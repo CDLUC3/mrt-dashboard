@@ -1,0 +1,17 @@
+body {
+    font-family: 'Droid Sans', arial, serif;
+    /* font-size: 12pt; */
+    /* line-height: 14pt; */
+    /* margin: 1em; */
+}
+
+div.multicolumn {
+    -moz-column-width: 500px;
+    -webkit-column-width: 300px;
+    -moz-column-gap: 20px;
+    -webkit-column-gap: 20px;
+}
+
+dd {
+    text-indent: 1em;
+}

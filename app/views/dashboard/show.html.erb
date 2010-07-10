@@ -1,0 +1,29 @@
+<% content_for :title do %>...<% end %>
+
+<div class="container_16">
+  <div class="grid_16">
+    <h2 id="page-heading">DPR Dashboard (PROTOTYPE)</h2>
+  </div>
+  <div class="grid_4">
+    <div class="box">
+      <h2><a href="#" id="toggle-overview">Overview</a></h2>
+      <div class="block" id="overview">
+        <p>Object count: <%= @object_count %></p>
+        <p>Version count: <%= @version_count %></p>
+        <p>Total size: <%= number_to_human_size(@total_size) %></p>
+      </div>
+    </div>
+  </div>
+  <div class="grid_8">
+    <div class="box">
+      <h2><a href="#" id="toggle-recent">Recent objects</a></h2>
+      <div class="block" id="recent">
+        <ul>
+          <% for info in @recent_objects %>
+          <li><%= render :partial=>'show/short_object', :object => info %></li>
+          <% end %>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
