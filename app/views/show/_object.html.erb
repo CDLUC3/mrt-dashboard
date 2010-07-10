@@ -1,0 +1,43 @@
+<% content_for :title do %>
+  <%= @info[Mrt::Kernel.who] || "unkn" %>,
+  <%= @info[Mrt::Kernel.what] || "unkn" %>
+  (<%= @info[Mrt::Kernel.when] || "unkn" %>)
+<% end %>
+
+<% stored_object = @info[Mrt::Mrt['hasStoredObject']][0] %>
+<% current = stored_object[Mrt::Mrt['currentVersion']][0] %>
+<% versions = stored_object[RDF::DC['hasVersion']] %>
+<div class="grid_16">
+  <h2 id="page-heading"><%= render :partial=>'short_object', :object => @info %></h2>
+</div>
+<div class="grid_8">
+  <div class="box">
+    <h2><a href="#" id="toggle-current">Current version</a></h2>
+    <div class="block" id="current">
+      <ul>
+        <% current[Mrt::Mrt['hasFile']].each do |f| %>
+        <% if md = f.to_s.match(/\/producer%2F([^\/]+)/) then %>
+        <li><%= link_to(md[1], "/show/#{clean_id(f)}") %></li>
+        <% end %>
+        <% end %>
+      </ul>
+    </div>
+  </div>
+</div>
+<% if versions.size > 1 %>
+<div class="grid_8">
+  <div class="box">
+    <h2>Other versions</h2>
+    <div class="block">
+      <ul>
+        <% versions.each do |version| %>
+        <%   if version != current %>
+        <li><%= link_to(version, "/show/#{clean_id(version)}") %></li>
+        <%   end %>
+        <% end %>
+      </ul>
+    </div>
+  </div>
+</div>
+<% end %>
+

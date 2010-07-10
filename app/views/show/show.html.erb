@@ -1,0 +1,12 @@
+<div class="container_16">
+  <% if params.has_key?('raw') then %>
+    <%= render :partial=>'raw', :locals => {:info => @info } %>
+  <% else %>
+    <% case @info[RDF.type]
+       when [Mrt::Mrt['Object']] %>
+         <%= render :partial=>'object', :locals => {:info => @info } %>
+    <% else %>
+         <%= render :partial=>'raw', :locals => {:info => @info } %>
+    <% end %>
+  <% end %>
+</div>

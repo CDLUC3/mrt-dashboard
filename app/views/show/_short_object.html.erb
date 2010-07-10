@@ -1,0 +1,3 @@
+<%= short_object[Mrt::Kernel.who] || "unkn" %>,
+<%= link_to((short_object[Mrt::Kernel.what] || "unkn"), "/show/#{clean_id(short_object)}") %>
+(<%= short_object[Mrt::Kernel.when] || "unkn" %>)
