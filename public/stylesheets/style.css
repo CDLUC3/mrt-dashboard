@@ -12,6 +12,21 @@ div.multicolumn {
     -webkit-column-gap: 20px;
 }
 
-dd {
-    text-indent: 1em;
+dt {
+    font-weight: bold;
+    float: left;
+    clear: left;
+    width: 100px;
+    text-align: right;
+    margin-right: 1em;
+}
+
+dt:after {
+    content: ":";
+}
+
+li {
+    list-style: none;
+    margin-left: 2em;
+    text-indent: -1em;
 }
