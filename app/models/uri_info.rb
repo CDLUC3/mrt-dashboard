@@ -24,6 +24,11 @@ class UriInfo < RDF::URI
     return @info[key]
   end
 
+  def first(key, default=nil)
+    cache_info if @info.nil?
+    return (@info[key][0] || default)
+  end
+
   def cache_info
     q = Mrt::Sparql::Q.new("<#{self.to_s}> ?p ?o .")
     res = UriInfo.store.select(q)
