@@ -14,4 +14,9 @@ module ApplicationHelper
       return val
     end
   end
+  
+  def version_no(uri)
+    md = uri.to_s.match(/\/([0-9]+)$/)
+    return md[1]
+  end
 end
