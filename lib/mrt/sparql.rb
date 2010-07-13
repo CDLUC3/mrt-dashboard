@@ -7,9 +7,11 @@ module Mrt
         :select => "*",
         :ns     => {
           :dc   => RDF::DC,
+          :mrt  => RDF::Vocabulary.new("http://cdlib.org/mrt/"),
           :rdf  => RDF,
           :rdfs => RDF::RDFS,
-          :mrt  => RDF::Vocabulary.new("http://cdlib.org/mrt/") }
+          :xsd  => RDF::XSD
+        }
       }
 
       def initialize(query, args={})
@@ -73,12 +75,12 @@ module Mrt
             binding = row[key]
             new_row[key] = case binding['type']
                            when 'uri'
-                             RDF::URI.new(binding['value'])
+                             UriInfo.new(binding['value'])
                            when 'literal'
                              lang = if binding.has_key?('xml:lang') then binding['xml:lang'].intern else nil end
                              RDF::Literal.new(binding['value'], :language=>lang)
                            when 'typed-literal'
-                             RDF::Literal.new(binding['value'], :type=>RDF::URI.new(binding['type']))
+                             RDF::Literal.new(binding['value'], :type=>UriInfo.new(binding['type']))
                            when 'bnode'
                              RDF::Node.new(binding['value'])
                            end
