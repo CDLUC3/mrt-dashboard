@@ -8,9 +8,14 @@
     <div class="box">
       <h2><a href="#" id="toggle-overview">Overview</a></h2>
       <div class="block" id="overview">
-        <p>Object count: <%= @object_count %></p>
-        <p>Version count: <%= @version_count %></p>
-        <p>Total size: <%= number_to_human_size(@total_size) %></p>
+        <dt>object count</dt>
+        <dd><%= @object_count %></dd>
+        <dt>version count</dt>
+        <dd><%= @version_count %></dd>
+        <dt>file count</dt>
+        <dd><%= @file_count %></dd>
+        <dt>total size</dt>
+        <dd><%= number_to_human_size(@total_size) %></dd>
       </div>
     </div>
   </div>
