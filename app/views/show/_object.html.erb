@@ -12,32 +12,51 @@
 </div>
 <div class="grid_8">
   <div class="box">
-    <h2><a href="#" id="toggle-current">Current version</a></h2>
-    <div class="block" id="current">
-      <ul>
-        <% current[Mrt::Mrt['hasFile']].each do |f| %>
-        <% if md = f.to_s.match(/\/producer%2F([^\/]+)/) then %>
-        <li><%= link_to(md[1], "/show/#{clean_id(f)}") %></li>
-        <% end %>
-        <% end %>
-      </ul>
-    </div>
+    <h2>Information</h2>
+    <div class="block">
+      <dl>
+        <dt>identifier</dt>
+        <dd><%= stored_object[RDF::DC.identifier] %></dd>
+        <dt>who</dt>
+        <dd><%= @info[Mrt::Kernel.who] %></dd>
+        <dt>what</dt>
+        <dd><%= @info[Mrt::Kernel.what] %></dd>
+        <dt>when</dt>
+        <dd><%= @info[Mrt::Kernel.when] %></dd>
+        <dt>last modified</dt>
+        <dd><%= stored_object[RDF::DC.modified] %></dd>
+        <dt>created</dt>
+        <dd><%= stored_object[RDF::DC.created] %></dd>
+        <dt>last access</dt>
+        <dd><%= stored_object[Mrt::Mrt.lastAccess] %></dd>
+        <dt>total size</dt>
+        <dd><%= number_to_human_size(stored_object[Mrt::Mrt.totalSize][0].value) %></dd>
+        <dt>total files</dt>
+        <dd><%= stored_object[Mrt::Mrt.numActualFiles] %></dd>
+      </dl>
+    </div>  
   </div>
 </div>
-<% if versions.size > 1 %>
 <div class="grid_8">
   <div class="box">
-    <h2>Other versions</h2>
-    <div class="block">
-      <ul>
-        <% versions.each do |version| %>
-        <%   if version != current %>
-        <li><%= link_to(version, "/show/#{clean_id(version)}") %></li>
-        <%   end %>
-        <% end %>
-      </ul>
+    <h2>Versions</h2>
+    <div class="block" id="accordion">
+      <h3 class="toggler atStart">Current version (<%= version_no(current.first(RDF::DC.identifier)) %>)</h3>
+      <div class="element atStart">
+        <ul>
+        <%= render :partial => 'file_info_maybe', :collection => current[Mrt::Mrt['hasFile']] %>
+        </ul>
+      </div>
+      <% versions.each do |version| %>
+      <%   if version != current %>
+      <h3 class="toggler atStart">Version <%= version_no(version.first(RDF::DC.identifier)) %></h3>
+      <div class="element atStart">
+        <ul>
+        <%=  render :partial => 'file_info_maybe', :collection => version[Mrt::Mrt['hasFile']] %>
+        </ul>
+      </div>
+      <%   end %>
+      <% end %>
     </div>
   </div>
 </div>
-<% end %>
-
