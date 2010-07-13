@@ -49,7 +49,8 @@ MrtDashboard::Application.routes.draw do |map|
   # You can have the root of your site routed with "root"
   # just remember to delete public/index.html.
 
-  match('show/*id' => 'show#show')
+  match('show/view/*id' => 'show#view')
+  match('show/*id'      => 'show#show')
   root(:to => "dashboard#show")
 
   # See how all your routes lay out with "rake routes"
