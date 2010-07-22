@@ -8,14 +8,18 @@
     <div class="box">
       <h2><a href="#" id="toggle-overview">Overview</a></h2>
       <div class="block" id="overview">
-        <dt>object count</dt>
-        <dd><%= @object_count %></dd>
-        <dt>version count</dt>
-        <dd><%= @version_count %></dd>
-        <dt>file count</dt>
-        <dd><%= @file_count %></dd>
-        <dt>total size</dt>
-        <dd><%= number_to_human_size(@total_size) %></dd>
+        <p>Welcome, <%= @current_user.login %>, <%= @current_user.title %></p>
+        <p><a href="/logout">Logout</a></p>
+        <dl>
+          <dt>object count</dt>
+          <dd><%= @object_count %></dd>
+          <dt>version count</dt>
+          <dd><%= @version_count %></dd>
+          <dt>file count</dt>
+          <dd><%= @file_count %></dd>
+          <dt>total size</dt>
+          <dd><%= number_to_human_size(@total_size) %></dd>
+        </dl>
       </div>
     </div>
   </div>
