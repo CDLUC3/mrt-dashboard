@@ -16,4 +16,11 @@ class DashboardController < ApplicationController
               :order_by =>"DESC(?mod)")
     @recent_objects = store().select(q).map{|s| UriInfo.new(s['s']) }
   end
+
+  def search
+    q = Q.new("?s ?p ?o
+               FILTER (datatype(?o) = xsd:string)
+               FILTER regex(?o, \"#{params[:q]}\", \"i\")")
+    @results = store().select(q)
+  end
 end
