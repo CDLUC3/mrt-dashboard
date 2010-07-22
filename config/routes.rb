@@ -52,7 +52,14 @@ MrtDashboard::Application.routes.draw do |map|
   match('show/view/*id' => 'show#view')
   match('show/*id'      => 'show#show')
   root(:to => "dashboard#show")
-
+  match('login'         => 'user_sessions#login',
+        :as             => :login,
+        :constraints    => {:method => 'GET'})
+  match('login'         => 'user_sessions#login_post',
+        :as             => :login_post,
+        :constraints    => {:method => 'POST'})
+  match('logout'        => 'user_sessions#logout',
+        :as             => :logout)
   # See how all your routes lay out with "rake routes"
 
   # This is a legacy wild controller route that's not recommended for RESTful applications.

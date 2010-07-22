@@ -1,4 +1,6 @@
 class DashboardController < ApplicationController
+  before_filter :require_user
+
   Q = Mrt::Sparql::Q
   def show
     @object_count  = store().select(Q.new("?s rdf:type mrt:Object", :select=>"COUNT(?s) as c")).map{|r| r['c']}[0].value
