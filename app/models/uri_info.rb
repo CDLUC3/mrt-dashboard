@@ -26,7 +26,9 @@ class UriInfo < RDF::URI
 
   def first(key, default=nil)
     cache_info if @info.nil?
-    return (@info[key][0] || default)
+    d = @info[key]
+    if d.nil? then return default
+    else return (d[0] || default) end
   end
 
   def cache_info
