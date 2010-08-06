@@ -3,7 +3,7 @@ class ApplicationController < ActionController::Base
   layout 'application'
 
   def store
-    return Mrt::Sparql::Store.new('http://localhost:8080/sparql/')
+    return Mrt::Sparql::Store.new(SPARQL_ENDPOINT)
   end
 
   helper :all

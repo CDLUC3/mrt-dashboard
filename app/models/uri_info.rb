@@ -1,5 +1,5 @@
 class UriInfo < RDF::URI
-  @store = Mrt::Sparql::Store.new("http://localhost:8080/sparql/") if @store.nil?
+  @store = Mrt::Sparql::Store.new(SPARQL_ENDPOINT) if @store.nil?
   class << self
     attr_accessor :store
   end

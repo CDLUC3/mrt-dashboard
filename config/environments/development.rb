@@ -23,4 +23,5 @@ MrtDashboard::Application.configure do
   LDAP_BASE       = "ou=People,ou=uc3,dc=cdlib,dc=org"
   LDAP_ADMIN_USER = "cn=Directory Manager"
   LDAP_ADMIN_PASS = "xxxxxxx"
+  SPARQL_ENDPOINT = "http://badger.cdlib.org:8080/sparql/"
 end
