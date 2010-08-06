@@ -16,4 +16,11 @@ MrtDashboard::Application.configure do
 
   # Don't care if the mailer can't send
   config.action_mailer.raise_delivery_errors = false
+
+  LDAP_HOST       = "badger.cdlib.org"
+  LDAP_PORT       = 1636
+  LDAP_ENCRYPTION = { :method => :simple_tls }
+  LDAP_BASE       = "ou=People,ou=uc3,dc=cdlib,dc=org"
+  LDAP_ADMIN_USER = "cn=Directory Manager"
+  LDAP_ADMIN_PASS = "xxxxxxx"
 end

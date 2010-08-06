@@ -7,33 +7,27 @@ class User < ActiveRecord::Base
   
   protected
   def valid_ldap_credentials?(password)
-    ad_ldap = Net::LDAP.new
-    ad_ldap.host = 'p-irc-dc01.ad.ucop.edu'
-    ad_ldap.port = 3268
-    ad_ldap.auth("CN=#{self.login},OU=Users,OU=CDL,DC=AD,DC=UCOP,DC=EDU", password)
-    cdlib_ldap = Net::LDAP.new
-    cdlib_ldap.host = 'gales.cdlib.org'
-    cdlib_ldap.port = 389
-    cdlib_ldap.auth("uid=#{self.login},ou=people,dc=cdlib,dc=org", password)
+    ldap = Net::LDAP.new
+    ldap.host = LDAP_HOST
+    ldap.port = LDAP_PORT
+    ldap.encryption(LDAP_ENCRYPTION)
+    ldap.auth("uid=#{self.login},#{LDAP_BASE}", password)
 
-    res = if cdlib_ldap.bind then
-            cdlib_ldap.search(:base   => "ou=people,dc=cdlib,dc=org", 
-                              :filter => Net::LDAP::Filter.eq("uid", self.login))
-          elsif ad_ldap.bind then
-            ad_ldap.search(:base   => "OU=Users,OU=CDL,DC=AD,DC=UCOP,DC=EDU", 
-                           :filter => Net::LDAP::Filter.eq("CN", self.login))
-          end
-    if !res then
+    if !ldap.bind then
       return false
     else
-      if res.size > 0 then
+      res = ldap.search(:base   => LDAP_BASE,
+                        :filter => Net::LDAP::Filter.eq("uid", self.login))
+      if !res or res.size == 0 then
+        return false
+      else
         first_res = res[0]
         if !first_res[:title].nil? and first_res[:title].size > 0 then
           self.title = first_res[:title][0] 
           self.save
         end
+        return true
       end
-      return true
     end
   end
   
