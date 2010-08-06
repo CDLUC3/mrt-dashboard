@@ -6,11 +6,12 @@ module Mrt
       INITIALIZE_DEFARGS = { 
         :select => "*",
         :ns     => {
-          :dc   => RDF::DC,
-          :mrt  => RDF::Vocabulary.new("http://cdlib.org/mrt/"),
-          :rdf  => RDF,
-          :rdfs => RDF::RDFS,
-          :xsd  => RDF::XSD
+          :dc      => RDF::DC,
+          :mrt     => RDF::Vocabulary.new("http://cdlib.org/mrt/"),
+          :mulgara => RDF::Vocabulary.new("http://mulgara.org/mulgara#"),
+          :rdf     => RDF,
+          :rdfs    => RDF::RDFS,
+          :xsd     => RDF::XSD
         }
       }
 
@@ -24,8 +25,14 @@ module Mrt
           "PREFIX #{key}: <#{@args[:ns][key].to_uri.to_s}>"
         end.join("\n")
         limit_str = if !@args[:limit].nil? then "LIMIT #{@args[:limit]}" else "" end
+        offset_str = if !@args[:offset].nil? then "OFFSET #{@args[:offset]}" else "" end
         order_by_str = if !@args[:order_by].nil? then "ORDER BY #{@args[:order_by]}" else "" end
-        return "#{namespace_str} SELECT #{@args[:select]} WHERE { #{@query} } #{order_by_str} #{limit_str}"
+        return "#{namespace_str} SELECT #{@args[:select]}
+          WHERE {
+            GRAPH <rmi://gales.cdlib.org/server1#> { 
+              ?g rdf:type mulgara:Model } . 
+            GRAPH ?g { #{@query} }
+          } #{order_by_str} #{limit_str} #{offset_str}"
       end
     end
     
@@ -43,9 +50,11 @@ module Mrt
         http.start do |h|
           request = Net::HTTP::Post.new(@endpoint.path)
           request.set_form_data({ 'query' => query.to_s, 'soft-limit' => @softlimit });
-          request['Accept'] = 'application/json'
+#          request['Accept'] = 'application/json'
+          request['Accept'] = 'application/sparql-results+json'
           response = h.request(request)
           parse_json_results(response.body)
+          #parse_xml_results(response.body)
         end
       end
 
@@ -66,9 +75,34 @@ module Mrt
         h
       end
       
+      def parse_xml_results(raw)
+        ns = { "sparql" => "http://www.w3.org/2005/sparql-results#" }
+        xml_doc  = Nokogiri::XML(raw)
+        return xml_doc.xpath("/sparql:sparql/sparql:results/sparql:result", ns).map do |result|
+          new_row = {}
+          result.xpath("sparql:binding", ns).each do |binding|
+            val = binding.xpath("sparql:literal|sparql:uri", ns)[0]
+            new_row[binding['name']] = case val.name
+                                       when 'uri'
+                                         UriInfo.new(val.xpath("text()"))
+                                       when 'literal'
+                                         lang = nil
+                                         #lang = if binding.has_key?('xml:lang') then binding['xml:lang'].intern else nil end
+                                         datatype = if val['datatype'] then UriInfo.new(val['datatype']) else nil end
+                                         RDF::Literal.new(val.xpath("text()"),
+                                                          :type=> datatype,
+                                                          :language=>lang)
+                                       when 'bnode'
+                                         # TODO!
+                                       end
+          end
+          new_row
+        end
+      end
+
       # Parse JSON results into a more usable format.
       def parse_json_results(raw)
-        json =  JSON.parse(raw)
+        json = JSON.parse(raw)
         json['results']['bindings'].map do |row|
           new_row = {}
           row.keys.each do |key|
