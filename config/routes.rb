@@ -51,6 +51,8 @@ MrtDashboard::Application.routes.draw do |map|
 
   resource 'users', :as => 'account'
 
+  match('objects/recent(.:format)'  => 'objects#recent')
+  match('feeds/recent'  => 'feeds#recent')
   match('show/view/*id' => 'show#view')
   match('show/*id'      => 'show#show')
   root(:to => "dashboard#show")
