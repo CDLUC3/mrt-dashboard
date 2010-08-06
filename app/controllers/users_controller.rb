@@ -7,9 +7,10 @@ class UsersController < ApplicationController
   
   def get_ldap
     ldap = Net::LDAP.new()
-    ldap.host = "gales.cdlib.org"
-    ldap.port = 389
-    ldap.auth("cn=admin,dc=cdlib,dc=org", "1234")
+    ldap.host = LDAP_HOST
+    ldap.port = LDAP_PORT
+    ldap.encryption(LDAP_ENCRYPTION)
+    ldap.auth(LDAP_ADMIN_USER, LDAP_ADMIN_PASS)
     if !ldap.bind then
       raise Exception.new("Unable to bind to LDAP server.")
     end
@@ -17,12 +18,12 @@ class UsersController < ApplicationController
   end
 
   def create
-    salt = File.read("/dev/urandom", 4)
     login = params[:login]
-    dn = "uid=#{login},ou=people,dc=cdlib,dc=org"
-    passwd = Base64.encode64(Digest::SHA1.digest(params[:password] + salt) + salt).chomp!
     name = params[:name]
     (givenName, sn) = name.split(/ /)
+    dn = "uid=#{login},#{LDAP_BASE}"
+    # salt = File.read("/dev/urandom", 4)
+    # passwd = Base64.encode64(Digest::SHA1.digest(params[:password] + salt) + salt).chomp! - not allowed with OpenDS
     attr = {
       :objectclass           => ["inetOrgPerson"],
       :uid                   => login,
@@ -30,7 +31,7 @@ class UsersController < ApplicationController
       :givenName             => givenName,
       :cn                    => name,
       :displayName           => name,
-      :userPassword          => "{SSHA}#{passwd}",
+      :userPassword          => params[:password],
       :mail                  => params[:email],
       :title                 => params[:title],
       :postalAddress         => [""],
