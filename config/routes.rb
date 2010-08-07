@@ -55,7 +55,7 @@ MrtDashboard::Application.routes.draw do |map|
   match('feeds/recent'  => 'feeds#recent')
   match('show/view/*id' => 'show#view')
   match('show/*id'      => 'show#show')
-  root(:to => "dashboard#show")
+  root(:to => "home#index")
   match('login'         => 'user_sessions#login',
         :as             => :login,
         :constraints    => {:method => 'GET'})
