@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= yield :title %></title>
+    <%= stylesheet_link_tag 'reset' %>
+    <%= stylesheet_link_tag 'text' %>
+    <%= stylesheet_link_tag 'grid' %>
+    <%= stylesheet_link_tag 'layout' %>
+    <%= stylesheet_link_tag 'nav' %>
+    <%= stylesheet_link_tag 'style' %>
+    <!--[if IE 6]><link rel="stylesheet" type="text/css" href="css/ie6.css" media="screen" /><![endif]-->
+    <!--[if IE 7]><link rel="stylesheet" type="text/css" href="css/ie.css" media="screen" /><![endif]-->
+    <%= csrf_meta_tag %>
+  </head>
+  <body>
+    <div class="container_16">
+      <div class="grid_12">WAS Logo</div>
+      <div class="grid_4">
+        Login | Contact UC3
+      </div>
+      <div class="clear"></div>
+      <%= yield %>
+      <div class="clear">&nbsp;</div>
+      <div class="grid_16">
+        copyright information here
+      </div>
+      <script type="text/javascript" src="/javascripts/mootools-1.2.1-core.js"></script>
+      <script type="text/javascript" src="/javascripts/mootools-1.2-more.js"></script>
+      <script type="text/javascript" src="/javascripts/mootools-fluid16-autoselect.js"></script>
+      <%# javascript_include_tag :all %>
+
+    </div>
+  </body>
+</html>

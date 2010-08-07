@@ -4,3 +4,8 @@ syntax: glob
 db/*.sqlite3
 log/*.log
 tmp/*
+\.orig\..*$
+\.orig$
+\.chg\..*$
+\.rej$
+\.conflict\~$
