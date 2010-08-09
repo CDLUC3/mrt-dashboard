@@ -1,24 +1,30 @@
-<div class="container_16">
-  <div class="grid_5"><br/></div>
-  <div class="grid_6">
-    <div class="box">
-      <div class="block">
-        <p><%= flash[:notice] %></p>
-        <h1>Login</h1>
-        <%= form_for @user_session, :url => login_post_path do |f| %>
-        <% f.error_messages %>
-        <%= f.label :login %><br />
-        <%= f.text_field :login %><br />
-        <br />
-        <%= f.label :password %><br />
-        <%= f.password_field :password %><br />
-        <br />
-        <%= f.check_box :remember_me %><%= f.label :remember_me %><br />
-        <br />
-        <%= f.submit "Login" %>
-        <% end %>
-        <p>New? <%= link_to "Register", new_account_url %>,</p>
-      </div>
-    </div>
+<div class="grid_10">
+  <h1>Login</h1>
+  <p><%= flash[:notice] %></p>
+  <%= form_for @user_session, :url => login_post_path do |f| %>
+  <% f.error_messages %>
+  <div class="left_label">
+    <%= f.label :login %>
   </div>
-</div>
+  <div class="right_field">
+    <%= f.text_field :login %>
+  </div>
+  <div class="right_field" style="width:50px;">
+    <%= f.submit "Login" %>
+  </div>
+  <div class="clear"></div>
+  <div class="left_label">
+    <%= f.label :password %>
+  </div>
+  <div class="right_field">
+    <%= f.password_field :password %><br />
+  </div>
+  <div class="clear"></div>
+  <div class="left_label">&nbsp;</div>
+  <div class="right_field">
+    <%= f.check_box :remember_me %><%= f.label :remember_me %>
+  </div>
+  <div class="clear"></div>
+    <% end %>
+  <div style="width:200px;height:100px;">&nbsp;</div>
+ </div>
