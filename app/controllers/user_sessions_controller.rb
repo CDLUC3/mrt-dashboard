@@ -1,6 +1,8 @@
 class UserSessionsController < ApplicationController
   before_filter :require_no_user, :only => [:login, :login_post]
   before_filter :require_user,    :only => :logout
+
+  layout "home", :except => ['logout']
   
   def login
     @user_session = UserSession.new

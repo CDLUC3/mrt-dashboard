@@ -1,0 +1,77 @@
+/* 
+    Document   : main_styles
+    Created on : Aug 9, 2010, 10:06:19 AM
+    Author     : sfisher
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+/* 
+   TODO customize this sample style
+   Syntax recommendation http://www.w3.org/TR/REC-CSS2/
+*/
+
+/* Overall styles */
+root { 
+    display: block;
+}
+
+body {
+  background-color: #e8eef7;
+  font-family: Tahoma, Helvetica, Arial, sans-serif;
+  font-size:100%;
+}
+
+.container_16 {
+  background-color: #ffffff;
+}
+
+/* section styles */
+
+.head_left {
+    text-align: left;
+}
+
+.head_right {
+    text-align: right;
+}
+
+.foot_full {
+    text-align: center;
+    font-size: 80%;
+}
+
+/* subsection styles */
+.foot_full hr {
+    margin: 10px 0px 6px 0px;
+    padding: 0px 0px 0px 0px;
+}
+
+
+/* text styles */
+.caption {
+    font-size: 80%;
+    font-style: italic;
+}
+
+
+/* form styles */
+div.left_label {
+  margin-top: 0.25em;
+  margin-bottom:0.25em;
+  margin-right:0.5em;
+  display: block;
+  clear: left;
+  float:left;
+  width: 150px;
+  text-align: right;
+}
+
+div.right_field {
+  margin-top: 0.25em;
+  margin-bottom:0.25em;
+  display: block;
+  float: left;
+  width: 250px;
+  text-align: left;
+}
