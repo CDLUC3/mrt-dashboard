@@ -10,7 +10,7 @@ class UserSessionsController < ApplicationController
   
   def login_post
     @user_session = UserSession.new(params[:user_session])
-    if @user_session.save
+    if @user_session.save then
       flash[:notice] = "Login successful!"
       redirect_back_or_default "/"
     else

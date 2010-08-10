@@ -1,3 +1,4 @@
+require 'ldap_cdl'
 MrtDashboard::Application.configure do
   # Settings specified here will take precedence over those in config/environment.rb
 
@@ -16,6 +17,16 @@ MrtDashboard::Application.configure do
 
   # Don't care if the mailer can't send
   config.action_mailer.raise_delivery_errors = false
+
+ LDAP_SERVER = LdapCdl::Server.new(
+       {:host            => "badger.cdlib.org",
+         :port            => 1636,
+         :people_base     => 'ou=People,ou=uc3,dc=cdlib,dc=org',
+         :groups_base     => 'ou=uc3,dc=cdlib,dc=org',
+         :admin_user      => 'Directory Manager',
+         :admin_password  => 'ahz6ap2I',
+         :minter          => 'http://noid.cdlib.org/nd/noidu_g9'}
+    )
 
   LDAP_HOST       = "badger.cdlib.org"
   LDAP_PORT       = 1636

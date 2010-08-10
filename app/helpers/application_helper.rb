@@ -28,4 +28,5 @@ module ApplicationHelper
       w3cdtf(Time.parse(time.to_s))
     end
   end
+
 end

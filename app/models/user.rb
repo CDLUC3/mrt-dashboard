@@ -1,5 +1,3 @@
-require 'net/ldap'
-
 class User < ActiveRecord::Base
   acts_as_authentic do |c|
     c.validate_password_field = false
@@ -7,31 +5,30 @@ class User < ActiveRecord::Base
   
   protected
   def valid_ldap_credentials?(password)
-    ldap = Net::LDAP.new
-    ldap.host = LDAP_HOST
-    ldap.port = LDAP_PORT
-    ldap.encryption(LDAP_ENCRYPTION)
-    ldap.auth("uid=#{self.login},#{LDAP_BASE}", password)
-
-    if !ldap.bind then
+    begin
+      res = LDAP_SERVER.authenticate(login, password)
+    rescue LdapCdl::LdapException => ex
       return false
-    else
-      res = ldap.search(:base   => LDAP_BASE,
-                        :filter => Net::LDAP::Filter.eq("uid", self.login))
-      if !res or res.size == 0 then
-        return false
-      else
-        first_res = res[0]
-        if !first_res[:title].nil? and first_res[:title].size > 0 then
-          self.title = first_res[:title][0] 
-          self.save
-        end
-        return true
-      end
     end
+    return false if res == false
+
+    u = LDAP_SERVER.fetch(login)
+    self.title = single_value(u, 'title')
+    self.displayname = single_value(u, 'displayname')
+    self.lastname = single_value(u, 'sn')
+    self.firstname = single_value(u, 'givenname')
+    self.email = single_value(u, 'mail')
+    self.save
+    true
   end
   
   def self.find_or_create_user(login)
     User.find_or_create_by_login(login)
   end
+  
+  def single_value(record, field)
+    return nil if record[field].nil? or record[field][0].nil? or record[field][0].length < 1
+    return record[field][0]
+  end
+
 end
