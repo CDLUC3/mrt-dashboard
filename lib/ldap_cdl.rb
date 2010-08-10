@@ -10,12 +10,21 @@ module LdapCdl
     attr_accessor :people_base, :groups_base, :admin_ldap
 
     #Set up this LDAP Server Connection
-    def initialize(host = "badger.cdlib.org",
-                  port = 1636,
-                  people_base = 'ou=People,ou=uc3,dc=cdlib,dc=org',
-                  groups_base = 'ou=uc3,dc=cdlib,dc=org',
-                  admin_user = 'Directory Manager', admin_password = 'ahz6ap2I',
-                  minter = 'http://noid.cdlib.org/nd/noidu_g9')
+    def initialize(init_hash)
+        
+        #sample hash
+        #host => "badger.cdlib.org",
+        #port => 1636,
+        #people_base => 'ou=People,ou=uc3,dc=cdlib,dc=org',
+        #groups_base => 'ou=uc3,dc=cdlib,dc=org',
+        #admin_user => 'Directory Manager',
+        #admin_password => 'ahz6ap2I',
+        #minter => 'http://noid.cdlib.org/nd/noidu_g9'
+        
+        host, port, people_base, groups_base, admin_user, admin_password, minter =
+          init_hash[:host], init_hash[:port], init_hash[:people_base], init_hash[:groups_base],
+          init_hash[:admin_user], init_hash[:admin_password], init_hash[:minter]
+
       @minter = Noid::Minter.new(minter)
       @people_base = people_base
       @groups_base = groups_base

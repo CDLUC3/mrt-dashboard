@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100721225918) do
+ActiveRecord::Schema.define(:version => 20100810170751) do
 
   create_table "users", :force => true do |t|
     t.string   "login"
@@ -24,6 +24,12 @@ ActiveRecord::Schema.define(:version => 20100721225918) do
     t.string   "current_login_ip"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "displayname"
+    t.string   "lastname"
+    t.string   "firstname"
+    t.string   "email"
   end
+
+  add_index "users", ["login"], :name => "index_users_on_login", :unique => true
 
 end

@@ -2,7 +2,11 @@
   <%=image_tag("logos/subtitle_head.png")%>
 </div>
 <div class="grid_4 head_right">
-  <%= link_to("Login", :controller => 'user_sessions', :action => 'login') %> | Contact UC3
+  <% if current_user then %>
+    <%= link_to("Logout", :controller => 'user_sessions', :action => 'logout') %>
+  <% else %>
+    <%= link_to("Login", :controller => 'user_sessions', :action => 'login') %>
+  <% end %> | Contact UC3
 </div>
 <div class="clear"></div>
 <div class="grid_16">&nbsp;</div>
