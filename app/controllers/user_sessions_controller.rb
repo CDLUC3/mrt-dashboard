@@ -11,16 +11,17 @@ class UserSessionsController < ApplicationController
   def login_post
     @user_session = UserSession.new(params[:user_session])
     if @user_session.save then
-      flash[:notice] = "Login successful!"
-      redirect_back_or_default "/"
+      flash[:notice] = "Login was successful"
+      redirect_back_or_default "/home/choose_collection"
     else
+      flash[:notice] = "Login unsuccessful"
       render :action => :login
     end
   end
   
   def logout
     current_user_session.destroy
-    flash[:notice] = "Logout successful!"
+    flash[:notice] = "You are now logged out"
     redirect_back_or_default '/'
   end
 end

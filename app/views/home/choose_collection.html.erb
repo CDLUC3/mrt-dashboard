@@ -1,0 +1,41 @@
+<div class="grid_12">
+  <p>
+    Choose a collection to work with.  If you have &quot;write&quot; access to
+    a collection, you can add new objects or update existing objects.  Contact
+    UC3 if you don't see the collection you need.  Whatever else we need to say.
+  </p>
+
+  <p>
+    We really don't know what is happening with the profile service right
+    now, so we're not sure how permissions or number of objects will ever
+    get populated.
+  </p>
+
+  <h3>Collections</h3>
+
+  <%= @grps.inspect %>
+
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 40%;">Collection</th>
+        <th style="width: 20%;">Permissions</th>
+        <th style="width: 20%;"># Objects</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @grps.each do |grp| %>
+      <tr>
+        <td><%= grp.description %></td>
+        <td><%= grp.permission %></td>
+        <td><%= grp.object_count %></td>
+      </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+<div class="grid_4">
+  <h3>Search my collections</h3>
+
+  <h3 style="color:#cc0000;">Alert</h3>
+</div>

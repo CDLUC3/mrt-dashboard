@@ -9,12 +9,12 @@
 
     <!--[if IE 6]><link rel="stylesheet" type="text/css" href="css/ie6.css" media="screen" /><![endif]-->
     <!--[if IE 7]><link rel="stylesheet" type="text/css" href="css/ie.css" media="screen" /><![endif]-->
-    
+
     <%= csrf_meta_tag %>
   </head>
   <body>
     <div class="container_16">
-      <%= render :partial => "shared/unlogged_head" %>
+      <%= render :partial => "shared/no_collection_head" %>
       <%= yield %>
       <%= render :partial => "shared/footer" %>
       <%= javascript_include_tag :all %>
