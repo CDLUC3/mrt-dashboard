@@ -54,6 +54,21 @@ body {
     font-style: italic;
 }
 
+.dynamic_message {
+    font-style: bold;
+    color: #bb0000;
+    font-size: 110%;
+}
+
+h3 {
+    display: block;
+    width: 100%;
+    font-size:90%;
+    border-bottom-color: #cccccc;
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+}
+
 
 /* form styles */
 div.left_label {
@@ -74,4 +89,34 @@ div.right_field {
   float: left;
   width: 250px;
   text-align: left;
+}
+
+
+/* table styles */
+table{
+    border-collapse:collapse;
+}
+
+table, th, td {
+    border: 1px solid #cccccc;
+}
+
+th {
+    text-align: center;
+    vertical-align: top;
+    font-weight: bold;
+    font-size: 90%;
+    background-color: #0077dd;
+    color: #ffffff;
+    padding: 5px 15px 5px 15px;
+}
+
+tr.shaded, tr.shaded td {
+    background-color: #0099ff;
+}
+
+td {
+    text-align: left;
+    vertical-align: top;
+    padding: 5px;
 }

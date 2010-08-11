@@ -1,6 +1,6 @@
 <div class="grid_10">
   <h1>Login</h1>
-  <p><%= flash[:notice] %></p>
+  <%= render :partial => '/shared/flash_show' %>
   <%= form_for @user_session, :url => login_post_path do |f| %>
   <% f.error_messages %>
   <div class="left_label">

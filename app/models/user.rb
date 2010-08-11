@@ -2,7 +2,12 @@ class User < ActiveRecord::Base
   acts_as_authentic do |c|
     c.validate_password_field = false
   end
-  
+ 
+  def groups
+    grps = LDAP_SERVER.groups_for_user(self.login)
+    grps.map{|g| Group.find(g)}
+  end
+
   protected
   def valid_ldap_credentials?(password)
     begin
@@ -21,7 +26,7 @@ class User < ActiveRecord::Base
     self.save
     true
   end
-  
+
   def self.find_or_create_user(login)
     User.find_or_create_by_login(login)
   end
