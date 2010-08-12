@@ -57,7 +57,23 @@ module GroupLdap
       perms
     end
 
-    def delete_user(userid, groupid, user_object)
+    def find_groups_for_user(userid, user_object)
+      #these are the permission subgroups so they need to be parsed back up a level
+      grps = @admin_ldap.search(:base => @base, :filter =>
+        Net::LDAP::Filter.eq("uniquemember", user_object.ns_dn(userid)))
+      correct_len = @base.split(',').length + 2
+      grps.map! do |grp|
+        g = grp[:dn][0].split(',')
+        return nil if g.length != correct_len or !g[0][0..1].eql?('cn') or !g[1][0..1].eql?('ou')
+        g[1][3..-1]
+      end
+      grps = grps.compact.uniq.map{|grp| fetch(grp)}
+      grps.each{|grp| grp[:permissions] = get_user_permissions(userid, grp[:ou][0], user_object)}
+      grps
+
+    end
+
+    def remove_user(userid, groupid, user_object)
       #get all cn under this ou
       sub_grps = @admin_ldap.search(:base => ns_dn(groupid), :filter => Net::LDAP::Filter.eq('cn','*') )
       long_user = user_object.ns_dn(userid)
@@ -71,19 +87,13 @@ module GroupLdap
       true
     end
 
-    #fetches a sub object of the group organizational unit (ou)
+    #fetches a cn sub object of the group organizational unit (ou)
     def sub_fetch(group_id, sub_id )
       results = @admin_ldap.search(:base => ns_dn(group_id), :filter =>
                                               Net::LDAP::Filter.eq('cn', sub_id))
       raise LdapException.new('id does not exist') if results.length < 1
       raise LdapException.new('ambigulous results, duplicate ids') if results.length > 1
       results[0]
-    end
-
-    def groups_for_user(userid)
-      filter = Net::LDAP::Filter.eq("uniqueMember", namespace_dn(userid, 'people_base'))
-      grps = @admin_ldap.search(:base => @groups_base, :filter => filter)
-      grps.map{|grp| grp['dn'][0].gsub(@groups_base, '')[3..-2] }
     end
 
     def ns_dn(id)
