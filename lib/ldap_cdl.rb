@@ -30,7 +30,7 @@ module LdapCdl
       @groups_base = groups_base
       @ldap_connect = {:host => host, :port => port,
         :auth => {:method => :simple, :username => "cn=#{admin_user}", :password => admin_password},
-        :encryption => :simple_tls
+        :encryption => :simple_tlsy
       }
       @admin_ldap = Net::LDAP.new(@ldap_connect)
         if !@admin_ldap.bind then
@@ -38,7 +38,7 @@ module LdapCdl
       end
     end
 
-    def add_user(userid, password, firstname, lastname, email, groupid)
+    def add_user(userid, password, firstname, lastname, email, groupid, read = true, write = true)
       #probably required attributes cn (common name, first + last), displayName,  dn (distinguished name),
       #givenName (first name), sn (surname, last name), name = cn, displayName, uid,
       #userPassword, mail, title, postalAddress, initials
@@ -58,21 +58,43 @@ module LdapCdl
         #:initials              => "#{firstname[0,1]}#{lastname[0,1]}"
         }
       true_or_exception(@admin_ldap.add(:dn => namespace_dn(userid, 'people_base'), :attributes => attr))
-      add_user_to_group(userid, groupid)
+      add_user_to_group(userid, groupid, read, write)
     end
 
-    def add_group(groupid, group_class = 'ezidOwnerGroup')
+    def add_group(groupid, description, extra_classes = ['ezidOwnerGroup'])
+
       attr = {
-        :objectclass           => ["groupOfUniqueNames", group_class],
-        :cn                    => groupid,
+        :objectclass           => ["organizationalUnit"] + extra_classes,
+        :name                  => groupid,
+        :description           => description,
         :arkId                 => @minter.mint
         }
 
       true_or_exception(@admin_ldap.add(:dn => namespace_dn(groupid, 'groups_base'), :attributes => attr))
+
+      attr_read = {
+        :objectclass          => ["groupOfUniqueNames"],
+        :cn                   => "read_#{groupid}"
+        }
+
+      true_or_exception(@admin_ldap.add(:dn => namespace_dn("read", 'groups_base'), :attributes => attr_read))
+
+      attr_write = {
+        :objectclass          => ["groupOfUniqueNames"],
+        :cn                   => "write_#{groupid}"
+        }
+
+      true_or_exception(@admin_ldap.add(:dn => namespace_dn("write_#{groupid}", 'groups_base'), :attributes => attr_write))
+      
     end
 
-    def add_user_to_group(userid, groupid)
-      add_attribute(groupid, 'uniqueMember', namespace_dn(userid, 'people_base'), 'groups_base')
+    def add_user_to_group(userid, groupid, read = true, write = true)
+      if read == true then
+        add_attribute("read_#{groupid}", 'uniqueMember', namespace_dn(userid, 'people_base'), 'groups_base')
+      end
+      if write == true then
+        add_attribute("write_#{groupid}", 'uniqueMember', namespace_dn(userid, 'people_base'), 'groups_base')
+      end
     end
 
     def delete_user(userid)
@@ -182,11 +204,11 @@ module LdapCdl
       end
     end
 
-    def namespace_dn(id, ns='people_base')
+    def namespace_dn(id, ns='people_base', sub_ns = 'read')
       if ns == 'people_base' then
         "uid=#{id},#{self.send(ns)}"
       elsif ns == 'groups_base' then
-        "cn=#{id},#{self.send(ns)}"
+        "cn=#{sub_ns},ou=#{id},#{self.send(ns)}"
       end
     end
 

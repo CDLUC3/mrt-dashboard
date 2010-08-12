@@ -41,6 +41,7 @@ body {
     font-size: 80%;
 }
 
+
 /* subsection styles */
 .foot_full hr {
     margin: 10px 0px 6px 0px;
@@ -69,6 +70,10 @@ h3 {
     border-bottom-width: 1px;
 }
 
+.sidebar p{
+    font-size: 90%;
+    padding-top: 1em;
+}
 
 /* form styles */
 div.left_label {
@@ -111,8 +116,12 @@ th {
     padding: 5px 15px 5px 15px;
 }
 
-tr.shaded, tr.shaded td {
-    background-color: #0099ff;
+tr.even, tr.even td {
+    background-color: #ffffff;
+}
+
+tr.odd, tr.odd td {
+    background-color: #88ccff;
 }
 
 td {
