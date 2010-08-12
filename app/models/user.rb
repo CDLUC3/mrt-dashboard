@@ -5,6 +5,8 @@ class User < ActiveRecord::Base
  
   def groups
     grps = LDAP_SERVER.groups_for_user(self.login)
+    grps.delete_if{|g| not (g[0..4].eql?('read_') or g[0..5].eql?('write_')) }
+    grps = grps.map{|g| g[/_.*$/][1..-1]}.uniq
     grps.map{|g| Group.find(g)}
   end
 

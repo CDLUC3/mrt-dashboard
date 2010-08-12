@@ -29,4 +29,10 @@ module ApplicationHelper
     end
   end
 
+  # from http://codesnippets.joyent.com/posts/show/1812
+  def formatted_int(i)
+    return "0" if i.nil?
+    i.to_s.gsub!(/(\d)(?=(\d\d\d)+(?!\d))/, "\\1,")
+  end
+
 end
