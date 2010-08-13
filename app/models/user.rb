@@ -4,22 +4,20 @@ class User < ActiveRecord::Base
   end
  
   def groups
-    grps = LDAP_SERVER.groups_for_user(self.login)
-    grps.delete_if{|g| not (g[0..4].eql?('read_') or g[0..5].eql?('write_')) }
-    grps = grps.map{|g| g[/_.*$/][1..-1]}.uniq
-    grps.map{|g| Group.find(g)}
+    grp_ids = LDAP_GROUP.find_groups_for_user(self.login, LDAP_USER)
+    grp_ids.map{|id| Group.find(id)}
   end
 
-  protected
+  #protected
   def valid_ldap_credentials?(password)
     begin
-      res = LDAP_SERVER.authenticate(login, password)
+      res = LDAP_USER.authenticate(login, password)
     rescue LdapCdl::LdapException => ex
       return false
     end
     return false if res == false
 
-    u = LDAP_SERVER.fetch(login)
+    u = LDAP_USER.fetch(login)
     self.title = single_value(u, 'title')
     self.displayname = single_value(u, 'displayname')
     self.lastname = single_value(u, 'sn')

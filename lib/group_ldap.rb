@@ -67,8 +67,8 @@ module GroupLdap
         return nil if g.length != correct_len or !g[0][0..1].eql?('cn') or !g[1][0..1].eql?('ou')
         g[1][3..-1]
       end
-      grps = grps.compact.uniq.map{|grp| fetch(grp)}
-      grps.each{|grp| grp[:permissions] = get_user_permissions(userid, grp[:ou][0], user_object)}
+      grps = grps.compact.uniq #.map{|grp| fetch(grp)}
+      #grps.each{|grp| grp[:permissions] = get_user_permissions(userid, grp[:ou][0], user_object)}
       grps
 
     end
