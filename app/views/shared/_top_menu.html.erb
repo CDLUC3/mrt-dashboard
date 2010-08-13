@@ -1,0 +1,25 @@
+<div class="grid_16 menu_fun">
+<ul role="menubar" id="menu-1" class="menu">
+
+  <li id="" class="active"><a role="menuitem" href="#">Collection home</a></li>
+
+  <li id=""><a role="menuitem" href="#">Add object</a></li>
+
+  <li class="" id="" class="last"><a aria-haspopup="true" role="menuitem" tabindex="0" class="sub" href="#">Change collection</a>
+    <ul role="menu">
+      <li id=""><a role="menuitem" href="#">Item 1.1</a></li>
+      <li id=""><a role="menuitem" href="#">Item 1.2</a></li>
+      <li id=""><a role="menuitem" href="#">Item 1.3</a></li>
+      <li id="" class="last"><a role="menuitem" href="#">Item 1.4</a></li>
+    </ul>
+  </li>
+</ul>
+
+</div>
+
+<script type='text/javascript'>
+   document.observe('dom:loaded', function(){
+      new ProtoFish('menu-1', '200', 'hover', false, true, true);
+   });
+</script>
+<div class="clear"></div>

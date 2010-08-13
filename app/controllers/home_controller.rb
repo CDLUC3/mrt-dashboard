@@ -9,7 +9,7 @@ class HomeController < ApplicationController
 
   def choose_collection
     #return if require_user == false
-    @grps = current_user.groups
+    @groups = current_user.groups
 
     render :layout => 'no_collection'
   end

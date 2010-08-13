@@ -26,7 +26,7 @@ class Group
     rand(10000)
   end
 
-  # XXX a random permission since we don't have any yet
+  # permissions are returned as an array like ['read','write'], maybe more in the future
   def permission(userid)
     LDAP_GROUP.get_user_permissions(userid, self.id, LDAP_USER)
   end
