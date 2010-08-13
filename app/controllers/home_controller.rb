@@ -8,9 +8,11 @@ class HomeController < ApplicationController
   end
 
   def choose_collection
-    #return if require_user == false
-    @groups = current_user.groups
-
+    @groups = current_user.groups.sort{|x, y| x.description.downcase <=> y.description.downcase}
+    if @groups.length == 1 then
+      redirect_to :controller => 'collection', :action => 'index', :group => @groups[0].id
+      return false
+    end
     render :layout => 'no_collection'
   end
   

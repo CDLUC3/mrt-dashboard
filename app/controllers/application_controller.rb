@@ -32,9 +32,9 @@ class ApplicationController < ActionController::Base
   end
 
   def require_group
-    redirect_to(CollectionHome) and return false if params[:id].nil?
+    redirect_to(CollectionHome) and return false if params[:group].nil?
     begin
-      @group = Group.find(params[:id])
+      @group = Group.find(params[:group])
     rescue Exception => ex
       redirect_to(CollectionHome)
       return false
@@ -46,7 +46,7 @@ class ApplicationController < ActionController::Base
       return false
     end
     redirect_to(CollectionHome) and return false if @permissions.length < 1
-    @groups = current_user.groups
+    @groups = current_user.groups.sort{|x, y| x.description.downcase <=> y.description.downcase}
   end
 
   def require_no_user
