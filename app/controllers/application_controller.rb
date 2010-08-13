@@ -2,6 +2,8 @@ class ApplicationController < ActionController::Base
   protect_from_forgery
   layout 'application'
 
+  CollectionHome = {:controller => 'home', :action => 'choose_collection'}
+
   def store
     return Mrt::Sparql::Store.new(SPARQL_ENDPOINT)
   end
@@ -29,6 +31,24 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  def require_group
+    redirect_to(CollectionHome) and return false if params[:id].nil?
+    begin
+      @group = Group.find(params[:id])
+    rescue Exception => ex
+      redirect_to(CollectionHome)
+      return false
+    end
+    begin
+      @permissions = @group.permission(current_user.login)
+    rescue Exception => ex
+      redirect_to(CollectionHome)
+      return false
+    end
+    redirect_to(CollectionHome) and return false if @permissions.length < 1
+    @groups = current_user.groups
+  end
+
   def require_no_user
     if current_user
       store_location
@@ -46,4 +66,5 @@ class ApplicationController < ActionController::Base
     redirect_to(session[:return_to] || default)
     session[:return_to] = nil
   end
+
 end

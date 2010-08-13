@@ -1,0 +1,2 @@
+class ObjectController < ApplicationController
+end

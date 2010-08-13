@@ -10,27 +10,6 @@
     now, so we're not sure how permissions or number of objects will ever
     get populated.
   </p>
-
-  <h3>Collections</h3>
-
-  <table>
-    <thead>
-      <tr>
-        <th style="width: 40%;">Collection</th>
-        <th style="width: 20%;">Permissions</th>
-        <th style="width: 20%;"># Objects</th>
-      </tr>
-    </thead>
-    <tbody>
-      <% @groups.each do |grp| %>
-      <tr class="<%=cycle('even', 'odd') %>">
-        <td><%= link_to(grp.description, :controller => 'collection', :action => 'index', :id => grp.id) %></td>
-        <td><%= permissions(grp.permission(current_user.login)) %></td>
-        <td style="text-align:right;">random! <%= formatted_int(grp.object_count) %></td>
-      </tr>
-      <% end %>
-    </tbody>
-  </table>
 </div>
 <div class="grid_4 sidebar">
   <h3>Search my collections</h3>
@@ -38,9 +17,10 @@
     <%= text_field_tag 'id', 'enter primary id here' %>
     <%= submit_tag('Go') %>
   <% end %>
- 
+
   <p>You can look up a known primary ID across all collections. Once you select
     a collection, you will be able to search by title, creator or local ID.
   </p>
   <h3 style="color:#cc0000;">Alert</h3>
 </div>
+
