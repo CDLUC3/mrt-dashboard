@@ -35,4 +35,10 @@ module ApplicationHelper
     i.to_s.gsub!(/(\d)(?=(\d\d\d)+(?!\d))/, "\\1,")
   end
 
+  def permissions(array)
+    return "none" if array.length < 1
+    return "#{array[0]} only" if array.length == 1
+    return array.join('/')
+  end
+
 end

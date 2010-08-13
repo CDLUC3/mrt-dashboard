@@ -25,8 +25,8 @@
       <% @grps.each do |grp| %>
       <tr class="<%=cycle('even', 'odd') %>">
         <td><%= grp.description %></td>
-        <td><%= grp.permission %></td>
-        <td style="text-align:right;"><%= formatted_int(grp.object_count) %></td>
+        <td><%= permissions(grp.permission(current_user.login)) %></td>
+        <td style="text-align:right;">random! <%= formatted_int(grp.object_count) %></td>
       </tr>
       <% end %>
     </tbody>
