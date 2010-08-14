@@ -61,6 +61,16 @@ body {
     font-size: 110%;
 }
 
+h1 {
+    display: block;
+    font-size: 140%;
+}
+
+h2 {
+    display: block;
+    font-size: 120%;
+}
+
 h3 {
     display: block;
     width: 100%;
@@ -73,6 +83,10 @@ h3 {
 .sidebar p{
     font-size: 90%;
     padding-top: 1em;
+}
+
+.breadcrumbs {
+    font-size: 85%;
 }
 
 /* form styles */
