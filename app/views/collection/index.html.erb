@@ -1,15 +1,6 @@
 <div class="grid_12">
-  <p>
-    Choose a collection to work with.  If you have &quot;write&quot; access to
-    a collection, you can add new objects or update existing objects.  Contact
-    UC3 if you don't see the collection you need.  Whatever else we need to say.
-  </p>
-
-  <p>
-    We really don't know what is happening with the profile service right
-    now, so we're not sure how permissions or number of objects will ever
-    get populated.
-  </p>
+  <h2>Collection: <%= @group.description %></h2>
+  <div class="breadcrumbs"><%=raw crumb_path(['merritt'])%>Collection: <%= @group.description %></div>
 </div>
 <div class="grid_4 sidebar">
   <h3>Search my collections</h3>
