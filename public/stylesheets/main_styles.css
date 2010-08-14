@@ -81,6 +81,8 @@ h3 {
     border-bottom-width: 1px;
 }
 
+p { margin-bottom: 0.3em;}
+
 .sidebar p{
     font-size: 90%;
     padding-top: 1em;
