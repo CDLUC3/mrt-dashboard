@@ -9,6 +9,25 @@
   <h3>Object info</h3>
   <% form_tag({:action => :upload}, :multipart => true) do %>
 
+    <div class="left_label">
+      <label_for="file">File:</label>
+    </div>
+    <div class="right_field">
+      <%=file_field_tag("file")%>
+    </div>
+
+  <div class="left_label">
+    <label for="object_type">Single object:</label>
+  </div>
+  <div class="option_container">
+    <div class="short_option">
+      <%= radio_button_tag('object_type', 'file', 'true') %>
+    </div>
+    <div class="short_option_description">
+      <
+    </div>
+  </div>
+
   <% end #form_tag
   %>
 
