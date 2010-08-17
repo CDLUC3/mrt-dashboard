@@ -41,17 +41,4 @@ module ApplicationHelper
     return array.join('/')
   end
 
-  def crumb_path(id_arr)
-    locations = {'merritt' => ['Merritt', {:controller => 'home', :action => 'index'}]
-    }
-    html_nuggets = id_arr.map do |id|
-      if !locations[id].nil? then
-        link_to(locations[id][0], locations[id][1])
-      else
-        nil
-      end
-    end
-    "#{html_nuggets.compact.join(" &gt; ")} &gt; "
-  end
-
 end

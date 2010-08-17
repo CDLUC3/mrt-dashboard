@@ -1,6 +1,7 @@
 <div class="grid_12">
   <h2>Collection: <%= @group.description %></h2>
-  <div class="breadcrumbs"><%=raw crumb_path(['merritt'])%>Collection: <%= @group.description %></div>
+  <div class="breadcrumbs"><%= link_to('Merritt', :controller => 'home', :action => 'index') %> &gt;
+    Collection: <%= @group.description %></div>
 
   <% for info in @recent_objects %>
     <%= info[Mrt::Kernel.who] || "unkn" %>,
