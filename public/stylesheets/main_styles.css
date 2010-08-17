@@ -55,6 +55,10 @@ body {
     font-style: italic;
 }
 
+.title {
+    font-weight: bold;
+}
+
 .dynamic_message {
     font-style: bold;
     color: #bb0000;
@@ -79,13 +83,15 @@ h3 {
     border-bottom-color: #cccccc;
     border-bottom-style: solid;
     border-bottom-width: 1px;
+    margin-top: 0.5em;
+    margin-bottom: 1em;
 }
 
 p { margin-bottom: 0.3em;}
 
+.sidebar {font-size: 90%;}
 .sidebar p{
-    font-size: 90%;
-    padding-top: 1em;
+    margin-top: 1em;
 }
 
 .breadcrumbs {
@@ -111,6 +117,28 @@ div.right_field {
   float: left;
   width: 250px;
   text-align: left;
+}
+
+/* small key-value styles */
+div.key {
+  /*margin-top: 0.25em;
+  margin-bottom:0.25em; */
+  font-weight: bold;
+  margin-right:0.5em;
+  display: block;
+  clear: left;
+  float:left;
+  width: 100px;
+  text-align: right;
+}
+
+div.value {
+  /* margin-top: 0.25em;
+  margin-bottom:0.25em; */
+  display: block;
+  float: left;
+  width: 75px;
+  text-align: right;
 }
 
 
