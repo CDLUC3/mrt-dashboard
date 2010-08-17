@@ -10,22 +10,98 @@
   <% form_tag({:action => :upload}, :multipart => true) do %>
 
     <div class="left_label">
-      <label_for="file">File:</label>
+      <label for="file">File:</label>
     </div>
     <div class="right_field">
       <%=file_field_tag("file")%>
     </div>
+  <br/><br/>
 
   <div class="left_label">
     <label for="object_type">Single object:</label>
   </div>
   <div class="option_container">
     <div class="short_option">
-      <%= radio_button_tag('object_type', 'file', 'true') %>
+      <%= radio_button_tag('object_type', 'file', 'true') %> File
     </div>
     <div class="short_option_description">
-      <
+      <a href="#" id="file_tip"><%= image_tag("tip_icon.gif", :size => '15x15' ) %></a>
     </div>
+
+    <div class="short_option">
+      <%= radio_button_tag('object_type', 'container') %> Container
+    </div>
+    <div class="short_option_description">
+      <a href="#" id="container_tip"><%= image_tag("tip_icon.gif", :size => '15x15' ) %></a>
+    </div>
+
+    <div class="short_option">
+      <%= radio_button_tag('object_type', 'manifest') %> Manifest
+    </div>
+    <div class="short_option_description">
+      <a href="#" id="manifest_tip"><%= image_tag("tip_icon.gif", :size => '15x15' ) %></a>
+    </div>
+  </div>
+
+  <div class="left_label">
+    Batch:
+  </div>
+  <div class="option_container">
+    <div class="short_option">
+      <%= radio_button_tag('object_type', 'batch_manifest') %> Manifest
+    </div>
+    <div class="short_option_description">
+      <a href="#" id="batch_manifest_tip"><%= image_tag("tip_icon.gif", :size => '15x15' ) %></a>
+    </div>
+  </div>
+  <div class="clear"></div>
+  <h3>Optional description:</h3>
+  <p>You will be able to search by the following fields:</p>
+
+  <div class="left_label">Title:</div>
+  <div class="right_field">
+    <%= text_field_tag('title', nil, :size => 30)  %>
+  </div>
+  <div class="short_text_description">
+    <a href="#" id="title_tip"><%= image_tag("tip_icon.gif", :size => '15x15' ) %></a>
+  </div>
+
+  <div class="left_label">Author:</div>
+  <div class="right_field">
+    <%= text_field_tag('author', nil, :size => 30)  %>
+  </div>
+  <div class="short_text_description">
+    <a href="#" id="author_tip"><%= image_tag("tip_icon.gif", :size => '15x15' ) %></a>
+  </div>
+
+  <div class="left_label">Date:</div>
+  <div class="right_field">
+    <%= text_field_tag('date', nil, :size => 30)  %>
+  </div>
+  <div class="short_text_description">
+    <a href="#" id="date_tip"><%= image_tag("tip_icon.gif", :size => '15x15' ) %></a>
+  </div>
+
+  <div class="left_label">Local ID:</div>
+  <div class="right_field">
+    <%= text_field_tag('local_id', nil, :size => 30)  %>
+  </div>
+  <div class="short_text_description">
+    <a href="#" id="local_id_tip"><%= image_tag("tip_icon.gif", :size => '15x15' ) %></a>
+  </div>
+
+  <div class="left_label">Curatorial note:</div>
+  <div class="right_field">
+    <%= text_area_tag('note', nil, :size => "30x5")  %>
+  </div>
+  <div class="short_text_description">
+    <a href="#" id="note_tip"><%= image_tag("tip_icon.gif", :size => '15x15' ) %></a>
+  </div>
+  <div class="clear"></div>
+  <div class="left_label">&nbsp;</div>
+  <div class="right_area">
+    <%= hidden_field_tag('group', params[:group]) %>
+    <%= submit_tag("Submit") %>
   </div>
 
   <% end #form_tag
@@ -34,6 +110,18 @@
   
 </div>
 <div class="grid_4 sidebar">
-
+  
 </div>
+
+<script type="text/javascript">
+  new Tip('file_tip', 'This is a file upload, fun!')
+  new Tip('container_tip', 'This is a container upload, like a zip file, fun!')
+  new Tip('manifest_tip', 'This is a manifest, we\'ll try getting a single file from your server')
+  new Tip('batch_manifest_tip', 'This is a manifest, we\'ll attempt getting a list of files')
+  new Tip('title_tip', 'Titles are our favorities')
+  new Tip('author_tip', 'Authors create things')
+  new Tip('date_tip', 'Dates are how you identify a temporal portion of the year')
+  new Tip('local_id_tip', 'You have an id already?  Why  not use it?')
+  new Tip('note_tip', 'In case you forget what is happening.')
+</script>
 
