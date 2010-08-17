@@ -1,10 +1,31 @@
 <div class="grid_12">
   <h2>Collection: <%= @group.description %></h2>
   <div class="breadcrumbs"><%=raw crumb_path(['merritt'])%>Collection: <%= @group.description %></div>
+
+  <% for info in @recent_objects %>
+    <%= info[Mrt::Kernel.who] || "unkn" %>,
+    <%= link_to((info[Mrt::Kernel.what] || "unkn"), "/show/#{clean_id(info)}") %>
+    (<%= info[Mrt::Kernel.when] || "unkn" %>)
+  <% end %>
+
+    <br/>
+
+    <table>
+    <thead>
+      <tr>
+        <th style="width: 30%;">Primary Id</th>
+        <th style="width: 70%;">Object info</th>
+      </tr>
+    </thead>
+    <tbody>
+      <%= render :partial => "/object/table_row" %>
+    </tbody>
+  </table>
 </div>
 <div class="grid_4 sidebar">
-  <%= render :partial => '/shared/side_lookup' %>
-  
-  <h3 style="color:#cc0000;">Alert</h3>
+  <%= render :partial => '/shared/side_lookup' %><br/>
+  <%= render :partial => 'overview' %><br/>
+  <%= render :partial => '/shared/side_alert' %>
+
 </div>
 

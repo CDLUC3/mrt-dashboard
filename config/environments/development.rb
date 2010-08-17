@@ -19,6 +19,8 @@ MrtDashboard::Application.configure do
   config.action_view.debug_rjs             = true
   config.action_controller.perform_caching = false
 
+  config.active_support.deprecation        = :log
+
   # Don't care if the mailer can't send
   config.action_mailer.raise_delivery_errors = false
 =begin
@@ -58,5 +60,6 @@ MrtDashboard::Application.configure do
   #LDAP_BASE       = "ou=People,ou=uc3,dc=cdlib,dc=org"
   #LDAP_ADMIN_USER = "cn=Directory Manager"
   #LDAP_ADMIN_PASS = "xxxxxxx"
-  SPARQL_ENDPOINT = "http://badger.cdlib.org:8080/sparql/"
+  #SPARQL_ENDPOINT = "http://badger.cdlib.org:8080/sparql/"
+  SPARQL_ENDPOINT = "http://gales.cdlib.org:8080/sparql/"
 end
