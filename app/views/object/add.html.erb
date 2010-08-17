@@ -5,7 +5,12 @@
     <%= link_to("Collection: #{@group.description}", :controller => 'collection', :action => 'index', :group => @group.id) %>
     &gt; Add Object
   </div>
-    <br/>
+  <br/>
+  <h3>Object info</h3>
+  <% form_tag({:action => :upload}, :multipart => true) do %>
+
+  <% end #form_tag
+  %>
 
   
 </div>

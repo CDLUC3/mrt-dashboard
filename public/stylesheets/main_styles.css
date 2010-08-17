@@ -99,6 +99,7 @@ p { margin-bottom: 0.3em;}
 }
 
 /* form styles */
+/* for 2 column forms */
 div.left_label {
   margin-top: 0.25em;
   margin-bottom:0.25em;
@@ -117,6 +118,43 @@ div.right_field {
   float: left;
   width: 250px;
   text-align: left;
+}
+
+/* for 3 column forms with help icon to the side
+add this to the side of right_field to add another column*/
+div.short_text_description {
+  margin-top: 0.25em;
+  margin-bottom:0.25em;
+  float: left;
+  clear: right;
+  height: 1.2em;
+  width:12em;
+  vertical-align: text-bottom;
+}
+
+/* for 3 column radio buttons with help icon to the side
+contain the short_option and short_option_description within
+option_container in place of "right_field" */
+
+div.option_container {
+  float: left;
+  margin-top: 0.25em;
+  margin-bottom: 0.25em;
+}
+
+div.short_option {
+  float:left;
+  clear:left;
+  height:1.2em;
+  width:8em;
+}
+
+div.short_option_description {
+  float: left;
+  clear: right;
+  height: 1.2em;
+  width:12em;
+  vertical-align: text-bottom;
 }
 
 /* small key-value styles */
