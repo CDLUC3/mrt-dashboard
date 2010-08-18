@@ -23,18 +23,6 @@ MrtDashboard::Application.configure do
 
   # Don't care if the mailer can't send
   config.action_mailer.raise_delivery_errors = false
-=begin
- LDAP_SERVER = LdapCdl::Server.new(
-       {:host            => "badger.cdlib.org",
-         :port            => 1636,
-         :people_base     => 'ou=People,ou=uc3,dc=cdlib,dc=org',
-         :groups_base     => 'ou=uc3,dc=cdlib,dc=org',
-         :admin_user      => 'Directory Manager',
-         :admin_password  => 'ahz6ap2I',
-         :minter          => 'http://noid.cdlib.org/nd/noidu_g9'}
-    )
-=end
-
 
   LDAP_USER = UserLdap::Server.new(
        {:host             => "badger.cdlib.org",
@@ -54,12 +42,8 @@ MrtDashboard::Application.configure do
          :minter          => 'http://noid.cdlib.org/nd/noidu_g9'}
     )
 
-  #LDAP_HOST       = "badger.cdlib.org"
-  #LDAP_PORT       = 1636
-  #LDAP_ENCRYPTION = { :method => :simple_tls }
-  #LDAP_BASE       = "ou=People,ou=uc3,dc=cdlib,dc=org"
-  #LDAP_ADMIN_USER = "cn=Directory Manager"
-  #LDAP_ADMIN_PASS = "xxxxxxx"
+  INGEST_SERVICE = 'http://linux-oj8o.ad.ucop.edu:8080/poster/submit/'
+
   #SPARQL_ENDPOINT = "http://badger.cdlib.org:8080/sparql/"
   SPARQL_ENDPOINT = "http://gales.cdlib.org:8080/sparql/"
 end
