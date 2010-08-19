@@ -79,7 +79,7 @@ h2 {
 h3 {
     display: block;
     width: 100%;
-    font-size:90%;
+    font-size:95%;
     border-bottom-color: #cccccc;
     border-bottom-style: solid;
     border-bottom-width: 1px;
@@ -157,8 +157,30 @@ div.short_option_description {
   vertical-align: text-bottom;
 }
 
-/* small key-value styles */
+/* normal key-value styles */
 div.key {
+  /*margin-top: 0.25em;
+  margin-bottom:0.25em; */
+  font-weight: bold;
+  margin-right:0.5em;
+  display: block;
+  clear: left;
+  float:left;
+  width: 225px;
+  text-align: right;
+}
+
+div.value {
+  /* margin-top: 0.25em;
+  margin-bottom:0.25em; */
+  display: block;
+  float: left;
+  width: 425px;
+  text-align: left;
+}
+
+/* small key-value styles in sidebar */
+.sidebar div.key {
   /*margin-top: 0.25em;
   margin-bottom:0.25em; */
   font-weight: bold;
@@ -170,7 +192,7 @@ div.key {
   text-align: right;
 }
 
-div.value {
+.sidebar div.value {
   /* margin-top: 0.25em;
   margin-bottom:0.25em; */
   display: block;
@@ -178,7 +200,6 @@ div.value {
   width: 75px;
   text-align: right;
 }
-
 
 /* table styles */
 table{
