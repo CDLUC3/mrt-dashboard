@@ -1,0 +1,6 @@
+Q = Mrt::Sparql::Q
+
+def store
+  return Mrt::Sparql::Store.new(SPARQL_ENDPOINT)
+end
+

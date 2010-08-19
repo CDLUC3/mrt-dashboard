@@ -1,7 +1,6 @@
 <tr class="even">
   <td><%= link_to("ark:/13030/vf9474b83", :controller => 'object', :action => 'index', :group => @group.id, :object => 'ark:/13030/vf9474b83' ) %></td>
-  <td>Pawson, Catherine Tara. <span class="title">Characterization of the Behavior and
-      Regulation of Pioneer Microtubules at the Larval Drosophila Neuromuscular Junction.</span> (2008)</td>
+  <td><%= render :partial => "/object/short_bib_display" %></td>
 </tr>
 <tr class="odd">
   <td><%= link_to("ark:/13030/vf0dv1fps", :controller => 'object', :action => 'index', :group => @group.id, :object => 'ark:/13030/vf0dv1fps' ) %></td>
