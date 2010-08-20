@@ -17,8 +17,6 @@ gem 'sqlite3-ruby', :require => 'sqlite3'
 gem 'ruby-debug'
 
 # For creating http posts
-gem 'httpclient'
-gem 'ruby-multipart-post'
 gem 'rest-client'
 
 # Bundle the extra gems:
@@ -35,6 +33,7 @@ gem 'rest-client'
 
 gem 'json'
 gem 'rdf'
+#gem 'xml-simple'
 gem 'authlogic', :git => 'git://github.com/odorcicd/authlogic.git', :branch => 'rails3'
 #gem 'ruby-net-ldap'
-#gem 'nokogiri'
+gem 'nokogiri'
