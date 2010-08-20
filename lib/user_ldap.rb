@@ -13,7 +13,7 @@ module UserLdap
       #givenName (first name), sn (surname, last name), name = cn, displayName, uid,
       #userPassword, mail, title, postalAddress, initials
       attr = {
-        :objectclass           => ["inetOrgPerson", 'ezidUser'],
+        :objectclass           => ["inetOrgPerson", 'merrittUser'],
         :uid                   => userid,
         :sn                    => lastname,
         :givenName             => firstname,

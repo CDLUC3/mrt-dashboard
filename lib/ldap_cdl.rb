@@ -43,7 +43,7 @@ module LdapCdl
       #givenName (first name), sn (surname, last name), name = cn, displayName, uid,
       #userPassword, mail, title, postalAddress, initials
       attr = {
-        :objectclass           => ["inetOrgPerson", 'ezidUser'],
+        :objectclass           => ["inetOrgPerson", 'merrittUser'],
         :uid                   => userid,
         :sn                    => lastname,
         :givenName             => firstname,
@@ -61,7 +61,7 @@ module LdapCdl
       add_user_to_group(userid, groupid, read, write)
     end
 
-    def add_group(groupid, description, extra_classes = ['ezidOwnerGroup'])
+    def add_group(groupid, description, extra_classes = ['merrittOwnerGroup'])
 
       attr = {
         :objectclass           => ["organizationalUnit"] + extra_classes,

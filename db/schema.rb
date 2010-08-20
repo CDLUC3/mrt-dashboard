@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100810170751) do
+ActiveRecord::Schema.define(:version => 20100820212148) do
 
   create_table "users", :force => true do |t|
     t.string   "login"
@@ -28,6 +28,7 @@ ActiveRecord::Schema.define(:version => 20100810170751) do
     t.string   "lastname"
     t.string   "firstname"
     t.string   "email"
+    t.string   "tz_region"
   end
 
   add_index "users", ["login"], :name => "index_users_on_login", :unique => true

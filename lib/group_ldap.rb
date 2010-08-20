@@ -7,7 +7,7 @@ module GroupLdap
   class Server
     include LdapMixin
 
-    def add(groupid, description, permissions = ['read', 'write'], extra_classes = ['ezidOwnerGroup'])
+    def add(groupid, description, permissions = ['read', 'write'], extra_classes = ['merrittOwnerGroup'])
       attr = {
         :objectclass           => ["organizationalUnit"] + extra_classes,
         #:name                  => groupid

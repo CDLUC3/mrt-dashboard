@@ -3,11 +3,11 @@
   <div class="breadcrumbs"><%= link_to('Merritt', :controller => 'home', :action => 'index') %> &gt;
     Collection: <%= @group.description %></div>
 
-  <% for info in @recent_objects %>
-    <%= info[Mrt::Kernel.who] || "unkn" %>,
-    <%= link_to((info[Mrt::Kernel.what] || "unkn"), "/show/#{clean_id(info)}") %>
-    (<%= info[Mrt::Kernel.when] || "unkn" %>)
-  <% end %>
+  <% #for info in @recent_objects %>
+    <%#= info[Mrt::Kernel.who] || "unkn" %>
+    <%#= link_to((info[Mrt::Kernel.what] || "unkn"), "/show/#{clean_id(info)}") %>
+    <%#= info[Mrt::Kernel.when] || "unkn" %>
+  <% #end %>
 
     <br/>
 
