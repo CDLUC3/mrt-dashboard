@@ -15,9 +15,9 @@ class ObjectController < ApplicationController
     hsh = {
         'file'              => File.new(new_file, 'rb'),
         'type'              => params[:object_type],
-        'submitter'         => current_user.displayname, # is this user in mark's example (submitter)
-        'filename'          => params[:file].original_filename, # is this necessary?
-        'profile'           => 'profileSFISHER', # XXX this needs to be changed
+        'submitter'         => current_user.displayname,
+        'filename'          => params[:file].original_filename,
+        'profile'           => @group.submission_profile,
         'creator'           => params[:author],
         'title'             => params[:title],
         'date'              => params[:date],
