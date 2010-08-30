@@ -1,7 +1,8 @@
 module ApplicationHelper
   def clean_id(id)
     if (md = id.to_s.match(/^(http:\/\/)(.*)$/)) then
-      return URI.escape(md[2], Regexp.new("[^#{URI::PATTERN::UNRESERVED}]"))
+      #return URI.escape(md[2], Regexp.new("[^#{URI::PATTERN::UNRESERVED}]"))
+      return md[2]
     else
       return id.to_s
     end
