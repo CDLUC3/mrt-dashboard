@@ -2,8 +2,8 @@ class ObjectsController < ApplicationController
   Q = Mrt::Sparql::Q
   def recent
     start = params[:start].to_i
-    q = Q.new("?so rdf:type mrt:StorageObject . 
-               ?so mrt:isStoredObjectFor ?s . 
+    q = Q.new("?so rdf:type base:Object . 
+               ?so object:isStoredObjectFor ?s . 
                ?s ?p ?o . 
                ?so dc:modified ?mod .",
               :limit    => 10,

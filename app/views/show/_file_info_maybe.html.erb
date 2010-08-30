@@ -2,5 +2,5 @@
 
 <% if md = f.to_s.match(/\/producer%2F([^\/]+)/) then %>
 <li><b><%= link_to(md[1], "/show/view/#{clean_id(f.to_uri)}") %></b>, 
-  (<%= f.first(RDF::DC.format) %>, <%= number_to_human_size(f.first(RDF::DC.extent).value) %>)
+  (<%= f.first(Mrt::File['mediaType']) %>, <%= number_to_human_size(f.first(Mrt::Base.size).value) %>)
 <% end %>

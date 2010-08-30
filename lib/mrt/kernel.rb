@@ -1,3 +1,3 @@
 module Mrt
-  class Kernel < RDF::Vocabulary("http://cdlib.org/mrt/kernel/") ; end
+  class Kernel < RDF::Vocabulary("http://uc3.cdlib.org/ontology/kernel/") ; end
 end

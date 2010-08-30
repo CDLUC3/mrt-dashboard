@@ -6,11 +6,15 @@ module Mrt
       INITIALIZE_DEFARGS = { 
         :select => "*",
         :ns     => {
+          :base    => RDF::Vocabulary.new("http://uc3.cdlib.org/ontology/store/base#"),
           :dc      => RDF::DC,
-          :mrt     => RDF::Vocabulary.new("http://cdlib.org/mrt/"),
+          :file    => RDF::Vocabulary.new("http://uc3.cdlib.org/ontology/store/file#"),
           :mulgara => RDF::Vocabulary.new("http://mulgara.org/mulgara#"),
+          :object  => RDF::Vocabulary.new("http://uc3.cdlib.org/ontology/store/object#"),
           :rdf     => RDF,
           :rdfs    => RDF::RDFS,
+          :store  => RDF::Vocabulary.new("http://uc3.cdlib.org/ontology/store/store#"),
+          :version => RDF::Vocabulary.new("http://uc3.cdlib.org/ontology/store/version#"),
           :xsd     => RDF::XSD
         }
       }
@@ -29,7 +33,7 @@ module Mrt
         order_by_str = if !@args[:order_by].nil? then "ORDER BY #{@args[:order_by]}" else "" end
         return "#{namespace_str} SELECT #{@args[:select]}
           WHERE {
-            GRAPH <rmi://gales.cdlib.org/server1#> { 
+            GRAPH <rmi://localhost/server1#> { 
               ?g rdf:type mulgara:Model } . 
             GRAPH ?g { #{@query} }
           } #{order_by_str} #{limit_str} #{offset_str}"
