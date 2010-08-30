@@ -9,6 +9,24 @@ class UriInfo < RDF::URI
     @info = nil
   end
 
+  def has_list?
+    return self[RDF['type']].first == RDF['Seq'].to_uri
+  end
+
+  def to_list
+    if self.has_list? then
+      a = Array.new
+      self.keys.each do |key|
+        if (md = key.to_s.match(/_([0-9]+)$/)) then
+          n = (md[1].to_i - 1)
+          a[n] = self[key].first
+          a[n] = UriInfo.new(a[n]) if a[n].instance_of? RDF::URI 
+        end
+      end
+      return a
+    end
+  end
+
   def keys
     cache_info if @info.nil?
     return @info.keys

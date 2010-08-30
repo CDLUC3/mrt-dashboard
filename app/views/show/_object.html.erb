@@ -4,9 +4,8 @@
   (<%= @info[Mrt::Kernel.when] || "unkn" %>)
 <% end %>
 
-<% stored_object = @info[Mrt::Mrt['hasStoredObject']][0] %>
-<% current = stored_object[Mrt::Mrt['currentVersion']][0] %>
-<% versions = stored_object[RDF::DC['hasVersion']] %>
+<% stored_object = @info[Mrt::Object['hasStoredObject']].first %>
+<% versions = stored_object[Mrt::Object['versionSeq']].first.to_list %>
 <div class="grid_16">
   <h2 id="page-heading"><%= render :partial=>'short_object', :object => @info %></h2>
 </div>
@@ -25,14 +24,8 @@
         <dd><%= @info[Mrt::Kernel.when] %></dd>
         <dt>last modified</dt>
         <dd><%= stored_object[RDF::DC.modified] %></dd>
-        <dt>created</dt>
-        <dd><%= stored_object[RDF::DC.created] %></dd>
-        <dt>last access</dt>
-        <dd><%= stored_object[Mrt::Mrt.lastAccess] %></dd>
-        <dt>total size</dt>
-        <dd><%= number_to_human_size(stored_object[Mrt::Mrt.totalSize][0].value) %></dd>
         <dt>total files</dt>
-        <dd><%= stored_object[Mrt::Mrt.numActualFiles] %></dd>
+        <dd><%= stored_object[Mrt::Object.numActualFiles] %></dd>
       </dl>
     </div>  
   </div>
@@ -41,18 +34,18 @@
   <div class="box">
     <h2>Versions</h2>
     <div class="block" id="accordion">
-      <h3 class="toggler atStart">Current version (<%= version_no(current.first(RDF::DC.identifier)) %>)</h3>
+      <h3 class="toggler atStart">Current version (<%= versions.size %>)</h3>
       <div class="element atStart">
         <ul>
-        <%= render :partial => 'file_info_maybe', :collection => current[Mrt::Mrt['hasFile']] %>
+          <%= render :partial => 'file_info_maybe', :collection => versions[-1][Mrt::Version['hasFile']] %>
         </ul>
       </div>
-      <% versions.each do |version| %>
-      <%   if version != current %>
-      <h3 class="toggler atStart">Version <%= version_no(version.first(RDF::DC.identifier)) %></h3>
+      <% versions.each_index do |i| %>
+      <%   if (i + 1) != versions.size %>
+      <h3 class="toggler atStart">Version <%= i + 1 %></h3>
       <div class="element atStart">
         <ul>
-        <%=  render :partial => 'file_info_maybe', :collection => version[Mrt::Mrt['hasFile']] %>
+        <%=  render :partial => 'file_info_maybe', :collection => versions[i][Mrt::Version['hasFile']] %>
         </ul>
       </div>
       <%   end %>

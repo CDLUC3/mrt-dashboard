@@ -3,9 +3,9 @@
     <%= render :partial=>'raw', :locals => {:info => @info } %>
   <% else %>
     <% case @info[RDF.type]
-       when [Mrt::Mrt['Object']] %>
+       when [Mrt::ORE['Aggregation']] %>
          <%= render :partial=>'object', :locals => {:info => @info } %>
-    <% when [Mrt::Mrt['StorageFile']] %>
+    <% when [Mrt::File['File']] %>
          <%= render :partial=>'storage_file', :object => @info %>
     <% else %>
          <%= render :partial=>'raw', :locals => {:info => @info } %>
