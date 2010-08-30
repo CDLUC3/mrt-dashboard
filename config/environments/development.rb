@@ -44,6 +44,6 @@ MrtDashboard::Application.configure do
 
   INGEST_SERVICE = 'http://linux-oj8o.ad.ucop.edu:8080/poster/submit/'
 
-  #SPARQL_ENDPOINT = "http://badger.cdlib.org:8080/sparql/"
-  SPARQL_ENDPOINT = "http://gales.cdlib.org:8080/sparql/"
+  SPARQL_ENDPOINT = "http://badger.cdlib.org:8080/sparql/"
+  #SPARQL_ENDPOINT = "http://gales.cdlib.org:8080/sparql/"
 end
