@@ -1,2 +1,5 @@
-Pawson, Catherine Tara. <span class="title">Characterization of the Behavior and
-Regulation of Pioneer Microtubules at the Larval Drosophila Neuromuscular Junction.</span> (2008)
+<%# takes :obj passed in as local variable
+%>
+<%= obj[Mrt::Kernel.who] || "unkn" %>.
+<span class="title"><%=(obj[Mrt::Kernel.what] || 'unkn')%></span>
+(<%= obj[Mrt::Kernel.when] || "unkn" %>)
