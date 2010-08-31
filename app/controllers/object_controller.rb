@@ -12,6 +12,7 @@ class ObjectController < ApplicationController
   def upload
     new_file = DataFile.save(params[:file], current_user.login)
 
+  #this works for file and container
     hsh = {
         'file'              => File.new(new_file, 'rb'),
         'type'              => params[:object_type],
