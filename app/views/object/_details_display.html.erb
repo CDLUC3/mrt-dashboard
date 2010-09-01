@@ -1,34 +1,37 @@
+<%# the local obj must be passed in which is an rdf object %>
+<% stored_object = obj[Mrt::Object['hasStoredObject']].first %>
+<% versions = stored_object[Mrt::Object['versionSeq']].first.to_list %>
   <div class="key">primary identifier:</div>
-  <div class="value"><%= params[:object] %></div>
+  <div class="value"><%= stored_object[RDF::DC.identifier] %></div>
 
   <div class="key">title:</div>
-  <div class="value">Characterization of the Behavior and Regulation of Pioneer Microtubules at the Larval Drosophila Neuromuscular Junction</div>
+  <div class="value"><%= obj[Mrt::Kernel.what] %></div>
 
   <div class="key">author:</div>
-  <div class="value">Pawson, Catherine Tara</div>
+  <div class="value"><%= obj[Mrt::Kernel.who] %></div>
 
   <div class="key">date:</div>
-  <div class="value">2008</div>
+  <div class="value"><%= obj[Mrt::Kernel.when] %></div>
 
   <div class="key">local id:</div>
-  <div class="value">(not given)</div>
+  <div class="value">???</div>
 
   <div class="key">last modified:</div>
-  <div class="value">2010-07-01 4:32 pm</div>
+  <div class="value"><%= stored_object[RDF::DC.modified] %></div>
 
   <div class="key">created:</div>
-  <div class="value">2010-05-22 8:27 am </div>
+  <div class="value"><%= stored_object[RDF::DC.created] %>???</div>
 
   <div class="key">last access:</div>
-  <div class="value">2010-07-01 4:32 pm</div>
+  <div class="value"><%= stored_object[RDF::DC.accessed] %>???</div>
 
   <div class="key">total size <span style="font-weight: normal">(all versions)</span>:</div>
-  <div class="value">522 KB</div>
+  <div class="value">???</div>
 
   <div class="key">total files <span style="font-weight: normal">(all versions)</span>:</div>
-  <div class="value">15</div>
+  <div class="value"><%= stored_object[Mrt::Object.numActualFiles] %></div>
 
   <div class="key">total versions:</div>
-  <div class="value">4</div>
+  <div class="value"><%=versions.length%></div>
 
   <div class="clear"></div>

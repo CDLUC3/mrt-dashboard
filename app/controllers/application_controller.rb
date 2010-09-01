@@ -51,8 +51,12 @@ class ApplicationController < ActionController::Base
   end
 
   def require_object
-    redirect_to(ObjectList.merge({:group => params[:group]})) if params[:object].nil?
-    #some other stuff will go here to perhaps load the object and validate it more
+    redirect_to(ObjectList.merge({:group => params[:group]})) and return false if params[:object].nil?
+    begin
+      @object = UriInfo.new("http://#{params[:object]}")
+    rescue Exception => ex
+      redirect_to(ObjectList.merge({:group => params[:group]})) and return false
+    end
   end
 
   def require_no_user
