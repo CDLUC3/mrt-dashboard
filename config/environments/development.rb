@@ -30,7 +30,7 @@ MrtDashboard::Application.configure do
          :base            => 'ou=People,ou=uc3,dc=cdlib,dc=org',
          :admin_user      => 'Directory Manager',
          :admin_password  => 'ahz6ap2I',
-         :minter          => 'http://noid.cdlib.org/nd/noidu_g9'}
+         :minter          => 'http://noid.cdlib.org/nd/noidu_p9'}
     )
 
   LDAP_GROUP = GroupLdap::Server.new(
@@ -39,7 +39,7 @@ MrtDashboard::Application.configure do
          :base            => 'ou=uc3,dc=cdlib,dc=org',
          :admin_user      => 'Directory Manager',
          :admin_password  => 'ahz6ap2I',
-         :minter          => 'http://noid.cdlib.org/nd/noidu_g9'}
+         :minter          => 'http://noid.cdlib.org/nd/noidu_p9'}
     )
 
   #INGEST_SERVICE = 'http://linux-oj8o.ad.ucop.edu:8080/poster/submit/'
