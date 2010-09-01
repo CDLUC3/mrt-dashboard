@@ -3,6 +3,7 @@ class ApplicationController < ActionController::Base
   layout 'application'
 
   CollectionHome = {:controller => 'home', :action => 'choose_collection'}
+  ObjectList = {:controller => 'collection', :action => 'index'}
 
   def store
     return Mrt::Sparql::Store.new(SPARQL_ENDPOINT)
@@ -47,6 +48,11 @@ class ApplicationController < ActionController::Base
     end
     redirect_to(CollectionHome) and return false if @permissions.length < 1
     @groups = current_user.groups.sort{|x, y| x.description.downcase <=> y.description.downcase}
+  end
+
+  def require_object
+    redirect_to(ObjectList.merge({:group => params[:group]})) if params[:object].nil?
+    #some other stuff will go here to perhaps load the object and validate it more
   end
 
   def require_no_user
