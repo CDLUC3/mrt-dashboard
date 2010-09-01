@@ -7,10 +7,11 @@
 
   <br/>
   <h3 style="font-weight: normal;">
-<%= render :partial => "/object/short_bib_display", :locals => {:obj => @obj_rdf} %></h3>
+<%= render :partial => "/object/short_bib_display", :locals => {:obj => @object} %></h3>
 
-<%# render :partial => '/object/details_display' %>
-  <p>Download button here.  Is this possible for entire object?</p>
+<%= render :partial => '/object/details_display', :locals => {:obj => @object} %>
+  <div class="clear"></div>
+  <p><br/>Tracy has a download button here.  Is this possible for and entire object, not just a version?</p>
 
 
 </div>

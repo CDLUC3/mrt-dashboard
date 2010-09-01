@@ -10,10 +10,9 @@ class ObjectController < ApplicationController
   # other people are experienceing it also
   # before_filter :require_object, :except => [:upload]
   # so have to use the more awkward before_filter, :only instead, below
-  before_filter :require_object, :only => [:index]
+  before_filter :require_object, :only => [:index] #really only everything but upload, so have to add each action
 
   def index
-    @obj_rdf = UriInfo.new("http://#{params[:object]}")
     
   end
 
