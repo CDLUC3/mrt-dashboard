@@ -1,11 +1,14 @@
 require 'rest_client'
 require 'ftools'
+require 'rdf'
 
 class ObjectController < ApplicationController
   before_filter :require_user
   before_filter :require_group
+  #before_filter :require_object
 
   def index
+    @obj_rdf = UriInfo.new("http://#{params[:object]}")
     
   end
 
