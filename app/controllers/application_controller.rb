@@ -53,7 +53,7 @@ class ApplicationController < ActionController::Base
   def require_object
     redirect_to(ObjectList.merge({:group => params[:group]})) and return false if params[:object].nil?
     begin
-      @object = UriInfo.new("http://#{params[:object]}")
+      @object = UriInfo.new("#{RDF_ARK_URI}#{params[:object]}")
     rescue Exception => ex
       redirect_to(ObjectList.merge({:group => params[:group]})) and return false
     end

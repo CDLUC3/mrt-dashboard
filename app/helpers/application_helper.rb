@@ -1,11 +1,12 @@
 module ApplicationHelper
+  #takes an ark id and strips it down to just that if it's a RDF full uri
   def clean_id(id)
-    if (md = id.to_s.match(/^(http:\/\/)(.*)$/)) then
-      #return URI.escape(md[2], Regexp.new("[^#{URI::PATTERN::UNRESERVED}]"))
-      return md[2]
-    else
-      return id.to_s
-    end
+    id.to_s.match(/ark:\/\d+\/\S+$/).to_s
+  end
+
+  #takes an ark id and returns full rdf uri
+  def rdf_id(id)
+    "#{RDF_ARK_URI}#{clean_id(id)}"
   end
 
   def maybe_link(val, raw=nil)
