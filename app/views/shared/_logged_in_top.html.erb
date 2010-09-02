@@ -7,7 +7,7 @@
     <%= link_to("Logout", :controller => 'user_sessions', :action => 'logout') %>
   <% else %>
     <%= link_to("Login", :controller => 'user_sessions', :action => 'login') %>
-  <% end %> | My Profile | Contact UC3 | Help
+  <% end %> | My Profile | <a href="http://www.cdlib.org/services/uc3/contact.html">Contact UC3</a> | Help
   <% if usr then %>
     <br/>Logged in as <%= usr.displayname %>
   <% end %>
