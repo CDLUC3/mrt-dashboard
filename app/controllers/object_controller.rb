@@ -5,14 +5,14 @@ require 'rdf'
 class ObjectController < ApplicationController
   before_filter :require_user
   before_filter :require_group
-  # the following before_filter :except doesn't work right, see bug report for rails 3 pre
-  # at https://rails.lighthouseapp.com/projects/8994/tickets/3913-protect_from_forgery-except-override-in-individual-controllers-isnt-working-in-rails-3pre
-  # other people are experienceing it also
-  # before_filter :require_object, :except => [:upload]
-  # so have to use the more awkward before_filter, :only instead, below
-  before_filter :require_object, :only => [:index] #really only everything but upload, so have to add each action
+  before_filter :require_object, :except => [:add, :upload]
+
 
   def index
+    
+  end
+
+  def add
     
   end
 
@@ -23,7 +23,7 @@ class ObjectController < ApplicationController
     hsh = {
         'file'              => File.new(new_file, 'rb'),
         'type'              => params[:object_type],
-        'submitter'         => current_user.displayname,
+        'submitter'         => "#{current_user.login}/#{current_user.displayname}",
         'filename'          => params[:file].original_filename,
         'profile'           => @group.submission_profile,
         'creator'           => params[:author],
