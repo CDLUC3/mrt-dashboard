@@ -9,7 +9,8 @@ class ObjectController < ApplicationController
 
 
   def index
-    
+    @stored_object = @object[Mrt::Object['hasStoredObject']].first
+    @versions = @stored_object[Mrt::Object['versionSeq']].first.to_list
   end
 
   def add
