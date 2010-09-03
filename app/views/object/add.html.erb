@@ -28,6 +28,7 @@
       <a href="#" id="file_tip"><%= image_tag("tip_icon.gif", :size => '15x15' ) %></a>
     </div>
 
+    <div class="clear" style="width:100%;"></div>
     <div class="short_option">
       <%= radio_button_tag('object_type', 'container', nil, {:onclick => 'enable_meta();'}) %> Container
     </div>
@@ -35,6 +36,7 @@
       <a href="#" id="container_tip"><%= image_tag("tip_icon.gif", :size => '15x15' ) %></a>
     </div>
 
+    <div class="clear" style="width:100%;"></div>
     <div class="short_option">
       <%= radio_button_tag('object_type', 'object-manifest', nil, {:onclick => 'enable_meta();'}) %> Manifest
     </div>
@@ -54,7 +56,8 @@
     <div class="short_option_description">
       <a href="#" id="single_file_batch_tip"><%= image_tag("tip_icon.gif", :size => '15x15' ) %></a>
     </div>
-    
+
+    <div class="clear" style="width:100%;"></div>
     <div class="short_option">
       <%= radio_button_tag('object_type', 'container-batch-manifest', nil, {:onclick => 'disable_meta();'}) %> of containers
     </div>
@@ -62,6 +65,7 @@
       <a href="#" id="container_batch_tip"><%= image_tag("tip_icon.gif", :size => '15x15' ) %></a>
     </div>
 
+    <div class="clear" style="width:100%;"></div>
     <div class="short_option">
       <%= radio_button_tag('object_type', 'batch-manifest', nil, {:onclick => 'disable_meta();'}) %> of object manifests
     </div>
