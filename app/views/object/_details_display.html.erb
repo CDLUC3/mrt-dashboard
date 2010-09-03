@@ -1,6 +1,8 @@
-<%# the local obj must be passed in which is an rdf object %>
-<% stored_object = obj[Mrt::Object['hasStoredObject']].first %>
-<% versions = stored_object[Mrt::Object['versionSeq']].first.to_list %>
+<%# the following must be passed in
+  obj = metadata obj
+  stored_object = Information about object storage
+  versions = versions of the stored object
+%>
   <div class="key">primary identifier:</div>
   <div class="value"><%= stored_object[RDF::DC.identifier] %></div>
 
