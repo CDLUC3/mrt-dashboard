@@ -1,6 +1,7 @@
   <h3>Object Lookup</h3>
-  <%= form_tag({:controller => 'search', :action => 'all'}, :method => :get) do %>
+  <%= form_tag({:controller => 'collection', :action => 'search_results'}, :method => :get) do %>
     <%= text_field_tag 'terms' %>
+    <%= hidden_field_tag 'group', params[:group] %>
     <%= submit_tag('Go') %>
   <% end %>
 

@@ -18,4 +18,11 @@ class CollectionController < ApplicationController
                :order_by => "DESC(?mod)")
     @recent_objects = store().select(q).map{|s| UriInfo.new(s['s']) }
   end
+
+  def search_results
+    q = Q.new("?s ?p ?o
+           FILTER (datatype(?o) = xsd:string)
+           FILTER regex(?o, \"#{params[:terms]}\", \"i\")")
+    @results = store().select(q)
+  end
 end
