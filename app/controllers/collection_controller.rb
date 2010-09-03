@@ -20,9 +20,19 @@ class CollectionController < ApplicationController
   end
 
   def search_results
-    q = Q.new("?s ?p ?o
-           FILTER (datatype(?o) = xsd:string)
-           FILTER regex(?o, \"#{params[:terms]}\", \"i\")")
-    @results = store().select(q)
+    #this doesn't search by arkid :-(
+    q = Q.new("?so rdf:type object:Object .
+           ?so object:isStoredObjectFor ?s .
+           ?s ?p ?o .
+           ?so dc:modified ?mod .
+           ?so <http://purl.org/dc/terms/identifier> ?so_ident
+           FILTER (datatype(?o) = xsd:string) .
+           FILTER regex(?o, \"#{params[:terms]}\", \"i\")", # ||
+#          FILTER regex(?so_ident, \"#{params[:terms]}\", \"i\")",
+           :limit => 100,
+           :select => "DISTINCT ?s ?mod ?so_ident",
+           :order_by => "DESC(?mod)")
+    @results = store().select(q).map{|s| UriInfo.new(s['s']) }
+    #@results = store().select(q)
   end
 end
