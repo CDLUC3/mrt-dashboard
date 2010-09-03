@@ -5,7 +5,8 @@
     &gt; Search Results
   </div>
   <br/>
-    <table>
+  <% if @results.length > 0 then %>
+  <table>
     <thead>
       <tr>
         <th style="width: 30%;">Primary Id</th>
@@ -16,6 +17,9 @@
       <%= render :partial => "/object/table_row", :collection => @results %>
     </tbody>
   </table>
+  <% else %>
+    There were no items that had the text matching <strong><%=params[:terms]%></strong>.
+  <% end %>
 </div>
 <div class="grid_4 sidebar">
   <%= render :partial => '/shared/side_lookup' %>
