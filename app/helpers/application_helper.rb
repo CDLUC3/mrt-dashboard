@@ -74,4 +74,13 @@ module ApplicationHelper
     return array.join('/')
   end
 
+  def merritt_time(t)
+    if t.class == String then
+      my_t = Time.parse(t)
+    else
+      my_t = t
+    end
+    my_t.strftime("%Y-%m-%d  %I:%M %p").downcase
+  end
+
 end
