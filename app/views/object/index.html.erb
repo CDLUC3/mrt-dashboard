@@ -18,6 +18,10 @@
 </div>
 <div class="grid_4 sidebar">
   <%= render :partial => '/shared/side_lookup' %><br/>
+  <% if @versions.length > 1 then %>
+    <%= render :partial => '/version/list_sidebar',
+      :locals => {:versions => @versions.reverse[1..-1], :title => 'Prior Versions'} %><br/>
+  <% end %>
   <%# render :partial => 'overview' %><br/>
   <%# render :partial => '/shared/side_alert' %>
 
