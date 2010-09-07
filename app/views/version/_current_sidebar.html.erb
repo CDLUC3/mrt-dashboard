@@ -1,13 +1,10 @@
-<% #pass in 'version' as local variable %>
+<% #pass in 'version' and 'files' as local variables %>
 <h3>Current Version</h3>
 
 <%= render :partial => '/version/line_sidebar', :collection => [version] %>
 
 <ul>
-  <li>bbghall_cells.pdf</li>
-  <li>bbghali_cells_data.xls</li>
-  <li>bbghali_cells_marc.xml</li>
-  <li>cell_picture.jpg</li>
+  <%= render :partial => '/file/line_sidebar', :collection => files %>
 </ul>
 
 31 more files
