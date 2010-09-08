@@ -5,33 +5,14 @@ class CollectionController < ApplicationController
   Q = Mrt::Sparql::Q
 
   def index
-    @object_count = store().select(Q.new("?obj rdf:type object:Object .
-        ?obj object:isStoredObjectFor ?meta .
-        ?meta object:isInCollection <#{@group.sparql_id}>")).size
+    @object_count = @group.object_count
 
-    @version_count = store().select(Q.new("?vers rdf:type version:Version .
-        ?vers version:inObject ?obj .
-        ?obj object:isStoredObjectFor ?meta .
-        ?meta object:isInCollection <#{@group.sparql_id}>")).size
+    @version_count = @group.version_count
 
-    @file_count = store().select(Q.new("?file rdf:type file:File .
-        ?file file:inVersion ?vers .
-        ?vers version:inObject ?obj .
-        ?obj object:isStoredObjectFor ?meta .
-        ?meta object:isInCollection <#{@group.sparql_id}>")).size
+    @file_count = @group.file_count
 
-    q = Q.new("?obj rdf:type object:Object .
-        ?obj object:isStoredObjectFor ?meta .
-        ?meta object:isInCollection <#{@group.sparql_id}>",
-      :select => "?obj")
-
-    obs = store().select(q).map{|s| UriInfo.new(s['obj']) }
-
-    @total_size = 0
+    @total_size = @group.total_size
     
-    obs.each{|ob| @total_size += ob[Mrt::Object.totalActualSize].to_s.to_i}
-
-    #@total_size = store().select(Q.new("?s dc:extent ?n")).map{|r| r['n'].value.to_i}.sum() #XXX this doesn't work right
     q = Q.new("?so rdf:type object:Object .
                ?so object:isStoredObjectFor ?s .
                ?s ?p ?o .
