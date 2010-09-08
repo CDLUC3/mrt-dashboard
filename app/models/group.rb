@@ -28,6 +28,10 @@ class Group
     LDAP_GROUP.get_user_permissions(userid, self.id, LDAP_USER)
   end
 
+  def sparql_id
+    "http://uc3.cdlib.org/collection/#{URI.encode(self.id, Regexp.new("[^#{URI::PATTERN::UNRESERVED}]"))}"
+  end
+
   private
 
   # this may belong to some ldap base class at some point
