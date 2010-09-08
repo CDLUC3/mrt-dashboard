@@ -1,6 +1,9 @@
 # this all probably needs to be refactored eventually
 class Group
 
+  Q = Mrt::Sparql::Q
+  STORE = Mrt::Sparql::Store.new(SPARQL_ENDPOINT)
+
   attr_accessor :id, :submission_profile, :ark_id, :owner, :description
 
   def initialize
@@ -30,6 +33,41 @@ class Group
 
   def sparql_id
     "http://uc3.cdlib.org/collection/#{URI.encode(self.id, Regexp.new("[^#{URI::PATTERN::UNRESERVED}]"))}"
+  end
+
+  def object_count
+    STORE.select(Q.new("?obj rdf:type object:Object .
+      ?obj object:isStoredObjectFor ?meta .
+      ?meta object:isInCollection <#{self.sparql_id}>")).size
+  end
+
+  def version_count
+    STORE.select(Q.new("?vers rdf:type version:Version .
+        ?vers version:inObject ?obj .
+        ?obj object:isStoredObjectFor ?meta .
+        ?meta object:isInCollection <#{self.sparql_id}>")).size
+  end
+
+  def file_count
+    STORE.select(Q.new("?file rdf:type file:File .
+        ?file file:inVersion ?vers .
+        ?vers version:inObject ?obj .
+        ?obj object:isStoredObjectFor ?meta .
+        ?meta object:isInCollection <#{self.sparql_id}>")).size
+  end
+
+  def total_size
+    q = Q.new("?obj rdf:type object:Object .
+        ?obj object:isStoredObjectFor ?meta .
+        ?meta object:isInCollection <#{self.sparql_id}>",
+      :select => "?obj")
+
+    obs = STORE.select(q).map{|s| UriInfo.new(s['obj']) }
+
+    total_size = 0
+
+    obs.each{|ob| total_size += ob[Mrt::Object.totalActualSize].to_s.to_i}
+    total_size
   end
 
   private
