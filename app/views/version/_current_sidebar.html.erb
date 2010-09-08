@@ -6,7 +6,8 @@
 <% trunc_files = (files.length > 4 ? files[0..3] : files) %>
 
 <ul>
-  <%= render :partial => '/file/line_sidebar', :collection => trunc_files %>
+  <%= render :partial => '/file/line_sidebar', :collection => trunc_files,
+            :locals => {:version => version} %>
 </ul>
 
 <% if files.length > trunc_files.length then%>
