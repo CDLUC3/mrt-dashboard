@@ -21,11 +21,6 @@ class Group
     return g
   end
 
-  # XXX a random number of objects since we don't know yet
-  def object_count
-    rand(10000)
-  end
-
   # permissions are returned as an array like ['read','write'], maybe more in the future
   def permission(userid)
     LDAP_GROUP.get_user_permissions(userid, self.id, LDAP_USER)
