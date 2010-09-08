@@ -15,6 +15,9 @@ class ObjectController < ApplicationController
     @files = @versions[@versions.length-1][Mrt::Version.hasFile]
     @files.delete_if {|file| file[RDF::DC.identifier].to_s[0..10].eql?('system/mrt-')}
     @files.sort! {|x,y| File.basename(x[RDF::DC.identifier].to_s.downcase) <=> File.basename(y[RDF::DC.identifier].to_s.downcase)}
+    @total_size = 0
+    @versions.each {|ver| @total_size += ver[Mrt::Base.totalActualSize].to_s.to_i}
+    #@versions.each {|ver| ver[Mrt::Base.size].to_s.to_i} #this one doesn't work
   end
 
   def add

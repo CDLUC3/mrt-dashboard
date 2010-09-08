@@ -16,7 +16,7 @@
   <div class="value"><%= obj[Mrt::Kernel.when] %></div>
 
   <div class="key">local id:</div>
-  <div class="value">???</div>
+  <div class="value">??? (is this in the inventory service yet?)</div>
 
   <div class="key">last modified:</div>
   <div class="value"><%= merritt_time(stored_object[RDF::DC.modified].to_s) %></div>
@@ -25,7 +25,7 @@
   <div class="value"><%= merritt_time(versions[0][RDF::DC.created].to_s) %></div>
 
   <div class="key">total size <span style="font-weight: normal">(all versions)</span>:</div>
-  <div class="value">???</div>
+  <div class="value"><%=number_to_storage_size(@total_size)%></div>
 
   <div class="key">total files <span style="font-weight: normal">(all versions)</span>:</div>
   <div class="value"><%= stored_object[Mrt::Object.numActualFiles] %></div>
