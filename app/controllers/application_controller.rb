@@ -1,4 +1,6 @@
 class ApplicationController < ActionController::Base
+
+  Q = Mrt::Sparql::Q
   protect_from_forgery
   layout 'application'
 
@@ -57,6 +59,23 @@ class ApplicationController < ActionController::Base
     rescue Exception => ex
       redirect_to(ObjectList.merge({:group => params[:group]})) and return false
     end
+  end
+
+  def require_version
+    #get version of specific object
+    q = Q.new("?vers dc:identifier \"#{params[:version]}\"^^<http://www.w3.org/2001/XMLSchema#string> .
+                ?vers rdf:type version:Version .
+                ?vers version:inObject ?obj .
+                ?obj rdf:type object:Object .
+                ?obj object:isStoredObjectFor ?meta .
+                ?obj dc:identifier \"#{params[:object]}\"^^<http://www.w3.org/2001/XMLSchema#string>",
+      :select => "?vers")
+
+    res = store().select(q)
+
+    #if @results.length != 1 then
+
+    @version = UriInfo.new(res[0]['vers'])
   end
 
   def require_no_user

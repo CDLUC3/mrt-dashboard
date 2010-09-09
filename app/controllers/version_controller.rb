@@ -5,8 +5,19 @@ class VersionController < ApplicationController
   before_filter :require_user
   before_filter :require_group
   before_filter :require_object
+  before_filter :require_version
 
   def index
+
+    debugger
+
+
+
+
+
+
+
+
     @stored_object = @object[Mrt::Object['hasStoredObject']].first
     @versions = @stored_object[Mrt::Object['versionSeq']].first.to_list
     #files for current version
