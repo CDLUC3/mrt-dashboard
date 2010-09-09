@@ -58,8 +58,8 @@ module ApplicationHelper
     size = Kernel.Float(size)
     case
       when size == 1 then "1 Byte"
-      when size < 10**3 then "%d Bytes" % size
-      when size < 10**6 then "%.#{precision}f kB"  % (size / 10.0**3)
+      when size < 10**3 then "%d B" % size
+      when size < 10**6 then "%.#{precision}f KB"  % (size / 10.0**3)
       when size < 10**9 then "%.#{precision}f MB"  % (size / 10.0**6)
       when size < 10**12 then "%.#{precision}f GB"  % (size / 10.0**9)
       else                    "%.#{precision}f TB"  % (size / 10.0**12)

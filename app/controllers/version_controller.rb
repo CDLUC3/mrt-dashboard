@@ -9,22 +9,21 @@ class VersionController < ApplicationController
 
   def index
 
-    debugger
-
-
-
-
-
-
-
-
     @stored_object = @object[Mrt::Object['hasStoredObject']].first
     @versions = @stored_object[Mrt::Object['versionSeq']].first.to_list
     #files for current version
-    @files = @versions[@versions.length-1][Mrt::Version.hasFile]
-    @files.delete_if {|file| file[RDF::DC.identifier].to_s[0..10].eql?('system/mrt-')}
+    files = @version[Mrt::Version.hasFile]
+    @system_files = []
+    @files = []
+    files.each do |file|
+      if file[RDF::DC.identifier].to_s[0..10].eql?('system/mrt-') then
+        @system_files.push(file)
+      else
+        @files.push(file)
+      end
+    end
     @files.sort! {|x,y| File.basename(x[RDF::DC.identifier].to_s.downcase) <=> File.basename(y[RDF::DC.identifier].to_s.downcase)}
-    @total_size = @stored_object[Mrt::Object.totalActualSize].to_s.to_i
+    @system_files.sort! {|x,y| File.basename(x[RDF::DC.identifier].to_s.downcase) <=> File.basename(y[RDF::DC.identifier].to_s.downcase)}
     
   end
 end
