@@ -1,31 +1,35 @@
 <div class="grid_12">
-
-  STARTING TEMPLATE, NEEDS MODIFICATION (JUST SO YOU KNOW).
-  <h2><%= params[:object] %> - Version <%=params[:version] %></h2>
+  <h2><%= params[:object] %> - Version <%=params[:version] %>: <%= merritt_time(@version[RDF::DC.created].to_s)%> </h2>
   <div class="breadcrumbs"><%= link_to('Merritt', :controller => 'home', :action => 'index') %> &gt;
     <%= link_to("Collection: #{@group.description}", :controller => 'collection', :action => 'index', :group => params[:group]) %> &gt;
-    Object: <%= params[:object] %>
+    <%= link_to("Object: #{params[:object]}", :controller => 'object', :action => 'index', :group => params[:group], :object => params[:object]) %> &gt;
+    Version <%= params[:version] %>
   </div>
 
   <br/>
   <h3 style="font-weight: normal;">
 <%= render :partial => "/object/short_bib_display", :locals => {:obj => @object} %></h3>
 
-<%= render :partial => '/object/details_display', :locals => {:obj => @object,
-        :stored_object => @stored_object, :versions => @versions} %>
-  <div class="clear"></div>
-  <p><br/>Tracy has a download button here.  Is this possible for and entire object, not just a version?</p>
+<%= render :partial => '/version/details_display', :locals => {:obj => @object,
+        :stored_object => @stored_object, :version => @version} %>
+<div class="clear"></div>
 
+<%= render :partial => '/version/files', :locals => {:title => 'User Files', :files => @files, :obj => @object, :version => @version} %>
+<%= render :partial => '/version/files', :locals => {:title => 'System Files', :files => @system_files, :obj => @object, :version => @version} %>
 
+<div class="key">&nbsp;</div><div class="value">&nbsp;</div>
+<div class="key">&nbsp;</div>
+<div class="value">
+  <form>
+    <input type="button" name="dl_version" value="Download version"/>
+    <input type="button" name="backwards" value="Back" onclick="history.back();"/>
+  </form>
+</div>
 </div>
 <div class="grid_4 sidebar">
   <%= render :partial => '/shared/side_lookup' %><br/>
-  <%= render :partial => '/version/current_sidebar',
-      :locals => {:version => @versions.reverse[0], :files => @files} %><br/>
-  <% if @versions.length > 1 then %>
-    <%= render :partial => '/version/list_sidebar',
-      :locals => {:versions => @versions.reverse[1..-1], :title => 'Prior Versions'} %><br/>
-  <% end %>
+  <%= render :partial => '/version/list_sidebar',
+      :locals => {:versions => @versions.reverse, :title => 'All Versions'} %><br/>
   <%# render :partial => 'overview' %><br/>
   <%# render :partial => '/shared/side_alert' %>
 

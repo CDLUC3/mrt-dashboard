@@ -181,6 +181,14 @@ div.value {
   text-align: left;
 }
 
+div.files div.key {
+    word-wrap: break-word;
+}
+
+div.files div.value {
+    word-wrap: break-word;
+}
+
 /* small key-value styles in sidebar */
 .sidebar div.key {
   /*margin-top: 0.25em;

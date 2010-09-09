@@ -1,0 +1,19 @@
+<%# the following must be passed in
+  files = files to display
+  obj = metadata obj
+  stored_object = Information about object storage
+  version = version of the stored object
+%>
+
+<h3><%=title%></h3>
+<div class ="files">
+  <% files.each do |file| %>
+    <div class="key"><%=File.basename(file[RDF::DC.identifier].to_s)%></div>
+    <div class="value">
+      <%=file[Mrt::File.mediaType]%>
+      <%=number_to_storage_size(file[Mrt::Base.size].to_s.to_i)%>
+    </div>
+
+  <% end %>
+</div>
+<div class="clear"></div>
