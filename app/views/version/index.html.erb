@@ -1,0 +1,32 @@
+<div class="grid_12">
+
+  STARTING TEMPLATE, NEEDS MODIFICATION (JUST SO YOU KNOW).
+  <h2>Object: <%= params[:object] %></h2>
+  <div class="breadcrumbs"><%= link_to('Merritt', :controller => 'home', :action => 'index') %> &gt;
+    <%= link_to("Collection: #{@group.description}", :controller => 'collection', :action => 'index', :group => params[:group]) %> &gt;
+    Object: <%= params[:object] %>
+  </div>
+
+  <br/>
+  <h3 style="font-weight: normal;">
+<%= render :partial => "/object/short_bib_display", :locals => {:obj => @object} %></h3>
+
+<%= render :partial => '/object/details_display', :locals => {:obj => @object,
+        :stored_object => @stored_object, :versions => @versions} %>
+  <div class="clear"></div>
+  <p><br/>Tracy has a download button here.  Is this possible for and entire object, not just a version?</p>
+
+
+</div>
+<div class="grid_4 sidebar">
+  <%= render :partial => '/shared/side_lookup' %><br/>
+  <%= render :partial => '/version/current_sidebar',
+      :locals => {:version => @versions.reverse[0], :files => @files} %><br/>
+  <% if @versions.length > 1 then %>
+    <%= render :partial => '/version/list_sidebar',
+      :locals => {:versions => @versions.reverse[1..-1], :title => 'Prior Versions'} %><br/>
+  <% end %>
+  <%# render :partial => 'overview' %><br/>
+  <%# render :partial => '/shared/side_alert' %>
+
+</div>
