@@ -62,6 +62,7 @@ class ApplicationController < ActionController::Base
   end
 
   def require_version
+    redirect_to(:controller => :object, :action => 'index', :group => :params[:group], :object => params[:object]) and return false if params[:version].nil?
     #get version of specific object
     q = Q.new("?vers dc:identifier \"#{params[:version]}\"^^<http://www.w3.org/2001/XMLSchema#string> .
                 ?vers rdf:type version:Version .
@@ -73,9 +74,13 @@ class ApplicationController < ActionController::Base
 
     res = store().select(q)
 
-    #if @results.length != 1 then
+    redirect_to(:controller => :object, :action => 'index', :group => :params[:group], :object => params[:object]) and return false if res.length != 1
 
     @version = UriInfo.new(res[0]['vers'])
+  end
+
+  def file_state_uri(id, version, fn)
+    "#{FILE_STATE_URI}#{unesc(id)}/#{unesc(version)}/#{unesc(fn)}"
   end
 
   def require_no_user
@@ -94,6 +99,10 @@ class ApplicationController < ActionController::Base
   def redirect_back_or_default(default)
     redirect_to(session[:return_to] || default)
     session[:return_to] = nil
+  end
+
+  def unesc(i)
+    URI.escape(i, Regexp.new("[^#{URI::PATTERN::UNRESERVED}]"))
   end
 
 end
