@@ -7,16 +7,16 @@
   <div class="value"><%= stored_object[RDF::DC.identifier] %></div>
 
   <div class="key">title:</div>
-  <div class="value"><%= dc_nice(version[Mrt::Kernel.what]) %></div>
+  <div class="value"><%= dc_nice(version[Mrt::Kernel.what]) %>&nbsp;</div>
 
   <div class="key">creator:</div>
-  <div class="value"><%= dc_nice(version[Mrt::Kernel.who]) %></div>
+  <div class="value"><%= dc_nice(version[Mrt::Kernel.who]) %>&nbsp;</div>
 
   <div class="key">date:</div>
-  <div class="value"><%= dc_nice(version[Mrt::Kernel.when]) %></div>
+  <div class="value"><%= dc_nice(version[Mrt::Kernel.when]) %>&nbsp;</div>
 
   <div class="key">local id:</div>
-  <div class="value"><%= dc_nice(obj[Mrt::Object.localIdentifier])%></div>
+  <div class="value"><%= dc_nice(obj[Mrt::Object.localIdentifier])%>&nbsp;</div>
 
   <div class="key">version number:</div>
   <div class="value"><%=version[RDF::DC.identifier]%></div>
