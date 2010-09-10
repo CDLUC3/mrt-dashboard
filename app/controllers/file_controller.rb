@@ -22,9 +22,12 @@ class FileController < ApplicationController
 
     @file = UriInfo.new(res[0]['file'])
 
-    @bytestream = @file[Mrt::File.bytestream]
-
-    redirect_to @bytestream.to_s
-
+    fileUri = @file.first(Mrt::File.bytestream).to_uri
+    http = Mrt::HTTP.new(fileUri.scheme, fileUri.host, fileUri.port)
+    tmp_file = http.get_to_tempfile(fileUri.path)
+    send_file(tmp_file.path,
+              :filename => File.basename(@file[RDF::DC.identifier].to_s),
+              :type => @file[Mrt::File.mediaType].to_s,
+              :disposition => 'inline')
   end
 end
