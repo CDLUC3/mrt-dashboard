@@ -83,4 +83,10 @@ module ApplicationHelper
     my_t.strftime("%Y-%m-%d  %I:%M %p").downcase
   end
 
+  #makes dublin core metadatas display nicely if not assigned
+  def dc_nice(i)
+    return "unknown" if i.nil?
+    (i.to_s.eql?("(:unas)") ? 'unknown' : i.to_s )
+  end
+
 end

@@ -1,7 +1,7 @@
 <% content_for :title do %>
-  <%= @info[Mrt::Kernel.who] || "unkn" %>,
-  <%= @info[Mrt::Kernel.what] || "unkn" %>
-  (<%= @info[Mrt::Kernel.when] || "unkn" %>)
+  <%= dc_nice(@info[Mrt::Kernel.who]) %>,
+  <%= dc_nice(@info[Mrt::Kernel.what]) %>
+  (<%= dc_nice(@info[Mrt::Kernel.when]) %>)
 <% end %>
 
 <% stored_object = @info[Mrt::Object['hasStoredObject']].first %>
