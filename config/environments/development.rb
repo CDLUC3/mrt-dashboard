@@ -36,7 +36,7 @@ MrtDashboard::Application.configure do
   LDAP_GROUP = GroupLdap::Server.new(
        {:host             => "badger.cdlib.org",
          :port            => 1636,
-         :base            => 'ou=uc3,dc=cdlib,dc=org',
+         :base            => 'ou=mrt-groups,ou=uc3,dc=cdlib,dc=org',
          :admin_user      => 'Directory Manager',
          :admin_password  => 'ahz6ap2I',
          :minter          => 'http://noid.cdlib.org/nd/noidu_p9'}
@@ -50,5 +50,5 @@ MrtDashboard::Application.configure do
 
   RDF_ARK_URI = "http://ark.cdlib.org/"
 
-  FILE_STATE_URI = "http://badger.cdlib.org:35121/state/10/"
+  STORE_URI = "http://badger.cdlib.org:35121/content/10/"
 end

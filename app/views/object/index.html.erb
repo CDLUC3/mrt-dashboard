@@ -15,10 +15,12 @@
   <div class="key">&nbsp;</div><div class="value">&nbsp;</div>
    <div class="key">&nbsp;</div>
   <div class="value">
-    <form>
-      <input type="button" name="dl_version" value="Download version"/>
+    <%= form_tag(:action => 'download') do %>
+      <%= hidden_field_tag 'group', params[:group] %>
+      <%= hidden_field_tag 'object', params[:object] %>
+      <%= submit_tag 'Download object' %>
       <input type="button" name="backwards" value="Back" onclick="history.back();"/>
-    </form>
+    <% end %>
   </div>
 
 

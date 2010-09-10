@@ -12,7 +12,7 @@ module GroupLdap
         :objectclass           => ["organizationalUnit"] + extra_classes,
         #:name                  => groupid
         :description           => description,
-        :arkId                 => @minter.mint
+        :arkId                 => "ark:/13030/#{@minter.mint}"
         }
 
       true_or_exception(@admin_ldap.add(:dn => ns_dn(groupid), :attributes => attr))

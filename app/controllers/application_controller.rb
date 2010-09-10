@@ -80,7 +80,7 @@ class ApplicationController < ActionController::Base
   end
 
   def file_state_uri(id, version, fn)
-    "#{FILE_STATE_URI}#{unesc(id)}/#{unesc(version)}/#{unesc(fn)}"
+    "#{FILE_STATE_URI}#{esc(id)}/#{esc(version)}/#{esc(fn)}"
   end
 
   def require_no_user
@@ -101,7 +101,7 @@ class ApplicationController < ActionController::Base
     session[:return_to] = nil
   end
 
-  def unesc(i)
+  def esc(i)
     URI.escape(i, Regexp.new("[^#{URI::PATTERN::UNRESERVED}]"))
   end
 
