@@ -16,7 +16,6 @@ class ObjectController < ApplicationController
     @files.delete_if {|file| file[RDF::DC.identifier].to_s[0..10].eql?('system/mrt-')}
     @files.sort! {|x,y| File.basename(x[RDF::DC.identifier].to_s.downcase) <=> File.basename(y[RDF::DC.identifier].to_s.downcase)}
     @total_size = @stored_object[Mrt::Object.totalActualSize].to_s.to_i
-    
   end
 
   def add
