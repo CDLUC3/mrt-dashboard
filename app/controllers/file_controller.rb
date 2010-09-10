@@ -8,8 +8,8 @@ class FileController < ApplicationController
   before_filter :require_version
 
   def display
-    q = Q.new("?vers version:hasFile ?file .
-               ?vers version:hasFile <#{file_state_uri(params[:object], params[:version], params[:file])}> .
+    q = Q.new("?file dc:identifier \"#{params[:file]}\"^^<http://www.w3.org/2001/XMLSchema#string> .
+               ?vers version:hasFile ?file .
                ?vers dc:identifier \"#{params[:version]}\"^^<http://www.w3.org/2001/XMLSchema#string> .
                ?vers rdf:type version:Version .
                ?vers version:inObject ?obj .
