@@ -28,6 +28,7 @@ class CollectionController < ApplicationController
     q = Q.new("?so rdf:type object:Object .
            ?so object:isStoredObjectFor ?s .
            ?s ?p ?o .
+           ?s object:isInCollection <#{@group.sparql_id}> .
            ?so dc:modified ?mod .
            ?so dc:identifier ?so_ident
            FILTER (datatype(?o) = xsd:string) .
