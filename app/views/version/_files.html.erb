@@ -8,7 +8,12 @@
 <h3><%=title%></h3>
 <div class ="files">
   <% files.each do |file| %>
-    <div class="key"><%=File.basename(file[RDF::DC.identifier].to_s)%></div>
+    <div class="key">
+      <%=link_to(File.basename(file[RDF::DC.identifier].to_s),
+          :controller => :file, :action => :display,
+          :group => params[:group], :object => params[:object],
+          :version => params[:version], :file => file[RDF::DC.identifier].to_s)
+          %></div>
     <div class="value">
       <%=file[Mrt::File.mediaType]%>
       <%=number_to_storage_size(file[Mrt::Base.size].to_s.to_i)%>
