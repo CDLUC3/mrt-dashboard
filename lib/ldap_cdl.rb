@@ -50,7 +50,7 @@ module LdapCdl
         :cn                    => "#{firstname} #{lastname}",
         :displayName           => "#{firstname} #{lastname}",
         :userPassword          => password,
-        :arkId                 => @minter.mint,
+        :arkId                 => "ark:/13030/#{@minter.mint}",
         :mail                  => email
         #:mail                  => "testy@tester.com",
         #:title                 => "test user",

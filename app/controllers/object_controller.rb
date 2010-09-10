@@ -18,6 +18,17 @@ class ObjectController < ApplicationController
     @total_size = @stored_object[Mrt::Object.totalActualSize].to_s.to_i
   end
 
+  def download
+    dl_uri = "#{STORE_URI}#{esc(params[:object])}"
+    fileUri = RDF::URI.new(dl_uri)
+    http = Mrt::HTTP.new(fileUri.scheme, fileUri.host, fileUri.port)
+    tmp_file = http.get_to_tempfile(fileUri.path)
+    send_file(tmp_file.path,
+              :filename => "#{esc(params[:object])}_object.tar.gz",
+              :type => "application/octet-stream",
+              :disposition => 'inline')
+  end
+
   def add
     
   end
