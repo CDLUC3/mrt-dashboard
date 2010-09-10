@@ -7,16 +7,16 @@
   <div class="value"><%= stored_object[RDF::DC.identifier] %></div>
 
   <div class="key">title:</div>
-  <div class="value"><%= dc_nice(obj[Mrt::Kernel.what]) %></div>
+  <div class="value"><%= dc_nice(obj[Mrt::Kernel.what]) %>&nbsp;</div>
 
   <div class="key">creator:</div>
-  <div class="value"><%= dc_nice(obj[Mrt::Kernel.who]) %></div>
+  <div class="value"><%= dc_nice(obj[Mrt::Kernel.who]) %>&nbsp;</div>
 
   <div class="key">date:</div>
-  <div class="value"><%= dc_nice(obj[Mrt::Kernel.when]) %></div>
+  <div class="value"><%= dc_nice(obj[Mrt::Kernel.when]) %>&nbsp;</div>
 
   <div class="key">local id:</div>
-  <div class="value"><%= dc_nice(obj[Mrt::Object.localIdentifier])%></div>
+  <div class="value"><%= dc_nice(obj[Mrt::Object.localIdentifier])%>&nbsp;</div>
 
   <div class="key">last modified:</div>
   <div class="value"><%= merritt_time(stored_object[RDF::DC.modified].to_s) %></div>
@@ -26,9 +26,6 @@
 
   <div class="key">total size <span style="font-weight: normal">(all versions)</span>:</div>
   <div class="value"><%=number_to_storage_size(@total_size)%></div>
-
-  <div class="key">total files <span style="font-weight: normal">(all versions)</span>:</div>
-  <div class="value"><%= stored_object[Mrt::Object.numActualFiles] %></div>
 
   <div class="key">total versions:</div>
   <div class="value"><%=versions.length%></div>

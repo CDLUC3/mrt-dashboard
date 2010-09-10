@@ -84,9 +84,10 @@ module ApplicationHelper
   end
 
   #makes dublin core metadatas display nicely if not assigned
+  #tracy wants nothing to display anywhere if not filled in, so we'll see ;-)
   def dc_nice(i)
-    return "unknown" if i.nil?
-    (i.to_s.eql?("(:unas)") ? 'unknown' : i.to_s )
+    return "" if i.nil?
+    (i.to_s.eql?("(:unas)") ? '' : i.to_s )
   end
 
 end

@@ -34,6 +34,7 @@ class ObjectController < ApplicationController
   end
 
   def upload
+    new_file = ''
     begin
       new_file = DataFile.save(params[:file], current_user.login)
 
@@ -69,6 +70,7 @@ class ObjectController < ApplicationController
       @batch_id = @doc.xpath("//bat:batchState/bat:batchID")[0].child.text
       @obj_count = @doc.xpath("//bat:batchState/bat:jobStates").length
     rescue Exception => ex
+      File.delete(new_file)
       @exception = ex
       render :action => "upload_error"
     end
