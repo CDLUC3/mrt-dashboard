@@ -31,9 +31,9 @@ class VersionController < ApplicationController
     dl_uri = "#{STORE_URI}#{esc(params[:object])}/#{esc(params[:version])}"
     fileUri = RDF::URI.new(dl_uri)
     http = Mrt::HTTP.new(fileUri.scheme, fileUri.host, fileUri.port)
-    tmp_file = http.get_to_tempfile(fileUri.path)
+    tmp_file = http.get_to_tempfile("#{fileUri.path}?t=zip")
     send_file(tmp_file.path,
-              :filename => "#{esc(params[:object])}_version_#{esc(params[:version])}.tar.gz",
+              :filename => "#{esc(params[:object])}_version_#{esc(params[:version])}.zip",
               :type => "application/octet-stream",
               :disposition => 'inline')
   end
