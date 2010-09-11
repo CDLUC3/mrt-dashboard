@@ -22,9 +22,9 @@ class ObjectController < ApplicationController
     dl_uri = "#{STORE_URI}#{esc(params[:object])}"
     fileUri = RDF::URI.new(dl_uri)
     http = Mrt::HTTP.new(fileUri.scheme, fileUri.host, fileUri.port)
-    tmp_file = http.get_to_tempfile(fileUri.path)
+    tmp_file = http.get_to_tempfile("#{fileUri.path}?t=zip")
     send_file(tmp_file.path,
-              :filename => "#{esc(params[:object])}_object.tar.gz",
+              :filename => "#{esc(params[:object])}_object.zip",
               :type => "application/octet-stream",
               :disposition => 'inline')
   end
