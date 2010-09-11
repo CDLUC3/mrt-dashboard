@@ -34,9 +34,12 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  #require a group, but hackish thing to get group from session instead of params for help
   def require_group
-    redirect_to(CollectionHome) and return false if params[:group].nil?
+    redirect_to(CollectionHome) and return false if params[:group].nil? and session[:group].nil?
     begin
+      session[:group] = params[:group] if !params[:group].nil?
+      params[:group] = session[:group] if params[:group].nil?
       @group = Group.find(params[:group])
     rescue Exception => ex
       redirect_to(CollectionHome)
