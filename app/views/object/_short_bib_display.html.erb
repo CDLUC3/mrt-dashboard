@@ -1,5 +1,13 @@
 <%# takes :obj passed in as local variable as rdf object
 %>
-<%= dc_nice(obj[Mrt::Kernel.who]) %>.
-<span class="title"><%= dc_nice(obj[Mrt::Kernel.what])%></span>
-(<%= dc_nice(obj[Mrt::Kernel.when]) %>)
+<% who, what, whn = dc_nice(obj[Mrt::Kernel.who]), dc_nice(obj[Mrt::Kernel.what]), dc_nice(obj[Mrt::Kernel.when]) %>
+<% if who and !who.eql?('') then %>
+  <%= who %>.
+<% end %>
+<% if what and !what.eql?('') then %>
+  <span class="title"><%= what %></span>
+<% end %>
+<% if whn and !whn.eql?('') then %>
+  (<%= whn %>)
+<% end %>
+
