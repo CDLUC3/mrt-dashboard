@@ -15,6 +15,11 @@ root {
 }
 
 
+.grid_11 {
+  font-family: Helvetica, Verdana, Tahoma, Arial, sans-serif;
+  font-size: 12px; 
+}
+
 .sidebar {
   display: none;
 
@@ -39,11 +44,6 @@ root {
 }
 
 
-
-body {
-  font-family: Helvetica, Verdana, Tahoma, Arial, sans-serif;
-  font-size: 12px/1.5; 
-}
 
 
 
