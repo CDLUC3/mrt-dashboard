@@ -2,14 +2,20 @@
 
 
 <h2>Merritt and Metadata</h2>
-
+  <div class="breadcrumbs"><%= link_to('Merritt', :controller => 'home', :action => 'index') %> &gt;
+    <%= link_to("Collection: #{@group.description}", :controller => 'collection', :action => 'index') %> &gt;
+    <%= link_to("Help", :controller => 'help', :action => 'index') %> &gt;
+    Merritt and Metadata
+  </div>
+  
+<br />
 <p>We strongly recommend that descriptive metadata accompany each digital object. Metadata are critical to managing digital collections and providing meaningful reports. We are aware that you most likely have descriptive metadata about each object, stored in MARC, MODS, METS, or some other format. If you have metadata records, we will store and preserve them as part of the digital object.  To preserve metadata records with a digital object, we recommend that you create a container file (.zip or .tar) include all object component files as well as the metadata files and submit the container file to Merritt.</p> 
 
 <p>Merritt also enables you to use metadata to discover and manage content in the repository.  You can provide information about title, creator (author), date and local identifier either by typing in metadata on the <strong>Add Object</strong> form, by using a batch manifest, or by submitting a <strong>mrt-erc.txt</strong> file with the object.  This guide will help you choose the best approach.  Note that elements contained within associated metadata files such as METS or MARC will be preserved but not searchable.  If these files contain title or author information, you will also need to provide that data via the <strong>Add Object</strong> form, a manifest or an <strong>mrt-erc.txt</strong> file.</p>
 
-
+<a name="elements"></a>
 <h3>The Metadata Elements</h3>
-<p>Merritt uses Dublin Core Kernel Metadata, also expressed as Electronic Resource Citations (ERCs), to provide access to content.  These four elements can have different names depending the means of submission:</p>
+<p>Merritt uses Dublin Core Kernel Metadata, also expressed as Electronic Resource Citations (ERCs), to provide access to content.  These four elements can have different names depending on the means of submission:</p>
 
 
 <table width="90%">
@@ -54,23 +60,25 @@
 <p>Not only are all of these elements searchable in Merritt, but the <strong>local identifier</strong> element can be used to edit content.  (If you have a large number of objects to edit, you can submit a batch manifest that specifies the local identifiers of the objects to be edited along with the revised content - see <a href="edit_objects.html.erb">Editing Objects</a> for details.) At this time these elements are not repeatable.</p>
 
 
-
+<a name="options"></a>
 <h3>Metadata Submission Options</h3>
 
-<p><img src="metadata_option_chart.gif" /></p>
+<p><%=image_tag("help/metadata_option_chart.gif")%></p>
 
-
+<a name="erc"></a>
 <h3>The ERC format</h3>
 
 <p>The Electronic Resource Citation specification is meant to be lightweight and easy-to-supply and provides easy-to-read, meaningful information about the object. We'll use the ERC metadata you supply in reports about your digital objects and collections. For further details, see the Electronic Resource Citation Specification at: <a href="http://dublincore.org/kernelwiki/FrontPage?action=AttachFile&do=get&target=ercspec.html" target=_new>http://dublincore.org/kernelwiki/FrontPage?action=AttachFile&do=get&target=ercspec.html</a></p>.  
 
+<p>Sample ERC file:</p>  
+
 
 <pre>
 erc:
-who: 
-what: 
-when: 
-where: 
+who: (:unkn) unknown
+what: Jazz for the bears
+when: 1920-1932
+where: 2001697390
 </pre>
 
 <p>If you are using the ERC method, be sure to name the file <strong>mrt-erc.txt</strong> and either include it in a container file with the object or reference it in an object manifest file.</p>
@@ -80,25 +88,15 @@ where:
 <div class="grid_1">&nbsp;</div>
 <div class="grid_4 sidebar">
 
-<h3>Contents</h3>
+
+<h3>Page Contents</h3>
 <ul>
 	<li><a href="#elements">The Metadata Elements</a>
 	<li><a href="#options">Metadata Submission Options</a>
 	<li><a href="#erc">The ERC Format</a>
 </ul>
 
+<%= render :partial => 'help_sidebar' %>
 
-<h3>Further Help</h3>
-
-  <ul>
-	<li> <a href="about.html">About Merritt</a> </li>
-	<li> <a href="overview.html">Quick overview</a> </li>
-	<li> <a href="metadata_help.html">Merritt & metadata </li>
-	<li> <a href="manifest_guide.html">Using a manifest</a> </li>
-	<li> <a href="edit_objects.html">Editing objects</a> </li>
-    <li> <a href="glossary.html">Glossary</a> </li>
-    <li> <a href="samples.html">Sample data</a></li>
-</ul>
-  
   
 </div>

@@ -1,4 +1,4 @@
-<div class="grid_12">
+<div class="grid_11">
   <h2>Add Object</h2>
   <div class="breadcrumbs">
     <%= link_to('Merritt', :controller => 'home', :action => 'index') %> &gt;
@@ -6,6 +6,8 @@
     &gt; Add Object
   </div>
   <br/>
+  
+  <p>Upload objects directly from your local drive or submit a manifest to add objects posted on a web server.</p>
   <h3>Object info</h3>
   <%= form_tag({:action => :upload}, :multipart => true) do %>
 
@@ -22,7 +24,7 @@
   </div>
   <div class="option_container">
     <div class="short_option">
-      <%= radio_button_tag('object_type', 'file', 'true', {:onclick => 'enable_meta();'}) %> File
+      <%= radio_button_tag('object_type', 'file', 'true', {:onclick => 'enable_meta();'}) %> file
     </div>
     <div class="short_option_description">
       <a href="#" id="file_tip"><%= image_tag("tip_icon.gif", :size => '15x15' ) %></a>
@@ -30,7 +32,7 @@
 
     <div class="clear" style="width:100%;"></div>
     <div class="short_option">
-      <%= radio_button_tag('object_type', 'container', nil, {:onclick => 'enable_meta();'}) %> Container
+      <%= radio_button_tag('object_type', 'container', nil, {:onclick => 'enable_meta();'}) %> container
     </div>
     <div class="short_option_description">
       <a href="#" id="container_tip"><%= image_tag("tip_icon.gif", :size => '15x15' ) %></a>
@@ -38,7 +40,7 @@
 
     <div class="clear" style="width:100%;"></div>
     <div class="short_option">
-      <%= radio_button_tag('object_type', 'object-manifest', nil, {:onclick => 'enable_meta();'}) %> Manifest
+      <%= radio_button_tag('object_type', 'object-manifest', nil, {:onclick => 'enable_meta();'}) %> manifest
     </div>
     <div class="short_option_description">
       <a href="#" id="object_manifest_tip"><%= image_tag("tip_icon.gif", :size => '15x15' ) %></a>
@@ -67,7 +69,7 @@
 
     <div class="clear" style="width:100%;"></div>
     <div class="short_option">
-      <%= radio_button_tag('object_type', 'batch-manifest', nil, {:onclick => 'disable_meta();'}) %> of object manifests
+      <%= radio_button_tag('object_type', 'batch-manifest', nil, {:onclick => 'disable_meta();'}) %> of manifests
     </div>
     <div class="short_option_description">
       <a href="#" id="batch_manifest_tip"><%= image_tag("tip_icon.gif", :size => '15x15' ) %></a>
@@ -81,7 +83,7 @@
   <div class="right_field">
     <%= text_field_tag('title', nil, :size => 30)  %>
   </div>
-  <div class="short_text_description">
+    <div class="short_text_description">
     <a href="#" id="title_tip"><%= image_tag("tip_icon.gif", :size => '15x15' ) %></a>
   </div>
 
@@ -130,22 +132,24 @@
 
   
 </div>
+<div class="grid_1">&nbsp;</div>
 <div class="grid_4 sidebar">
-  <%= render :partial => '/help/example' %>
+  <%= render :partial => '/shared/side_lookup' %>
+  <%= render :partial => '/help/add' %>
   
 </div>
 
 <script type="text/javascript">
-  new Tip('file_tip', 'Use if your object is only comprised of one file');
-  new Tip('container_tip', 'Use if your object is bundled as a container such as a zip or tar file');
-  new Tip('object_manifest_tip', 'Use if you are using a manifest that specifies all the files that make up your object');
-  new Tip('single_file_batch_tip', 'Every file specified in the manifest will be part of a separate object');
-  new Tip('container_batch_tip', 'The manifest specifies container files (such as zip or tar files), each of which will have its contents imported as a separate object');
+  new Tip('file_tip', 'Use if your object is only comprised of one file.');
+  new Tip('container_tip', 'Use if your object is bundled as a container such as a zip or tar file.');
+  new Tip('object_manifest_tip', 'Use if you have created a manifest that specifies all the files that make up your object.');
+  new Tip('single_file_batch_tip', 'Every file specified in the manifest will be part of a separate object.');
+  new Tip('container_batch_tip', 'The manifest specifies container files (such as zip or tar files), each of which will have its contents imported as a separate object.');
   new Tip('batch_manifest_tip', 'The manifest specifies object manifests, each of which will comprise a separate object');
-  new Tip('title_tip', 'Titles are our favorities');
-  new Tip('author_tip', 'Authors create things');
-  new Tip('date_tip', 'Dates are how you identify a temporal portion of the year');
-  new Tip('local_id_tip', 'You have an id already?  Why  not use it?');
+  new Tip('title_tip', 'We strongly recommend that you provide at least a title.');
+  new Tip('author_tip', 'Author or creator of the object.');
+  new Tip('date_tip', 'Publicaton date of object.');
+  new Tip('local_id_tip', 'An identifier you already use to track the object.');
   // new Tip('note_tip', 'In case you forget what is happening.');
 
   function disable_meta(){

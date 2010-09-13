@@ -1,19 +1,14 @@
-<div class="grid_12">
+<div class="grid_11">
+  
+  
+  <h2>Welcome</h2>
   <p>
-    Choose a collection to work with.  If you have &quot;write&quot; access to
-    a collection, you can add new objects or update existing objects.  Contact
-    UC3 if you don't see the collection you need.  Whatever else we need to say.
-  </p>
-
-  <p>
-    We really don't know what is happening with the profile service right
-    now, so we're not sure how permissions or number of objects will ever
-    get populated.
+  The collections you have access to are listed below.  Choose a collection to search, display, download and (if authorized) add objects.  The guides at the right are accessible from the <strong>help</strong> link available on any page.  Please contact UC3 support if you encounter any questions or issues as you use Merritt.  You can email uc3@ucop.edu or use the <strong>contact UC3</strong> link on any page.
   </p>
 
   <h3>Collections</h3>
 
-  <table>
+  <table width=100%>
     <thead>
       <tr>
         <th style="width: 40%;">Collection</th>
@@ -26,13 +21,15 @@
       <tr class="<%=cycle('even', 'odd') %>">
         <td><%= link_to(grp.description, :controller => 'collection', :action => 'index', :group => grp.id) %></td>
         <td><%= permissions(grp.permission(current_user.login)) %></td>
-        <td style="text-align:right;"><%= formatted_int(grp.object_count) %></td>
+        <td><%= formatted_int(grp.object_count) %></td>
       </tr>
       <% end %>
     </tbody>
   </table>
 </div>
+<div class="grid_1">&nbsp;</div>
 <div class="grid_4 sidebar">
-
+  
+  <%= render :partial => 'help/help_sidebar' %>
   
 </div>

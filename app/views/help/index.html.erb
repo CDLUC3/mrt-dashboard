@@ -1,21 +1,29 @@
-<div class="grid_12">
+<div class="grid_11">
 
 <h2>Merritt Help</h2>
+  <div class="breadcrumbs"><%= link_to('Merritt', :controller => 'home', :action => 'index') %> &gt;
+    <%= link_to("Collection: #{@group.description}", :controller => 'collection', :action => 'index') %> &gt;
+    Help
+  </div>
 
-<p>You can contact UC3 support staff if you have any questions or problems. You can send email directly to uc3help@ucop.edu or fill out the <a href="http://www.cdlib.org/services/uc3/contact.html">Contact UC3</a> form.</p>
-<h3>Help</h3>
+<br />
 
-<ul>
-	<li> Quick overview </li>
-	<li> Search options </li>
-	<li> <a href="metadata_guide.html.erb">Merritt & metadata </li>
-	<li> <a href="manifest_guide.html.erb">Using a manifest</a> </li>
-	<li> <a href="edit_objects.html.erb">Editing objects</a> </li>
-	<li> <a href="about.html.erb">About Merritt</a> </li>
-</ul>
-  
+<p>Please contact UC3 support staff if you have any questions or problems. You can send email directly to uc3@ucop.edu or fill out the <a href="http://www.cdlib.org/services/uc3/contact.html">Contact UC3</a> form.</p>
+
+  <ul>
+    <li><%= link_to("About Merritt", :controller => 'help', :action => 'about_merritt') %></li>
+    <li><%= link_to("Adding Objects", :controller => 'help', :action => 'add_object') %></li>
+    <li><%= link_to("Retrieving Objects", :controller => 'help', :action => 'retrieve_object') %></li>
+    <li><%= link_to("Merritt and metadata", :controller => 'help', :action => 'metadata_guide') %></li>
+    <li><%= link_to("Using a manifest", :controller => 'help', :action => 'manifest_guide') %></li>
+    <li><%= link_to("Editing objects", :controller => 'help', :action => 'edit_objects') %></li>
+    <li><%= link_to("Glossary", :controller => 'help', :action => 'glossary') %></li>
+    <li><%= link_to("Sample data", :controller => 'help', :action => 'samples') %></li>
+  </ul>
+
+
 </div>
+<div class="grid_1">&nbsp;</div>
 <div class="grid_4 sidebar">
 
-  
 </div>
