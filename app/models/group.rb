@@ -31,38 +31,33 @@ class Group
   end
 
   def object_count
-    STORE.select(Q.new("?obj rdf:type object:Object .
+    return STORE.select(Q.new("?obj rdf:type object:Object .
       ?obj object:isStoredObjectFor ?meta .
-      ?meta object:isInCollection <#{self.sparql_id}>")).size
+      ?meta object:isInCollection <#{self.sparql_id}>", :select=>"?obj")).size
   end
 
   def version_count
-    STORE.select(Q.new("?vers rdf:type version:Version .
+    return STORE.select(Q.new("?vers rdf:type version:Version .
         ?vers version:inObject ?obj .
         ?obj object:isStoredObjectFor ?meta .
-        ?meta object:isInCollection <#{self.sparql_id}>")).size
+        ?meta object:isInCollection <#{self.sparql_id}>", :select=>"?vers")).size
   end
 
   def file_count
-    STORE.select(Q.new("?file rdf:type file:File .
+    return STORE.select(Q.new("?file rdf:type file:File .
         ?file file:inVersion ?vers .
         ?vers version:inObject ?obj .
         ?obj object:isStoredObjectFor ?meta .
-        ?meta object:isInCollection <#{self.sparql_id}>")).size
+        ?meta object:isInCollection <#{self.sparql_id}>", :select=>"?file")).size
   end
 
   def total_size
     q = Q.new("?obj rdf:type object:Object .
         ?obj object:isStoredObjectFor ?meta .
-        ?meta object:isInCollection <#{self.sparql_id}>",
-      :select => "?obj")
-
-    obs = STORE.select(q).map{|s| UriInfo.new(s['obj']) }
-
-    total_size = 0
-
-    obs.each{|ob| total_size += ob[Mrt::Object.totalActualSize].to_s.to_i}
-    total_size
+        ?meta object:isInCollection <#{self.sparql_id}> .
+        ?obj object:totalActualSize ?size",
+      :select => "?size")
+    return STORE.select(q).map{|row| row['size'].value.to_i}.sum
   end
 
   private
@@ -77,5 +72,4 @@ class Group
     return [] if record[field].nil? or record[field][0].nil? or record[field][0].length < 1
     return record[field]
   end
-
 end

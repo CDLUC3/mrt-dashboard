@@ -18,7 +18,7 @@ class CollectionController < ApplicationController
                ?s ?p ?o .
                ?s object:isInCollection <#{no_inject(@group.sparql_id)}> .
                ?so dc:modified ?mod",
-               :limit => 100,
+               :limit => 10,
                :select => "DISTINCT ?s ?mod",
                :order_by => "DESC(?mod)")
     @recent_objects = store().select(q).map{|s| UriInfo.new(s['s']) }
