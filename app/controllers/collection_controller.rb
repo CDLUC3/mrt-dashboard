@@ -17,7 +17,7 @@ class CollectionController < ApplicationController
                ?so object:isStoredObjectFor ?s .
                ?s ?p ?o .
                ?s object:isInCollection <#{no_inject(@group.sparql_id)}> .
-               ?so dc:modified ?mod .",
+               ?so dc:modified ?mod",
                :limit => 100,
                :select => "DISTINCT ?s ?mod",
                :order_by => "DESC(?mod)")
