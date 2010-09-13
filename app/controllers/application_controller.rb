@@ -114,4 +114,16 @@ class ApplicationController < ActionController::Base
     str.gsub('"', '\\"')
   end
 
+  #this chooses the first group if one isn't set since Tracy's help layout
+  #requires a group, even though it might not have been chosen.  It's wacky
+  #but a way to solve the shady layout.
+  def first_group_if_unset
+    grps = current_user.groups
+    if grps.length < 1 then
+      redirect_to "/home/logout" and return false
+    end
+    session[:group] = grps[0].id
+    params[:group] = grps[0].id
+  end
+
 end

@@ -39,6 +39,13 @@
       <li><%= link_to("huskyChicken.zip", "/samples/huskyChicken.zip") %>(object has 3 files)</li> 
       <li><%= link_to("outdoorStore.zip", "/samples/outdoorStore.zip") %> (object has 8 files)</li> 
       <li><%= link_to("souvenirs.zip", "/samples/souvenirs.zip") %>(object has 2 files)</li>
+      <li><%= link_to("brain_v1.zip", "/samples/brain_v1.zip") %>(object has 4 files)</li> 
+      <li><%= link_to("brain_v1.tar", "/samples/brain_v1.tar") %>(object has 4 files)</li> 
+      <li><%= link_to("brain_v1.tar.gz", "/samples/brain_v1.tar.gz") %>(object has 4 files)</li> 
+      <li><%= link_to("brain_v2.zip", "/samples/brain_v2.zip") %>(object has 5 files)</li> 
+      <li><%= link_to("brain_v2.tar", "/samples/brain_v2.tar") %>(object has 5 files)</li> 
+      <li><%= link_to("brain_v2.tar.gz", "/samples/brain_v2.tar.gz") %>(object has 5 files)</li> 
+      <li><%= link_to("jazzbears.zip", "/samples/jazzbears.zip") %>(object has 2 files)</li> 
     </ul>
    </td>  
  </tr>
@@ -70,19 +77,39 @@
 
 </table>
 
-<h3>Using the Sample Files to Test Manifests</h3>
+<h3>Using the Sample Files to Demonstrate Manifests</h3>
 <p>The <%= link_to("merrittManifest.xlsm", "/docs/merrittManifest.xlsm") %> file that contains the macros needed to generate a manifest also contains sample worksheets for objects and each kind of manifest.  The objects referenced in those worksheets are all included in the samples.zip file and are posted on Merritt for you to use.  (If you run the macro to produce a manifest from the sample worksheets, the sample objects are already posted on a server to add).</p>
 
 
-<h3>Using the Sample Files to Test ERC files</h3>
+<h3>Using the Sample Files to Demonstrate ERC files</h3>
 
-PERRY, FURTHER TEXT OR INSTRUCTIONS?
+<p>The <strong>jazzbears.zip</strong> file contains both a .tif image and a mrt-erc.txt file.  The mrt-erc file contains the following metadata:</p>
+<pre>
+erc:
+who: (:unkn) unknown
+what: Jazz for the bears
+when: 1920-1932
+where: 2001697390
+</pre>
 
-<h3>Using the Sample Files to Test Versioning</h3>
+<p>Submit this object as a container file to see that Merritt extracts the mrt-erc-txt metadata.</p>
 
+<h3>Using the Sample Files to Demonstrate Versioning</h3>
 
-PERRY, FURTHER TEXT OR INSTRUCTIONS?
+<p>The "brain_v1" and "brain_v2" sample files will demonstrate both object versioning and will show you how different kinds of container files can be used to submit content to Merritt.  The .tar, .zip and .tar.gz file sets are independent of one another; they each include the same files:</p>
 
+<ul>
+  <li>brain_398.tif</li>
+  <li>brain_492.tif</li>
+  <li>brain_508.tif</li>
+  <li>brain_604.tif</li>
+</ul>
+
+<p>v2 of the tar, gz and zip containers add another file: <strong>brain.tif</strong></p>
+
+<p>To demonstrate container formats, submit any of the files to see that they are unpacked upon ingest. </p>
+
+<p>To test versioning, be sure to provide a <strong>local identifier</strong>, for version 1, then provide the same local identifier for version 2.</p>
 
 </div>
 <div class="grid_1">&nbsp;</div>
