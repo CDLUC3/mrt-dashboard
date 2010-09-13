@@ -4,7 +4,7 @@ require 'rdf'
 
 class ObjectController < ApplicationController
   before_filter :require_user
-  before_filter :require_group
+  before_filter :require_group_if_user
   before_filter :require_object, :except => [:add, :upload, :upload_error]
 
 
