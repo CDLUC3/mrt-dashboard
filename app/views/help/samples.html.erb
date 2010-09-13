@@ -1,0 +1,94 @@
+
+<div class="grid_11">
+
+<h2>Sample Data</h2>
+
+  <div class="breadcrumbs"><%= link_to('Merritt', :controller => 'home', :action => 'index') %> &gt;
+    <%= link_to("Collection: #{@group.description}", :controller => 'collection', :action => 'index') %> &gt;
+    <%= link_to("Help", :controller => 'help', :action => 'index') %> &gt;
+    Sample Data
+   </div>
+ 
+<br />
+
+<p>Sample data is available to use as you try out the service.  In some cases samples such as manifest and erc files may be useful as examples for formatting your own Merritt files.  All of the sample files below are available as a zip file from <%= link_to("http://merritt.cdlib.org/samples/samples.zip", "/samples/sampleObjects.zip") %></p>
+
+
+<h3>Sample Files</h3>
+<table style="width:100%;">
+ <tr>
+  <th>Sample type</th>
+  <th>File name</th>
+ </tr>
+ 
+ <tr>
+  <td>Single-file objects </td> 
+  <td>
+    <ul>
+      <li><%= link_to("goldenDragon.jpg", "/samples/goldenDragon.jpg") %></li> 
+      <li><%= link_to("tumbleBug.jpg", "/samples/tumbleBug.jpg") %></li> 
+      <li><%= link_to("generalDrapery.jpg", "/samples/generalDrapery.jpg") %></li>
+    </ul>
+   </td>  
+ </tr>
+ 
+ <tr>
+  <td>Container file objects </td> 
+  <td>
+    <ul>    
+      <li><%= link_to("huskyChicken.zip", "/samples/huskyChicken.zip") %>(object has 3 files)</li> 
+      <li><%= link_to("outdoorStore.zip", "/samples/outdoorStore.zip") %> (object has 8 files)</li> 
+      <li><%= link_to("souvenirs.zip", "/samples/souvenirs.zip") %>(object has 2 files)</li>
+    </ul>
+   </td>  
+ </tr>
+ 
+  
+ <tr>
+  <td>Object manifests <br />(pointing to multi-file objects)</td> 
+  <td>
+    <ul>    
+      <li><%= link_to("4blocks.checkm", "/samples/manifests/4blocks.checkm") %></li> 
+      <li><%= link_to("bigHunt.checkm", "/samples/manifests/bigHunt.checkm") %></li> 
+      <li><%= link_to("call911.checkm", "/samples/manifests/call911.checkm") %></li>      
+    </ul>
+   </td>  
+ </tr>
+
+
+ <tr>
+  <td>Batch manifests</td> 
+  <td>
+    <ul>
+      <li><%= link_to("sampleBatchOfContainers.checkm", "/samples/manifests/sampleBatchOfContainers.checkm") %></li> 
+      <li><%= link_to("sampleBatchOfFiles.checkm", "/samples/manifests/sampleBatchOfFiles.checkm") %></li> 
+      <li><%= link_to("sampleBatchOfManifests.checkm", "/samples/manifests/sampleBatchOfManifests.checkm") %></li>   
+    </ul>
+   </td>  
+ </tr>
+
+
+</table>
+
+<h3>Using the Sample Files to Test Manifests</h3>
+<p>The <%= link_to("merrittManifest.xlsm", "/docs/merrittManifest.xlsm") %> file that contains the macros needed to generate a manifest also contains sample worksheets for objects and each kind of manifest.  The objects referenced in those worksheets are all included in the samples.zip file and are posted on Merritt for you to use.  (If you run the macro to produce a manifest from the sample worksheets, the sample objects are already posted on a server to add).</p>
+
+
+<h3>Using the Sample Files to Test ERC files</h3>
+
+PERRY, FURTHER TEXT OR INSTRUCTIONS?
+
+<h3>Using the Sample Files to Test Versioning</h3>
+
+
+PERRY, FURTHER TEXT OR INSTRUCTIONS?
+
+
+</div>
+<div class="grid_1">&nbsp;</div>
+<div class="grid_4 sidebar">
+  
+  <%= render :partial => 'help_sidebar' %>
+  
+</div>
+
