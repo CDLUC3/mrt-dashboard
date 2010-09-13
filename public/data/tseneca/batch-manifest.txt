@@ -1,0 +1,24 @@
+#%checkm_0.7
+#%profile | http://merritt.cdlib.org/registry/manifest/mrt-batch-manifest
+#%prefix | mrt: | http://merritt.cdlib.org/terms#
+#%prefix | nfo: | http://www.semanticdesktop.org/ontologies/2007/03/22/nfo#
+#%fields | nfo:fileUrl | nfo:hashAlgorithm | nfo:hashValue | nfo:fileSize | nfo:fileLastModified | nfo:fileName | mrt:primaryIdentifier | mrt:localIdentifier
+@http://www.tracyseneca.com/merrittSigns2/bigHuntManifest.checkm |  |  |  |  | bigHuntManifest.checkm |  | 968 | Tracy Seneca | The Big Hunt | 2009-09-01T00:00:00
+@http://www.tracyseneca.com/merrittSigns2/4blocksManifest.checkm |  |  |  |  | 4blocksManifest.checkm |  | 969 | Tracy Seneca | Motel Capri | 2009-09-01T00:00:00
+@http://www.tracyseneca.com/merrittSigns2/call911Manifest.checkm |  |  |  |  | call911Manifest.checkm |  | 970 | Tracy Seneca | If This Bell Rings Call 911 | 2009-09-01T00:00:00
+@http://www.tracyseneca.com/merrittSigns2/chateauTanundaManifest.checkm |  |  |  |  | chateauTanundaManifest.checkm |  | 971 | Tracy Seneca | Chateau Tanunda | 2009-09-01T00:00:00
+@http://www.tracyseneca.com/merrittSigns2/comicKingManifest.checkm |  |  |  |  | comicKingManifest.checkm |  | 972 | Tracy Seneca | Comic King | 2009-09-01T00:00:00
+@http://www.tracyseneca.com/merrittSigns2/footReflexManifest.checkm |  |  |  |  | footReflexManifest.checkm |  | 973 | Tracy Seneca | Foot Reflexology | 2009-09-01T00:00:00
+@http://www.tracyseneca.com/merrittSigns2/funnyLandManifest.checkm |  |  |  |  | funnyLandManifest.checkm |  | 974 | Tracy Seneca | Funny Land | 2009-09-01T00:00:00
+@http://www.tracyseneca.com/merrittSigns2/generalDraperyManifest.checkm |  |  |  |  | generalDraperyManifest.checkm |  | 975 | Tracy Seneca | General Drapery | 2009-09-01T00:00:00
+@http://www.tracyseneca.com/merrittSigns2/goldenDragonManifest.checkm |  |  |  |  | goldenDragonManifest.checkm |  | 976 | Tracy Seneca | Golden Dragon | 2009-09-01T00:00:00
+@http://www.tracyseneca.com/merrittSigns2/huskyChickenManifest.checkm |  |  |  |  | huskyChickenManifest.checkm |  | 977 | Tracy Seneca | Husky Chicken | 2009-09-01T00:00:00
+@http://www.tracyseneca.com/merrittSigns2/manySignsManifest.checkm |  |  |  |  | manySignsManifest.checkm |  | 978 | Tracy Seneca | Many Signs | 2009-09-01T00:00:00
+@http://www.tracyseneca.com/merrittSigns2/outdoorStoreManifest.checkm |  |  |  |  | outdoorManifest.checkm |  | 979 | Tracy Seneca | The Portland Outdoor Store | 2009-09-01T00:00:00
+@http://www.tracyseneca.com/merrittSigns2/rexSimpsonManifest.checkm |  |  |  |  | rexSimpsonManifest.checkm |  | 980 | Tracy Seneca | Rex Simpson Fine Clothing for Men | 2009-09-01T00:00:00
+@http://www.tracyseneca.com/merrittSigns2/rotorManifest.checkm |  |  |  |  | rotorManifest.checkm |  | 981 | Tracy Seneca | Professor E. Hoffmeister's World Famous Scientific Theatre Rotor | 2009-09-01T00:00:00
+@http://www.tracyseneca.com/merrittSigns2/sAndCManifest.checkm |  |  |  |  | sAndCManifest.checkm |  | 982 | Tracy Seneca | S & C | 2009-09-01T00:00:00
+@http://www.tracyseneca.com/merrittSigns2/souvenirsManifest.checkm |  |  |  |  | souvenirsManifest.checkm |  | 983 | Tracy Seneca | Souvenirs | 2009-09-01T00:00:00
+@http://www.tracyseneca.com/merrittSigns2/sunriseFoodbarManifest.checkm |  |  |  |  | sunriseFoodbarManifest.checkm |  | 984 | Tracy Seneca | Sunrise Foodbar | 2009-09-01T00:00:00
+@http://www.tracyseneca.com/merrittSigns2/tumbleBugManifest.checkm |  |  |  |  | tumbleBugManifest.checkm |  | 985 | Tracy Seneca | Tumble Bug | 2009-09-01T00:00:00
+#%eof

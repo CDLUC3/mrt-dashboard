@@ -1,0 +1,10 @@
+#%checkm_0.7
+#%profile | http://uc3.cdlib.org/registry/ingest/manifest/mrt-single-file-batch-manifest
+#%prefix | mrt: | http://merritt.cdlib.org/terms#
+#%prefix | nfo: | http://www.semanticdesktop.org/ontologies/2007/03/22/nfo#
+#%fields | nfo:fileUrl | nfo:hashAlgorithm | nfo:hashValue | nfo:fileSize | nfo:fileLastModified | nfo:fileName | mrt:primaryIdentifier | mrt:localIdentifier | mrt:creator | mrt:title | mrt:date
+http://www.tracyseneca.com/merrittSigns2/bigHunt2.jpg |  |  |  |  | bigHunt.jpg |  |  | Tracy Seneca | The Big Hunt - just the picture | 2009-09-01T00:00:00
+http://www.tracyseneca.com/merrittSigns2/4blocks.jpg |  |  |  |  | 4blocks.jpg |  |  | Tracy Seneca | Motel Capri - just the picture
+http://www.tracyseneca.com/merrittSigns2/call911.jpg |  |  |  |  | call911.jpg |  |  |  | If This Bell Rings Call 911 - just the picutre | 2009-09-01T00:00:00
+http://www.tracyseneca.com/merrittSigns2/goldenDragon.jpg | md5 | aa59e145dfb2237ecd8cb5ce4f4953ea | 114000 |  | goldenDragon.jpg |  |  | Tracy Seneca | Golden Dragon Restaurant Sign | 2009-09-01T00:00:00
+#%eof

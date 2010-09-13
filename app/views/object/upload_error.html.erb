@@ -1,0 +1,19 @@
+<div class="grid_12">
+  <h2>Submission Error</h2>
+  <div class="breadcrumbs">
+    <%= link_to('Merritt', :controller => 'home', :action => 'index') %> &gt;
+    <%= link_to("Collection: #{@group.description}", :controller => 'collection', :action => 'index', :group => @group.id) %>
+    &gt; Submission Error
+  </div>
+
+  <br/>
+
+  <p>We're sorry, but your request to add data to the storage repository ran into a problem.</p>
+
+  <p>Please be sure any manifests are formatted correctly and you chose the correct
+    type of submission.</p>
+
+</div>
+<div class="grid_4 sidebar">
+  <%= render :partial => '/shared/side_lookup' %><br/>
+</div>

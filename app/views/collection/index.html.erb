@@ -1,0 +1,32 @@
+<div class="grid_11">
+  <h2>Collection: <%= @group.description %></h2>
+  <div class="breadcrumbs"><%= link_to('Merritt', :controller => 'home', :action => 'index') %> &gt;
+    Collection: <%= @group.description %></div>
+
+  <% #for info in @recent_objects %>
+    <%#= info[Mrt::Kernel.who] || "unkn" %>
+    <%#= link_to((info[Mrt::Kernel.what] || "unkn"), "/show/#{clean_id(info)}") %>
+    <%#= info[Mrt::Kernel.when] || "unkn" %>
+  <% #end %>
+
+    <br/>
+
+    <table width=100%>
+    <thead>
+      <tr>
+        <th style="width: 30%;">Primary Id</th>
+        <th style="width: 70%;">Object info</th>
+      </tr>
+    </thead>
+    <tbody>
+      <%= render :partial => "/object/table_row", :collection => @recent_objects %>
+    </tbody>
+  </table>
+</div>
+<div class="grid_1">&nbsp;</div>
+<div class="grid_4 sidebar">
+  <%= render :partial => '/shared/side_lookup' %><br/>
+  <%= render :partial => 'overview' %><br/>
+
+</div>
+

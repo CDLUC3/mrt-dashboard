@@ -1,0 +1,121 @@
+
+<div class="grid_11">
+
+<h2>Sample Data</h2>
+
+  <div class="breadcrumbs"><%= link_to('Merritt', :controller => 'home', :action => 'index') %> &gt;
+    <%= link_to("Collection: #{@group.description}", :controller => 'collection', :action => 'index') %> &gt;
+    <%= link_to("Help", :controller => 'help', :action => 'index') %> &gt;
+    Sample Data
+   </div>
+ 
+<br />
+
+<p>Sample data is available to use as you try out the service.  In some cases samples such as manifest and erc files may be useful as examples for formatting your own Merritt files.  All of the sample files below are available as a zip file from <%= link_to("http://merritt.cdlib.org/samples/samples.zip", "/samples/sampleObjects.zip") %></p>
+
+
+<h3>Sample Files</h3>
+<table style="width:100%;">
+ <tr>
+  <th>Sample type</th>
+  <th>File name</th>
+ </tr>
+ 
+ <tr>
+  <td>Single-file objects </td> 
+  <td>
+    <ul>
+      <li><%= link_to("goldenDragon.jpg", "/samples/goldenDragon.jpg") %></li> 
+      <li><%= link_to("tumbleBug.jpg", "/samples/tumbleBug.jpg") %></li> 
+      <li><%= link_to("generalDrapery.jpg", "/samples/generalDrapery.jpg") %></li>
+    </ul>
+   </td>  
+ </tr>
+ 
+ <tr>
+  <td>Container file objects </td> 
+  <td>
+    <ul>    
+      <li><%= link_to("huskyChicken.zip", "/samples/huskyChicken.zip") %>(object has 3 files)</li> 
+      <li><%= link_to("outdoorStore.zip", "/samples/outdoorStore.zip") %> (object has 8 files)</li> 
+      <li><%= link_to("souvenirs.zip", "/samples/souvenirs.zip") %>(object has 2 files)</li>
+      <li><%= link_to("brain_v1.zip", "/samples/brain_v1.zip") %>(object has 4 files)</li> 
+      <li><%= link_to("brain_v1.tar", "/samples/brain_v1.tar") %>(object has 4 files)</li> 
+      <li><%= link_to("brain_v1.tar.gz", "/samples/brain_v1.tar.gz") %>(object has 4 files)</li> 
+      <li><%= link_to("brain_v2.zip", "/samples/brain_v2.zip") %>(object has 5 files)</li> 
+      <li><%= link_to("brain_v2.tar", "/samples/brain_v2.tar") %>(object has 5 files)</li> 
+      <li><%= link_to("brain_v2.tar.gz", "/samples/brain_v2.tar.gz") %>(object has 5 files)</li> 
+      <li><%= link_to("jazzbears.zip", "/samples/jazzbears.zip") %>(object has 2 files)</li> 
+    </ul>
+   </td>  
+ </tr>
+ 
+  
+ <tr>
+  <td>Object manifests <br />(pointing to multi-file objects)</td> 
+  <td>
+    <ul>    
+      <li><%= link_to("4blocks.checkm", "/samples/manifests/4blocks.checkm") %></li> 
+      <li><%= link_to("bigHunt.checkm", "/samples/manifests/bigHunt.checkm") %></li> 
+      <li><%= link_to("call911.checkm", "/samples/manifests/call911.checkm") %></li>      
+    </ul>
+   </td>  
+ </tr>
+
+
+ <tr>
+  <td>Batch manifests</td> 
+  <td>
+    <ul>
+      <li><%= link_to("sampleBatchOfContainers.checkm", "/samples/manifests/sampleBatchOfContainers.checkm") %></li> 
+      <li><%= link_to("sampleBatchOfFiles.checkm", "/samples/manifests/sampleBatchOfFiles.checkm") %></li> 
+      <li><%= link_to("sampleBatchOfManifests.checkm", "/samples/manifests/sampleBatchOfManifests.checkm") %></li>   
+    </ul>
+   </td>  
+ </tr>
+
+
+</table>
+
+<h3>Using the Sample Files to Demonstrate Manifests</h3>
+<p>The <%= link_to("merrittManifest.xlsm", "/docs/merrittManifest.xlsm") %> file that contains the macros needed to generate a manifest also contains sample worksheets for objects and each kind of manifest.  The objects referenced in those worksheets are all included in the samples.zip file and are posted on Merritt for you to use.  (If you run the macro to produce a manifest from the sample worksheets, the sample objects are already posted on a server to add).</p>
+
+
+<h3>Using the Sample Files to Demonstrate ERC files</h3>
+
+<p>The <strong>jazzbears.zip</strong> file contains both a .tif image and a mrt-erc.txt file.  The mrt-erc file contains the following metadata:</p>
+<pre>
+erc:
+who: (:unkn) unknown
+what: Jazz for the bears
+when: 1920-1932
+where: 2001697390
+</pre>
+
+<p>Submit this object as a container file to see that Merritt extracts the mrt-erc-txt metadata.</p>
+
+<h3>Using the Sample Files to Demonstrate Versioning</h3>
+
+<p>The "brain_v1" and "brain_v2" sample files will demonstrate both object versioning and will show you how different kinds of container files can be used to submit content to Merritt.  The .tar, .zip and .tar.gz file sets are independent of one another; they each include the same files:</p>
+
+<ul>
+  <li>brain_398.tif</li>
+  <li>brain_492.tif</li>
+  <li>brain_508.tif</li>
+  <li>brain_604.tif</li>
+</ul>
+
+<p>v2 of the tar, gz and zip containers add another file: <strong>brain.tif</strong></p>
+
+<p>To demonstrate container formats, submit any of the files to see that they are unpacked upon ingest. </p>
+
+<p>To test versioning, be sure to provide a <strong>local identifier</strong>, for version 1, then provide the same local identifier for version 2.</p>
+
+</div>
+<div class="grid_1">&nbsp;</div>
+<div class="grid_4 sidebar">
+  
+  <%= render :partial => 'help_sidebar' %>
+  
+</div>
+
