@@ -35,24 +35,26 @@ class ApplicationController < ActionController::Base
   end
 
   #require a group, but hackish thing to get group from session instead of params for help
-  def require_group
-    redirect_to(CollectionHome) and return false if params[:group].nil? and session[:group].nil?
-    begin
-      session[:group] = params[:group] if !params[:group].nil?
-      params[:group] = session[:group] if params[:group].nil?
-      @group = Group.find(params[:group])
-    rescue Exception => ex
-      redirect_to(CollectionHome)
-      return false
+  def require_group_if_user
+    if current_user then
+      redirect_to(CollectionHome) and return false if params[:group].nil? and session[:group].nil?
+      begin
+        session[:group] = params[:group] if !params[:group].nil?
+        params[:group] = session[:group] if params[:group].nil?
+        @group = Group.find(params[:group])
+      rescue Exception => ex
+        redirect_to(CollectionHome)
+        return false
+      end
+      begin
+        @permissions = @group.permission(current_user.login)
+      rescue Exception => ex
+        redirect_to(CollectionHome)
+        return false
+      end
+      redirect_to(CollectionHome) and return false if @permissions.length < 1
+      @groups = current_user.groups.sort{|x, y| x.description.downcase <=> y.description.downcase}
     end
-    begin
-      @permissions = @group.permission(current_user.login)
-    rescue Exception => ex
-      redirect_to(CollectionHome)
-      return false
-    end
-    redirect_to(CollectionHome) and return false if @permissions.length < 1
-    @groups = current_user.groups.sort{|x, y| x.description.downcase <=> y.description.downcase}
   end
 
   def require_object
@@ -67,12 +69,12 @@ class ApplicationController < ActionController::Base
   def require_version
     redirect_to(:controller => :object, :action => 'index', :group => :params[:group], :object => params[:object]) and return false if params[:version].nil?
     #get version of specific object
-    q = Q.new("?vers dc:identifier \"#{params[:version]}\"^^<http://www.w3.org/2001/XMLSchema#string> .
+    q = Q.new("?vers dc:identifier \"#{no_inject(params[:version])}\"^^<http://www.w3.org/2001/XMLSchema#string> .
                 ?vers rdf:type version:Version .
                 ?vers version:inObject ?obj .
                 ?obj rdf:type object:Object .
                 ?obj object:isStoredObjectFor ?meta .
-                ?obj dc:identifier \"#{params[:object]}\"^^<http://www.w3.org/2001/XMLSchema#string>",
+                ?obj dc:identifier \"#{no_inject(params[:object])}\"^^<http://www.w3.org/2001/XMLSchema#string>",
       :select => "?vers")
 
     res = store().select(q)
@@ -106,6 +108,10 @@ class ApplicationController < ActionController::Base
 
   def esc(i)
     URI.escape(i, Regexp.new("[^#{URI::PATTERN::UNRESERVED}]"))
+  end
+
+  def no_inject(str)
+    str.gsub('"', '\\"')
   end
 
 end

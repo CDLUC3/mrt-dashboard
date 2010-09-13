@@ -1,6 +1,7 @@
 class UserSessionsController < ApplicationController
-  before_filter :require_no_user, :only => [:login, :login_post]
+  #before_filter :require_no_user, :only => [:login, :login_post]
   before_filter :require_user,    :only => :logout
+  before_filter :require_group_if_user
 
   layout "home", :except => ['logout']
   
@@ -20,6 +21,8 @@ class UserSessionsController < ApplicationController
   end
   
   def logout
+    session[:group] = nil
+    session[:user] = nil
     current_user_session.destroy
     flash[:notice] = "You are now logged out"
     redirect_back_or_default '/'

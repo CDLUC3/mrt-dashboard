@@ -6,7 +6,10 @@
     <%= stylesheet_link_tag 'text' %>
     <%= stylesheet_link_tag '960' %>
     <%= stylesheet_link_tag 'main_styles' %>
+    <%= stylesheet_link_tag 'menu' %>
     <%= stylesheet_link_tag 'print', :media =>"print" %>
+    <%= javascript_include_tag :defaults %>
+    <%= javascript_include_tag 'protofish-min.js' %>
 
     <!--[if IE 6]><link rel="stylesheet" type="text/css" href="css/ie6.css" media="screen" /><![endif]-->
     <!--[if IE 7]><link rel="stylesheet" type="text/css" href="css/ie.css" media="screen" /><![endif]-->
@@ -15,7 +18,12 @@
   </head>
   <body>
     <div class="container_16">
-      <%= render :partial => "shared/unlogged_head" %>
+      <% usr = current_user
+      if usr then %>
+        <%= render :partial => "shared/collection_head" %>
+      <% else %>
+        <%= render :partial => "shared/unlogged_head" %>
+      <% end %>
       <%= yield %>
       <%= render :partial => "shared/footer" %>
       <%= javascript_include_tag :all %>

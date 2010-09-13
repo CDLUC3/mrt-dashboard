@@ -1,6 +1,6 @@
 class CollectionController < ApplicationController
   before_filter :require_user
-  before_filter :require_group
+  before_filter :require_group_if_user
 
   Q = Mrt::Sparql::Q
 
@@ -16,7 +16,7 @@ class CollectionController < ApplicationController
     q = Q.new("?so rdf:type object:Object .
                ?so object:isStoredObjectFor ?s .
                ?s ?p ?o .
-               ?s object:isInCollection <#{@group.sparql_id}> .
+               ?s object:isInCollection <#{no_inject(@group.sparql_id)}> .
                ?so dc:modified ?mod .",
                :limit => 100,
                :select => "DISTINCT ?s ?mod",
@@ -32,7 +32,7 @@ class CollectionController < ApplicationController
            ?so dc:modified ?mod .
            ?so dc:identifier ?so_ident
            FILTER (datatype(?o) = xsd:string) .
-           FILTER ( regex(?o, \"#{params[:terms]}\", \"i\") || regex(str(?so_ident), \"#{params[:terms]}\", \"i\") )",
+           FILTER ( regex(?o, \"#{no_inject(params[:terms])}\", \"i\") || regex(str(?so_ident), \"#{no_inject(params[:terms])}\", \"i\") )",
            :limit => 100,
            :select => "DISTINCT ?s ?mod ?so_ident",
            :order_by => "DESC(?mod)")
