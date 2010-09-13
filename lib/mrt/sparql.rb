@@ -33,9 +33,8 @@ module Mrt
         order_by_str = if !@args[:order_by].nil? then "ORDER BY #{@args[:order_by]}" else "" end
         return "#{namespace_str} SELECT #{@args[:select]}
           WHERE {
-            GRAPH <rmi://localhost/server1#> { 
-              ?g rdf:type mulgara:Model } . 
-            GRAPH ?g { #{@query} }
+            GRAPH <http://merritt.cdlib.org/> 
+            { #{@query} }
           } #{order_by_str} #{limit_str} #{offset_str}"
       end
     end
