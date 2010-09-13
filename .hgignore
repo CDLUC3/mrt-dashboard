@@ -9,3 +9,6 @@ tmp/*
 \.chg\..*$
 \.rej$
 \.conflict\~$
+mrt-dashboard_development
+mrt-dashboard_test
+
