@@ -35,6 +35,11 @@ class ObjectController < ApplicationController
 
   def upload
     new_file = ''
+    if params[:file].nil? then
+      flash[:error] = 'You must choose a filename to submit.'
+      redirect_to :controller => 'object', :action => 'add', :group => params[:group]
+      return false
+    end
     begin
       new_file = DataFile.save(params[:file], current_user.login)
 
@@ -57,7 +62,7 @@ class ObjectController < ApplicationController
                   hsh,
                   {#"Content-Type" => 'application/octet-stream',
                    #"Content-Length" => File.size(new_file),
-                   "Accept" => 'application/xml',
+                   #"Accept" => 'application/xml',
                    :multipart => true
                   }
              )
@@ -71,7 +76,10 @@ class ObjectController < ApplicationController
       @obj_count = @doc.xpath("//bat:batchState/bat:jobStates").length
     rescue Exception => ex
       File.delete(new_file)
-      @exception = ex
+      @doc = Nokogiri::XML(ex.http_body) do |config|
+        config.strict.noent.noblanks
+      end
+      @description = @doc.xpath("//exc:statusDescription")[0].child.text
       render :action => "upload_error"
     end
   end
