@@ -34,7 +34,8 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  #require a group, but hackish thing to get group from session instead of params for help
+  #require a group if user logged in
+  #but hackish thing to get group from session instead of params for help
   def require_group_if_user
     if current_user then
       redirect_to(CollectionHome) and return false if params[:group].nil? and session[:group].nil?
