@@ -80,7 +80,7 @@ module ApplicationHelper
     else
       my_t = t
     end
-    my_t.strftime("%Y-%m-%d  %I:%M %p").downcase
+    my_t.localtime.strftime("%Y-%m-%d  %I:%M %p").downcase
   end
 
   #makes dublin core metadatas display nicely if not assigned
