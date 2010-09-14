@@ -80,11 +80,11 @@ module ApplicationHelper
     else
       my_t = t
     end
-    my_t.strftime("%Y-%m-%d  %I:%M %p").downcase
+    my_t.localtime.strftime("%Y-%m-%d  %I:%M %p").downcase
   end
 
   #makes dublin core metadatas display nicely if not assigned
-  #tracy wants nothing to display anywhere if not filled in, so we'll see ;-)
+  #tracy wants nothing to display anywhere if not filled in
   def dc_nice(i)
     return "" if i.nil?
     (i.to_s.eql?("(:unas)") ? '' : i.to_s )

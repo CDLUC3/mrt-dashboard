@@ -1,3 +1,6 @@
+<% content_for :title do %>
+  UC3 Merritt: Add Object
+<% end %>
 <div class="grid_11">
   <h2>Add Object</h2>
   <div class="breadcrumbs">
@@ -6,7 +9,9 @@
     &gt; Add Object
   </div>
   <br/>
-  
+  <% if flash[:error] then %>
+    <p class="dynamic_message"><%=flash[:error]%></p>
+  <% end %>
   <p>Upload objects directly from your local drive or submit a manifest to add objects posted on a web server.</p>
   <h3>Object info</h3>
   <%= form_tag({:action => :upload}, :multipart => true) do %>

@@ -1,3 +1,6 @@
+<% content_for :title do %>
+  UC3 Merritt: Submission Error
+<% end %>
 <div class="grid_12">
   <h2>Submission Error</h2>
   <div class="breadcrumbs">
@@ -10,8 +13,13 @@
 
   <p>We're sorry, but your request to add data to the storage repository ran into a problem.</p>
 
-  <p>Please be sure any manifests are formatted correctly and you chose the correct
-    type of submission.</p>
+  <!-- <%=@description%> -->
+
+  <p>The most common cause of this error is a problem with the formatting of
+    your manifest, or it does not match the type of submission you are requesting.</p>
+
+  <p><a href="http://www.cdlib.org/services/uc3/contact.html">Contact us</a>
+  for assistance in troubleshooting the problem.</p>
 
 </div>
 <div class="grid_4 sidebar">
