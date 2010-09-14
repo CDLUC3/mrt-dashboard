@@ -24,6 +24,7 @@ body {
 
 .home {
 	background-image:url('/images/merritt_bg.jpg');
+	background-repeat:no-repeat;
 }
 
 .container_16 {
