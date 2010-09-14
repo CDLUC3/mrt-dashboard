@@ -1,3 +1,6 @@
+<% content_for :title do %>
+  UC3 Merritt: Collection -- <%= @group.description %>
+<% end %>
 <div class="grid_11">
   <h2>Collection: <%= @group.description %></h2>
   <div class="breadcrumbs"><%= link_to('Merritt', :controller => 'home', :action => 'index') %> &gt;
