@@ -15,3 +15,6 @@ require 'mrt/sparql'
 require 'mrt/mrt'
 require 'mrt/http'
 #require 'nokogiri'
+
+require 'webrick/httputils'
+Rack::Mime::MIME_TYPES['.xlsm'] = "application/vnd.ms-excel.sheet.macroEnabled.12"
