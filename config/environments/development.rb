@@ -50,6 +50,8 @@ MrtDashboard::Application.configure do
   #SPARQL_ENDPOINT = "http://gales.cdlib.org:8080/sparql/"
 
   RDF_ARK_URI = "http://ark.cdlib.org/"
+  RDF_COLLECTION_URI = "http://uc3.cdlib.org/collection/"
 
   STORE_URI = "http://badger.cdlib.org:35121/content/10/"
+
 end
