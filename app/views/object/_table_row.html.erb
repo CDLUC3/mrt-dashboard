@@ -1,5 +1,5 @@
 <%obj=table_row%>
 <tr class="<%= cycle('even','odd') %>">
   <td><%= link_to(clean_id(obj), :controller => 'object', :action => 'index', :group => @group.id, :object => clean_id(obj) ) %></td>
-  <td><%= render :partial => "/object/short_bib_display", :locals => { :obj => obj } %></td>
+  <td colspan="2"><%= render :partial => "/object/short_bib_display", :locals => { :obj => obj } %></td>
 </tr>

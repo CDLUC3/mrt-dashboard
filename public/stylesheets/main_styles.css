@@ -56,10 +56,7 @@ body {
 
 /* text styles */
 .caption {
-    font-size: 85%;
-    font-style: italic;
-    text-align: center;
-    
+    font-size: 85%;  
 }
 
 .title {
@@ -70,6 +67,16 @@ body {
     font-style: bold;
     color: #bb0000;
     font-size: 110%;
+}
+
+.centered {
+    display: block;
+    margin-left: auto;
+    margin-right: auto 
+}
+
+a {
+  text-decoration: none;
 }
 
 h1 {

@@ -22,7 +22,6 @@ root {
 
 .sidebar {
   display: none;
-
 }
 
 .menu {
@@ -44,7 +43,11 @@ root {
 }
 
 
-
+.centered {
+    display: block;
+    margin-left: auto;
+    margin-right: auto 
+}
 
 
 h1 {
@@ -74,7 +77,9 @@ h3 {
   margin-bottom: 5px;
 }
 
-
+a {
+  text-decoration: none;
+}
 
 /* form styles */
 /* for 2 column forms */

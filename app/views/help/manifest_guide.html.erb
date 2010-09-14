@@ -14,7 +14,7 @@
 <p>There are a variety of ways to submit digital objects to Merritt; the method you choose will depend on the nature of the digital objects and how many objects you have to submit.  One option is to use a <em>manifest</em> to add either complex objects consisting of many files or a large batch of objects.  A manifest is a simple pipe-delimited text file containing basic information about the files being submitted; just post the objects to a web server and use the <strong>Add Object</strong> page to submit the manifest that points to them. </p>
 
 
-<p>CDL has created Excel macros that will transform an Excel worksheet into a properly formatted checkm manifest file.  The <%= link_to("Macros: merrittManifest.xlsm", "/docs/merrittManifest.xlsm") %> file contains the macros for generating a manifest as well as worksheets with sample data.</p>
+<p>CDL has created Excel macros that will transform an Excel worksheet into a properly formatted checkm manifest file.  The <%= link_to("http://merritt.cdlib.org/docs/merrittManifest.xls", "/docs/merrittManifest.xls") %> file contains the macros for generating a manifest as well as worksheets with sample data.</p>
 
 <p>This guide will show you how to prepare manifest files to submit objects to Merritt, either individually or in batches.  The guide assumes that you are using MS Excel 2007 to record information about the objects you're submitting, and running a macro to produce a manifest.</p>
 
@@ -25,7 +25,7 @@
 <h3>Why Use a Manifest?</h3>
 
 
-<p><%=image_tag("help/manifest_decision_table.gif")%></p>
+<p><%=image_tag("help/manifest_decision_table.gif", :class=>"centered")%></p>
 
 <p><strong>For a single object:</strong>  In most cases it will be easiest to submit single objects via the Merritt user interface rather than using an object manifest.   There are two reasons you might prefer to use an object manifest to submit a single object to Merritt:</p>
 <ol>
@@ -42,9 +42,9 @@
 <a name="macro"></a>
 <h3>The Excel Macro</h3>
 
-<p>The <strong>merrittManifest.xlsm</strong> Excel file contains four macros that allow you to create manifests for individual objects and batches of single files, container files or manifest files. This spreadsheet also includes sample worksheets showing the information needed for the batch and object manifests.</p>
+<p>The <strong>merrittManifest.xls</strong> Excel file contains four macros that allow you to create manifests for individual objects and batches of single files, container files or manifest files. This spreadsheet also includes sample worksheets showing the information needed for the batch and object manifests.</p>
 
-<p>When you open the merrittManifest.xlsm file, you may see a security warning to let you know that the file contains macros, and that they have been disabled.  Click <strong>Options</strong>, select <strong>enable this content</strong>, then click <strong>OK</strong>.</p>
+<p>When you open the merrittManifest.xls file, you may see a security warning to let you know that the file contains macros, and that they have been disabled.  Click <strong>Options</strong>, select <strong>enable this content</strong>, then click <strong>OK</strong>.</p>
 
 <p><%=image_tag("help/enable_macros_1.gif")%></p>
 <p><%=image_tag("help/enable_macros_2.gif")%></p>
@@ -58,7 +58,7 @@
 
 <ol>
   <li>Place the object file(s) on a web server.</li>
-  <li>Download the <strong>merrittManifest.xlsm</strong> file</li>
+  <li>Download the <strong>merrittManifest.xls</strong> file</li>
   <li>Create a new worksheet for the object manifest.  There can be only one object per object manifest.</li>
   <li>Provide a URL and file name for each file in the object.  You may optionally provide checksum and file size information; <strong>object manifest</strong> section of this guide for details.</li>
   <li>Choose <strong>View > Macros > View Macros > ThisWorkbook.CreateObjectManifest > Run</strong> </li>
@@ -77,7 +77,7 @@
 <ol>
   <li>If your digital objects are composed of many files, create a container (.zip or .tar) file for each object.</li>  
   <li>Place the container files on a web server.</li> 
-  <li>Download the <strong>merrittManifest.xlsm file</strong>.</li> 
+  <li>Download the <strong>merrittManifest.xls file</strong>.</li> 
   <li>Create a new worksheet for your batch manifest.</li> 
   <li>Provide a URL and file name for each container file in the batch.  Provide any optional metadata (details in The Batch Manifest section).</li> 
   <li>Choose <strong>View > Macros > View Macros > ThisWorkbook.BatchOfContainerFiles > Run</strong>.</li> 
@@ -93,7 +93,7 @@
 
 <ol>
   <li>Place the files on a web server.</li>
-  <li>Download the <strong>merrittManifest.xlsm</strong> file.</li>
+  <li>Download the <strong>merrittManifest.xls</strong> file.</li>
   <li>Create a new worksheet for your batch manifest.</li>
   <li>Provide a URL and file name for each file in the batch.  Provide any optional metadata (details in The Batch Manifest section).</li>
   <li>Choose <strong>View > Macros > View Macros > ThisWorkbook.BatchOfSingleFiles > Run</strong>.</li>
@@ -110,7 +110,7 @@
 
 <ol>
   <li>Place the object files on a web server.</li>
-  <li>Download the <strong>merrittMacro.xlsm </strong>file.</li>
+  <li>Download the <strong>merrittMacro.xls </strong>file.</li>
   <li>Create a new worksheet for each object manifest.  There can be only one object per object manifest.</li>
   <li>Provide a URL and file name for each file in the object.  You may optionally provide checksum and file size information; see the <strong>Object Manifest</strong> section for details.</li>
   <li>Choose <strong>View > Macros > View Macros > ThisWorkbook.CreateObjectManifest > Run</strong>.</li>
@@ -201,7 +201,6 @@ Batch of object manifests:
 
   <li>In any batch manifest, empty cells up to the <strong>nfo:fileName</strong> column must be identified with " | | ".  After the nfo:fileName column, empty cells should be identified ONLY if they are followed by another cell that has a value.   Examples:<br/>
   
-   <p>INCLUDE MANIFEST ROW EXAMPLES HERE</p>
 </li>
 </ul>
 
@@ -220,7 +219,7 @@ Batch of object manifests:
 <h3>Optimizing the Macro: Create a Trusted Location (Optional for PC)</h3>
 
 
-<p>If you plan to create lot of Merritt manifests, you may want to create a trusted location for the merrittManifest.xlsm file on your computer.  This will allow you to run the macro without having to chose enable this content when you open the excel file.  It will also enable you to run the macro from other excel files as long as you have the merrittManifest.xlsm file open.  The following instructions are taken from Microsoft documentation for Office 2007 users (http://office.microsoft.com/en-us/excel-help/create-remove-or-change-a-trusted-location-for-your-files-HA010031999.aspx)</p>
+<p>If you plan to create lot of Merritt manifests, you may want to create a trusted location for the merrittManifest.xls file on your computer.  This will allow you to run the macro without having to chose enable this content when you open the excel file.  It will also enable you to run the macro from other excel files as long as you have the merrittManifest.xls file open.  The following instructions are taken from Microsoft documentation for Office 2007 users (http://office.microsoft.com/en-us/excel-help/create-remove-or-change-a-trusted-location-for-your-files-HA010031999.aspx)</p>
 
 <ol>
   <li>Open MS Excel.</li>
@@ -231,8 +230,8 @@ Batch of object manifests:
   <li>If you want to include subfolders as trusted locations, select the <strong>Subfolders of this location are also trusted</strong> check box.</li>
   <li>In the <strong>Description</strong> box, type what you want to describe the purpose of the trusted location.</li>
   <li>Click OK.</li>
-  <li>Store the merrittManifest.xlsm spreadsheet in this directory.</li>
-  <li>When you open the merrittManifest.xlsm file, the macros will be accessible to any other excel file you open in the trusted directory.</li>
+  <li>Store the merrittManifest.xls spreadsheet in this directory.</li>
+  <li>When you open the merrittManifest.xls file, the macros will be accessible to any other excel file you open in the trusted directory.</li>
 </ol>
 
   </div>
@@ -267,7 +266,7 @@ Batch of object manifests:
   <li><%= link_to("Batch Manifest: Single Files", "/samples/manifests/sampleBatchOfSingleFiles.checkm") %></li>
   <li><%= link_to("Batch Manifest: Object Manifest Files", "/samples/sampleBatchoOfManifests.checkm") %></li>
   <li><%= link_to("Object Manifest", "/samples/manifests/sampleBatchoOfManifests.checkm") %></li>
-  <li><%= link_to("Macros: merrittManifest.xlsm", "/docs/merrittManifest.xlsm") %></li>
+  <li><%= link_to("Macros: merrittManifest.xls", "/docs/merrittManifest.xls") %></li>
   <li><%= link_to("ERC file: mrt-erc.txt", "/samples/object1/mrt-erc.txt") %></li>
   <li><%= link_to("Sample objects [zip]", "/samples/sampleObjects.zip") %></li>
 </ul>

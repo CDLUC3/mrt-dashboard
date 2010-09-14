@@ -6,11 +6,14 @@
   </div>
   <br/>
   <% if @results.length > 0 then %>
-  <table>
+  <table style="width: 90%;">
     <thead>
       <tr>
         <th style="width: 30%;">Primary Id</th>
-        <th style="width: 70%;">Object info</th>
+        <th style="width: 20%;">Object info</th>
+        <th style="width: 50%;text-align: right;">
+          <%= render :partial => '/shared/paging', :locals => {:num_results => @object_count, :page_size => @page_size} %>
+        </th>
       </tr>
     </thead>
     <tbody>

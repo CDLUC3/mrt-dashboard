@@ -9,7 +9,7 @@ MrtDashboard::Application.configure do
 
   # The production environment is meant for finished, "live" apps.
   # Code is not reloaded between requests
-  config.cache_classes = true
+  config.cache_classes = false
 
   # Full error reports are disabled and caching is turned on
   config.consider_all_requests_local       = false
@@ -56,7 +56,7 @@ MrtDashboard::Application.configure do
          :port            => 1636,
          :base            => 'ou=People,ou=uc3,dc=cdlib,dc=org',
          :admin_user      => 'Directory Manager',
-         :admin_password  => 'XXXXXXXX',
+         :admin_password  => 'wah8oLab',
          :minter          => 'http://noid.cdlib.org/nd/noidu_p9'}
     )
 
@@ -65,7 +65,7 @@ MrtDashboard::Application.configure do
          :port            => 1636,
          :base            => 'ou=mrt-groups,ou=uc3,dc=cdlib,dc=org',
          :admin_user      => 'Directory Manager',
-         :admin_password  => 'XXXXXXXX',
+         :admin_password  => 'wah8oLab',
          :minter          => 'http://noid.cdlib.org/nd/noidu_p9'}
     )
 
@@ -74,6 +74,7 @@ MrtDashboard::Application.configure do
   SPARQL_ENDPOINT = "http://badger.cdlib.org:8080/sparql/"
 
   RDF_ARK_URI = "http://ark.cdlib.org/"
+  RDF_COLLECTION_URI = "http://uc3.cdlib.org/collection/"
 
   STORE_URI = "http://badger.cdlib.org:35121/content/10/"
 end

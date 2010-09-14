@@ -5,6 +5,11 @@ class CollectionController < ApplicationController
   Q = Mrt::Sparql::Q
 
   def index
+
+    @page_size = 10
+    @page = (params[:page] or '1').to_i
+    offset = (@page - 1) * @page_size
+
     @object_count = @group.object_count
 
     @version_count = @group.version_count
@@ -18,13 +23,19 @@ class CollectionController < ApplicationController
                ?s ?p ?o .
                ?s object:isInCollection <#{no_inject(@group.sparql_id)}> .
                ?so dc:modified ?mod",
-               :limit => 10,
+               :limit => @page_size,
+               :offset => offset,
                :select => "DISTINCT ?s ?mod",
                :order_by => "DESC(?mod)")
     @recent_objects = store().select(q).map{|s| UriInfo.new(s['s']) }
   end
 
   def search_results
+    @page_size = 10
+    @page = (params[:page] or '1').to_i
+    pg_start = (@page -1) * @page_size
+    pg_end = @page * @page_size - 1
+
     q = Q.new("?so rdf:type object:Object .
            ?so object:isStoredObjectFor ?s .
            ?s ?p ?o .
@@ -36,7 +47,9 @@ class CollectionController < ApplicationController
            :limit => 100,
            :select => "DISTINCT ?s ?mod ?so_ident",
            :order_by => "DESC(?mod)")
-    @results = store().select(q).map{|s| UriInfo.new(s['s']) }
-    #@results = store().select(q)
+    @results = store().select(q)
+    @object_count = @results.length
+    @results = @results[pg_start..pg_end].map{|s| UriInfo.new(s['s']) }
+    
   end
 end
