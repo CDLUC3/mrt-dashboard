@@ -56,7 +56,7 @@ MrtDashboard::Application.configure do
          :port            => 1636,
          :base            => 'ou=People,ou=uc3,dc=cdlib,dc=org',
          :admin_user      => 'Directory Manager',
-         :admin_password  => 'wah8oLab',
+         :admin_password  => 'XXXXXXXX',
          :minter          => 'http://noid.cdlib.org/nd/noidu_p9'}
     )
 
@@ -65,7 +65,7 @@ MrtDashboard::Application.configure do
          :port            => 1636,
          :base            => 'ou=mrt-groups,ou=uc3,dc=cdlib,dc=org',
          :admin_user      => 'Directory Manager',
-         :admin_password  => 'wah8oLab',
+         :admin_password  => 'XXXXXXXX',
          :minter          => 'http://noid.cdlib.org/nd/noidu_p9'}
     )
 
