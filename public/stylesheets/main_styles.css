@@ -22,6 +22,10 @@ body {
   font-size: 12px/1.5; 
 }
 
+.home {
+	background-image:url('/images/merritt_bg.jpg');
+}
+
 .container_16 {
   background-color: #fff;
 }
