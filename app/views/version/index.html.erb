@@ -1,0 +1,43 @@
+<% content_for :title do %>
+  UC3 Merritt: Version -- <%= params[:object] %>, Version <%= params[:version] %>
+<% end %>
+<div class="grid_11">
+  <h2><%= params[:object] %> - Version <%=params[:version] %>: <%= merritt_time(@version[RDF::DC.created].to_s)%> </h2>
+  <div class="breadcrumbs"><%= link_to('Merritt', :controller => 'home', :action => 'index') %> &gt;
+    <%= link_to("Collection: #{@group.description}", :controller => 'collection', :action => 'index', :group => params[:group]) %> &gt;
+    <%= link_to("Object: #{params[:object]}", :controller => 'object', :action => 'index', :group => params[:group], :object => params[:object]) %> &gt;
+    Version <%= params[:version] %>
+  </div>
+
+  <br/>
+  <h3 style="font-weight: normal;">
+<%= render :partial => "/object/short_bib_display", :locals => {:obj => @version} %></h3>
+
+<%= render :partial => '/version/details_display', :locals => {:obj => @object,
+        :stored_object => @stored_object, :version => @version} %>
+<div class="clear"></div>
+
+<%= render :partial => '/version/files', :locals => {:title => 'User Files', :files => @files, :obj => @object, :version => @version} %>
+<%= render :partial => '/version/files', :locals => {:title => 'System Files', :files => @system_files, :obj => @object, :version => @version} %>
+
+<div class="key">&nbsp;</div><div class="value">&nbsp;</div>
+<div class="key">&nbsp;</div>
+<div class="value">
+    <%= form_tag(:action => 'download') do %>
+      <%= hidden_field_tag 'group', params[:group] %>
+      <%= hidden_field_tag 'object', params[:object] %>
+      <%= hidden_field_tag 'version', params[:version] %>
+      <%= submit_tag 'Download version' %>
+      <input type="button" name="backwards" value="Back" onclick="history.back();"/>
+    <% end %>
+</div>
+</div>
+<div class="grid_1">&nbsp;</div>
+<div class="grid_4 sidebar">
+  <%= render :partial => '/shared/side_lookup' %><br/>
+  <%= render :partial => '/version/list_sidebar',
+      :locals => {:versions => @versions.reverse, :title => 'All Versions'} %><br/>
+  <%# render :partial => 'overview' %><br/>
+  <%# render :partial => '/shared/side_alert' %>
+
+</div>

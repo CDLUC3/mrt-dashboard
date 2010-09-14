@@ -1,0 +1,25 @@
+<% content_for :title do %><%= @info.to_uri %><% end %>
+
+<div class="grid_16">
+  <h2 id="page-heading"><%= @info.to_uri %></h2>
+  <div class="box">
+    <div class="block">
+      <dl>
+        <% @info.keys.each do |key| %>
+        <dt><%= key %></dt>
+        <dd>
+          <% if @info[key].size == 1 %>
+          <%=  maybe_link(@info[key][0], params.has_key?('raw')) %>
+          <% else %>
+          <ul>
+            <% @info[key].each do |val| %>
+            <li><%= maybe_link(val, params.has_key?('raw')) %></li>
+            <% end %>
+          </ul>
+          <% end %>
+        </dd>
+        <% end %>
+      </dl>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,15 @@
+<div class="grid_10 head_left">
+  <%=image_tag("logos/merritt_logo.gif")%>
+</div>
+<div class="grid_6 head_right">
+  <% usr = current_user
+  if usr then %>
+    <%= link_to("Logout", :controller => 'user_sessions', :action => 'logout') %>
+  <% else %>
+    <%= link_to("Login", :controller => 'user_sessions', :action => 'login') %>
+  <% end %> | <a href="http://www.cdlib.org/services/uc3/contact.html">Contact UC3</a> | <%= link_to("Help", :controller => 'help', :action => 'index') %>
+  <% if usr then %>
+    <br/>Logged in as <%= usr.displayname %>
+  <% end %>
+</div>
+<div class="clear"></div>
