@@ -1,18 +1,24 @@
+<% content_for :title do %>
+  UC3 Merritt Home
+<% end %>
+
 <div class="grid_12">
   <%= render :partial => '/shared/flash_show' %>
-  <p>This is the welcome screen to Merritt.  It describes what the service does,
-  who can use it and how to contact us.  Text about the Micro-Services approach
-  behind the service?</p>
 
-  <ul>
-    <li>Merritt User Guide</li>
-    <li>Learn more about the Micro-Services</li>
-    <li><a href="http://www.cdlib.org/services/uc3/contact.html">Contact UC3</a> for further information</li>
-  </ul>
-  
- <p>Some image options:</p> 
- 
- <%=image_tag("logos/merritt5.jpg")%>
+<p>Merritt is a new cost-effective repository service from the University of California Curation Center (UC3) that lets the UC community manage, archive, and share its valuable digital content.  Use Merritt to provide long-term preservation of digital assets, share your research with others or meet the data sharing and preservation requirements of a grant-funded project. </p>
+
+<p>Merritt is built upon a Micro-Services approach to digital curation based on devolving curation function into a set of independent, but interoperable, services that embody curation values and strategies. Since each of the services is small and self-contained, they are collectively easier to develop, deploy, maintain, and enhance.  This design approach is detailed in the <a href="https://confluence.ucop.edu/download/attachments/13860983/UC3-Foundations-latest.pdf?version=1" target="_blank">UC3 Curation Foundations</a> paper.</p>
+
+
+<h2>Learn more about Merritt:</h2>
+<ul>
+  <li><%= link_to("Handout: Merritt Uses and FAQ", "/docs/merritt_handout.pdf") %></li>
+  <li><%= link_to("Merritt User Guide", "/docs/merritt_user_guide.pdf") %></li>
+</ul>
+
+<h2>Need a Merritt Account?</h2>
+<p>Fill out the <a href="http://www.cdlib.org/services/uc3/contact.html">Contact UC3 form</a> or email <strong>uc3@ucop.edu</strong>.</p>
+
 </div>
 <div class="grid_4">
   <%=image_tag("logos/merritt2.jpg")%>
