@@ -1,3 +1,4 @@
+#this is because I couldn't get our patched library to load otherwise for some reason
 $:.unshift File.join(Rails.root, 'vendor','gems', 'net-ldap-0.1.1-patched', 'lib')
 require 'user_ldap'
 require 'group_ldap'

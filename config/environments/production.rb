@@ -1,3 +1,9 @@
+#this is because I couldn't get our patched library to load otherwise for some reason
+$:.unshift File.join(Rails.root, 'vendor','gems', 'net-ldap-0.1.1-patched', 'lib')
+require 'user_ldap'
+require 'group_ldap'
+require 'net/ldap'
+
 MrtDashboard::Application.configure do
   # Settings specified here will take precedence over those in config/environment.rb
 
@@ -43,4 +49,31 @@ MrtDashboard::Application.configure do
   # Enable locale fallbacks for I18n (makes lookups for any locale fall back to
   # the I18n.default_locale when a translation can not be found)
   config.i18n.fallbacks = true
+
+  # our configuration
+    LDAP_USER = UserLdap::Server.new(
+       {:host             => "dp01.cdlib.org",
+         :port            => 1636,
+         :base            => 'ou=People,ou=uc3,dc=cdlib,dc=org',
+         :admin_user      => 'Directory Manager',
+         :admin_password  => 'XXXXXXXX',
+         :minter          => 'http://noid.cdlib.org/nd/noidu_p9'}
+    )
+
+  LDAP_GROUP = GroupLdap::Server.new(
+       {:host             => "dp01.cdlib.org",
+         :port            => 1636,
+         :base            => 'ou=mrt-groups,ou=uc3,dc=cdlib,dc=org',
+         :admin_user      => 'Directory Manager',
+         :admin_password  => 'XXXXXXXX',
+         :minter          => 'http://noid.cdlib.org/nd/noidu_p9'}
+    )
+
+  INGEST_SERVICE = 'http://badger.cdlib.org:33121/poster/submit/'
+
+  SPARQL_ENDPOINT = "http://badger.cdlib.org:8080/sparql/"
+
+  RDF_ARK_URI = "http://ark.cdlib.org/"
+
+  STORE_URI = "http://badger.cdlib.org:35121/content/10/"
 end
