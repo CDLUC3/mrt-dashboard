@@ -14,7 +14,7 @@
 <%= render :partial => "/object/short_bib_display", :locals => {:obj => @version} %></h3>
 
 <%= render :partial => '/version/details_display', :locals => {:obj => @object,
-        :stored_object => @stored_object, :version => @version} %>
+        :stored_object => @stored_object, :version => @version, :number_files => (@files.length + @system_files.length)} %>
 <div class="clear"></div>
 
 <%= render :partial => '/version/files', :locals => {:title => 'User Files', :files => @files, :obj => @object, :version => @version} %>
