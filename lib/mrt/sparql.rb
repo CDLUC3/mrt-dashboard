@@ -27,15 +27,17 @@ module Mrt
       def to_s()
         namespace_str = @args[:ns].keys.map do |key|
           "PREFIX #{key}: <#{@args[:ns][key].to_uri.to_s}>"
-        end.join("\n")
+        end.join(" ")
         limit_str = if !@args[:limit].nil? then "LIMIT #{@args[:limit]}" else "" end
         offset_str = if !@args[:offset].nil? then "OFFSET #{@args[:offset]}" else "" end
         order_by_str = if !@args[:order_by].nil? then "ORDER BY #{@args[:order_by]}" else "" end
-        return "#{namespace_str} SELECT #{@args[:select]}
-          WHERE {
-            GRAPH <http://merritt.cdlib.org/> 
-            { #{@query} }
-          } #{order_by_str} #{limit_str} #{offset_str}"
+        where_str = if !@query.blank? then "{ #{@query} }" else "" end
+        select_or_desc_str = if !@args[:describe].blank? then
+                               "DESCRIBE #{@args[:describe]}"
+                             else
+                               "SELECT #{@args[:select]}"
+                             end
+        return "#{namespace_str} #{select_or_desc_str} FROM <http://merritt.cdlib.org/> #{where_str} #{order_by_str} #{limit_str} #{offset_str}"
       end
     end
     
