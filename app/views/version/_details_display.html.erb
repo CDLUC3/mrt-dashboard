@@ -2,6 +2,7 @@
   obj = metadata obj
   stored_object = Information about object storage
   version = version of the stored object
+  number_files = number of files
 %>
   <div class="key">identifier:</div>
   <div class="value"><%= stored_object[RDF::DC.identifier] %></div>
@@ -28,6 +29,6 @@
   <div class="value"><%=number_to_storage_size(version[Mrt::Base.size].to_s.to_i)%></div>
 
   <div class="key">version files:</div>
-  <div class="value"><%= version[Mrt::Base.numActualFiles] %></div>
+  <div class="value"><%= number_files %></div>
 
   <div class="clear"></div>
