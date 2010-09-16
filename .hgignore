@@ -11,4 +11,7 @@ tmp/*
 \.conflict\~$
 mrt-dashboard_development
 mrt-dashboard_test
+mrt-dashboard_production
+console
+
 
