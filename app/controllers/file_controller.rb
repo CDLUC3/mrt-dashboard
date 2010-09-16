@@ -18,16 +18,13 @@ class FileController < ApplicationController
                ?obj dc:identifier \"#{no_inject(params[:object])}\"^^<http://www.w3.org/2001/XMLSchema#string>",
       :select => "?file")
     
-    res = store().select(q)
-
-    @file = UriInfo.new(res[0]['file'])
-
-    fileUri = @file.first(Mrt::File.bytestream).to_uri
-    http = Mrt::HTTP.new(fileUri.scheme, fileUri.host, fileUri.port)
-    tmp_file = http.get_to_tempfile(fileUri.path)
+    file = UriInfo.new(store().select(q)[0]['file'])
+    file_uri = file.first(Mrt::File.bytestream).to_uri
+    http = Mrt::HTTP.new(file_uri.scheme, file_uri.host, file_uri.port)
+    tmp_file = http.get_to_tempfile(file_uri.path)
     send_file(tmp_file.path,
-              :filename => File.basename(@file[RDF::DC.identifier].to_s),
-              :type => @file[Mrt::File.mediaType].to_s,
+              :filename => File.basename(file[RDF::DC.identifier].to_s),
+              :type => file[Mrt::File.mediaType].to_s,
               :disposition => 'inline')
   end
 end

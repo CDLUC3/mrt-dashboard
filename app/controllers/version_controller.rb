@@ -28,13 +28,23 @@ class VersionController < ApplicationController
   end
 
   def download
-    dl_uri = "#{STORE_URI}#{esc(params[:object])}/#{esc(params[:version])}"
-    fileUri = RDF::URI.new(dl_uri)
-    http = Mrt::HTTP.new(fileUri.scheme, fileUri.host, fileUri.port)
-    tmp_file = http.get_to_tempfile("#{fileUri.path}?t=zip")
+    q = Q.new("?vers dc:identifier \"#{no_inject(params[:version])}\"^^<http://www.w3.org/2001/XMLSchema#string> .
+               ?vers rdf:type version:Version .
+               ?vers version:inObject ?obj .
+               ?obj rdf:type object:Object .
+               ?obj object:isStoredObjectFor ?meta .
+               ?obj dc:identifier \"#{no_inject(params[:object])}\"^^<http://www.w3.org/2001/XMLSchema#string>",
+      :select => "?vers")
+    
+    version_uri = store().select(q)[0]['vers'].to_uri
+    # HACK 
+    version_uri = URI.parse(version_uri.to_s.gsub(/\/state\//, '/content/'))
+    http = Mrt::HTTP.new(version_uri.scheme, version_uri.host, version_uri.port)
+    tmp_file = http.get_to_tempfile("#{version_uri.path}?t=zip")
     send_file(tmp_file.path,
+              :x_sendfile => false,
               :filename => "#{esc(params[:object])}_version_#{esc(params[:version])}.zip",
-              :type => "application/octet-stream",
-              :disposition => 'inline')
+              :type => "application/zip",
+              :disposition => "attachment")
   end
 end
