@@ -1,0 +1,14 @@
+<div class="container_16">
+  <div class="grid_4"><br/></div>
+  <div class="grid_8">
+    <div class="box">
+      <h2>Register</h2>
+      <div class="block">
+        <% form_tag({:action=>'create'}) do %>
+        <%= render :partial => "form" %>
+        <%= submit_tag("Register") %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
