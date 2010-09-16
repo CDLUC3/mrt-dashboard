@@ -87,7 +87,9 @@ module ApplicationHelper
   #tracy wants nothing to display anywhere if not filled in
   def dc_nice(i)
     return "" if i.nil?
-    (i.to_s.eql?("(:unas)") ? '' : i.to_s )
+    i.delete_if{|mm| mm.to_s.eql?('(:unas)')}
+    return '' if i.length < 1
+    i.join(': ')
   end
 
 end

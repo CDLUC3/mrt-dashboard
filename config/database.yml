@@ -15,6 +15,12 @@ test:
   pool: 5
   timeout: 5000
 
+production_development:
+  adapter: sqlite3
+  database: mrt-dashboard_production
+  pool: 5
+  timeout: 5000
+
 production:
   adapter: sqlite3
   database: mrt-dashboard_production
