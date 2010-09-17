@@ -14,7 +14,6 @@ mrt-dashboard_test
 mrt-dashboard_production
 console
 help/*
-Gemfile.lock
 
 
 
