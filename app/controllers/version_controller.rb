@@ -8,23 +8,15 @@ class VersionController < ApplicationController
   before_filter :require_version
 
   def index
-
     @stored_object = @object[Mrt::Object['hasStoredObject']].first
     @versions = @stored_object[Mrt::Object['versionSeq']].first.to_list
     #files for current version
-    files = @version[Mrt::Version.hasFile]
-    @system_files = []
-    @files = []
-    files.each do |file|
-      if file[RDF::DC.identifier].to_s[0..10].eql?('system/mrt-') then
-        @system_files.push(file)
-      else
-        @files.push(file)
-      end
+    all_files = @version[Mrt::Version.hasFile].sort_by do |f| 
+      f[RDF::DC.identifier].to_s.downcase
     end
-    @files.sort! {|x,y| File.basename(x[RDF::DC.identifier].to_s.downcase) <=> File.basename(y[RDF::DC.identifier].to_s.downcase)}
-    @system_files.sort! {|x,y| File.basename(x[RDF::DC.identifier].to_s.downcase) <=> File.basename(y[RDF::DC.identifier].to_s.downcase)}
-    
+    (@system_files, @files) = all_files.partition do |file|
+      file[RDF::DC.identifier].to_s.match(/^system\//)
+    end
   end
 
   def download
@@ -42,7 +34,6 @@ class VersionController < ApplicationController
     http = Mrt::HTTP.new(version_uri.scheme, version_uri.host, version_uri.port)
     tmp_file = http.get_to_tempfile("#{version_uri.path}?t=zip")
     send_file(tmp_file.path,
-              :x_sendfile => false,
               :filename => "#{esc(params[:object])}_version_#{esc(params[:version])}.zip",
               :type => "application/zip",
               :disposition => "attachment")
