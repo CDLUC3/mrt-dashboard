@@ -2,6 +2,7 @@ module Mrt
   module Sparql
     class Q
       attr_accessor :limit
+      ::RDF::URI::CACHE_SIZE = 0
 
       INITIALIZE_DEFARGS = { 
         :select => "*",
@@ -13,7 +14,7 @@ module Mrt
           :object  => RDF::Vocabulary.new("http://uc3.cdlib.org/ontology/store/object#"),
           :rdf     => RDF,
           :rdfs    => RDF::RDFS,
-          :store  => RDF::Vocabulary.new("http://uc3.cdlib.org/ontology/store/store#"),
+          :store   => RDF::Vocabulary.new("http://uc3.cdlib.org/ontology/store/store#"),
           :version => RDF::Vocabulary.new("http://uc3.cdlib.org/ontology/store/version#"),
           :xsd     => RDF::XSD
         }
@@ -52,11 +53,12 @@ module Mrt
       end
       
       def select(query)
+        puts "searching: " + query.to_s
         http.start do |h|
           request = Net::HTTP::Post.new(@endpoint.path)
           request.set_form_data({ 'query' => query.to_s, 'soft-limit' => @softlimit });
-#          request['Accept'] = 'application/json'
           request['Accept'] = 'application/sparql-results+json'
+          #request['Accept'] = 'application/sparql-results+xml'
           response = h.request(request)
           parse_json_results(response.body)
           #parse_xml_results(response.body)
