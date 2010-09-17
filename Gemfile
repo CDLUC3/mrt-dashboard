@@ -34,6 +34,6 @@ gem 'rest-client'
 gem 'json'
 gem 'rdf'
 #gem 'xml-simple'
-gem 'authlogic' #, :git => 'git://github.com/odorcicd/authlogic.git', :branch => 'rails3'
+gem 'authlogic', '2.1.6' # this version has a bug, but also committed fix to the user_session.rb model
 #gem 'ruby-net-ldap'
 gem 'nokogiri'
