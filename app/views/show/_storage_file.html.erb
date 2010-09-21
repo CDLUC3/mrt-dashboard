@@ -1,0 +1,23 @@
+<% content_for :title do %>
+  <%= storage_file.to_uri %>
+<% end %>
+
+<div class="grid_16">
+  <h2 id="page-heading"><%= storage_file[RDF::DC['identifier']] %></h2>
+</div>
+<div class="grid_8">
+  <div class="box">
+    <h2><a href="#" id="toggle-info">Information</a></h2>
+    <div class="block" id="info">
+      <dl>
+        <dt>Mime type:</dt>
+        <dd><%= storage_file[RDF::DC.format] %></dd>
+        <dt>Created:</dt>
+        <dd><%= storage_file[RDF::DC.created] %></dd>
+        <dt>Size:</dt>
+        <dd><%= number_to_human_size(storage_file[RDF::DC.extent]) %></dd>
+      </dl>
+      <p><%= link_to("View", "/show/view/#{clean_id(storage_file.to_uri)}") %></p>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,51 @@
+
+<div class="grid_11">
+
+ 
+<h2>Retrieving Objects</h2>
+  <div class="breadcrumbs"><%= link_to('Merritt', :controller => 'home', :action => 'index') %> &gt;
+    <%= link_to("Collection: #{@group.description}", :controller => 'collection', :action => 'index') %> &gt;
+    <%= link_to("Help", :controller => 'help', :action => 'index') %> &gt;
+    Retrieving Objects
+   </div>
+   
+
+<br />
+
+<p>If you used the Merritt metadata options to provide a title, creator, date or local identifier, you will be able to search within the collection for any of those terms.  Terms typed in the search box will be found in any of these fields, as well as in the primary identifier assigned by Merritt.</p>
+  
+
+<p>The <strong>Display Object</strong> screen shows the complete metadata provided by the curator as well as system-generated metadata such as primary identifier, file size, date added (created) and date last modified.</p>
+
+<p><%=image_tag("help/display_object.gif", :class=>"centered")%></p>
+
+
+<p>If there are multiple versions of an object, information about the most recent version will display on the <strong>Display Object</strong> page.</p>
+  
+<p>If there are multiple component files for the object, up to four of them will be listed in the right sidebar.  Clicking on an object file will open the file.</p>
+
+<p>If there are multiple versions of the object, a link to each version will be available in the right sidebar.  The <strong>Display Version</strong> page, which will provide links to every component file for the object.</p>
+  
+<p>The <strong>Download Object</strong> button on the <strong>Display Object</strong> page will download a .zip file including every version of the object.</p>
+  
+<p>The <strong>Display Version</strong> screen provides links to each component file you supplied for the object, along with system-derived metadata.</p>
+
+<p><%=image_tag("help/display_version.gif", :class=>"centered")%></p>
+
+
+<p>The <strong>Display Version</strong> screen also provides access to the files that Merritt generates to facilitate object management.</p>
+  
+<p>The <strong>Download Version</strong> button will provide you with a .zip file of the version you are viewing.  The download will include the system files Merritt generated. </p>
+ 
+
+
+
+
+</div>
+<div class="grid_1">&nbsp;</div>
+<div class="grid_4 sidebar">
+  
+  <%= render :partial => 'help_sidebar' %>
+  
+</div>
+
