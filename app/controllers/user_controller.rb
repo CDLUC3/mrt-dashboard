@@ -12,14 +12,20 @@ class UserController < ApplicationController
     if !params[:givenname].nil? then
       params.each_pair{|k,v| @ldap_user[k] = v } #stuck updated info in this hash so they don't have to retype
       @required = {'givenname' => 'First name', 'sn' => 'Last name',
-                  'userpassword' => 'Password', 'mail' => 'Email'}
+                  'userpassword' => 'Password', 'repeatuserpassword' => 'Repeat Password',
+                  'mail' => 'Email'}
       @required.each_key do |key|
         if params[key].nil? or params[key].eql?('') then
           @error_fields.push(key)
         end
       end
-      if @error_fields.length > 0 then
-        @display_text = "The following items must be filled in: #{@error_fields.map{|i| @required[i]}.join(', ' )}."
+      if @error_fields.length > 0 or !params[:userpassword].eql?(params[:repeatuserpassword]) then
+        if @error_fields.length > 0 then
+          @display_text += "The following items must be filled in: #{@error_fields.map{|i| @required[i]}.join(', ' )}."
+        end
+        if !params[:userpassword].eql?(params[:repeatuserpassword]) then
+          @display_text += " Your password and repeated password do not match."
+        end
       else
         ['givenname', 'sn', 'mail', 'tzregion', 'telephonenumber'].each do |i|
           LDAP_USER.replace_attribute(current_user.login, i, params[i])
