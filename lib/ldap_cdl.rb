@@ -29,7 +29,7 @@ module LdapCdl
       @people_base = people_base
       @groups_base = groups_base
       @ldap_connect = {:host => host, :port => port,
-        :auth => {:method => :simple, :username => "cn=#{admin_user}", :password => admin_password},
+        :auth => {:method => :simple, :username => admin_user, :password => admin_password},
         :encryption => :simple_tlsy
       }
       @admin_ldap = Net::LDAP.new(@ldap_connect)

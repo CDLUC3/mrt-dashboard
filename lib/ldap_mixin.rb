@@ -26,7 +26,7 @@ module LdapMixin
     @minter = Noid::Minter.new(minter)
     @base = base
     @ldap_connect = {:host => host, :port => port,
-      :auth => {:method => :simple, :username => "cn=#{admin_user}", :password => admin_password},
+      :auth => {:method => :simple, :username => admin_user, :password => admin_password},
       :encryption => :simple_tls
     }
     @admin_ldap = Net::LDAP.new(@ldap_connect)
