@@ -22,7 +22,7 @@ MrtDashboard::Application.configure do
   config.action_mailer.raise_delivery_errors = false
 
   LDAP_ADMIN_PASSWORD = "ahz6ap2I"
-  LDAP_ADMIN_USER     = "Directory Manager"
+  LDAP_ADMIN_USER     = "cn=Directory Manager"
   LDAP_GROUP_BASE     = "ou=mrt-groups,ou=uc3,dc=cdlib,dc=org"
   LDAP_HOST           = "badger.cdlib.org"
   LDAP_PORT           = 1636
