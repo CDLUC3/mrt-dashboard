@@ -36,4 +36,4 @@ gem 'rdf'
 #gem 'xml-simple'
 gem 'authlogic', '2.1.6' # this version has a bug, but also committed fix to the user_session.rb model
 gem 'nokogiri'
-gem 'net-ldap', "0.1.2", :git=>'http://github.com/RoryO/ruby-net-ldap.git'
+gem 'net-ldap', "0.1.2", :git=>'git://github.com/RoryO/ruby-net-ldap.git'
