@@ -8,6 +8,11 @@ class User < ActiveRecord::Base
     grp_ids.map{|id| Group.find(id)}
   end
 
+  #these would be LDAP attributes, not database ones.  maybe they should sync up more.
+  def set_attrib(attribute, value)
+    LDAP_USER.replace_attribute(self.login, attribute, value)
+  end
+
   #protected
   def valid_ldap_credentials?(password)
     begin

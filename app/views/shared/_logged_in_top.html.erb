@@ -7,7 +7,11 @@
     <%= link_to("Logout", :controller => 'user_sessions', :action => 'logout') %>
   <% else %>
     <%= link_to("Login", :controller => 'user_sessions', :action => 'login') %>
-  <% end %> | <a href="http://www.cdlib.org/services/uc3/contact.html">Contact UC3</a> | <%= link_to("Help", :controller => 'help', :action => 'index') %>
+  <% end %>
+  <% if usr then %>
+    | <%= link_to('Profile', params.merge({:controller => 'user', :action => 'update'}))  %>
+  <% end %>
+  | <a href="http://www.cdlib.org/services/uc3/contact.html">Contact UC3</a> | <%= link_to("Help", :controller => 'help', :action => 'index') %>
   <% if usr then %>
     <br/>Logged in as <%= usr.displayname %>
   <% end %>
