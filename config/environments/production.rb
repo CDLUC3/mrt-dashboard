@@ -1,9 +1,3 @@
-#this is because I couldn't get our patched library to load otherwise for some reason
-$:.unshift File.join(Rails.root, 'vendor','gems', 'net-ldap-0.1.1-patched', 'lib')
-require 'user_ldap'
-require 'group_ldap'
-require 'net/ldap'
-
 MrtDashboard::Application.configure do
   config.cache_classes = false
   config.consider_all_requests_local       = false
@@ -34,3 +28,8 @@ MrtDashboard::Application.configure do
   RDF_ARK_URI        = "http://ark.cdlib.org/"
   RDF_COLLECTION_URI = "http://uc3.cdlib.org/collection/"
 end
+
+MrtDashboard::Application.config.middleware.use ExceptionNotifier,
+  :email_prefix => "[Merritt UI] ",
+  :sender_address => "\"notifier\" <no-reply@#{Socket.gethostname}>",
+  :exception_recipients => %w{erik.hetzner@ucop.edu scott.fisher@ucop.edu}

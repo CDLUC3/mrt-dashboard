@@ -1,8 +1,14 @@
 GIT
-  remote: http://github.com/RoryO/ruby-net-ldap.git
-  revision: 4159643
+  remote: git://github.com/RoryO/ruby-net-ldap.git
+  revision: 85a137c
   specs:
     net-ldap (0.1.2)
+
+GIT
+  remote: git://github.com/rails/exception_notification.git
+  revision: 192a49a
+  specs:
+    exception_notification (1.0.0)
 
 GEM
   remote: http://rubygems.org/
@@ -92,6 +98,7 @@ PLATFORMS
 
 DEPENDENCIES
   authlogic (= 2.1.6)
+  exception_notification!
   json
   net-ldap (= 0.1.2)!
   nokogiri
