@@ -19,31 +19,16 @@ MrtDashboard::Application.configure do
   # Don't care if the mailer can't send
   config.action_mailer.raise_delivery_errors = false
 
-  LDAP_USER = UserLdap::Server.new(
-       {:host             => "dp01.cdlib.org",
-         :port            => 1636,
-         :base            => 'ou=People,ou=uc3,dc=cdlib,dc=org',
-         :admin_user      => 'Directory Manager',
-         :admin_password  => 'XXXXXXXX',
-         :minter          => 'http://noid.cdlib.org/nd/noidu_p9'}
-    )
+  LDAP_ADMIN_PASSWORD = "XXXXXXXX"
+  LDAP_ADMIN_USER     = "cn=Directory Manager"
+  LDAP_GROUP_BASE     = "ou=mrt-groups,ou=uc3,dc=cdlib,dc=org"
+  LDAP_HOST           = "dp01.cdlib.org"
+  LDAP_PORT           = 1636
+  LDAP_USER_BASE      = "ou=People,ou=uc3,dc=cdlib,dc=org"
+  LDAP_ARK_MINTER_URL = "http://noid.cdlib.org/nd/noidu_p9"
 
-  LDAP_GROUP = GroupLdap::Server.new(
-       {:host             => "dp01.cdlib.org",
-         :port            => 1636,
-         :base            => 'ou=mrt-groups,ou=uc3,dc=cdlib,dc=org',
-         :admin_user      => 'Directory Manager',
-         :admin_password  => 'XXXXXXXX',
-         :minter          => 'http://noid.cdlib.org/nd/noidu_p9'}
-    )
-
-  INGEST_SERVICE = 'http://.cdlib.org:33121/poster/submit/'
-
-  SPARQL_ENDPOINT = "http://dp01.cdlib.org:8080/sparql/"
-
-  RDF_ARK_URI = "http://ark.cdlib.org/"
-  RDF_COLLECTION_URI = "http://uc3.cdlib.org/collection/"
-
-  STORE_URI = "http://badger.cdlib.org:35121/content/10/"
-
+  INGEST_SERVICE      = 'http://uc3.cdlib.org:33121/poster/submit/'
+  SPARQL_ENDPOINT     = "http://dp01.cdlib.org:8080/sparql/"
+  RDF_ARK_URI         = "http://ark.cdlib.org/"
+  RDF_COLLECTION_URI  = "http://uc3.cdlib.org/collection/"
 end
