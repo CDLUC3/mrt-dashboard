@@ -1,10 +1,18 @@
 class User < ActiveRecord::Base
+  LDAP = UserLdap::Server.
+    new({ :host            => LDAP_HOST,
+          :port            => LDAP_PORT,
+          :base            => LDAP_USER_BASE,
+          :admin_user      => LDAP_ADMIN_USER,
+          :admin_password  => LDAP_ADMIN_PASSWORD,
+          :minter          => LDAP_ARK_MINTER_URL})
+
   acts_as_authentic do |c|
     c.validate_password_field = false
   end
  
   def groups
-    grp_ids = LDAP_GROUP.find_groups_for_user(self.login, LDAP_USER)
+    grp_ids = Group::LDAP.find_groups_for_user(self.login, User::LDAP)
     grp_ids.map{|id| Group.find(id)}
   end
 
@@ -16,13 +24,13 @@ class User < ActiveRecord::Base
   #protected
   def valid_ldap_credentials?(password)
     begin
-      res = LDAP_USER.authenticate(login, password)
+      res = User::LDAP.authenticate(login, password)
     rescue LdapCdl::LdapException => ex
       return false
     end
     return false if res == false
 
-    u = LDAP_USER.fetch(login)
+    u = User::LDAP.fetch(login)
     self.title = single_value(u, 'title')
     self.displayname = single_value(u, 'displayname')
     self.lastname = single_value(u, 'sn')
@@ -37,8 +45,10 @@ class User < ActiveRecord::Base
   end
   
   def single_value(record, field)
-    return nil if record[field].nil? or record[field][0].nil? or record[field][0].length < 1
-    return record[field][0]
+    if record[field].nil? or record[field][0].nil? or record[field][0].length < 1 then
+      return nil 
+    else
+      return record[field][0]
+    end
   end
-
 end

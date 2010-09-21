@@ -1,5 +1,12 @@
 # this all probably needs to be refactored eventually
 class Group
+  LDAP = GroupLdap::Server.
+    new({ :host            => LDAP_HOST,
+          :port            => LDAP_PORT,
+          :base            => LDAP_GROUP_BASE,
+          :admin_user      => LDAP_ADMIN_USER,
+          :admin_password  => LDAP_ADMIN_PASSWORD,
+          :minter          => LDAP_ARK_MINTER_URL})
 
   Q = Mrt::Sparql::Q
   STORE = Mrt::Sparql::Store.new(SPARQL_ENDPOINT)
@@ -11,7 +18,7 @@ class Group
   end
 
   def self.find(id)
-    grp = LDAP_GROUP.fetch(id)
+    grp = Group::LDAP.fetch(id)
     g = self.new
     g.id = simplify_single_value(grp, 'ou')
     g.submission_profile = simplify_single_value(grp, 'submissionprofile')
@@ -23,7 +30,7 @@ class Group
 
   # permissions are returned as an array like ['read','write'], maybe more in the future
   def permission(userid)
-    LDAP_GROUP.get_user_permissions(userid, self.id, LDAP_USER)
+    Group::LDAP.get_user_permissions(userid, self.id, User::LDAP)
   end
 
   def sparql_id
