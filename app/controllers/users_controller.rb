@@ -17,6 +17,7 @@ class UsersController < ApplicationController
     return ldap
   end
 
+=begin
   def create
     login = params[:login]
     name = params[:name]
@@ -44,4 +45,5 @@ class UsersController < ApplicationController
       redirect_back_or_default '/'
     end
   end
+=end
 end
