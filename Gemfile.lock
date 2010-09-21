@@ -1,3 +1,9 @@
+GIT
+  remote: http://github.com/RoryO/ruby-net-ldap.git
+  revision: 4159643
+  specs:
+    net-ldap (0.1.2)
+
 GEM
   remote: http://rubygems.org/
   specs:
@@ -87,6 +93,7 @@ PLATFORMS
 DEPENDENCIES
   authlogic (= 2.1.6)
   json
+  net-ldap (= 0.1.2)!
   nokogiri
   rails (= 3.0.0.rc)
   rdf

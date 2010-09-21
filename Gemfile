@@ -35,5 +35,5 @@ gem 'json'
 gem 'rdf'
 #gem 'xml-simple'
 gem 'authlogic', '2.1.6' # this version has a bug, but also committed fix to the user_session.rb model
-#gem 'ruby-net-ldap'
 gem 'nokogiri'
+gem 'net-ldap', "0.1.2", :git=>'http://github.com/RoryO/ruby-net-ldap.git'
