@@ -12,6 +12,7 @@ module Mrt
           :file    => RDF::Vocabulary.new("http://uc3.cdlib.org/ontology/store/file#"),
           :mulgara => RDF::Vocabulary.new("http://mulgara.org/mulgara#"),
           :object  => RDF::Vocabulary.new("http://uc3.cdlib.org/ontology/store/object#"),
+          :ore     => RDF::Vocabulary.new("http://www.openarchives.org/ore/terms/"),
           :rdf     => RDF,
           :rdfs    => RDF::RDFS,
           :store   => RDF::Vocabulary.new("http://uc3.cdlib.org/ontology/store/store#"),
@@ -53,7 +54,6 @@ module Mrt
       end
       
       def select(query)
-        puts "searching: " + query.to_s
         http.start do |h|
           request = Net::HTTP::Post.new(@endpoint.path)
           request.set_form_data({ 'query' => query.to_s, 'soft-limit' => @softlimit });
