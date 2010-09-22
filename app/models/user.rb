@@ -51,4 +51,5 @@ class User < ActiveRecord::Base
       return record[field][0]
     end
   end
+
 end
