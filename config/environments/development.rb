@@ -27,6 +27,7 @@ MrtDashboard::Application.configure do
   LDAP_HOST           = "badger.cdlib.org"
   LDAP_PORT           = 1636
   LDAP_USER_BASE      = "ou=People,ou=uc3,dc=cdlib,dc=org"
+  LDAP_INST_BASE      = "o=institutions,ou=uc3,dc=cdlib,dc=org"
   LDAP_ARK_MINTER_URL = "http://noid.cdlib.org/nd/noidu_p9"
 
   INGEST_SERVICE      = 'http://badger.cdlib.org:33121/poster/submit/'

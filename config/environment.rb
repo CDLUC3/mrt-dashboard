@@ -17,6 +17,7 @@ require 'mrt/http'
 #require 'nokogiri'
 require 'user_ldap'
 require 'group_ldap'
+require 'institution_ldap'
 require 'net/ldap'
 require 'exception_notifier'
 
