@@ -8,6 +8,15 @@ module UserLdap
 
     include LdapMixin
 
+    def find_all
+      usr = @admin_ldap.search(:base => @base,
+        :filter => (Net::LDAP::Filter.eq('objectclass', 'inetOrgPerson') and
+            Net::LDAP::Filter.eq('objectclass', 'merrittUser')),
+        :scope => Net::LDAP::SearchScope_SingleLevel
+        )
+      usr.sort{|x,y| x['cn'][0].downcase <=> y['cn'][0].downcase}
+    end
+
     def add(userid, password, firstname, lastname, email)
       #probably required attributes cn (common name, first + last), displayName,  dn (distinguished name),
       #givenName (first name), sn (surname, last name), name = cn, displayName, uid,

@@ -16,9 +16,9 @@ module InstitutionLdap
       Net::LDAP::Filter.eq("o", id )
     end
 
-    def institutions
+    def find_all
       inst = @admin_ldap.search(:base => @base)
-      inst.map{|i| i[:o][0]}.delete_if{|i| i.eql?('institutions')}.sort{|x,y| x.downcase <=> y.downcase}
+      inst.delete_if{|i| i['o'][0].eql?('institutions')}.sort{|x,y| x['o'][0].downcase <=> y['o'][0].downcase}
     end
 
   end

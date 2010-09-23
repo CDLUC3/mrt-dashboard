@@ -17,6 +17,10 @@ class Group
 
   end
 
+  def self.find_all
+    LDAP.find_all
+  end
+
   def self.find(id)
     grp = Group::LDAP.fetch(id)
     g = self.new

@@ -10,6 +10,10 @@ class User < ActiveRecord::Base
   acts_as_authentic do |c|
     c.validate_password_field = false
   end
+
+  def self.find_all
+    LDAP.find_all
+  end
  
   def groups
     grp_ids = Group::LDAP.find_groups_for_user(self.login, User::LDAP)
