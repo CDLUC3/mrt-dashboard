@@ -64,7 +64,7 @@
     <div class="clear"></div>
 
     <div class="left_label">Institution:</div>
-    <% inst = Institution.list.map{|i| [i, "o=#{i},#{LDAP_INST_BASE}"]}
+    <% inst = Institution.find_all.map{|i| [ i['o'][0], i['dn'][0] ]}
     %>
     <div class="right_field">
       <%= select_tag('institution', options_for_select(inst, @ldap_user['institution'].to_s) ) %>

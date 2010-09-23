@@ -11,8 +11,7 @@ class Institution
           :admin_password  => LDAP_ADMIN_PASSWORD,
           :minter          => LDAP_ARK_MINTER_URL})
 
-  #list institution names
-  def self.list
-    LDAP.institutions
+  def self.find_all
+    LDAP.find_all
   end
 end
