@@ -59,4 +59,33 @@ class AdminController < ApplicationController
       end
     end
   end
+
+  def add_user_to_group
+    @ldap = {}
+    @m_grps = Group.find_all.map{|i| [ i['description'][0], i['ou'][0] ]}
+    @m_usrs = User.find_all.map{|i| [ i['cn'][0], i['uid'][0] ]}
+    @perms = []
+
+    if params[:submitted].eql?('true') then
+      @ldap[:uid] = params[:uid]
+      @ldap[:ou] = params[:ou]
+
+      ['read', 'write'].each do |perm|
+        if params[:permissions].nil? or !params[:permissions].include?(perm) then
+          Group::LDAP.unset_user_permission(params[:uid], params[:ou], User::LDAP, perm)
+        else
+          Group::LDAP.set_user_permission(params[:uid], params[:ou], User::LDAP, perm)
+        end
+      end
+      #get permissions from LDAP
+      usr = User::LDAP.fetch(params[:uid])
+      grp = Group.find(params[:ou])
+      @perms = grp.permission(params[:uid])
+      @display_text = "The user permissions were set as shown below.  The user is likely to need " +
+       "their email address (#{usr[:mail][0]}) added or removed from the ingest profile (#{grp.submission_profile}) in the ingest service." +
+       " If it is not modified they may not receive appropriate emails from the ingest service."
+    else
+      #nothing checked
+    end
+  end
 end

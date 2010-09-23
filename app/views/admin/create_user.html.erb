@@ -1,11 +1,12 @@
 <% content_for :title do %>
-  UC3 Merritt: Create User
+  UC3 Merritt: Create User Account
 <% end %>
 
 <div class="grid_11">
-  <h2>Create account</h2>
+  <%= render :partial => 'quick_nav' %>
+  <h2>Create User Account</h2>
   <div class="breadcrumbs"><%= link_to('Merritt', :controller => 'home', :action => 'index') %> &gt;
-    Create account</div>
+    Create user account</div>
   <br/>
   <% if !@display_text.eql?('') then %>
     <p class="dynamic_message"><%=@display_text%></p>
