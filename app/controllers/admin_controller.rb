@@ -33,6 +33,30 @@ class AdminController < ApplicationController
         @ldap_user = User::LDAP.fetch(params[:uid])
       end
     end
+  end
 
+  def create_group
+    @ldap_group = {}
+    require_group_if_user if !session[:group].nil? or !params[:group].nil? #get group info if it's there
+    @error_fields = []
+    @display_text = ''
+    if !params[:ou].nil? then
+      params.each_pair{|k,v| @ldap_group[k] = v } #stuck updated info in this hash so they don't have to retype
+      @required = {'ou' => 'collection ID', 'description' => 'description',
+            'submissionprofile' => 'Ingest Profile ID'}
+      @required.each_key do |key|
+        if params[key].nil? or params[key].eql?('') then
+          @error_fields.push(key)
+        end
+      end
+      if @error_fields.length > 0 then
+        @display_text += "The following items must be filled in: #{@error_fields.map{|i| @required[i]}.join(', ' )}."
+      else
+        Group::LDAP.add(params[:ou], params[:description], ['read', 'write'], ['merrittOwnerGroup'])
+        Group::LDAP.replace_attribute(params[:ou], 'submissionprofile', params['submissionprofile'])
+        @display_text = "This collection has been created."
+        @ldap_group = Group::LDAP.fetch(params[:ou])
+      end
+    end
   end
 end
