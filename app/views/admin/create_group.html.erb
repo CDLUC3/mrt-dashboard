@@ -3,6 +3,7 @@
 <% end %>
 
 <div class="grid_11">
+  <%= render :partial => 'quick_nav' %>
   <h2>Create Collection</h2>
   <div class="breadcrumbs"><%= link_to('Merritt', :controller => 'home', :action => 'index') %> &gt;
     Create collection</div>
@@ -35,6 +36,13 @@
       <%= submit_tag %><input type="button" name="reset_form" value="Reset Form" onclick="this.form.reset();"/>
     </div>
     <div class="clear"></div>
+    <p><strong>IMPORTANT NOTE:</strong> Any time a new collection is created, a corresponding
+      ingest profile <strong>must also be created</strong> (manually) in order for ingest to work.  After
+      creating a new collection, please contact the person in charge of creating and modifying
+      ingest profiles (currently Mark Reyes).  He will need the ingest profile ID along
+      with any email addresses of people that should receive ingest notifications
+      for this collection.
+    </p>
   <% end %>
 
 </div>
