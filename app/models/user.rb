@@ -29,7 +29,8 @@ class User < ActiveRecord::Base
   def valid_ldap_credentials?(password)
     begin
       res = User::LDAP.authenticate(login, password)
-    rescue LdapCdl::LdapException => ex
+
+    rescue LdapMixin::LdapException => ex
       return false
     end
     return false if res == false
