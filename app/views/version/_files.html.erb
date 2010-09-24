@@ -15,7 +15,7 @@
           :version => params[:version], :file => file[RDF::DC.identifier].to_s)
           %></div>
     <div class="value">
-      <%=file[Mrt::File.mediaType]%>
+      <%= file[Mrt::File.mediaType].to_s.gsub(/;.*$/, '') %>
       <%=number_to_storage_size(file[Mrt::Base.size].to_s.to_i)%>
     </div>
 
