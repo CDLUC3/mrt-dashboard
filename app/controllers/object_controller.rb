@@ -23,9 +23,8 @@ class ObjectController < ApplicationController
                ?obj dc:identifier \"#{no_inject(params[:object])}\"^^<http://www.w3.org/2001/XMLSchema#string>",
       :select => "?obj")
     
-    object_uri = store().select(q)[0]['obj'].to_uri
-    # HACK 
-    object_uri = URI.parse(object_uri.to_s.gsub(/\/state\//, '/content/'))
+    object = store().select(q)[0]['obj'].to_uri
+    object_uri = object.first(Mrt::Base.bytestream).to_uri
     http = Mrt::HTTP.new(object_uri.scheme, object_uri.host, object_uri.port)
     tmp_file = http.get_to_tempfile("#{object_uri.path}?t=zip")
     send_file(tmp_file.path,

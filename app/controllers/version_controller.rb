@@ -28,9 +28,8 @@ class VersionController < ApplicationController
                ?obj dc:identifier \"#{no_inject(params[:object])}\"^^<http://www.w3.org/2001/XMLSchema#string>",
       :select => "?vers")
     
-    version_uri = store().select(q)[0]['vers'].to_uri
-    # HACK 
-    version_uri = URI.parse(version_uri.to_s.gsub(/\/state\//, '/content/'))
+    version = store().select(q)[0]['vers'].to_uri
+    version_uri = version.first(Mrt::Base.bytestream).to_uri
     http = Mrt::HTTP.new(version_uri.scheme, version_uri.host, version_uri.port)
     tmp_file = http.get_to_tempfile("#{version_uri.path}?t=zip")
     send_file(tmp_file.path,
