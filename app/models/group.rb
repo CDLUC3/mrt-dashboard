@@ -42,24 +42,23 @@ class Group
   end
 
   def object_count
-    return STORE.select(Q.new("?obj rdf:type object:Object .
-      ?obj object:isStoredObjectFor ?meta .
-      ?meta object:isInCollection <#{self.sparql_id}>", :select=>"?obj")).size
+    return STORE.select(Q.new("?obj object:isInCollection <#{self.sparql_id}> .",
+                              :select=>"(count(?obj) as c)"))[0]["c"].value.to_i
   end
 
   def version_count
-    return STORE.select(Q.new("?vers rdf:type version:Version .
-        ?vers version:inObject ?obj .
+    return STORE.select(Q.new("?vers version:inObject ?obj .
         ?obj object:isStoredObjectFor ?meta .
-        ?meta object:isInCollection <#{self.sparql_id}>", :select=>"?vers")).size
+        ?meta object:isInCollection <#{self.sparql_id}>", :select=>"(count(?vers) as c)"))[0]["c"].value.to_i
   end
 
   def file_count
-    return STORE.select(Q.new("?file rdf:type file:File .
-        ?file file:inVersion ?vers .
-        ?vers version:inObject ?obj .
-        ?obj object:isStoredObjectFor ?meta .
-        ?meta object:isInCollection <#{self.sparql_id}>", :select=>"?file")).size
+    q = Q.new("?meta object:isInCollection <#{self.sparql_id}> .
+               ?obj object:isStoredObjectFor ?meta .
+               ?vers version:inObject ?obj .
+               ?file file:inVersion ?vers .",
+              :select=>"(count(?file) as c)")
+    return STORE.select(q)[0]["c"].value.to_i
   end
 
   def total_size
@@ -67,8 +66,8 @@ class Group
         ?obj object:isStoredObjectFor ?meta .
         ?meta object:isInCollection <#{self.sparql_id}> .
         ?obj object:totalActualSize ?size",
-      :select => "?size")
-    return STORE.select(q).map{|row| row['size'].value.to_i}.sum
+      :select => "(sum(?size) as total)")
+    return STORE.select(q)[0]["total"].value.to_i
   end
 
   private

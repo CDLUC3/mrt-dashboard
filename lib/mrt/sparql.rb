@@ -39,7 +39,8 @@ module Mrt
                              else
                                "SELECT #{@args[:select]}"
                              end
-        return "#{namespace_str} #{select_or_desc_str} FROM <http://merritt.cdlib.org/> #{where_str} #{order_by_str} #{limit_str} #{offset_str}"
+        from_str = "" # "FROM <http://merritt.cdlib.org/>"
+        return "#{namespace_str} #{select_or_desc_str} #{from_str} WHERE #{where_str} #{order_by_str} #{limit_str} #{offset_str}"
       end
     end
     
@@ -50,7 +51,7 @@ module Mrt
         @proxy = URI.parse(ENV['HTTP_PROXY']) if ENV['HTTP_PROXY']
         @certificate = options["certificate"] if options
         @key = options["key"] if options
-        @softlimit = options["soft-limit"] if options
+        @softlimit = (options["soft-limit"] if options) || 100000
       end
       
       def select(query)
@@ -123,7 +124,8 @@ module Mrt
                            when 'typed-literal'
                              RDF::Literal.new(binding['value'], :type=>UriInfo.new(binding['type']))
                            when 'bnode'
-                             RDF::Node.new(binding['value'])
+                             # a hack that works with 4store
+                             UriInfo.new("bnode:#{binding['value']}")
                            end
           end
           new_row
