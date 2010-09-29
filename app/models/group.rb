@@ -56,16 +56,15 @@ class Group
     q = Q.new("?meta object:isInCollection <#{self.sparql_id}> .
                ?obj object:isStoredObjectFor ?meta .
                ?vers version:inObject ?obj .
-               ?file file:inVersion ?vers .",
+               ?vers version:hasFile ?file .",
               :select=>"(count(?file) as c)")
     return STORE.select(q)[0]["c"].value.to_i
   end
 
   def total_size
-    q = Q.new("?obj rdf:type object:Object .
-        ?obj object:isStoredObjectFor ?meta .
-        ?meta object:isInCollection <#{self.sparql_id}> .
-        ?obj object:totalActualSize ?size",
+    q = Q.new("?meta object:isInCollection <#{self.sparql_id}> .
+               ?obj object:isStoredObjectFor ?meta ;
+                    object:totalActualSize ?size",
       :select => "(sum(?size) as total)")
     return STORE.select(q)[0]["total"].value.to_i
   end
