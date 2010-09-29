@@ -51,7 +51,7 @@ module Mrt
         @proxy = URI.parse(ENV['HTTP_PROXY']) if ENV['HTTP_PROXY']
         @certificate = options["certificate"] if options
         @key = options["key"] if options
-        @softlimit = (options["soft-limit"] if options) || 100000
+        @softlimit = (options["soft-limit"] if options) || 1000000
       end
       
       def select(query)
@@ -73,6 +73,7 @@ module Mrt
         else
           h = Net::HTTP.new(@endpoint.host, @endpoint.port)
         end
+        h.read_timeout=600
         if @certificate && @key
           require 'net/https'
           h.use_ssl = true
