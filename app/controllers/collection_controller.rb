@@ -11,22 +11,28 @@ class CollectionController < ApplicationController
     @page = (params[:page] or '1').to_i
     offset = (@page - 1) * @page_size
 
-    @object_count = @group.object_count
+    @object_count = my_cache("#{@group.id}_object_count") do 
+      @group.object_count 
+    end
 
-    @version_count = @group.version_count
+    @version_count = my_cache("#{@group.id}_version_count") do
+      @group.version_count
+    end
 
-    @file_count = @group.file_count
+    @file_count = my_cache("#{@group.id}_file_count") do 
+      @group.file_count
+    end
 
-    @total_size = @group.total_size
-    
-    q = Q.new("?so rdf:type object:Object .
-               ?so object:isStoredObjectFor ?s .
-               ?s ?p ?o .
-               ?s object:isInCollection <#{no_inject(@group.sparql_id)}> .
-               ?so dc:modified ?mod",
+    @total_size = my_cache("#{@group.id}_total_size") do
+      @group.total_size
+    end
+
+    q = Q.new("?s a ore:Aggregation ;
+                  object:isInCollection <#{no_inject(@group.sparql_id)}> ;
+                  dc:modified ?mod .",
                :limit => @page_size,
                :offset => offset,
-               :select => "DISTINCT ?s ?mod",
+               :select => "?s",
                :order_by => "DESC(?mod)")
     @recent_objects = store().select(q).map{|s| UriInfo.new(s['s']) }
   end
@@ -39,12 +45,11 @@ class CollectionController < ApplicationController
 
     q = Q.new("?s a ore:Aggregation ;
                   object:isInCollection <#{@group.sparql_id}> ;
-                  ?p ?o .
-               OPTIONAL { ?s dc:modified ?mod } .
+                  dc:modified ?mod .
+               ?s ?p ?o .
                FILTER (datatype(?o) = xsd:string) .
-               FILTER ( regex(?o, \"#{no_inject(params[:terms])}\", \"i\") || 
-                        regex(str(?s), \"#{no_inject(params[:terms])}\", \"i\") )",
-              :select => "DISTINCT ?s ?mod",
+               FILTER ( regex(?o, \"#{no_inject(params[:terms])}\", \"i\"))",
+              :select => "DISTINCT ?s",
               :order_by => "DESC(?mod)")
     @results = store().select(q)
     @object_count = @results.length
