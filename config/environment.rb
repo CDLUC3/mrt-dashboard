@@ -10,6 +10,7 @@ end
 # Initialize the rails application
 MrtDashboard::Application.initialize!
 require 'ostruct'
+require 'mrt/cache'
 require 'mrt/kernel'
 require 'mrt/sparql'
 require 'mrt/mrt'
