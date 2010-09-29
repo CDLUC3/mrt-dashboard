@@ -120,7 +120,8 @@ module Mrt
                              UriInfo.new(binding['value'])
                            when 'literal'
                              lang = if binding.has_key?('xml:lang') then binding['xml:lang'].intern else nil end
-                             RDF::Literal.new(binding['value'], :language=>lang)
+                             datatype = if binding.has_key?('datatype') then UriInfo.new(binding['datatype']) else nil end
+                             RDF::Literal.new(binding['value'], :language=>lang, :datatype=>datatype)
                            when 'typed-literal'
                              RDF::Literal.new(binding['value'], :type=>UriInfo.new(binding['type']))
                            when 'bnode'
