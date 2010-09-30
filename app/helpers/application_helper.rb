@@ -89,7 +89,7 @@ module ApplicationHelper
     return "" if i.nil?
     i.delete_if{|mm| mm.to_s.eql?('(:unas)')}
     return '' if i.length < 1
-    i.join(': ')
+    i.join('; ')
   end
 
 end
