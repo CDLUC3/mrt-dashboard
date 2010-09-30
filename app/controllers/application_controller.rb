@@ -130,4 +130,9 @@ class ApplicationController < ActionController::Base
     params[:group] = grps[0].id
   end
 
+  def my_cache(key, expires_in = 600)
+    Mrt::Cache.cache(key, expires_in) do
+      yield()
+    end
+  end
 end
