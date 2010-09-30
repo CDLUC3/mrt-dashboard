@@ -3,9 +3,9 @@ require 'ftools'
 require 'rdf'
 
 class ObjectController < ApplicationController
-  before_filter :require_user
-  before_filter :require_group_if_user
-  before_filter :require_object, :except => [:add, :upload, :upload_error]
+  before_filter :require_user, :except => [:jupload_add]
+  before_filter :require_group_if_user, :except => [:jupload_add]
+  before_filter :require_object, :except => [:add, :upload, :upload_error, :dir_add, :jupload_add]
 
 
   def index
@@ -87,4 +87,13 @@ class ObjectController < ApplicationController
       render :action => "upload_error"
     end
   end
+
+  def dir_add
+  
+  end
+
+  def jupload_add
+    
+  end
+
 end
