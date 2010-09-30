@@ -51,7 +51,7 @@ module Mrt
         @proxy = URI.parse(ENV['HTTP_PROXY']) if ENV['HTTP_PROXY']
         @certificate = options["certificate"] if options
         @key = options["key"] if options
-        @softlimit = (options["soft-limit"] if options) || 100000
+        @softlimit = (options["soft-limit"] if options) || 1000000
       end
       
       def select(query)
@@ -73,6 +73,7 @@ module Mrt
         else
           h = Net::HTTP.new(@endpoint.host, @endpoint.port)
         end
+        h.read_timeout=600
         if @certificate && @key
           require 'net/https'
           h.use_ssl = true
@@ -120,7 +121,8 @@ module Mrt
                              UriInfo.new(binding['value'])
                            when 'literal'
                              lang = if binding.has_key?('xml:lang') then binding['xml:lang'].intern else nil end
-                             RDF::Literal.new(binding['value'], :language=>lang)
+                             datatype = if binding.has_key?('datatype') then UriInfo.new(binding['datatype']) else nil end
+                             RDF::Literal.new(binding['value'], :language=>lang, :datatype=>datatype)
                            when 'typed-literal'
                              RDF::Literal.new(binding['value'], :type=>UriInfo.new(binding['type']))
                            when 'bnode'
