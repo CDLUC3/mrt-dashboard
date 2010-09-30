@@ -6,7 +6,7 @@ MrtDashboard::Application.configure do
   config.serve_static_assets = false
   config.i18n.fallbacks = true
   
-  ActionController::Base.cache_store = :file_store
+  ActionController::Base.cache_store = :file_store, "tmp/cache"
 
   LDAP_ADMIN_PASSWORD = "XXXXXXXX"
   LDAP_ADMIN_USER     = "cn=Directory Manager"
