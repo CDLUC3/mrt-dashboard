@@ -7,7 +7,7 @@ MrtDashboard::Application.configure do
   config.active_support.deprecation          = :log
   config.action_mailer.raise_delivery_errors = false
 
-  LDAP_ADMIN_PASSWORD = "XXXXXXXX"
+  LDAP_ADMIN_PASSWORD = "wah8oLab"
   LDAP_ADMIN_USER     = "cn=Directory Manager"
   LDAP_GROUP_BASE     = "ou=mrt-groups,ou=uc3,dc=cdlib,dc=org"
   LDAP_HOST           = "dp01.cdlib.org"
