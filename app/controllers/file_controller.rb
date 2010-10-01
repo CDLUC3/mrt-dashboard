@@ -8,16 +8,14 @@ class FileController < ApplicationController
   before_filter :require_version
 
   def display
-    q = Q.new("?file dc:identifier \"#{no_inject(params[:file])}\"^^<http://www.w3.org/2001/XMLSchema#string> .
-               ?vers version:hasFile ?file .
-               ?vers dc:identifier \"#{no_inject(params[:version])}\"^^<http://www.w3.org/2001/XMLSchema#string> .
-               ?vers rdf:type version:Version .
-               ?vers version:inObject ?obj .
-               ?obj rdf:type object:Object .
-               ?obj object:isStoredObjectFor ?meta .
-               ?obj dc:identifier \"#{no_inject(params[:object])}\"^^<http://www.w3.org/2001/XMLSchema#string>",
-      :select => "?file")
-    
+    q = Q.new("?obj dc:identifier \"#{no_inject(params[:object])}\"^^<http://www.w3.org/2001/XMLSchema#string> ;
+                    a object:Object .
+               ?vers version:inObject ?obj ;
+                     dc:identifier \"#{no_inject(params[:version])}\"^^<http://www.w3.org/2001/XMLSchema#string> ;
+                     version:hasFile ?file .
+               ?file dc:identifier \"#{no_inject(params[:file])}\"^^<http://www.w3.org/2001/XMLSchema#string> .",
+              :select => "?file")
+
     file = UriInfo.new(store().select(q)[0]['file'])
     file_uri = file.first(Mrt::Base.bytestream).to_uri
     http = Mrt::HTTP.new(file_uri.scheme, file_uri.host, file_uri.port)
