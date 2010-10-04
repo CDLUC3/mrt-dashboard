@@ -1,25 +1,12 @@
-require 'user_ldap'
-require 'group_ldap'
 MrtDashboard::Application.configure do
-  # Settings specified here will take precedence over those in config/environment.rb
-
-  # In the development environment your application's code is reloaded on
-  # every request.  This slows down response time but is perfect for development
-  # since you don't have to restart the webserver when you make code changes.
-  config.cache_classes = false
-
-  # Log error messages when you accidentally call methods on nil.
-  config.whiny_nils = true
-
-  # Show full error reports and disable caching
-  config.consider_all_requests_local       = true
-  config.action_view.debug_rjs             = true
-  config.action_controller.perform_caching = false
-
-  config.active_support.deprecation        = :log
-
-  # Don't care if the mailer can't send
+  config.action_controller.perform_caching   = false
   config.action_mailer.raise_delivery_errors = false
+  config.action_view.debug_rjs               = true
+  config.active_support.deprecation          = :log
+  config.cache_classes                       = false
+  config.consider_all_requests_local         = true
+  config.whiny_nils                          = true
+
 
   LDAP_ADMIN_PASSWORD = "ahz6ap2I"
   LDAP_ADMIN_USER     = "cn=Directory Manager"
@@ -34,5 +21,4 @@ MrtDashboard::Application.configure do
   RDF_ARK_URI         = "http://ark.cdlib.org/"
   RDF_COLLECTION_URI  = "http://uc3.cdlib.org/collection/"
   SPARQL_ENDPOINT     = "http://badger.cdlib.org:8082/sparql/"
-#  SPARQL_ENDPOINT     = "http://badger.cdlib.org:8080/sparql/"
 end
