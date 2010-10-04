@@ -1,0 +1,23 @@
+development:
+  adapter: sqlite3
+  database: sqlite/development.sqlite
+  pool: 5
+  timeout: 5000
+
+development_nonlocal:
+  development
+
+test:
+  adapter: sqlite3
+  database: sqlite/test.sqlite
+  pool: 5
+  timeout: 5000
+
+production:
+  adapter: sqlite3
+  database: sqlite/production.sqlite
+  pool: 5
+  timeout: 5000
+
+production_development:
+  production

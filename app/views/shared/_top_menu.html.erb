@@ -1,0 +1,64 @@
+<%
+=begin
+gak, these 3 menus and display state are annoying.
+They display differently depending on what is set.
+1. collection home displays either "/group/index?group=<id>" if @group set or
+   or displays /home/choose_collection if @group NOT set.
+
+2. add object displays if the person has write permissions (@permissions.include?('write'))
+   otherwise, if nil or no write permissions it's skipped.
+
+3. "change collection" only displays if there if @groups set and its length is > 1
+
+4. further, the css has to insert last into the li css class if a menu is the last one displayed
+=end
+
+home_disp = !@group.nil?
+add_disp = !@permissions.nil? and @permissions.include?('write')
+change_disp = !@groups.nil? and @groups.length > 1
+
+last_menu = if change_disp then 'change' elsif add_disp then 'add' else 'home' end
+
+%>
+<div class="grid_16 menu_fun">
+<ul role="menubar" id="menu-1" class="menu">
+
+  <li id="" class="<%= params[:controller].eql?('collection') ? 'active' : '' %> <%= last_menu.eql?('home') ? 'last' : '' %>">
+    <% if home_disp then %>
+      <%= link_to('Collection home', {:controller => 'collection', :action => 'index', :group => @group.id}, {:role => 'menuitem'}) %>
+    <% else %>
+      <%= link_to('Home', {:controller => 'home', :action => 'choose_collection'}, {:role => 'menuitem'}) %>
+    <% end %>
+  </li>
+
+  <% if add_disp then %>
+    <li id="" class="<%= params[:controller].eql?('object') and params[:action].eql?('add') ? 'active' : '' %> <%= last_menu.eql?('add') ? 'last' : '' %>">
+      <%= link_to('Add object', {:controller => 'object', :action => 'add', :group => @group.id}, {:role => 'menuitem'}) %>
+    </li>
+  <% end %>
+
+  <% if change_disp then %>
+    <li class="" id="" class="last">
+      <%= link_to('Change collection', {:controller => 'home', :action => 'choose_collection', :group => @group.id},
+          {:role => 'menuitem', :tabindex => "0", :class => 'sub', 'aria-haspopup' => "true"}) %>
+      <ul role="menu">
+        <% curr_item = 0
+        @groups.each do |grp|
+          curr_item += 1 %>
+          <li id="" class="<%= curr_item == @groups.length ? 'last' : '' %>">
+            <%= link_to(grp.description, {:controller => 'collection', :action => 'index', :group => grp.id}) %>
+          </li>
+        <% end %>
+      </ul>
+    <% end %>
+  </li>
+</ul>
+
+</div>
+
+<script type='text/javascript'>
+   document.observe('dom:loaded', function(){
+      new ProtoFish('menu-1', '200', 'hover', false, true, true);
+   });
+</script>
+<div class="clear"></div>

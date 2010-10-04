@@ -1,0 +1,34 @@
+<%# the following must be passed in
+  obj = metadata obj
+  stored_object = Information about object storage
+  version = version of the stored object
+  number_files = number of files
+%>
+  <div class="key">identifier:</div>
+  <div class="value"><%= stored_object[RDF::DC.identifier] %></div>
+
+  <div class="key">title:</div>
+  <div class="value"><%= dc_nice(version[Mrt::Kernel.what]) %>&nbsp;</div>
+
+  <div class="key">creator:</div>
+  <div class="value"><%= dc_nice(version[Mrt::Kernel.who]) %>&nbsp;</div>
+
+  <div class="key">date:</div>
+  <div class="value"><%= dc_nice(version[Mrt::Kernel.when]) %>&nbsp;</div>
+
+  <div class="key">local id:</div>
+  <div class="value"><%= dc_nice(obj[Mrt::Object.localIdentifier])%>&nbsp;</div>
+
+  <div class="key">version number:</div>
+  <div class="value"><%=version[RDF::DC.identifier]%></div>
+
+  <div class="key">version date:</div>
+  <div class="value"><%= merritt_time(version[RDF::DC.created].to_s) %></div>
+
+  <div class="key">version size:</div>
+  <div class="value"><%=number_to_storage_size(version[Mrt::Base.size].to_s.to_i)%></div>
+
+  <div class="key">version files:</div>
+  <div class="value"><%= number_files %></div>
+
+  <div class="clear"></div>
