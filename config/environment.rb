@@ -9,18 +9,6 @@ end
 
 # Initialize the rails application
 MrtDashboard::Application.initialize!
-require 'ostruct'
-require 'mrt/cache'
-require 'mrt/kernel'
-require 'mrt/sparql'
-require 'mrt/mrt'
-require 'mrt/http'
-#require 'nokogiri'
-require 'user_ldap'
-require 'group_ldap'
-require 'institution_ldap'
-require 'net/ldap'
-require 'exception_notifier'
 
 require 'webrick/httputils'
 Rack::Mime::MIME_TYPES['.xlsm'] = "application/vnd.ms-excel.sheet.macroEnabled.12"

@@ -1,12 +1,12 @@
 # this all probably needs to be refactored eventually
 class Group
   LDAP = GroupLdap::Server.
-    new({ :host            => LDAP_HOST,
-          :port            => LDAP_PORT,
-          :base            => LDAP_GROUP_BASE,
-          :admin_user      => LDAP_ADMIN_USER,
-          :admin_password  => LDAP_ADMIN_PASSWORD,
-          :minter          => LDAP_ARK_MINTER_URL})
+    new({ :host            => LDAP_CONFIG["host"],
+          :port            => LDAP_CONFIG["port"],
+          :base            => LDAP_CONFIG["group_base"],
+          :admin_user      => LDAP_CONFIG["admin_user"],
+          :admin_password  => LDAP_CONFIG["admin_password"],
+          :minter          => LDAP_CONFIG["ark_minter_url"]})
 
   Q = Mrt::Sparql::Q
   STORE = Mrt::Sparql::Store.new(SPARQL_ENDPOINT)

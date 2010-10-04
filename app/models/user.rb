@@ -1,11 +1,11 @@
 class User < ActiveRecord::Base
   LDAP = UserLdap::Server.
-    new({ :host            => LDAP_HOST,
-          :port            => LDAP_PORT,
-          :base            => LDAP_USER_BASE,
-          :admin_user      => LDAP_ADMIN_USER,
-          :admin_password  => LDAP_ADMIN_PASSWORD,
-          :minter          => LDAP_ARK_MINTER_URL})
+    new({ :host            => LDAP_CONFIG["host"],
+          :port            => LDAP_CONFIG["port"],
+          :base            => LDAP_CONFIG["user_base"],
+          :admin_user      => LDAP_CONFIG["admin_user"],
+          :admin_password  => LDAP_CONFIG["admin_password"],
+          :minter          => LDAP_CONFIG["ark_minter_url"]})
 
   acts_as_authentic do |c|
     c.validate_password_field = false

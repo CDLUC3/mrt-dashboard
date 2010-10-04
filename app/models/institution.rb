@@ -4,12 +4,12 @@
 class Institution
 
   LDAP = InstitutionLdap::Server.
-    new({ :host            => LDAP_HOST,
-          :port            => LDAP_PORT,
-          :base            => LDAP_INST_BASE,
-          :admin_user      => LDAP_ADMIN_USER,
-          :admin_password  => LDAP_ADMIN_PASSWORD,
-          :minter          => LDAP_ARK_MINTER_URL})
+    new({ :host            => LDAP_CONFIG["host"],
+          :port            => LDAP_CONFIG["port"],
+          :base            => LDAP_CONFIG["inst_base"],
+          :admin_user      => LDAP_CONFIG["admin_user"],
+          :admin_password  => LDAP_CONFIG["admin_password"],
+          :minter          => LDAP_CONFIG["ark_minter_url"]})
 
   def self.find_all
     LDAP.find_all

@@ -1,20 +1,13 @@
 MrtDashboard::Application.configure do
   config.action_controller.perform_caching = true
   config.action_dispatch.x_sendfile_header = "X-Sendfile"
-  config.cache_classes                     = false
+  config.autoload_paths                   += %W(#{config.root}/lib)
+  config.cache_classes                     = true
   config.consider_all_requests_local       = false
   config.i18n.fallbacks                    = true
   config.serve_static_assets               = false
   
   ActionController::Base.cache_store = :file_store, "tmp/cache"
-
-  LDAP_ADMIN_PASSWORD = "XXXXXXXX"
-  LDAP_ADMIN_USER     = "cn=Directory Manager"
-  LDAP_GROUP_BASE     = "ou=mrt-groups,ou=uc3,dc=cdlib,dc=org"
-  LDAP_HOST           = "dp01.cdlib.org"
-  LDAP_PORT           = 1636
-  LDAP_USER_BASE      = "ou=People,ou=uc3,dc=cdlib,dc=org"
-  LDAP_ARK_MINTER_URL = "http://noid.cdlib.org/nd/noidu_p9"
 
   INGEST_SERVICE      = 'http://uc3.cdlib.org:33121/poster/submit/'
   SPARQL_ENDPOINT     = "http://dp01.cdlib.org:8082/sparql/"

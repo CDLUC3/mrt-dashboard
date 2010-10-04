@@ -15,4 +15,4 @@ mrt-dashboard_production
 console
 help/*
 sqlite/*
-
+config/ldap.yml
