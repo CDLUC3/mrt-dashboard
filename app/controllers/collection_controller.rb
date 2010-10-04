@@ -43,7 +43,7 @@ class CollectionController < ApplicationController
     pg_start = (@page -1) * @page_size
     pg_end = @page * @page_size - 1
 
-    terms = no_inject(params[:terms]).downcase().split(/\s+/)
+    terms = no_inject(params[:terms]).downcase().split(/[\s:\/_-]+/)
     terms_q = terms.map {|term| "<http://4store.org/fulltext#token> \"#{term}\"" }.join("; ")
 
     q = Q.new("?s a ore:Aggregation ;
