@@ -43,12 +43,12 @@ class CollectionController < ApplicationController
     pg_start = (@page -1) * @page_size
     pg_end = @page * @page_size - 1
 
+    terms = no_inject(params[:terms]).downcase()
+
     q = Q.new("?s a ore:Aggregation ;
+                  <http://4store.org/fulltext#token> \"#{terms}\" ;
                   object:isInCollection <#{@group.sparql_id}> ;
-                  dc:modified ?mod .
-               ?s ?p ?o .
-               FILTER (datatype(?o) = xsd:string) .
-               FILTER ( regex(?o, \"#{no_inject(params[:terms])}\", \"i\"))",
+                  dc:modified ?mod .",
               :select => "DISTINCT ?s",
               :order_by => "DESC(?mod)")
     @results = store().select(q)
