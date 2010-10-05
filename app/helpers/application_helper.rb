@@ -8,14 +8,6 @@ module ApplicationHelper
   def rdf_id(id)
     "#{RDF_ARK_URI}#{clean_id(id)}"
   end
-
-  def maybe_link(val, raw=nil)
-    if val.kind_of? RDF::URI then
-      return "<a href=\"/show/#{clean_id(val)}#{if raw then "?raw" else "" end}\">#{val}</a>".html_safe
-    else
-      return val
-    end
-  end
   
   def version_no(uri)
     md = uri.to_s.match(/\/([0-9]+)$/)
