@@ -60,7 +60,7 @@ class ObjectController < ApplicationController
           'responseForm'      => 'xml'
         }
 
-      hsh.delete_if{|key, value| value.nil? or (value.class == String and value.strip.eql?(''))}
+      hsh.delete_if{|key, value| value.blank? }
 
       response = RestClient.post(INGEST_SERVICE,
                   hsh,
