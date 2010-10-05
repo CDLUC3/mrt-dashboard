@@ -1,12 +1,7 @@
-require 'rest_client'
-require 'ftools'
-require 'rdf'
-
 class ObjectController < ApplicationController
   before_filter :require_user, :except => [:jupload_add]
   before_filter :require_group_if_user, :except => [:jupload_add]
   before_filter :require_object, :except => [:add, :upload, :upload_error, :dir_add, :jupload_add]
-
 
   def index
     @stored_object = @object[Mrt::Object['hasStoredObject']].first
@@ -34,21 +29,16 @@ class ObjectController < ApplicationController
   end
 
   def add
-    
   end
 
   def upload
-    new_file = ''
     if params[:file].nil? then
       flash[:error] = 'You must choose a filename to submit.'
-      redirect_to :controller => 'object', :action => 'add', :group => params[:group]
-      return false
+      redirect_to :controller => 'object', :action => 'add', :group => params[:group] and return false
     end
     begin
-      new_file = DataFile.save(params[:file], current_user.login)
-
       hsh = {
-          'file'              => File.new(new_file, 'rb'),
+          'file'              => params[:file],
           'type'              => params[:object_type],
           'submitter'         => "#{current_user.login}/#{current_user.displayname}",
           'filename'          => params[:file].original_filename,
@@ -58,20 +48,9 @@ class ObjectController < ApplicationController
           'date'              => params[:date],
           'localIdentifier'   => params[:local_id], # local identifier necessary, nulls?
           'responseForm'      => 'xml'
-        }
+        }.reject{|key, value| value.blank? }
 
-      hsh.delete_if{|key, value| value.blank? }
-
-      response = RestClient.post(INGEST_SERVICE,
-                  hsh,
-                  {#"Content-Type" => 'application/octet-stream',
-                   #"Content-Length" => File.size(new_file),
-                   #"Accept" => 'application/xml',
-                   :multipart => true
-                  }
-             )
-
-      File.delete(new_file)
+      response = RestClient.post(INGEST_SERVICE, hsh, { :multipart => true })
       @doc = Nokogiri::XML(response) do |config|
         config.strict.noent.noblanks
       end
@@ -79,7 +58,6 @@ class ObjectController < ApplicationController
       @batch_id = @doc.xpath("//bat:batchState/bat:batchID")[0].child.text
       @obj_count = @doc.xpath("//bat:batchState/bat:jobStates").length
     rescue Exception => ex
-      File.delete(new_file)
       @doc = Nokogiri::XML(ex.http_body) do |config|
         config.strict.noent.noblanks
       end
@@ -89,11 +67,8 @@ class ObjectController < ApplicationController
   end
 
   def dir_add
-  
   end
 
   def jupload_add
-    
   end
-
 end
