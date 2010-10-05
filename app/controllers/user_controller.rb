@@ -15,7 +15,7 @@ class UserController < ApplicationController
                   'userpassword' => 'Password', 'repeatuserpassword' => 'Repeat Password',
                   'mail' => 'Email'}
       @required.each_key do |key|
-        if params[key].nil? or params[key].eql?('') then
+        if params[key].blank? then
           @error_fields.push(key)
         end
       end
