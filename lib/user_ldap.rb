@@ -1,20 +1,14 @@
-require 'rubygems'
-require 'noid'
-require 'ldap_mixin'
-
 module UserLdap
-
   class Server
 
     include LdapMixin
 
     def find_all
-      usr = @admin_ldap.search(:base => @base,
-        :filter => (Net::LDAP::Filter.eq('objectclass', 'inetOrgPerson') and
-            Net::LDAP::Filter.eq('objectclass', 'merrittUser')),
-        :scope => Net::LDAP::SearchScope_SingleLevel
-        )
-      usr.sort{|x,y| x['cn'][0].downcase <=> y['cn'][0].downcase}
+      return @admin_ldap.search(:base => @base,
+                                :filter => (Net::LDAP::Filter.eq('objectclass', 'inetOrgPerson') &
+                                            Net::LDAP::Filter.eq('objectclass', 'merrittUser')),
+                                :scope => Net::LDAP::SearchScope_SingleLevel).
+        sort_by{ |user| user['cn'][0].downcase }
     end
 
     def add(userid, password, firstname, lastname, email)
@@ -52,8 +46,7 @@ module UserLdap
     end
 
     def obj_filter(id)
-      Net::LDAP::Filter.eq("uid", id )
+      Net::LDAP::Filter.eq("uid", id)
     end
-
   end
 end
