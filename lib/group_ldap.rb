@@ -8,12 +8,11 @@ module GroupLdap
     include LdapMixin
 
     def find_all
-      grp = @admin_ldap.search(:base => @base,
-        :filter => (Net::LDAP::Filter.eq('objectclass', 'organizationalUnit') and
-            Net::LDAP::Filter.eq('objectclass', 'merrittOwnerGroup')),
-        :scope => Net::LDAP::SearchScope_SingleLevel
-        )
-      grp.sort{|x,y| x['ou'][0].downcase <=> y['ou'][0].downcase}
+      return @admin_ldap.search(:base => @base,
+                                :filter => (Net::LDAP::Filter.eq('objectclass', 'organizationalUnit') &
+                                            Net::LDAP::Filter.eq('objectclass', 'merrittOwnerGroup')),
+                                :scope => Net::LDAP::SearchScope_SingleLevel).
+        sort_by{ |g| g['ou'][0].downcase }
     end
 
     def add(groupid, description, permissions = ['read', 'write'], extra_classes = ['merrittOwnerGroup'])
