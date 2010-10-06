@@ -1,6 +1,3 @@
-require 'ftools'
-require 'rdf'
-
 class VersionController < ApplicationController
   before_filter :require_user
   before_filter :require_group_if_user
