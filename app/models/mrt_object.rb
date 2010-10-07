@@ -1,4 +1,24 @@
+require 'will_paginate/finders/base'
+module MrtObjectPaginator
+  include WillPaginate::Finders::Base
+
+  protected
+  def wp_query(options, pager, args, &block)
+    find_options = options.except(:count).update(:offset => pager.offset, :limit => pager.per_page) 
+    pager.replace(self.find(find_options))
+    unless pager.total_entries
+      pager.total_entries = wp_count(options)
+    end
+  end
+  
+  def wp_count(options)
+    self.count(options.except(:count, :order))
+  end
+end
+
 class MrtObject < UriInfo
+  extend MrtObjectPaginator
+  
   Q = Mrt::Sparql::Q
 
   def self.find_by_identifier(id)
@@ -6,6 +26,39 @@ class MrtObject < UriInfo
                ?obj dc:identifier \"#{id}\"^^<http://www.w3.org/2001/XMLSchema#string>",
       :select => "?obj")
     return MrtObject.new(UriInfo.store().select(q)[0]['obj'])
+  end
+
+  def self.find(*args)
+    arg_hash = args.last
+    sort = arg_hash[:sort] || "dc:modified"
+    order = arg_hash[:order] || "DESC"
+    q = if arg_hash[:collection] then
+          Q.new("?o a ore:Aggregation ;
+                    object:isInCollection <#{arg_hash[:collection]}> ;
+                    object:hasStoredObject ?s .
+                 ?s #{sort} ?sort .",
+                :select   => "?s",
+                :order_by => "#{order}(?sort)",
+                :offset   => arg_hash[:offset],
+                :limit    => arg_hash[:limit])
+        else
+          raise Exception
+        end
+    return UriInfo.store().select(q).map{ |r| MrtObject.new(r['s']) }
+  end
+
+  # XXX - integrate with find
+  def self.count(*args)
+    arg_hash = args.last
+    q = if arg_hash[:collection] then
+          Q.new("?o a ore:Aggregation ;
+                    object:isInCollection <#{arg_hash[:collection]}> ;
+                    object:hasStoredObject ?s .",
+                :select => "(count(?s) as ?count)")
+        else
+          raise Exception
+        end
+    return UriInfo.store().select(q)[0]['count'].value.to_i
   end
 
   def bytestream
@@ -38,6 +91,18 @@ class MrtObject < UriInfo
 
   def is_stored_object_for
     return self.first(Mrt::Object['isStoredObjectFor'])
+  end
+
+  def who
+    return self.first(Mrt::Object['isStoredObjectFor']).first(Mrt::Kernel['who'])
+  end
+
+  def who
+    return self.first(Mrt::Object['isStoredObjectFor']).first(Mrt::Kernel['what'])
+  end
+
+  def when
+    return self.first(Mrt::Object['isStoredObjectFor']).first(Mrt::Kernel['when'])
   end
 
   def identifier
