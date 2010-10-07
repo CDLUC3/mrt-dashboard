@@ -38,3 +38,5 @@ gem 'authlogic', '2.1.6' # this version has a bug, but also committed fix to the
 gem 'nokogiri'
 gem 'net-ldap', "0.1.2", :git=>'git://github.com/RoryO/ruby-net-ldap.git'
 gem "exception_notification", :git => "git://github.com/rails/exception_notification.git"
+
+gem "will_paginate", "~> 3.0.pre2"
