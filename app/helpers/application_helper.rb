@@ -16,7 +16,7 @@ module ApplicationHelper
 
   def w3cdtf(time)
     case time
-    when Time
+    when Time, DateTime
       return time.strftime("%Y-%m-%dT%H:%M:%S#{time.formatted_offset}")
     when RDF::Literal
       w3cdtf(Time.parse(time.to_s))
