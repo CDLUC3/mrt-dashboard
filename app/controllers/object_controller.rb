@@ -1,7 +1,7 @@
 class ObjectController < ApplicationController
-  before_filter :require_user, :except => [:jupload_add]
-  before_filter :require_group_if_user, :except => [:jupload_add]
-  before_filter :require_object, :except => [:add, :upload, :upload_error, :dir_add, :jupload_add]
+  before_filter :require_user, :except => [:jupload_add, :recent]
+  before_filter :require_group_if_user, :except => [:jupload_add, :recent]
+  before_filter :require_object, :except => [:add, :upload, :upload_error, :dir_add, :jupload_add, :recent]
 
   def index
     @stored_object = @object[Mrt::Object['hasStoredObject']].first
@@ -70,5 +70,15 @@ class ObjectController < ApplicationController
   end
 
   def jupload_add
+  end
+
+  def recent
+    page = params[:page] || 1
+    collection = params[:collection]
+    @objects = MrtObject.paginate(:collection=>collection, :page=>page, :per_page=>50)
+    respond_to do |format|
+      format.html
+      format.atom
+    end
   end
 end
