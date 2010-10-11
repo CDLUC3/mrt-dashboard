@@ -125,6 +125,8 @@ module Mrt
         retval = RDF::Graph.new
         RDF::Reader.for(:rdfxml).new(raw) do |reader|
           reader.each do |stmt|
+            # a hack that works with 4store
+            stmt.object = UriInfo.new("bnode:#{stmt.object.id}") if stmt.object.instance_of? RDF::Node
             retval.insert(stmt)
           end
         end
