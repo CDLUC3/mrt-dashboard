@@ -1,3 +1,5 @@
+require 'rdf/raptor'
+
 module Mrt
   module Sparql
     class Q
@@ -33,7 +35,7 @@ module Mrt
         limit_str = if !@args[:limit].nil? then "LIMIT #{@args[:limit]}" else "" end
         offset_str = if !@args[:offset].nil? then "OFFSET #{@args[:offset]}" else "" end
         order_by_str = if !@args[:order_by].nil? then "ORDER BY #{@args[:order_by]}" else "" end
-        where_str = if !@query.blank? then "{ #{@query} }" else "" end
+        where_str = if !@query.blank? then "{ #{@query} }" else "{}" end
         select_or_desc_str = if !@args[:describe].blank? then
                                "DESCRIBE #{@args[:describe]}"
                              else
@@ -58,11 +60,21 @@ module Mrt
         http.start do |h|
           request = Net::HTTP::Post.new(@endpoint.path)
           request.set_form_data({ 'query' => query.to_s, 'soft-limit' => @softlimit });
-          request['Accept'] = 'application/sparql-results+json'
-          #request['Accept'] = 'application/sparql-results+xml'
+          #4store accept header not working right
+          if query.to_s.match(/DESCRIBE/) then
+            request['Accept'] = 'application/rdf+xml'
+          else
+            request['Accept'] = 'application/sparql-results+json'
+          end
           response = h.request(request)
-          parse_json_results(response.body)
-          #parse_xml_results(response.body)
+          case response['Content-Type'].sub(/;.*$/, "")
+          when "application/rdf+xml"
+            parse_rdf_xml_results(response.body)
+          when "application/sparql-results+json"
+            parse_json_results(response.body)
+          when "application/sparql-results+xml"
+            parse_xml_results(response.body)
+          end
         end
       end
 
@@ -107,6 +119,16 @@ module Mrt
           end
           new_row
         end
+      end
+
+      def parse_rdf_xml_results(raw)
+        retval = RDF::Graph.new
+        RDF::Reader.for(:rdfxml).new(raw) do |reader|
+          reader.each do |stmt|
+            retval.insert(stmt)
+          end
+        end
+        return retval
       end
 
       # Parse JSON results into a more usable format.
