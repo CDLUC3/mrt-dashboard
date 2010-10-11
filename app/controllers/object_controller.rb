@@ -1,5 +1,5 @@
 class ObjectController < ApplicationController
-  before_filter :require_user, :except => [:jupload_add, :recent]
+  before_filter :require_user, :except => [:jupload_add, :recent, :download]
   before_filter :require_group_if_user, :except => [:jupload_add, :recent]
   before_filter :require_object, :except => [:add, :upload, :upload_error, :dir_add, :jupload_add, :recent]
 
@@ -74,8 +74,9 @@ class ObjectController < ApplicationController
 
   def recent
     page = params[:page] || 1
-    collection = params[:collection]
-    @objects = MrtObject.paginate(:collection=>collection, :page=>page, :per_page=>50)
+    @collection = params[:collection]
+    @objects = MrtObject.paginate(:collection=>"http://uc3.cdlib.org/collection/#{@collection}", 
+                                  :page=>page, :per_page=>10)
     respond_to do |format|
       format.html
       format.atom

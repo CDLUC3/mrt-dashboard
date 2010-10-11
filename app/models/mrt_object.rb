@@ -19,14 +19,14 @@ class MrtObject < UriInfo
                     object:isInCollection <#{arg_hash[:collection]}> ;
                     object:hasStoredObject ?s .
                  ?s #{sort} ?sort .",
-                :select   => "?s",
+                :describe   => "?s",
                 :order_by => "#{order}(?sort)",
                 :offset   => arg_hash[:offset],
                 :limit    => arg_hash[:limit])
         else
           raise Exception
         end
-    return UriInfo.store().select(q).map{ |r| MrtObject.new(r['s']) }
+    return self.query_bulk_loader(q)
   end
 
   # XXX - integrate with find
@@ -76,15 +76,15 @@ class MrtObject < UriInfo
   end
 
   def who
-    return self.first(Mrt::Object['isStoredObjectFor']).first(Mrt::Kernel['who'])
+    return self.first(Mrt::Kernel['who'])
   end
 
   def what
-    return self.first(Mrt::Object['isStoredObjectFor']).first(Mrt::Kernel['what'])
+    return self.first(Mrt::Kernel['what'])
   end
 
   def when
-    return self.first(Mrt::Object['isStoredObjectFor']).first(Mrt::Kernel['when'])
+    return self.first(Mrt::Kernel['when'])
   end
 
   def identifier

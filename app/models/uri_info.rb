@@ -3,7 +3,30 @@ class UriInfo < RDF::URI
   class << self
     attr_accessor :store
   end
-  
+
+  def self.maybe_make(o)
+    if o.instance_of? RDF::URI then
+      return UriInfo.new(o)
+    else
+      return o
+    end
+  end
+
+  def self.bulk_loader(uris)
+    uris_str = uris.map{|uri| "<#{uri}>"}.join(", ")
+    q = Mrt::Sparql::Q.new(nil, :describe=>uris_str)
+    return self.query_bulk_loader(q)
+  end
+
+  def self.query_bulk_loader(query)
+    graph = UriInfo.store.select(query)
+    uris = Hash.new
+    return graph.subjects.map do |uri|
+      u = self.new(uri)
+      u.cache_from_graph(graph)
+    end
+  end
+
   def initialize(*args)
     super(*args)
     @info = nil
@@ -28,38 +51,58 @@ class UriInfo < RDF::URI
   end
 
   def keys
-    cache_info if @info.nil?
+    fill_cache if @info.nil?
     return @info.keys
   end
 
   def has_key?(key)
-    cache_info if @info.nil?
+    fill_cache if @info.nil?
     return @info.has_key?(key)
   end
 
   def [](key)
-    cache_info if @info.nil?
+    fill_cache if @info.nil?
     return @info[key]
   end
 
   def first(key, default=nil)
-    cache_info if @info.nil?
+    fill_cache if @info.nil?
     d = @info[key]
     if d.nil? then return default
     else return (d[0] || default) end
   end
 
-  def cache_info
-    q = Mrt::Sparql::Q.new("<#{self.to_s}> ?p ?o .")
+  def fill_cache
+    q = Mrt::Sparql::Q.new("<#{self.to_s}> ?p ?o")
     res = UriInfo.store.select(q)
+    cache_from(res.map { |row|
+                 [self, 
+                  UriInfo.maybe_make(row['p']),
+                  UriInfo.maybe_make(row['o'])]})
+  end
+  
+  def cache_from(data)
     @info = Hash.new
-    res.each do |row|
-      p = row['p']
-      p = UriInfo.new(p) if p.instance_of? RDF::URI 
-      o = row['o']
-      o = UriInfo.new(o) if o.instance_of? RDF::URI 
+    known_uris = Hash.new
+    data.each do |row|
+      (s,p,o) = *row
+      known_uris[s] ||= s if s.instance_of? UriInfo
+      known_uris[p] ||= p if p.instance_of? UriInfo
+      known_uris[o] ||= o if o.instance_of? UriInfo
       @info[p] ||= Array.new
       @info[p].push(o)
     end
+    return self
+  end
+
+  def cache_from_graph(graph)
+    @info = Hash.new
+    graph.each_statement do |stmt|
+      if (stmt.subject == self) then
+        @info[stmt.predicate] ||= []
+        @info[stmt.predicate].push(stmt.object)
+      end
+    end
+    return self
   end
 end
