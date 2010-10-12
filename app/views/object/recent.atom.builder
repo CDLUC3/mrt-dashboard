@@ -2,20 +2,29 @@
 
 xml.tag!('feed', :xmlns => "http://www.w3.org/2005/Atom") do 
   xml.tag!("link", 
-           "href" => "/objects/recent.atom?collection=#{@collection}&page=#{@objects.current_page}",
-           "rel" => "self", 
+           "href" => "/object/recent.atom?collection=#{@collection}&page=#{@objects.current_page}",
+           "rel"  => "self", 
            "type" => "application/atom+xml")
-  if @objects.next_page then
+  xml.tag!("link", 
+           "href" => "/object/recent.atom?collection=#{@collection}&page=1",
+           "rel"  => "first", 
+           "type" => "application/atom+xml")
+  xml.tag!("link", 
+           "href" => "/object/recent.atom?collection=#{@collection}&page=#{@objects.total_pages}",
+           "rel"  => "last",
+           "type" => "application/atom+xml")
+  if @objects.next_page
     xml.tag!("link", 
-             "href" => "/objects/recent.atom?collection=#{@collection}&page=#{@objects.next_page}",
-             "rel" => "next", "type" => "application/atom+xml")
+           "href" => "/object/recent.atom?collection=#{@collection}&page=#{@objects.next_page}",
+             "rel"  => "next", 
+             "type" => "application/atom+xml")
   end
-  if @objects.previous_page then
-    xml.tag!("link", "href" => "/objects/recent.atom?collection=#{@collection}&page=#{@objects.previous_page}",
-             "rel" => "previous", "type" => "application/atom+xml")
+  if @objects.previous_page
+    xml.tag!("link", 
+             "href" => "/object/recent.atom?collection=#{@collection}&page=#{@objects.previous_page}",
+             "rel"  => "previous", 
+             "type" => "application/atom+xml")
   end
-  xml.tag!("link", "href" => "/objects/recent.atom?collection=#{@collection}&page=1",
-           "rel" => "first", "type" => "application/atom+xml")
   xml.tag!("id", "urn:uuid:8dd71209-616a-4723-bfc1-b46572499932")
   xml.tag!("title", "Recent objects")
   if @objects[0] then
