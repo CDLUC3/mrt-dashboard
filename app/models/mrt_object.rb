@@ -12,13 +12,13 @@ class MrtObject < UriInfo
 
   def self.find(*args)
     arg_hash = args.last
-    sort = arg_hash[:sort] || "dc:modified"
+    sort = arg_hash[:sort] || RDF::DC['modified']
     order = arg_hash[:order] || "DESC"
     q = if arg_hash[:collection] then
           Q.new("?o a ore:Aggregation ;
                     object:isInCollection <#{arg_hash[:collection]}> ;
                     object:hasStoredObject ?s .
-                 ?s #{sort} ?sort .",
+                 ?s <#{sort}> ?sort .",
                 :describe   => "?s",
                 :order_by => "#{order}(?sort)",
                 :offset   => arg_hash[:offset],
@@ -26,7 +26,11 @@ class MrtObject < UriInfo
         else
           raise Exception
         end
-    return self.query_bulk_loader(q)
+    if order == "DESC" then
+      return self.query_bulk_loader(q).sort_by { |o| o[sort] }.reverse
+    else
+      return self.query_bulk_loader(q).sort_by { |o| o[sort] }
+    end
   end
 
   # XXX - integrate with find
