@@ -53,17 +53,14 @@ xml.tag!('feed', :xmlns => "http://www.w3.org/2005/Atom") do
         xml.tag!("name", obj.who)
       end
       xml.tag!("updated", obj.modified)
-      current_version = obj.versions.last
-      if current_version then
-        current_version.files.each do |file|
-          xml.tag!("link", 
-                   "href" => url_for(:controller => 'file', 
-                                     :action     => 'display',
-                                     :object     => clean_id(ark),
-                                     :version    => current_version.identifier,
-                                     :file       => file.identifier),
-                   "rel"  => "http://purl.org/dc/terms/hasPart")
-        end
+      obj.files.each do |file|
+        xml.tag!("link", 
+                 "href" => url_for(:controller => 'file', 
+                                   :action     => 'display',
+                                   :object     => clean_id(ark),
+                                   :version    => obj.versions.last.identifier,
+                                   :file       => file.identifier),
+                 "rel"  => "http://purl.org/dc/terms/hasPart")
       end
     end
   end

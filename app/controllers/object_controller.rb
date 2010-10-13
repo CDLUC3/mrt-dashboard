@@ -73,10 +73,10 @@ class ObjectController < ApplicationController
   end
 
   def recent
-    page = params[:page] || 1
     @collection = params[:collection]
-    @objects = MrtObject.paginate(:collection=>"http://uc3.cdlib.org/collection/#{@collection}", 
-                                  :page=>page, :per_page=>10)
+    @objects = MrtObject.paginate(:collection => "http://uc3.cdlib.org/collection/#{@collection}", 
+                                  :page       => (params[:page] || 1), 
+                                  :per_page   => 20)
     respond_to do |format|
       format.html
       format.atom
