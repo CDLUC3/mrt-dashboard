@@ -2,7 +2,10 @@ class MrtVersion < UriInfo
   Q = Mrt::Sparql::Q
 
   def identifier
-    return self.first(RDF::DC['identifier']).value
+    # this works with current storage service and saves a trip to
+    # SPARQL when we just need the identifier
+    return self.to_uri.path.match(/\/([0-9]+)$/)[1]
+#    return self.first(RDF::DC['identifier']).value
   end
 
   def bytestream

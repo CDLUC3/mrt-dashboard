@@ -18,7 +18,7 @@ class MrtObject < UriInfo
           Q.new("?o a ore:Aggregation ;
                     object:isInCollection <#{arg_hash[:collection]}> ;
                     object:hasStoredObject ?s .
-                 ?s <#{sort}> ?sort .",
+                 ?o <#{sort}> ?sort .",
                 :describe   => "?s",
                 :order_by => "#{order}(?sort)",
                 :offset   => arg_hash[:offset],
@@ -38,8 +38,7 @@ class MrtObject < UriInfo
     arg_hash = args.last
     q = if arg_hash[:collection] then
           Q.new("?o a ore:Aggregation ;
-                    object:isInCollection <#{arg_hash[:collection]}> ;
-                    object:hasStoredObject ?s .",
+                    object:isInCollection <#{arg_hash[:collection]}> .",
                 :select => "(count(?s) as ?count)")
         else
           raise Exception
@@ -72,7 +71,10 @@ class MrtObject < UriInfo
   end
 
   def versions
-    return @versions ||= self.first(Mrt::Object['versionSeq']).to_list.map{|v| MrtVersion.new(v)}
+    # this works with current storage service and saves a trip to
+    # SPARQL
+    return @versions ||= self[RDF::DC["hasVersion"]].map{|uri| MrtVersion.new(uri)}.sort_by{|v| v.identifier}
+    #return @versions ||= self.first(Mrt::Object['versionSeq']).to_list.map{|v| MrtVersion.new(v)}
   end
 
   def is_stored_object_for
@@ -93,5 +95,17 @@ class MrtObject < UriInfo
 
   def identifier
     return self.first(RDF::DC['identifier'])
+  end
+
+  def files
+    return @files ||= self[Mrt::Version['hasFile']].map{|u| MrtFile.new(u)}.sort_by{|f| f.identifier}
+  end
+
+  def system_files 
+    return self.files.select {|f| f.identifier.match(/^system\//) }
+  end
+
+  def producer_files 
+    return self.files.select {|f| f.identifier.match(/^producer\//) }
   end
 end
