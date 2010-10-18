@@ -21,6 +21,10 @@ class Group
     LDAP.find_all
   end
 
+  def self.find_users(grp_id)
+    LDAP.find_users(grp_id)
+  end
+
   def self.find(id)
     grp = Group::LDAP.fetch(id)
     g = self.new
@@ -68,6 +72,23 @@ class Group
       :select => "(sum(?size) as total)")
     return STORE.select(q)[0]["total"].value.to_i
   end
+
+  #get all groups and email addresses of members, this is a stopgap for our own use
+  def self.show_emails
+    out_str = ''
+    grps = Group.find_all
+    grps.each do |grp|
+      out_str << "#{grp['ou'][0]}\r\n"
+      usrs = Group.find_users(grp['ou'][0])
+      usrs.each do |usr|
+        u = User::LDAP.fetch(usr)
+        out_str << "#{u[:mail][0]}\r\n"
+      end
+      out_str << "\r\n"
+    end
+    out_str
+  end
+
 
   private
 

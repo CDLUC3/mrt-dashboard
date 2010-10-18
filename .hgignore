@@ -16,3 +16,5 @@ console
 help/*
 sqlite/*
 config/ldap.yml
+db/schema.rb
+

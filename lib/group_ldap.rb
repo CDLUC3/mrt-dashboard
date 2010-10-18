@@ -15,6 +15,17 @@ module GroupLdap
         sort_by{ |g| g['ou'][0].downcase }
     end
 
+    def find_users(grp_id)
+      mem_grps = @admin_ldap.search(:base => "ou=#{grp_id},#{@base}",
+                                :filter => Net::LDAP::Filter.eq('objectclass', 'groupOfUniqueNames'),
+                                :scope => Net::LDAP::SearchScope_WholeSubtree)
+      all = []
+      mem_grps.each{|grp| all = all + grp[:uniquemember]}
+      all.uniq!
+      all.compact!
+      all.map{|i| i[/^uid=[^,]+/][4..-1] }
+    end
+
     def add(groupid, description, permissions = ['read', 'write'], extra_classes = ['merrittOwnerGroup'])
       attr = {
         :objectclass           => ["organizationalUnit"] + extra_classes,
