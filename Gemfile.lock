@@ -94,6 +94,8 @@ GEM
     treetop (1.4.8)
       polyglot (>= 0.3.1)
     tzinfo (0.3.23)
+    unicorn (1.1.4)
+      rack
     will_paginate (3.0.pre2)
 
 PLATFORMS
@@ -111,4 +113,5 @@ DEPENDENCIES
   rest-client
   ruby-debug
   sqlite3-ruby
+  unicorn
   will_paginate (~> 3.0.pre2)
