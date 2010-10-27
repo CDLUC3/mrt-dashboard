@@ -2,11 +2,13 @@
 
 
 <h2>Merritt and Metadata</h2>
+  <% if !@group.nil? then %>
   <div class="breadcrumbs"><%= link_to('Merritt', :controller => 'home', :action => 'index') %> &gt;
     <%= link_to("Collection: #{@group.description}", :controller => 'collection', :action => 'index') %> &gt;
     <%= link_to("Help", :controller => 'help', :action => 'index') %> &gt;
     Merritt and Metadata
   </div>
+  <% end %>
   
 <br />
 <p>We strongly recommend that descriptive metadata accompany each digital object. Metadata are critical to managing digital collections and providing meaningful reports. We are aware that you most likely have descriptive metadata about each object, stored in MARC, MODS, METS, or some other format. If you have metadata records, we will store and preserve them as part of the digital object.  To preserve metadata records with a digital object, we recommend that you create a container file (.zip or .tar) include all object component files as well as the metadata files and submit the container file to Merritt.</p> 
