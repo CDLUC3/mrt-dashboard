@@ -4,7 +4,7 @@ class UserController < ApplicationController
   def update
     #this could be made more efficient and wonderful, but I think that we may be going
     #to a different authentication service soon, so it will all need rewriting, anyway, might as well wait.
-    require_group_if_user if !session[:group].nil? or !params[:group].nil? #get group info if it's there
+    require_group if !session[:group].nil? or !params[:group].nil? #get group info if it's there
     @ldap_user = User::LDAP.fetch(current_user.login) #uncached from LDAP, so always current
     #update if this is submitted with appropriate information
     @error_fields = []

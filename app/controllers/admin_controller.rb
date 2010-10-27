@@ -3,7 +3,7 @@ class AdminController < ApplicationController
 
   def create_user
     @ldap_user = {'tzregion' => 'America/Los_Angeles'}
-    require_group_if_user if !session[:group].nil? or !params[:group].nil? #get group info if it's there
+    require_group if !session[:group].nil? or !params[:group].nil? #get group info if it's there
     @error_fields = []
     @display_text = ''
     if !params[:givenname].nil? then
@@ -37,7 +37,7 @@ class AdminController < ApplicationController
 
   def create_group
     @ldap_group = {}
-    require_group_if_user if !session[:group].nil? or !params[:group].nil? #get group info if it's there
+    require_group if !session[:group].nil? or !params[:group].nil? #get group info if it's there
     @error_fields = []
     @display_text = ''
     if !params[:ou].nil? then
