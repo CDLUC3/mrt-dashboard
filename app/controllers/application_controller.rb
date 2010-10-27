@@ -71,6 +71,8 @@ class ApplicationController < ActionController::Base
     end
     (redirect_to(CollectionHome) and return false) if @permissions.length < 1
     @groups = current_user.groups.sort{|x, y| x.description.downcase <=> y.description.downcase}
+    @group_ids = @groups.map{|grp| grp.id}
+    (redirect_to(CollectionHome) and return false) if !@group_ids.include?(flexi_group_id)
   end
 
   def require_object
