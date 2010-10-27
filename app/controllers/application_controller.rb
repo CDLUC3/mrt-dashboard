@@ -15,6 +15,12 @@ class ApplicationController < ActionController::Base
   helper_method :current_user_session, :current_user
   
   private
+
+  #lets the group get itself from the params, but if not, from the session
+  def flexi_group_id
+    params[:group] or session[:group]
+  end
+
   def current_user_session
     return @current_user_session if defined?(@current_user_session)
     @current_user_session = UserSession.find
@@ -36,11 +42,11 @@ class ApplicationController < ActionController::Base
 
   # tries to get the group for help files, but otherwise skips
   def group_optional
-    grp = params[:group] or session[:group]
+    grp = flexi_group_id
     if grp.nil? then
       @group = nil
     else
-      @group = Group.find(params[:group])
+      @group = Group.find(flexi_group_id)
       require_group
     end
   end
@@ -48,11 +54,11 @@ class ApplicationController < ActionController::Base
   #require a group if user logged in
   #but hackish thing to get group from session instead of params if help files didn't pass it along
   def require_group
-    (redirect_to(CollectionHome) and return false) if params[:group].nil? and session[:group].nil?
+    (redirect_to(CollectionHome) and return false) if flexi_group_id.nil?
     begin
-      session[:group] = params[:group] if !params[:group].nil?
-      params[:group] = session[:group] if params[:group].nil?
-      @group = Group.find(params[:group])
+      @group = Group.find(flexi_group_id)
+      session[:group] = flexi_group_id
+      params[:group] = flexi_group_id
     rescue Exception => ex
       redirect_to(CollectionHome)
       return false
@@ -68,19 +74,19 @@ class ApplicationController < ActionController::Base
   end
 
   def require_object
-    redirect_to(ObjectList.merge({:group => params[:group]})) and return false if params[:object].nil?
+    redirect_to(ObjectList.merge({:group => flexi_group_id})) and return false if params[:object].nil?
     begin
       @object = UriInfo.new("#{RDF_ARK_URI}#{params[:object]}")
     rescue Exception => ex
-      redirect_to(ObjectList.merge({:group => params[:group]})) and return false
+      redirect_to(ObjectList.merge({:group => flexi_group_id})) and return false
     end
     #require that a valid group for this object is supplied, I guess not happening right now
     grps = @object[Mrt::Object.isInCollection].map{|grp| grp.to_s} #gives url like http://uc3.cdlib.org/collection/cdlQA
-    redirect_to(ObjectList.merge({:group => params[:group]})) and return false if !grps.include?("#{RDF_COLLECTION_URI}#{(params[:group] or session[:group])}")
+    redirect_to(ObjectList.merge({:group => flexi_group_id})) and return false if !grps.include?("#{RDF_COLLECTION_URI}#{flexi_group_id}")
   end
 
   def require_version
-    redirect_to(:controller => :object, :action => 'index', :group => :params[:group], :object => params[:object]) and return false if params[:version].nil?
+    redirect_to(:controller => :object, :action => 'index', :group => flexi_group_id, :object => params[:object]) and return false if params[:version].nil?
     #get version of specific object
     q = Q.new("?vers dc:identifier \"#{no_inject(params[:version])}\"^^<http://www.w3.org/2001/XMLSchema#string> .
                 ?vers rdf:type version:Version .
@@ -92,7 +98,7 @@ class ApplicationController < ActionController::Base
 
     res = store().select(q)
 
-    redirect_to(:controller => :object, :action => 'index', :group => :params[:group], :object => params[:object]) and return false if res.length != 1
+    redirect_to(:controller => :object, :action => 'index', :group => flexi_group_id, :object => params[:object]) and return false if res.length != 1
 
     @version = UriInfo.new(res[0]['vers'])
   end

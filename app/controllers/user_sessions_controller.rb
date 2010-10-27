@@ -3,7 +3,7 @@ class UserSessionsController < ApplicationController
   before_filter :require_user,    :only => [:logout]
   #before_filter :require_group, :except => [:logout]
 
-  layout "home", :except => ['logout']
+  #layout "home", :except => ['logout']
   
   def login
     @user_session = UserSession.new
