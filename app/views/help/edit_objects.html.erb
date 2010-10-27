@@ -3,11 +3,13 @@
 
 <h2>Editing Objects in Merritt</h2>
 
+  <% if !@group.nil? then %>
   <div class="breadcrumbs"><%= link_to('Merritt', :controller => 'home', :action => 'index') %> &gt;
     <%= link_to("Collection: #{@group.description}", :controller => 'collection', :action => 'index') %> &gt;
     <%= link_to("Help", :controller => 'help', :action => 'index') %> &gt;
     Editing Objects
    </div>
+   <% end %>
  
 <br />
 
@@ -56,9 +58,3 @@ If you have submitted an object to Merritt and need to edit either the object it
   <%= render :partial => 'help_sidebar' %>
   
 </div>
-
-
-
-
-</body>
-</html>

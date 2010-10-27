@@ -2,11 +2,13 @@
   <div class="help">
 
 <h2>Using a Manifest to Submit Objects to Merritt</h2>
+  <% if !@group.nil? then %>
   <div class="breadcrumbs"><%= link_to('Merritt', :controller => 'home', :action => 'index') %> &gt;
     <%= link_to("Collection: #{@group.description}", :controller => 'collection', :action => 'index') %> &gt;
     <%= link_to("Help", :controller => 'help', :action => 'index') %> &gt;
     Using a Manifest
    </div>
+  <% end %>
    
 
 <br />

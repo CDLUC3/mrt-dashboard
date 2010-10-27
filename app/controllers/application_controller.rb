@@ -34,6 +34,15 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  # tries to get the group for help files, but otherwise doesn't care
+  def group_for_help
+    grp = params[:group] or session[:group]
+    if grp.nil? then
+      @group = nil
+    else
+      @group = Group.find(params[:group])
+    end
+  end
   #require a group if user logged in
   #but hackish thing to get group from session instead of params for help files
   def require_group_if_user
@@ -66,8 +75,8 @@ class ApplicationController < ActionController::Base
       redirect_to(ObjectList.merge({:group => params[:group]})) and return false
     end
     #require that a valid group for this object is supplied, I guess not happening right now
-    #grps = @object[Mrt::Object.isInCollection].map{|grp| grp.to_s} #gives url like http://uc3.cdlib.org/collection/cdlQA
-    #redirect_to(ObjectList.merge({:group => params[:group]})) and return false if !grps.include?("#{RDF_COLLECTION_URI}#{(params[:group] or session[:group])}")
+    grps = @object[Mrt::Object.isInCollection].map{|grp| grp.to_s} #gives url like http://uc3.cdlib.org/collection/cdlQA
+    redirect_to(ObjectList.merge({:group => params[:group]})) and return false if !grps.include?("#{RDF_COLLECTION_URI}#{(params[:group] or session[:group])}")
   end
 
   def require_version
