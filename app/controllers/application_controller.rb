@@ -34,37 +34,37 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  # tries to get the group for help files, but otherwise doesn't care
-  def group_for_help
+  # tries to get the group for help files, but otherwise skips
+  def group_optional
     grp = params[:group] or session[:group]
     if grp.nil? then
       @group = nil
     else
       @group = Group.find(params[:group])
+      require_group
     end
   end
+  
   #require a group if user logged in
-  #but hackish thing to get group from session instead of params for help files
+  #but hackish thing to get group from session instead of params if help files didn't pass it along
   def require_group
-    if current_user then
-      redirect_to(CollectionHome) and return false if params[:group].nil? and session[:group].nil?
-      begin
-        session[:group] = params[:group] if !params[:group].nil?
-        params[:group] = session[:group] if params[:group].nil?
-        @group = Group.find(params[:group])
-      rescue Exception => ex
-        redirect_to(CollectionHome)
-        return false
-      end
-      begin
-        @permissions = @group.permission(current_user.login)
-      rescue Exception => ex
-        redirect_to(CollectionHome)
-        return false
-      end
-      redirect_to(CollectionHome) and return false if @permissions.length < 1
-      @groups = current_user.groups.sort{|x, y| x.description.downcase <=> y.description.downcase}
+    (redirect_to(CollectionHome) and return false) if params[:group].nil? and session[:group].nil?
+    begin
+      session[:group] = params[:group] if !params[:group].nil?
+      params[:group] = session[:group] if params[:group].nil?
+      @group = Group.find(params[:group])
+    rescue Exception => ex
+      redirect_to(CollectionHome)
+      return false
     end
+    begin
+      @permissions = @group.permission(current_user.login)
+    rescue Exception => ex
+      redirect_to(CollectionHome)
+      return false
+    end
+    (redirect_to(CollectionHome) and return false) if @permissions.length < 1
+    @groups = current_user.groups.sort{|x, y| x.description.downcase <=> y.description.downcase}
   end
 
   def require_object
