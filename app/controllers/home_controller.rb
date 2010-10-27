@@ -1,6 +1,6 @@
 class HomeController < ApplicationController
 
-  layout 'home', :except => ['choose_collection']
+  #layout 'home', :except => ['choose_collection']
   before_filter :require_user,    :only => :choose_collection
   before_filter :group_optional
 
@@ -10,7 +10,7 @@ class HomeController < ApplicationController
       redirect_to :controller => 'collection', :action => 'index', :group => @groups[0].id
       return false
     end
-    render :layout => 'no_collection'
+    #render :layout => 'no_collection'
   end
   
 end
