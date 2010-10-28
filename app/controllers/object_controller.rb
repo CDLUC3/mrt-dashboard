@@ -2,6 +2,7 @@ class ObjectController < ApplicationController
   before_filter :require_user, :except => [:jupload_add, :recent]
   before_filter :require_group, :except => [:jupload_add, :recent]
   before_filter :require_object, :except => [:add, :upload, :upload_error, :dir_add, :jupload_add, :recent]
+  before_filter :require_write, :only => [:add, :upload]
 
   def index
     @stored_object = @object[Mrt::Object['hasStoredObject']].first
@@ -29,6 +30,7 @@ class ObjectController < ApplicationController
   end
 
   def add
+
   end
 
   def upload
