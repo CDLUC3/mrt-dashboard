@@ -1,11 +1,20 @@
 class ApplicationController < ActionController::Base
 
+  class ErrorUnavailable < StandardError; end
+  rescue_from ErrorUnavailable, :with => :render_unavailable
+
   Q = Mrt::Sparql::Q
   protect_from_forgery
   layout 'application'
 
   CollectionHome = {:controller => 'home', :action => 'choose_collection'}
   ObjectList = {:controller => 'collection', :action => 'index'}
+
+
+
+  def render_unavailable
+    render :file => "#{Rails.root}/public/unavailable.html", :status => 500
+  end
 
   def store
     return Mrt::Sparql::Store.new(SPARQL_ENDPOINT)
@@ -54,25 +63,23 @@ class ApplicationController < ActionController::Base
   #require a group if user logged in
   #but hackish thing to get group from session instead of params if help files didn't pass it along
   def require_group
-    (redirect_to(CollectionHome) and return false) if flexi_group_id.nil?
+    raise ErrorUnavailable if flexi_group_id.nil?
     begin
       @group = Group.find(flexi_group_id)
       session[:group] = flexi_group_id
       params[:group] = flexi_group_id
     rescue Exception => ex
-      redirect_to(CollectionHome)
-      return false
+      raise ErrorUnavailable
     end
     begin
       @permissions = @group.permission(current_user.login)
     rescue Exception => ex
-      redirect_to(CollectionHome)
-      return false
+      raise ErrorUnavailable
     end
-    (redirect_to(CollectionHome) and return false) if @permissions.length < 1
+    raise ErrorUnavailable if @permissions.length < 1
     @groups = current_user.groups.sort{|x, y| x.description.downcase <=> y.description.downcase}
     @group_ids = @groups.map{|grp| grp.id}
-    (redirect_to(CollectionHome) and return false) if !@group_ids.include?(flexi_group_id)
+    raise ErrorUnavailable if !@group_ids.include?(flexi_group_id)
   end
 
   def require_object
