@@ -82,6 +82,11 @@ class ApplicationController < ActionController::Base
     raise ErrorUnavailable if !@group_ids.include?(flexi_group_id)
   end
 
+  #require write access to this group
+  def require_write
+    raise ErrorUnavailable if !@permissions.include?('write')
+  end
+
   def require_object
     redirect_to(ObjectList.merge({:group => flexi_group_id})) and return false if params[:object].nil?
     begin
@@ -89,9 +94,6 @@ class ApplicationController < ActionController::Base
     rescue Exception => ex
       redirect_to(ObjectList.merge({:group => flexi_group_id})) and return false
     end
-    #require that a valid group for this object is supplied, I guess not happening right now
-    grps = @object[Mrt::Object.isInCollection].map{|grp| grp.to_s} #gives url like http://uc3.cdlib.org/collection/cdlQA
-    redirect_to(ObjectList.merge({:group => flexi_group_id})) and return false if !grps.include?("#{RDF_COLLECTION_URI}#{flexi_group_id}")
   end
 
   def require_version
