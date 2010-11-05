@@ -1,0 +1,279 @@
+<div class="grid_11">
+  <div class="help">
+
+<h2>Using a Manifest to Submit Objects to Merritt</h2>
+  <% if !@group.nil? then %>
+  <div class="breadcrumbs"><%= link_to('Merritt', :controller => 'home', :action => 'index') %> &gt;
+    <%= link_to("Collection: #{@group.description}", :controller => 'collection', :action => 'index') %> &gt;
+    <%= link_to("Help", :controller => 'help', :action => 'index') %> &gt;
+    Using a Manifest
+   </div>
+  <% end %>
+   
+
+<br />
+
+<p>There are a variety of ways to submit digital objects to Merritt; the method you choose will depend on the nature of the digital objects and how many objects you have to submit.  One option is to use a <em>manifest</em> to add either complex objects consisting of many files or a large batch of objects.  A manifest is a simple pipe-delimited text file containing basic information about the files being submitted; just post the objects to a web server and use the <strong>Add Object</strong> page to submit the manifest that points to them. </p>
+
+
+<p>CDL has created Excel macros that will transform an Excel worksheet into a properly formatted checkm manifest file.  The <%= link_to("http://merritt.cdlib.org/docs/merrittManifest.xls", "/docs/merrittManifest.xls") %> file contains the macros for generating a manifest as well as worksheets with sample data.</p>
+
+<p>This guide will show you how to prepare manifest files to submit objects to Merritt, either individually or in batches.  The guide assumes that you are using MS Excel 2007 to record information about the objects you're submitting, and running a macro to produce a manifest.</p>
+
+<p>You can also use a text editor to create manifest files if you prefer; details are included in the <a href="#text_tips">Tips for Creating Text-based Manifests</a> section of this guide.</p>  
+
+
+<a name="why"></a>
+<h3>Why Use a Manifest?</h3>
+
+
+<p><%=image_tag("help/manifest_decision_table.gif", :class=>"centered")%></p>
+
+<p><strong>For a single object:</strong>  In most cases it will be easiest to submit single objects via the Merritt user interface rather than using an object manifest.   There are two reasons you might prefer to use an object manifest to submit a single object to Merritt:</p>
+<ol>
+  <li>You have checksum values for every file in a complex object, and you would like each file-level checksum to be verified by Merritt upon ingest.</li>
+  <li>You have a complex object consisting of many files, but do not have access to a utility to create a .zip or .tar container file.</li>
+</ol>
+
+<p><strong>For a batch of objects:</strong> If you have a large number of objects to submit, it may be more efficient to use a batch manifest.  If each object consists of many files, you can create container (.zip or .tar) files for each object, post those container files to a web server, then create a batch manifest with URLs for the container files.  You will also be able to supply metadata about each object in the batch manifest.</p>
+
+<p>A batch manifest will be an especially good option if you already have information about the objects available in a spreadsheet format, or can easily export a spreadsheet report from another system.</p>
+
+<p>You can also submit a batch manifest that points to object manifests for complex objects.  This is a good option if you have in-house scripting expertise and a way to derive object metadata.  This is also the option to choose if you have checksum values for every individual component file of every object, and you want Merritt to validate each checksum upon ingest.</p>
+
+<a name="macro"></a>
+<h3>The Excel Macro</h3>
+
+<p>The <strong>merrittManifest.xls</strong> Excel file contains four macros that allow you to create manifests for individual objects and batches of single files, container files or manifest files. This spreadsheet also includes sample worksheets showing the information needed for the batch and object manifests.</p>
+
+<p>When you open the merrittManifest.xls file, you may see a security warning to let you know that the file contains macros, and that they have been disabled.  Click <strong>Options</strong>, select <strong>enable this content</strong>, then click <strong>OK</strong>.</p>
+
+<p><%=image_tag("help/enable_macros_1.gif")%></p>
+<p><%=image_tag("help/enable_macros_2.gif")%></p>
+
+  
+<p>You can use this excel file directly and simply create a new worksheet for each object or each batch.  It's important that each worksheet includes exactly the same columns in exactly the same order, so you may want to copy and paste the column headings from a sample worksheet into your own worksheet.  (If you are only entering the bare minimum elements, you will still need headers for the columns you don't use).  Note that the macro will ignore any text that is bold, so the header row must be in bold, and no other text should be bold.  The headings for required columns are highlighted in orange.</p>
+
+
+<a name="workflow1"></a>
+<h3>Workflow: A Single Object</h3>
+
+<ol>
+  <li>Place the object file(s) on a web server.</li>
+  <li>Download the <strong>merrittManifest.xls</strong> file</li>
+  <li>Create a new worksheet for the object manifest.  There can be only one object per object manifest.</li>
+  <li>Provide a URL and file name for each file in the object.  You may optionally provide checksum and file size information; <strong>object manifest</strong> section of this guide for details.</li>
+  <li>Choose <strong>View > Macros > View Macros > ThisWorkbook.CreateObjectManifest > Run</strong> </li>
+  <li>Name your object manifest file.  A file extension of .checkm will automatically be added to the file.</li>
+  <li>Login to Merritt.  If you work with multiple collections, choose the collection this object will be submitted to.</li>
+  <li>Choose <strong>Add Object</strong>.</li>
+  <li>Select  the <strong>Single object : Manifest</strong> radio button, and browse to select the object manifest you just created.</li>
+  <li>You will receive an email to acknowledge that the object submission has been received.  You will receive another email to tell you whether the object was added successfully or not.</li>
+</ol>
+  
+  
+  
+<a name="workflow2"></a>
+<h3>Workflow: A Batch of Container Files</h3>
+
+<ol>
+  <li>If your digital objects are composed of many files, create a container (.zip or .tar) file for each object.</li>  
+  <li>Place the container files on a web server.</li> 
+  <li>Download the <strong>merrittManifest.xls file</strong>.</li> 
+  <li>Create a new worksheet for your batch manifest.</li> 
+  <li>Provide a URL and file name for each container file in the batch.  Provide any optional metadata (details in The Batch Manifest section).</li> 
+  <li>Choose <strong>View > Macros > View Macros > ThisWorkbook.BatchOfContainerFiles > Run</strong>.</li> 
+  <li>Name your batch manifest file.  A file extension of .checkm will automatically be added to the file.</li> 
+  <li>Login to Merritt.  If you work with multiple collections, choose the collection this batch will be submitted to.</li>
+  <li>Choose <strong>Add Object</strong>.</li> 
+  <li>Select  the <strong>Batch of containers</strong> radio button, and browse to select the batch manifest you just created.</li> 
+  <li>You will receive an email to acknowledge that the batch submission has been received.   You will receive another email to tell you whether the object was added successfully or not.</li>
+</ol>
+
+<a name="workflow3"></a>
+<h3>Workflow: A Batch of Single Files</h3>
+
+<ol>
+  <li>Place the files on a web server.</li>
+  <li>Download the <strong>merrittManifest.xls</strong> file.</li>
+  <li>Create a new worksheet for your batch manifest.</li>
+  <li>Provide a URL and file name for each file in the batch.  Provide any optional metadata (details in The Batch Manifest section).</li>
+  <li>Choose <strong>View > Macros > View Macros > ThisWorkbook.BatchOfSingleFiles > Run</strong>.</li>
+  <li>Name your batch manifest file.  A file extension of .checkm will automatically be added to the file.</li>
+  <li>Login to Merritt.  If you work with multiple collections, choose the collection this batch will be submitted to.</li>
+  <li>Choose <strong>Add Object</strong>.</li>
+  <li>Select  the <strong>Batch of files</strong> radio button, and browse to select the batch manifest you just created.</li>
+  <li>You will receive an email to acknowledge that the batch submission has been received.  You will receive another email to tell you whether the object was added successfully or not.</li>
+</ol>
+
+
+<a name="workflow4"></a>
+<h3>Workflow: A Batch of Object Manifest Files</h3>
+
+<ol>
+  <li>Place the object files on a web server.</li>
+  <li>Download the <strong>merrittMacro.xls </strong>file.</li>
+  <li>Create a new worksheet for each object manifest.  There can be only one object per object manifest.</li>
+  <li>Provide a URL and file name for each file in the object.  You may optionally provide checksum and file size information; see the <strong>Object Manifest</strong> section for details.</li>
+  <li>Choose <strong>View > Macros > View Macros > ThisWorkbook.CreateObjectManifest > Run</strong>.</li>
+  <li>Name your object manifest file.  A file extension of .checkm will automatically be added to the file.</li>
+  <li>Post each resulting object manifest to a web server.</li>
+  <li>Create a new worksheet for your batch manifest.</li>
+  <li>Provide a URL and file name for each object manifest you created.  Provide any optional metadata (details in The <strong>Batch Manifest</strong> section).</li>
+  <li>Choose <strong>View > Macros > View Macros > ThisWorkbook.BatchOfManifestFiles > Run</strong>.</li>
+  <li>Name your batch manifest file.  A file extension of .checkm will automatically be added to the file.</li>
+  <li>Login to Merritt.  If you work with multiple collections, choose the collection this batch will be submitted to.</li>
+  <li>Choose <strong>Add Object</strong>.</li>
+  <li>Select  the <strong>Batch of object manifests</strong> radio button, and browse to select the batch manifest you just created.</li>
+  <li>You will receive an email to acknowledge that the batch submission has been received.  You will receive another email when the submission has been processed.  You will receive another email to tell you whether the object was added successfully or not.</li>
+</ol>
+
+  
+<a name="object_manifest"></a>
+<h3>The Object Manifest</h3>
+
+<p>The object manifest contains a separate row for each file that is considered part of a single object.  Each object worksheet or manifest should only include information about one object.  Object components can include files of metadata pertaining to the object in any format (METS, marc etc.).  The <%= link_to("Object Manifest Specification", "/docs/objectManifestSpecification.txt", :target =>"_blank") %> for Merritt is available in a plain text file (to make columns and rows more clear).</p>  The information you can provide in an object manifest is:</p>
+
+<p>fileURL | hashAlgorithm | hashValue | fileSize | filename</p>
+
+<p>Only <strong>fileURL</strong> and <strong>fileName</strong> are required.</p>
+
+<p>The <strong>hashAlgorithm</strong> column specifies what kind of checksum you are providing, if you have a checksum value for a component file in the object.  (Accepted checksum algorithms are: Adler-32, CRC-32, MD2, MD5,SHA-1, SHA-256, SHA-384, and SHA-512).  If you provide a hashAlgorithm, you must also provide a <strong>hashValue</strong>, and vice-versa.  If provided, Merritt will validate any checksum values provided for each file.  If the value provided does not match that value that Merritt calculates, the object submission will fail.  You will be notified by email that the object was not submitted because the object did not pass a fixity check.</p>
+
+<p>The <strong>fileSize</strong> column is optional and is expressed in bytes.</p>
+
+<p>There are no columns for object-level metadata such as title, creator etc.  These can be supplied when you upload the manifest by filling out the form on the Add Object screen, or by also submitting a batch manifest.</p>
+
+ 
+ 
+ 
+<a name="batch_manifest"></a>
+<h3>Workflow: The Batch Manifest</h3> 
+ 
+<p>The batch manifest contains a separate row for each object, and can contain only one row for any complex, multi-file object.  Rows for complex object should point either to container (.zip or .tar) files or to object manifest files.  The <%= link_to("Batch Manifest Specification", "/docs/batchManifestSpecification.txt", :target =>"_blank") %> for Merritt is available in a plain text file (to make columns and rows more clear).</p>  
+
+<p>The information you can provide in a batch manifest is:</p> 
+
+<p>fileUrl | hashAlgorithm | hashValue | fileSize | fileName | primaryIdentifier | localIdentifier | creator | title | date</p>
+
+<p>Only <strong>fileURL</strong> and <strong>fileName</strong> are required.</p>
+
+<p>The <strong>hashAlgorithm</strong> and <strong>hashValue</strong> columns refer to the checksum of whatever file is referenced in the <strong>fileUrl</strong> column.  If you provide URLs pointing to object manifest files, the hashValue would be the checksum of the object manifest itself. The hashAlgorithm column specifies what kind of checksum you are providing, if you have a checksum value for a component file in the object.  (Accepted checksum algorithms are: Adler-32, CRC-32, MD2, MD5,SHA-1, SHA-256, SHA-384, and SHA-512).  If you provide a hashAlgorithm, you must also provide a hashValue, and vice-versa.  If provided, Merritt will validate any checksum values provided for each file.  If the value provided does not match the value that Merritt calculates, the object submission will fail.  You will be notified by email that the object did not pass a fixity check.</p>
+
+<p>The <strong>fileSize</strong> column is optional and is expressed in bytes.</p>  
+
+<p><strong>primaryIdentifier</strong> is the identifier that Merritt uses to track the object.  If you are submitting new objects, you will very likely not have a primary identifier.  Primary identifiers must be ARK format identifiers.  You will generally only use this column if you are using a manifest to edit an existing object.  You will be able to see the Merritt-supplied primary identifier for any object in Merritt when you display it.</p>  
+
+<p><strong>localIdentifier</strong> is any identifier you already use to refer to the object.  You can provide multiple local identifiers by separating them with a semicolon. The contents of this column will be searchable in Merritt.  You will also be able to edit the object by referring to the local identifier in a manifest.</p> 
+
+<p><strong>creator</strong> is the author or creator of the object itself.  There are no format requirements for expressing named persons or entities. Merritt will display the creator exactly as entered.  This column will be searchable in Merritt.</p>
+
+<p><strong>title</strong> is the title of the object itself. Merritt will display the title exactly as entered.  This column will be searchable in Merritt.</p>
+
+<p><strong>date</strong> is the publication date of the object itself.  If you provide the date in a standard excel format, it will be submitted to in Web UTC datetime format.  If you enter a non-standard date format, the date will be submitted as plain text.  Merritt will display the date exactly as entered.  This column will be searchable in Merritt.</p>
+
+
+
+
+<a name="text_tips"></a>
+<h3>Tips for Creating Text-based Manifests</h3>
+
+<ul class="help">
+  <li>You do not have to use Excel to create a manifest file; you can also use a text editor or create a script to write manifest files.  You can use the <%= link_to("sample batch and object manifests", :controller => 'help', :action => 'samples') %> and simply edit the area for conveying rows of object information.</li>
+
+  <li>The contents of the manifest are listed on separate lines, with each column delimited by " | " [space] [pipe] [space].   Empty columns are indicated by a space between column delineators: " |  | ".  (There may be one or two blank spaces in the column).</li>
+
+  <li>The column heading text in the excel spreadsheet is slightly different than in the manifest files.  The meaning and order of the columns is the same, but the headings in the text of a manifest file will begin with either "nfo:" or "mrt:" (example: nfo:fileUrl).</li>
+
+  <li>Merritt manifests contain placeholders for two columns that do not appear in the spreadsheet described above: nfo:fileLastModified and mrt:mimetype.  These columns are not yet implemented in Merritt, but they do need to be included in any manifest that you type by hand, with the columns left empty.</li>  
+
+  <li>Batch manifests must be identified as a batch of containers, batch of single files or a batch of object manifests.  The profile line of the manifest identifies the type of batch:<br/><br/>
+
+Batch of container files:
+<pre>&#35;&#37;profile | http://uc3.cdlib.org/registry/ingest/manifest/mrt-container-batch-manifest</pre>
+
+Batch of single files:
+<pre>&#35;&#37;profile | http://uc3.cdlib.org/registry/ingest/manifest/mrt-single-file-manifest</pre>
+
+Batch of object manifests:
+<pre>&#35;&#37;profile | http://uc3.cdlib.org/registry/ingest/manifest/mrt-batch-manifest</pre>
+  </li>
+
+  <li>When you've finished editing a sample manifest, be sure to save it with a unique name and a ".checkm" file extension.</li>  
+
+  <li>In any batch manifest, empty cells up to the <strong>nfo:fileName</strong> column must be identified with " | | ".  After the nfo:fileName column, empty cells should be identified ONLY if they are followed by another cell that has a value.   Examples:<br/>
+  
+</li>
+</ul>
+
+
+<a name="considerations"></a>
+<h3>Special Considerations</h3>
+
+<ul class="help">
+  <li>If you are using the Excel spreadsheet, any text in bold will be ignored.  Make sure that all of your content is in plain text.</li>
+  <li>If you are using the Excel spreadsheet, and if you need to delete a row, use the [right click] [delete] approach.  You need to delete the entire row, rather than just the text in the row cells.</li>
+  <li>If you are using either the spreadsheet or a text editor to produce a manifest, you cannot use a pipe (vertical bar) character "|" in any of your fields.  If you need a pipe character to appear anywhere in an object record, replace it with: %7C</li>
+</ul>
+
+
+<a name="optimizing"></a>
+<h3>Optimizing the Macro: Create a Trusted Location (Optional for PC)</h3>
+
+
+<p>If you plan to create lot of Merritt manifests, you may want to create a trusted location for the merrittManifest.xls file on your computer.  This will allow you to run the macro without having to chose enable this content when you open the excel file.  It will also enable you to run the macro from other excel files as long as you have the merrittManifest.xls file open.  The following instructions are taken from Microsoft documentation for Office 2007 users (http://office.microsoft.com/en-us/excel-help/create-remove-or-change-a-trusted-location-for-your-files-HA010031999.aspx)</p>
+
+<ol>
+  <li>Open MS Excel.</li>
+  <li>Click the <strong>Microsoft Office Button</strong> , and then click <strong>Excel Options</strong>.</li>
+  <li>Click <strong>Trust Center</strong>, click <strong>Trust Center Settings</strong>, and then click <strong>Trusted Locations</strong>.</li>
+  <li>Click <strong>Add new location</strong>.  Important: We recommended that you do not make your entire Documents or My Documents folder a trusted location; doing so increases your security risk. Create a subfolder within Documents or My Documents, and make only that folder a trusted location.</li>
+  <li>In the <strong>Path</strong> box, type the name of the folder that you want to use as a trusted location, or click <strong>Browse</strong> to locate the folder.</li>
+  <li>If you want to include subfolders as trusted locations, select the <strong>Subfolders of this location are also trusted</strong> check box.</li>
+  <li>In the <strong>Description</strong> box, type what you want to describe the purpose of the trusted location.</li>
+  <li>Click OK.</li>
+  <li>Store the merrittManifest.xls spreadsheet in this directory.</li>
+  <li>When you open the merrittManifest.xls file, the macros will be accessible to any other excel file you open in the trusted directory.</li>
+</ol>
+
+  </div>
+</div>
+<div class="grid_1">&nbsp;</div>
+<div class="grid_4 sidebar">
+ 
+  
+<h3>Page Contents</h3>
+<ul>
+  <li><a href="#why">Why Use A Manifest?</a></li>
+  <li><a href="#macro">The Excel Macro</a></li>
+  <li><a href="#workflow1">Workflow: A Single Object</a></li>
+  <li><a href="#workflow2">Workflow: A Batch of Container Files</a></li>
+  <li><a href="#workflow3">Workflow: A Batch of Single Files</a></li>
+  <li><a href="#workflow4">Workflow: A Batch of Object Manifest Files</a></li>
+  <li><a href="#object_manifest">The Object Manifest</a></li>
+  <li><a href="#batch_manifest">The Batch Manifest</a></li>
+  <li><a href="#text_tips">Tips for Creating Text-based Manifests</a></li>
+  <li><a href="#considerations">Special Considerations</a></li>
+  <li><a href="#optimizing">Optimizing the Macro: Create a Trusted Location (Optional for PC)</a></li>
+
+</ul>
+
+
+
+
+<h3>Sample Data and Files</h3>
+<ul>
+  <li><%= link_to("Object Manifest", "/samples/manifests/call911.checkm") %></li>
+  <li><%= link_to("Batch Manifest: Container Files", "/samples/manifests/sampleBatchOfContainers.checkm") %></li>
+  <li><%= link_to("Batch Manifest: Single Files", "/samples/manifests/sampleBatchOfSingleFiles.checkm") %></li>
+  <li><%= link_to("Batch Manifest: Object Manifest Files", "/samples/sampleBatchoOfManifests.checkm") %></li>
+  <li><%= link_to("Object Manifest", "/samples/manifests/sampleBatchoOfManifests.checkm") %></li>
+  <li><%= link_to("Macros: merrittManifest.xls", "/docs/merrittManifest.xls") %></li>
+  <li><%= link_to("ERC file: mrt-erc.txt", "/samples/object1/mrt-erc.txt") %></li>
+  <li><%= link_to("Sample objects [zip]", "/samples/sampleObjects.zip") %></li>
+</ul>
+
+<%= render :partial => 'help_sidebar' %>
+
+  
+</div>
