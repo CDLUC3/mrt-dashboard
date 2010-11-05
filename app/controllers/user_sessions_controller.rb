@@ -6,13 +6,13 @@ class UserSessionsController < ApplicationController
   #layout "home", :except => ['logout']
   
   def login
-    @user_session = UserSession.new
+    reset_session
   end
   
   def login_post
-    @user_session = UserSession.new(params[:user_session])
-    if @user_session.save then
+    if User.valid_ldap_credentials?(params[:login], params[:password]) then
       flash[:notice] = "Login was successful"
+      session[:uid] = params[:login]
       redirect_back_or_default "/home/choose_collection"
     else
       flash[:notice] = "Login unsuccessful"
@@ -23,7 +23,7 @@ class UserSessionsController < ApplicationController
   def logout
     session[:group] = nil
     session[:user] = nil
-    current_user_session.destroy
+    reset_session
     flash[:notice] = "You are now logged out"
     redirect_back_or_default '/'
   end

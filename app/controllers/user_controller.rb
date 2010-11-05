@@ -1,6 +1,6 @@
 class UserController < ApplicationController
   before_filter :require_user
-  before filter :group_optional
+  before_filter :group_optional
   def update
     #this could be made more efficient and wonderful, but I think that we may be going
     #to a different authentication service soon, so it will all need rewriting, anyway, might as well wait.
