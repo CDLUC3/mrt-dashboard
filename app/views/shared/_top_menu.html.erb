@@ -14,8 +14,8 @@ They display differently depending on what is set.
 =end
 
 home_disp = !@group.nil?
-add_disp = !@permissions.nil? and @permissions.include?('write')
-change_disp = !@groups.nil? and @groups.length > 1
+add_disp = !@permissions.nil? && @permissions.include?('write')
+change_disp = !@groups.nil? && @groups.length > 1 && !@group.nil?
 
 last_menu = if change_disp then 'change' elsif add_disp then 'add' else 'home' end
 

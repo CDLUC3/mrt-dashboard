@@ -21,7 +21,7 @@ class ApplicationController < ActionController::Base
   end
 
   helper :all
-  helper_method :current_user_session, :current_user
+  helper_method :current_user
   
   private
 
