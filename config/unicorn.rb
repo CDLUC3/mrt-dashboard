@@ -1,3 +1,4 @@
+require 'socket'
 rails_env = ENV['RAILS_ENV'] || 'production'
 
 # 16 workers and 1 master
@@ -12,7 +13,6 @@ pid File.join(Dir.pwd, "log", "unicorn.pid")
 # Restart any workers that haven't responded in 30 seconds
 timeout 30
 
-# Listen on a Unix data socket
-listen "localhost:26181"
+listen "#{Socket.gethostname}:26181"
 
 logger Logger.new(File.join(Dir.pwd, "log", "unicorn.log"))
