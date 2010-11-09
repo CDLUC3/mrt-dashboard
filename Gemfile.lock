@@ -87,6 +87,7 @@ GEM
       ruby-debug-base (~> 0.10.3.0)
     ruby-debug-base (0.10.3)
       linecache (>= 0.3)
+    sendfile (1.0.0)
     sqlite3-ruby (1.3.1)
     thor (0.14.3)
     treetop (1.4.8)
@@ -109,6 +110,7 @@ DEPENDENCIES
   rdf-raptor
   rest-client
   ruby-debug
+  sendfile (= 1.0.0)
   sqlite3-ruby
   unicorn
   will_paginate (~> 3.0.pre2)

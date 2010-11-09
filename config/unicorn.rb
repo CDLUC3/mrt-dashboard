@@ -1,4 +1,6 @@
 require 'socket'
+require 'sendfile'
+
 rails_env = ENV['RAILS_ENV'] || 'production'
 
 # 16 workers and 1 master
