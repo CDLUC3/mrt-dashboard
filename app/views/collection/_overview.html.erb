@@ -4,11 +4,17 @@
 <div class="value"><%=formatted_int(@object_count)%></div>
 <div class="clear"></div>
 <div class="key">version count:</div>
-<div class="value"><%=formatted_int(@version_count)%></div>
+<div id="version_count" class="value">calculating</div>
 <div class="clear"></div>
 <div class="key">file count:</div>
-<div class="value"><%=formatted_int(@file_count)%></div>
+<div id="file_count" class="value">calculating</div>
 <div class="clear"></div>
 <div class="key">total size:</div>
-<div class="value"><%=number_to_storage_size(@total_size)%></div>
+<div id="total_size" class="value">calculating</div>
 <div class="clear"></div>
+
+<%= javascript_tag do %>
+new Ajax.Updater({success : 'version_count'}, '/collection/version_count', { method: 'get' });
+new Ajax.Updater({success : 'file_count'}, '/collection/file_count', { method: 'get' });
+new Ajax.Updater({success : 'total_size'}, '/collection/total_size', { method: 'get' });
+<% end %>
