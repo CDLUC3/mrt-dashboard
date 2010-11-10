@@ -1,6 +1,5 @@
 # This file is used by Rack-based servers to start the application.
 require 'rack/cache'
-require 'rack/contrib/static_cache'
 require 'rack/munge_headers'
 
 use Rack::MungeHeaders,
