@@ -3,11 +3,10 @@ require 'rack/cache'
 require 'lib/rack/munge_headers'
 
 use Rack::ConditionalGet
-#use Rack::Deflater
 
 use Rack::MungeHeaders,
   :patterns => {
-    /^\/(stylesheets|javascripts)/ => {
+    /^\/(stylesheets|javascripts|images)/ => {
       "Expires" => Proc.new { (Time.now + 86400).utc.rfc2822 } 
     }
   }
