@@ -1,6 +1,6 @@
 # This file is used by Rack-based servers to start the application.
 require 'rack/cache'
-require 'rack/munge_headers'
+require 'lib/rack/munge_headers'
 
 use Rack::MungeHeaders,
   :patterns => {
@@ -15,8 +15,6 @@ use Rack::Cache,
   :entitystore => 'file:' + ::File.expand_path('../tmp/rack-cache/body', __FILE__)
 
 use Rack::ConditionalGet
-
-#use Rack::Static, :urls => ["/javascripts", "/stylesheets"], :root => "public"
 
 require ::File.expand_path('../config/environment',  __FILE__)
 run MrtDashboard::Application
