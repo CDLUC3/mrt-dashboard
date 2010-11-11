@@ -2,7 +2,7 @@
 <html>
   <head>
     <title><%= yield :title %></title>
-    <%= stylesheet_link_tag 'reset', 'text', '960', 'main_styles', :cache=>"no_collection" %>
+    <%= stylesheet_link_tag 'reset', 'text', '960', 'main_styles', 'menu' :cache=>"most" %>
     <%= stylesheet_link_tag 'print', :media =>"print" %>
 
     <!--[if IE 6]><link rel="stylesheet" type="text/css" href="css/ie6.css" media="screen" /><![endif]-->
@@ -15,8 +15,7 @@
       <%= render :partial => "shared/no_collection_head" %>
       <%= yield %>
       <%= render :partial => "shared/footer" %>
-      <%= javascript_include_tag :all, :cache=>true %>
-
+      <%= javascript_include_tag :all, :cache=>'all' %>
     </div>
   </body>
 </html>
