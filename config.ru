@@ -2,6 +2,9 @@
 require 'rack/cache'
 require 'lib/rack/munge_headers'
 
+use Rack::ConditionalGet
+use Rack::Deflater
+
 use Rack::MungeHeaders,
   :patterns => {
     /^\/(stylesheets|javascripts)/ => {
@@ -10,11 +13,9 @@ use Rack::MungeHeaders,
   }
 
 use Rack::Cache,
-  :verbose     => true,
+#  :verbose     => true,
   :metastore   => 'file:' + ::File.expand_path('../tmp/rack-cache/meta', __FILE__),
   :entitystore => 'file:' + ::File.expand_path('../tmp/rack-cache/body', __FILE__)
-
-use Rack::ConditionalGet
 
 require ::File.expand_path('../config/environment',  __FILE__)
 run MrtDashboard::Application
