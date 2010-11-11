@@ -3,7 +3,7 @@ require 'rack/cache'
 require 'lib/rack/munge_headers'
 
 use Rack::ConditionalGet
-use Rack::Deflater
+#use Rack::Deflater
 
 use Rack::MungeHeaders,
   :patterns => {
