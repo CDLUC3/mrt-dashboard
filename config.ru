@@ -4,11 +4,12 @@ require 'lib/rack/munge_headers'
 
 use Rack::ConditionalGet
 use Rack::ETag
+use Rack::Deflater
 
 use Rack::MungeHeaders,
   :patterns => {
     /^\/(stylesheets|javascripts|images)/ => {
-      "Expires" => Proc.new { (Time.now + 86400).utc.rfc2822 } 
+      "Expires" => Proc.new { (Time.now + 31536000).utc.rfc2822 } 
     }
   }
 
