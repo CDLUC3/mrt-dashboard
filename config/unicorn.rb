@@ -1,5 +1,4 @@
 require 'socket'
-require 'sendfile'
 
 rails_env = ENV['RAILS_ENV'] || 'production'
 
