@@ -1,10 +1,17 @@
 def load_config(name)
-  conf = YAML.load_file(File.join(Rails.root, "config", name))
-  conf_env = conf[Rails.env]
-  if conf_env.class == String then
-    return conf[conf_env]
+  path = File.join(Rails.root, "config", name)
+  if !File.exists?(path) then
+    raise Exception("Config file #{name} not found!")
+  elsif File.size(path) == 0 then
+    raise Exception("Config file #{name} is empty!")    
   else
-    return conf_env
+    conf = YAML.load_file(path)
+    conf_env = conf[Rails.env]
+    if conf_env.class == String then
+      return conf[conf_env]
+    else
+      return conf_env
+    end
   end
 end
 
