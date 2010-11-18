@@ -51,7 +51,7 @@ class AdminController < ApplicationController
       if @error_fields.length > 0 then
         @display_text += "The following items must be filled in: #{@error_fields.map{|i| @required[i]}.join(', ' )}."
       else
-        Group::LDAP.add(params[:ou], params[:description], ['read', 'write'], ['merrittOwnerGroup'])
+        Group::LDAP.add(params[:ou], params[:description], ['read', 'write'], ['merrittClass'])
         Group::LDAP.replace_attribute(params[:ou], 'submissionprofile', params['submissionprofile'])
         @display_text = "This collection has been created."
         @ldap_group = Group::LDAP.fetch(params[:ou])
