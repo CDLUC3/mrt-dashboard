@@ -1,7 +1,7 @@
 development:
   admin_password: XXXXXXXX
   admin_user:     cn=Directory Manager
-  group_base:     ou=mrt-groups,ou=uc3,dc=cdlib,dc=org
+  group_base:     ou=mrt-classes,ou=uc3,dc=cdlib,dc=org
   host:           badger.cdlib.org
   port:           1636
   user_base:      ou=People,ou=uc3,dc=cdlib,dc=org
@@ -14,7 +14,7 @@ development_nonlocal:
 production:
   admin_password: XXXXXXXX
   admin_user:     cn=Directory Manager
-  group_base:     ou=mrt-groups,ou=uc3,dc=cdlib,dc=org
+  group_base:     ou=mrt-classes,ou=uc3,dc=cdlib,dc=org
   host:           dp01.cdlib.org
   port:           1636
   user_base:      ou=People,ou=uc3,dc=cdlib,dc=org
