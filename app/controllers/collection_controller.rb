@@ -35,7 +35,7 @@ class CollectionController < ApplicationController
     end
 
     q = Q.new("?s a ore:Aggregation ;
-                  object:isInCollection <#{no_inject(@group.sparql_id)}> ;
+                  base:isInCollection <#{no_inject(@group.sparql_id)}> ;
                   dc:modified ?mod .",
                :limit => @page_size,
                :offset => offset,
@@ -55,7 +55,7 @@ class CollectionController < ApplicationController
 
     q = Q.new("?s a ore:Aggregation ;
                   #{terms_q} ;
-                  object:isInCollection <#{@group.sparql_id}> ;
+                  base:isInCollection <#{@group.sparql_id}> ;
                   dc:modified ?mod .",
               :select => "DISTINCT ?s",
               :order_by => "DESC(?mod)")

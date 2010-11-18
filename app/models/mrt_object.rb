@@ -16,7 +16,7 @@ class MrtObject < UriInfo
     order = arg_hash[:order] || "DESC"
     q = if arg_hash[:collection] then
           Q.new("?o a ore:Aggregation ;
-                    object:isInCollection <#{arg_hash[:collection]}> ;
+                    base:isInCollection <#{arg_hash[:collection]}> ;
                     object:hasStoredObject ?s .
                  ?o <#{sort}> ?sort .",
                 :describe   => "?s",
@@ -38,7 +38,7 @@ class MrtObject < UriInfo
     arg_hash = args.last
     q = if arg_hash[:collection] then
           Q.new("?o a ore:Aggregation ;
-                    object:isInCollection <#{arg_hash[:collection]}> .",
+                    base:isInCollection <#{arg_hash[:collection]}> .",
                 :select => "(count(?s) as ?count)")
         else
           raise Exception
