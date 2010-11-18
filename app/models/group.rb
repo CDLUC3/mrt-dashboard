@@ -42,22 +42,23 @@ class Group
   end
 
   def sparql_id
-    "http://uc3.cdlib.org/collection/#{URI.encode(self.id, Regexp.new("[^#{URI::PATTERN::UNRESERVED}]"))}"
+    return "http://ark.cdlib.org/#{self.ark_id}"
+    #"http://uc3.cdlib.org/collection/#{URI.encode(self.id, Regexp.new("[^#{URI::PATTERN::UNRESERVED}]"))}"
   end
 
   def object_count
-    return STORE.select(Q.new("?obj object:isInCollection <#{self.sparql_id}> .",
+    return STORE.select(Q.new("?obj base:isInCollection <#{self.sparql_id}> .",
                               :select=>"(count(?obj) as c)"))[0]["c"].value.to_i
   end
 
   def version_count
     return STORE.select(Q.new("?vers version:inObject ?obj .
         ?obj object:isStoredObjectFor ?meta .
-        ?meta object:isInCollection <#{self.sparql_id}>", :select=>"(count(?vers) as c)"))[0]["c"].value.to_i
+        ?meta base:isInCollection <#{self.sparql_id}>", :select=>"(count(?vers) as c)"))[0]["c"].value.to_i
   end
 
   def file_count
-    q = Q.new("?meta object:isInCollection <#{self.sparql_id}> .
+    q = Q.new("?meta base:isInCollection <#{self.sparql_id}> .
                ?obj object:isStoredObjectFor ?meta .
                ?vers version:inObject ?obj .
                ?vers version:hasFile ?file .",
@@ -66,7 +67,7 @@ class Group
   end
 
   def total_size
-    q = Q.new("?meta object:isInCollection <#{self.sparql_id}> .
+    q = Q.new("?meta base:isInCollection <#{self.sparql_id}> .
                ?obj object:isStoredObjectFor ?meta ;
                     object:totalActualSize ?size",
       :select => "(sum(?size) as total)")
