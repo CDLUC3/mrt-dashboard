@@ -61,7 +61,7 @@ module LdapCdl
       add_user_to_group(userid, groupid, read, write)
     end
 
-    def add_group(groupid, description, extra_classes = ['merrittOwnerGroup'])
+    def add_group(groupid, description, extra_classes = ['merrittClass'])
 
       attr = {
         :objectclass           => ["organizationalUnit"] + extra_classes,

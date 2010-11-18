@@ -10,7 +10,7 @@ module GroupLdap
     def find_all
       return @admin_ldap.search(:base => @base,
                                 :filter => (Net::LDAP::Filter.eq('objectclass', 'organizationalUnit') &
-                                            Net::LDAP::Filter.eq('objectclass', 'merrittOwnerGroup')),
+                                            Net::LDAP::Filter.eq('objectclass', 'merrittClass')),
                                 :scope => Net::LDAP::SearchScope_SingleLevel).
         sort_by{ |g| g['ou'][0].downcase }
     end
@@ -26,7 +26,7 @@ module GroupLdap
       all.map{|i| i[/^uid=[^,]+/][4..-1] }
     end
 
-    def add(groupid, description, permissions = ['read', 'write'], extra_classes = ['merrittOwnerGroup'])
+    def add(groupid, description, permissions = ['read', 'write'], extra_classes = ['merrittClass'])
       attr = {
         :objectclass           => ["organizationalUnit"] + extra_classes,
         #:name                  => groupid
