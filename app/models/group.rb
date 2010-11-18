@@ -53,8 +53,9 @@ class Group
   end
 
   def version_count
-    return STORE.select(Q.new("?obj base:isInCollection <#{self.sparql_id}> ;
-                                    object:hasVersion ?vers .",
+    return STORE.select(Q.new("?obj a object:Object ;
+                                    base:isInCollection <#{self.sparql_id}> ;
+                                    dc:hasVersion ?vers .",
                               :select=>"(count(?vers) as c)"))[0]["c"].value.to_i
   end
 
