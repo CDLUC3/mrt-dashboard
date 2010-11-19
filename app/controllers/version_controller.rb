@@ -6,7 +6,7 @@ class VersionController < ApplicationController
 
   def index
     @stored_object = @object[Mrt::Object['hasStoredObject']].first
-    @versions = @stored_object[Mrt::Object['versionSeq']].first.to_list
+    @versions = @stored_object[RDF::DC['hasVersion']].sort_by{|v| v[RDF::DC['identifier']]}
     #files for current version
     all_files = @version[Mrt::Version.hasFile].sort_by do |f| 
       f[RDF::DC.identifier].to_s.downcase
