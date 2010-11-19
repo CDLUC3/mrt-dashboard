@@ -6,7 +6,7 @@ class ObjectController < ApplicationController
 
   def index
     @stored_object = @object[Mrt::Object['hasStoredObject']].first
-    @versions = @stored_object[Mrt::Object['versionSeq']].first.to_list
+    @versions = @stored_object[RDF::DC['hasVersion']].sort_by{|v| v[RDF::DC['identifier']]}
     #files for current version
     @files = @versions[@versions.length-1][Mrt::Version.hasFile]
     @files.delete_if {|file| file[RDF::DC.identifier].to_s[0..10].eql?('system/mrt-')}
