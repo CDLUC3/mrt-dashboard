@@ -76,7 +76,7 @@ class ObjectController < ApplicationController
 
   def recent
     @collection = params[:collection]
-    @objects = MrtObject.paginate(:collection => "http://uc3.cdlib.org/collection/#{@collection}", 
+    @objects = MrtObject.paginate(:collection => @collection,
                                   :page       => (params[:page] || 1), 
                                   :per_page   => 20)
     respond_to do |format|
