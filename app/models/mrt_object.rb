@@ -15,11 +15,10 @@ class MrtObject < UriInfo
     sort = arg_hash[:sort] || RDF::DC['modified']
     order = arg_hash[:order] || "DESC"
     q = if arg_hash[:collection] then
-          Q.new("?o a ore:Aggregation ;
+          Q.new("?o a object:Object ;
                     base:isInCollection <#{arg_hash[:collection]}> ;
-                    object:hasStoredObject ?s .
-                 ?o <#{sort}> ?sort .",
-                :describe   => "?s",
+                    <#{sort}> ?sort .",
+                :describe   => "?o",
                 :order_by => "#{order}(?sort)",
                 :offset   => arg_hash[:offset],
                 :limit    => arg_hash[:limit])
