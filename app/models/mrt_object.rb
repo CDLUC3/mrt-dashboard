@@ -44,9 +44,9 @@ class MrtObject < UriInfo
   def self.count(*args)
     arg_hash = args.last
     q = if arg_hash[:collection] then
-          Q.new("?o a ore:Aggregation ;
+          Q.new("?o a object:Object ;
                     base:isInCollection <#{arg_hash[:collection]}> .",
-                :select => "(count(?s) as ?count)")
+                :select => "(count(?o) as ?count)")
         else
           raise Exception
         end
