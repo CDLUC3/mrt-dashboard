@@ -3,6 +3,13 @@ class MrtObject < UriInfo
   
   Q = Mrt::Sparql::Q
 
+  # Creates a MrtObject from a UriInfo object.
+  def self.from_uri_info(uri_info)
+    retval = MrtObject.new(uri_info.to_uri)
+    retval.info = uri_info.info
+    return retval
+  end
+
   def self.find_by_identifier(id)
     q = Q.new("?obj rdf:type object:Object .
                ?obj dc:identifier \"#{id}\"^^<http://www.w3.org/2001/XMLSchema#string>",
@@ -10,6 +17,11 @@ class MrtObject < UriInfo
     return MrtObject.new(UriInfo.store().select(q)[0]['obj'])
   end
 
+  def self.bulk_loader(uris)
+    results = UriInfo.bulk_loader(uris)
+    return results.map {|uri_info| MrtObject.from_uri_info(uri_info) }
+  end
+  
   def self.find(*args)
     arg_hash = args.last
     sort = arg_hash[:sort] || RDF::DC['modified']
@@ -18,18 +30,14 @@ class MrtObject < UriInfo
           Q.new("?o a object:Object ;
                     base:isInCollection <#{arg_hash[:collection]}> ;
                     <#{sort}> ?sort .",
-                :describe   => "?o",
+                :select   => "?o",
                 :order_by => "#{order}(?sort)",
                 :offset   => arg_hash[:offset],
                 :limit    => arg_hash[:limit])
         else
           raise Exception
         end
-    if order == "DESC" then
-      return self.query_bulk_loader(q).sort_by { |o| o[sort] }.reverse
-    else
-      return self.query_bulk_loader(q).sort_by { |o| o[sort] }
-    end
+    return MrtObject.bulk_loader(UriInfo.store.select(q).map{|row|row['o']})
   end
 
   # XXX - integrate with find
