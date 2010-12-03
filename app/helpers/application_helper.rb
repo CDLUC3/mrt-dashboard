@@ -1,7 +1,7 @@
 module ApplicationHelper
   #takes an ark id and strips it down to just that if it's a RDF full uri
   def clean_id(id)
-    id.to_s.match(/ark:\/\d+\/\S+$/).to_s
+    id.to_s.match(/ark:\/\d+\/\S+$/)[0].to_s
   end
 
   #takes an ark id and returns full rdf uri
