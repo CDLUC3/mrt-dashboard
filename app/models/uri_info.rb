@@ -4,6 +4,8 @@ class UriInfo < RDF::URI
     attr_accessor :store
   end
 
+  attr_accessor :info
+
   def self.maybe_make(o)
     if o.instance_of? RDF::URI then
       return UriInfo.new(o)
@@ -13,22 +15,43 @@ class UriInfo < RDF::URI
   end
 
   def self.bulk_loader(uris)
-    uris_str = uris.map{|uri| "<#{uri}>"}.join(", ")
-    q = Mrt::Sparql::Q.new(nil, :describe=>uris_str)
-    return self.query_bulk_loader(q)
+    indexes = (0..(uris.size-1)).to_a
+    q_str = ""
+    indexes.each do |i|
+      graph_uri = URI.decode(uris[i].to_uri.to_s)
+      q_str += "{ OPTIONAL { <#{uris[i]}> ?p#{i} ?o#{i} . } }\n"
+    end
+    results = UriInfo.store.select(Mrt::Sparql::Q.new(q_str))
+
+    retval = uris.map {|uri| self.new(uri)}
+    results.each do |row|
+      indexes.each do |i|
+        if !row["p#{i}"].nil? then
+          retval[i].cache_vals(row["p#{i}"], row["o#{i}"])
+        end
+      end
+    end
+    return retval
   end
 
   def self.query_bulk_loader(query)
-    graph = UriInfo.store.select(query)
-    uris = Hash.new
-    return graph.subjects.map do |uri|
-      u = self.new(uri)
-      u.cache_from_graph(graph)
+    results = UriInfo.store.select(query)
+    known_uris = Hash.new
+    subjects = Hash.new
+    results.each do |row|
+      (s,p,o) = *row
+      known_uris[s] ||= s if s.instance_of? UriInfo
+      subjects[s] ||= s
+      known_uris[p] ||= p if p.instance_of? UriInfo
+      known_uris[o] ||= o if o.instance_of? UriInfo
+      known_uris[s].cache_vals(known_uris[p], known_uris[o])
     end
+    return subjects.keys
   end
 
-  def initialize(*args)
-    super(*args)
+  def initialize(uri, graph_uri=nil, *rest)
+    super(uri, *rest)
+    @graph_uri = graph_uri
     @info = nil
   end
 
@@ -73,7 +96,11 @@ class UriInfo < RDF::URI
   end
 
   def fill_cache
-    q = Mrt::Sparql::Q.new("<#{self.to_s}> ?p ?o")
+    q = if @graph
+          Mrt::Sparql::Q.new("GRAPH <#{@graph}> { <#<#{self.to_s}> ?p ?o }")
+        else 
+          Mrt::Sparql::Q.new("<#{self.to_s}> ?p ?o")
+        end
     res = UriInfo.store.select(q)
     cache_from(res.map { |row|
                  [self, 
@@ -104,5 +131,11 @@ class UriInfo < RDF::URI
       end
     end
     return self
+  end
+
+  def cache_vals(p, o)
+    @info ||= Hash.new
+    @info[p] ||= []
+    @info[p].push(o)
   end
 end
