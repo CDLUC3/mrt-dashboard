@@ -32,22 +32,15 @@ class CollectionController < ApplicationController
   end
 
   def search_results
-    @page_size = 10
-    @page = (params[:page] or '1').to_i
-    pg_start = (@page -1) * @page_size
-    pg_end = @page * @page_size - 1
-
     terms = no_inject(Unicode.downcase(params[:terms])).split(/[\s:\/_-]+/)
     terms_q = terms.map {|term| "<http://4store.org/fulltext#token> \"#{term}\"" }.join("; ")
-
-    q = Q.new("?s a ore:Aggregation ;
+    q = Q.new("?s a object:Object ;
                   #{terms_q} ;
                   base:isInCollection <#{@group.sparql_id}> ;
                   dc:modified ?mod .",
               :select => "DISTINCT ?s",
               :order_by => "DESC(?mod)")
-    @results = store().select(q)
-    @object_count = @results.length
-    @results = @results[pg_start..pg_end].map{|s| UriInfo.new(s['s']) }
+    @results = store().select(q).map{|s| MrtObject.new(s['s']) }.
+      paginate(:page=>params[:page], :per_page=>10)
   end
 end
