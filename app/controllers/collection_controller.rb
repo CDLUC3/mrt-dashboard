@@ -26,22 +26,9 @@ class CollectionController < ApplicationController
   end
 
   def index
-    @page_size = 10
-    @page = (params[:page] or '1').to_i
-    offset = (@page - 1) * @page_size
-
-    @object_count = my_cache("#{@group.id}_object_count") do   
-      @group.object_count 
-    end
-
-    q = Q.new("?s a ore:Aggregation ;
-                  base:isInCollection <#{no_inject(@group.sparql_id)}> ;
-                  dc:modified ?mod .",
-               :limit => @page_size,
-               :offset => offset,
-               :select => "?s",
-               :order_by => "DESC(?mod)")
-    @recent_objects = store().select(q).map{|s| UriInfo.new(s['s']) }
+    @recent_objects = MrtObject.paginate(:collection => no_inject(@group.sparql_id),
+                                         :page       => (params[:page] || 1), 
+                                         :per_page   => 10)
   end
 
   def search_results

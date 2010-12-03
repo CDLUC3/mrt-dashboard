@@ -1,5 +1,14 @@
-<%obj=table_row%>
-<tr class="<%= cycle('even','odd') %>">
-  <td><%= link_to(clean_id(obj), :controller => 'object', :action => 'index', :group => @group.id, :object => clean_id(obj) ) %></td>
-  <td colspan="2"><%= render :partial => "/object/short_bib_display", :locals => { :obj => obj } %></td>
+<tr class="<%= cycle('even', 'odd') %>">
+  <td>
+    <% ark = clean_id(table_row.identifier) %>
+    <%= link_to ark, 
+                :controller => "object", 
+                :action     => "index", 
+                :group      => @group.id, 
+                :object     => ark %>
+  </td>
+  <td colspan="2">
+    <%= render :partial => "/object/short_bib_display", 
+               :locals  => { :obj => table_row } %>
+  </td>
 </tr>
