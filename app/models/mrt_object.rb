@@ -89,19 +89,23 @@ class MrtObject < UriInfo
   end
 
   def who
-    return self.first(Mrt::Kernel['who'])
+    return self[Mrt::Kernel['who']].map { |el| el.value.to_s }
   end
 
   def what
-    return self.first(Mrt::Kernel['what'])
+    return self[Mrt::Kernel['what']].map { |el| el.value.to_s }
   end
 
   def when
-    return self.first(Mrt::Kernel['when'])
+    return self[Mrt::Kernel['when']].map { |el| el.value.to_s }
   end
 
   def identifier
     return self.first(RDF::DC['identifier'])
+  end
+
+  def local_identifier
+    return self.is_stored_object_for.first(Mrt::Object.localIdentifier)
   end
 
   def files
