@@ -1,9 +1,5 @@
 class UserSessionsController < ApplicationController
-  #before_filter :require_no_user, :only => [:login, :login_post]
   before_filter :require_user,    :only => [:logout]
-  #before_filter :require_group, :except => [:logout]
-
-  #layout "home", :except => ['logout']
   
   def login
     reset_session
