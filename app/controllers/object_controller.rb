@@ -68,16 +68,10 @@ class ObjectController < ApplicationController
     end
   end
 
-  def dir_add
-  end
-
-  def jupload_add
-  end
-
   def recent
     @collection = params[:collection]
     @objects = MrtObject.paginate(:collection => @collection,
-                                  :page       => (params[:page] || 1), 
+                                  :page       => (params[:page] || 1),
                                   :per_page   => 20)
     respond_to do |format|
       format.html
