@@ -17,8 +17,6 @@ class UserSessionsController < ApplicationController
   end
   
   def logout
-    session[:group] = nil
-    session[:user] = nil
     reset_session
     flash[:notice] = "You are now logged out"
     redirect_back_or_default '/'
