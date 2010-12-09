@@ -1,3 +1,4 @@
+
 module ApplicationHelper
   #takes an ark id and strips it down to just that if it's a RDF full uri
   def clean_id(id)
@@ -67,21 +68,15 @@ module ApplicationHelper
   end
 
   def merritt_time(t)
-    if t.class == String then
-      my_t = Time.parse(t)
-    else
-      my_t = t
-    end
-    my_t.localtime.strftime("%Y-%m-%d  %I:%M %p").downcase
+    t = Time.parse(t.to_s) if (t.class != Time)
+    t.localtime.strftime("%Y-%m-%d  %I:%M %p").downcase
   end
 
-  #makes dublin core metadatas display nicely if not assigned
-  #tracy wants nothing to display anywhere if not filled in
+  # Format kernel metadata, filtering out unassigned values and
+  # joining with ;.
   def dc_nice(i)
-    return "" if i.nil?
-    i.delete_if{|mm| mm.to_s.eql?('(:unas)')}
-    return '' if i.length < 1
-    i.join('; ')
+    return '' if i.nil?
+    ((i.map { |el| el.to_s }) - ['(:unas)']).join("; ")
   end
 
   #makes a tip over a question mark item, just pass in the text
