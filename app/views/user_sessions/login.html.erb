@@ -1,0 +1,27 @@
+<% content_for :title do %>
+  UC3 Merritt Login
+<% end %>
+<div class="grid_10">
+  <h1>Login</h1>
+  <%= render :partial => '/shared/flash_show' %>
+  <%= form_tag({:action => 'login_post'}) do %>
+  <div class="left_label">
+    <%= label_tag :login %>
+  </div>
+  <div class="right_field">
+    <%= text_field_tag :login, params[:login], {:tabindex => '1'} %>
+  </div>
+  <div class="right_field" style="width:50px;">
+    <%= submit_tag "Login", {:tabindex => '3'} %>
+  </div>
+  <div class="clear"></div>
+  <div class="left_label">
+    <%= label_tag :password %>
+  </div>
+  <div class="right_field">
+    <%= password_field_tag :password, params[:password], {:tabindex => '2'} %><br />
+  </div>
+  <div class="clear"></div>
+  <% end %>
+  <div style="width:200px;height:100px;">&nbsp;</div>
+ </div>
