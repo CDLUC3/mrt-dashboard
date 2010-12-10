@@ -45,14 +45,14 @@ class MrtVersion < UriInfo
   end
 
   def who
-    return self[Mrt::Kernel['who']].map{ |w| w.value }
+    return self[Mrt::Kernel['who']].map{ |w| w.value.to_s }
   end
 
   def what
-    return self[Mrt::Kernel['what']].map{ |w| w.value }
+    return self[Mrt::Kernel['what']].map{ |w| w.value.to_s }
   end
 
   def when
-    return self[Mrt::Kernel['when']].map{ |w| w.value }
+    return self[Mrt::Kernel['when']].map{ |w| w.value.to_s }
   end
 end
