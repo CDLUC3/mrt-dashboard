@@ -4,6 +4,13 @@ class CollectionController < ApplicationController
 
   Q = Mrt::Sparql::Q
 
+  def object_count
+    @object_count = my_cache("#{@group.id}_object_count") do
+      MrtObject.count(:collection=>@group.id)
+    end
+    render :partial=>"object_count"
+  end
+
   def version_count
     @version_count = my_cache("#{@group.id}_version_count") do
       @group.version_count
