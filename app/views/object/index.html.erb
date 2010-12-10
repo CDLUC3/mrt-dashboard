@@ -1,19 +1,22 @@
 <% content_for :title do %>
   UC3 Merritt: Object -- <%= params[:object] %>
 <% end %>
+
 <div class="grid_11">
   <h2>Object: <%= params[:object] %></h2>
-  <div class="breadcrumbs"><%= link_to('Merritt', :controller => 'home', :action => 'index') %> &gt;
+  <div class="breadcrumbs">
+    <%= link_to('Merritt', :controller => 'home', :action => 'index') %> &gt;
     <%= link_to("Collection: #{@group.description}", :controller => 'collection', :action => 'index', :group => params[:group]) %> &gt;
     Object: <%= params[:object] %> 
   </div>
 
   <br/>
   <h3 style="font-weight: normal;">
-<%= render :partial => "/object/short_bib_display", :locals => {:obj => @object} %></h3>
+    <%= render :partial => "/object/short_bib_display", 
+               :locals => {:obj => @object} %></h3>
 
-<%= render :partial => '/object/details_display', :locals => {:obj => @object,
-        :stored_object => @stored_object, :versions => @versions} %>
+    <%= render :partial => 'details_display',
+               :locals => { :obj => @object } %>
   <div class="clear"></div>
   <div class="key">&nbsp;</div><div class="value">&nbsp;</div>
    <div class="key">&nbsp;</div>
