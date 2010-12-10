@@ -24,7 +24,7 @@ class ObjectController < ApplicationController
     send_file(tmp_file.path,
               :filename => "#{esc(params[:object])}_object.zip",
               :type => "application/zip",
-              :disposition => "download")
+              :disposition => "attachment")
   end
 
   def add
