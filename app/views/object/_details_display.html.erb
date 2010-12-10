@@ -1,33 +1,31 @@
 <%# the following must be passed in
-  obj = metadata obj
-  stored_object = Information about object storage
-  versions = versions of the stored object
-%>
-  <div class="key">primary identifier:</div>
-  <div class="value"><%= stored_object[RDF::DC.identifier] %></div>
+    obj = metadata obj %>
 
-  <div class="key">title:</div>
-  <div class="value"><%= dc_nice(obj[Mrt::Kernel.what]) %>&nbsp;</div>
+<div class="key">primary identifier:</div>
+<div class="value"><%= obj.identifier %></div>
 
-  <div class="key">creator:</div>
-  <div class="value"><%= dc_nice(obj[Mrt::Kernel.who]) %>&nbsp;</div>
+<div class="key">title:</div>
+<div class="value"><%= dc_nice(obj.what) %>&nbsp;</div>
 
-  <div class="key">date:</div>
-  <div class="value"><%= dc_nice(obj[Mrt::Kernel.when]) %>&nbsp;</div>
+<div class="key">creator:</div>
+<div class="value"><%= dc_nice(obj.who) %>&nbsp;</div>
 
-  <div class="key">local id:</div>
-  <div class="value"><%= dc_nice(obj[Mrt::Object.localIdentifier])%>&nbsp;</div>
+<div class="key">date:</div>
+<div class="value"><%= dc_nice(obj.when) %>&nbsp;</div>
 
-  <div class="key">last modified:</div>
-  <div class="value"><%= merritt_time(stored_object[RDF::DC.modified].to_s) %></div>
+<div class="key">local id:</div>
+<div class="value"><%= obj.local_identifier %>&nbsp;</div>
 
-  <div class="key">created:</div>
-  <div class="value"><%= merritt_time(versions[0][RDF::DC.created].to_s) %></div>
+<div class="key">last modified:</div>
+<div class="value"><%= merritt_time(obj.modified) %></div>
 
-  <div class="key">total size <span style="font-weight: normal">(all versions)</span>:</div>
-  <div class="value"><%=number_to_storage_size(@total_size)%></div>
+<div class="key">created:</div>
+<div class="value"><%= merritt_time(obj.versions[0][RDF::DC.created].to_s) %></div>
 
-  <div class="key">total versions:</div>
-  <div class="value"><%=versions.length%></div>
+<div class="key">total size <span style="font-weight: normal">(all versions)</span>:</div>
+<div class="value"><%= number_to_storage_size(obj.total_actual_size) %></div>
 
-  <div class="clear"></div>
+<div class="key">total versions:</div>
+<div class="value"><%= obj.versions.length %></div>
+
+<div class="clear"></div>
