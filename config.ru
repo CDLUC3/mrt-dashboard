@@ -4,7 +4,7 @@ require 'lib/rack/munge_headers'
 
 use Rack::ConditionalGet
 use Rack::ETag
-use Rack::Deflater
+#use Rack::Deflater
 
 use Rack::MungeHeaders,
   :patterns => {
