@@ -91,6 +91,24 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  def require_mrt_object
+    redirect_to(ObjectList.merge({:group => flexi_group_id})) and return false if params[:object].nil?
+    begin
+      @object = MrtObject.find_by_identifier(params[:object])
+    rescue Exception => ex
+      redirect_to(ObjectList.merge({:group => flexi_group_id})) and return false
+    end
+  end
+  
+  def require_mrt_version
+    redirect_to(:controller => :object,
+                :action => 'index', 
+                :group => flexi_group_id,
+                :object => params[:object]) and return false if params[:version].nil?
+    require_mrt_object() if @object.nil?
+    @version = @object.versions[params[:version].to_i - 1]
+  end
+
   def require_version
     redirect_to(:controller => :object, :action => 'index', :group => flexi_group_id, :object => params[:object]) and return false if params[:version].nil?
     #get version of specific object
