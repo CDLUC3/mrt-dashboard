@@ -1,8 +1,8 @@
 <% version = line_sidebar %>
-  <%= link_to "Version #{version[RDF::DC.identifier].to_s}",
-              :controller     => :version,
-              :action         => :index,
-              :group          => params[:group],
-              :object         => params[:object],
-              :version        => version[RDF::DC.identifier].to_s %>:
-  <%=merritt_time(version[RDF::DC.created].to_s)%><br/>
+<%= link_to "Version #{version.identifier}",
+            :controller     => :version,
+            :action         => :index,
+            :group          => params[:group],
+            :object         => params[:object],
+            :version        => version[RDF::DC.identifier].to_s %>:
+<%= merritt_time(version.created) %><br/>
