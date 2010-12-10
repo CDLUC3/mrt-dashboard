@@ -1,5 +1,5 @@
 <% content_for :title do %>
-  UC3 Merritt: Version -- <%= params[:object] %>, Version <%= params[:version] %>
+  UC3 Merritt: Version -- <%= @object.identifier %>, Version <%= @version.identifier %>
 <% end %>
 <div class="grid_11">
   <h2><%= params[:object] %> - Version <%=params[:version] %>: <%= merritt_time(@version[RDF::DC.created].to_s)%> </h2>
