@@ -1,17 +1,15 @@
 class ObjectController < ApplicationController
   before_filter :require_user, :except => [:jupload_add, :recent]
   before_filter :require_group, :except => [:jupload_add, :recent]
-  before_filter :require_object, :except => [:add, :upload, :upload_error, :dir_add, :jupload_add, :recent]
   before_filter :require_write, :only => [:add, :upload]
 
   def index
-    @stored_object = @object[Mrt::Object['hasStoredObject']].first
-    @versions = @stored_object[RDF::DC['hasVersion']].sort_by{|v| v[RDF::DC['identifier']]}
+    @object = MrtObject.find_by_identifier(params[:object])
+    @versions = @object.versions
     #files for current version
-    @files = @versions[@versions.length-1][Mrt::Version.hasFile]
-    @files.delete_if {|file| file[RDF::DC.identifier].to_s[0..10].eql?('system/mrt-')}
-    @files.sort! {|x,y| File.basename(x[RDF::DC.identifier].to_s.downcase) <=> File.basename(y[RDF::DC.identifier].to_s.downcase)}
-    @total_size = @stored_object[Mrt::Object.totalActualSize].to_s.to_i
+    @files = @object.files
+    @files.delete_if {|file| file[RDF::DC.identifier][0].value.match(/^system\/mrt-/) }
+    @files = @files.sort_by {|x| File.basename(x[RDF::DC.identifier].to_s.downcase) }
   end
 
   def download
@@ -30,7 +28,6 @@ class ObjectController < ApplicationController
   end
 
   def add
-
   end
 
   def upload
