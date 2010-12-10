@@ -22,9 +22,9 @@ class ObjectController < ApplicationController
     http = Mrt::HTTP.new(object_uri.scheme, object_uri.host, object_uri.port)
     tmp_file = http.get_to_tempfile("#{object_uri.path}?t=zip")
     send_file(tmp_file.path,
-              :filename => "#{esc(params[:object])}_object.zip",
+              :filename => "#{Pairtree.encode(params[:object])}_object.zip",
               :type => "application/zip",
-              :disposition => "download")
+              :disposition => "attachment")
   end
 
   def add

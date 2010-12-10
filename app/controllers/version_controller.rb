@@ -30,7 +30,7 @@ class VersionController < ApplicationController
     http = Mrt::HTTP.new(version_uri.scheme, version_uri.host, version_uri.port)
     tmp_file = http.get_to_tempfile("#{version_uri.path}?t=zip")
     send_file(tmp_file.path,
-              :filename => "#{esc(params[:object])}_version_#{esc(params[:version])}.zip",
+              :filename => "#{Pairtree.encode(params[:object])}_version_#{Pairtree.encode(params[:version])}.zip",
               :type => "application/zip",
               :disposition => "attachment")
   end
