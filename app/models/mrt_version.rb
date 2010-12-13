@@ -11,6 +11,10 @@ class MrtVersion < UriInfo
   def bytestream
     return self.first(Mrt::Base['bytestream'])
   end
+
+  def bytestream_uri
+    return self.bytestream.to_uri
+  end
   
   def total_actual_size
     return self.first(Mrt::Base['totalActualSize']).value.to_i
