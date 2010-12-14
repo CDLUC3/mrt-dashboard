@@ -174,4 +174,24 @@ class ApplicationController < ActionController::Base
       yield()
     end
   end
+
+  def fetch_to_tempfile(*args)
+    require 'open-uri'
+    open(*args) do |data|
+      if data.instance_of?(File) then
+        return data
+      else
+        tmp_file = Tempfile.new('mrt_http')
+        begin
+          buff = ""
+          while (!data.read(1024, buff).nil?) do 
+            tmp_file << buff
+          end
+          return tmp_file
+        ensure
+          tmp_file.close
+        end
+      end
+    end
+  end
 end
