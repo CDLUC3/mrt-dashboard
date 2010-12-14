@@ -2,6 +2,7 @@ class ObjectController < ApplicationController
   before_filter :require_user, :except => [:jupload_add, :recent]
   before_filter :require_group, :except => [:jupload_add, :recent]
   before_filter :require_write, :only => [:add, :upload]
+  before_filter :require_mrt_object, :only => [:download]
 
   def index
     @object = MrtObject.find_by_identifier(params[:object])
@@ -13,16 +14,9 @@ class ObjectController < ApplicationController
   end
 
   def download
-    q = Q.new("?obj rdf:type object:Object .
-               ?obj dc:identifier \"#{no_inject(params[:object])}\"^^<http://www.w3.org/2001/XMLSchema#string>",
-      :select => "?obj")
-    
-    object = store().select(q)[0]['obj'].to_uri
-    object_uri = object.first(Mrt::Base.bytestream).to_uri
-    http = Mrt::HTTP.new(object_uri.scheme, object_uri.host, object_uri.port)
-    tmp_file = http.get_to_tempfile("#{object_uri.path}?t=zip")
+    tmp_file = fetch_to_tempfile("#{@object.bytestream_uri}?t=zip")
     send_file(tmp_file.path,
-              :filename => "#{Pairtree.encode(params[:object])}_object.zip",
+              :filename => "#{Pairtree.encode(@object.identifier.to_s)}_object.zip",
               :type => "application/zip",
               :disposition => "attachment")
   end

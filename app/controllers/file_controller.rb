@@ -18,11 +18,13 @@ class FileController < ApplicationController
 
     file = UriInfo.new(store().select(q)[0]['file'])
     file_uri = file.first(Mrt::Base.bytestream).to_uri
-    http = Mrt::HTTP.new(file_uri.scheme, file_uri.host, file_uri.port)
-    tmp_file = http.get_to_tempfile(file_uri.path)
+    tmp_file = fetch_to_tempfile(file_uri)
+    puts tmp_file
+    filename = File.basename(file[RDF::DC.identifier].to_s)
+    tyoe = file[Mrt::File.mediaType].to_s
     send_file(tmp_file.path,
-              :filename => File.basename(file[RDF::DC.identifier].to_s),
-              :type => file[Mrt::File.mediaType].to_s,
+              :filename => filename,
+              :type => type,
               :disposition => 'inline')
   end
 end
