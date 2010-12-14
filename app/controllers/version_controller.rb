@@ -14,20 +14,9 @@ class VersionController < ApplicationController
   end
 
   def download
-    q = Q.new("?vers dc:identifier \"#{no_inject(params[:version])}\"^^<http://www.w3.org/2001/XMLSchema#string> .
-               ?vers rdf:type version:Version .
-               ?vers version:inObject ?obj .
-               ?obj rdf:type object:Object .
-               ?obj object:isStoredObjectFor ?meta .
-               ?obj dc:identifier \"#{no_inject(params[:object])}\"^^<http://www.w3.org/2001/XMLSchema#string>",
-      :select => "?vers")
-    
-    version = store().select(q)[0]['vers'].to_uri
-    version_uri = version.first(Mrt::Base.bytestream).to_uri
-    http = Mrt::HTTP.new(version_uri.scheme, version_uri.host, version_uri.port)
-    tmp_file = http.get_to_tempfile("#{version_uri.path}?t=zip")
+    tmp_file = fetch_to_tempfile("#{@version.bytestream_uri}?t=zip")
     send_file(tmp_file.path,
-              :filename => "#{Pairtree.encode(params[:object])}_version_#{Pairtree.encode(params[:version])}.zip",
+              :filename => "#{Pairtree.encode(@object.identifier.to_s)}_version_#{Pairtree.encode(@version.identifier.to_s)}.zip",
               :type => "application/zip",
               :disposition => "attachment")
   end
