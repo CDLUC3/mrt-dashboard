@@ -15,6 +15,8 @@ class ObjectController < ApplicationController
 
   def download
     tmp_file = fetch_to_tempfile("#{@object.bytestream_uri}?t=zip")
+    # rails is not setting Content-Length
+    response.headers["Content-Length"] = File.size(tmp_file.size).to_s
     send_file(tmp_file.path,
               :filename => "#{Pairtree.encode(@object.identifier.to_s)}_object.zip",
               :type => "application/zip",

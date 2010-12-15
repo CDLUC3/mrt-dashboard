@@ -1,6 +1,3 @@
-# hack to keep temp files around for a while
-$OLD_TMP_FILES = []
-
 class FileController < ApplicationController
   before_filter :require_user, :except=>[:display]
   before_filter :require_group
@@ -19,8 +16,8 @@ class FileController < ApplicationController
     file = UriInfo.new(store().select(q)[0]['file'])
     file_uri = file.first(Mrt::Base.bytestream).to_uri
     tmp_file = fetch_to_tempfile(file_uri)
-    $OLD_TMP_FILES.push(tmp_file)
-    $OLD_TMP_FILES.shift if $OLD_TMP_FILES.size > 10
+    # rails is not setting Content-Length
+    response.headers["Content-Length"] = File.size(tmp_file.size).to_s
     send_file(tmp_file.path,
               :filename => File.basename(file[RDF::DC.identifier].to_s),
               :type => file[Mrt::File.mediaType].to_s,
