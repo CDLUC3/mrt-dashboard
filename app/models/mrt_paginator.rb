@@ -1,3 +1,5 @@
+require 'will_paginate/finders/base'
+
 module MrtPaginator
   include WillPaginate::Finders::Base
 
