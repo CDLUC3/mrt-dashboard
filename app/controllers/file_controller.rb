@@ -1,5 +1,5 @@
-require 'ftools'
-require 'rdf'
+# hack to keep temp files around for a while
+$OLD_TMP_FILES = []
 
 class FileController < ApplicationController
   before_filter :require_user, :except=>[:display]
@@ -19,11 +19,11 @@ class FileController < ApplicationController
     file = UriInfo.new(store().select(q)[0]['file'])
     file_uri = file.first(Mrt::Base.bytestream).to_uri
     tmp_file = fetch_to_tempfile(file_uri)
-    filename = File.basename(file[RDF::DC.identifier].to_s)
-    type = file[Mrt::File.mediaType].to_s
+    $OLD_TMP_FILES.push(tmp_file)
+    $OLD_TMP_FILES.shift if $OLD_TMP_FILES.size > 10
     send_file(tmp_file.path,
-              :filename => filename,
-              :type => type,
-              :disposition => 'inline')
+              :filename => File.basename(file[RDF::DC.identifier].to_s),
+              :type => file[Mrt::File.mediaType].to_s,
+              :disposition => "inline")
   end
 end
