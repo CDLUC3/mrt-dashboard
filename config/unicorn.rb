@@ -11,8 +11,8 @@ preload_app true
 
 pid File.join(Dir.pwd, "log", "unicorn.pid")
 
-# Restart any workers that haven't responded in 30 seconds
-timeout 30
+# timeout is long because unicorn is serving up files
+timeout 120
 
 listen "#{Socket.gethostname}:26181"
 
