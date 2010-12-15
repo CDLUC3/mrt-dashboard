@@ -15,6 +15,8 @@ class VersionController < ApplicationController
 
   def download
     tmp_file = fetch_to_tempfile("#{@version.bytestream_uri}?t=zip")
+    # rails is not setting Content-Length
+    response.headers["Content-Length"] = File.size(tmp_file.size).to_s
     send_file(tmp_file.path,
               :filename => "#{Pairtree.encode(@object.identifier.to_s)}_version_#{Pairtree.encode(@version.identifier.to_s)}.zip",
               :type => "application/zip",
