@@ -178,19 +178,15 @@ class ApplicationController < ActionController::Base
   def fetch_to_tempfile(*args)
     require 'open-uri'
     open(*args) do |data|
-      if data.instance_of?(Tempfile) then
-        return data
-      else
-        tmp_file = Tempfile.new('mrt_http')
-        begin
-          buff = ""
-          while (!data.read(1024, buff).nil?) do 
-            tmp_file << buff
-          end
-          return tmp_file
-        ensure
-          tmp_file.close
+      tmp_file = Tempfile.new('mrt_http')
+      begin
+        buff = ""
+        while (!data.read(1024, buff).nil?) do 
+          tmp_file << buff
         end
+        return tmp_file
+      ensure
+        tmp_file.close
       end
     end
   end
