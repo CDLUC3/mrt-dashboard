@@ -17,7 +17,7 @@ class FileController < ApplicationController
     file_uri = file.first(Mrt::Base.bytestream).to_uri
     tmp_file = fetch_to_tempfile(file_uri)
     # rails is not setting Content-Length
-    response.headers["Content-Length"] = File.size(tmp_file.size).to_s
+    response.headers["Content-Length"] = File.size(tmp_file.path).to_s
     send_file(tmp_file.path,
               :filename => File.basename(file[RDF::DC.identifier].to_s),
               :type => file[Mrt::File.mediaType].to_s,
