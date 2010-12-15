@@ -19,9 +19,8 @@ class FileController < ApplicationController
     file = UriInfo.new(store().select(q)[0]['file'])
     file_uri = file.first(Mrt::Base.bytestream).to_uri
     tmp_file = fetch_to_tempfile(file_uri)
-    puts tmp_file
     filename = File.basename(file[RDF::DC.identifier].to_s)
-    tyoe = file[Mrt::File.mediaType].to_s
+    type = file[Mrt::File.mediaType].to_s
     send_file(tmp_file.path,
               :filename => filename,
               :type => type,
