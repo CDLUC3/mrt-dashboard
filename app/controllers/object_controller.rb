@@ -33,7 +33,7 @@ class ObjectController < ApplicationController
     end
     begin
       hsh = {
-          'file'              => params[:file],
+          'file'              => params[:file].tempfile,
           'type'              => params[:object_type],
           'submitter'         => "#{current_user.login}/#{current_user.displayname}",
           'filename'          => params[:file].original_filename,
