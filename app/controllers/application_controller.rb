@@ -177,17 +177,21 @@ class ApplicationController < ActionController::Base
 
   def fetch_to_tempfile(*args)
     require 'open-uri'
+    require 'ftools'
     open(*args) do |data|
       tmp_file = Tempfile.new('mrt_http')
-      begin
-        buff = ""
-        while (!data.read(1024, buff).nil?) do 
-          tmp_file << buff
+      if data.instance_of? File then
+        File.copy(data.path, tmp_file.path)
+      else
+        begin
+          while (!(buff = data.read(4096)).nil?)do 
+            tmp_file << buff
+          end
+        ensure
+          tmp_file.close
         end
-        return tmp_file
-      ensure
-        tmp_file.close
       end
+      return tmp_file
     end
   end
 end
