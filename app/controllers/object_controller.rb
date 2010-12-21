@@ -6,7 +6,7 @@ class ObjectController < ApplicationController
 
   def index
     @object = MrtObject.find_by_identifier(params[:object])
-    @versions = @object.versions
+    @versions = @object.versions.sort{ |x,y| x[RDF::DC.identifier].to_s.to_i <=> y[RDF::DC.identifier].to_s.to_i }
     #files for current version
     @files = @object.files
     @files.delete_if {|file| file[RDF::DC.identifier][0].value.match(/^system\/mrt-/) }
