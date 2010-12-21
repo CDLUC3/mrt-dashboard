@@ -18,7 +18,7 @@ class ObjectController < ApplicationController
     # rails is not setting Content-Length
     response.headers["Content-Length"] = File.size(tmp_file.path).to_s
     send_file(tmp_file.path,
-              :filename => "#{Pairtree.encode(@object.identifier.to_s)}_object.zip",
+              :filename => "#{Orchard::Pairtree.encode(@object.identifier.to_s)}_object.zip",
               :type => "application/zip",
               :disposition => "attachment")
   end
