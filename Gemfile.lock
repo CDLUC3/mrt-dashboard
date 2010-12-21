@@ -57,6 +57,7 @@ GEM
       treetop (~> 1.4.8)
     mime-types (1.16)
     nokogiri (1.4.4)
+    orchard (0.1)
     polyglot (0.3.1)
     rack (1.2.1)
     rack-cache (0.5.3)
@@ -108,6 +109,7 @@ DEPENDENCIES
   json
   net-ldap (= 0.1.2)!
   nokogiri
+  orchard
   rack-cache
   rails (= 3.0.3)
   rdf
