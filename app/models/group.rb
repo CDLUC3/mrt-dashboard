@@ -26,7 +26,14 @@ class Group
   end
 
   def self.find(id)
-    grp = Group::LDAP.fetch(id)
+    grp = nil
+    #fetch by groupid, but otherwise, fall back to arkid
+    begin
+      grp = Group::LDAP.fetch(id)
+    rescue LdapMixin::LdapException => ex
+      grp = Group::LDAP.fetch_by_ark_id(id)
+    end
+    
     g = self.new
     g.id = simplify_single_value(grp, 'ou')
     g.submission_profile = simplify_single_value(grp, 'submissionprofile')
