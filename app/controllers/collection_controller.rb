@@ -6,7 +6,7 @@ class CollectionController < ApplicationController
 
   def object_count
     @object_count = my_cache("#{@group.id}_object_count") do
-      MrtObject.count(:collection=>@group.id)
+      @group.object_count
     end
     render :partial=>"object_count"
   end
