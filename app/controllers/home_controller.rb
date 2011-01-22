@@ -3,7 +3,7 @@ class HomeController < ApplicationController
   before_filter :group_optional
 
   def choose_collection
-    @groups = current_user.groups.sort_by{|x, y| x.description.downcase }
+    @groups = current_user.groups.sort_by{|group| group.description.downcase }
     if @groups.length == 1 then
       redirect_to(:controller => 'collection', 
                   :action => 'index', 
