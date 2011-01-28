@@ -67,6 +67,15 @@ module LdapMixin
     results[0]
   end
 
+  def fetch_by_ark_id(ark_id)
+    results = @admin_ldap.search(:base => @base,
+                :filter => Net::LDAP::Filter.eq('arkid', ark_id),
+                                :scope => Net::LDAP::SearchScope_SingleLevel)
+    raise LdapException.new('id does not exist') if results.length < 1
+    raise LdapException.new('ambigulous results, duplicate ids') if results.length > 1
+    results[0]
+  end
+
   def fetch_attribute(id, attribute)
     r = fetch(id)
     raise LdapException.new('attribute does not exist for that id') if r[attribute].nil? or r[attribute].length < 1
