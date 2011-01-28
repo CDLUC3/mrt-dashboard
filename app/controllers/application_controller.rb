@@ -61,8 +61,8 @@ class ApplicationController < ActionController::Base
     raise ErrorUnavailable if flexi_group_id.nil?
     begin
       @group = Group.find(flexi_group_id)
-      session[:group] = flexi_group_id
-      params[:group] = flexi_group_id
+      session[:group] = @group.id
+      params[:group] = @group.id
     rescue Exception => ex
       raise ErrorUnavailable
     end
