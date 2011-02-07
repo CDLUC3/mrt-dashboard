@@ -89,4 +89,11 @@ module ApplicationHelper
 eos
     str.html_safe
   end
+
+  # outputs a formatted string for the current environment, except production
+  def show_environment
+    if !Rails.env.include?('production') then
+      Rails.env
+    end
+  end
 end
