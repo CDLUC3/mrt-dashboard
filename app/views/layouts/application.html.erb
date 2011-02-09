@@ -3,7 +3,7 @@
 %>
 <html>
   <head>
-    <title><%= yield :title %></title>
+    <title><%= yield :title %><%=(show_environment ? ": #{show_environment}" : '')%></title>
     <%= stylesheet_link_tag 'reset', 'text', '960', 'main_styles', 'menu',
                             :cache=>"most" %>
     <%= stylesheet_link_tag 'print', :media =>"print" %>
