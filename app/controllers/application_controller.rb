@@ -31,8 +31,22 @@ class ApplicationController < ActionController::Base
   end
   
   def current_user
-    return @current_user if defined?(@current_user)
-    @current_user = session[:uid] && User.find_by_id(session[:uid])
+    if !defined?(@current_user) then
+      if !session[:uid].nil? then
+        # normal form login
+        @current_user = User.find_by_id(session[:uid])
+      else
+        # http basic auth
+        auth = request.headers['HTTP_AUTHORIZATION']
+        if (!auth.blank? && auth.match(/Basic /)) then
+          (login, password) = Base64.decode64(auth.gsub(/Basic /,'')).split(/:/)
+          if User.valid_ldap_credentials?(login, password)
+            @current_user = User.find_by_id(login)
+          end
+        end
+      end
+    end
+    return @current_user
   end
   
   def require_user
