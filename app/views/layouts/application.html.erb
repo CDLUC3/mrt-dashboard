@@ -13,6 +13,7 @@
     <%= javascript_include_tag :all, :cache=>'all' %>
     
     <%= csrf_meta_tag %>
+    <%= yield :extra_head %>
   </head>
   <body>
     <div class="container_16">
