@@ -2,26 +2,26 @@
 
 xml.tag!('feed', :xmlns => "http://www.w3.org/2005/Atom") do 
   xml.tag!("link", 
-           "href" => "/object/recent.atom?collection=#{@collection}&page=#{@objects.current_page}",
+           "href" => "/object/recent.atom?collection=#{@collection_ark}&page=#{@objects.current_page}",
            "rel"  => "self", 
            "type" => "application/atom+xml")
   xml.tag!("link", 
-           "href" => "/object/recent.atom?collection=#{@collection}&page=1",
+           "href" => "/object/recent.atom?collection=#{@collection_ark}&page=1",
            "rel"  => "first", 
            "type" => "application/atom+xml")
   xml.tag!("link", 
-           "href" => "/object/recent.atom?collection=#{@collection}&page=#{@objects.total_pages}",
+           "href" => "/object/recent.atom?collection=#{@collection_ark}&page=#{@objects.total_pages}",
            "rel"  => "last",
            "type" => "application/atom+xml")
   if @objects.next_page
     xml.tag!("link", 
-           "href" => "/object/recent.atom?collection=#{@collection}&page=#{@objects.next_page}",
+           "href" => "/object/recent.atom?collection=#{@collection_ark}&page=#{@objects.next_page}",
              "rel"  => "next", 
              "type" => "application/atom+xml")
   end
   if @objects.previous_page
     xml.tag!("link", 
-             "href" => "/object/recent.atom?collection=#{@collection}&page=#{@objects.previous_page}",
+             "href" => "/object/recent.atom?collection=#{@collection_ark}&page=#{@objects.previous_page}",
              "rel"  => "previous", 
              "type" => "application/atom+xml")
   end
@@ -46,7 +46,7 @@ xml.tag!('feed', :xmlns => "http://www.w3.org/2005/Atom") do
                "type" => "application/zip",
                "href" => url_for(:controller => 'object', 
                                  :action     => 'download',
-                                 :group      => @collection,
+                                 :group      => @collection_ark,
                                  :object     => clean_id(ark)))
       xml.tag!("title", obj.what)
       xml.tag!("author") do
