@@ -11,6 +11,10 @@ class ApplicationController < ActionController::Base
   ObjectList = {:controller => 'collection', :action => 'index'}
 
 
+  def urlencode(item)
+    URI.escape(item, Regexp.new("[^#{URI::PATTERN::UNRESERVED}]"))
+  end
+
 
   def render_unavailable
     render :file => "#{Rails.root}/public/unavailable.html", :status => 500

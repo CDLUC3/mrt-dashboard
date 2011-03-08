@@ -45,18 +45,38 @@ class ObjectController < ApplicationController
           'responseForm'      => 'xml'
         }.reject{|key, value| value.blank? }
 
-      response = RestClient.post(INGEST_SERVICE, hsh, { :multipart => true })
-      @doc = Nokogiri::XML(response) do |config|
+      #this is for debugging with equivalent request with curl
+=begin
+      arr_out = []
+      hsh.each_pair do |k,v|
+        if !k.eql?('file') then
+          arr_out.push("-F \"#{k}=#{v}\"")
+        end
+      end
+      puts "\ncurl -F \"file=@#{hsh['file'].path}\" #{arr_out.join(" ")} #{INGEST_SERVICE}\n\n"
+=end
+      #end for debugging
+
+      @response = RestClient.post(INGEST_SERVICE, hsh, { :multipart => true })
+      
+      @doc = Nokogiri::XML(@response) do |config|
         config.strict.noent.noblanks
       end
 
       @batch_id = @doc.xpath("//bat:batchState/bat:batchID")[0].child.text
       @obj_count = @doc.xpath("//bat:batchState/bat:jobStates").length
     rescue Exception => ex
-      @doc = Nokogiri::XML(ex.http_body) do |config|
-        config.strict.noent.noblanks
+      begin
+        # see if we can parse the error from ingest, if not then unknown error
+        @doc = Nokogiri::XML(ex.response) do |config|
+          config.strict.noent.noblanks
+        end
+        @description = "ingest: #{@doc.xpath("//exc:statusDescription")[0].child.text}"
+        @error = "ingest: #{@doc.xpath("//exc:error")[0].child.text}"
+      rescue Exception => ex
+        @description = "ui: #{ex.message}"
+        @error = ""
       end
-      @description = @doc.xpath("//exc:statusDescription")[0].child.text
       render :action => "upload_error"
     end
   end
