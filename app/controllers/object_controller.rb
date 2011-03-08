@@ -82,8 +82,8 @@ class ObjectController < ApplicationController
   end
 
   def recent
-    @collection = params[:collection]
-    @objects = MrtObject.paginate(:collection => @collection,
+    @collection_ark = params[:collection]
+    @objects = MrtObject.paginate(:collection => RDF_ARK_URI + @collection_ark,
                                   :page       => (params[:page] || 1),
                                   :per_page   => 20)
     respond_to do |format|
