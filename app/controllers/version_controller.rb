@@ -11,6 +11,7 @@ class VersionController < ApplicationController
     (@system_files, @files) = all_files.partition do |file|
       file[RDF::DC.identifier].to_s.match(/^system\//)
     end
+    @versions = @object.versions.sort{ |x,y| x[RDF::DC.identifier].to_s.to_i <=> y[RDF::DC.identifier].to_s.to_i }
   end
 
   def download
