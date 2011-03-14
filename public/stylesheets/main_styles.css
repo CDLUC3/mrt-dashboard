@@ -238,6 +238,7 @@ div.key {
   float:left;
   width: 200px;
   text-align: right;
+  word-wrap: break-word;
 }
 
 div.value {
