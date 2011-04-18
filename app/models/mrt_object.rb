@@ -113,7 +113,8 @@ class MrtObject < UriInfo
   end
 
   def files
-    return @files ||= self[Mrt::Version['hasFile']].map{|u| MrtFile.new(u)}.sort_by{|f| f.identifier}
+    return @files ||= MrtFile.bulk_loader(self[Mrt::Version['hasFile']]).
+      sort_by{|f| f.identifier}
   end
 
   def system_files 
