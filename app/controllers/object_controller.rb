@@ -8,9 +8,9 @@ class ObjectController < ApplicationController
     @object = MrtObject.find_by_identifier(params[:object])
     @versions = @object.versions
     #files for current version
-    @files = @object.files
-    @files.delete_if {|file| file[RDF::DC.identifier][0].value.match(/^system\/mrt-/) }
-    @files = @files.sort_by {|x| File.basename(x[RDF::DC.identifier].to_s.downcase) }
+    @files = @object.files.
+      reject {|file| file[RDF::DC.identifier][0].value.match(/^system\/mrt-/) }.
+      sort_by {|x| File.basename(x[RDF::DC.identifier].to_s.downcase) }
   end
 
   def download
