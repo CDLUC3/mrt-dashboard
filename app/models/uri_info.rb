@@ -14,24 +14,30 @@ class UriInfo < RDF::URI
     end
   end
 
-  def self.bulk_loader(uris)
-    indexes = (0..(uris.size-1)).to_a
-    q_str = ""
-    indexes.each do |i|
-      graph_uri = URI.decode(uris[i].to_uri.to_s)
-      q_str += "{ OPTIONAL { <#{uris[i]}> ?p#{i} ?o#{i} . } }\n"
-    end
-    results = UriInfo.store.select(Mrt::Sparql::Q.new(q_str))
+  BULK_LOADER_MAX = 50
 
-    retval = uris.map {|uri| self.new(uri)}
-    results.each do |row|
+  def self.bulk_loader(uris)
+    if (uris.size > BULK_LOADER_MAX) then
+      return self.bulk_loader(uris[0..(BULK_LOADER_MAX-1)]) + self.bulk_loader(uris[BULK_LOADER_MAX..-1])
+    else
+      indexes = (0..(uris.size-1)).to_a
+      q_str = ""
       indexes.each do |i|
-        if !row["p#{i}"].nil? then
-          retval[i].cache_vals(row["p#{i}"], row["o#{i}"])
+        graph_uri = URI.decode(uris[i].to_uri.to_s)
+        q_str += "{ OPTIONAL { <#{uris[i]}> ?p#{i} ?o#{i} . } }\n"
+      end
+      results = UriInfo.store.select(Mrt::Sparql::Q.new(q_str))
+      
+      retval = uris.map {|uri| self.new(uri)}
+      results.each do |row|
+        indexes.each do |i|
+          if !row["p#{i}"].nil? then
+            retval[i].cache_vals(row["p#{i}"], row["o#{i}"])
+          end
         end
       end
+      return retval
     end
-    return retval
   end
 
   def self.query_bulk_loader(query)
