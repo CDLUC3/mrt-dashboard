@@ -69,6 +69,10 @@ class MrtObject < UriInfo
     return DateTime.parse(self.first(RDF::DC['modified']).value)
   end
 
+  def created
+    return DateTime.parse(self.first(RDF::DC['created']).value)
+  end
+
   def size
     return self.first(Mrt::Base['size']).value.to_i
   end
