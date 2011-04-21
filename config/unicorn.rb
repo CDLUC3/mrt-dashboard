@@ -11,8 +11,9 @@ preload_app true
 
 pid File.join(Dir.pwd, "log", "unicorn.pid")
 
-# timeout is long because unicorn is serving up files
-timeout 120
+# timeout is long because we upload files
+# switch to nginx to fix
+timeout 3000
 
 listen "#{Socket.gethostname}:26181"
 
