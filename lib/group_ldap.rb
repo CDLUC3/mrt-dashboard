@@ -19,11 +19,7 @@ module GroupLdap
       mem_grps = @admin_ldap.search(:base => "ou=#{grp_id},#{@base}",
                                 :filter => Net::LDAP::Filter.eq('objectclass', 'groupOfUniqueNames'),
                                 :scope => Net::LDAP::SearchScope_WholeSubtree)
-      all = []
-      mem_grps.each{|grp| all = all + grp[:uniquemember]}
-      all.uniq!
-      all.compact!
-      all.map{|i| i[/^uid=[^,]+/][4..-1] }
+      mem_grps.map{|g| g[:uniquemember]}.flatten.uniq.compact.map{|i| i[/^uid=[^,]+/][4..-1] }
     end
 
     def add(groupid, description, permissions = ['read', 'write'], extra_classes = ['merrittClass'])
