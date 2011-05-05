@@ -4,5 +4,5 @@
             :action         => :index,
             :group          => params[:group],
             :object         => params[:object],
-            :version        => version[RDF::DC.identifier].to_s %>:
+            :version        => version[RDF::DC.identifier][0].to_s %>:
 <%= merritt_time(version.created) %><br/>

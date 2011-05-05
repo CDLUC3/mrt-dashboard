@@ -35,8 +35,8 @@ class User
     array_to_value(@user[meth.to_s])
   end
  
-  def groups
-    grp_ids = Group::LDAP.find_groups_for_user(self.login, User::LDAP)
+  def groups(permission=nil)
+    grp_ids = Group::LDAP.find_groups_for_user(self.login, User::LDAP, permission)
     grp_ids.map{|id| Group.find(id)}
   end
 
