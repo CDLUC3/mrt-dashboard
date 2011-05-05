@@ -1,9 +1,30 @@
 class ObjectController < ApplicationController
-  before_filter :require_user, :except => [:jupload_add, :recent]
-  before_filter :require_group, :except => [:jupload_add, :recent]
-  before_filter :require_write, :only => [:add, :upload]
+  before_filter :require_user,       :except => [:jupload_add, :recent]
+  before_filter :require_group,      :except => [:jupload_add, :recent, :ingest]
+  before_filter :require_write,      :only => [:add, :upload]
   before_filter :require_mrt_object, :only => [:download]
+  protect_from_forgery :except => [:ingest]
 
+  def ingest
+    if !current_user.groups.any? {|g| g.submission_profile == params[:profile]} then
+      render :status=>401, :text=>""
+    else
+      ingest_args = {
+        'file'            => params[:file].tempfile,
+        'type'            => params[:type],
+        'submitter'       => "#{current_user.login}/#{current_user.displayname}",
+        'filename'        => params[:file].original_filename,
+        'profile'         => params[:profile],
+        'creator'         => params[:creator],
+        'title'           => params[:title],
+        'date'            => params[:date],
+        'localIdentifier' => params[:localIdentifier],
+        'responseForm'    => params[:responseForm] }
+      response = RestClient.post(INGEST_SERVICE, ingest_args, { :multipart => true })
+      render :status=>response.code, :content_type=>response.headers[:content_type], :text=>response.body
+    end
+  end
+  
   def index
     @object = MrtObject.find_by_identifier(params[:object])
     @versions = @object.versions
@@ -58,7 +79,7 @@ class ObjectController < ApplicationController
       #end for debugging
 
       @response = RestClient.post(INGEST_SERVICE, hsh, { :multipart => true })
-      
+
       @doc = Nokogiri::XML(@response) do |config|
         config.strict.noent.noblanks
       end
