@@ -6,20 +6,26 @@ class ObjectController < ApplicationController
   protect_from_forgery :except => [:ingest]
 
   def ingest
-    if !current_user.groups.any? {|g| g.submission_profile == params[:profile]} then
+    if !current_user.groups('write').any? {|g| g.submission_profile == params[:profile]} then
       render :status=>401, :text=>""
     else
       ingest_args = {
-        'file'            => params[:file].tempfile,
-        'type'            => params[:type],
-        'submitter'       => "#{current_user.login}/#{current_user.displayname}",
-        'filename'        => params[:file].original_filename,
-        'profile'         => params[:profile],
-        'creator'         => params[:creator],
-        'title'           => params[:title],
-        'date'            => params[:date],
-        'localIdentifier' => params[:localIdentifier],
-        'responseForm'    => params[:responseForm] }
+        'creator'           => params[:creator],
+        'date'              => params[:date],
+        'digestType'        => params[:digestType],
+        'digestValue'       => params[:digestValue],
+        'file'              => params[:file].tempfile,
+        'filename'          => (params[:filename] || params[:file].original_filename),
+        'localIdentifier'   => params[:localIdentifier],
+        'primaryIdentifier' => params[:primaryIdentifier],
+        'profile'           => params[:profile],
+        'note'              => params[:note],
+        'responseForm'      => params[:responseForm],
+        'submitter'         => "#{current_user.login}/#{current_user.displayname}",
+        'title'             => params[:title],
+        'type'              => params[:type]
+      }.reject{|k, v| v.blank? }
+
       response = RestClient.post(INGEST_SERVICE, ingest_args, { :multipart => true })
       render :status=>response.code, :content_type=>response.headers[:content_type], :text=>response.body
     end
