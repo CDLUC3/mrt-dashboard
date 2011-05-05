@@ -19,11 +19,7 @@ module GroupLdap
       mem_grps = @admin_ldap.search(:base => "ou=#{grp_id},#{@base}",
                                 :filter => Net::LDAP::Filter.eq('objectclass', 'groupOfUniqueNames'),
                                 :scope => Net::LDAP::SearchScope_WholeSubtree)
-      all = []
-      mem_grps.each{|grp| all = all + grp[:uniquemember]}
-      all.uniq!
-      all.compact!
-      all.map{|i| i[/^uid=[^,]+/][4..-1] }
+      mem_grps.map{|g| g[:uniquemember]}.flatten.uniq.compact.map{|i| i[/^uid=[^,]+/][4..-1] }
     end
 
     def add(groupid, description, permissions = ['read', 'write'], extra_classes = ['merrittClass'])
@@ -75,11 +71,16 @@ module GroupLdap
       end
       perms
     end
-
-    def find_groups_for_user(userid, user_object)
+    
+    def find_groups_for_user(userid, user_object, permission=nil)
       #these are the permission subgroups so they need to be parsed back up a level
-      grps = @admin_ldap.search(:base => @base, :filter =>
-        Net::LDAP::Filter.eq("uniquemember", user_object.ns_dn(userid)))
+      filter = if permission.nil? then
+                 Net::LDAP::Filter.eq("uniquemember", user_object.ns_dn(userid))
+               else
+                 Net::LDAP::Filter.eq("uniquemember", user_object.ns_dn(userid)) &
+                   Net::LDAP::Filter.eq("cn", permission)
+               end
+      grps = @admin_ldap.search(:base => @base, :filter => filter)
       correct_len = @base.split(',').length + 2
       grps.map! do |grp|
         g = grp[:dn][0].split(',')

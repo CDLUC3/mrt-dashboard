@@ -1,16 +1,43 @@
 class ObjectController < ApplicationController
-  before_filter :require_user, :except => [:jupload_add, :recent]
-  before_filter :require_group, :except => [:jupload_add, :recent]
-  before_filter :require_write, :only => [:add, :upload]
+  before_filter :require_user,       :except => [:jupload_add, :recent]
+  before_filter :require_group,      :except => [:jupload_add, :recent, :ingest]
+  before_filter :require_write,      :only => [:add, :upload]
   before_filter :require_mrt_object, :only => [:download]
+  protect_from_forgery :except => [:ingest]
 
+  def ingest
+    if !current_user.groups('write').any? {|g| g.submission_profile == params[:profile]} then
+      render :status=>401, :text=>""
+    else
+      ingest_args = {
+        'creator'           => params[:creator],
+        'date'              => params[:date],
+        'digestType'        => params[:digestType],
+        'digestValue'       => params[:digestValue],
+        'file'              => params[:file].tempfile,
+        'filename'          => (params[:filename] || params[:file].original_filename),
+        'localIdentifier'   => params[:localIdentifier],
+        'primaryIdentifier' => params[:primaryIdentifier],
+        'profile'           => params[:profile],
+        'note'              => params[:note],
+        'responseForm'      => params[:responseForm],
+        'submitter'         => "#{current_user.login}/#{current_user.displayname}",
+        'title'             => params[:title],
+        'type'              => params[:type]
+      }.reject{|k, v| v.blank? }
+
+      response = RestClient.post(INGEST_SERVICE, ingest_args, { :multipart => true })
+      render :status=>response.code, :content_type=>response.headers[:content_type], :text=>response.body
+    end
+  end
+  
   def index
     @object = MrtObject.find_by_identifier(params[:object])
-    @versions = @object.versions.sort{ |x,y| x[RDF::DC.identifier].to_s.to_i <=> y[RDF::DC.identifier].to_s.to_i }
+    @versions = @object.versions
     #files for current version
-    @files = @object.files
-    @files.delete_if {|file| file[RDF::DC.identifier][0].value.match(/^system\/mrt-/) }
-    @files = @files.sort_by {|x| File.basename(x[RDF::DC.identifier].to_s.downcase) }
+    @files = @object.files.
+      reject {|file| file[RDF::DC.identifier][0].value.match(/^system\/mrt-/) }.
+      sort_by {|x| File.basename(x[RDF::DC.identifier].to_s.downcase) }
   end
 
   def download
@@ -45,18 +72,38 @@ class ObjectController < ApplicationController
           'responseForm'      => 'xml'
         }.reject{|key, value| value.blank? }
 
-      response = RestClient.post(INGEST_SERVICE, hsh, { :multipart => true })
-      @doc = Nokogiri::XML(response) do |config|
+      #this is for debugging with equivalent request with curl
+=begin
+      arr_out = []
+      hsh.each_pair do |k,v|
+        if !k.eql?('file') then
+          arr_out.push("-F \"#{k}=#{v}\"")
+        end
+      end
+      puts "\ncurl -F \"file=@#{hsh['file'].path}\" #{arr_out.join(" ")} #{INGEST_SERVICE}\n\n"
+=end
+      #end for debugging
+
+      @response = RestClient.post(INGEST_SERVICE, hsh, { :multipart => true })
+
+      @doc = Nokogiri::XML(@response) do |config|
         config.strict.noent.noblanks
       end
 
       @batch_id = @doc.xpath("//bat:batchState/bat:batchID")[0].child.text
       @obj_count = @doc.xpath("//bat:batchState/bat:jobStates").length
     rescue Exception => ex
-      @doc = Nokogiri::XML(ex.http_body) do |config|
-        config.strict.noent.noblanks
+      begin
+        # see if we can parse the error from ingest, if not then unknown error
+        @doc = Nokogiri::XML(ex.response) do |config|
+          config.strict.noent.noblanks
+        end
+        @description = "ingest: #{@doc.xpath("//exc:statusDescription")[0].child.text}"
+        @error = "ingest: #{@doc.xpath("//exc:error")[0].child.text}"
+      rescue Exception => ex
+        @description = "ui: #{ex.message}"
+        @error = ""
       end
-      @description = @doc.xpath("//exc:statusDescription")[0].child.text
       render :action => "upload_error"
     end
   end

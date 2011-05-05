@@ -5,12 +5,13 @@ class VersionController < ApplicationController
 
   def index
     #files for current version
-    all_files = @version[Mrt::Version.hasFile].sort_by do |f| 
+    all_files = @version.files.sort_by do |f| 
       f[RDF::DC.identifier].to_s.downcase
     end
     (@system_files, @files) = all_files.partition do |file|
       file[RDF::DC.identifier].to_s.match(/^system\//)
     end
+    @versions = @object.versions
   end
 
   def download

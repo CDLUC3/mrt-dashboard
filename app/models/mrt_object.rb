@@ -69,6 +69,10 @@ class MrtObject < UriInfo
     return DateTime.parse(self.first(RDF::DC['modified']).value)
   end
 
+  def created
+    return DateTime.parse(self.first(RDF::DC['created']).value)
+  end
+
   def size
     return self.first(Mrt::Base['size']).value.to_i
   end
@@ -84,7 +88,7 @@ class MrtObject < UriInfo
   def versions
     # this works with current storage service and saves a trip to
     # SPARQL
-    return @versions ||= self[RDF::DC["hasVersion"]].map{|uri| MrtVersion.new(uri)}.sort_by{|v| v.identifier}
+    return @versions ||= self[RDF::DC["hasVersion"]].map{|uri| MrtVersion.new(uri)}.sort_by{ |v| v[RDF::DC.identifier].to_s.to_i }
     #return @versions ||= self.first(Mrt::Object['versionSeq']).to_list.map{|v| MrtVersion.new(v)}
   end
 
@@ -113,7 +117,8 @@ class MrtObject < UriInfo
   end
 
   def files
-    return @files ||= self[Mrt::Version['hasFile']].map{|u| MrtFile.new(u)}.sort_by{|f| f.identifier}
+    return @files ||= MrtFile.bulk_loader(self[Mrt::Version['hasFile']]).
+      sort_by{|f| f.identifier}
   end
 
   def system_files 
