@@ -23,6 +23,12 @@
     <div class="right_field">
       <%=file_field_tag("file")%>
     </div>
+
+    <div class="left_label">
+    </div>
+    <div class="right_field">
+      <%=check_box_tag("update_object", 1, false, {:onclick => "toggle_update();"})%> <label for="update_object">Update this object instead of adding it</label>
+    </div>
   <br/><br/>
 
   <div class="left_label">
@@ -59,7 +65,7 @@
     Batch:
   </div>
   <div class="option_container">
-    <div class="short_option">
+    <div class="short_option" id="batchy_files">
       <%= radio_button_tag('object_type', 'single-file-batch-manifest', nil, {:onclick => 'disable_meta();'}) %> of files
     </div>
     <div class="short_option_description">
@@ -67,7 +73,7 @@
     </div>
 
     <div class="clear" style="width:100%;"></div>
-    <div class="short_option">
+    <div class="short_option" id="batchy_containers">
       <%= radio_button_tag('object_type', 'container-batch-manifest', nil, {:onclick => 'disable_meta();'}) %> of containers
     </div>
     <div class="short_option_description">
@@ -75,7 +81,7 @@
     </div>
 
     <div class="clear" style="width:100%;"></div>
-    <div class="short_option">
+    <div class="short_option" id="batchy_manifests">
       <%= radio_button_tag('object_type', 'batch-manifest', nil, {:onclick => 'disable_meta();'}) %> of manifests
     </div>
     <div class="short_option_description">
@@ -116,6 +122,14 @@
   </div>
   <div class="short_text_description">
     <%= help_tip('An existing identifier you use to track the object.') %>
+  </div>
+
+  <div class="left_label">Primary ID:</div>
+  <div class="right_field">
+    <%= text_field_tag('primary_id', nil, :size => 30, :disabled => true)  %>
+  </div>
+  <div class="short_text_description">
+    <%= help_tip('Most commonly used for updates, this is the previously assigned primary identifier.') %>
   </div>
 
   <!--
@@ -160,6 +174,26 @@
     document.getElementById('author').disabled = false;
     document.getElementById('date').disabled = false;
     document.getElementById('local_id').disabled = false;
+  }
+
+  function toggle_update(){
+    if(document.getElementById('update_object').checked == true){
+      document.getElementById('primary_id').disabled = false;
+      document.getElementById('object_type_single-file-batch-manifest').disabled = true;
+      document.getElementById('object_type_container-batch-manifest').disabled = true;
+      document.getElementById('object_type_batch-manifest').disabled = true;
+      document.getElementById('batchy_files').style.color = '#999999';
+      document.getElementById('batchy_containers').style.color = '#999999';
+      document.getElementById('batchy_manifests').style.color = '#999999';
+    }else{
+      document.getElementById('primary_id').disabled = true;
+      document.getElementById('object_type_single-file-batch-manifest').disabled = false;
+      document.getElementById('object_type_container-batch-manifest').disabled = false;
+      document.getElementById('object_type_batch-manifest').disabled = false;
+      document.getElementById('batchy_files').style.color = '#000000';
+      document.getElementById('batchy_containers').style.color = '#000000';
+      document.getElementById('batchy_manifests').style.color = '#000000';
+    }
   }
 </script>
 
