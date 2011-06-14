@@ -67,6 +67,7 @@ class ObjectController < ApplicationController
           'profile'           => @group.submission_profile,
           'creator'           => params[:author],
           'title'             => params[:title],
+          'primaryIdentifier' => params[:primary_id],
           'date'              => params[:date],
           'localIdentifier'   => params[:local_id], # local identifier necessary, nulls?
           'responseForm'      => 'xml'
