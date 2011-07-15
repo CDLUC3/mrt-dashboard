@@ -13,7 +13,7 @@ pid File.join(Dir.pwd, "log", "unicorn.pid")
 
 # timeout is long because we upload files
 # switch to nginx to fix
-timeout 1800
+timeout 3000
 
 listen "#{Socket.gethostname}:26181"
 
