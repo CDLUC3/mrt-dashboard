@@ -81,6 +81,8 @@ end
 NS = { "atom"  => "http://www.w3.org/2005/Atom",
        "xhtml" => "http://www.w3.org/1999/xhtml" }
 
+PAGE_DELAY = 10 # delay between each page we process
+
 def xpath_content(node, xpath)
   nodes = node.xpath(xpath, NS)
   return nil if (nodes.nil? || nodes.size == 0)
@@ -166,6 +168,7 @@ def process_atom_feed(server, submitter, profile, starting_point)
     n = n + 1
     break if n == 10 # only 10 pages this time
     next_page = xpath_content(doc, "/atom:feed/atom:link[@rel=\"next\"]/@href")
+    sleep(PAGE_DELAY)
   end
 end
 
