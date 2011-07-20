@@ -7,6 +7,9 @@
 require 'webrick'
 require 'tmpdir'
 require 'fileutils'
+require 'open-uri'
+
+OPEN_URI_ARGS = {"User-Agent" => "Ruby/#{RUBY_VERSION}"}
 
 # An HTTP server that will serve each file ONCE.
 class OneTimeServer
@@ -89,7 +92,7 @@ def xpath_content(node, xpath)
   return nodes[0].content
 end
 
-def ingest(submitter, profile, creator, title, date, local_id, file)
+def ingest(submitter, profile, creator, title, date, local_id, primary_id, file)
   params = {
     'file'              => file,
     'type'              => "object-manifest",
@@ -97,6 +100,9 @@ def ingest(submitter, profile, creator, title, date, local_id, file)
     'filename'          => file.path.split(/\//).last,
     'profile'           => profile,
     'responseForm'      => 'xml' }
+  if !primary_id.nil? then
+    params['primaryIdentifier'] = primary_id
+  end
   response = RestClient.post(INGEST_SERVICE, params, { :multipart => true })
   @doc = Nokogiri::XML(response) do |config|
     config.strict.noent.noblanks
@@ -111,18 +117,18 @@ def mk_manifest(manifest, urls)
   manifest.write("#%prefix | mrt: | http://uc3.cdlib.org/ontology/mom#\n")
   manifest.write("#%prefix | nfo: | http://www.semanticdesktop.org/ontologies/2007/03/22/nfo#\n")
   manifest.write("#%fields | nfo:fileUrl | nfo:hashAlgorithm | nfo:hashValue | nfo:fileSize | nfo:fileLastModified | nfo:fileName | mrt:mimeType\n")
-  urls.each do |url, filename|
-    manifest.write("#{url} | | | | | #{filename} |\n")
+  urls.each do |url|
+    manifest.write("#{url['url']} | | | | | #{url['name']} |\n")
   end
   manifest.write("#%EOF\n")
 end
 
 # Create ERC file.
-def mk_erc(erc, creator, title, date, local_id, created, modified)
+def mk_erc(erc, creator, title, date, identifier, created, modified)
   erc.write("who: #{creator}\n")
   erc.write("what: #{title}\n")
   erc.write("when: #{date}\n")
-  erc.write("where: #{local_id}\n")
+  erc.write("where: #{identifier}\n")
   erc.write("when/created: #{created}\n")
   erc.write("when/modified: #{modified}\n")
 end
@@ -137,9 +143,10 @@ def process_atom_feed(server, submitter, profile, starting_point)
   next_page = starting_point
   n = 0
   until next_page.nil? do
-    doc = Nokogiri::XML(open(next_page))
+    doc = Nokogiri::XML(open(next_page, OPEN_URI_ARGS))
     doc.xpath("//atom:entry", NS).each do |entry|
-      id = xpath_content(entry, "atom:id")
+      # get the basic stuff
+      local_id = xpath_content(entry, "atom:id")
       modified = xpath_content(entry, "atom:updated")
       date = xpath_content(entry, "atom:published")
       title = xpath_content(entry, "atom:title")
@@ -147,23 +154,38 @@ def process_atom_feed(server, submitter, profile, starting_point)
         xpath_content(au, "atom:name")
       }.join("; ")
       urls = entry.xpath("atom:link", NS).map do |link| 
-        url = link['href']
-        filename = url.gsub(/^https?:\/\//, '')
-        [url, filename]
+        { 'rel'  => link['rel'], 
+          'url'  => link['href'],
+          'name' => link['href'].sub(/^https?:\/\//, '') }
       end
+
+      # extract the archival id, if it exists
+      archival_id = urls.select {|u|
+        (u['rel'] == 'archival')
+      }.map {|u| 
+        # extract url only, and remove extra junk
+        u['url'].sub(/ezid\/id\//, '')
+      }.first 
+
+      # do not submit archival link
+      urls = urls.delete_if {|u| u['rel'] == 'archival'}
 
       # Make mrt-erc.txt file & add to list of urls to ingest
       erc_url = server.add_file do |erc|
-        mk_erc(erc, creator, title, date, id, date, modified)
+        mk_erc(erc, creator, title, date, (archival_id || local_id), date, modified)
       end
-      urls.push([erc_url, 'mrt-erc.txt'])
+      urls.push({ 'rel'  => 'metadata',
+                  'url'  => erc_url, 
+                  'name' => 'mrt-erc.txt'})
 
       # Make manifest file.
       manifest_file = Tempfile.new("mrt-atom-ingester")
       mk_manifest(manifest_file, urls)
+      # reset to beginning
       manifest_file.open
-     
-      ingest(submitter, profile, creator, title, date, id, manifest_file)
+      
+      ingest(submitter, profile, creator, title, date, local_id, archival_id, manifest_file)
+      break
     end
     n = n + 1
     break if n == 10 # only 10 pages this time
