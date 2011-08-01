@@ -53,7 +53,9 @@ xml.tag!('feed', :xmlns => "http://www.w3.org/2005/Atom") do
         xml.tag!("name", obj.who)
       end
       xml.tag!("updated", obj.modified)
-      xml.tag!("updated", obj.created)
+      if (!obj.created.blank?) then
+        xml.tag!("published", obj.created)
+      end
       obj.files.each do |file|
         xml.tag!("link", 
                  "href" => url_for(:controller => 'file', 
