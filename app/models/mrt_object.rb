@@ -62,19 +62,29 @@ class MrtObject < UriInfo
   end
   
   def total_actual_size
-    return self.first(Mrt::Object['totalActualSize']).value.to_i
+    return self.first_value(Mrt::Object['totalActualSize']).to_i
   end
   
   def modified
-    return DateTime.parse(self.first(RDF::DC['modified']).value)
+    val = self.first_value(RDF::DC['modified'])
+    if val.nil? then
+      return nil
+    else
+      return DateTime.parse(val)
+    end
   end
 
   def created
-    return DateTime.parse(self.first(RDF::DC['created']).value)
+    val = self.first_value(RDF::DC['created'])
+    if val.nil? then
+      return nil
+    else
+      return DateTime.parse(val)
+    end
   end
 
   def size
-    return self.first(Mrt::Base['size']).value.to_i
+    return self.first_value(Mrt::Base['size']).to_i
   end
 
   def in_node
@@ -82,7 +92,7 @@ class MrtObject < UriInfo
   end
 
   def num_actual_files
-    return self.first(Mrt::Object['numActualFiles']).value.to_i
+    return self.first_value(Mrt::Object['numActualFiles']).to_i
   end
 
   def versions

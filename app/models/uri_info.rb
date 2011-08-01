@@ -101,6 +101,15 @@ class UriInfo < RDF::URI
     else return (d[0] || default) end
   end
 
+  def first_value(key, default=nil)
+    tmp = first(key, default)
+    if tmp.nil? then
+      return nil
+    else
+      return tmp.value
+    end
+  end
+
   def fill_cache
     q = if @graph
           Mrt::Sparql::Q.new("GRAPH <#{@graph}> { <#<#{self.to_s}> ?p ?o }")
