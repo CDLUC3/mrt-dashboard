@@ -28,11 +28,10 @@ def ingest(submitter, profile, creator, title, date, local_id, primary_id, file)
     'type'              => "object-manifest",
     'submitter'         => submitter,
     'filename'          => file.path.split(/\//).last,
+    'primaryIdentifier' => primary_id
     'profile'           => profile,
-    'responseForm'      => 'xml' }
-  if !primary_id.nil? then
-    params['primaryIdentifier'] = primary_id
-  end
+    'responseForm'      => 'xml' }.
+    delete_if {|k,v| v.nil? }
   response = RestClient.post(INGEST_SERVICE, params, { :multipart => true })
   @doc = Nokogiri::XML(response) do |config|
     config.strict.noent.noblanks
