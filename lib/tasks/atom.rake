@@ -28,7 +28,7 @@ def ingest(submitter, profile, creator, title, date, local_id, primary_id, file)
     'type'              => "object-manifest",
     'submitter'         => submitter,
     'filename'          => file.path.split(/\//).last,
-    'primaryIdentifier' => primary_id
+    'primaryIdentifier' => primary_id,
     'profile'           => profile,
     'responseForm'      => 'xml' }.
     delete_if {|k,v| v.nil? }
