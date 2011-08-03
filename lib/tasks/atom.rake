@@ -63,9 +63,13 @@ def mk_erc(erc, creator, title, date, identifier, created, modified)
 end
 
 def up_to_date?(store, local_id, last_updated)
-  q = Q.new("?s object:localIdentfier \"#{local_id}")
-  res = store().select(q)
-  # ...
+  q = Mrt::Sparql::Q.new("?s object:localIdentifier \"#{local_id}\"")
+  res = store.select(q)
+  if res.empty? then
+    return false
+  else
+    obj = MrtObject.new(res[0]['s'])
+  end
 end
 
 def process_atom_feed(server, submitter, profile, starting_point)
