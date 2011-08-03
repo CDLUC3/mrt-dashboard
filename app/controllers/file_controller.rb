@@ -1,6 +1,5 @@
 class FileController < ApplicationController
-  before_filter :require_user, :except=>[:display]
-  before_filter :require_group
+  before_filter :require_user
   before_filter :require_object
   before_filter :require_version
 
