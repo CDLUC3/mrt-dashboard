@@ -7,7 +7,12 @@
 <% end %>
 
 <div class="grid_11">
-  <h2>Collection: <%= @group.description %></h2>
+  <h2>
+    Collection: <%= @group.description %>
+    <a href="/object/recent.atom?collection=<%= @group.ark_id %>">
+      <%= image_tag("feed-icon-14x14.png", :alt=>"atom feed") %>
+    </a>
+  </h2>
   <div class="breadcrumbs"><%= link_to('Merritt', :controller => 'home', :action => 'index') %> &gt;
     Collection: <%= @group.description %></div>
 
