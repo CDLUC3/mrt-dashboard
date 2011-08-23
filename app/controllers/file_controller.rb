@@ -19,7 +19,7 @@ class FileController < ApplicationController
     response.headers["Content-Length"] = File.size(tmp_file.path).to_s
     send_file(tmp_file.path,
               :filename => File.basename(file[RDF::DC.identifier].to_s),
-              :type => file[Mrt::File.mediaType].to_s,
+              :type => file[Mrt::File.mediaType].to_s.downcase,
               :disposition => "inline")
   end
 end
