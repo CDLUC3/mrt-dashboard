@@ -5,12 +5,11 @@ class VersionController < ApplicationController
 
   def index
     #files for current version
-    all_files = @version.files.sort_by do |f| 
-      f[RDF::DC.identifier].to_s.downcase
-    end
-    (@system_files, @files) = all_files.partition do |file|
-      file[RDF::DC.identifier].to_s.match(/^system\//)
-    end
+    (@system_files, @files) = @version.files.sort_by { |file|
+      file.identifier.downcase
+    }.partition { |file|
+      file.identifier.match(/^system\//)
+    }
     @versions = @object.versions
   end
 
