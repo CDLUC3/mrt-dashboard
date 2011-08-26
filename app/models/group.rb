@@ -26,23 +26,15 @@ class Group
   end
 
   def self.find(id)
-    grp = nil
     #fetch by groupid, but otherwise, fall back to arkid
-    begin
-      grp = Group::LDAP.fetch(id)
-    rescue LdapMixin::LdapException => ex
-      grp = Group::LDAP.fetch_by_ark_id(id)
-    end
-    
-    g = self.new
-    g.id = simplify_single_value(grp, 'ou')
-    g.submission_profile = simplify_single_value(grp, 'submissionprofile')
-    g.ark_id = simplify_single_value(grp, 'arkid')
-    g.owner = simplify_single_value(grp, 'owner')
-    g.description = simplify_single_value(grp, 'description')
-    return g
+    ldap_group = begin
+                   Group::LDAP.fetch(id)
+                 rescue LdapMixin::LdapException => ex
+                   Group::LDAP.fetch_by_ark_id(id)
+                 end
+    return self.make_from_ldap(ldap_group)
   end
-
+  
   # permissions are returned as an array like ['read','write'], maybe more in the future
   def permission(userid)
     Group::LDAP.get_user_permissions(userid, self.id, User::LDAP)
@@ -50,7 +42,6 @@ class Group
 
   def sparql_id
     return "http://ark.cdlib.org/#{self.ark_id}"
-    #"http://uc3.cdlib.org/collection/#{URI.encode(self.id, Regexp.new("[^#{URI::PATTERN::UNRESERVED}]"))}"
   end
 
   def object_count
@@ -84,11 +75,9 @@ class Group
   #get all groups and email addresses of members, this is a stopgap for our own use
   def self.show_emails
     out_str = ''
-    grps = Group.find_all
-    grps.each do |grp|
+    Group.find_all.each do |grp|
       out_str << "#{grp['ou'][0]}\r\n"
-      usrs = Group.find_users(grp['ou'][0])
-      usrs.each do |usr|
+      Group.find_users(grp['ou'][0]).each do |usr|
         u = User::LDAP.fetch(usr)
         out_str << "#{u[:mail][0]}\r\n"
       end
@@ -97,8 +86,17 @@ class Group
     out_str
   end
 
-
   private
+
+  def self.make_from_ldap(ldap_group)
+    g = self.new
+    g.id                 = simplify_single_value(ldap_group, 'ou')
+    g.submission_profile = simplify_single_value(ldap_group, 'submissionprofile')
+    g.ark_id             = simplify_single_value(ldap_group, 'arkid')
+    g.owner              = simplify_single_value(ldap_group, 'owner')
+    g.description        = simplify_single_value(ldap_group, 'description')
+    return g
+  end
 
   # this may belong to some ldap base class at some point
   def self.simplify_single_value(record, field)
