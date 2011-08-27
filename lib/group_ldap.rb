@@ -84,7 +84,7 @@ module GroupLdap
       correct_len = @base.split(',').length + 2
       grps.map! do |grp|
         g = grp[:dn][0].split(',')
-        return nil if g.length != correct_len or !g[0][0..1].eql?('cn') or !g[1][0..1].eql?('ou')
+        return [] if g.length != correct_len or !g[0][0..1].eql?('cn') or !g[1][0..1].eql?('ou')
         g[1][3..-1]
       end
       grps = grps.compact.uniq #.map{|grp| fetch(grp)}
