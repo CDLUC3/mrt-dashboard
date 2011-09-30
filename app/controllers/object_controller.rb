@@ -67,6 +67,7 @@ class ObjectController < ApplicationController
           'profile'           => @group.submission_profile,
           'creator'           => params[:author],
           'title'             => params[:title],
+          'primaryIdentifier' => params[:primary_id],
           'date'              => params[:date],
           'localIdentifier'   => params[:local_id], # local identifier necessary, nulls?
           'responseForm'      => 'xml'
@@ -83,8 +84,8 @@ class ObjectController < ApplicationController
       puts "\ncurl -F \"file=@#{hsh['file'].path}\" #{arr_out.join(" ")} #{INGEST_SERVICE}\n\n"
 =end
       #end for debugging
-
-      @response = RestClient.post(INGEST_SERVICE, hsh, { :multipart => true })
+      service = (params[:update_object].blank? ? INGEST_SERVICE : INGEST_SERVICE_UPDATE)
+      @response = RestClient.post(service, hsh, { :multipart => true })
 
       @doc = Nokogiri::XML(@response) do |config|
         config.strict.noent.noblanks
