@@ -1,0 +1,22 @@
+<% content_for :title do %>
+  UC3 Merritt: Submission Received
+<% end %>
+<div class="grid_12">
+  <h2>Submission Received</h2>
+  <div class="breadcrumbs">
+    <%= link_to('Merritt', :controller => 'home', :action => 'index') %> &gt;
+    <%= link_to("Collection: #{@group.description}", :controller => 'collection', :action => 'index', :group => @group.id) %>
+    &gt; Submission Received
+  </div>
+
+  <br/>
+
+  <p>You have requested to add data to the repository.  Your request is now
+  in process.</p>
+
+  <p>The id for your request is <%=@batch_id%>.</p>
+
+</div>
+<div class="grid_4 sidebar">
+  <%= render :partial => '/shared/side_lookup' %><br/>
+</div>

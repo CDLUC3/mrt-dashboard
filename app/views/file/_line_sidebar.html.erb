@@ -1,0 +1,11 @@
+<% file = line_sidebar %>
+<li style="word-wrap:break-word;">
+  <%= link_to File.basename(file[RDF::DC.identifier].to_s),
+          :controller       => :file,
+          :action           => :display,
+          :group            => params[:group],
+          :object           => params[:object],
+          :version          => version[RDF::DC.identifier].to_s,
+          :file             => file[RDF::DC.identifier].to_s
+  %>
+</li>
