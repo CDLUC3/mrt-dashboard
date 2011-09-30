@@ -81,16 +81,11 @@ module GroupLdap
                    Net::LDAP::Filter.eq("cn", permission)
                end
       grps = @admin_ldap.search(:base => @base, :filter => filter)
-      correct_len = @base.split(',').length + 2
-      grps.map! do |grp|
-        g = grp[:dn][0].split(',')
-        return [] if g.length != correct_len or !g[0][0..1].eql?('cn') or !g[1][0..1].eql?('ou')
-        g[1][3..-1]
-      end
-      grps = grps.compact.uniq #.map{|grp| fetch(grp)}
-      #grps.each{|grp| grp[:permissions] = get_user_permissions(userid, grp[:ou][0], user_object)}
-      grps
-
+      re = Regexp.new("^cn=(read|write),ou=([^, ]+),#{@base}$", Regexp::IGNORECASE)
+      grps.map do |grp|
+        m = re.match(grp[:dn].first)
+        (!m.nil? ? m[2].to_s : nil )
+      end.compact.uniq
     end
 
     def remove_user(userid, groupid, user_object)
@@ -112,7 +107,7 @@ module GroupLdap
       results = @admin_ldap.search(:base => ns_dn(group_id), :filter =>
                                               Net::LDAP::Filter.eq('cn', sub_id))
       raise LdapException.new('id does not exist') if results.length < 1
-      raise LdapException.new('ambigulous results, duplicate ids') if results.length > 1
+      raise LdapException.new('ambiguous results, duplicate ids') if results.length > 1
       results[0]
     end
 
