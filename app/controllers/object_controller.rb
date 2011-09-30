@@ -36,8 +36,8 @@ class ObjectController < ApplicationController
     @versions = @object.versions
     #files for current version
     @files = @object.files.
-      reject {|file| file[RDF::DC.identifier][0].value.match(/^system\/mrt-/) }.
-      sort_by {|x| File.basename(x[RDF::DC.identifier].to_s.downcase) }
+      reject {|file| file.identifier.match(/^system\/mrt-/) }.
+      sort_by {|x| File.basename(x.identifier.downcase) }
   end
 
   def download

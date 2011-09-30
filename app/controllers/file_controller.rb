@@ -12,14 +12,14 @@ class FileController < ApplicationController
                ?file dc:identifier \"#{no_inject(params[:file])}\"^^<http://www.w3.org/2001/XMLSchema#string> .",
               :select => "?file")
 
-    file = UriInfo.new(store().select(q)[0]['file'])
+    file = MrtFile.new(store().select(q)[0]['file'])
     file_uri = file.first(Mrt::Base.bytestream).to_uri
     tmp_file = fetch_to_tempfile(file_uri)
     # rails is not setting Content-Length
     response.headers["Content-Length"] = File.size(tmp_file.path).to_s
     send_file(tmp_file.path,
-              :filename => File.basename(file[RDF::DC.identifier].to_s),
-              :type => file[Mrt::File.mediaType].to_s,
+              :filename => File.basename(file.identifier),
+              :type => file[Mrt::File.mediaType].to_s.downcase,
               :disposition => "inline")
   end
 end
