@@ -9,10 +9,10 @@
 <div class ="files">
   <% files.each do |file| %>
     <div class="key">
-      <%=link_to(File.basename(file[RDF::DC.identifier].to_s),
+      <%=link_to(File.basename(file.identifier),
           :controller => :file, :action => :display,
           :group => params[:group], :object => params[:object],
-          :version => params[:version], :file => file[RDF::DC.identifier].to_s)
+          :version => params[:version], :file => file.identifier)
           %></div>
     <div class="value">
       <%= file[Mrt::File.mediaType].to_s.gsub(/;.*$/, '') %>

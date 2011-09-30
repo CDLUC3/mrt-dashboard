@@ -1,5 +1,5 @@
 source 'http://rubygems.org'
-gem 'rails', '3.0.9'
+gem 'rails', '3.0.10'
 gem "exception_notification", :git => "git://github.com/rails/exception_notification.git"
 gem "json"
 gem "net-ldap", "0.1.2", :git=>"git://github.com/RoryO/ruby-net-ldap.git"
