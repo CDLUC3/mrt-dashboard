@@ -91,7 +91,7 @@ class UriInfo < RDF::URI
 
   def [](key)
     fill_cache if @info.nil?
-    return @info[key]
+    return @info[key] || []
   end
 
   def first(key, default=nil)
