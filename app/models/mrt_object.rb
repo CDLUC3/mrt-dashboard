@@ -54,7 +54,7 @@ class MrtObject < UriInfo
   end
 
   def bytestream
-    return self.first(Mrt::Base['bytestream'])
+    return self.first(Mrt::Model::Base['bytestream'])
   end
 
   def bytestream_uri
@@ -62,7 +62,7 @@ class MrtObject < UriInfo
   end
   
   def total_actual_size
-    return self.first_value(Mrt::Object['totalActualSize']).to_i
+    return self.first_value(Mrt::Model::Object['totalActualSize']).to_i
   end
   
   def modified
@@ -84,38 +84,38 @@ class MrtObject < UriInfo
   end
 
   def size
-    return self.first_value(Mrt::Base['size']).to_i
+    return self.first_value(Mrt::Model::Base['size']).to_i
   end
 
   def in_node
-    return self.first(Mrt::Object['inNode'])
+    return self.first(Mrt::Model::Object['inNode'])
   end
 
   def num_actual_files
-    return self.first_value(Mrt::Object['numActualFiles']).to_i
+    return self.first_value(Mrt::Model::Object['numActualFiles']).to_i
   end
 
   def versions
     # this works with current storage service and saves a trip to
     # SPARQL
     return @versions ||= self[RDF::DC["hasVersion"]].map{|uri| MrtVersion.new(uri)}.sort_by{ |v| v[RDF::DC.identifier].to_s.to_i }
-    #return @versions ||= self.first(Mrt::Object['versionSeq']).to_list.map{|v| MrtVersion.new(v)}
+    #return @versions ||= self.first(Mrt::Model::Object['versionSeq']).to_list.map{|v| MrtVersion.new(v)}
   end
 
   def is_stored_object_for
-    return self.first(Mrt::Object['isStoredObjectFor'])
+    return self.first(Mrt::Model::Object['isStoredObjectFor'])
   end
 
   def who
-    return self[Mrt::Kernel['who']].map { |el| el.value.to_s }
+    return self[Mrt::Model::Kernel['who']].map { |el| el.value.to_s }
   end
 
   def what
-    return self[Mrt::Kernel['what']].map { |el| el.value.to_s }
+    return self[Mrt::Model::Kernel['what']].map { |el| el.value.to_s }
   end
 
   def when
-    return self[Mrt::Kernel['when']].map { |el| el.value.to_s }
+    return self[Mrt::Model::Kernel['when']].map { |el| el.value.to_s }
   end
 
   def identifier
@@ -123,11 +123,11 @@ class MrtObject < UriInfo
   end
 
   def local_identifier
-    return self.is_stored_object_for.first(Mrt::Object.localIdentifier)
+    return self.is_stored_object_for.first(Mrt::Model::Object.localIdentifier)
   end
 
   def files
-    return @files ||= MrtFile.bulk_loader(self[Mrt::Version['hasFile']]).
+    return @files ||= MrtFile.bulk_loader(self[Mrt::Model::Version['hasFile']]).
       sort_by{|f| f.identifier}
   end
 

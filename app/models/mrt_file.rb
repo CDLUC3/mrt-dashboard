@@ -21,11 +21,11 @@ class MrtFile < UriInfo
   end
 
   def bytestream
-    return self.first(Mrt::Base['bytestream'])
+    return self.first(Mrt::Model::Base['bytestream'])
   end
 
   def size
-    return self.first(Mrt::Base['size']).value.to_i
+    return self.first(Mrt::Model::Base['size']).value.to_i
   end
 
   def created
@@ -33,14 +33,14 @@ class MrtFile < UriInfo
   end
   
   def media_type
-    return self.first(Mrt::File['mediaType']).value
+    return self.first(Mrt::Model::File['mediaType']).value
   end
 
   def in_version
-    return @version ||= MrtVersion.new(self.first(Mrt::File['inVersion']))
+    return @version ||= MrtVersion.new(self.first(Mrt::Model::File['inVersion']))
   end
   
   def message_digest
-    return self.first(Mrt::File['messageDigest'])
+    return self.first(Mrt::Model::File['messageDigest'])
   end
 end

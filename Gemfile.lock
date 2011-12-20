@@ -47,7 +47,7 @@ GEM
     erubis (2.6.6)
       abstract (>= 1.0.0)
     i18n (0.5.0)
-    json (1.4.6)
+    json (1.6.1)
     kgio (2.0.0)
     linecache (0.43)
     mail (2.2.19)
@@ -56,6 +56,9 @@ GEM
       mime-types (~> 1.16)
       treetop (~> 1.4.8)
     mime-types (1.16)
+    mrt-ingest (0.0.2)
+      json (>= 1.5.0)
+      rest-client (>= 1.6.0)
     nokogiri (1.4.4)
     orchard (0.1)
     polyglot (0.3.2)
@@ -109,7 +112,8 @@ PLATFORMS
 
 DEPENDENCIES
   exception_notification!
-  json
+  json (> 1.5.0)
+  mrt-ingest
   net-ldap (= 0.1.2)!
   nokogiri
   orchard

@@ -9,7 +9,7 @@ class MrtVersion < UriInfo
   end
 
   def bytestream
-    return self.first(Mrt::Base['bytestream'])
+    return self.first(Mrt::Model::Base['bytestream'])
   end
 
   def bytestream_uri
@@ -17,7 +17,7 @@ class MrtVersion < UriInfo
   end
   
   def total_actual_size
-    return self.first(Mrt::Base['totalActualSize']).value.to_i
+    return self.first(Mrt::Model::Base['totalActualSize']).value.to_i
   end
   
   def created
@@ -25,15 +25,15 @@ class MrtVersion < UriInfo
   end
 
   def size
-    return self.first(Mrt::Base['size']).value.to_i
+    return self.first(Mrt::Model::Base['size']).value.to_i
   end
 
   def num_actual_files
-    return self.first(Mrt::Object['numActualFiles']).value.to_i
+    return self.first(Mrt::Model::Object['numActualFiles']).value.to_i
   end
 
   def files
-    return @files ||= MrtFile.bulk_loader(self[Mrt::Version['hasFile']]).
+    return @files ||= MrtFile.bulk_loader(self[Mrt::Model::Version['hasFile']]).
       sort_by{|f| f.identifier}
   end
 
@@ -46,18 +46,18 @@ class MrtVersion < UriInfo
   end
 
   def in_object
-    return @in_object ||= MrtObject.new(self.first(Mrt::Version['inObject']))
+    return @in_object ||= MrtObject.new(self.first(Mrt::Model::Version['inObject']))
   end
 
   def who
-    return self[Mrt::Kernel['who']].map{ |w| w.value.to_s }
+    return self[Mrt::Model::Kernel['who']].map{ |w| w.value.to_s }
   end
 
   def what
-    return self[Mrt::Kernel['what']].map{ |w| w.value.to_s }
+    return self[Mrt::Model::Kernel['what']].map{ |w| w.value.to_s }
   end
 
   def when
-    return self[Mrt::Kernel['when']].map{ |w| w.value.to_s }
+    return self[Mrt::Model::Kernel['when']].map{ |w| w.value.to_s }
   end
 end

@@ -13,13 +13,13 @@ class FileController < ApplicationController
               :select => "?file")
 
     file = MrtFile.new(store().select(q)[0]['file'])
-    file_uri = file.first(Mrt::Base.bytestream).to_uri
+    file_uri = file.first(Mrt::Model::Base.bytestream).to_uri
     tmp_file = fetch_to_tempfile(file_uri)
     # rails is not setting Content-Length
     response.headers["Content-Length"] = File.size(tmp_file.path).to_s
     send_file(tmp_file.path,
               :filename => File.basename(file.identifier),
-              :type => file[Mrt::File.mediaType].to_s.downcase,
+              :type => file[Mrt::Model::File.mediaType].to_s.downcase,
               :disposition => "inline")
   end
 end

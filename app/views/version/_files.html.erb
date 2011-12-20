@@ -15,8 +15,8 @@
           :version => params[:version], :file => file.identifier)
           %></div>
     <div class="value">
-      <%= file[Mrt::File.mediaType].to_s.gsub(/;.*$/, '') %>
-      <%=number_to_storage_size(file[Mrt::Base.size].to_s.to_i)%>
+      <%= file[Mrt::Model::File.mediaType].to_s.gsub(/;.*$/, '') %>
+      <%=number_to_storage_size(file[Mrt::Model::Base.size].to_s.to_i)%>
     </div>
 
   <% end %>

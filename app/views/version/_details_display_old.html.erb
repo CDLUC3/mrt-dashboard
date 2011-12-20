@@ -7,13 +7,13 @@
   <div class="value"><%= stored_object[RDF::DC.identifier] %></div>
 
   <div class="key">title:</div>
-  <div class="value"><%= obj[Mrt::Kernel.what] %></div>
+  <div class="value"><%= obj[Mrt::Model::Kernel.what] %></div>
 
   <div class="key">creator:</div>
-  <div class="value"><%= obj[Mrt::Kernel.who] %></div>
+  <div class="value"><%= obj[Mrt::Model::Kernel.who] %></div>
 
   <div class="key">date:</div>
-  <div class="value"><%= obj[Mrt::Kernel.when] %></div>
+  <div class="value"><%= obj[Mrt::Model::Kernel.when] %></div>
 
   <div class="key">local id:</div>
   <div class="value">??? (is this in the inventory service yet?)</div>
@@ -28,7 +28,7 @@
   <div class="value"><%=number_to_storage_size(@total_size)%></div>
 
   <div class="key">total files <span style="font-weight: normal">(all versions)</span>:</div>
-  <div class="value"><%= stored_object[Mrt::Object.numActualFiles] %></div>
+  <div class="value"><%= stored_object[Mrt::Model::Object.numActualFiles] %></div>
 
   <div class="key">total versions:</div>
   <div class="value"><%=versions.length%></div>
