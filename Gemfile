@@ -1,7 +1,7 @@
 source 'http://rubygems.org'
 gem 'rails', '3.0.10'
 gem "exception_notification", :git => "git://github.com/rails/exception_notification.git"
-gem "json"
+gem "json", "> 1.5.0"
 gem "net-ldap", "0.1.2", :git=>"git://github.com/RoryO/ruby-net-ldap.git"
 gem "nokogiri"
 gem "rdf"
@@ -13,3 +13,4 @@ gem "will_paginate", "~> 3.0.pre2"
 gem "rack-cache"
 gem "unicode"
 gem "orchard"
+gem "mrt-ingest"
