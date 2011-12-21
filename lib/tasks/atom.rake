@@ -9,7 +9,6 @@ require 'fileutils'
 require 'open-uri'
 require 'mrt/ingest'
 
-
 OPEN_URI_ARGS = {"User-Agent" => "Ruby/#{RUBY_VERSION}"}
 
 # Namespaces
@@ -31,10 +30,12 @@ def up_to_date?(store, local_id, last_updated)
     return false
   else
     obj = MrtObject.new(res[0]['s'])
+    return DateTime.parse(last_updated) >= obj.modified
   end
 end
 
 def process_atom_feed(submitter, profile, starting_point)
+  store = Mrt::Sparql::Store.new(SPARQL_ENDPOINT)
   client = Mrt::Ingest::Client.new(INGEST_SERVICE)
   next_page = starting_point
   n = 0
@@ -44,10 +45,13 @@ def process_atom_feed(submitter, profile, starting_point)
       # get the basic stuff
       local_id = xpath_content(entry, "atom:id")
       published = xpath_content(entry, "atom:published")
+      updated = xpath_content(entry, "atom:updated")
       title = xpath_content(entry, "atom:title")
       creator = entry.xpath("atom:author", NS).map { |au|
         xpath_content(au, "atom:name")
       }.join("; ")
+
+      next if up_to_date? (store, local_id, updated)
 
       # pull out the urls
       urls = entry.xpath("atom:link", NS).map do |link| 
@@ -70,7 +74,7 @@ def process_atom_feed(submitter, profile, starting_point)
         "when" => published,
         "where" => (archival_id || local_id),
         "when/created" => published,
-        "when/modified" => xpath_content(entry, "atom:updated") }
+        "when/modified" => updated }
       iobject = Mrt::Ingest::IObject.new(:erc         => erc,
                                          :archival_id => archival_id)
 
@@ -78,8 +82,8 @@ def process_atom_feed(submitter, profile, starting_point)
       urls.each do |url|
         iobject.add_component(URI.parse(url[:url]), url[:name])
       end
-#      iobject.start_ingest(client, profile, submitter)
-#      iobject.finish_ingest()
+      iobject.start_ingest(client, profile, submitter)
+      iobject.finish_ingest()
     end
     return
     next_page = xpath_content(doc, "/atom:feed/atom:link[@rel=\"next\"]/@href")
