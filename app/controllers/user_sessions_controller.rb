@@ -21,4 +21,15 @@ class UserSessionsController < ApplicationController
     flash[:notice] = "You are now logged out"
     redirect_back_or_default '/'
   end
+  
+  def guest_login
+    if User.valid_ldap_credentials?(User::GUEST_USER[:guest_user], User::GUEST_USER[:guest_password]) then
+      flash[:notice] = "Login was successful"
+      session[:uid] = User::GUEST_USER[:guest_user]
+      redirect_back_or_default "/home/choose_collection"
+    else
+      flash[:notice] = "Login unsuccessful"
+      render :action => :login
+    end
+  end
 end

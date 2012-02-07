@@ -14,6 +14,10 @@ class User
       'email'         => 'mail',
       'tz_region'     => 'tzregion'}
 
+  GUEST_USER = 
+    { :guest_user     => LDAP_CONFIG["guest_user"],
+      :guest_password => LDAP_CONFIG["guest_password"]}
+      
   def initialize(*args)
     if args.length == 1 and args[0].class == Net::LDAP::Entry then
       @user = args[0]

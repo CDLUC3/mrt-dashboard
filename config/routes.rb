@@ -15,6 +15,8 @@ MrtDashboard::Application.routes.draw do
   match('logout'        => 'user_sessions#logout',
         :as             => :logout)
 
+  match 'guest_login', :to => 'user_sessions#guest_login', :as => :guest_login, :via => :post
+
   # This is a legacy wild controller route that's not recommended for RESTful applications.
   # Note: This route will make all actions in every controller accessible via GET requests.
   match ':controller(/:action(/:id(.:format)))'
