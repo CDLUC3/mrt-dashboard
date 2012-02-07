@@ -16,7 +16,7 @@ module LdapMixin
       #port => 1636,
       #base => 'ou=People,ou=uc3,dc=cdlib,dc=org',
       #admin_user => 'Directory Manager',
-      #admin_password => 'ahz6ap2I',
+      #admin_password => 'XXXXXXX',
       #minter => 'http://noid.cdlib.org/nd/noidu_g9'
 
       host, port, base, admin_user, admin_password, minter =
