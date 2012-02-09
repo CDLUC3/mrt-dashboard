@@ -17,7 +17,7 @@ root {
 }
 
 body {
-  background-color:fff;
+  background-color:#fff;
   font-family: Helvetica, Verdana, Tahoma, Arial, sans-serif;
   font-size: 12px/1.5; 
 }
@@ -64,7 +64,7 @@ body {
 }
 
 .dynamic_message {
-    font-style: bold;
+    font-weight: bold;
     color: #bb0000;
     font-size: 110%;
 }
@@ -168,6 +168,13 @@ div.env_disp div{
     vertical-align:bottom;
 }
 
+div.line {  
+	border-bottom-color: #cccccc;
+  	border-bottom-style: solid;
+  	border-bottom-width: 1px;
+  	margin-bottom: 25px;
+}
+
 /* form styles */
 /* for 2 column forms */
 div.left_label {
@@ -178,7 +185,31 @@ div.left_label {
   clear: left;
   float:left;
   width: 150px;
-  text-align: right;
+  text-align: left;
+}
+
+/* form styles */
+/* for 2 column forms */
+div.long_left_label {
+  margin-top: 0.25em;
+  margin-bottom:0.25em;
+  margin-right:0.5em;
+  display: block;
+  clear: left;
+  float:left;
+  width: 325px;
+  text-align: left;
+}
+
+div.short_left_label {
+  margin-top: 0.25em;
+  margin-bottom:0.25em;
+  margin-right:0.5em;
+  display: block;
+  clear: left;
+  float:left;
+  width: 75px;
+  text-align: left;
 }
 
 div.right_field {
@@ -312,4 +343,31 @@ td {
 	border-bottom:0;
 	border-left:0;
 	border-right:0;
+}
+
+/* guest login page */
+div.login_choice_box {
+  margin-bottom: 50px;
+  border-style: solid;
+  border-width: 1px;
+  border-color: #516935;
+}
+
+div.login_choice_box div {
+  padding: 8px 12px;
+}
+
+div.login_choice_box h2 {
+  text-align: center;
+  background-color: #516935;
+  color: #ffffff;
+  padding: 5px 0 5px 0;
+  font-size:110%;
+  font-weight: bold;
+  margin-top:0px;
+}
+
+div.login_choice_box label {
+  font-weight: normal;
+  padding-right: 24px;
 }
