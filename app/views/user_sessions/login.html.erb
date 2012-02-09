@@ -1,27 +1,46 @@
 <% content_for :title do %>
-  UC3 Merritt Login
+UC3 Merritt Login
 <% end %>
-<div class="grid_10">
-  <h1>Login</h1>
-  <%= render :partial => '/shared/flash_show' %>
-  <%= form_tag({:action => 'login_post'}) do %>
-  <div class="left_label">
-    <%= label_tag :login %>
-  </div>
-  <div class="right_field">
-    <%= text_field_tag :login, params[:login], {:tabindex => '1'} %>
-  </div>
-  <div class="right_field" style="width:50px;">
-    <%= submit_tag "Login", {:tabindex => '3'} %>
-  </div>
-  <div class="clear"></div>
-  <div class="left_label">
-    <%= label_tag :password %>
-  </div>
-  <div class="right_field">
-    <%= password_field_tag :password, params[:password], {:tabindex => '2'} %><br />
-  </div>
-  <div class="clear"></div>
-  <% end %>
-  <div style="width:200px;height:100px;">&nbsp;</div>
- </div>
+<div class='grid_8 suffix_2 alpha'>
+	<!-- ><div class="grid_10"> -->
+	<h1>Login</h1>
+		<%= render :partial => '/shared/flash_show' %>
+	<div class='grid_8 prefix_2'>
+		<div>
+			<div class="long_left_label">
+				<%= label_tag "Login as guest for read-only access" %>
+		<br />
+			</div>
+			<%= form_tag({:action => 'guest_login'}) do %>
+			<div class="right_field" style="width:100px;">
+				<%= submit_tag "Guest", {:tabindex => '1'} %>
+			</div>
+		</div>
+		<% end %>
+		<br /><br />
+		<hr />
+		<div class="short_left_label">
+			<%= label_tag :Username %>
+		</div>
+		<%= form_tag({:action => 'login_post'}) do %>
+		<div class="right_field">
+			<%= text_field_tag :login, params[:login], {:tabindex => '2'} %>
+		</div>
+		<div class="right_field" style="width:50px;">
+			<%= submit_tag "Login", {:tabindex => '4'} %>
+		</div>
+		<div class="clear"></div>
+		<div class="short_left_label">
+			<%= label_tag :password %>
+		</div>
+		<div class="right_field">
+			<%= password_field_tag :password, params[:password], {:tabindex => '3'} %>
+			<br />
+		</div>
+		<div class="clear"></div>
+		<div style="width:200px;height:100px;">
+			&nbsp;
+		</div>
+	</div>
+	<% end %>
+</div>
