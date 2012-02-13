@@ -221,6 +221,15 @@ div.right_field {
   text-align: left;
 }
 
+div.login_right_field {
+  margin-top: 0.25em;
+  margin-bottom:0.25em;
+  display: block;
+  float: left;
+  width: 250px;
+  text-align: left;
+}
+
 /* for 3 column forms with help icon to the side
 add this to the side of right_field to add another column*/
 div.short_text_description {
