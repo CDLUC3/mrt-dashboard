@@ -7,6 +7,8 @@ development:
   user_base:      ou=People,ou=uc3,dc=cdlib,dc=org
   inst_base:      o=institutions,ou=uc3,dc=cdlib,dc=org
   ark_minter_url: http://noid.cdlib.org/nd/noidu_p9
+  guest_password: guest
+  guest_user:     anonymous
 
 development_nonlocal:
   development
