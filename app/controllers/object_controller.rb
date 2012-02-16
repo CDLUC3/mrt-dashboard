@@ -1,33 +1,37 @@
 class ObjectController < ApplicationController
-  before_filter :require_user,       :except => [:jupload_add, :recent]
+  before_filter :require_user,       :except => [:jupload_add, :recent, :ingest]
   before_filter :require_group,      :except => [:jupload_add, :recent, :ingest]
   before_filter :require_write,      :only => [:add, :upload]
   before_filter :require_mrt_object, :only => [:download]
   protect_from_forgery :except => [:ingest]
 
   def ingest
-    if !current_user.groups('write').any? {|g| g.submission_profile == params[:profile]} then
-      render :status=>401, :text=>""
+    if !current_user then
+      render :status=>401, :text=>"" and return
     else
-      ingest_args = {
-        'creator'           => params[:creator],
-        'date'              => params[:date],
-        'digestType'        => params[:digestType],
-        'digestValue'       => params[:digestValue],
-        'file'              => params[:file].tempfile,
-        'filename'          => (params[:filename] || params[:file].original_filename),
-        'localIdentifier'   => params[:localIdentifier],
-        'primaryIdentifier' => params[:primaryIdentifier],
-        'profile'           => params[:profile],
-        'note'              => params[:note],
-        'responseForm'      => params[:responseForm],
-        'submitter'         => "#{current_user.login}/#{current_user.displayname}",
-        'title'             => params[:title],
-        'type'              => params[:type]
-      }.reject{|k, v| v.blank? }
-
-      response = RestClient.post(INGEST_SERVICE, ingest_args, { :multipart => true })
-      render :status=>response.code, :content_type=>response.headers[:content_type], :text=>response.body
+      if !current_user.groups('write').any? {|g| g.submission_profile == params[:profile]} then
+        render :status=>401, :text=>"" and return
+      else
+        ingest_args = {
+          'creator'           => params[:creator],
+          'date'              => params[:date],
+          'digestType'        => params[:digestType],
+          'digestValue'       => params[:digestValue],
+          'file'              => params[:file].tempfile,
+          'filename'          => (params[:filename] || params[:file].original_filename),
+          'localIdentifier'   => params[:localIdentifier],
+          'primaryIdentifier' => params[:primaryIdentifier],
+          'profile'           => params[:profile],
+          'note'              => params[:note],
+          'responseForm'      => params[:responseForm],
+          'submitter'         => "#{current_user.login}/#{current_user.displayname}",
+          'title'             => params[:title],
+          'type'              => params[:type]
+        }.reject{|k, v| v.blank? }
+        
+        response = RestClient.post(INGEST_SERVICE, ingest_args, { :multipart => true })
+        render :status=>response.code, :content_type=>response.headers[:content_type], :text=>response.body
+      end
     end
   end
   
