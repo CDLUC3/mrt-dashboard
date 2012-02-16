@@ -1,0 +1,11 @@
+<% file = line_sidebar %>
+<li style="word-wrap:break-word;">
+  <%= link_to File.basename(file.identifier),
+          :controller       => :file,
+          :action           => :display,
+          :group            => params[:group],
+          :object           => params[:object],
+          :version          => version.identifier,
+          :file             => file.identifier
+  %>
+</li>
