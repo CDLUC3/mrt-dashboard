@@ -10,7 +10,7 @@ class ObjectController < ApplicationController
       render :status=>401, :text=>"" and return
     else
       if !current_user.groups('write').any? {|g| g.submission_profile == params[:profile]} then
-        render :status=>401, :text=>"" and return
+        render :status=>404, :text=>"" and return
       else
         ingest_args = {
           'creator'           => params[:creator],
