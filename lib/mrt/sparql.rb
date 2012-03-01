@@ -1,5 +1,3 @@
-require 'rdf/raptor'
-
 module Mrt
   module Sparql
     class Q
