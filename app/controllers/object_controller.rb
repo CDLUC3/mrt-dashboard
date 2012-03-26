@@ -9,8 +9,10 @@ class ObjectController < ApplicationController
     if !current_user then
       render :status=>401, :text=>"" and return
     else
-      if !current_user.groups('write').any? {|g| g.submission_profile == params[:profile]} then
-        render :status=>404, :text=>"" and return
+      if (!params[:file].respond_to? :tempfile) then
+        render(:status=>400, :text=>"Bad file parameter.\n") and return
+      elsif !current_user.groups('write').any? {|g| g.submission_profile == params[:profile]} then
+        render(:status=>404, :text=>"") and return
       else
         ingest_args = {
           'creator'           => params[:creator],
