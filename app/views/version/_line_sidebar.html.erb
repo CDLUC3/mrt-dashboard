@@ -1,0 +1,8 @@
+<% version = line_sidebar %>
+<%= link_to "Version #{version.identifier}",
+            :controller     => :version,
+            :action         => :index,
+            :group          => params[:group],
+            :object         => params[:object],
+            :version        => version.identifier %>:
+<%= merritt_time(version.created) %><br/>
