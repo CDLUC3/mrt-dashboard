@@ -69,10 +69,14 @@ class Group
   end
 
   def total_size
-    q = Q.new("?obj base:isInCollection <#{self.sparql_id}> ;
-                    object:totalActualSize ?size",
-      :select => "(sum(?size) as total)")
-    return STORE.select(q)[0]["total"].value.to_i
+    response = RSOLR.get('select', 
+                         :params => {
+                           :q    => "type:object and memberOf:\"#{self.ark_id}\"",
+                           :fl   => "totalActualSize",
+                           :rows => nil });
+    size =  0
+    response["response"]["docs"].each {|d| size += d["totalActualSize"] }
+    return size
   end
 
   #get all groups and email addresses of members, this is a stopgap for our own use

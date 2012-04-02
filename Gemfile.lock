@@ -95,6 +95,8 @@ GEM
       mime-types (>= 1.16)
     rsolr (1.0.6)
       builder (>= 2.1.2)
+    rsolr-ext (1.0.3)
+      rsolr (>= 1.0.2)
     ruby-debug (0.10.4)
       columnize (>= 0.1)
       ruby-debug-base (~> 0.10.4.0)
@@ -126,6 +128,7 @@ DEPENDENCIES
   rdf
   rest-client
   rsolr (= 1.0.6)
+  rsolr-ext
   ruby-debug
   unicode
   unicorn (= 3.1.0)
