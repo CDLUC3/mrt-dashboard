@@ -1,5 +1,7 @@
 # this all probably needs to be refactored eventually
 class Group
+  RSOLR = RSolr.connect(:url => SOLR_SERVER)
+
   LDAP = GroupLdap::Server.
     new({ :host            => LDAP_CONFIG["host"],
           :port            => LDAP_CONFIG["port"],
@@ -45,16 +47,17 @@ class Group
   end
 
   def object_count
-    return STORE.select(Q.new("?obj base:isInCollection <#{self.sparql_id}> ;
-                                    a object:Object .",
-                              :select=>"(count(?obj) as c)"))[0]["c"].value.to_i
+    response = RSOLR.get('select', 
+                         :params => {:q => 'type:object and memberOf:"#{self.ark_id}"', 
+                         :fl=>""})
+    return response['response']['numFound'].to_i
   end
 
   def version_count
-    return STORE.select(Q.new("?obj a object:Object ;
-                                    base:isInCollection <#{self.sparql_id}> ;
-                                    dc:hasVersion ?vers .",
-                              :select=>"(count(?vers) as c)"))[0]["c"].value.to_i
+    response = RSOLR.get('select', 
+                         :params => {:q => 'type:version and memberOf:"#{self.ark_id}"', 
+                         :fl=>""})
+    return response['response']['numFound'].to_i
   end
 
   def file_count
