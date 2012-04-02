@@ -93,6 +93,8 @@ GEM
       json (~> 1.4)
     rest-client (1.6.7)
       mime-types (>= 1.16)
+    rsolr (1.0.6)
+      builder (>= 2.1.2)
     ruby-debug (0.10.4)
       columnize (>= 0.1)
       ruby-debug-base (~> 0.10.4.0)
@@ -123,6 +125,7 @@ DEPENDENCIES
   rails (= 3.0.12)
   rdf
   rest-client
+  rsolr (= 1.0.6)
   ruby-debug
   unicode
   unicorn (= 3.1.0)
