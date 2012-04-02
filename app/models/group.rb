@@ -48,14 +48,14 @@ class Group
 
   def object_count
     response = RSOLR.get('select', 
-                         :params => {:q => 'type:object and memberOf:"#{self.ark_id}"', 
+                         :params => {:q => "type:object and memberOf:\"#{self.ark_id}\"", 
                          :fl=>""})
     return response['response']['numFound'].to_i
   end
 
   def version_count
     response = RSOLR.get('select', 
-                         :params => {:q => 'type:version and memberOf:"#{self.ark_id}"', 
+                         :params => {:q => "type:version and memberOf:\"#{self.ark_id}\"",
                          :fl=>""})
     return response['response']['numFound'].to_i
   end
