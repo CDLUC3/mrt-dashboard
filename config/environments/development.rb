@@ -13,4 +13,5 @@ MrtDashboard::Application.configure do
   RDF_ARK_URI         = "http://ark.cdlib.org/"
   RDF_COLLECTION_URI  = "http://uc3.cdlib.org/collection/"
   SPARQL_ENDPOINT     = "http://badger.cdlib.org:8082/sparql/"
+  SOLR_SERVER         = "http://badger.cdlib.org:39680/solr/"
 end
