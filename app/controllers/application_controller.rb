@@ -57,6 +57,7 @@ class ApplicationController < ActionController::Base
     unless current_user
       store_location
       flash[:notice] = "You must be logged in to access the page you requested"
+      #redirect_to "/guest_login" #:controller=>'user_sessions', :action=>'guest_login'
       redirect_to login_url
       return false
     end
@@ -75,7 +76,20 @@ class ApplicationController < ActionController::Base
   
   #require a group if user logged in
   #but hackish thing to get group from session instead of params if help files didn't pass it along
+  # 3.30.12 mstrong added logic to determine if :group is an object or collection
   def require_group
+    # parms{:group] that do not contain an ark id are a collection; all objects contain an ark.
+    if !params[:group].nil? then
+      if  (params[:group].include? "ark:") then
+      # check for collection existance.  if a collection exists, it a object otherwise it's a collection     
+        collection = MrtObject.get_collection(params[:group])
+        if !collection.nil? then
+          params[:object] = params[:group] 
+          params[:group] = (/https?:\/\/\S+?\/(\S+)/.match(collection))[1]  #remove the sparql part of the ark_id
+        end 
+      end
+    end
+      
     raise ErrorUnavailable if flexi_group_id.nil?
     begin
       @group = Group.find(flexi_group_id)
@@ -159,7 +173,7 @@ class ApplicationController < ActionController::Base
   end
   
   def store_location
-    session[:return_to] = request.request_uri
+    session[:return_to] = request.fullpath
   end
   
   def redirect_back_or_default(default)

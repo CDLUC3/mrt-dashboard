@@ -27,7 +27,7 @@ MrtDashboard::Application.routes.draw do
   # s: search 
    
   # route objects and collections to the collection index since they share the same URL syntax 
-  match( 'm/:group/' => 'collection#index', :contraints => {:group => /ark(%3A|:)(%2F|\/).+/i})
+  match( 'm/:group/' => 'collection#index') #, :contraints => {:group => /ark(%3A|:)(%2F|\/).+/i})
   match( 'm/:group/:version' => 'version#index', :contraints => {:group => /ark(%3A|:)(%2F|\/).+/i})
  
   match('d/:object' => 'object#download')
