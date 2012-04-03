@@ -41,7 +41,7 @@ class CollectionController < ApplicationController
   def search_results
     terms = no_inject(Unicode.downcase(params[:terms])).split(/[\s:\/_-]+/)
     terms_q = terms.map {|term| "<http://4store.org/fulltext#token> \"#{term}\"" }.join("; ")
-    q = Q.new("?s a ore:Aggregation ;
+    q = Q.new("?s a object:Object ;
                   #{terms_q} ;
                   base:isInCollection <#{@group.sparql_id}> ;
                   dc:modified ?mod .",
