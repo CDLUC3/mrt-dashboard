@@ -7,6 +7,7 @@ MrtDashboard::Application.configure do
   config.serve_static_assets               = true
   
   INGEST_SERVICE      = 'http://dp01.cdlib.org:33121/poster/submit/'
+  N2T_URI             = "http://n2t.net/"
   SPARQL_ENDPOINT     = "http://dp01.cdlib.org:38082/sparql/"
   RDF_ARK_URI         = "http://ark.cdlib.org/"
   RDF_COLLECTION_URI  = "http://uc3.cdlib.org/collection/"

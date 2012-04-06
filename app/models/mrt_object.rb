@@ -1,6 +1,8 @@
 class MrtObject < UriInfo
   extend MrtPaginator
   
+  attr_accessor :perma_link
+  
   Q = Mrt::Sparql::Q
 
   # Creates a MrtObject from a UriInfo object.
@@ -141,6 +143,10 @@ class MrtObject < UriInfo
     return self.is_stored_object_for.first(Mrt::Model::Object.localIdentifier)
   end
 
+  def permalink
+    return self.perma_link = "#{N2T_URI}" + identifier.to_s
+  end
+  
   def files
     return @files ||= MrtFile.bulk_loader(self[Mrt::Model::Version['hasFile']]).
       sort_by{|f| f.identifier}
