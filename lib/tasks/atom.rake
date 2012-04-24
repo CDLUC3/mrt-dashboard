@@ -30,7 +30,12 @@ def up_to_date?(store, local_id, last_updated)
     return false
   else
     obj = MrtObject.new(res[0]['s'])
-    return DateTime.parse(last_updated) >= obj.modified
+    if last_updated.nil? then
+      return false 
+    else
+      last_updated_date = DateTime.parse(last_updated)
+      return last_updated_date >= obj.modified
+    end
   end
 end
 
