@@ -37,6 +37,25 @@ class ObjectController < ApplicationController
     end
   end
   
+  def mint
+    if !current_user then
+      render :status=>401, :text=>"" and return
+    else
+      if !current_user.groups('write').any? {|g| g.submission_profile == params[:profile]} then
+        render(:status=>404, :text=>"") and return
+      else
+        mint_args = {
+          'profile'           => params[:profile],
+          'erc'              =>  params[:erc],
+          'responseForm'      => params[:responseForm]
+        }.reject{|k, v| v.blank? }
+
+        response = RestClient.post(MINT_SERVICE, mint_args, { :multipart => true })
+        render :status=>response.code, :content_type=>response.headers[:content_type], :text=>response.body
+      end
+    end
+  end
+
   def index
     @object = MrtObject.find_by_identifier(params[:object])
     @versions = @object.versions
