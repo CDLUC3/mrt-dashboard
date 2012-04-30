@@ -14,9 +14,8 @@
   <table width=100%>
     <thead>
       <tr>
-        <th style="width: 40%;">Collection</th>
+        <th style="width: 60%;">Collection</th>
         <th style="width: 20%;">Permissions</th>
-        <th style="width: 20%;"># Objects</th>
       </tr>
     </thead>
     <tbody>
@@ -24,7 +23,6 @@
       <tr class="<%=cycle('even', 'odd') %>">
         <td><%= link_to(grp.description, :controller => 'collection', :action => 'index', :group => grp.id) %></td>
         <td><%= permissions(grp.permission(current_user.login)) %></td>
-        <td><%= formatted_int(grp.object_count) %></td>
       </tr>
       <% end %>
     </tbody>
