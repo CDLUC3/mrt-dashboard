@@ -1,9 +1,11 @@
+require 'tempfile'
+
 class ObjectController < ApplicationController
-  before_filter :require_user,       :except => [:jupload_add, :recent, :ingest]
-  before_filter :require_group,      :except => [:jupload_add, :recent, :ingest]
+  before_filter :require_user,       :except => [:jupload_add, :recent, :ingest, :mint]
+  before_filter :require_group,      :except => [:jupload_add, :recent, :ingest, :mint]
   before_filter :require_write,      :only => [:add, :upload]
   before_filter :require_mrt_object, :only => [:download]
-  protect_from_forgery :except => [:ingest]
+  protect_from_forgery :except => [:ingest, :mint]
 
   def ingest
     if !current_user then
@@ -37,6 +39,26 @@ class ObjectController < ApplicationController
     end
   end
   
+  def mint
+    if !current_user then
+      render :status=>401, :text=>"" and return
+    else
+      if !current_user.groups('write').any? {|g| g.submission_profile == params[:profile]} then
+        render(:status=>404, :text=>"") and return
+      else
+        mint_args = {
+          'profile'           => params[:profile],
+          'erc'              =>  params[:erc] ,
+          'file'             =>  Tempfile.new('restclientbug'), 
+          'responseForm'     => params[:responseForm]
+        }.reject{|k, v| v.blank? }
+
+        response = RestClient.post(MINT_SERVICE, mint_args, { :multipart => true, :accept => '*/*'})
+        render :status=>response.code, :content_type=>response.headers[:content_type], :text=>response.body
+      end
+    end
+  end
+
   def index
     @object = MrtObject.find_by_identifier(params[:object])
     @versions = @object.versions
