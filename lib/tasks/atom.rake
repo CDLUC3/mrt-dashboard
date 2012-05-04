@@ -80,7 +80,11 @@ def process_atom_feed(submitter, profile, starting_point)
 
       # add componenets
       urls.each do |url|
-        iobject.add_component(URI.parse(url[:url]), url[:name])
+        iobject.add_component(URI.parse(url[:url]), 
+                              :name=>url[:name], 
+                              :prefetch=>true,
+                              # workaround for funky site
+                              :prefetch_options=>{"Accept"=>"text/html, */*"})
       end
       iobject.start_ingest(client, profile, submitter)
       iobject.finish_ingest()
