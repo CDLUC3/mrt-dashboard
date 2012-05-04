@@ -15,7 +15,26 @@ MrtDashboard::Application.routes.draw do
   match('logout'        => 'user_sessions#logout',
         :as             => :logout)
 
-  match 'guest_login', :to => 'user_sessions#guest_login', :as => :guest_login, :via => :post
+  match('guest_login'   => 'user_sessions#guest_login', 
+         :as            => :guest_login)
+
+  # pattern of URL is http://merritt.cdlib.org/mode/collectionid|objectid[/versionid[/fileid]]
+  # where mode is an underlying action:
+  # a: add
+  # d: download
+  # m: metadata (landing page)
+  # s: search 
+   
+  # route objects and collections to the collection index since they share the same URL syntax 
+  match( 'm/:group/' => 'collection#index') 
+  match( 'm/:group/:version' => 'version#index', :contraints => {:group => /ark(%3A|:)(%2F|\/).+/i})
+ 
+  match('d/:object' => 'object#download')
+  match('d/:object/:version' => 'version#download')
+  match('d/:object/:version/:file' => 'file#display')
+
+  match('s/:group' => 'collection#search_results')
+  match('a/:group' => 'object#add')
 
   # This is a legacy wild controller route that's not recommended for RESTful applications.
   # Note: This route will make all actions in every controller accessible via GET requests.
