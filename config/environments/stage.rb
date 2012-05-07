@@ -18,5 +18,8 @@ require 'exception_notifier'
 MrtDashboard::Application.config.middleware.use ExceptionNotifier,
   :email_prefix => "[Merritt UI] ",
   :sender_address => "\"notifier\" <no-reply@#{Socket.gethostname}>",
-  :exception_recipients => 
-    %w{erik.hetzner@ucop.edu scott.fisher@ucop.edu perry.willett@ucop.edu}
+  :exception_recipients => ["erik.hetzner@ucop.edu",
+                            "marisa.strong@ucop.edu",
+                            "mark.reyes@ucop.edu",
+                            "perry.willett@ucop.edu",
+                            "scott.fisher@ucop.edu"]
