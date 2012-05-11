@@ -1,3 +1,6 @@
+<% 
+download_disp = !@permissions.nil? && @permissions.include?('download')
+%>
 <% content_for :title do %>
   UC3 Merritt: Version -- <%= @object.identifier %>, Version <%= @version.identifier %>
 <% end %>
@@ -47,6 +50,7 @@
 
   <div class="key">&nbsp;</div><div class="value">&nbsp;</div>
   <div class="key">&nbsp;</div>
+<% if download_disp then %>
   <div class="value">
     <%= form_tag(:action => 'download') do %>
       <%= hidden_field_tag 'group', params[:group] %>
@@ -55,6 +59,7 @@
       <%= submit_tag 'Download version' %>
     <% end %>
   </div>
+<% end %>
 </div>
 <div class="grid_1">&nbsp;</div>
 <div class="grid_4 sidebar">
