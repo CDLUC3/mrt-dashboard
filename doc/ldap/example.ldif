@@ -1,0 +1,134 @@
+dn: ou=uc3,dc=cdlib,dc=org
+objectClass: organizationalunit
+objectClass: top
+ou: uc3
+ds-sync-state: 0000012f74d3b86d78340000006f
+ds-sync-state: 000001300a85b4ac2e080000031f
+ds-sync-state: 00000130042b3a4a1f8d000000d2
+entryUUID: 6af95a8d-207f-3ea8-a6a6-343990d15e6d
+ds-sync-generation-id: 2401310
+
+dn: ou=People,ou=uc3,dc=cdlib,dc=org
+objectClass: organizationalunit
+objectClass: top
+ou: People
+entryUUID: cf0b297e-53c9-3d1b-a714-a09afbc512ec
+
+dn: ou=mrt-classes,ou=uc3,dc=cdlib,dc=org
+objectClass: organizationalUnit
+objectClass: top
+description: Groups for Merritt
+ou: mrt-classes
+ds-sync-hist: dn:0000012c601384c22e0800000015:moddn
+entryUUID: 4a605ee7-8c91-48b4-8676-cb6ba778b178
+createTimestamp: 20100910200452Z
+creatorsName: cn=Directory Manager,cn=Root DNs,cn=config
+modifyTimestamp: 20101118174120Z
+modifiersName: cn=Directory Manager,cn=Root DNs,cn=config
+
+dn: o=institutions,ou=uc3,dc=cdlib,dc=org
+objectClass: top
+objectClass: organization
+o: institutions
+entryUUID: d6765b7c-8628-404f-bb5d-42dc81466107
+createTimestamp: 20100914200152Z
+creatorsName: cn=Directory Manager,cn=Root DNs,cn=config
+
+dn: ou=merritt_demo,ou=mrt-classes,ou=uc3,dc=cdlib,dc=org
+objectClass: organizationalUnit
+objectClass: merrittClass
+objectClass: top
+submissionProfile: merritt_demo_content
+arkId: ark:/99999/fkrn35s8
+ou: merritt_demo
+description: Demo Merritt collection
+entryUUID: a2fa92de-04c7-48ab-bbb9-8451fb796916
+creatorsName: cn=Directory Manager,cn=Root DNs,cn=config
+createTimestamp: 20110601231230Z
+modifyTimestamp: 20110601232253Z
+modifiersName: cn=Directory Manager,cn=Root DNs,cn=config
+
+dn: cn=read,ou=merritt_demo,ou=mrt-classes,ou=uc3,dc=cdlib,dc=org
+objectClass: groupOfUniqueNames
+objectClass: top
+cn: read
+uniqueMember: uid=rjones,ou=People,ou=uc3,dc=cdlib,dc=org
+uniqueMember: uid=aschultze,ou=People,ou=uc3,dc=cdlib,dc=org
+entryUUID: c21e342d-7702-4cb6-83ae-c471831885d6
+createTimestamp: 20110601231251Z
+creatorsName: cn=Directory Manager,cn=Root DNs,cn=config
+modifyTimestamp: 20110601233210Z
+modifiersName: cn=Directory Manager,cn=Root DNs,cn=config
+
+dn: cn=write,ou=merritt_demo,ou=mrt-classes,ou=uc3,dc=cdlib,dc=org
+objectClass: groupOfUniqueNames
+objectClass: top
+cn: write
+uniqueMember: uid=rjones,ou=People,ou=uc3,dc=cdlib,dc=org
+entryUUID: 7ba52114-cc2f-4c22-8a28-2c3766773680
+createTimestamp: 20110601231310Z
+creatorsName: cn=Directory Manager,cn=Root DNs,cn=config
+modifyTimestamp: 20110601233243Z
+modifiersName: cn=Directory Manager,cn=Root DNs,cn=config
+
+dn: o=CDL,o=institutions,ou=uc3,dc=cdlib,dc=org
+objectClass: top
+objectClass: organization
+postalAddress: 415 20th St., 4th Flr
+postalCode: 94612
+description: California Digital LIbrary
+l: Oakland
+o: CDL
+st: CA
+entryUUID: 4c2a625a-af7f-4add-993f-2d110833b36e
+createTimestamp: 20110601231537Z
+creatorsName: cn=Directory Manager,cn=Root DNs,cn=config
+
+dn: uid=rjones,ou=People,ou=uc3,dc=cdlib,dc=org
+objectClass: person
+objectClass: inetOrgPerson
+objectClass: organizationalPerson
+objectClass: merrittUser
+objectClass: top
+institution: o=CDL,o=institutions,ou=uc3,dc=cdlib,dc=org
+givenName: Robert
+tzRegion: America/Los_Angeles
+uid: rjones
+cn: Robert Jones
+sn: Jones
+telephoneNumber: 510-555-1212
+userPassword: {SSHA}YcqzttVNtcfqiqANk52G6YYgCACTCFPKJVjk4w==
+arkId: ark:/99999/fkzp3w014
+mail: bob.jones@example.com
+displayName: Bob Jones
+entryUUID: 0b3e8ebf-57e0-4cc8-be53-a062aac7670d
+pwdChangedTime: 20110601235842.412Z
+creatorsName: cn=Directory Manager,cn=Root DNs,cn=config
+createTimestamp: 20110601231816Z
+modifyTimestamp: 20110601235842Z
+modifiersName: cn=Internal Client,cn=Root DNs,cn=config
+
+dn: uid=aschultze,ou=People,ou=uc3,dc=cdlib,dc=org
+objectClass: person
+objectClass: inetOrgPerson
+objectClass: organizationalPerson
+objectClass: merrittUser
+objectClass: top
+institution: o=CDL,o=institutions,ou=uc3,dc=cdlib,dc=org
+givenName: Angela
+tzRegion: America/Los_Angeles
+uid: aschultze
+cn: Angela Schultze
+telephoneNumber: 415-555-1212
+sn: Schultze
+userPassword: {SSHA}JKM3EcBB10F7LR/L73KbGQKjbL5m/K4CgUSgrg==
+arkId: ark:/99999/fkzp3w011
+mail: angela.schultze@example.com
+displayName: Angela Schultze
+entryUUID: fbe68335-ef91-48eb-ab1b-68b1bcff698b
+pwdChangedTime: 20110601235829.406Z
+createTimestamp: 20110601232151Z
+creatorsName: cn=Directory Manager,cn=Root DNs,cn=config
+modifyTimestamp: 20110601235829Z
+modifiersName: cn=Internal Client,cn=Root DNs,cn=config
+
