@@ -1,3 +1,6 @@
+<% 
+download_disp = !@permissions.nil? && @permissions.include?('download')
+%>
 <%# the following must be passed in
   files = files to display
   obj = metadata obj
@@ -9,16 +12,20 @@
 <div class ="files">
   <% files.each do |file| %>
     <div class="key">
-      <%=link_to(File.basename(file.identifier),
-          :controller => :file, :action => :display,
-          :group => params[:group], :object => params[:object],
-          :version => params[:version], :file => file.identifier)
-          %></div>
-    <div class="value">
-      <%= file[Mrt::Model::File.mediaType].to_s.gsub(/;.*$/, '') %>
-      <%=number_to_storage_size(file[Mrt::Model::Base.size].to_s.to_i)%>
-    </div>
-
+    	<% if download_disp then %>
+	      <%= link_to(File.basename(file.identifier),
+	          :controller => :file, :action => :display,
+	          :group => params[:group], :object => params[:object],
+	          :version => params[:version], :file => file.identifier)
+	          %></div>
+          <% else %>
+          	  <%= File.basename(file.identifier) %>
+        </div>
+	    <div class="value">
+	      <%= file[Mrt::Model::File.mediaType].to_s.gsub(/;.*$/, '') %>
+	      <%=number_to_storage_size(file[Mrt::Model::Base.size].to_s.to_i)%>
+	    </div>
+	    <% end %>
   <% end %>
 </div>
 <div class="clear"></div>
