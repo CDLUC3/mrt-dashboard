@@ -21,11 +21,11 @@ download_disp = !@permissions.nil? && @permissions.include?('download')
           <% else %>
           	  <%= File.basename(file.identifier) %>
         </div>
+	    <% end %>
 	    <div class="value">
 	      <%= file[Mrt::Model::File.mediaType].to_s.gsub(/;.*$/, '') %>
 	      <%=number_to_storage_size(file[Mrt::Model::Base.size].to_s.to_i)%>
 	    </div>
-	    <% end %>
   <% end %>
 </div>
 <div class="clear"></div>

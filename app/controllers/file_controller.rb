@@ -3,7 +3,19 @@ class FileController < ApplicationController
   before_filter :require_object
   before_filter :require_version
 
-  def display
+  def display    
+    # determine if user is retrieving a system file; otherwise assume they are obtaining
+    # a producer file which needs to prepended to the filename
+    if !params[:file].include? "producer"
+      if !params[:file].include? "system"
+       params[:file].insert(0, "producer/")     
+      end
+    end
+    # the router removes the file extension from the filename - need to add it back on if one exists
+    if !params[:format].blank?
+      params[:file].concat "." + params[:format]
+    end
+    
     q = Q.new("?obj dc:identifier \"#{no_inject(params[:object])}\"^^<http://www.w3.org/2001/XMLSchema#string> ;
                     a object:Object .
                ?vers version:inObject ?obj ;
