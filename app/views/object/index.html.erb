@@ -12,8 +12,8 @@ download_disp = !@permissions.nil? && @permissions.include?('download')
     <%= link_to("Collection: #{@group.description}", :controller => 'collection', :action => 'index', :group => params[:group]) %> &gt;
     Object: <%= params[:object] %> 
   </div>
-
-  <br/>
+<br/>
+  <%= render :partial => '/shared/flash_show' %>
   <h3 style="font-weight: normal;">
     <%= render :partial => "/object/short_bib_display", 
                :locals => {:obj => @object} %></h3>
