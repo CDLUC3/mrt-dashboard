@@ -8,6 +8,7 @@ MrtDashboard::Application.configure do
   config.whiny_nils                        = true
   
   INGEST_SERVICE      = 'http://dp01.cdlib.org:33121/poster/submit/'
+  MINT_SERVICE      = 'http://dp01.cdlib.org:33121/ingest/request-identifier'
   N2T_URI             = "http://n2t.net/"
   SPARQL_ENDPOINT     = "http://dp01.cdlib.org:38082/sparql/"
   RDF_ARK_URI         = "http://ark.cdlib.org/"
