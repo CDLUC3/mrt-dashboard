@@ -24,6 +24,8 @@ download_disp = !@permissions.nil? && @permissions.include?('download')
                 :object => @object.identifier) %> &gt;
     Version <%= @version.identifier %>
   </div>
+  <br/>
+  <%= render :partial => '/shared/flash_show' %>
 
   <br/>
   <h3 style="font-weight: normal;">
