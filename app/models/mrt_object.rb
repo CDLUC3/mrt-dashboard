@@ -1,6 +1,8 @@
 class MrtObject < UriInfo
   extend MrtPaginator
   
+  attr_accessor :perma_link
+  
   Q = Mrt::Sparql::Q
 
   # Creates a MrtObject from a UriInfo object.
@@ -15,6 +17,21 @@ class MrtObject < UriInfo
                ?obj dc:identifier \"#{id}\"^^<http://www.w3.org/2001/XMLSchema#string>",
       :select => "?obj")
     return MrtObject.new(UriInfo.store().select(q)[0]['obj'])
+  end
+  
+  def self.get_collection(group_or_object)
+    # we need to find out the collection if it's an object
+    q = Q.new("<#{RDF_ARK_URI}#{group_or_object}> 
+               base:isInCollection ?uri .",
+               :select => "?uri")
+    results = UriInfo.store().select(q)
+    if !results.empty? then
+      uri = results[0]['uri'].to_s
+      return uri
+    else
+      return nil
+    end
+
   end
 
   def self.bulk_loader(uris)
@@ -126,6 +143,10 @@ class MrtObject < UriInfo
     return self.is_stored_object_for.first(Mrt::Model::Object.localIdentifier)
   end
 
+  def permalink
+    return self.perma_link = "#{N2T_URI}" + identifier.to_s
+  end
+  
   def files
     return @files ||= MrtFile.bulk_loader(self[Mrt::Model::Version['hasFile']]).
       sort_by{|f| f.identifier}
