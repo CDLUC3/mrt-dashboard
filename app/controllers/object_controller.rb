@@ -24,6 +24,7 @@ class ObjectController < ApplicationController
           'file'              => params[:file].tempfile,
           'filename'          => (params[:filename] || params[:file].original_filename),
           'localIdentifier'   => params[:localIdentifier],
+          'notification'      => params[:notification],
           'primaryIdentifier' => params[:primaryIdentifier],
           'profile'           => params[:profile],
           'note'              => params[:note],

@@ -6,20 +6,20 @@ UC3 Merritt Login
 	<h1>Login</h1>
 	<%= render :partial => '/shared/flash_show' %>
 	<div class='grid_8 prefix_2'>
-		<%# <div> %>
-			<%# <div class="long_left_label"> %>
-				<%# <%= label_tag "Login as guest for read-only access" %>
-				<%# <br /> %>
-			<%# </div> %>
-			<%# <%= form_tag({:action => 'guest_login'}) do %>
-			<%# <div class="right_field" style="width:100px;"> %>
-				<%# <%= submit_tag "Guest", {:tabindex => '1'} %>
-			<%# </div> %>
-			<%# end %>
-		<%# </div> %>
-		<%# <br /> %>
-		<%# <br /> %>
-		<%# <hr /> %>
+		 <div> 
+			 <div class="long_left_label"> 
+				 <%= label_tag "Login as guest for read-only access" %>
+				 <br /> 
+			 </div> 
+			<%= form_tag({:action => 'guest_login'}) do %>
+			 <div class="right_field" style="width:100px;"> 
+				 <%= submit_tag "Guest", {:tabindex => '1'} %>
+			 </div> 
+			<% end %>
+		 </div> 
+		<br /> 
+		<br /> 
+		<hr /> 
 		<div class="short_left_label">
 			<%= label_tag :Username %>
 		</div>
