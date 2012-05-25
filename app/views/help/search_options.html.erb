@@ -1,7 +1,26 @@
 
 <div class="grid_11">
 
-	<%= render :partial => request[:action] %>
+<h2>Search Options</h2>
+
+  <% if !@group.nil? then %>
+  <div class="breadcrumbs"><%= link_to('Merritt', :controller => 'home', :action => 'index') %> &gt;
+    <%= link_to("Collection: #{@group.description}", :controller => 'collection', :action => 'index') %> &gt;
+    <%= link_to("Help", :controller => 'help', :action => 'index') %> &gt;
+    Search Options
+   </div>
+  <% end %>
+ 
+<br />
+
+<p>If you used the Merritt metadata options to provide a title, creator, date or local identifier, you will be able to search within the collection for any of those terms.  Terms typed in the search box will be found in any of these fields, as well as in the primary identifier assigned by Merritt.  </p>
+
+<h3>Not known: untested</h3>
+<ul>
+  <li>Can I target a search to a field? If so, how?</li>
+  <li>I'm trying to understand how to search on date, but I can't find any records that have date metadata.  I believe that date formats might be transformed if submitted via the spreadsheet.</li>
+</ul>
+
 
 </div>
 <div class="grid_1">&nbsp;</div>

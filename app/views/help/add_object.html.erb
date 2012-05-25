@@ -1,7 +1,49 @@
 
 <div class="grid_11">
-	
-	<%= render :partial => request[:action] %>
+
+ 
+<h2>Adding Objects</h2>
+  <% if !@group.nil? then %>
+  <div class="breadcrumbs"><%= link_to('Merritt', :controller => 'home', :action => 'index') %> &gt;
+    <%= link_to("Collection: #{@group.description}", :controller => 'collection', :action => 'index') %> &gt;
+    <%= link_to("Help", :controller => 'help', :action => 'index') %> &gt;
+    Adding Objects
+   </div>
+  <% end %>
+
+<br />
+
+<p>The <strong>Add Object</strong> screen allows you to submit digital objects one-by-one or in batches.  Single objects can be uploaded directly from your local drive.  Batches must be submitted via a manifest file, which you prepare and upload from your local drive.</p>
+  
+<p><%=image_tag("help/add_object.gif", :class =>"centered")%></p>
+
+
+<p>The following is a brief description of the options for adding objects.  For any option involving a manifest, consult the detailed Using a Manifest guide.</p>
+
+<dl>
+  <dt>Single object: file</dt>
+    <dd>Upload a single file from a local drive. </dd>
+  <dt>Single object: container</dt>
+    <dd>Upload a .zip or .tar file from your local drive.  This container file may contain any number of component files or associated metadata files for a single object.</dd>
+  <dt>Single object: manifest</dt>
+    <dd>As an alternative to wrapping a multi-file object in a .zip or .tar file, you can also create a .checkm format text manifest to upload the object.  You will need to post all component files for the object on a web server, then upload a manifest file that points to the object components.  This option allows you to provide and validate checksum information for each file in an object.  Details are provided in the Using a Manifest guide.</dd>
+  <dt>Batch: of files</dt>
+    <dd>Use this option when you have a long list of simple, one –file objects to add.  You can provide metadata for each object in the manifest.</dd>
+  <dt>Batch: of containers</dt>
+    <dd>Use this option when you have many complex objects to add and you have enclosed each object in a .zip or .tar file.</dd>
+  <dt>Batch: of object manifests</dt>
+    <dd>Use this option if you have prepared object manifests for a large number of objects.</dd>
+</dl>
+
+
+
+<p><%=image_tag("help/manifest_decision_table.gif", :class=>"centered")%></p>
+
+<p>When you add an object you will receive a confirmation screen with a batch ID number.  This screen confirms that the object has been submitted, but does not yet confirm that the object has been successfully ingested.  Merritt takes a number of steps (such as fixity checking ) before an object is ingested.  In most cases it will take a couple of minutes before the object will be retrieved from a search and displayed.</p>
+    
+<p>You will receive an email with a confirmation when the object has either succeeded or failed the ingest process.   Any error details will be provided in the email message; you can contact <strong>uc3@ucop.edu</strong> if you have any questions.</p>
+  
+<p>Merritt allows you to provide title, creator, date and local identifier metadata either by filling out the <strong>Optional Description</strong> form, by providing metadata in a manifest file, or by submitting an <strong>mrt-erc.txt</strong> file with the object.  The metadata you provide becomes searchable in Merritt; we strongly recommend that you provide at least title information.  Further details are in the <strong>Merritt and Metadata </strong>guide.</p>
 
 </div>
 <div class="grid_1">&nbsp;</div>
