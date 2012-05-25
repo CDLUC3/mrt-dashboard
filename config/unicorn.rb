@@ -15,6 +15,4 @@ pid File.join(Dir.pwd, "log", "unicorn.pid")
 # switch to nginx to fix
 timeout 3000
 
-listen "#{Socket.gethostname}:26181"
-
 logger Logger.new(File.join(Dir.pwd, "log", "unicorn.log"))
