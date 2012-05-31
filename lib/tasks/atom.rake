@@ -41,7 +41,7 @@ end
 
 def process_atom_feed(submitter, profile, starting_point)
   store = Mrt::Sparql::Store.new(SPARQL_ENDPOINT)
-  client = Mrt::Ingest::Client.new(INGEST_SERVICE)
+  client = Mrt::Ingest::Client.new(INGEST_SERVICE_ADD)
   server = Mrt::Ingest::OneTimeServer.new
   server.start_server
   next_page = starting_point
