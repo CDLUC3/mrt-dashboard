@@ -53,12 +53,17 @@ class ApplicationController < ActionController::Base
     return @current_user
   end
   
+  # if a user is not logged in then it will default to looging them in as a guest user
+  # if the object is not public then the user will need to navigate to the login page and
+  # login with their own credentials - mstrong 4/12/12
   def require_user
     unless current_user
       store_location
       flash[:notice] = "You must be logged in to access the page you requested"
-      #redirect_to "/guest_login" #:controller=>'user_sessions', :action=>'guest_login'
-      redirect_to login_url
+      # finish encoding the ark: if it wasn't already (apache only encodes slashes)
+      session[:return_to].sub!(/ark:/) {|a| urlencode(a) }  
+      redirect_to :controller=>'user_sessions', :action=>'guest_login'
+      # redirect_to login_url
       return false
     end
   end

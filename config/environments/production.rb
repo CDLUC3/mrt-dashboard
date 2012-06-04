@@ -7,7 +7,8 @@ MrtDashboard::Application.configure do
   config.serve_static_assets               = true
   
   INGEST_SERVICE      = 'http://uc3.cdlib.org:33121/poster/submit/'
-  MINT_SERVICE      = 'http://uc3.cdlib.org:33121/request-identifier'
+  MINT_SERVICE      = 'http://uc3.cdlib.org:33121/ingest/request-identifier'
+  N2T_URI             = "http://n2t.net/"
   SPARQL_ENDPOINT     = "http://inventory.cdlib.org:8082/sparql/"
   RDF_ARK_URI         = "http://ark.cdlib.org/"
   RDF_COLLECTION_URI  = "http://uc3.cdlib.org/collection/"
@@ -17,5 +18,8 @@ require 'exception_notifier'
 MrtDashboard::Application.config.middleware.use ExceptionNotifier,
   :email_prefix => "[Merritt UI] ",
   :sender_address => "\"notifier\" <no-reply@#{Socket.gethostname}>",
-  :exception_recipients =>
-    %w{erik.hetzner@ucop.edu scott.fisher@ucop.edu perry.willett@ucop.edu}
+  :exception_recipients => ["erik.hetzner@ucop.edu",
+                            "marisa.strong@ucop.edu",
+                            "mark.reyes@ucop.edu",
+                            "perry.willett@ucop.edu",
+                            "scott.fisher@ucop.edu"]

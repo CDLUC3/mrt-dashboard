@@ -16,8 +16,7 @@ MrtDashboard::Application.routes.draw do
         :as             => :logout)
 
   match('guest_login'   => 'user_sessions#guest_login', 
-         :as            => :guest_login, 
-        :constraints    => {:method => 'POST'})
+         :as            => :guest_login)
 
   # pattern of URL is http://merritt.cdlib.org/mode/collectionid|objectid[/versionid[/fileid]]
   # where mode is an underlying action:
@@ -27,7 +26,7 @@ MrtDashboard::Application.routes.draw do
   # s: search 
    
   # route objects and collections to the collection index since they share the same URL syntax 
-  match( 'm/:group/' => 'collection#index') #, :contraints => {:group => /ark(%3A|:)(%2F|\/).+/i})
+  match( 'm/:group/' => 'collection#index') 
   match( 'm/:group/:version' => 'version#index', :contraints => {:group => /ark(%3A|:)(%2F|\/).+/i})
  
   match('d/:object' => 'object#download')
