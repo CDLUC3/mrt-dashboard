@@ -20,7 +20,7 @@ module ApplicationHelper
     when Time, DateTime
       return time.strftime("%Y-%m-%dT%H:%M:%S#{time.formatted_offset}")
     when RDF::Literal
-      w3cdtf(Time.parse(time.to_s))
+      w3cdtf(DateTime.parse(time.to_s))
     end
   end
 
@@ -68,8 +68,8 @@ module ApplicationHelper
   end
 
   def merritt_time(t)
-    t = Time.parse(t.to_s) if (t.class != Time)
-    t.localtime.strftime("%Y-%m-%d  %I:%M %p").downcase
+    t = DateTime.parse(t.to_s) if (t.class != DateTime)
+    t.strftime("%Y-%m-%d  %I:%M %p UTC")
   end
 
   # Format kernel metadata, filtering out unassigned values and
