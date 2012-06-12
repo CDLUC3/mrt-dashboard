@@ -48,11 +48,14 @@ xml.tag!('feed', :xmlns => "http://www.w3.org/2005/Atom") do
                                  :action     => 'download',
                                  :group      => @collection_ark,
                                  :object     => clean_id(ark)))
-      local_id = obj.local_identifier.value
-      if (!local_id.blank? && local_id.match(/^http/)) then
-        xml.tag!("link",
-                 "rel"  => "alternate",
-                 "href" => obj.local_identifier)
+
+      if (!obj.local_identifier.nil?) then
+        local_id = obj.local_identifier.value
+        if (local_id.blank? && local_id.match(/^http/)) then
+          xml.tag!("link",
+                   "rel"  => "alternate",
+                   "href" => local_id)
+        end
       end
       xml.tag!("title", obj.what)
       xml.tag!("author") do
