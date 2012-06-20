@@ -1,5 +1,5 @@
 source 'http://rubygems.org'
-gem 'rails', '3.0.12'
+gem 'rails', '3.0.13'
 gem "exception_notification", 
     :git => "git://github.com/rails/exception_notification.git"
 gem "json", "> 1.5.0"

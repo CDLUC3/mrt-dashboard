@@ -115,7 +115,7 @@ class MrtObject < UriInfo
   def versions
     # this works with current storage service and saves a trip to
     # SPARQL
-    return @versions ||= self[RDF::DC["hasVersion"]].map{|uri| MrtVersion.new(uri)}.sort_by{ |v| v[RDF::DC.identifier].to_s.to_i }
+    return @versions ||= self[RDF::DC["hasVersion"]].map{|uri| MrtVersion.new(uri)}.sort_by{ |v| v.identifier.to_i }
     #return @versions ||= self.first(Mrt::Model::Object['versionSeq']).to_list.map{|v| MrtVersion.new(v)}
   end
 
