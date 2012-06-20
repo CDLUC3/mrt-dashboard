@@ -87,12 +87,19 @@ class ApplicationController < ActionController::Base
     if !params[:group].nil? then
       if  (params[:group].include? "ark:") then
       # check for collection existance.  if a collection exists, it a object otherwise it's a collection     
-        collection = MrtObject.get_collection(params[:group])
-        if !collection.nil? then
+        @collection = MrtObject.get_collection(params[:group])
+        if !@collection.nil? then
           params[:object] = params[:group] 
-          params[:group] = (/https?:\/\/\S+?\/(\S+)/.match(collection))[1]  #remove the sparql part of the ark_id
+          params[:group] = (/https?:\/\/\S+?\/(\S+)/.match(@collection))[1]  #remove the sparql part of the ark_id
         end 
       end
+    end
+    
+    def collection_ark
+      if @collection.nil? then
+          @collection = (/https?:\/\/\S+?\/(\S+)/.match(MrtObject.get_collection(params[:object])))[1]
+      end
+      return @collection
     end
       
     raise ErrorUnavailable if flexi_group_id.nil?
@@ -218,17 +225,18 @@ class ApplicationController < ActionController::Base
     open(*args) do |data|
       tmp_file = Tempfile.new('mrt_http')
       if data.instance_of? File then
-        File.copy(data.path, tmp_file.path)
+         File.copy(data.path, tmp_file.path)
       else
-        begin
-          while (!(buff = data.read(4096)).nil?)do 
-            tmp_file << buff
-          end
-        ensure
-          tmp_file.close
-        end
+         begin
+           while (!(buff = data.read(4096)).nil?)do 
+             tmp_file << buff
+           end
+         ensure
+           tmp_file.close
+         end
       end
       return tmp_file
-    end
+    end  
   end
+  
 end

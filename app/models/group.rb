@@ -86,6 +86,8 @@ class Group
     out_str
   end
 
+
+  
   private
 
   def self.make_from_ldap(ldap_group)
@@ -108,4 +110,7 @@ class Group
     return [] if record[field].nil? or record[field][0].nil? or record[field][0].length < 1
     return record[field]
   end
+  
+
+  
 end
