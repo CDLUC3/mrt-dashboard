@@ -1,5 +1,15 @@
 class ApplicationController < ActionController::Base
+#prepend_before_filter :prepare_session 
 
+  def prepare_session 
+    if !session[:expiry_time].nil?
+        if (Time.now > session[:expiry_time] + 30) 
+          reset_session
+        end 
+    end 
+    session[:expiry_time] = Time.now 
+  end
+  
   class ErrorUnavailable < StandardError; end
   rescue_from ErrorUnavailable, :with => :render_unavailable
 
@@ -95,12 +105,7 @@ class ApplicationController < ActionController::Base
       end
     end
     
-    def collection_ark
-      if @collection.nil? then
-          @collection = (/https?:\/\/\S+?\/(\S+)/.match(MrtObject.get_collection(params[:object])))[1]
-      end
-      return @collection
-    end
+
       
     raise ErrorUnavailable if flexi_group_id.nil?
     begin
@@ -238,5 +243,25 @@ class ApplicationController < ActionController::Base
       return tmp_file
     end  
   end
-  
+ 
+    def collection_ark
+      if @collection.nil? then
+          @collection = (/https?:\/\/\S+?\/(\S+)/.match(MrtObject.get_collection(params[:object])))[1]
+      end
+      return @collection
+    end 
+  #
+  # parse the component (object, file, or version) uri to construct the DUA URI
+  # returns the response of the HTTP request for the DUA URI
+  def process_dua_request(rx, component_uri)
+          md = rx.match(component_uri.to_s)
+          debugger
+          dua_filename = "#{md[1]}/" + urlencode(collection_ark) + "/0/" + urlencode(APP_CONFIG['mrt_dua_file']) 
+          dua_file_uri = UriInfo.new(dua_filename)
+          Rails.logger.info("DUA File URI: " + dua_file_uri)
+          uri = URI.parse(dua_file_uri)
+          http = Net::HTTP.new(uri.host, uri.port)
+          uri_response = http.request(Net::HTTP::Get.new(uri.request_uri))
+          return uri_response
+  end 
 end

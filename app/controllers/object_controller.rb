@@ -61,17 +61,32 @@ class ObjectController < ApplicationController
   end
 
   def index
-    @object = MrtObject.find_by_identifier(params[:object])
-    @versions = @object.versions
-    #files for current version
-    @files = @object.files.
-      reject {|file| file.identifier.match(/^system\/mrt-/) }.
-      sort_by {|x| File.basename(x.identifier.downcase) }
+    begin
+      @object = MrtObject.find_by_identifier(params[:object])
+      @versions = @object.versions
+      #files for current version
+      @files = @object.files.
+        reject {|file| file.identifier.match(/^system\/mrt-/) }.
+        sort_by {|x| File.basename(x.identifier.downcase) }     
+    rescue Exception => ex
+      raise ErrorUnavailable
+    end
+
   end
 
   def download
     # check if user has download permissions 
     if !@permissions.nil? && @permissions.include?('download') then
+       if !session[:collection_acceptance].nil? && !session[:collection_acceptance][@group.id] 
+         rx = /^(.*)\/([^\/]+)$/  
+         uri_response = process_dua_request(rx, @object.bytestream_uri)
+         if (uri_response.class == Net::HTTPOK) then
+             tmp_dua_file = fetch_to_tempfile(dua_file_uri) 
+             session[:dua_file_uri] = dua_file_uri
+             store_location
+             redirect_to :controller => "dua",  :action => "index" and return false 
+         end
+       end
       tmp_file = fetch_to_tempfile("#{@object.bytestream_uri}?t=zip")
       # rails is not setting Content-Length
       response.headers["Content-Length"] = File.size(tmp_file.path).to_s

@@ -14,14 +14,23 @@ class DuaController < ApplicationController
   
   def index 
     if !params['commit'].blank? then
-      if params[:commit] = 'Do Not Accept'   
+      if params[:commit] = 'Do Not Accept' 
+        return  
       end
       if params[:accept].nil? then
         flash[:message] = 'You must check that you accept the terms.'
         return
       end
+      if params[:name].nil? then
+        flash[:message] = 'Please enter the required fields'
+        return
+      end
+      if params[:affiliation].nil? then
+        flash[:message] = 'Please enter the required fields'
+        return
+      end
       if params[:email].blank? or (params[:email] =~ /^.+@.+$/).nil? then
-        flash[:message] = 'You must fill in a return email address.'
+        flash[:message] = 'You must fill in a valid return email address.'
         return
       end      
         to_email = params[:email] + "," +  # need to obtain owner of collection email
