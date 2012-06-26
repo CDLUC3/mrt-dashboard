@@ -1,0 +1,72 @@
+<% 
+download_disp = !@permissions.nil? && @permissions.include?('download')
+%>
+<% content_for :title do %>
+  UC3 Merritt: Version -- <%= @object.identifier %>, Version <%= @version.identifier %>
+<% end %>
+
+<div class="grid_11">
+  <h2>
+    <%= @object.identifier %> - 
+    Version <%= @version.identifier %>:
+    <%= merritt_time(@version.created)%>
+  </h2>
+  <div class="breadcrumbs">
+    <%= link_to('Merritt', :controller => 'home', :action => 'index') %> &gt;
+    <%= link_to("Collection: #{@group.description}", 
+                :controller => 'collection',
+                :action => 'index', 
+                :group => params[:group]) %> &gt;
+    <%= link_to("Object: #{@object.identifier}", 
+                :controller => 'object', 
+                :action => 'index', 
+                :group => params[:group], 
+                :object => @object.identifier) %> &gt;
+    Version <%= @version.identifier %>
+  </div>
+  <br/>
+  <%= render :partial => '/shared/flash_show' %>
+
+  <br/>
+  <h3 style="font-weight: normal;">
+    <%= render :partial => "/object/short_bib_display", 
+               :locals => {:obj => @object} %>
+  </h3>
+
+  <%= render :partial => '/version/details_display', 
+  :locals => {:obj => @object,
+              :version => @version, 
+              :number_files => (@files.length + @system_files.length)} %>
+  <div class="clear"></div>
+
+  <%= render :partial => '/version/files', 
+             :locals => {:title   => 'User Files', 
+                         :files   => @files, 
+                         :obj     => @object, 
+                         :version => @version} %>
+  <%= render :partial => '/version/files',
+             :locals => {:title   => 'System Files', 
+                         :files   => @system_files,
+                         :obj     => @object, 
+                         :version => @version} %>
+
+  <div class="key">&nbsp;</div><div class="value">&nbsp;</div>
+  <div class="key">&nbsp;</div>
+<% if download_disp then %>
+  <div class="value">
+    <%= form_tag(:action => 'download') do %>
+      <%= hidden_field_tag 'group', params[:group] %>
+      <%= hidden_field_tag 'object', @object.identifier %>
+      <%= hidden_field_tag 'version', @version.identifier %>
+      <%= submit_tag 'Download version' %>
+    <% end %>
+  </div>
+<% end %>
+</div>
+<div class="grid_1">&nbsp;</div>
+<div class="grid_4 sidebar">
+  <%= render :partial => '/shared/side_lookup' %><br/>
+  <%= render :partial => '/version/list_sidebar',
+      :locals => {:versions => @versions.reverse,
+                  :title => 'All Versions'} %><br/>
+</div>

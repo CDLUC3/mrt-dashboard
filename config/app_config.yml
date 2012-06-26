@@ -1,0 +1,23 @@
+development:
+  feedback_email_to:      [pwillet.ucop.edu, mstrong@ucop.edu]
+  feedback_email_from:    no-reply-dmptool@ucop.edu
+  mrt_dua_file:           producer/mrt-dua.txt
+
+development_nonlocal:
+  development
+
+stage:
+  feedback_email_to:      [uc3@ucop.edu]
+  feedback_email_from:    no-reply-dmptool@ucop.edu
+  mrt_dua_file:           producer/mrt-dua.txt
+
+stage_development:
+  stage
+
+production:
+  feedback_email_to:      [uc3@ucop.edu]
+  feedback_email_from:    no-reply-dmptool@ucop.edu
+  mrt_dua_file:           producer/mrt-dua.txt
+
+production_development:
+  production
