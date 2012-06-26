@@ -16,6 +16,18 @@ class VersionController < ApplicationController
   def download
     # check if user has download permissions 
     if !@permissions.nil? && @permissions.include?('download') then
+       if !session[:collection_acceptance].nil? && !session[:collection_acceptance][@group.id] 
+
+         rx = /^(.*)\/([^\/]+)\/([0-9]+)$/  
+         uri_response = process_dua_request(rx, @version.bytestream_uri)
+         if (uri_response.class == Net::HTTPOK) then
+             tmp_dua_file = fetch_to_tempfile(dua_file_uri) 
+             session[:dua_file_uri] = dua_file_uri
+             store_location
+             redirect_to :controller => "dua",  :action => "index" and return false 
+         end
+       end
+
       tmp_file = fetch_to_tempfile("#{@version.bytestream_uri}?t=zip")
       # rails is not setting Content-Length
       response.headers["Content-Length"] = File.size(tmp_file.path).to_s

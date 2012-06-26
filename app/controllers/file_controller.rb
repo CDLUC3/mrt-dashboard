@@ -5,6 +5,7 @@ class FileController < ApplicationController
   before_filter :require_version
 
   def display
+    debugger
     filename = params[:file]
     # check if user has download permissions 
     if !@permissions.nil? && @permissions.include?('download') then
@@ -30,26 +31,25 @@ class FileController < ApplicationController
   
       file = MrtFile.new(store().select(q)[0]['file'])
       file_uri = file.first(Mrt::Model::Base.bytestream).to_uri
+      Rails.logger.info(file_uri)
       
+      # do not process DUA for python scripts - indicated by special param
       # if DUA has been accepted already for this collection, do not display to user again in this session
-      if !session[:collection_acceptance][@group.id] 
-          #construct the dua_file_uri based off the file_uri, the object's parent collection, version 0, and  DUA filename
-          rx = /^(.*)\/([^\/]+)\/([0-9]+)\/([^\/]+)$/
-          md = rx.match(file_uri.to_s)
-          dua_filename = "#{md[1]}/" + urlencode(collection_ark) + "/0/" + urlencode(APP_CONFIG['mrt_dua_file']) 
-          dua_file_uri = UriInfo.new(dua_filename)
-          uri = URI.parse(dua_file_uri)
-    
-           http = Net::HTTP.new(uri.host, uri.port)
-           uri_response = http.request(Net::HTTP::Get.new(uri.request_uri))
-           # if the DUA exists, display DUA to user for acceptance before displaying file
-           if (uri_response.class == Net::HTTPOK) then
-             tmp_dua_file = fetch_to_tempfile(dua_file_uri) 
-             session[:dua_file_uri] = dua_file_uri
-             store_location
-             redirect_to :controller => "dua",  :action => "index" and return false 
+     # debugger
+#      if params[:blue].nil? then
+        if !session[:collection_acceptance][@group.id] 
+            #construct the dua_file_uri based off the file_uri, the object's parent collection, version 0, and  DUA filename
+            rx = /^(.*)\/([^\/]+)\/([0-9]+)\/([^\/]+)$/
+            uri_response = process_dua_request(rx, file_uri)
+            # if the DUA exists, display DUA to user for acceptance before displaying file
+             if (uri_response.class == Net::HTTPOK) then
+               tmp_dua_file = fetch_to_tempfile(dua_file_uri) 
+               session[:dua_file_uri] = dua_file_uri
+               store_location
+               redirect_to :controller => "dua",  :action => "index" and return false 
+           end
          end
-       end
+#      end
       # else do nothing - no DUA file so don't need to display DUA, just display file
       
       tmp_file = fetch_to_tempfile(file_uri)
