@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+	<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+  <head>
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+  </head>
+  <body>
+    <h1>DUA <%= @hsh['title'] %></h1>
+    <li>
+      <ul>Email: <%= @from %></ul>
+      <ul>DUA Terms: <%= @hsh['terms'] %> </ul>
+    </li>
+    <p>
+      <%= @hsh['body'].gsub("\n", '</p><p>') %>
+    </p>
+  </body>
+</html>
