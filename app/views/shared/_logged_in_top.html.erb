@@ -11,7 +11,8 @@
   <% else %>
     <%= link_to("Login", :controller => 'user_sessions', :action => 'login') %>
   <% end %>
-  <% if usr then %>
+  <!-- do not display Profile link for Guest user -->
+  <% if usr && !usr.login.eql?(User::GUEST_USER[:guest_user]) then %>
     | <%= link_to('Profile', params.merge({:controller => 'user', :action => 'update'}))  %>
   <% end %>
   | <a href="http://www.cdlib.org/services/uc3/contact.html">Contact UC3</a> | <%= link_to("Help", :controller => 'help', :action => 'index') %>

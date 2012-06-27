@@ -14,18 +14,20 @@
       <span class="smaller">I accept all terms</span>
     </div>
 
-    <%= label_tag('name', '* Name:', {:class => 'short_label'}) %>
+    <br/>
+    <%= label_tag('name', '* Name: ', {:class => 'short_label'}) %>
     <%= text_field_tag('name', params[:name]) %>
     <div class="clear"></div>
     
-    <%= label_tag('affiliation', '* Affiliation:', {:class => 'short_label'}) %>
+    <br/>
+    <%= label_tag('affiliation', '* Affiliation: ', {:class => 'short_label'}) %>
     <%= text_field_tag('affiliation', params[:affiliation]) %>
     <div class="clear"></div>
 
+    <br/>
     <div class='short_label'>
-      <%= label_tag('email', '* Email:') %>
+      <%= label_tag('email', '* Email: ') %>
       <%= text_field_tag('email', params[:email]) %>
-<!--      <span class="smaller">(required)</span> -->
     </div>
     <div class="clear"></div><br/>
     
@@ -36,8 +38,9 @@
     <%= submit_tag('Accept') %>
     <%= submit_tag('Do Not Accept', {:onClick => "window.close()"}) %>
     
+    <br/>
     <div class='short_label'>
-    <span class="smaller">NOTE: When accepted, an email will be sent to the email entered with the terms of this agreement</span>
+    <span class="smaller">NOTE: Following acceptance, a copy of these agreement terms will be emailed to the email entered here</span>
     </div>
 
   <% end%>

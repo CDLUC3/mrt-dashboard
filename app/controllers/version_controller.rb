@@ -11,13 +11,14 @@ class VersionController < ApplicationController
       file.identifier.match(/^system\//)
     }
     @versions = @object.versions
+    @path_info = request.env["PATH_INFO"]
+    @permalink = request.env["REQUEST_URI"]
   end
 
   def download
     # check if user has download permissions 
     if !@permissions.nil? && @permissions.include?('download') then
        if !session[:collection_acceptance].nil? && !session[:collection_acceptance][@group.id] 
-         #process DUA if one exists
          rx = /^(.*)\/([^\/]+)\/([0-9]+)$/  
          dua_file_uri = construct_dua_uri(rx, file_uri)
          uri_response = process_dua_request(dua_file_uri)
