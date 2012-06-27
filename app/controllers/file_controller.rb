@@ -5,7 +5,6 @@ class FileController < ApplicationController
   before_filter :require_version
 
   def display
-    debugger
     filename = params[:file]
     # check if user has download permissions 
     if !@permissions.nil? && @permissions.include?('download') then
@@ -36,7 +35,7 @@ class FileController < ApplicationController
       # do not process DUA for python scripts - indicated by special param
       # if DUA has been accepted already for this collection, do not display to user again in this session
      # debugger
-#      if params[:blue].nil? then
+      if params[:blue].nil? then
         if !session[:collection_acceptance][@group.id] 
             #construct the dua_file_uri based off the file_uri, the object's parent collection, version 0, and  DUA filename
             rx = /^(.*)\/([^\/]+)\/([0-9]+)\/([^\/]+)$/
@@ -50,7 +49,7 @@ class FileController < ApplicationController
                redirect_to :controller => "dua",  :action => "index" and return false 
            end
          end
-#      end
+      end
       # else do nothing - no DUA file so don't need to display DUA, just display file
       
       tmp_file = fetch_to_tempfile(file_uri)
