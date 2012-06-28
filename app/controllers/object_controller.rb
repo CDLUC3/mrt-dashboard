@@ -80,7 +80,7 @@ class ObjectController < ApplicationController
        if !session[:collection_acceptance].nil? && !session[:collection_acceptance][@group.id] 
          #process DUA if one exists
          rx = /^(.*)\/([^\/]+)$/  
-         dua_file_uri = construct_dua_uri(rx, file_uri)
+         dua_file_uri = construct_dua_uri(rx, @object.bytestream_uri)
          uri_response = process_dua_request(dua_file_uri)
          if (uri_response.class == Net::HTTPOK) then
              tmp_dua_file = fetch_to_tempfile(dua_file_uri) 
