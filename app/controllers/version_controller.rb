@@ -13,7 +13,6 @@ class VersionController < ApplicationController
     @versions = @object.versions
     @relative_link = "/m/" + urlencode(@object.identifier.to_s) + "/" + @version.identifier
     @permalink = "http://" + request.env["HTTP_HOST"] + @relative_link
-     debugger
   end
 
   def download
@@ -21,7 +20,7 @@ class VersionController < ApplicationController
     if !@permissions.nil? && @permissions.include?('download') then
        if !session[:collection_acceptance].nil? && !session[:collection_acceptance][@group.id] 
          rx = /^(.*)\/([^\/]+)\/([0-9]+)$/  
-         dua_file_uri = construct_dua_uri(rx, file_uri)
+         dua_file_uri = construct_dua_uri(rx, @version.bytestream_uri)
          uri_response = process_dua_request(dua_file_uri)
          if (uri_response.class == Net::HTTPOK) then
              tmp_dua_file = fetch_to_tempfile(dua_file_uri) 
