@@ -11,8 +11,9 @@ class VersionController < ApplicationController
       file.identifier.match(/^system\//)
     }
     @versions = @object.versions
-    @path_info = request.env["PATH_INFO"]
-    @permalink = request.env["REQUEST_URI"]
+    @relative_link = "/m/" + urlencode(@object.identifier.to_s) + "/" + @version.identifier
+    @permalink = "http://" + request.env["HTTP_HOST"] + @relative_link
+     debugger
   end
 
   def download

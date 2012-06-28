@@ -34,9 +34,12 @@ class FileController < ApplicationController
       
       # do not process DUA for python scripts - indicated by special param
       # if DUA has been accepted already for this collection, do not display to user again in this session
-     # debugger
+      debugger
       if params[:blue].nil? then
-        if !session[:collection_acceptance][@group.id] 
+#        if session[:collection_acceptance][@group.id].eql?("not accepted") then
+#           redirect_to  :controller => 'object', :action => 'index', :group => flexi_group_id,  :object =>params[:object] and return false         
+#         end
+        if !session[:collection_acceptance][@group.id]
             #construct the dua_file_uri based off the file_uri, the object's parent collection, version 0, and  DUA filename
             rx = /^(.*)\/([^\/]+)\/([0-9]+)\/([^\/]+)$/
             dua_file_uri = construct_dua_uri(rx, file_uri)
@@ -50,8 +53,8 @@ class FileController < ApplicationController
            end
          end
       end
-      # else do nothing - no DUA file so don't need to display DUA, just display file
       
+      # else do nothing - no DUA file so don't need to display DUA, just display file
       tmp_file = fetch_to_tempfile(file_uri)
       # rails is not setting Content-Length
       response.headers["Content-Length"] = File.size(tmp_file.path).to_s

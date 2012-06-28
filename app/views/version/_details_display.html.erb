@@ -7,7 +7,7 @@
   <div class="value"><%= obj.identifier %></div>
 
   <div class="key">permanent link:</div>
-  <div class="value"><%= link_to(@permalink, @path_info ) %></div>
+  <div class="value"><%= link_to(@permalink, @relative_link ) %></div>
 
   <div class="key">title:</div>
   <div class="value"><%= dc_nice(version.what) %>&nbsp;</div>

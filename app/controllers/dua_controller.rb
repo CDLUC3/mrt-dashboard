@@ -13,44 +13,40 @@ class DuaController < ApplicationController
   end
   
   def index 
-    if !params['commit'].blank? then
-      if params[:commit] = 'Do Not Accept' 
-        return  
-      end
+    if params['commit'].eql?("Accept") then  
       if params[:accept].nil? then
         flash[:message] = 'You must check that you accept the terms.'
         return
       end
-      if params[:name].nil? then
+      if params[:name].blank? || params[:affiliation].blank? || params[:email].blank? then
         flash[:message] = 'Please enter the required fields'
         return
       end
-      if params[:affiliation].nil? then
-        flash[:message] = 'Please enter the required fields'
-        return
-      end
-      if params[:email].blank? or (params[:email] =~ /^.+@.+$/).nil? then
+
+      if  (params[:email] =~ /^.+@.+$/).nil? then
         flash[:message] = 'You must fill in a valid return email address.'
         return
-      end      
+      end   
+      
         to_email = params[:email] + "," +  # need to obtain owner of collection email
                    APP_CONFIG['feedback_email_to'].join(", ")
-
         #ContactMailer.feedback_email(params[:email],
         #          { 'title``'  => @title,
         #            'to_email'        => to_email,
         #            'name'            => params[:name],
         #            'body'            => params[:body]}).deliver
         #redirect_to :action => 'sent' and return
-    session[:collection_acceptance][@group.id] = true
-    redirect_to session[:return_to]
-     return
-#       render :sent
-    end
+          session[:collection_acceptance][@group.id] = true
+          redirect_to session[:return_to]
+          return
+
+        else if params[:commit].eql?("Do Not Accept") then
+          puts "did not accept"
+          session[:collection_acceptance][@group.id] = "not accepted"
+          redirect_to session[:return_to]
+         end
+       end
   end
 
-  def sent
-    redirect_to :back
-  end
 
 end
