@@ -192,6 +192,13 @@ class ApplicationController < ActionController::Base
   def store_location
     session[:return_to] = request.fullpath
   end
+  def store_object
+    session[:object] = request.params[:object]
+  end
+  
+  def store_version
+    session[:version] = request.params[:version]
+  end
   
   def redirect_back_or_default(default)
     redirect_to(session[:return_to] || default)

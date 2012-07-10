@@ -28,25 +28,24 @@ class DuaController < ApplicationController
         return
       end   
       
-        to_email = params[:email] + "," +  # need to obtain owner of collection email
+      to_email = params[:email] + "," +  # need to obtain owner of collection email
                    APP_CONFIG['feedback_email_to'].join(", ")
-        #ContactMailer.feedback_email(params[:email],
-        #          { 'title``'  => @title,
-        #            'to_email'        => to_email,
-        #            'name'            => params[:name],
-        #            'body'            => params[:body]}).deliver
-        #redirect_to :action => 'sent' and return
-          session[:collection_acceptance][@group.id] = true
-          redirect_to session[:return_to]
-          return
-
-        else if params[:commit].eql?("Do Not Accept") then
-          puts "did not accept"
-          session[:collection_acceptance][@group.id] = "not accepted"
-          redirect_to session[:return_to]
-         end
-       end
-  end
-
-
+      #ContactMailer.feedback_email(params[:email],
+      #          { 'title``'  => @title,
+      #            'to_email'        => to_email,
+      #            'name'            => params[:name],
+      #            'body'            => params[:body]}).deliver
+      
+      #user accepted DUA, go ahead and process file/object/version download
+      session[:collection_acceptance][@group.id] = true
+       # return to where user came from 
+       redirect_to session[:return_to]
+    elsif params[:commit].eql?("Do Not Accept") then
+       puts "did not accept DUA"
+       session[:collection_acceptance][@group.id] = "not accepted"
+       # return to where user came from 
+       redirect_to session[:return_to]
+    end
+   end
+   
 end
