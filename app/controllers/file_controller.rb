@@ -32,29 +32,29 @@ class FileController < ApplicationController
       file_uri = file.first(Mrt::Model::Base.bytestream).to_uri
       Rails.logger.info(file_uri)
       
-      # do not process DUA for python scripts - indicated by special param
-      # if DUA has been accepted already for this collection, do not display to user again in this session
-      debugger
+      # bypass DUA processing for python scripts - indicated by special param
       if params[:blue].nil? then
-#        if session[:collection_acceptance][@group.id].eql?("not accepted") then
-#           redirect_to  :controller => 'object', :action => 'index', :group => flexi_group_id,  :object =>params[:object] and return false         
-#         end
-        if !session[:collection_acceptance][@group.id]
-            #construct the dua_file_uri based off the file_uri, the object's parent collection, version 0, and  DUA filename
-            rx = /^(.*)\/([^\/]+)\/([0-9]+)\/([^\/]+)$/
-            dua_file_uri = construct_dua_uri(rx, file_uri)
-            uri_response = process_dua_request(dua_file_uri)
-            # if the DUA exists, display DUA to user for acceptance before displaying file
-             if (uri_response.class == Net::HTTPOK) then
-               tmp_dua_file = fetch_to_tempfile(dua_file_uri) 
-               session[:dua_file_uri] = dua_file_uri
-               store_location
-               redirect_to :controller => "dua",  :action => "index" and return false 
-           end
-         end
+        # if DUA was not accepted, redirect to object landing page 
+        if session[:collection_acceptance][@group.id].eql?("not accepted") then
+          session[:collection_acceptance][@group.id] = false  # reinitialize to false so user can again be given option to accept DUA 
+          redirect_to  :controller => 'object', :action => 'index', :group => flexi_group_id,  :object =>params[:object] and return false         
+        # if DUA for this collection has not yet been displayed to user, perform logic to retrieve DUA.
+        elsif !session[:collection_acceptance][@group.id]
+          #construct the dua_file_uri based off the file_uri, the object's parent collection, version 0, and  DUA filename
+          rx = /^(.*)\/([^\/]+)\/([0-9]+)\/([^\/]+)$/
+          dua_file_uri = construct_dua_uri(rx, file_uri)
+          uri_response = process_dua_request(dua_file_uri)
+          # if the DUA for this collection exists, display DUA to user for acceptance before displaying file
+          if (uri_response.class == Net::HTTPOK) then
+             tmp_dua_file = fetch_to_tempfile(dua_file_uri) 
+             session[:dua_file_uri] = dua_file_uri
+             store_location
+             redirect_to :controller => "dua",  :action => "index" and return false 
+          end
+        end
       end
       
-      # else do nothing - no DUA file so don't need to display DUA, just display file
+      # the user has accepted the DUA for this collection or there is no DUA to process -  just display file
       tmp_file = fetch_to_tempfile(file_uri)
       # rails is not setting Content-Length
       response.headers["Content-Length"] = File.size(tmp_file.path).to_s
@@ -63,8 +63,10 @@ class FileController < ApplicationController
                 :type => file[Mrt::Model::File.mediaType].to_s.downcase,
                 :disposition => "inline")
    else
-      flash[:error] = 'You do not have permission to download.'     
+      flash[:error] = 'You do not have download permissions.'     
       redirect_to  :controller => 'version', :action => 'index', :group => flexi_group_id,  :object =>params[:object], :version => params[:version] and return false
    end
  end 
+ 
+ 
 end
