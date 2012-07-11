@@ -41,7 +41,6 @@ class ApplicationController < ActionController::Base
 
   #lets the group get itself from the params, but if not, from the session
   def flexi_group_id
-    puts "in flexi_group_id: params[:group] = " + (params[:group] ?   params[:group] :" " ) + " session[:group] = " + (session[:group] ?   session[:group] : " ")
     params[:group] or session[:group]
   end
   
@@ -94,7 +93,6 @@ class ApplicationController < ActionController::Base
   #but hackish thing to get group from session instead of params if help files didn't pass it along
   # 3.30.12 mstrong added logic to determine if :group is an object or collection
   def require_group
-    debugger
     # parms{:group] that do not contain an ark id are a collection; all objects contain an ark.
     if !params[:group].nil? then
       if  (params[:group].include? "ark:") then
@@ -275,7 +273,7 @@ class ApplicationController < ActionController::Base
   # parse the component (object, file, or version) uri to construct the DUA URI
   def construct_dua_uri(rx, component_uri)
      md = rx.match(component_uri.to_s)
-     dua_filename = "#{md[1]}/" + urlencode(collection_ark) + "/0/" + urlencode(APP_CONFIG['mrt_dua_file']) 
+     dua_filename = "#{md[1]}/" + urlencode((/https?:\/\/\S+?\/(\S+)/.match(collection_ark))[1])   + "/0/" + urlencode(APP_CONFIG['mrt_dua_file']) 
      dua_file_uri = UriInfo.new(dua_filename)
      Rails.logger.debug("DUA File URI: " + dua_file_uri)
      return dua_file_uri

@@ -30,7 +30,6 @@ class VersionController < ApplicationController
     if !@permissions.nil? && @permissions.include?('download') then
       # bypass DUA processing for python scripts - indicated by special param
       if params[:blue].nil? then
-        debugger
         # if DUA was not accepted, redirect to object landing page 
         if session[:collection_acceptance][@group.id].eql?("not accepted") then
           session[:collection_acceptance][@group.id] = false  # reinitialize to false so user can again be given option to accept DUA 
