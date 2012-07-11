@@ -105,10 +105,7 @@ class ApplicationController < ActionController::Base
       end
     else  #obtain the group if its not yet been set
       if params[:group].nil? && !params[:object].nil? then
-        @collection = MrtObject.get_collection(params[:object])
-        if !@collection.nil? then
-          params[:group] = (/https?:\/\/\S+?\/(\S+)/.match(@collection))[1]  #remove the sparql part of the ark_id
-        end 
+          params[:group]= (/https?:\/\/\S+?\/(\S+)/.match(MrtObject.get_collection(params[:object])))[1]
       end
     end
 
@@ -273,7 +270,7 @@ class ApplicationController < ActionController::Base
   # parse the component (object, file, or version) uri to construct the DUA URI
   def construct_dua_uri(rx, component_uri)
      md = rx.match(component_uri.to_s)
-     dua_filename = "#{md[1]}/" + urlencode((/https?:\/\/\S+?\/(\S+)/.match(collection_ark))[1])   + "/0/" + urlencode(APP_CONFIG['mrt_dua_file']) 
+     dua_filename = "#{md[1]}/" + urlencode(collection_ark)  + "/0/" + urlencode(APP_CONFIG['mrt_dua_file']) 
      dua_file_uri = UriInfo.new(dua_filename)
      Rails.logger.debug("DUA File URI: " + dua_file_uri)
      return dua_file_uri
