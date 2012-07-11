@@ -9,7 +9,6 @@ class ObjectController < ApplicationController
   protect_from_forgery :except => [:ingest, :mint]
 
   def require_session_object
-    debugger
     if !session[:object].nil?
       params[:object] = session[:object]
     end
@@ -83,7 +82,6 @@ class ObjectController < ApplicationController
   end
 
   def download
-    debugger
     # check if user has download permissions 
     if !@permissions.nil? && @permissions.include?('download') then
       # bypass DUA processing for python scripts - indicated by special param
