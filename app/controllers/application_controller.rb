@@ -41,6 +41,7 @@ class ApplicationController < ActionController::Base
 
   #lets the group get itself from the params, but if not, from the session
   def flexi_group_id
+    puts "in flexi_group_id: params[:group] = " + (params[:group] ?   params[:group] :" " ) + " session[:group] = " + (session[:group] ?   session[:group] : " ")
     params[:group] or session[:group]
   end
   
@@ -93,20 +94,26 @@ class ApplicationController < ActionController::Base
   #but hackish thing to get group from session instead of params if help files didn't pass it along
   # 3.30.12 mstrong added logic to determine if :group is an object or collection
   def require_group
+    debugger
     # parms{:group] that do not contain an ark id are a collection; all objects contain an ark.
     if !params[:group].nil? then
       if  (params[:group].include? "ark:") then
-      # check for collection existance.  if a collection exists, it a object otherwise it's a collection     
+      # check for collection existance.  if a collection exists, it an object otherwise it's a collection     
         @collection = MrtObject.get_collection(params[:group])
         if !@collection.nil? then
           params[:object] = params[:group] 
           params[:group] = (/https?:\/\/\S+?\/(\S+)/.match(@collection))[1]  #remove the sparql part of the ark_id
         end 
       end
+    else  #obtain the group if its not yet been set
+      if params[:group].nil? && !params[:object].nil? then
+        @collection = MrtObject.get_collection(params[:object])
+        if !@collection.nil? then
+          params[:group] = (/https?:\/\/\S+?\/(\S+)/.match(@collection))[1]  #remove the sparql part of the ark_id
+        end 
+      end
     end
-    
 
-      
     raise ErrorUnavailable if flexi_group_id.nil?
     begin
       @group = Group.find(flexi_group_id)
@@ -124,6 +131,12 @@ class ApplicationController < ActionController::Base
     @groups = current_user.groups.sort{|x, y| x.description.downcase <=> y.description.downcase}
     @group_ids = @groups.map{|grp| grp.id}
     raise ErrorUnavailable if !@group_ids.include?(flexi_group_id)
+    # initialize the DUA acceptance to false - once the user accepts for a collection, it will be set to true.  
+    # Resets at logout
+    if session[:collection_acceptance].nil? then 
+      session[:collection_acceptance] = Hash.new(false)
+    end
+
   end
 
   #require write access to this group

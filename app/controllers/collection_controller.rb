@@ -37,11 +37,6 @@ class CollectionController < ApplicationController
     if !params[:object].nil? then
         redirect_to :controller=>'object', :action=>'index', :group=>params[:group], :object=>params[:object]
     end
-    # initialize the DUA acceptance to false - once the user accepts for a collection, it will be set to true.  
-    # Resets at logout
-    if session[:collection_acceptance].nil? then 
-      session[:collection_acceptance] = Hash.new(false)
-    end
       
     @recent_objects = MrtObject.paginate(:collection => no_inject(@group.sparql_id),
                                          :page       => (params[:page] || 1), 
