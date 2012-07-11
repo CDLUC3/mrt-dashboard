@@ -24,6 +24,7 @@ class UserSessionsController < ApplicationController
   end
   
   def guest_login
+    debugger
     if User.valid_ldap_credentials?(User::GUEST_USER[:guest_user], User::GUEST_USER[:guest_password]) then
       flash[:notice] = "Login was successful"
       session[:uid] = User::GUEST_USER[:guest_user]
