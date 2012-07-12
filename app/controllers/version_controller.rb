@@ -21,8 +21,13 @@ class VersionController < ApplicationController
       file.identifier.match(/^system\//)
     }
     @versions = @object.versions
+    # construct the permalink to this version - use the constant defined in config for stage and prod environments
     @relative_link = "/m/" + urlencode(@object.identifier.to_s) + "/" + @version.identifier
-    @permalink = "http://" + request.env["SERVER_NAME"] + @relative_link
+    if Rails.env.production? or Rails.env.stage? then
+       @permalink = MERRITT_SERVER + @relative_link
+     else
+       @permalink = "http://" + request.env["SERVER_NAME"] + @relative_link
+     end
   end
 
   def download

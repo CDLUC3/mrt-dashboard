@@ -1,4 +1,4 @@
-class ContactMailer < ActionMailer::Base
+class DuaMailer < ActionMailer::Base
 
   default :from => APP_CONFIG['feedback_email_from']
 
