@@ -22,7 +22,7 @@ class VersionController < ApplicationController
     }
     @versions = @object.versions
     @relative_link = "/m/" + urlencode(@object.identifier.to_s) + "/" + @version.identifier
-    @permalink = "http://" + request.env["HTTP_HOST"] + @relative_link
+    @permalink = "http://" + request.env["SERVER_NAME"] + @relative_link
   end
 
   def download
