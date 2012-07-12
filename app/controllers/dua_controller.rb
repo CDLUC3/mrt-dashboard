@@ -31,8 +31,8 @@ class DuaController < ApplicationController
       to_email = params[:email] + "," +  # need to obtain owner of collection email
                    APP_CONFIG['feedback_email_to'].join(", ")
       DuaMailer.feedback_email(params[:email],
-               { 'title``'   => @dua_hash["Title"],
-                  'to_email' => to_email,
+               { 'title'     => @dua_hash["Title"],
+                 'to_email'  => to_email,
                   'name'     => params[:name],
                   'body'     => @dua_hash["Terms"]}).deliver
        
