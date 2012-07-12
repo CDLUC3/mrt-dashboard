@@ -30,12 +30,12 @@ class DuaController < ApplicationController
       
       to_email = params[:email] + "," +  # need to obtain owner of collection email
                    APP_CONFIG['feedback_email_to'].join(", ")
-      #ContactMailer.feedback_email(params[:email],
-      #          { 'title``'  => @title,
-      #            'to_email'        => to_email,
-      #            'name'            => params[:name],
-      #            'body'            => params[:body]}).deliver
-      
+      DuaMailer.feedback_email(params[:email],
+               { 'title``'   => @dua_hash["Title"],
+                  'to_email' => to_email,
+                  'name'     => params[:name],
+                  'body'     => @dua_hash["Terms"]}).deliver
+       
       #user accepted DUA, go ahead and process file/object/version download
       session[:collection_acceptance][@group.id] = true
        # return to where user came from 
