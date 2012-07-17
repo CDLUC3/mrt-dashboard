@@ -34,11 +34,13 @@ class DuaController < ApplicationController
                  APP_CONFIG['dua_email_to']].join(", ")
                  
       DuaMailer.dua_email(@dua_hash,
-              {'to_email'   => to_email,
+              {'title'      => @dua_hash["Title"],
+               'to_email'   => to_email,
                'name'       => params[:name],
                'affiliation'=> params[:affiliation],
                'email'      => params[:user_agent_email],
-               'collection' => @group.id, 
+               'object'     => session[:object],
+               'collection' => @group.description, 
                'body'     => @dua_hash["Terms"]
                   }).deliver
        
