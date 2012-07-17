@@ -4,7 +4,7 @@ Name: <%= @hsh['name'] %>
 Affiliation: <%= @hsh['affiliation'] %> 
 Email: <%= @hsh['email'] %>
 Collection: <%= @hsh['collection'] %> 
-Date: <%= time_tag Date.today %>  <!-- yyyy-mm-dd hh:mm:ss±hh:mm -->
+Date: <%= Time.now.strftime("%Y-%m-%dd %H:%M:%S %:z") %>  <!-- yyyy-mm-dd hh:mm:ss±hh:mm -->
 Terms of Use: 
 
 <%= @hsh['body'] %>

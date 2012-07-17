@@ -10,7 +10,7 @@
       <ul>Affiliation: <%= @hsh['affiliation'] %> </ul>
      <ul>Email: <%= @hsh['email'] %> </ul> 
       <ul>Collection: <%= @hsh['collection'] %> </ul>
-      <ul>Date: <%= time_tag Date.today %> </ul>  <!-- yyyy-mm-dd hh:mm:ss±hh:mm -->
+      <ul>Date: <%= Time.now.strftime("%Y-%m-%dd %H:%M:%S %:z") %> </ul>  <!-- yyyy-mm-dd hh:mm:ss±hh:mm -->
       <ul>Terms of Use:  </ul>
     </li>
     <p>    	
