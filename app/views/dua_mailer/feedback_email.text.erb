@@ -1,7 +1,11 @@
 Data Use Agreement <%= @hsh['title'] %>
 
-Email: <%= @from %>
-Terms <%= @hsh['terms'] %>
+Name: <%= @hsh['name'] %>
+Affiliation: <%= @hsh['affiliation'] %> 
+Email: <%= @hsh['email'] %>
+Collection: <%= @hsh['collection'] %> 
+Date: <%= time_tag Date.today %>  <!-- yyyy-mm-dd hh:mm:ss±hh:mm -->
+Terms of Use: 
 
 <%= @hsh['body'] %>
 
