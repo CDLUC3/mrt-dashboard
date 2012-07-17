@@ -29,8 +29,6 @@ class DuaController < ApplicationController
       end   
       
       # configure the email
-      @dua_hash['Notification'] = "mstrong@ucop.edu"
-      
       to_email = [params[:user_agent_email] , 
                  (@dua_hash["Notification"]  || ''),
                  APP_CONFIG['dua_email_to']].join(", ")
