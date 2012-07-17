@@ -18,23 +18,31 @@ class DuaController < ApplicationController
         flash[:message] = 'You must check that you accept the terms.'
         return
       end
-      if params[:name].blank? || params[:affiliation].blank? || params[:email].blank? then
+      if params[:name].blank? || params[:affiliation].blank? || params[:user_agent_email].blank? then
         flash[:message] = 'Please enter the required fields'
         return
       end
 
-      if  (params[:email] =~ /^.+@.+$/).nil? then
+      if  (params[:user_agent_email] =~ /^.+@.+$/).nil? then
         flash[:message] = 'You must fill in a valid return email address.'
         return
       end   
       
-      to_email = params[:email] + "," +  # need to obtain owner of collection email
-                   APP_CONFIG['feedback_email_to'].join(", ")
-#      DuaMailer.feedback_email(params[:email],
-#               { 'title'     => @dua_hash["Title"],
-#                 'to_email'  => to_email,
-#                  'name'     => params[:name],
-#                  'body'     => @dua_hash["Terms"]}).deliver
+      # configure the email
+      @dua_hash['Notification'] = "mstrong@ucop.edu"
+      
+      to_email = [params[:user_agent_email] , 
+                 (@dua_hash["Notification"]  || ''),
+                 APP_CONFIG['dua_email_to']].join(", ")
+                 
+      DuaMailer.dua_email(@dua_hash,
+              {'to_email'   => to_email,
+               'name'       => params[:name],
+               'affiliation'=> params[:affiliation],
+               'email'      => params[:user_agent_email],
+               'collection' => @group.id, 
+               'body'     => @dua_hash["Terms"]
+                  }).deliver
        
       #user accepted DUA, go ahead and process file/object/version download
       session[:collection_acceptance][@group.id] = true
@@ -48,4 +56,6 @@ class DuaController < ApplicationController
     end
    end
    
+   def send_email
+   end
 end

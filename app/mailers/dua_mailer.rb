@@ -1,12 +1,12 @@
 class DuaMailer < ActionMailer::Base
 
-  default :from => APP_CONFIG['feedback_email_from']
+  default :from => APP_CONFIG['dua_email_from']
 
-  def feedback_email(from, hsh)
-    @from = from
-    @hsh = {'title' => '', 'name' => '', 'body' => ''}.merge(hsh)
+  def dua_email(dua_hsh, hsh)
+    debugger
+    @hsh = {'body' => ''}.merge(hsh)
      mail( :to            => "#{@hsh['to_email']}",
-           :subject       => "#{@hsh['title']}",
-           :from          => @from)
+           :subject       => "Merritt DUA acceptance: " + dua_hsh['Title'],
+           :reply_to      => dua_hsh["Notification"])
   end
 end
