@@ -29,7 +29,6 @@ class FileController < ApplicationController
   
       file = MrtFile.new(store().select(q)[0]['file'])
       dl_url = file.first(Mrt::Model::Base.bytestream).to_uri
-      puts dl_url
       response.headers["Content-Length"] = file.size.to_s
       response.headers["Content-Disposition"] = "inline; filename=\"#{File.basename(file.identifier)}\""
       response.headers["Content-Type"] = file.media_type

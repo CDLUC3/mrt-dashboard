@@ -104,17 +104,6 @@ class ObjectController < ApplicationController
           'responseForm'      => 'xml'
         }.reject{|key, value| value.blank? }
 
-      #this is for debugging with equivalent request with curl
-=begin
-      arr_out = []
-      hsh.each_pair do |k,v|
-        if !k.eql?('file') then
-          arr_out.push("-F \"#{k}=#{v}\"")
-        end
-      end
-      puts "\ncurl -F \"file=@#{hsh['file'].path}\" #{arr_out.join(" ")} #{INGEST_SERVICE}\n\n"
-=end
-      #end for debugging
       service = (params[:update_object].blank? ? INGEST_SERVICE : INGEST_SERVICE_UPDATE)
       @response = RestClient.post(service, hsh, { :multipart => true })
 
