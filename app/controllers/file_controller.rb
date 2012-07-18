@@ -28,14 +28,12 @@ class FileController < ApplicationController
                 :select => "?file")
   
       file = MrtFile.new(store().select(q)[0]['file'])
-      file_uri = file.first(Mrt::Model::Base.bytestream).to_uri
-      tmp_file = fetch_to_tempfile(file_uri)
-      # rails is not setting Content-Length
-      response.headers["Content-Length"] = File.size(tmp_file.path).to_s
-      send_file(tmp_file.path,
-                :filename => File.basename(file.identifier),
-                :type => file[Mrt::Model::File.mediaType].to_s.downcase,
-                :disposition => "inline")
+      dl_url = file.first(Mrt::Model::Base.bytestream).to_uri
+      puts dl_url
+      response.headers["Content-Length"] = file.size.to_s
+      response.headers["Content-Disposition"] = "inline; filename=\"#{File.basename(file.identifier)}\""
+      response.headers["Content-Type"] = file.media_type
+      self.response_body = Streamer.new(dl_url)
    else
       flash[:error] = 'You do not have permission to download.'     
       redirect_to  :controller => 'version', :action => 'index', :group => flexi_group_id,  :object =>params[:object], :version => params[:version] and return false
