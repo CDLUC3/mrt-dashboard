@@ -72,13 +72,9 @@ class ObjectController < ApplicationController
   def download
     # check if user has download permissions 
     if !@permissions.nil? && @permissions.include?('download') then
-      tmp_file = fetch_to_tempfile("#{@object.bytestream_uri}?t=zip")
-      # rails is not setting Content-Length
-      response.headers["Content-Length"] = File.size(tmp_file.path).to_s
-      send_file(tmp_file.path,
-                :filename => "#{Orchard::Pairtree.encode(@object.identifier.to_s)}_object.zip",
-                :type => "application/zip",
-                :disposition => "attachment")
+      response.headers["Content-Disposition"] = "attachment; filename=#{Orchard::Pairtree.encode(@object.identifier.to_s)}_object.zip"
+      response.headers["Content-Type"] = "application/zip"
+      self.response_body = Streamer.new("#{@object.bytestream_uri}?t=zip")
     else
       flash[:error] = 'You do not have permission to download.'     
       redirect_to  :action => 'index', :group => flexi_group_id,  :object =>params[:object] and return false

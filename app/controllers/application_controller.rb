@@ -1,5 +1,23 @@
-class ApplicationController < ActionController::Base
+# monkeypatch, see http://stackoverflow.com/questions/3507594/ruby-on-rails-3-streaming-data-through-rails-to-client
+class Rack::Response
+  def close
+    @body.close if @body.respond_to?(:close)
+  end
+end
 
+class ApplicationController < ActionController::Base
+  class Streamer
+    def initialize(url)
+      @url = url
+    end
+    
+    def each 
+      HTTPClient.new.get_content(@url) { |chunk|
+        yield chunk
+      }
+    end
+  end
+  
   class ErrorUnavailable < StandardError; end
   rescue_from ErrorUnavailable, :with => :render_unavailable
 
