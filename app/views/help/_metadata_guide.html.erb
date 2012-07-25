@@ -1,0 +1,83 @@
+<h2>Merritt and Metadata</h2>
+  <% if !@group.nil? then %>
+  <div class="breadcrumbs"><%= link_to('Merritt', :controller => 'home', :action => 'index') %> &gt;
+    <%= link_to("Collection: #{@group.description}", :controller => 'collection', :action => 'index') %> &gt;
+    <%= link_to("Help", :controller => 'help', :action => 'index') %> &gt;
+    Merritt and Metadata
+  </div>
+  <% end %>
+  
+<br />
+<p>We strongly recommend that descriptive metadata accompany each digital object. Metadata are critical to managing digital collections and providing meaningful reports. We are aware that you most likely have descriptive metadata about each object, stored in MARC, MODS, METS, or some other format. If you have metadata records, we will store and preserve them as part of the digital object.  To preserve metadata records with a digital object, we recommend that you create a container file (.zip or .tar) include all object component files as well as the metadata files and submit the container file to Merritt.</p> 
+
+<p>Merritt also enables you to use metadata to discover and manage content in the repository.  You can provide information about title, creator (author), date and local identifier either by typing in metadata on the <strong>Add Object</strong> form, by using a batch manifest, or by submitting a <strong>mrt-erc.txt</strong> file with the object.  This guide will help you choose the best approach.  Note that elements contained within associated metadata files such as METS or MARC will be preserved but not searchable.  If these files contain title or author information, you will also need to provide that data via the <strong>Add Object</strong> form, a manifest or an <strong>mrt-erc.txt</strong> file.</p>
+
+<a name="elements"></a>
+<h3>The Metadata Elements</h3>
+<p>Merritt uses Dublin Core Kernel Metadata, also expressed as Electronic Resource Citations (ERCs), to provide access to content.  These four elements can have different names depending on the means of submission:</p>
+
+
+<table width="90%">
+	<tr>
+		<th width="25%">ERC (mrt-erc.txt file)</th>
+		<th width="25%">Dublin Core</th>
+		<th width="25%">Add Object Screen</th>
+		<th width="25%">Manifest File</th>
+	</tr>
+	
+	<tr>
+		<td><strong>Who</strong></td>
+		<td>DC.creator</td>
+		<td>creator</td>
+		<td>creator</td>
+	</tr>
+	
+	<tr>
+		<td><strong>What</strong></td>
+		<td>DC.title</td>
+		<td>title</td>
+		<td>title</td>
+	</tr>
+	
+	<tr>
+		<td><strong>When</strong></td>
+		<td>DC.date</td>
+		<td>date</td>
+		<td>date</td>
+	</tr>
+
+
+	<tr>
+		<td><strong>Where</strong></td>
+		<td>identifier</td>
+		<td>Local Identifier</td>
+		<td>localIdentifier</td>
+	</tr>
+
+</table>
+
+<p>Not only are all of these elements searchable in Merritt, but the <strong>local identifier</strong> element can be used to edit content.  (If you have a large number of objects to edit, you can submit a batch manifest that specifies the local identifiers of the objects to be edited along with the revised content - see <a href="edit_objects.html.erb">Editing Objects</a> for details.) At this time these elements are not repeatable.</p>
+
+
+<a name="options"></a>
+<h3>Metadata Submission Options</h3>
+
+<p><%=image_tag("help/metadata_option_chart.gif", :class=>"centered")%></p>
+
+<a name="erc"></a>
+<h3>The ERC format</h3>
+
+<p>The Electronic Resource Citation specification is meant to be lightweight and easy-to-supply and provides easy-to-read, meaningful information about the object. We'll use the ERC metadata you supply in reports about your digital objects and collections. For further details, see the Electronic Resource Citation Specification at: <a href="http://dublincore.org/kernelwiki/FrontPage?action=AttachFile&do=get&target=ercspec.html" target=_new>http://dublincore.org/kernelwiki/FrontPage?action=AttachFile&do=get&target=ercspec.html</a></p>.  
+
+<p>Sample ERC file:</p>  
+
+
+<pre>
+erc:
+who: (:unkn) unknown
+what: Jazz for the bears
+when: 1920-1932
+where: 2001697390
+</pre>
+
+<p>If you are using the ERC method, be sure to name the file <strong>mrt-erc.txt</strong> and either include it in a container file with the object or reference it in an object manifest file.</p>

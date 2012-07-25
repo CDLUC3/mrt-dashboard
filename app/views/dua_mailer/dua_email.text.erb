@@ -1,0 +1,12 @@
+Data Use Agreement <%= @hsh['title'] %>
+
+Name: <%= @hsh['name'] %>
+Affiliation: <%= @hsh['affiliation'] %> 
+Email: <%= @hsh['email'] %>
+Collection: <%= @hsh['collection'] %> 
+Object: <%= @hsh['object'] %> 
+Date: <%= Time.now.strftime("%Y-%m-%d %H:%M:%S %z") %>  <!-- yyyy-mm-dd hh:mm:ss±hh:mm -->
+Terms of Use: 
+
+<%= @hsh['body'] %>
+
