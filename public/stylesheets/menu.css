@@ -1,0 +1,391 @@
+/*
+	basic grid & markup
+	--------------------------------------------------
+*/
+/*
+.menu_fun {
+	font-family: "Lucida Sans", Verdana, Geneva, Helvetica, sans-serif;
+	font-size: 12px;
+	line-height: 20px;
+	text-align: center;
+} */
+
+
+/* reset default element styles */
+/*
+.menu_fun div, .menu_fun span,
+.menu_fun h1, .menu_fun h2, .menu_fun h3, .menu_fun h4,
+.menu_fun p, .menu_fun blockquote, .menu_fun pre,
+.menu_fun a, .menu_fun abbr, .menu_fun acronym,
+.menu_fun address, .menu_fun big, .menu_fun cite, .menu_fun code,
+.menu_fun del, .menu_fun dfn, .menu_fun em, .menu_fun font,
+.menu_fun img, .menu_fun ins, .menu_fun kbd, .menu_fun q, .menu_fun s,
+.menu_fun samp,
+.menu_fun small, .menu_fun strike, .menu_fun strong, .menu_fun sub,
+.menu_fun sup, .menu_fun tt, .menu_fun var,
+.menu_fun b, .menu_fun u, .menu_fun i, .menu_fun center,
+.menu_fun dl, .menu_fun dt, .menu_fun dd, .menu_fun ol, .menu_fun ul, .menu_fun li,
+.menu_fun fieldset, .menu_fun form, .menu_fun label, .menu_fun legend {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	vertical-align: baseline;
+}
+
+.menu_fun p, .menu_fun ul, .menu_fun ol {
+	margin-bottom: 20px;
+}
+
+.menu_fun p.tip {
+	font-size: 14px;
+}
+
+.menu_fun strong {
+	display: block;
+	clear: left;
+}
+
+.menu_fun p.tip strong,
+.menu_fun div.contact strong {
+	display: inline;
+}
+
+.menu_fun div.notice {
+	margin: 1em 0 2em;
+	padding: 5px 10px; background: #f3f3f3; border: 1px solid #F15C30;
+}
+
+*/
+
+.menu_fun li
+{
+	margin-left: 0px;
+}
+
+/*
+.menu_fun div.notice h3 {
+	font-weight: bold;
+}
+
+.menu_fun div.notice p {
+	margin: 5px 0 0 0;
+}
+
+.menu_fun div.contact {
+	margin: 0 0 20px 0;
+	text-align: right;
+	border-bottom: 2px solid #ccc;
+}
+
+.menu_fun div.contact strong,
+div.contact strong a {
+	color: #F15C30;
+}
+
+.menu_fun div.contact span{
+	display: block;
+}
+*/
+
+/* grid */
+
+/*
+.menu_fun div#container {
+	width: 600px;
+	margin: 0 auto;
+	padding-top: 50px;
+	text-align: left;
+}
+*/
+
+/* headings */
+/*
+.menu_fun h1, .menu_fun h2, .menu_fun h3, .menu_fun h4, .menu_fun h5, .menu_fun h6, .menu_fun legend {
+	font-family: "Lucida Sans", Verdana, Geneva, Helvetica, sans-serif;
+}
+
+
+.menu_fun h1 {
+	margin: 0 0 5px 0;
+	font-size: 20px;
+	font-weight: normal;
+}
+
+.menu_fun h2 {
+	font-size: 17px;
+	color: #999;
+	margin-bottom: 10px;
+}
+
+.menu_fun h3 {
+	font-size: 15px;
+	font-weight: normal;
+}
+*/
+
+/* definition list */
+
+.menu_fun dl {
+	clear: left;
+	margin: 20px 0;	
+}
+
+.menu_fun dt {
+	float: left;
+}
+
+.menu_fun dd {
+	margin-left: 10em;
+}
+
+
+/* pre & code */
+
+.menu_fun pre {
+	overflow: hidden;
+	padding: 0;
+	margin: 0;
+	width: 400px;
+	text-align: left;
+}
+
+.menu_fun div.demo-item {
+	overflow: hidden;
+	padding: 10px 0;
+	border-bottom: 1px solid #ccc;
+}
+
+.menu_fun div.last {
+	border: 0;
+}
+
+
+/*
+	navigation bar - horizontal dropdown
+	--------------------------------------------------
+*/
+
+/* first level */
+.menu_fun ul.menu {
+	float: left;
+	/*height: 100%;*/
+	width: 100%;
+	margin-top: 10px;
+	padding: 0;
+	/*border-left: 1px solid #d7d7d7;*/
+	/*border-right: 1px solid #d7d7d7;*/
+	list-style: none;
+	/*background: transparent url('/images/menu/bg-nav.png') repeat-x 0 0;*/
+	background-color: #C1CDCD;
+}
+
+.menu_fun ul.menu li {
+	position: relative;
+	float: left;
+	line-height: 1.1;
+}
+
+.menu_fun ul.menu li a {
+	display: block;
+	width: auto;
+	margin-left: 15px;
+	margin-right: 15px;
+	padding: 4px;
+	text-decoration: none;
+	color: #363636;
+	/*background: transparent url('/images/menu/bg-nav-sep.png') no-repeat right 2px;*/
+	background-color: #C1CDCD;
+	background: transparent;
+	font-weight:bold;
+}
+
+.menu_fun ul.menu li.last a {
+	background: transparent;
+}
+
+.menu_fun ul.menu li a.sub {
+	padding-right: 15px;
+	background: transparent url('/images/menu/arrow3.png') no-repeat right;
+}
+
+.menu_fun ul.menu li:hover,
+.menu_fun ul.menu li.hover /* protofish */ {
+	background: transparent url('/images/menu/bg-nav.png') repeat-x 0 -32px;
+}
+
+.menu_fun ul.menu li:hover a,
+.menu_fun ul.menu li.hover /* protofish */ a {
+	color: #000;
+}
+
+.menu_fun ul.menu li.active a {
+	color: #1c1c1c;
+}
+
+/* second level */
+.menu_fun ul.menu ul {
+	padding: 0;
+	margin: 0;
+	list-style: none;
+	top: 22px;
+	width: 168px;
+	border-top: 1px solid #d7d7d7;
+}
+
+/* resetting first level */
+.menu_fun ul.menu ul ul {
+	
+}
+
+.menu_fun ul.menu li:hover li,
+.menu_fun ul.menu li:hover li a,
+.menu_fun ul.menu li.hover /* protofish */ li,
+.menu_fun ul.menu li.hover /* protofish */ li a {
+	background: #fff;
+	/*color: #7c7c7c;*/
+	color: #1c1c1c;
+
+}
+
+/* submenu markup */
+.menu_fun ul.menu li li {
+	width: 100%;
+	border-left: 1px solid #d7d7d7;
+	border-right: 1px solid #d7d7d7;
+}
+
+.menu_fun ul.menu li li.last {
+	border-bottom: 1px solid #d7d7d7;
+}
+
+.menu_fun ul.menu li li a {
+	padding: 5px 0px 3px 10px;
+	margin: 0;
+}
+
+.menu_fun ul.menu li:hover li:hover a,
+.menu_fun ul.menu li.hover li.hover /* protofish */ a {
+	background: #EBF6DE;
+	color: #000;
+	margin: 0;
+}
+
+.menu_fun ul.menu li:hover li.active a,
+.menu_fun ul.menu li.hover /* protofish */ li.active a {
+	/*color: #f15c30; lighter green*/
+	color: #1c1c1c;
+}
+
+.menu_fun ul.menu li li a.sub {
+	padding-right: 15px;
+	background: url('/images/menu/arrow_r.png') no-repeat 95% 50%;
+}
+
+.menu_fun ul.menu li:hover li:hover a.sub,
+ul.menu li.hover li.hover /* protofish */ a.sub {
+	background: #f6f6f6 url('/images/menu/arrow_r.png') no-repeat 95% 50%;
+}
+
+/* third level */
+/* resetting second level */
+.menu_fun ul.menu ul ul{
+	top: -1px;
+	margin-left: 169px;
+	background: #fff;
+}
+
+.menu_fun ul.menu li:hover li:hover li,
+.menu_fun ul.menu li:hover li:hover li a, {
+ul.menu li.hover li.hover /* protofish */ li,
+ul.menu li.hover li.hover /* protofish */ li a
+	color: #7c7c7c;
+}
+
+/* subsubmenu markup */
+.menu_fun ul.menu li:hover li:hover li:hover a,
+.menu_fun ul.menu li.hover li.hover li.hover /* protofish */ a {
+	background: #e6e6e6;
+	color: #000;
+}
+
+.menu_fun ul.menu li:hover li:hover li.active a,
+.menu_fun ul.menu li.hover li.hover /* protofish */ li.active a {
+	color: #1c1c1c;
+	background: transparent url('/images/menu/bg-nav.png') repeat-x 0 -32px;
+}
+
+.menu_fun ul.menu li:hover li:hover li:hover a.sub,
+.menu_fun ul.menu li.hover li.hover li.hover /* protofish */ a.sub {
+	background: #e6e6e6 url('/images/menu/arrow_r.png') no-repeat 95% 50%;
+}
+
+/* fourth level */
+/* resetting second level */
+.menu_fun ul.menu li:hover li:hover li:hover li,
+.menu_fun ul.menu li:hover li:hover li:hover li a,
+.menu_fun ul.menu li.hover li.hover li.hover /* protofish */ li,
+.menu_fun ul.menu li.hover li.hover li.hover /* protofish */ li a {
+	color: #7c7c7c;
+}
+
+/* subsubmenu markup */
+.menu_fun ul.menu li:hover li:hover li:hover li:hover a,
+.menu_fun ul.menu li.hover li.hover li.hover li.hover /* protofish */ a {
+	background: #ccc;
+	color: #000;
+}
+
+.menu_fun ul.menu li:hover li:hover li:hover li.active a,
+.menu_fun ul.menu li.hover li.hover li.hover /* protofish */ li.active a {
+	color: #f15c30;
+}
+
+.menu_fun ul.menu li:hover li:hover li:hover li a.sub,
+.menu_fun ul.menu li.hover li.hover li.hover /* protofish */ li a.sub {
+	background: #e6e6e6;
+}
+
+.menu_fun ul.menu li:hover li:hover li:hover li:hover a.sub,
+.menu_fun ul.menu li.hover li.hover li.hover li.hover /* protofish */ a.sub {
+	background: #ccc;
+}
+
+/* hiding fifth level */
+.menu_fun div#nav ul ul ul ul ul {
+	display: none;
+}
+
+/* show hide behaviour */
+.menu_fun ul.menu ul,
+.menu_fun ul.menu li:hover ul ul,
+.menu_fun ul.menu ul ul,
+.menu_fun ul.menu li:hover ul ul ul,
+.menu_fun ul.menu ul ul ul,
+.menu_fun ul.menu li:hover ul ul ul ul {
+	position: absolute;
+	left: -999em;
+}
+
+.menu_fun ul.menu li:hover ul,
+.menu_fun ul.menu li li:hover ul,
+.menu_fun ul.menu li li li:hover ul,
+.menu_fun ul.menu li li li li:hover ul {
+	left: -1px;
+	z-index: 999;
+}
+
+/* show hide behaviour with protofish */
+.menu_fun ul.menu li.hover ul ul,
+.menu_fun ul.menu li.hover ul ul ul,
+.menu_fun ul.menu li.hover ul ul ul ul {
+	position: absolute;
+	left: -999em;
+}
+
+.menu_fun ul.menu li.hover ul,
+.menu_fun ul.menu li li.hover ul,
+.menu_fun ul.menu li li li.hover ul,
+.menu_fun ul.menu li li li li.hover ul {
+	left: -1px;
+	z-index: 999;
+}
