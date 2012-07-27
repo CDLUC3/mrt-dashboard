@@ -9,7 +9,7 @@ class Dua
     File.open(dua_file.path) do |f| 
       while line = f.gets
         if !rx.match(line).nil?
-          a << $~.captures
+          a << $~.captures.map {|entry| entry.strip}  # clean up the entries
         end  
       end
       @dua_hash = Hash[a]
