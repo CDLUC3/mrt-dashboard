@@ -11,10 +11,10 @@
       <dt>Email: <%= @hsh['email'] %> </dt>
       <dt>Collection: <%= @hsh['collection'] %> </dt>
       <dt>Object: <%= @hsh['object'] %> </dt>
-      <dt>Date: <%= Time.now.strftime("%Y-%m-%d %H:%M:%S %z") %> </dt>       
+      <dt>Date: <%= Time.now.strftime("%Y-%m-%d %H:%M:%S %z") %> </dt>
       <dt>Terms of Use:  </dt>
     </dl>
-    <p> <%= @hsh['body'].gsub("\n", '</p><p>') %>
+    <p> <%= word_wrap(@hsh['body'].gsub("\n", '</p><p>')) %>
     </p>
   </body>
 </html>
