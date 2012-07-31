@@ -153,8 +153,9 @@ class ObjectController < ApplicationController
       puts "\ncurl -F \"file=@#{hsh['file'].path}\" #{arr_out.join(" ")} #{INGEST_SERVICE}\n\n"
 =end
       #end for debugging
-      service = (params[:update_object].blank? ? INGEST_SERVICE : INGEST_SERVICE_UPDATE)
-      @response = RestClient.post(service, hsh, { :multipart => true })
+      # service = (params[:update_object].blank? ? INGEST_SERVICE : INGEST_SERVICE_UPDATE)
+      # @response = RestClient.post(service, hsh, { :multipart => true })
+      @response = RestClient.post(INGEST_SERVICE_UPDATE, hsh, { :multipart => true })
 
       @doc = Nokogiri::XML(@response) do |config|
         config.strict.noent.noblanks
