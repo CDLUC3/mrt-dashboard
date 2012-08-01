@@ -4,9 +4,16 @@ class ObjectController < ApplicationController
   before_filter :require_user,       :except => [:jupload_add, :recent, :ingest, :mint]
   before_filter :require_group,      :except => [:jupload_add, :recent, :ingest, :mint]
   before_filter :require_write,      :only => [:add, :upload]
+  before_filter :require_session_object, :only => [:download]
   before_filter :require_mrt_object, :only => [:download]
   protect_from_forgery :except => [:ingest, :mint]
 
+  def require_session_object
+    if !session[:object].nil?
+      params[:object] = session[:object]
+    end
+  end
+  
   def ingest
     if !current_user then
       render :status=>401, :text=>"" and return
@@ -61,28 +68,55 @@ class ObjectController < ApplicationController
   end
 
   def index
-    @object = MrtObject.find_by_identifier(params[:object])
-    @versions = @object.versions
-    #files for current version
-    @files = @object.files.
-      reject {|file| file.identifier.match(/^system\/mrt-/) }.
-      sort_by {|x| File.basename(x.identifier.downcase) }
+    begin
+      @object = MrtObject.find_by_identifier(params[:object])
+      @versions = @object.versions
+      #files for current version
+      @files = @object.files.
+        reject {|file| file.identifier.match(/^system\/mrt-/) }.
+        sort_by {|x| File.basename(x.identifier.downcase) }     
+    rescue Exception => ex
+      raise ErrorUnavailable
+    end
+
   end
 
   def download
     # check if user has download permissions 
     if !@permissions.nil? && @permissions.include?('download') then
+      # bypass DUA processing for python scripts - indicated by special param
+      if params[:blue].nil? then
+        # if DUA was not accepted, redirect to object landing page 
+        if session[:collection_acceptance][@group.id].eql?("not accepted") then
+           session[:collection_acceptance][@group.id] = false  # reinitialize to false so user can again be given option to accept DUA 
+           redirect_to  :action => 'index', :group => flexi_group_id,  :object =>params[:object] and return false
+        # if DUA has been accepted already for this collection, do not display to user again in this session
+        elsif !session[:collection_acceptance][@group.id]         #process DUA if one exists
+           #construct the dua_file_uri based off the object URI, the object's parent collection, version 0, and  DUA filename
+           rx = /^(.*)\/([^\/]+)$/  
+           dua_file_uri = construct_dua_uri(rx, @object.bytestream_uri)
+           uri_response = process_dua_request(dua_file_uri)
+           # if the DUA exists, display DUA to user for acceptance before displaying file
+           if (uri_response.class == Net::HTTPOK) then
+               tmp_dua_file = fetch_to_tempfile(dua_file_uri) 
+               session[:dua_file_uri] = dua_file_uri
+               store_location
+               store_object
+               redirect_to :controller => "dua",  :action => "index" and return false 
+           end
+         end
+       end
+       
+      # the user has accepted the DUA for this collection or there is no DUA to process -  download the object       
       response.headers["Content-Disposition"] = "attachment; filename=#{Orchard::Pairtree.encode(@object.identifier.to_s)}_object.zip"
       response.headers["Content-Type"] = "application/zip"
       self.response_body = Streamer.new("#{@object.bytestream_uri}?t=zip")
     else
-      flash[:error] = 'You do not have permission to download.'     
+      flash[:error] = 'You do not have download permissions'     
       redirect_to  :action => 'index', :group => flexi_group_id,  :object =>params[:object] and return false
     end
   end
 
-  def add
-  end
 
   def upload
     if params[:file].nil? then

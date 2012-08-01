@@ -2,7 +2,8 @@
     obj = metadata obj %>
 
 <div class="key">permanent link:</div>
-<div class="value"><%= obj.permalink %></div>
+<div class="value"><%= link_to(obj.permalink, obj.permalink) %></div>
+
 
 <div class="key">primary identifier:</div>
 <div class="value"><%= obj.identifier %></div>

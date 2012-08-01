@@ -201,6 +201,19 @@ div.long_left_label {
   text-align: left;
 }
 
+/* form styles */
+/* for 2 column forms */
+div.long_left_text {
+  margin-top: 0.25em;
+  margin-bottom:0.25em;
+  margin-right:0.5em;
+  display: block;
+  clear: left;
+  float:left;
+  width: 1000px;
+  text-align: left;
+}
+
 div.short_left_label {
   margin-top: 0.25em;
   margin-bottom:0.25em;
@@ -212,12 +225,42 @@ div.short_left_label {
   text-align: left;
 }
 
+div.short_label {
+  padding-right: 10px;
+  text-align: right;
+  display: block;
+  width: 70px;
+  float: left;
+  clear: left;
+}
+div.checkbox_label {
+  text-align: left;
+  display: block;
+  width: 100px;
+  float: left;
+  clear: right;
+}
+
+.smaller {
+  font-size: 80%;
+}
+
+
 div.right_field {
   margin-top: 0.25em;
   margin-bottom:0.25em;
   display: block;
   float: left;
   width: 250px;
+  text-align: left;
+}
+
+div.long_right_field {
+  margin-top: 0.25em;
+  margin-bottom:0.25em;
+  display: block;
+  float: left;
+  width: 500px;
   text-align: left;
 }
 
