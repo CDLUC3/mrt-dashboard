@@ -138,8 +138,9 @@ class ObjectController < ApplicationController
           'responseForm'      => 'xml'
         }.reject{|key, value| value.blank? }
 
-      service = (params[:update_object].blank? ? INGEST_SERVICE : INGEST_SERVICE_UPDATE)
-      @response = RestClient.post(service, hsh, { :multipart => true })
+      # service = (params[:update_object].blank? ? INGEST_SERVICE : INGEST_SERVICE_UPDATE)
+      # @response = RestClient.post(service, hsh, { :multipart => true })
+      @response = RestClient.post(INGEST_SERVICE_UPDATE, hsh, { :multipart => true })
 
       @doc = Nokogiri::XML(@response) do |config|
         config.strict.noent.noblanks
