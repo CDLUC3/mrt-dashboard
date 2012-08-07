@@ -32,6 +32,7 @@ class ObjectController < ApplicationController
           'filename'          => (params[:filename] || params[:file].original_filename),
           'localIdentifier'   => params[:localIdentifier],
           'notification'      => params[:notification],
+          'notificationFormat'      => params[:notificationFormat],
           'primaryIdentifier' => params[:primaryIdentifier],
           'profile'           => params[:profile],
           'note'              => params[:note],
