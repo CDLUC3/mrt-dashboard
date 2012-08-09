@@ -1,6 +1,7 @@
 # -*- mode: ruby -*-
 
-xml.tag!('feed', :xmlns => "http://www.w3.org/2005/Atom") do 
+xml.tag!('feed', :xmlns => "http://www.w3.org/2005/Atom",
+                 "xmlns:dct" => "http://purl.org/dc/terms/") do 
   xml.tag!("link", 
            "href" => "/object/recent.atom?collection=#{@collection_ark}&page=#{@objects.current_page}",
            "rel"  => "self", 
@@ -49,6 +50,7 @@ xml.tag!('feed', :xmlns => "http://www.w3.org/2005/Atom") do
                                  :group      => @collection_ark,
                                  :object     => clean_id(ark)))
 
+      xml.tag!("dct:extent", "#{obj.size}")
       if (!obj.local_identifier.nil?) then
         local_id = obj.local_identifier.value
         if (local_id.blank? && local_id.match(/^http/)) then
@@ -72,7 +74,9 @@ xml.tag!('feed', :xmlns => "http://www.w3.org/2005/Atom") do
                                    :object     => clean_id(ark),
                                    :version    => obj.versions.last.identifier,
                                    :file       => file.identifier),
-                 "rel"  => "http://purl.org/dc/terms/hasPart")
+                 "rel"  => "http://purl.org/dc/terms/hasPart",
+                 "length" => file.size,
+                 "type"  => file.media_type)
       end
     end
   end
