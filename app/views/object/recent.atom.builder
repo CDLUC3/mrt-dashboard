@@ -41,7 +41,7 @@ xml.tag!('feed', :xmlns => "http://www.w3.org/2005/Atom",
   @objects.each do |obj|
     xml.tag!("entry") do
       ark = obj.is_stored_object_for.to_s
-      xml.tag!("id", ark)
+      xml.tag!("id", obj.permalink)
       xml.tag!("link", 
                "rel"  => "alternate",
                "type" => "application/zip",
