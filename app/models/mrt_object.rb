@@ -1,8 +1,6 @@
 class MrtObject < UriInfo
   extend MrtPaginator
   
-  attr_accessor :perma_link
-  
   Q = Mrt::Sparql::Q
 
   # Creates a MrtObject from a UriInfo object.
@@ -144,7 +142,7 @@ class MrtObject < UriInfo
   end
 
   def permalink
-    return self.perma_link = "#{N2T_URI}" + identifier.to_s
+    return "#{N2T_URI}#{identifier.to_s}"
   end
   
   def files
