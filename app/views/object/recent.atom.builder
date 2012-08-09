@@ -61,7 +61,11 @@ xml.tag!('feed', :xmlns => "http://www.w3.org/2005/Atom",
       end
       xml.tag!("title", obj.what)
       xml.tag!("author") do
-        xml.tag!("name", obj.who)
+        w = obj.who
+        w = [w] if !w.instance_of?(Array)
+        w.each do |name|
+          xml.tag!("name", name)
+        end
       end
       xml.tag!("updated", obj.modified)
       if (!obj.created.blank?) then
