@@ -34,7 +34,7 @@ class VersionController < ApplicationController
     # check if user has download permissions 
     if !@permissions.nil? && @permissions.include?('download') then
       # bypass DUA processing for python scripts - indicated by special param
-      if params[:blue].nil? then
+          if params[:blue].nil? then
         #check if user already saw DUA and accepted- if so, skip all this & download the file
         if !session[:perform_download]   
           # if DUA was not accepted, redirect to object landing page 
