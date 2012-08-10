@@ -1,46 +1,38 @@
-class MrtFile < UriInfo
-  Q = Mrt::Sparql::Q
-
-  # Creates a MrtFile from a UriInfo object.
-  def self.from_uri_info(uri_info)
-    retval = MrtFile.new(uri_info.to_uri)
-    retval.info = uri_info.info
-    return retval
+class MrtFile < MrtSolr
+  def solr_type
+    return "file"
   end
-
-  def self.bulk_loader(uris)
-    results = UriInfo.bulk_loader(uris)
-    return results.map {|uri_info| MrtFile.from_uri_info(uri_info) }
+  
+  # is there a better way?
+  def self.bulk_loader(q)
+    MrtSolr.bulk_loader(MrtFile, "type:file AND #{q}")
   end
 
   def identifier
-    # this works with current storage service and saves a trip to
-    # SPARQL when we just need the identifier
-    return URI.decode(self.to_uri.path.match(/\/([^\/]+)$/)[1])
-    #return self.first(RDF::DC['identifier']).value
+    return doc['relativeId']
   end
 
   def bytestream
-    return self.first(Mrt::Model::Base['bytestream'])
+    return doc['bytestream']
   end
 
   def size
-    return self.first(Mrt::Model::Base['size']).value.to_i
+    return doc['size'].to_i
   end
 
   def created
-    return DateTime.parse(self.first(RDF::DC['created']).value)
+    return DateTime.parse(doc['created'])
   end
   
   def media_type
-    return self.first(Mrt::Model::File['mediaType']).value.downcase
+    return doc['mediaType']
   end
 
   def in_version
-    return @version ||= MrtVersion.new(self.first(Mrt::Model::File['inVersion']))
+    return @version ||= MrtVersion.from_query("storageUrl:\"#{doc['inVersion']}\"")
   end
   
   def message_digest
-    return self.first(Mrt::Model::File['messageDigest'])
+    return doc['messageDigest']
   end
 end
