@@ -16,4 +16,5 @@ gem "rack-cache"
 gem "unicode"
 gem "orchard"
 gem "mrt-ingest", "0.0.2"
-
+gem "rsolr", "1.0.6"
+gem "rsolr-ext"
