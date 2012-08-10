@@ -1,6 +1,7 @@
 # -*- mode: ruby -*-
 
-xml.tag!('feed', :xmlns => "http://www.w3.org/2005/Atom") do 
+xml.tag!('feed', :xmlns => "http://www.w3.org/2005/Atom",
+                 "xmlns:dct" => "http://purl.org/dc/terms/") do 
   xml.tag!("link", 
            "href" => "/object/recent.atom?collection=#{@collection_ark}&page=#{@objects.current_page}",
            "rel"  => "self", 
@@ -40,7 +41,7 @@ xml.tag!('feed', :xmlns => "http://www.w3.org/2005/Atom") do
   @objects.each do |obj|
     xml.tag!("entry") do
       ark = obj.is_stored_object_for.to_s
-      xml.tag!("id", ark)
+      xml.tag!("id", obj.permalink)
       xml.tag!("link", 
                "rel"  => "alternate",
                "type" => "application/zip",
@@ -48,9 +49,23 @@ xml.tag!('feed', :xmlns => "http://www.w3.org/2005/Atom") do
                                  :action     => 'download',
                                  :group      => @collection_ark,
                                  :object     => clean_id(ark)))
+
+      xml.tag!("dct:extent", "#{obj.size}")
+      if (!obj.local_identifier.nil?) then
+        local_id = obj.local_identifier.value
+        if (local_id.blank? && local_id.match(/^http/)) then
+          xml.tag!("link",
+                   "rel"  => "alternate",
+                   "href" => local_id)
+        end
+      end
       xml.tag!("title", obj.what)
       xml.tag!("author") do
-        xml.tag!("name", obj.who)
+        w = obj.who
+        w = [w] if !w.instance_of?(Array)
+        w.each do |name|
+          xml.tag!("name", name)
+        end
       end
       xml.tag!("updated", obj.modified)
       if (!obj.created.blank?) then
@@ -63,7 +78,9 @@ xml.tag!('feed', :xmlns => "http://www.w3.org/2005/Atom") do
                                    :object     => clean_id(ark),
                                    :version    => obj.versions.last.identifier,
                                    :file       => file.identifier),
-                 "rel"  => "http://purl.org/dc/terms/hasPart")
+                 "rel"  => "http://purl.org/dc/terms/hasPart",
+                 "length" => file.size,
+                 "type"  => file.media_type)
       end
     end
   end

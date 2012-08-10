@@ -33,7 +33,7 @@ class MrtFile < UriInfo
   end
   
   def media_type
-    return self.first(Mrt::Model::File['mediaType']).value
+    return self.first(Mrt::Model::File['mediaType']).value.downcase
   end
 
   def in_version

@@ -2,6 +2,7 @@ class UserSessionsController < ApplicationController
   before_filter :require_user,    :only => [:logout]
   
   def login
+    session[:expiry_time] = Time.now
 #    reset_session
   end
   

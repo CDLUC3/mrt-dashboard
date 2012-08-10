@@ -37,6 +37,7 @@ class CollectionController < ApplicationController
     if !params[:object].nil? then
         redirect_to :controller=>'object', :action=>'index', :group=>params[:group], :object=>params[:object]
     end
+      
     @recent_objects = MrtObject.paginate(:collection => no_inject(@group.sparql_id),
                                          :page       => (params[:page] || 1), 
                                          :per_page   => 10)
@@ -45,7 +46,7 @@ class CollectionController < ApplicationController
   def search_results
     terms = no_inject(Unicode.downcase(params[:terms])).split(/[\s:\/_-]+/)
     terms_q = terms.map {|term| "<http://4store.org/fulltext#token> \"#{term}\"" }.join("; ")
-    q = Q.new("?s a ore:Aggregation ;
+    q = Q.new("?s a object:Object ;
                   #{terms_q} ;
                   base:isInCollection <#{@group.sparql_id}> ;
                   dc:modified ?mod .",

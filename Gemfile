@@ -1,5 +1,6 @@
 source 'http://rubygems.org'
-gem 'rails', '3.0.12'
+gem "httpclient", "~> 2.2.5"
+gem 'rails', '3.0.13'
 gem "exception_notification", 
     :git => "git://github.com/rails/exception_notification.git"
 gem "json", "> 1.5.0"
@@ -9,7 +10,6 @@ gem "net-ldap", "0.1.2",
 gem "nokogiri"
 gem "rdf"
 gem "rest-client"
-gem "ruby-debug"
 gem "unicorn", "3.1.0"
 gem "will_paginate", "3.0.pre2"
 gem "rack-cache"

@@ -113,7 +113,7 @@ class MrtObject < UriInfo
   def versions
     # this works with current storage service and saves a trip to
     # SPARQL
-    return @versions ||= self[RDF::DC["hasVersion"]].map{|uri| MrtVersion.new(uri)}.sort_by{ |v| v[RDF::DC.identifier].to_s.to_i }
+    return @versions ||= self[RDF::DC["hasVersion"]].map{|uri| MrtVersion.new(uri)}.sort_by{ |v| v.identifier.to_i }
     #return @versions ||= self.first(Mrt::Model::Object['versionSeq']).to_list.map{|v| MrtVersion.new(v)}
   end
 
@@ -141,6 +141,10 @@ class MrtObject < UriInfo
     return self.is_stored_object_for.first(Mrt::Model::Object.localIdentifier)
   end
 
+  def permalink
+    return "#{N2T_URI}#{identifier.to_s}"
+  end
+  
   def files
     return @files ||= MrtFile.bulk_loader(self[Mrt::Model::Version['hasFile']]).
       sort_by{|f| f.identifier}
