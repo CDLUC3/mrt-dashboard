@@ -14,7 +14,7 @@ class Group
   attr_accessor :id, :submission_profile, :ark_id, :owner, :description
 
   def initialize
-
+    @rsolr = RSolr.connect(:url => SOLR_SERVER)
   end
 
   def self.find_all
@@ -45,9 +45,9 @@ class Group
   end
 
   def object_count
-    return STORE.select(Q.new("?obj base:isInCollection <#{self.sparql_id}> ;
-                                    a object:Object .",
-                              :select=>"(count(?obj) as c)"))[0]["c"].value.to_i
+    return @rsolr.get('select', :params => {
+                        :q => "type:object AND memberOf:\"#{self.ark_id}\"",
+                        :fl => "none" })['response']['numFound']
   end
 
   def version_count
@@ -66,12 +66,12 @@ class Group
   end
 
   def total_size
-    response = RSOLR.get('select', 
+    response = @rsolr.get('select', 
                          :params => {
                            :q    => "type:object and memberOf:\"#{self.ark_id}\"",
                            :fl   => "totalActualSize",
                            :rows => nil });
-    size =  0
+    size = 0
     response["response"]["docs"].each {|d| size += d["totalActualSize"] }
     return size
   end
