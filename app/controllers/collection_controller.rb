@@ -38,7 +38,7 @@ class CollectionController < ApplicationController
         redirect_to :controller=>'object', :action=>'index', :group=>params[:group], :object=>params[:object]
     end
       
-    @recent_objects = MrtObject.paginate(:collection => no_inject(@group.sparql_id),
+    @recent_objects = MrtObject.paginate(:collection => no_inject(@group.ark_id),
                                          :page       => (params[:page] || 1), 
                                          :per_page   => 10)
   end
