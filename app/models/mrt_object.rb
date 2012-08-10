@@ -1,18 +1,16 @@
-class MrtObject
+class MrtObject < MrtSolr
   extend MrtPaginator
 
-  def initialize(id, doc=nil)
-    @rsolr = RSolr.connect(:url => SOLR_SERVER)
-    @id = id
-    @doc = doc
+  def solr_type
+    return "object"
   end
 
-  def doc
-    @doc ||= @rsolr.get('select', :params => {:q => "type:object and primaryId:#{@id}" })['response']['docs'][0]
+  def self.bulk_loader(q)
+    MrtSolr.bulk_loader(MrtObject, "type:#{solr_type} AND #{q}")
   end
 
   def self.find_by_identifier(id)
-    return MrtObjectSolr.new(id)
+    return MrtObject.new(:q => "primaryId:\"#{id}\"")
   end
   
   def self.get_collection(group_or_object)
@@ -29,23 +27,22 @@ class MrtObject
                          :q => "type:object AND memberOf:\"#{arg_hash[:collection]}\"",
                          :sort => "modified desc"
                        })
-      return resp['response']['docs'].map { |d| MrtObject.new(d['primaryId'], d) }
+      return resp['response']['docs'].map { |d| MrtObject.new(d) }
     else
       return nil
     end
   end
 
-  # XXX - integrate with find
   def self.count(*args)
+    rsolr = RSolr.connect(:url => SOLR_SERVER)
     arg_hash = args.last
-    q = if arg_hash[:collection] then
-          Q.new("?o a object:Object ;
-                    base:isInCollection <#{arg_hash[:collection]}> .",
-                :select => "(count(?o) as ?count)")
-        else
-          raise Exception
-        end
-    return UriInfo.store().select(q)[0]['count'].value.to_i
+    if arg_hash[:collection] then
+      return rsolr.get('select', :params => {
+                         :q => "type:object AND memberOf:\"#{arg_hash[:collection]}\"",
+                         :fl => "none" })['response']['numFound']
+    else
+      raise Exception
+    end
   end
 
   def bytestream
@@ -77,7 +74,7 @@ class MrtObject
   end
 
   def versions
-    return []
+    return MrtVersion.bulk_loader("inObject:\"#{doc['storageUrl']}\"")
   end
 
   def who
@@ -92,10 +89,19 @@ class MrtObject
     return doc['when']
   end
 
-  def identifier
+  def primary_id
     return doc['primaryId']
   end
 
+  def identifier
+    return self.primary_id
+  end
+
+  def local_id
+    return doc['localId']
+  end
+
+  # deprecated
   def local_identifier
     return doc['localId']
   end
@@ -105,7 +111,7 @@ class MrtObject
   end
   
   def files
-    return []
+    return self.versions[-1].files
   end
 
   def system_files 

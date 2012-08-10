@@ -40,7 +40,6 @@ xml.tag!('feed', :xmlns => "http://www.w3.org/2005/Atom",
   xml.tag!("generator", "UC3 Dashboard", "version" => "0", "uri" => "http://www.cdlib.org/")
   @objects.each do |obj|
     xml.tag!("entry") do
-      ark = obj.is_stored_object_for.to_s
       xml.tag!("id", obj.permalink)
       xml.tag!("link", 
                "rel"  => "alternate",
@@ -48,11 +47,11 @@ xml.tag!('feed', :xmlns => "http://www.w3.org/2005/Atom",
                "href" => url_for(:controller => 'object', 
                                  :action     => 'download',
                                  :group      => @collection_ark,
-                                 :object     => clean_id(ark)))
+                                 :object     => obj.primary_id))
 
       xml.tag!("dct:extent", "#{obj.size}")
       if (!obj.local_identifier.nil?) then
-        local_id = obj.local_identifier.value
+        local_id = obj.local_identifier
         if (local_id.blank? && local_id.match(/^http/)) then
           xml.tag!("link",
                    "rel"  => "alternate",
@@ -75,7 +74,7 @@ xml.tag!('feed', :xmlns => "http://www.w3.org/2005/Atom",
         xml.tag!("link", 
                  "href" => url_for(:controller => 'file', 
                                    :action     => 'display',
-                                   :object     => clean_id(ark),
+                                   :object     => obj.primary_id,
                                    :version    => obj.versions.last.identifier,
                                    :file       => file.identifier),
                  "rel"  => "http://purl.org/dc/terms/hasPart",
