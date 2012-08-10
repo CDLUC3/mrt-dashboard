@@ -1,0 +1,53 @@
+<% 
+download_disp = !@permissions.nil? && @permissions.include?('download')
+%>
+<% content_for :title do %>
+  UC3 Merritt: Object -- <%= params[:object] %>
+<% end %>
+
+<div class="grid_11">
+  <h2>Object: <%= params[:object] %></h2>
+  <div class="breadcrumbs">
+    <%= link_to('Merritt', :controller => 'home', :action => 'index') %> &gt;
+    <%= link_to("Collection: #{@group.description}", :controller => 'collection', :action => 'index', :group => params[:group]) %> &gt;
+    Object: <%= params[:object] %> 
+  </div>
+<br/>
+  <%= render :partial => '/shared/flash_show' %>
+  <h3 style="font-weight: normal;">
+    <%= render :partial => "/object/short_bib_display", 
+               :locals => {:obj => @object} %></h3>
+
+    <%= render :partial => 'details_display',
+               :locals => { :obj => @object } %>
+  <div class="clear"></div>
+  <div class="key">&nbsp;</div><div class="value">&nbsp;</div>
+   <div class="key">&nbsp;</div>
+  <div class="value">
+  	<!--
+  	mstrong: only display the download button if the user has download permissions
+  	-->  	
+  	  <% if download_disp then %>
+	    <%= form_tag(:action => 'download') do %>
+	      <%= hidden_field_tag 'group', params[:group] %>
+	      <%= hidden_field_tag 'object', params[:object] %>
+	      <%= submit_tag 'Download object' %>
+	    <% end %>
+    <% end %>
+  </div>
+
+
+</div>
+<div class="grid_1">&nbsp;</div>
+<div class="grid_4 sidebar">
+  <%= render :partial => '/shared/side_lookup' %><br/>
+  <%= render :partial => '/version/current_sidebar',
+      :locals => {:version => @versions.reverse[0], :files => @files} %><br/>
+  <% if @versions.length > 1 then %>
+    <%= render :partial => '/version/list_sidebar',
+      :locals => {:versions => @versions.reverse[1..-1], :title => 'Prior Versions'} %><br/>
+  <% end %>
+  <%# render :partial => 'overview' %><br/>
+  <%# render :partial => '/shared/side_alert' %>
+
+</div>
