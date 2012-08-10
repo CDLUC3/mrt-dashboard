@@ -37,6 +37,7 @@ class ObjectController < ApplicationController
           'profile'           => params[:profile],
           'note'              => params[:note],
           'responseForm'      => params[:responseForm],
+          'DataCite.resourceType'      => params[:DataCite.resourceType],
           'submitter'         => "#{current_user.login}/#{current_user.displayname}",
           'title'             => params[:title],
           'type'              => params[:type]
