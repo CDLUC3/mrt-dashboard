@@ -5,12 +5,8 @@ class VersionController < ApplicationController
   before_filter :require_mrt_version
 
   def require_session_object_version
-    if !session[:object].nil?
-      params[:object] = session[:object]
-    end
-    if !session[:version].nil?
-      params[:version] = session[:version]
-    end
+      params[:object] = session[:object] if !session[:object].nil? && params[:object].nil?
+      params[:version] = session[:version] if !session[:version].nil? && params[:version].nil?
   end
 
   def index
@@ -34,7 +30,7 @@ class VersionController < ApplicationController
     # check if user has download permissions 
     if !@permissions.nil? && @permissions.include?('download') then
       # bypass DUA processing for python scripts - indicated by special param
-      if params[:blue].nil? then
+          if params[:blue].nil? then
         #check if user already saw DUA and accepted- if so, skip all this & download the file
         if !session[:perform_download]   
           # if DUA was not accepted, redirect to object landing page 
