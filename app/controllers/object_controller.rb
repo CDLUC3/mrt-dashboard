@@ -9,9 +9,7 @@ class ObjectController < ApplicationController
   protect_from_forgery :except => [:ingest, :mint]
 
   def require_session_object
-    if !session[:object].nil?
-      params[:object] = session[:object]
-    end
+      params[:object] = session[:object] if !session[:object].nil? && params[:object].nil?
   end
   
   def ingest
