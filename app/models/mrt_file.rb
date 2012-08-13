@@ -4,8 +4,10 @@ class MrtFile < MrtSolr
   end
   
   # is there a better way?
-  def self.bulk_loader(q)
-    MrtSolr.bulk_loader(MrtFile, "type:file AND #{q}")
+  def self.bulk_loader(p1)
+    p2 = p1.clone
+    p2[:q] = "type:file AND #{p2[:q]}"
+    MrtSolr.bulk_loader(MrtFile, p2)
   end
 
   def identifier
@@ -29,7 +31,7 @@ class MrtFile < MrtSolr
   end
 
   def in_version
-    return @version ||= MrtVersion.from_query("storageUrl:\"#{doc['inVersion']}\"")
+    return @version ||= MrtVersion.bulk_loader("storageUrl:\"#{doc['inVersion']}\"")[0]
   end
   
   def message_digest
