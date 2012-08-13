@@ -9,12 +9,12 @@ class MrtSolr
   end
 
   def doc
-    @doc ||= @rsolr.get('select', :params => {:q => "type:#{solr_type} and #{@q}" })['response']['docs'][0]
+    @doc ||= @rsolr.get('select', :params => {:q => "type:#{self.solr_type} and #{@q}" })['response']['docs'][0]
   end
 
-  def self.bulk_loader(klass, q)
+  def self.bulk_loader(klass, params)
     rsolr = RSolr.connect(:url => SOLR_SERVER)
-    return rsolr.get('select', :params => {:q => q})['response']['docs'].map {|d| klass.new(:doc=>d) }
+    return rsolr.get('select', :params => params)['response']['docs'].map {|d| klass.new(:doc=>d) }
   end
 end
 

@@ -5,8 +5,10 @@ class MrtVersion < MrtSolr
   end
 
   # is there a better way?
-  def self.bulk_loader(q)
-    MrtSolr.bulk_loader(MrtVersion, "type:version AND #{q}")
+  def self.bulk_loader(p1)
+    p2 = p1.clone
+    p2[:q] = "type:version AND #{p1[:q]}"
+    MrtSolr.bulk_loader(MrtVersion, p2)
   end
 
   def identifier
@@ -38,7 +40,7 @@ class MrtVersion < MrtSolr
   end
 
   def files
-    return @files ||= MrtFile.bulk_loader("inVersion:\"#{doc['storageUrl']}\"").
+    return @files ||= MrtFile.bulk_loader("type:file AND inVersion:\"#{doc['storageUrl']}\"").
       sort_by{|f| f.identifier}
   end
 

@@ -5,8 +5,11 @@ class MrtObject < MrtSolr
     return "object"
   end
 
-  def self.bulk_loader(q)
-    MrtSolr.bulk_loader(MrtObject, "type:#{solr_type} AND #{q}")
+  # is there a better way?
+  def self.bulk_loader(p1)
+    p2 = p1.clone
+    p2[:q] = "type:object AND #{p1[:q]}"
+    MrtSolr.bulk_loader(MrtObject, p2)
   end
 
   def self.find_by_identifier(id)
@@ -20,14 +23,13 @@ class MrtObject < MrtSolr
   def self.find(*args)
     rsolr = RSolr.connect(:url => SOLR_SERVER)
     arg_hash = args.last
-    sort = arg_hash[:sort] || RDF::DC['modified']
-    order = arg_hash[:order] || "DESC"
+    sort = arg_hash[:sort] || "modified"
+    order = arg_hash[:order] || "desc"
     if arg_hash[:collection] then
-      resp = rsolr.get('select', :params => { 
-                         :q => "type:object AND memberOf:\"#{arg_hash[:collection]}\"",
-                         :sort => "modified desc"
-                       })
-      return resp['response']['docs'].map { |d| MrtObject.new(d) }
+      return self.bulk_loader(:q => "memberOf:\"#{arg_hash[:collection]}\"", 
+                              :sort => "#{sort} #{order}",
+                              :start => arg_hash[:offset],
+                              :rows => arg_hash[:limit])
     else
       return nil
     end
@@ -74,7 +76,7 @@ class MrtObject < MrtSolr
   end
 
   def versions
-    return MrtVersion.bulk_loader("inObject:\"#{doc['storageUrl']}\"")
+    return MrtVersion.bulk_loader(:q=>"inObject:\"#{doc['storageUrl']}\"")
   end
 
   def who
