@@ -62,8 +62,6 @@ class ObjectController < ApplicationController
 
   def index
     @object = MrtObject.find_by_identifier(params[:object])
-    @versions = @object.versions
-    @files = @object.current_version.producer_files
   end
 
   def download
