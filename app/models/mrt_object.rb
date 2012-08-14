@@ -76,6 +76,10 @@ class MrtObject < MrtSolr
     return MrtVersion.bulk_loader(:q=>"inObject:\"#{doc['storageUrl']}\"")
   end
 
+  def current_version
+    return self.versions[-1]
+  end
+
   def who
     return doc['who']
   end
@@ -110,7 +114,7 @@ class MrtObject < MrtSolr
   end
   
   def files
-    return self.versions[-1].files
+    return self.current_version.files
   end
 
   def system_files 
