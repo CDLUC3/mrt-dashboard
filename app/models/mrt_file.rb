@@ -18,6 +18,10 @@ class MrtFile < MrtSolr
     return doc['bytestream']
   end
 
+  def bytestream_uri
+    return URI.parse(doc['bytestream'])
+  end
+
   def size
     return doc['size'].to_i
   end
