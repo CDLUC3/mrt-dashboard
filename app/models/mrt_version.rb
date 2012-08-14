@@ -40,7 +40,7 @@ class MrtVersion < MrtSolr
   end
 
   def files
-    return @files ||= MrtFile.bulk_loader("type:file AND inVersion:\"#{doc['storageUrl']}\"").
+    return @files ||= MrtFile.bulk_loader(:q=>"inVersion:\"#{doc['storageUrl']}\"").
       sort_by{|f| f.identifier}
   end
 
