@@ -29,7 +29,7 @@ class FileController < ApplicationController
                 :select => "?file")
   
       file = MrtFile.new(store().select(q)[0]['file'])
-      file_uri = file.first(Mrt::Model::Base.bytestream).to_uri
+      file_uri = file.bytestream_uri
       Rails.logger.info(file_uri)
       
       # bypass DUA processing for python scripts - indicated by special param
