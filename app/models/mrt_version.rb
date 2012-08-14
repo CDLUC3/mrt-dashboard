@@ -41,15 +41,17 @@ class MrtVersion < MrtSolr
 
   def files
     return @files ||= MrtFile.bulk_loader(:q=>"inVersion:\"#{doc['storageUrl']}\"").
-      sort_by{|f| f.identifier}
+      sort_by{|f| f.identifier.downcase }
   end
 
   def system_files 
-    return self.files.select {|f| f.identifier.match(/^system\//) }
+    return self.files.select {|f| f.identifier.match(/^system\//) }.
+      sort_by {|x| File.basename(x.identifier.downcase) }     
   end
 
   def producer_files 
-    return self.files.select {|f| f.identifier.match(/^producer\//) }
+    return self.files.select {|f| f.identifier.match(/^producer\//) }.
+      sort_by {|x| File.basename(x.identifier.downcase) }     
   end
 
   def in_object
