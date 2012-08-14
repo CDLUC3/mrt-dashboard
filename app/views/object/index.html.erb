@@ -47,6 +47,4 @@ download_disp = !@permissions.nil? && @permissions.include?('download')
     <%= render :partial => '/version/list_sidebar',
       :locals => {:versions => @object.versions.reverse[1..-1], :title => 'Prior Versions'} %><br/>
   <% end %>
-  <%# render :partial => 'overview' %><br/>
-  <%# render :partial => '/shared/side_alert' %>
 </div>
