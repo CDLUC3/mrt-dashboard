@@ -63,10 +63,7 @@ class ObjectController < ApplicationController
   def index
     @object = MrtObject.find_by_identifier(params[:object])
     @versions = @object.versions
-    #files for current version
-    @files = @object.files.
-      reject {|file| file.identifier.match(/^system\/mrt-/) }.
-      sort_by {|x| File.basename(x.identifier.downcase) }     
+    @files = @object.current_version.producer_files
   end
 
   def download
