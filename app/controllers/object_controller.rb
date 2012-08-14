@@ -2,6 +2,7 @@ require 'tempfile'
 
 class ObjectController < ApplicationController
   before_filter :require_user,       :except => [:jupload_add, :recent, :ingest, :mint]
+  before_filter :require_user_or_401, :only => [:ingest, :mint]
   before_filter :require_group,      :except => [:jupload_add, :recent, :ingest, :mint]
   before_filter :require_write,      :only => [:add, :upload]
   before_filter :require_session_object, :only => [:download]
@@ -15,55 +16,47 @@ class ObjectController < ApplicationController
   end
   
   def ingest
-    if !current_user then
-      render :status=>401, :text=>"" and return
+    if (!params[:file].respond_to? :tempfile) then
+      render(:status=>400, :text=>"Bad file parameter.\n") and return
+    elsif !current_user.groups('write').any? {|g| g.submission_profile == params[:profile]} then
+      render(:status=>404, :text=>"") and return
     else
-      if (!params[:file].respond_to? :tempfile) then
-        render(:status=>400, :text=>"Bad file parameter.\n") and return
-      elsif !current_user.groups('write').any? {|g| g.submission_profile == params[:profile]} then
-        render(:status=>404, :text=>"") and return
-      else
-        ingest_args = {
-          'creator'           => params[:creator],
-          'date'              => params[:date],
-          'digestType'        => params[:digestType],
-          'digestValue'       => params[:digestValue],
-          'file'              => params[:file].tempfile,
-          'filename'          => (params[:filename] || params[:file].original_filename),
-          'localIdentifier'   => params[:localIdentifier],
-          'notification'      => params[:notification],
-          'primaryIdentifier' => params[:primaryIdentifier],
-          'profile'           => params[:profile],
-          'note'              => params[:note],
-          'responseForm'      => params[:responseForm],
-          'submitter'         => "#{current_user.login}/#{current_user.displayname}",
-          'title'             => params[:title],
-          'type'              => params[:type]
-        }.reject{|k, v| v.blank? }
-        
-        response = RestClient.post(INGEST_SERVICE, ingest_args, { :multipart => true })
-        render :status=>response.code, :content_type=>response.headers[:content_type], :text=>response.body
-      end
+      ingest_args = {
+        'creator'           => params[:creator],
+        'date'              => params[:date],
+        'digestType'        => params[:digestType],
+        'digestValue'       => params[:digestValue],
+        'file'              => params[:file].tempfile,
+        'filename'          => (params[:filename] || params[:file].original_filename),
+        'localIdentifier'   => params[:localIdentifier],
+        'notification'      => params[:notification],
+        'primaryIdentifier' => params[:primaryIdentifier],
+        'profile'           => params[:profile],
+        'note'              => params[:note],
+        'responseForm'      => params[:responseForm],
+        'submitter'         => "#{current_user.login}/#{current_user.displayname}",
+        'title'             => params[:title],
+        'type'              => params[:type]
+      }.reject{|k, v| v.blank? }
+      
+      response = RestClient.post(INGEST_SERVICE, ingest_args, { :multipart => true })
+      render :status=>response.code, :content_type=>response.headers[:content_type], :text=>response.body
     end
   end
   
   def mint
-    if !current_user then
-      render :status=>401, :text=>"" and return
+    if !current_user.groups('write').any? {|g| g.submission_profile == params[:profile]} then
+      render(:status=>404, :text=>"") and return
     else
-      if !current_user.groups('write').any? {|g| g.submission_profile == params[:profile]} then
-        render(:status=>404, :text=>"") and return
-      else
-        mint_args = {
-          'profile'           => params[:profile],
-          'erc'              =>  params[:erc] ,
-          'file'             =>  Tempfile.new('restclientbug'), 
-          'responseForm'     => params[:responseForm]
-        }.reject{|k, v| v.blank? }
-
-        response = RestClient.post(MINT_SERVICE, mint_args, { :multipart => true, :accept => '*/*'})
-        render :status=>response.code, :content_type=>response.headers[:content_type], :text=>response.body
-      end
+      mint_args = {
+        'profile'           => params[:profile],
+        'erc'              =>  params[:erc] ,
+        'file'             =>  Tempfile.new('restclientbug'), 
+        'responseForm'     => params[:responseForm]
+      }.reject{|k, v| v.blank? }
+      
+      response = RestClient.post(MINT_SERVICE, mint_args, { :multipart => true, :accept => '*/*'})
+      render :status=>response.code, :content_type=>response.headers[:content_type], :text=>response.body
     end
   end
 
