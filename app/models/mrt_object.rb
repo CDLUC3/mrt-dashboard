@@ -38,7 +38,7 @@ class MrtObject < MrtSolr
   def self.count(*args)
     arg_hash = args.last
     if arg_hash[:collection] then
-      MrtObject.count("type:object AND memberOf:\"#{arg_hash[:collection]}\"")
+      MrtSolr.solr_count("type:object AND memberOf:\"#{arg_hash[:collection]}\"")
     else
       raise Exception
     end
