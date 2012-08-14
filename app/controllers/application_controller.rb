@@ -86,6 +86,25 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  def require_user_or_401
+    unless current_user 
+      render :status=>401, :text=>"" and return
+    end
+  end
+
+  def require_permissions(which)
+    if (@permissions.nil? || !@permissions.include?(which)) then
+      flash[:error] = 'You do not have #{which} permissions.'     
+      redirect_to(:action => 'index', 
+                  :group => flexi_group_id,
+                  :object =>params[:object]) and return false
+    end
+  end
+
+  def require_download_permissions
+    require_permissions('download')
+  end
+
   # tries to get the group for help files, but otherwise skips
   def group_optional
     grp = flexi_group_id
@@ -196,18 +215,10 @@ class ApplicationController < ActionController::Base
     "#{FILE_STATE_URI}#{esc(id)}/#{esc(version)}/#{esc(fn)}"
   end
 
-  def require_no_user
-    if current_user
-      store_location
-      flash[:notice] = "You must be logged out to access this page"
-      redirect_to '/'
-      return false
-    end
-  end
-  
   def store_location
     session[:return_to] = request.fullpath
   end
+
   def store_object
     session[:object] = request.params[:object]
   end
@@ -267,12 +278,9 @@ class ApplicationController < ActionController::Base
     end  
   end
  
-    def collection_ark
-      if @collection.nil? then
-          @collection = (/https?:\/\/\S+?\/(\S+)/.match(MrtObject.get_collection(params[:object])))[1]
-      end
-      return @collection
-    end 
+  def collection_ark
+    @collection ||= (/https?:\/\/\S+?\/(\S+)/.match(MrtObject.get_collection(params[:object])))[1]
+  end 
     
   #
   # parse the component (object, file, or version) uri to construct the DUA URI
