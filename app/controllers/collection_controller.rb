@@ -31,11 +31,6 @@ class CollectionController < ApplicationController
   end
 
   def index
-    #redirect objects to the object controller
-    if !params[:object].nil? then
-        redirect_to :controller=>'object', :action=>'index', :group=>params[:group], :object=>params[:object]
-    end
-      
     @recent_objects = MrtObject.paginate(:collection => no_inject(@group.ark_id),
                                          :page       => (params[:page] || 1), 
                                          :per_page   => 10)
