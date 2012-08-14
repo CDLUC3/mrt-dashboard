@@ -267,12 +267,9 @@ class ApplicationController < ActionController::Base
     end  
   end
  
-    def collection_ark
-      if @collection.nil? then
-          @collection = (/https?:\/\/\S+?\/(\S+)/.match(MrtObject.get_collection(params[:object])))[1]
-      end
-      return @collection
-    end 
+  def collection_ark
+    @collection ||= (/https?:\/\/\S+?\/(\S+)/.match(MrtObject.get_collection(params[:object])))[1]
+  end 
     
   #
   # parse the component (object, file, or version) uri to construct the DUA URI
