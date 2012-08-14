@@ -10,14 +10,12 @@ class FileController < ApplicationController
     if !@permissions.nil? && @permissions.include?('download') then
       # determine if user is retrieving a system file; otherwise assume they are obtaining
       # a producer file which needs to prepended to the filename
-      if !filename.include? "producer"
-        if !filename.include? "system"
-         filename.insert(0, "producer/")     
-        end
+      if !filename.match(/^(producer|system)/)
+        filename = "producer/#{filename}"
       end
       # the router removes the file extension from the filename - need to add it back on if one exists
       if !params[:format].blank?
-        filename.concat "." + params[:format]
+         filename = "#{filename}.#{params[:format]}"
       end
       
       q = Q.new("?obj dc:identifier \"#{no_inject(params[:object])}\"^^<http://www.w3.org/2001/XMLSchema#string> ;
