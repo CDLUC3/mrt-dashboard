@@ -16,5 +16,10 @@ class MrtSolr
     rsolr = RSolr.connect(:url => SOLR_SERVER)
     return rsolr.get('select', :params => params)['response']['docs'].map {|d| klass.new(:doc=>d) }
   end
+  
+  def self.count(q)
+    rsolr = RSolr.connect(:url => SOLR_SERVER)
+    return rsolr.get('select', :params => {:q => q, :fl=>"NONE"})['response']['numFound']
+  end
 end
 

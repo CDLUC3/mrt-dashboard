@@ -36,12 +36,8 @@ class MrtObject < MrtSolr
   end
 
   def self.count(*args)
-    rsolr = RSolr.connect(:url => SOLR_SERVER)
-    arg_hash = args.last
     if arg_hash[:collection] then
-      return rsolr.get('select', :params => {
-                         :q => "type:object AND memberOf:\"#{arg_hash[:collection]}\"",
-                         :fl => "none" })['response']['numFound']
+      MrtObject.count("type:object AND memberOf:\"#{arg_hash[:collection]}\"")
     else
       raise Exception
     end

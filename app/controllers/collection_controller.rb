@@ -2,8 +2,6 @@ class CollectionController < ApplicationController
   before_filter :require_user
   before_filter :require_group
 
-  Q = Mrt::Sparql::Q
-
   def object_count
     @object_count = my_cache("#{@group.id}_object_count") do
       @group.object_count
