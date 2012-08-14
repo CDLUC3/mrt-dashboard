@@ -86,6 +86,19 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  def require_permissions(which)
+    if (@permissions.nil? || !@permissions.include?(which)) then
+      flash[:error] = 'You do not have #{which} permissions.'     
+      redirect_to(:action => 'index', 
+                  :group => flexi_group_id,
+                  :object =>params[:object]) and return false
+    end
+  end
+
+  def require_download_permissions
+    require_permissions('download')
+  end
+
   # tries to get the group for help files, but otherwise skips
   def group_optional
     grp = flexi_group_id
