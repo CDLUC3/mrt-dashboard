@@ -86,6 +86,12 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  def require_user_or_401
+    unless current_user 
+      render :status=>401, :text=>"" and return
+    end
+  end
+
   def require_permissions(which)
     if (@permissions.nil? || !@permissions.include?(which)) then
       flash[:error] = 'You do not have #{which} permissions.'     
@@ -212,6 +218,7 @@ class ApplicationController < ActionController::Base
   def store_location
     session[:return_to] = request.fullpath
   end
+
   def store_object
     session[:object] = request.params[:object]
   end
