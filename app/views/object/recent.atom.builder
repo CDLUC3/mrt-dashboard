@@ -59,10 +59,10 @@ xml.tag!('feed', :xmlns => "http://www.w3.org/2005/Atom",
         end
       end
       xml.tag!("title", obj.what)
-      xml.tag!("author") do
-        w = obj.who
-        w = [w] if !w.instance_of?(Array)
-        w.each do |name|
+      w = obj.who
+      w = [w] if !w.instance_of?(Array)
+      w.each do |name|
+        xml.tag!("author") do
           xml.tag!("name", name)
         end
       end
