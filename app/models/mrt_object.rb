@@ -36,6 +36,7 @@ class MrtObject < MrtSolr
   end
 
   def self.count(*args)
+    arg_hash = args.last
     if arg_hash[:collection] then
       MrtObject.count("type:object AND memberOf:\"#{arg_hash[:collection]}\"")
     else
