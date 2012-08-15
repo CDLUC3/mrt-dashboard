@@ -1,144 +1,112 @@
-class MrtObject < UriInfo
+class MrtObject < MrtSolr
   extend MrtPaginator
-  
-  Q = Mrt::Sparql::Q
 
-  # Creates a MrtObject from a UriInfo object.
-  def self.from_uri_info(uri_info)
-    retval = MrtObject.new(uri_info.to_uri)
-    retval.info = uri_info.info
-    return retval
+  def solr_type
+    return "object"
+  end
+
+  # is there a better way?
+  def self.bulk_loader(p1)
+    p2 = p1.clone
+    p2[:q] = "type:object AND #{p1[:q]}"
+    MrtSolr.bulk_loader(MrtObject, p2)
   end
 
   def self.find_by_identifier(id)
-    q = Q.new("?obj rdf:type object:Object .
-               ?obj dc:identifier \"#{id}\"^^<http://www.w3.org/2001/XMLSchema#string>",
-      :select => "?obj")
-    return MrtObject.new(UriInfo.store().select(q)[0]['obj'])
+    return MrtObject.new(:q => "primaryId:\"#{id}\"")
   end
   
   def self.get_collection(group_or_object)
-    # we need to find out the collection if it's an object
-    q = Q.new("<#{RDF_ARK_URI}#{group_or_object}> 
-               base:isInCollection ?uri .",
-               :select => "?uri")
-    results = UriInfo.store().select(q)
-    if !results.empty? then
-      uri = results[0]['uri'].to_s
-      return uri
+    return nil
+  end
+
+  def self.find(*args)
+    rsolr = RSolr.connect(:url => SOLR_SERVER)
+    arg_hash = args.last
+    sort = arg_hash[:sort] || "modified"
+    order = arg_hash[:order] || "desc"
+    if arg_hash[:collection] then
+      return self.bulk_loader(:q => "memberOf:\"#{arg_hash[:collection]}\"", 
+                              :sort => "#{sort} #{order}",
+                              :start => arg_hash[:offset],
+                              :rows => arg_hash[:limit])
     else
       return nil
     end
-
   end
 
-  def self.bulk_loader(uris)
-    results = UriInfo.bulk_loader(uris)
-    return results.map {|uri_info| MrtObject.from_uri_info(uri_info) }
-  end
-  
-  def self.find(*args)
-    arg_hash = args.last
-    sort = arg_hash[:sort] || RDF::DC['modified']
-    order = arg_hash[:order] || "DESC"
-    q = if arg_hash[:collection] then
-          Q.new("?o a object:Object ;
-                    base:isInCollection <#{arg_hash[:collection]}> ;
-                    <#{sort}> ?sort .",
-                :select   => "?o",
-                :order_by => "#{order}(?sort)",
-                :offset   => arg_hash[:offset],
-                :limit    => arg_hash[:limit])
-        else
-          raise Exception
-        end
-    return MrtObject.bulk_loader(UriInfo.store.select(q).map{|row|row['o']})
-  end
-
-  # XXX - integrate with find
   def self.count(*args)
     arg_hash = args.last
-    q = if arg_hash[:collection] then
-          Q.new("?o a object:Object ;
-                    base:isInCollection <#{arg_hash[:collection]}> .",
-                :select => "(count(?o) as ?count)")
-        else
-          raise Exception
-        end
-    return UriInfo.store().select(q)[0]['count'].value.to_i
+    if arg_hash[:collection] then
+      MrtSolr.solr_count("type:object AND memberOf:\"#{arg_hash[:collection]}\"")
+    else
+      raise Exception
+    end
   end
 
   def bytestream
-    return self.first(Mrt::Model::Base['bytestream'])
+    return doc['bytestream']
   end
 
   def bytestream_uri
-    return self.bytestream.to_uri
+    return URI.parse(self.bytestream)
   end
   
   def total_actual_size
-    return self.first_value(Mrt::Model::Object['totalActualSize']).to_i
+    return doc['totalActualSize']
   end
   
   def modified
-    val = self.first_value(RDF::DC['modified'])
-    if val.nil? then
-      return nil
-    else
-      return DateTime.parse(val)
-    end
+    return DateTime.parse(doc['modified'])
   end
 
   def created
-    val = self.first_value(RDF::DC['created'])
-    if val.nil? then
-      return nil
-    else
-      return DateTime.parse(val)
-    end
+    return DateTime.parse(doc['created'])
   end
 
   def size
-    return self.first_value(Mrt::Model::Base['size']).to_i
-  end
-
-  def in_node
-    return self.first(Mrt::Model::Object['inNode'])
+    return doc['size']
   end
 
   def num_actual_files
-    return self.first_value(Mrt::Model::Object['numActualFiles']).to_i
+    return doc['numActualFiles']
   end
 
   def versions
-    # this works with current storage service and saves a trip to
-    # SPARQL
-    return @versions ||= self[RDF::DC["hasVersion"]].map{|uri| MrtVersion.new(uri)}.sort_by{ |v| v.identifier.to_i }
-    #return @versions ||= self.first(Mrt::Model::Object['versionSeq']).to_list.map{|v| MrtVersion.new(v)}
+    return MrtVersion.bulk_loader(:q=>"inObject:\"#{doc['storageUrl']}\"")
   end
 
-  def is_stored_object_for
-    return self.first(Mrt::Model::Object['isStoredObjectFor'])
+  def current_version
+    return self.versions[-1]
   end
 
   def who
-    return self[Mrt::Model::Kernel['who']].map { |el| el.value.to_s }
+    return doc['who']
   end
 
   def what
-    return self[Mrt::Model::Kernel['what']].map { |el| el.value.to_s }
+    return doc['what']
   end
 
   def when
-    return self[Mrt::Model::Kernel['when']].map { |el| el.value.to_s }
+    return doc['when']
+  end
+
+  def primary_id
+    return doc['primaryId']
   end
 
   def identifier
-    return self.first(RDF::DC['identifier'])
+    return self.primary_id
   end
 
+  def local_id
+    return doc['localId']
+  end
+
+  # deprecated
   def local_identifier
-    return self.is_stored_object_for.first(Mrt::Model::Object.localIdentifier)
+    return doc['localId']
   end
 
   def permalink
@@ -146,8 +114,7 @@ class MrtObject < UriInfo
   end
   
   def files
-    return @files ||= MrtFile.bulk_loader(self[Mrt::Model::Version['hasFile']]).
-      sort_by{|f| f.identifier}
+    return self.current_version.files
   end
 
   def system_files 

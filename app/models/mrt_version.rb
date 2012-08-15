@@ -1,15 +1,22 @@
-class MrtVersion < UriInfo
-  Q = Mrt::Sparql::Q
+class MrtVersion < MrtSolr
+
+  def solr_type
+    return "version"
+  end
+
+  # is there a better way?
+  def self.bulk_loader(p1)
+    p2 = p1.clone
+    p2[:q] = "type:version AND #{p1[:q]}"
+    MrtSolr.bulk_loader(MrtVersion, p2)
+  end
 
   def identifier
-    # this works with current storage service and saves a trip to
-    # SPARQL when we just need the identifier
-    return self.to_uri.path.match(/\/([0-9]+)$/)[1]
-#    return self.first(RDF::DC['identifier']).value
+    return doc['relativeId']
   end
 
   def bytestream
-    return self.first(Mrt::Model::Base['bytestream'])
+    return doc['bytestream']
   end
 
   def bytestream_uri
@@ -17,47 +24,49 @@ class MrtVersion < UriInfo
   end
   
   def total_actual_size
-    return self.first(Mrt::Model::Base['totalActualSize']).value.to_i
+    return doc['totalActualSize'].to_i
   end
   
   def created
-    return DateTime.parse(self.first(RDF::DC['created']).value)
+    return DateTime.parse(doc['created'])
   end
 
   def size
-    return self.first(Mrt::Model::Base['size']).value.to_i
+    return doc['size'].to_i
   end
 
   def num_actual_files
-    return self.first(Mrt::Model::Object['numActualFiles']).value.to_i
+    return doc['numActualFiles'].to_i
   end
 
   def files
-    return @files ||= MrtFile.bulk_loader(self[Mrt::Model::Version['hasFile']]).
-      sort_by{|f| f.identifier}
+    return @files ||= MrtFile.bulk_loader(:q=>"inVersion:\"#{doc['storageUrl']}\"").
+      sort_by{|f| f.identifier.downcase }
   end
 
   def system_files 
-    return self.files.select {|f| f.identifier.match(/^system\//) }
+    return self.files.select {|f| f.identifier.match(/^system\//) }.
+      sort_by {|x| File.basename(x.identifier.downcase) }     
   end
 
   def producer_files 
-    return self.files.select {|f| f.identifier.match(/^producer\//) }
+    return self.files.select {|f| f.identifier.match(/^producer\//) }.
+      sort_by {|x| File.basename(x.identifier.downcase) }     
   end
 
   def in_object
-    return @in_object ||= MrtObject.new(self.first(Mrt::Model::Version['inObject']))
+    return @in_object ||= MrtObject.new(:q => "storageUrl:\"#{doc['inObject']}\"")
   end
 
   def who
-    return self[Mrt::Model::Kernel['who']].map{ |w| w.value.to_s }
+    return doc['who']
   end
 
   def what
-    return self[Mrt::Model::Kernel['what']].map{ |w| w.value.to_s }
+    return doc['what']
   end
 
   def when
-    return self[Mrt::Model::Kernel['when']].map{ |w| w.value.to_s }
+    return doc['when']
   end
 end

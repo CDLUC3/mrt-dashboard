@@ -62,11 +62,6 @@ class ObjectController < ApplicationController
 
   def index
     @object = MrtObject.find_by_identifier(params[:object])
-    @versions = @object.versions
-    #files for current version
-    @files = @object.files.
-      reject {|file| file.identifier.match(/^system\/mrt-/) }.
-      sort_by {|x| File.basename(x.identifier.downcase) }     
   end
 
   def download
@@ -153,7 +148,7 @@ class ObjectController < ApplicationController
 
   def recent
     @collection_ark = params[:collection]
-    @objects = MrtObject.paginate(:collection => RDF_ARK_URI + @collection_ark,
+    @objects = MrtObject.paginate(:collection => @collection_ark,
                                   :page       => (params[:page] || 1),
                                   :per_page   => 20)
     respond_to do |format|
