@@ -252,24 +252,24 @@ class ApplicationController < ActionController::Base
   end
  
   def collection_ark
-    @collection ||= (/https?:\/\/\S+?\/(\S+)/.match(MrtObject.get_collection(params[:object])))[1]
+    @collection ||= MrtObject.find_by_identifier(params[:object]).member_of
   end 
     
   #
   # parse the component (object, file, or version) uri to construct the DUA URI
   def construct_dua_uri(rx, component_uri)
-     md = rx.match(component_uri.to_s)
-     dua_filename = "#{md[1]}/" + urlencode(collection_ark)  + "/0/" + urlencode(APP_CONFIG['mrt_dua_file']) 
-     dua_file_uri = UriInfo.new(dua_filename)
-     Rails.logger.debug("DUA File URI: " + dua_file_uri)
-     return dua_file_uri
+    md = rx.match(component_uri.to_s)
+    dua_filename = "#{md[1]}/" + urlencode(collection_ark)  + "/0/" + urlencode(APP_CONFIG['mrt_dua_file']) 
+    dua_file_uri = MrtFile.find_by_query("storageUrl:\"#{dua_filename}\"")
+    return dua_file_uri
   end
         
   # returns the response of the HTTP request for the DUA URI
   def process_dua_request(dua_file_uri)
-     uri = URI.parse(dua_file_uri)
-     http = Net::HTTP.new(uri.host, uri.port)
-     uri_response = http.request(Net::HTTP::Get.new(uri.request_uri))
-     return uri_response
+    return nil if dua_file_uri.nil?
+    uri = URI.parse(dua_file_uri)
+    http = Net::HTTP.new(uri.host, uri.port)
+    uri_response = http.request(Net::HTTP::Get.new(uri.request_uri))
+    return uri_response
   end 
 end
