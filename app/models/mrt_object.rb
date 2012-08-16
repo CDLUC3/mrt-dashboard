@@ -20,10 +20,6 @@ class MrtObject < MrtSolr
     return MrtObject.new(:q => "primaryId:\"#{id}\"")
   end
   
-  def self.get_collection(group_or_object)
-    return nil
-  end
-
   def self.find(*args)
     rsolr = RSolr.connect(:url => SOLR_SERVER)
     arg_hash = args.last
@@ -127,5 +123,9 @@ class MrtObject < MrtSolr
 
   def producer_files 
     return self.files.select {|f| f.identifier.match(/^producer\//) }
+  end
+
+  def member_of
+    return doc["memberOf"]
   end
 end
