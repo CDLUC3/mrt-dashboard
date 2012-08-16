@@ -68,7 +68,7 @@ module ApplicationHelper
   end
 
   def have_permission(which)
-    return @permissions.nil? && @permissions.include?(which)
+    return !@permissions.nil? && @permissions.include?(which)
   end
 
   def merritt_time(t)
