@@ -1,10 +1,8 @@
-require 'tempfile'
-
 class ObjectController < ApplicationController
-  before_filter :require_user,       :except => [:jupload_add, :recent, :ingest, :mint]
+  before_filter :require_user, :except => [:jupload_add, :recent, :ingest, :mint]
   before_filter :require_user_or_401, :only => [:ingest, :mint]
-  before_filter :require_group,      :except => [:jupload_add, :recent, :ingest, :mint]
-  before_filter :require_write,      :only => [:add, :upload]
+  before_filter :require_group, :except => [:jupload_add, :recent, :ingest, :mint]
+  before_filter :require_write, :only => [:add, :upload]
   before_filter :require_session_object, :only => [:download]
   before_filter :require_mrt_object, :only => [:download]
   protect_from_forgery :except => [:ingest, :mint]
