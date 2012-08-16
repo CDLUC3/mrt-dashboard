@@ -24,7 +24,7 @@ class MrtVersion < MrtSolr
   end
 
   def bytestream_uri
-    return self.bytestream.to_uri
+    return URI.parse(self.bytestream)
   end
   
   def total_actual_size
