@@ -167,20 +167,12 @@ class ApplicationController < ActionController::Base
 
   def require_object
     redirect_to(ObjectList.merge({:group => flexi_group_id})) and return false if params[:object].nil?
-    begin
-      @object = UriInfo.new("#{RDF_ARK_URI}#{params[:object]}")
-    rescue Exception => ex
-      redirect_to(ObjectList.merge({:group => flexi_group_id})) and return false
-    end
+    @object = MrtObject.find_by_identifier(params[:object])
   end
 
   def require_mrt_object
     redirect_to(ObjectList.merge({:group => flexi_group_id})) and return false if params[:object].nil?
-    begin
-      @object = MrtObject.find_by_identifier(params[:object])
-    rescue Exception => ex
-      redirect_to(ObjectList.merge({:group => flexi_group_id})) and return false
-    end
+    @object = MrtObject.find_by_identifier(params[:object])
   end
   
   def require_mrt_version
