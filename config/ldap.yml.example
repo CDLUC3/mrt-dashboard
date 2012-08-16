@@ -1,0 +1,37 @@
+development:
+  admin_password: XXXXXXXX
+  admin_user:     cn=Directory Manager
+  group_base:     ou=mrt-classes,ou=uc3,dc=cdlib,dc=org
+  host:           badger.cdlib.org
+  port:           1636
+  user_base:      ou=People,ou=uc3,dc=cdlib,dc=org
+  inst_base:      o=institutions,ou=uc3,dc=cdlib,dc=org
+  ark_minter_url: http://noid.cdlib.org/nd/noidu_p9
+  guest_password: guest
+  guest_user:     anonymous
+
+development_nonlocal:
+  development
+
+stage:
+  admin_password: XXXXXXXX
+  admin_user:     cn=Directory Manager
+  group_base:     ou=mrt-classes,ou=uc3,dc=cdlib,dc=org
+  host:           dp08.cdlib.org
+  port:           1636
+  user_base:      ou=People,ou=uc3,dc=cdlib,dc=org
+  inst_base:      o=institutions,ou=uc3,dc=cdlib,dc=org
+  ark_minter_url: http://noid.cdlib.org/nd/noidu_p9
+
+production:
+  admin_password: XXXXXXXX
+  admin_user:     cn=Directory Manager
+  group_base:     ou=mrt-classes,ou=uc3,dc=cdlib,dc=org
+  host:           dp01.cdlib.org
+  port:           1636
+  user_base:      ou=People,ou=uc3,dc=cdlib,dc=org
+  inst_base:      o=institutions,ou=uc3,dc=cdlib,dc=org
+  ark_minter_url: http://noid.cdlib.org/nd/noidu_p9
+
+production_development:
+  production
