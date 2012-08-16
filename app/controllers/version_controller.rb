@@ -15,9 +15,7 @@ class VersionController < ApplicationController
 
   def index
     #files for current version
-    (@system_files, @files) = @version.files.sort_by { |file|
-      file.identifier.downcase
-    }.partition { |file|
+    (@system_files, @files) = @version.files.partition { |file|
       file.identifier.match(/^system\//)
     }
     # construct the permalink to this version - use the constant defined in config for stage and prod environments
