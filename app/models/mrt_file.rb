@@ -11,7 +11,7 @@ class MrtFile < MrtSolr
   end
 
   def identifier
-    return doc['relativeId']
+    return doc['filename']
   end
 
   def bytestream
