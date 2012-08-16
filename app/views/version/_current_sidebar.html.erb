@@ -1,17 +1,19 @@
-<% #pass in 'version' and 'files' as local variables %>
-<h3>Current Version</h3>
+<% #pass in 'version' as local variable %>
 
+<h3>Current Version</h3>
 <%= render :partial => '/version/line_sidebar', :collection => [version] %>
 
-<% trunc_files = (files.length > 4 ? files[0..3] : files) %>
+<% files = version.producer_files %>
+<% show_only = 4 %>
 
 <ul>
-  <%= render :partial => '/file/line_sidebar', :collection => trunc_files,
-            :locals => {:version => version} %>
+  <%= render :partial => '/file/line_sidebar', 
+             :collection => files[0..(show_only-1)],
+             :locals => {:version => version} %>
 </ul>
 
-<% if files.length > trunc_files.length then%>
-  <%= link_to "#{files.length - trunc_files.length} more files",
+<% if (files.length > show_only) then%>
+  <%= link_to "#{(files.length - show_only)} more files",
               :controller     => :version,
               :action         => :index,
               :group          => params[:group],
