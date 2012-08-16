@@ -94,9 +94,10 @@ class ApplicationController < ActionController::Base
   def require_permissions(which)
     if (@permissions.nil? || !@permissions.include?(which)) then
       flash[:error] = 'You do not have #{which} permissions.'     
-      redirect_to(:action => 'index', 
-                  :group => flexi_group_id,
-                  :object =>params[:object]) and return false
+      redirect_to(:action  => 'index', 
+                  :group   => flexi_group_id,
+                  :object  => params[:object],
+                  :version => params[:version]) and return false
     end
   end
 
