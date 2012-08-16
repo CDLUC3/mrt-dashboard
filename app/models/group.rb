@@ -42,27 +42,24 @@ class Group
   end
 
   def object_count
-    return MrtSolr.count(:q => "type:object AND memberOf:\"#{self.ark_id}\"")
+    return MrtSolr.solr_count("type:object AND memberOf:\"#{self.ark_id}\"")
   end
 
   def version_count
-    return 0
-    return MrtSolr.count(:q => "type:version AND memberOf:\"#{self.ark_id}\"")
+    return MrtSolr.solr_count("type:version AND memberOf:\"#{self.ark_id}\"")
   end
 
   def file_count
-    return 0
+    return MrtSolr.solr_count("type:file AND memberOf:\"#{self.ark_id}\"")
   end
 
   def total_size
-    response = @rsolr.get('select', 
-                         :params => {
-                           :q    => "type:object and memberOf:\"#{self.ark_id}\"",
-                           :fl   => "totalActualSize",
-                           :rows => nil });
-    size = 0
-    response["response"]["docs"].each {|d| size += d["totalActualSize"] }
-    return size
+    response = @rsolr.get('select', :params => {
+                            :stats => 'true',
+                            :q    => "type:object and memberOf:\"#{self.ark_id}\"",
+                            :rows=>0,
+                            "stats.field" => "totalActualSize"})
+    return response["stats"]["stats_fields"]["totalActualSize"]["sum"].to_i
   end
 
   #get all groups and email addresses of members, this is a stopgap for our own use
