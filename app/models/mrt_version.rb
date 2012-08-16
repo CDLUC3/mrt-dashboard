@@ -11,6 +11,10 @@ class MrtVersion < MrtSolr
     MrtSolr.bulk_loader(MrtVersion, p2)
   end
 
+  def self.find_by_query(q)
+    self.bulk_loader(:q=>q)[0]
+  end
+
   def identifier
     return doc['versionNumber'].to_s
   end

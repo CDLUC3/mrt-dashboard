@@ -12,6 +12,10 @@ class MrtObject < MrtSolr
     MrtSolr.bulk_loader(MrtObject, p2)
   end
 
+  def self.find_by_query(q)
+    self.bulk_loader(:q=>q)[0]
+  end
+  
   def self.find_by_identifier(id)
     return MrtObject.new(:q => "primaryId:\"#{id}\"")
   end

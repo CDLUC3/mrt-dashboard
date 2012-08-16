@@ -10,6 +10,10 @@ class MrtFile < MrtSolr
     MrtSolr.bulk_loader(MrtFile, p2)
   end
 
+  def self.find_by_query(q)
+    self.bulk_loader(:q=>q)[0]
+  end
+
   def identifier
     return doc['filename']
   end
