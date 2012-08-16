@@ -36,7 +36,7 @@
 <div class="grid_4 sidebar">
   <%= render :partial => '/shared/side_lookup' %><br/>
   <%= render :partial => '/version/current_sidebar',
-      :locals => {:version => @object.versions.reverse[0], :files => @object.current_version.producer_files} %><br/>
+      :locals => {:version => @object.current_version} %><br/>
   <% if @object.versions.length > 1 then %>
     <%= render :partial => '/version/list_sidebar',
       :locals => {:versions => @object.versions.reverse[1..-1], :title => 'Prior Versions'} %><br/>
