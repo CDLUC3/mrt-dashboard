@@ -12,7 +12,7 @@ class MrtVersion < MrtSolr
   end
 
   def identifier
-    return doc['relativeId']
+    return doc['versionNumber'].to_s
   end
 
   def bytestream
