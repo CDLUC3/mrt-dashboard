@@ -235,8 +235,6 @@ class ApplicationController < ActionController::Base
   end
 
   def fetch_to_tempfile(*args)
-    require 'open-uri'
-    require 'ftools'
     open(*args) do |data|
       tmp_file = Tempfile.new('mrt_http')
       if data.instance_of? File then
