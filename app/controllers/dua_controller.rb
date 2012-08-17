@@ -55,7 +55,4 @@ class DuaController < ApplicationController
        redirect_to session[:return_to]
     end
    end
-   
-   def send_email
-   end
 end
