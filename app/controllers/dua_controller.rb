@@ -5,11 +5,8 @@ class DuaController < ApplicationController
   before_filter :require_dua
   
   def require_dua
-    if @dua_hash.nil? then
-      tmp_dua_file = fetch_to_tempfile(session[:dua_file_uri])
-      @dua_hash = Dua.parse_file(tmp_dua_file)
-    end
-    Dua.dua_hash = @dua_hash
+    @dua_hash ||= 
+      Dua.parse_file(fetch_to_tempfile(session[:dua_file_uri]))
   end
   
   def index 
