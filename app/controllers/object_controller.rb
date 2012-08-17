@@ -73,9 +73,7 @@ class ObjectController < ApplicationController
            redirect_to  :action => 'index', :group => flexi_group_id,  :object =>params[:object] and return false
         # if DUA has been accepted already for this collection, do not display to user again in this session
         elsif !session[:collection_acceptance][@group.id]         #process DUA if one exists
-           #construct the dua_file_uri based off the object URI, the object's parent collection, version 0, and  DUA filename
-           rx = /^(.*)\/([^\/]+)$/  
-           dua_file_uri = construct_dua_uri(rx, @object.bytestream_uri)
+           dua_file_uri = construct_dua_uri
            uri_response = process_dua_request(dua_file_uri)
            # if the DUA exists, display DUA to user for acceptance before displaying file
            if (uri_response.class == Net::HTTPOK) then

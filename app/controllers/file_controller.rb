@@ -25,9 +25,7 @@ class FileController < ApplicationController
         redirect_to  :controller => 'object', :action => 'index', :group => flexi_group_id,  :object =>params[:object] and return false         
         # if DUA for this collection has not yet been displayed to user, perform logic to retrieve DUA.
       elsif !session[:collection_acceptance][@group.id]
-        #construct the dua_file_uri based off the file_uri, the object's parent collection, version 0, and  DUA filename
-        rx = /^(.*)\/([^\/]+)\/([0-9]+)\/([^\/]+)$/
-        dua_file_uri = construct_dua_uri(rx, file.bytestream_uri)
+        dua_file_uri = construct_dua_uri
         uri_response = process_dua_request(dua_file_uri)
         # if the DUA for this collection exists, display DUA to user for acceptance before displaying file
         if (uri_response.class == Net::HTTPOK) then
