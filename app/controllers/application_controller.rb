@@ -1,3 +1,5 @@
+require 'open-uri'
+
 # monkeypatch, see http://stackoverflow.com/questions/3507594/ruby-on-rails-3-streaming-data-through-rails-to-client
 class Rack::Response
   def close
