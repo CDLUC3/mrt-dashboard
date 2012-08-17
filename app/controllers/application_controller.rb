@@ -259,10 +259,13 @@ class ApplicationController < ActionController::Base
   #
   # parse the component (object, file, or version) uri to construct the DUA URI
   def construct_dua_uri(rx, component_uri)
-    md = rx.match(component_uri.to_s)
-    dua_filename = "#{md[1]}/" + urlencode(collection_ark)  + "/0/" + urlencode(APP_CONFIG['mrt_dua_file']) 
-    dua_file_uri = MrtFile.find_by_query("storageUrl:\"#{dua_filename}\"")
-    return dua_file_uri
+    o = MrtObject.find_by_identifier(collection_ark)
+    if o.nil? then
+      return nil
+    else
+      dua_file = o.current_version.files.find {|f| f.filename == APP_CONFIG['mrt_dua_file'] }
+      return dua_file.bytestream
+    end
   end
         
   # returns the response of the HTTP request for the DUA URI
