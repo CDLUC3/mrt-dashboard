@@ -2,14 +2,11 @@ require 'net/http'
 class DuaController < ApplicationController
   before_filter :require_user
   before_filter :require_group
-  before_filter :require_dua
-  
-  def require_dua
-    @dua_hash ||= 
-      Dua.parse_file(fetch_to_tempfile(session[:dua_file_uri]))
-  end
   
   def index 
+    @dua_hash =
+      Dua.parse_file(fetch_to_tempfile(session[:dua_file_uri]))
+
     if params['commit'].eql?("Accept") then  
       if params[:accept].nil? then
         flash[:message] = 'You must check that you accept the terms.'
