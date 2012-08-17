@@ -258,7 +258,7 @@ class ApplicationController < ActionController::Base
     
   #
   # parse the component (object, file, or version) uri to construct the DUA URI
-  def construct_dua_uri(rx, component_uri)
+  def construct_dua_uri
     o = MrtObject.find_by_identifier(collection_ark)
     if o.nil? then
       return nil
