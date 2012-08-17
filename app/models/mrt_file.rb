@@ -18,6 +18,10 @@ class MrtFile < MrtSolr
     return doc['filename']
   end
 
+  def filename
+    return doc['filename']
+  end
+
   def bytestream
     return doc['bytestream']
   end
