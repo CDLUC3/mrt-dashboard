@@ -1,6 +1,6 @@
 require File.expand_path('../boot', __FILE__)
 
-# remove active_record, which we do not use
+require "active_record/railtie"
 require "action_controller/railtie"
 require "action_mailer/railtie"
 require "active_resource/railtie"

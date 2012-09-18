@@ -168,14 +168,15 @@ class ApplicationController < ActionController::Base
     raise ErrorUnavailable if !@permissions.include?('write')
   end
 
+  
   def require_object
-    redirect_to(ObjectList.merge({:group => flexi_group_id})) and return false if params[:object].nil?
-    @object = MrtObject.find_by_identifier(params[:object])
+    #wtf
+    return require_mrt_object
   end
 
   def require_mrt_object
     redirect_to(ObjectList.merge({:group => flexi_group_id})) and return false if params[:object].nil?
-    @object = MrtObject.find_by_identifier(params[:object])
+    @object = MrtObject.includes(:mrt_versions).where(:primary_id=>params[:object]).first
   end
   
   def require_mrt_version
@@ -253,13 +254,13 @@ class ApplicationController < ActionController::Base
   end
  
   def collection_ark
-    @collection ||= MrtObject.find_by_identifier(params[:object]).member_of
+    @collection ||= MrtObject.find_by_primary_id(params[:object]).member_of
   end 
     
   #
   # parse the component (object, file, or version) uri to construct the DUA URI
   def construct_dua_uri
-    o = MrtObject.find_by_identifier(collection_ark)
+    o = MrtObject.find_by_primary_id(collection_ark)
     if o.nil? then
       return nil
     else

@@ -31,9 +31,10 @@ class CollectionController < ApplicationController
   end
 
   def index
-    @recent_objects = MrtObject.paginate(:collection => no_inject(@group.ark_id),
-                                         :page       => (params[:page] || 1), 
-                                         :per_page   => 10)
+    @recent_objects = MrtObject.includes(:mrt_versions, :mrt_version_metadata).
+      where("mrt_version_metadata.name = 'collection' AND mrt_version_metadata.value = ?", @group.ark_id).
+      paginate(:page       => (params[:page] || 1), 
+               :per_page   => 10)
   end
 
   def search_results

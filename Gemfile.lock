@@ -37,6 +37,8 @@ GEM
       activesupport (= 3.0.13)
       arel (~> 2.0.10)
       tzinfo (~> 0.3.23)
+    activerecord-mysql2-adapter (0.0.3)
+      mysql2
     activeresource (3.0.13)
       activemodel (= 3.0.13)
       activesupport (= 3.0.13)
@@ -58,6 +60,7 @@ GEM
     mrt-ingest (0.0.2)
       json (>= 1.5.0)
       rest-client (>= 1.6.0)
+    mysql2 (0.3.11)
     nokogiri (1.5.0)
     orchard (0.2)
     polyglot (0.3.3)
@@ -106,6 +109,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  activerecord-mysql2-adapter (= 0.0.3)
   exception_notification!
   httpclient (~> 2.2.5)
   json (> 1.5.0)
