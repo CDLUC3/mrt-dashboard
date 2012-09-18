@@ -21,10 +21,6 @@ class MrtVersion < ActiveRecord::Base
       sort_by {|x| File.basename(x.identifier.downcase) }     
   end
 
-  def in_object
-    return @in_object ||= MrtObject.new(:q => "storageUrl:\"#{doc['inObject']}\"")
-  end
-
   def metadata(name)
     self.mrt_version_metadata.select {|md| md.name == name }.map {|md| md.value }
   end
