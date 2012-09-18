@@ -19,20 +19,24 @@ class MrtObject < ActiveRecord::Base
     return self.versions[-1]
   end
 
+  def metadata(name)
+    self.current_version.metadata(name)
+  end
+
   def who
-    return self.current_version.who
+    return metadata('who')
   end
 
   def what
-    return self.current_version.what
+    return metadata('what')
   end
 
   def when
-    return self.current_version.when
+    return metadata('when')
   end
 
   def member_of
-    return self.current_version.member_of
+    return metadata('collection')
   end
     
   def identifier
@@ -59,5 +63,4 @@ class MrtObject < ActiveRecord::Base
   def producer_files 
     return self.files.select {|f| f.identifier.match(/^producer\//) }
   end
-
 end
