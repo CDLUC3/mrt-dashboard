@@ -1,51 +1,14 @@
-class MrtVersion < MrtSolr
-
-  def solr_type
-    return "version"
-  end
-
-  # is there a better way?
-  def self.bulk_loader(p1)
-    p2 = p1.clone
-    p2[:q] = "type:version AND #{p1[:q]}"
-    MrtSolr.bulk_loader(MrtVersion, p2)
-  end
-
-  def self.find_by_query(q)
-    self.bulk_loader(:q=>q)[0]
-  end
+class MrtVersion < ActiveRecord::Base
+  belongs_to :mrt_object
+  has_many :mrt_files
+  has_many :mrt_version_metadata
 
   def identifier
-    return doc['versionNumber'].to_s
-  end
-
-  def bytestream
-    return doc['bytestream']
+    return self.version_number.to_s
   end
 
   def bytestream_uri
     return URI.parse(self.bytestream)
-  end
-  
-  def total_actual_size
-    return doc['totalActualSize'].to_i
-  end
-  
-  def created
-    return DateTime.parse(doc['created'])
-  end
-
-  def size
-    return doc['size'].to_i
-  end
-
-  def num_actual_files
-    return doc['numActualFiles'].to_i
-  end
-
-  def files
-    return @files ||= MrtFile.bulk_loader(:q=>"inVersion:\"#{doc['storageUrl']}\"").
-      sort_by{|f| f.identifier.downcase }
   end
 
   def system_files 
@@ -62,15 +25,27 @@ class MrtVersion < MrtSolr
     return @in_object ||= MrtObject.new(:q => "storageUrl:\"#{doc['inObject']}\"")
   end
 
+  def metadata(name)
+    self.mrt_version_metadata.select {|md| md.name == name }.map {|md| md.value }
+  end
+
+  def files
+    return self.mrt_files
+  end
+
   def who
-    return doc['who']
+    return self.metadata('who')
+  end
+
+  def member_of
+    return self.metadata('collection')
   end
 
   def what
-    return doc['what']
+    return self.metadata('what')
   end
 
   def when
-    return doc['when']
+    return self.metadata('when')
   end
 end

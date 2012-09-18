@@ -13,9 +13,9 @@ class FileController < ApplicationController
     # the router removes the file extension from the filename - need to add it back on if one exists
     filename = "#{filename}.#{params[:format]}" if !params[:format].blank?
 
-    file = MrtFile.find_by_query("filename:\"#{filename}\" AND \
-      primaryId:\"#{params[:object]}\" AND \
-      versionNumber:#{params[:version].to_i}")
+    file = MrtObject.where(:primary_id=>params[:object]).first.
+      versions.where(:version_number=>params[:version]).first.
+      files.where(:filename=>filename).first
 
     # bypass DUA processing for python scripts - indicated by special param
     if params[:blue].nil? then

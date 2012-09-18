@@ -59,7 +59,7 @@ class ObjectController < ApplicationController
   end
 
   def index
-    @object = MrtObject.find_by_identifier(params[:object])
+    @object = MrtObject.find(:first, :conditions=>{:primary_id=>params[:object]})
   end
 
   def download
