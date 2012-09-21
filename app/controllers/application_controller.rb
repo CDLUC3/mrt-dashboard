@@ -1,3 +1,5 @@
+require 'open-uri'
+
 # monkeypatch, see http://stackoverflow.com/questions/3507594/ruby-on-rails-3-streaming-data-through-rails-to-client
 class Rack::Response
   def close
@@ -21,7 +23,6 @@ class ApplicationController < ActionController::Base
   class ErrorUnavailable < StandardError; end
   rescue_from ErrorUnavailable, :with => :render_unavailable
 
-  Q = Mrt::Sparql::Q
   protect_from_forgery
   layout 'application'
 
@@ -95,9 +96,10 @@ class ApplicationController < ActionController::Base
   def require_permissions(which)
     if (@permissions.nil? || !@permissions.include?(which)) then
       flash[:error] = 'You do not have #{which} permissions.'     
-      redirect_to(:action => 'index', 
-                  :group => flexi_group_id,
-                  :object =>params[:object]) and return false
+      redirect_to(:action  => 'index', 
+                  :group   => flexi_group_id,
+                  :object  => params[:object],
+                  :version => params[:version]) and return false
     end
   end
 
@@ -166,22 +168,15 @@ class ApplicationController < ActionController::Base
     raise ErrorUnavailable if !@permissions.include?('write')
   end
 
+  
   def require_object
-    redirect_to(ObjectList.merge({:group => flexi_group_id})) and return false if params[:object].nil?
-    begin
-      @object = UriInfo.new("#{RDF_ARK_URI}#{params[:object]}")
-    rescue Exception => ex
-      redirect_to(ObjectList.merge({:group => flexi_group_id})) and return false
-    end
+    #wtf
+    return require_mrt_object
   end
 
   def require_mrt_object
     redirect_to(ObjectList.merge({:group => flexi_group_id})) and return false if params[:object].nil?
-    begin
-      @object = MrtObject.find_by_identifier(params[:object])
-    rescue Exception => ex
-      redirect_to(ObjectList.merge({:group => flexi_group_id})) and return false
-    end
+    @object = MrtObject.includes(:mrt_versions).where(:primary_id=>params[:object]).first
   end
   
   def require_mrt_version
@@ -191,24 +186,6 @@ class ApplicationController < ActionController::Base
                 :object => params[:object]) and return false if params[:version].nil?
     require_mrt_object() if @object.nil?
     @version = @object.versions[params[:version].to_i - 1]
-  end
-
-  def require_version
-    redirect_to(:controller => :object, :action => 'index', :group => flexi_group_id, :object => params[:object]) and return false if params[:version].nil?
-    #get version of specific object
-    q = Q.new("?vers dc:identifier \"#{no_inject(params[:version])}\"^^<http://www.w3.org/2001/XMLSchema#string> .
-                ?vers rdf:type version:Version .
-                ?vers version:inObject ?obj .
-                ?obj rdf:type object:Object .
-                ?obj object:isStoredObjectFor ?meta .
-                ?obj dc:identifier \"#{no_inject(params[:object])}\"^^<http://www.w3.org/2001/XMLSchema#string>",
-      :select => "?vers")
-
-    res = store().select(q)
-
-    redirect_to(:controller => :object, :action => 'index', :group => flexi_group_id, :object => params[:object]) and return false if res.length != 1
-
-    @version = UriInfo.new(res[0]['vers'])
   end
 
   def file_state_uri(id, version, fn)
@@ -259,8 +236,6 @@ class ApplicationController < ActionController::Base
   end
 
   def fetch_to_tempfile(*args)
-    require 'open-uri'
-    require 'ftools'
     open(*args) do |data|
       tmp_file = Tempfile.new('mrt_http')
       if data.instance_of? File then
@@ -279,24 +254,27 @@ class ApplicationController < ActionController::Base
   end
  
   def collection_ark
-    @collection ||= (/https?:\/\/\S+?\/(\S+)/.match(MrtObject.get_collection(params[:object])))[1]
+    @collection ||= MrtObject.find_by_primary_id(params[:object]).member_of
   end 
     
   #
   # parse the component (object, file, or version) uri to construct the DUA URI
-  def construct_dua_uri(rx, component_uri)
-     md = rx.match(component_uri.to_s)
-     dua_filename = "#{md[1]}/" + urlencode(collection_ark)  + "/0/" + urlencode(APP_CONFIG['mrt_dua_file']) 
-     dua_file_uri = UriInfo.new(dua_filename)
-     Rails.logger.debug("DUA File URI: " + dua_file_uri)
-     return dua_file_uri
+  def construct_dua_uri
+    o = MrtObject.find_by_primary_id(collection_ark)
+    if o.nil? then
+      return nil
+    else
+      dua_file = o.current_version.files.find {|f| f.filename == APP_CONFIG['mrt_dua_file'] }
+      return dua_file.bytestream
+    end
   end
         
   # returns the response of the HTTP request for the DUA URI
   def process_dua_request(dua_file_uri)
-     uri = URI.parse(dua_file_uri)
-     http = Net::HTTP.new(uri.host, uri.port)
-     uri_response = http.request(Net::HTTP::Get.new(uri.request_uri))
-     return uri_response
+    return nil if dua_file_uri.nil?
+    uri = URI.parse(dua_file_uri)
+    http = Net::HTTP.new(uri.host, uri.port)
+    uri_response = http.request(Net::HTTP::Get.new(uri.request_uri))
+    return uri_response
   end 
 end
