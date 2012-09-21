@@ -1,10 +1,8 @@
-require 'tempfile'
-
 class ObjectController < ApplicationController
-  before_filter :require_user,       :except => [:jupload_add, :recent, :ingest, :mint]
+  before_filter :require_user, :except => [:jupload_add, :recent, :ingest, :mint]
   before_filter :require_user_or_401, :only => [:ingest, :mint]
-  before_filter :require_group,      :except => [:jupload_add, :recent, :ingest, :mint]
-  before_filter :require_write,      :only => [:add, :upload]
+  before_filter :require_group, :except => [:jupload_add, :recent, :ingest, :mint]
+  before_filter :require_write, :only => [:add, :upload]
   before_filter :require_session_object, :only => [:download]
   before_filter :require_mrt_object, :only => [:download]
   protect_from_forgery :except => [:ingest, :mint]
@@ -78,12 +76,7 @@ class ObjectController < ApplicationController
   end
 
   def index
-    @object = MrtObject.find_by_identifier(params[:object])
-    @versions = @object.versions
-    #files for current version
-    @files = @object.files.
-      reject {|file| file.identifier.match(/^system\/mrt-/) }.
-      sort_by {|x| File.basename(x.identifier.downcase) }     
+    @object = MrtObject.find(:first, :conditions=>{:primary_id=>params[:object]})
   end
 
   def download
@@ -97,9 +90,7 @@ class ObjectController < ApplicationController
            redirect_to  :action => 'index', :group => flexi_group_id,  :object =>params[:object] and return false
         # if DUA has been accepted already for this collection, do not display to user again in this session
         elsif !session[:collection_acceptance][@group.id]         #process DUA if one exists
-           #construct the dua_file_uri based off the object URI, the object's parent collection, version 0, and  DUA filename
-           rx = /^(.*)\/([^\/]+)$/  
-           dua_file_uri = construct_dua_uri(rx, @object.bytestream_uri)
+           dua_file_uri = construct_dua_uri
            uri_response = process_dua_request(dua_file_uri)
            # if the DUA exists, display DUA to user for acceptance before displaying file
            if (uri_response.class == Net::HTTPOK) then
@@ -170,7 +161,7 @@ class ObjectController < ApplicationController
 
   def recent
     @collection_ark = params[:collection]
-    @objects = MrtObject.paginate(:collection => RDF_ARK_URI + @collection_ark,
+    @objects = MrtObject.paginate(:collection => @collection_ark,
                                   :page       => (params[:page] || 1),
                                   :per_page   => 20)
     respond_to do |format|

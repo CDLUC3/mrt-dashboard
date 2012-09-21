@@ -8,13 +8,10 @@ class Group
           :admin_password  => LDAP_CONFIG["admin_password"],
           :minter          => LDAP_CONFIG["ark_minter_url"]})
 
-  Q = Mrt::Sparql::Q
-  STORE = Mrt::Sparql::Store.new(SPARQL_ENDPOINT)
-
   attr_accessor :id, :submission_profile, :ark_id, :owner, :description
 
   def initialize
-
+    @rsolr = RSolr.connect(:url => SOLR_SERVER)
   end
 
   def self.find_all
@@ -45,31 +42,24 @@ class Group
   end
 
   def object_count
-    return STORE.select(Q.new("?obj base:isInCollection <#{self.sparql_id}> ;
-                                    a object:Object .",
-                              :select=>"(count(?obj) as c)"))[0]["c"].value.to_i
+    return MrtSolr.solr_count("type:object AND memberOf:\"#{self.ark_id}\"")
   end
 
   def version_count
-    return STORE.select(Q.new("?obj a object:Object ;
-                                    base:isInCollection <#{self.sparql_id}> ;
-                                    dc:hasVersion ?vers .",
-                              :select=>"(count(?vers) as c)"))[0]["c"].value.to_i
+    return MrtSolr.solr_count("type:version AND memberOf:\"#{self.ark_id}\"")
   end
 
   def file_count
-    q = Q.new("?obj base:isInCollection <#{self.sparql_id}> .
-               ?vers version:inObject ?obj ;
-                     version:hasFile ?file .",
-              :select=>"(count(?file) as c)")
-    return STORE.select(q)[0]["c"].value.to_i
+    return MrtSolr.solr_count("type:file AND memberOf:\"#{self.ark_id}\"")
   end
 
   def total_size
-    q = Q.new("?obj base:isInCollection <#{self.sparql_id}> ;
-                    object:totalActualSize ?size",
-      :select => "(sum(?size) as total)")
-    return STORE.select(q)[0]["total"].value.to_i
+    response = @rsolr.get('select', :params => {
+                            :stats => 'true',
+                            :q    => "type:object and memberOf:\"#{self.ark_id}\"",
+                            :rows=>0,
+                            "stats.field" => "totalActualSize"})
+    return response["stats"]["stats_fields"]["totalActualSize"]["sum"].to_i
   end
 
   #get all groups and email addresses of members, this is a stopgap for our own use
@@ -85,8 +75,6 @@ class Group
     end
     out_str
   end
-
-
   
   private
 
