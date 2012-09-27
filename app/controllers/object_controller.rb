@@ -161,9 +161,14 @@ class ObjectController < ApplicationController
 
   def recent
     @collection_ark = params[:collection]
-    @objects = MrtObject.paginate(:collection => @collection_ark,
-                                  :page       => (params[:page] || 1),
-                                  :per_page   => 20)
+    @objects = MrtCollection.
+      where(:ark=>@collection_ark).
+      first.
+      mrt_objects.
+      order('last_add_version').
+      includes(:mrt_versions, :mrt_version_metadata).
+      paginate(:page       => (params[:page] || 1), 
+               :per_page   => 20)
     respond_to do |format|
       format.html
       format.atom
