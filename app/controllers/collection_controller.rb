@@ -31,11 +31,11 @@ class CollectionController < ApplicationController
   end
 
   def index
-    @recent_objects = MrtObject.
-      joins(:mrt_version_metadata).
-      where(:mrt_version_metadata => {
-              :name => 'collection',
-              :value=> @group.ark_id }).
+    @recent_objects = MrtCollection.
+      where(:ark=>@group.ark_id).
+      first.
+      mrt_objects.
+      order('last_add_version').
       includes(:mrt_versions, :mrt_version_metadata).
       paginate(:page       => (params[:page] || 1), 
                :per_page   => 10)
