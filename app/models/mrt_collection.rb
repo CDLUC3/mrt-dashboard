@@ -1,3 +1,4 @@
 class MrtCollection < ActiveRecord::Base
-  has_and_belongs_to_many :mrt_objects
+  has_many :mrt_collections_mrt_objects
+  has_many :mrt_objects, :through => :mrt_collections_mrt_objects
 end

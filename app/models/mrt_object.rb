@@ -3,6 +3,9 @@ class MrtObject < ActiveRecord::Base
   has_many :mrt_version_metadata, :through=>:mrt_versions
   has_many :mrt_files, :through=>:mrt_versions
 
+  has_many :mrt_collections_mrt_objects
+  has_many :mrt_collections, :through => :mrt_collections_mrt_objects
+
   def bytestream_uri
     return URI.parse(self.bytestream)
   end
