@@ -42,7 +42,9 @@ class Group
   end
 
   def object_count
-    return MrtCollection.find_by_ark(self.ark_id).mrt_objects.count
+    MrtObject.joins(:mrt_collections).
+      where("mrt_collections.ark = ?", self.ark_id).
+      uniq.count
   end
 
   def version_count
@@ -58,9 +60,9 @@ class Group
   end
 
   def total_size
-    return MrtCollection.
-      find_by_ark(self.ark_id).
-      mrt_objects.select('total_actual_size').
+    MrtObject.joins(:mrt_collections).
+      where("mrt_collections.ark = ?", self.ark_id).
+      select('total_actual_size').
       map {|o| o.total_actual_size }.sum
   end
 
