@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+	<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+  <head>
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+  </head>
+  <body>
+    <h1><%= @hsh['title'] %></h1>
+    <dl>
+      <dt>Collection: <%= @hsh['collection'] %> </dt>
+      <dt>Object: <%= @hsh['object'] %> </dt>
+      <% if @hsh['version'] then %>
+      <dt>Version:  <%= @hsh['version'] %> </dt>
+      <% end %>
+    </dl>
+    <p> <%= word_wrap(@hsh['body'].gsub("\n", '</p><p>')) %>
+    <p> Note that this archive will expire in 72 hours. </p>
+    <p> If you have any questions regarding the download of this archive, please contact mailto:uc3@cdlib.org </p>
+    </p>
+  </body>
+</html>
+
