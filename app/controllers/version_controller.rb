@@ -1,14 +1,21 @@
 class VersionController < ApplicationController
   before_filter :require_user
   before_filter :require_group
-  before_filter :require_session_object_version, :only => [:download]
+  before_filter :require_session_object_version,  :only => [:download]
   before_filter :require_mrt_version
+  before_filter :require_size,                    :only => [:download]
 
   def require_session_object_version
       params[:object] = session[:object] if !session[:object].nil? && params[:object].nil?
       params[:version] = session[:version] if !session[:version].nil? && params[:version].nil?
   end
 
+  def require_size
+     @size = @object.total_actual_size
+     if @size > MAX_ARCHIVE_SIZE ? @exceeds_size = true : @exceeds_size = false
+     end
+  end
+  
   def index
     #files for current version
     (@system_files, @files) = @version.files.sort_by { |file|
@@ -57,6 +64,23 @@ class VersionController < ApplicationController
           end
         end
       end
+
+       # if size is > 4GB, redirect to have user enter email for asynch compression (skipping streaming)
+       if @exceeds_size then
+         #if user canceled out of enterering email redirect to object landing page
+         if session[:perform_async].eql?("cancel") then
+           session[:perform_async] = false;  #reinitalize flag to false
+           redirect_to  :action => 'index', :group => flexi_group_id, :object =>params[:object], :version => params[:version] and return false
+         elsif session[:perform_async] then #do not stream, redirect to object landing page
+           session[:perform_async] = false;  #reinitalize flag to false
+           redirect_to  :action => 'index', :group => flexi_group_id, :object =>params[:object], :version => params[:version]  and return false
+         else #allow user to enter email
+           store_location
+           store_object
+           store_version
+           redirect_to :controller => "lostorage",  :action => "index" and return false 
+         end
+       end
 
       filename = "#{Orchard::Pairtree.encode(@object.identifier.to_s)}_version_#{Orchard::Pairtree.encode(@version.identifier.to_s)}.zip"
       response.headers["Content-Type"] = "application/zip"

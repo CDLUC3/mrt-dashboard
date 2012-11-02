@@ -1,15 +1,22 @@
 require 'tempfile'
 
 class ObjectController < ApplicationController
-  before_filter :require_user,       :except => [:jupload_add, :recent, :ingest, :mint]
-  before_filter :require_group,      :except => [:jupload_add, :recent, :ingest, :mint]
-  before_filter :require_write,      :only => [:add, :upload]
-  before_filter :require_session_object, :only => [:download]
-  before_filter :require_mrt_object, :only => [:download]
-  protect_from_forgery :except => [:ingest, :mint]
+  before_filter :require_user,            :except => [:jupload_add, :recent, :ingest, :mint]
+  before_filter :require_group,           :except => [:jupload_add, :recent, :ingest, :mint]
+  before_filter :require_write,           :only => [:add, :upload]
+  before_filter :require_session_object,  :only => [:download]
+  before_filter :require_mrt_object,      :only => [:download]
+  before_filter :require_size,            :only => [:download]
+  protect_from_forgery                    :except => [:ingest, :mint]
 
   def require_session_object
       params[:object] = session[:object] if !session[:object].nil? && params[:object].nil?
+  end
+
+  def require_size
+     @size = @object.total_actual_size
+     if @size > MAX_ARCHIVE_SIZE ? @exceeds_size = true : @exceeds_size = false
+     end
   end
   
   def ingest
@@ -127,7 +134,22 @@ class ObjectController < ApplicationController
         end
        end
        
-      # the user has accepted the DUA for this collection or there is no DUA to process -  download the object       
+       # if size is > 4GB, redirect to have user enter email for asynch compression (skipping streaming)
+       if @exceeds_size then
+         #if user canceled out of enterering email redirect to object landing page
+         if session[:perform_async].eql?("cancel") then
+           session[:perform_async] = false;  #reinitalize flag to false
+           redirect_to  :action => 'index', :group => flexi_group_id, :object =>params[:object] and return false
+         elsif session[:perform_async] then #do not stream, redirect to object landing page
+           session[:perform_async] = false;  #reinitalize flag to false
+           redirect_to  :action => 'index', :group => flexi_group_id, :object =>params[:object] and return false
+         else #allow user to enter email
+           store_location
+           store_object
+           redirect_to :controller => "lostorage",  :action => "index" and return false 
+         end
+       end
+
       response.headers["Content-Disposition"] = "attachment; filename=#{Orchard::Pairtree.encode(@object.identifier.to_s)}_object.zip"
       response.headers["Content-Type"] = "application/zip"
       self.response_body = Streamer.new("#{@object.bytestream_uri}?t=zip")
