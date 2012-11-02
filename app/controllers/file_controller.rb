@@ -57,7 +57,7 @@ class FileController < ApplicationController
         end
       end
       
-      # the user has accepted the DUA for this collection or there is no DUA to process -  just display file
+      # the user has accepted the DUA for this collection or there is no DUA to process 
       dl_url = file.first(Mrt::Model::Base.bytestream).to_uri
       response.headers["Content-Length"] = file.size.to_s
       response.headers["Content-Disposition"] = "inline; filename=\"#{File.basename(file.identifier)}\""
