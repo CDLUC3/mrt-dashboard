@@ -22,6 +22,7 @@ class LostorageController < ApplicationController
       # send POST request along with email to storage
       begin
         response_code = post_los_email(params[:user_agent_email])
+        puts response_code
         @doc = Nokogiri::XML(@response) do |config|
           config.strict.noent.noblanks
         end
@@ -72,6 +73,7 @@ class LostorageController < ApplicationController
       
       storage_async_url = STORAGE_SERVICE + urlencode(session[:object])
       @response = RestClient.post(storage_async_url, @lostorage_args, {:multipart => true })
+      puts @response
       lostorage_xml_email_profile.close!
       return @response.code
     end
