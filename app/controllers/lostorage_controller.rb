@@ -22,7 +22,6 @@ class LostorageController < ApplicationController
       # send POST request along with email to storage
       begin
         response_code = post_los_email(params[:user_agent_email])
-        debugger
         @doc = Nokogiri::XML(@response) do |config|
           config.strict.noent.noblanks
         end
