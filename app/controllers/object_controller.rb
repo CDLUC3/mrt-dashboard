@@ -11,6 +11,7 @@ class ObjectController < ApplicationController
 
   def require_session_object
       params[:object] = session[:object] if !session[:object].nil? && params[:object].nil?
+      session[:version] = nil if !session[:version].nil?  #clear out version
   end
 
   def require_size
@@ -142,6 +143,7 @@ class ObjectController < ApplicationController
            redirect_to  :action => 'index', :group => flexi_group_id, :object =>params[:object] and return false
          elsif session[:perform_async] then #do not stream, redirect to object landing page
            session[:perform_async] = false;  #reinitalize flag to false
+           debugger
            redirect_to  :action => 'index', :group => flexi_group_id, :object =>params[:object] and return false
          else #allow user to enter email
            store_location

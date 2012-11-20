@@ -17,4 +17,6 @@ gem "ruby-debug"
 gem "unicode"
 gem "orchard"
 gem "mrt-ingest", "0.0.2"
+gem "builder"
+gem 'uuidtools'
 
