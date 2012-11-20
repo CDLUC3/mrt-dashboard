@@ -108,12 +108,14 @@ GEM
     unicorn (3.1.0)
       kgio (~> 2.0.0)
       rack
+    uuidtools (2.1.3)
     will_paginate (3.0.pre2)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
+  builder
   exception_notification!
   httpclient (~> 2.2.5)
   json (> 1.5.0)
@@ -128,4 +130,5 @@ DEPENDENCIES
   ruby-debug
   unicode
   unicorn (= 3.1.0)
+  uuidtools
   will_paginate (= 3.0.pre2)

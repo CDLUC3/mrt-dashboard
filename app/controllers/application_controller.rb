@@ -28,7 +28,6 @@ class ApplicationController < ActionController::Base
   CollectionHome = {:controller => 'home', :action => 'choose_collection'}
   ObjectList = {:controller => 'collection', :action => 'index'}
 
-  MAX_ARCHIVE_SIZE    = 4294967295
 
   def urlencode(item)
     URI.escape(item, Regexp.new("[^#{URI::PATTERN::UNRESERVED}]"))
