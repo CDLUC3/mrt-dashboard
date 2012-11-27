@@ -84,9 +84,9 @@ class LostorageController < ApplicationController
 #     to_email = [email, APP_CONFIG['lostorage_email_to']]          
      session[:version].nil? ? container_type = "object" : container_type = "version"
      #Create email URL to include in the body which includes a random name for stored container
-     uri_name = UUIDTools::UUID.random_create().to_s
+     uri_name = UUIDTools::UUID.random_create().hash.to_s + '.tar.gz'
      link_info = "The #{container_type} that you requested is ready for you to download. " +
-                   "Please click on the URI link #{CONTAINER_URL + uri_name + '.tar.gz'} to access your archive."
+                   "Please click on the URI link: \n\n #{CONTAINER_URL + uri_name} \n\nto access your archive." 
 
 #TODO: clean this up so all the text is in the template       
       @email_data = (
