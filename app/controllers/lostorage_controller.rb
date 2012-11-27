@@ -29,6 +29,7 @@ class LostorageController < ApplicationController
   
       rescue Exception => ex
         begin
+          puts ex
           # see if we can parse the error from async, if not then unknown error
           @doc = Nokogiri::XML(ex.response) do |config|
             config.strict.noent.noblanks
@@ -79,12 +80,14 @@ class LostorageController < ApplicationController
     end
 
   def create_email_msg_body(email)
-     to_email = email #[email, APP_CONFIG['lostorage_email_to']].join("; ")                 
+     to_email = email        
+     
+#     to_email = [email, APP_CONFIG['lostorage_email_to']]          
      session[:version].nil? ? container_type = "object" : container_type = "version"
      #Create email URL to include in the body which includes a random name for stored container
-     uri_name = UUIDTools::UUID.timestamp_create().to_s
+     uri_name = UUIDTools::UUID.random_create().to_s
      link_info = "The #{container_type} that you requested is ready for you to download. " +
-                   "Pleace click on the URI link #{CONTAINER_URL + uri_name} to access your archive."
+                   "Please click on the URI link #{CONTAINER_URL + uri_name} to access your archive."
 
 #TODO: clean this up so all the text is in the template       
       @email_data = (
@@ -108,6 +111,9 @@ class LostorageController < ApplicationController
       xml.email do
         xml.from @email_data['from']
         #TODO: fix to so that it can accept multiple addresses
+#        xml.to do
+#          @email_d
+#        end
         xml.to @email_data['to_email']
         xml.subject @email_data['subject']
         xml.msg @email_data['email_body']
