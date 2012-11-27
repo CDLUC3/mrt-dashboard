@@ -72,7 +72,7 @@ class LostorageController < ApplicationController
         'name'              => @email_data['name']        
       }.reject{|k, v| v.blank? }
       
-      storage_async_url = STORAGE_SERVICE + urlencode(session[:object])
+      storage_async_url = STORAGE_SERVICE + urlencode(session[:object]) 
       @response = RestClient.post(storage_async_url, @lostorage_args, {:multipart => true })
       puts @response
       lostorage_xml_email_profile.close!
@@ -80,14 +80,13 @@ class LostorageController < ApplicationController
     end
 
   def create_email_msg_body(email)
-     to_email = email        
-     
+     to_email = email             
 #     to_email = [email, APP_CONFIG['lostorage_email_to']]          
      session[:version].nil? ? container_type = "object" : container_type = "version"
      #Create email URL to include in the body which includes a random name for stored container
      uri_name = UUIDTools::UUID.random_create().to_s
      link_info = "The #{container_type} that you requested is ready for you to download. " +
-                   "Please click on the URI link #{CONTAINER_URL + uri_name} to access your archive."
+                   "Please click on the URI link #{CONTAINER_URL + uri_name + '.tar.gz'} to access your archive."
 
 #TODO: clean this up so all the text is in the template       
       @email_data = (
