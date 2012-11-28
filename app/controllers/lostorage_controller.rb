@@ -87,6 +87,7 @@ class LostorageController < ApplicationController
      uri_name = UUIDTools::UUID.random_create().hash.to_s + '.tar.gz'
      link_info = "The #{container_type} that you requested is ready for you to download. " +
                    "Please click on the URI link: \n\n #{CONTAINER_URL + uri_name} \n\nto access your archive." 
+     puts link_info
 
 #TODO: clean this up so all the text is in the template       
       @email_data = (
@@ -101,6 +102,7 @@ class LostorageController < ApplicationController
                })
       email_body = render_to_string( :partial => "lostorage/los_email_body.text.erb")      
       @email_data['email_body'] = email_body    
+      puts "name = " + @email_data['name']
    end
 
   def create_los_email
