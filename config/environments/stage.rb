@@ -14,12 +14,10 @@ MrtDashboard::Application.configure do
   SPARQL_ENDPOINT     = "http://dp01.cdlib.org:38082/sparql/"
   RDF_ARK_URI         = "http://ark.cdlib.org/"
   RDF_COLLECTION_URI  = "http://uc3.cdlib.org/collection/"
-  STORAGE_SERVICE     = 'http://uc3a-dev.cdlib.org:35121/async/910/'
-  CONTAINER_URL       = 'http://uc3a-dev.cdlib.org:35121/container/'
+  STORAGE_SERVICE     = 'http://store-stage.cdlib.org:35121/async/910/'
+  CONTAINER_URL       = 'http://store-stage.cdlib.org:35121/container/'
 
-  
-  MAX_ARCHIVE_SIZE    = 4294967295 
-
+  MAX_ARCHIVE_SIZE    = 4294967295  #maximum size threshhold for download of object/versions without compression
 end
 
 require 'exception_notifier'
