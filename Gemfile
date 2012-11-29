@@ -10,7 +10,7 @@ gem "net-ldap", "0.1.2",
 gem "nokogiri"
 gem "rest-client"
 gem "unicorn", "3.1.0"
-gem "will_paginate", "3.0.pre2"
+gem "will_paginate", "~> 3.0.0"
 gem "rack-cache"
 gem "unicode"
 gem "orchard"
