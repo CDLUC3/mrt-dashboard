@@ -103,7 +103,7 @@ GEM
     unicorn (3.1.0)
       kgio (~> 2.0.0)
       rack
-    will_paginate (3.0.pre2)
+    will_paginate (3.0.3)
 
 PLATFORMS
   ruby
@@ -124,4 +124,4 @@ DEPENDENCIES
   rsolr-ext
   unicode
   unicorn (= 3.1.0)
-  will_paginate (= 3.0.pre2)
+  will_paginate (~> 3.0.0)
