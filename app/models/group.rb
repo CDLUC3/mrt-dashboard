@@ -11,7 +11,6 @@ class Group
   attr_accessor :id, :submission_profile, :ark_id, :owner, :description
 
   def initialize
-    @rsolr = RSolr.connect(:url => SOLR_SERVER)
   end
 
   def self.find_all
