@@ -40,23 +40,44 @@ class Group
     return "http://ark.cdlib.org/#{self.ark_id}"
   end
 
-  def object_count
-    collection_id = MrtCollection.find_by_ark(self.ark_id).id
-    MrtObject.connection.select_all("SELECT COUNT(DISTINCT(`mrt_objects`.id)) as `count` FROM `mrt_objects` INNER JOIN `mrt_collections_mrt_objects` ON `mrt_objects`.id = `mrt_collections_mrt_objects`.mrt_object_id WHERE ((`mrt_collections_mrt_objects`.mrt_collection_id = #{collection_id}))")[0]["count"].to_i
+  def mrt_collection
+    @mrt_collection ||= MrtCollection.find_by_ark(self.ark_id)
   end
 
+  def mrt_collection_id
+    @mrt_collection_id ||= if self.mrt_collection then self.mrt_collection.id else nil end
+  end
+
+  def object_count
+    if self.mrt_collection_id.nil? then
+      0
+    else
+      MrtObject.connection.select_all("SELECT COUNT(DISTINCT(`mrt_objects`.id)) as `count` FROM `mrt_objects` INNER JOIN `mrt_collections_mrt_objects` ON `mrt_objects`.id = `mrt_collections_mrt_objects`.mrt_object_id WHERE ((`mrt_collections_mrt_objects`.mrt_collection_id = #{self.mrt_collection_id}))")[0]["count"].to_i
+    end
+  end
+  
   def version_count
-    collection_id = MrtCollection.find_by_ark(self.ark_id).id
-    MrtObject.connection.select_all("SELECT COUNT(DISTINCT(`mrt_versions`.id)) AS `count` FROM `mrt_versions` INNER JOIN `mrt_objects` ON `mrt_objects`.`id` = `mrt_versions`.`mrt_object_id` INNER JOIN `mrt_collections_mrt_objects` ON `mrt_objects`.`id` = `mrt_collections_mrt_objects`.`mrt_object_id` WHERE ((`mrt_collections_mrt_objects`.mrt_collection_id = #{collection_id}))")[0]["count"].to_i
+    if self.mrt_collection_id.nil? then
+      0
+    else
+      MrtObject.connection.select_all("SELECT COUNT(DISTINCT(`mrt_versions`.id)) AS `count` FROM `mrt_versions` INNER JOIN `mrt_objects` ON `mrt_objects`.`id` = `mrt_versions`.`mrt_object_id` INNER JOIN `mrt_collections_mrt_objects` ON `mrt_objects`.`id` = `mrt_collections_mrt_objects`.`mrt_object_id` WHERE ((`mrt_collections_mrt_objects`.mrt_collection_id = #{self.mrt_collection_id}))")[0]["count"].to_i
+    end
   end
 
   def file_count
-    collection_id = MrtCollection.find_by_ark(self.ark_id).id
-    MrtFile.connection.select_all("SELECT COUNT(DISTINCT(`mrt_files`.`id`)) AS `count` FROM `mrt_files` INNER JOIN `mrt_versions` ON `mrt_versions`.`id` = `mrt_files`.`mrt_version_id` INNER JOIN `mrt_objects` ON `mrt_objects`.`id` = `mrt_versions`.`mrt_object_id` INNER JOIN `mrt_collections_mrt_objects` ON `mrt_objects`.`id` = `mrt_collections_mrt_objects`.`mrt_object_id` WHERE ((`mrt_collections_mrt_objects`.mrt_collection_id = #{collection_id}))")[0]["count"].to_i
+    if self.mrt_collection_id.nil? then
+      0
+    else
+      MrtFile.connection.select_all("SELECT COUNT(DISTINCT(`mrt_files`.`id`)) AS `count` FROM `mrt_files` INNER JOIN `mrt_versions` ON `mrt_versions`.`id` = `mrt_files`.`mrt_version_id` INNER JOIN `mrt_objects` ON `mrt_objects`.`id` = `mrt_versions`.`mrt_object_id` INNER JOIN `mrt_collections_mrt_objects` ON `mrt_objects`.`id` = `mrt_collections_mrt_objects`.`mrt_object_id` WHERE ((`mrt_collections_mrt_objects`.mrt_collection_id = #{self.collection_id}))")[0]["count"].to_i
+    end
   end
 
   def total_size
-    MrtCollection.find_by_ark(self.ark_id).mrt_objects.sum('total_actual_size')
+    if self.mrt_collection.nil? then
+      0
+    else
+      self.mrt_collection.mrt_objects.sum('total_actual_size')
+    end
   end
 
   #get all groups and email addresses of members, this is a stopgap for our own use
