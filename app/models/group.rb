@@ -68,7 +68,7 @@ class Group
     if self.mrt_collection_id.nil? then
       0
     else
-      MrtFile.connection.select_all("SELECT COUNT(DISTINCT(`mrt_files`.`id`)) AS `count` FROM `mrt_files` INNER JOIN `mrt_versions` ON `mrt_versions`.`id` = `mrt_files`.`mrt_version_id` INNER JOIN `mrt_objects` ON `mrt_objects`.`id` = `mrt_versions`.`mrt_object_id` INNER JOIN `mrt_collections_mrt_objects` ON `mrt_objects`.`id` = `mrt_collections_mrt_objects`.`mrt_object_id` WHERE ((`mrt_collections_mrt_objects`.mrt_collection_id = #{self.collection_id}))")[0]["count"].to_i
+      MrtFile.connection.select_all("SELECT COUNT(DISTINCT(`mrt_files`.`id`)) AS `count` FROM `mrt_files` INNER JOIN `mrt_versions` ON `mrt_versions`.`id` = `mrt_files`.`mrt_version_id` INNER JOIN `mrt_objects` ON `mrt_objects`.`id` = `mrt_versions`.`mrt_object_id` INNER JOIN `mrt_collections_mrt_objects` ON `mrt_objects`.`id` = `mrt_collections_mrt_objects`.`mrt_object_id` WHERE ((`mrt_collections_mrt_objects`.mrt_collection_id = #{self.mrt_collection_id}))")[0]["count"].to_i
     end
   end
 
