@@ -165,7 +165,7 @@ class ObjectController < ApplicationController
       where(:ark=>@collection_ark).
       first.
       mrt_objects.
-      order('last_add_version').
+      order('last_add_version desc').
       includes(:mrt_versions, :mrt_version_metadata).
       paginate(:page       => (params[:page] || 1), 
                :per_page   => 20)

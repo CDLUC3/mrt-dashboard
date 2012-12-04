@@ -33,7 +33,7 @@ class CollectionController < ApplicationController
   def index
     @recent_objects = MrtObject.joins(:mrt_collections).
       where("mrt_collections.ark = ?", @group.ark_id).
-      order('last_add_version').
+      order('last_add_version desc').
       includes(:mrt_versions, :mrt_version_metadata).
       paginate(:page       => (params[:page] || 1), 
                :per_page   => 10)
