@@ -211,6 +211,12 @@ class ApplicationController < ActionController::Base
     @version = UriInfo.new(res[0]['vers'])
   end
 
+  def require_size
+     @size = @object.total_actual_size
+     if @size > MAX_ARCHIVE_SIZE ? @exceeds_size = true : @exceeds_size = false
+     end
+  end
+  
   def file_state_uri(id, version, fn)
     "#{FILE_STATE_URI}#{esc(id)}/#{esc(version)}/#{esc(fn)}"
   end
