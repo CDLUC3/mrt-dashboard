@@ -8,6 +8,7 @@ class ObjectController < ApplicationController
   before_filter :require_mrt_object, :only => [:download]
   before_filter :require_size,		 :only => [:download]
   protect_from_forgery :except => [:ingest, :mint, :update]
+  before_filter :require_download_permissions, :only => [:download]
 
   def require_session_object
       params[:object] = session[:object] if !session[:object].nil? && params[:object].nil?
@@ -141,74 +142,61 @@ class ObjectController < ApplicationController
   end
 
   def index
-    begin
-      @object = MrtObject.find_by_identifier(params[:object])
-      @versions = @object.versions
-      #files for current version
-      @files = @object.files.
-        reject {|file| file.identifier.match(/^system\/mrt-/) }.
-        sort_by {|x| File.basename(x.identifier.downcase) }     
-    rescue Exception => ex
-      raise ErrorUnavailable
-    end
-
+    @object = MrtObject.find_by_primary_id(params[:object])
+    @versions = @object.versions
+    #files for current version
+    @files = @object.files.
+      reject {|file| file.identifier.match(/^system\/mrt-/) }.
+      sort_by {|x| File.basename(x.identifier.downcase) }     
   end
 
   def download
-    # check if user has download permissions 
-    if !@permissions.nil? && @permissions.include?('download') then
-      # bypass DUA processing for python scripts (indicated by special param) or if dua has already been accepted
-      if params[:blue].nil? 
-        #check if user already saw DUA and accepted- if so, skip all this & download the file
-        if !session[:perform_download]  
+    # bypass DUA processing for python scripts (indicated by special param) or if dua has already been accepted
+    if params[:blue].nil? 
+      #check if user already saw DUA and accepted- if so, skip all this & download the file
+      if !session[:perform_download]  
         # if DUA was not accepted, redirect to object landing page 
-         if session[:collection_acceptance][@group.id].eql?("not accepted") then
-           session[:collection_acceptance][@group.id] = false  # reinitialize to false so user can again be given option to accept DUA 
-           redirect_to  :action => 'index', :group => flexi_group_id,  :object =>params[:object] and return false
-         # if DUA for this collection has not yet been displayed to user, perform logic to retrieve DUA.
-         # if persistance is at the session level and user already saw DUA, this section will be skipped
-         elsif !session[:collection_acceptance][@group.id] then
-           # perform DUA logic to retrieve DUA
-           #construct the dua_file_uri based off the object URI, the object's parent collection, version 0, and  DUA filename
-           rx = /^(.*)\/([^\/]+)$/  
-           dua_file_uri = construct_dua_uri(rx, @object.bytestream_uri)
-           uri_response = process_dua_request(dua_file_uri)
-           # if the DUA exists, display DUA to user for acceptance before displaying file
-           if (uri_response.class == Net::HTTPOK) then
-               tmp_dua_file = fetch_to_tempfile(dua_file_uri) 
-               session[:dua_file_uri] = dua_file_uri
-               store_location
-               store_object
-               redirect_to :controller => "dua",  :action => "index" and return false 
-           end
-         end
+        if session[:collection_acceptance][@group.id].eql?("not accepted") then
+          session[:collection_acceptance][@group.id] = false  # reinitialize to false so user can again be given option to accept DUA 
+          redirect_to  :action => 'index', :group => flexi_group_id,  :object =>params[:object] and return false
+          # if DUA for this collection has not yet been displayed to user, perform logic to retrieve DUA.
+          # if persistance is at the session level and user already saw DUA, this section will be skipped
+        elsif !session[:collection_acceptance][@group.id] then
+          # perform DUA logic to retrieve DUA
+          #construct the dua_file_uri based off the object URI, the object's parent collection, version 0, and  DUA filename
+          dua_file_uri = construct_dua_uri
+          uri_response = process_dua_request(dua_file_uri)
+          # if the DUA exists, display DUA to user for acceptance before displaying file
+          if (uri_response.class == Net::HTTPOK) then
+            tmp_dua_file = fetch_to_tempfile(dua_file_uri) 
+            session[:dua_file_uri] = dua_file_uri
+            store_location
+            store_object
+            redirect_to :controller => "dua",  :action => "index" and return false 
+          end
         end
-       end
-       
-       # if size is > 4GB, redirect to have user enter email for asynch compression (skipping streaming)
-       if @exceeds_size then
-         #if user canceled out of enterering email redirect to object landing page
-         if session[:perform_async].eql?("cancel") then
-           session[:perform_async] = false;  #reinitalize flag to false
-           redirect_to  :action => 'index', :group => flexi_group_id, :object =>params[:object] and return false
-         elsif session[:perform_async] then #do not stream, redirect to object landing page
-           session[:perform_async] = false;  #reinitalize flag to false
-           redirect_to  :action => 'index', :group => flexi_group_id, :object =>params[:object] and return false
-         else #allow user to enter email
-           store_location
-           store_object
-           redirect_to :controller => "lostorage",  :action => "index" and return false 
-         end
-       end
-
-      response.headers["Content-Disposition"] = "attachment; filename=#{Orchard::Pairtree.encode(@object.identifier.to_s)}_object.zip"
-      response.headers["Content-Type"] = "application/zip"
-      self.response_body = Streamer.new("#{@object.bytestream_uri}?t=zip")
-      session[:perform_download] = false  
-    else
-      flash[:error] = 'You do not have download permissions'     
-      redirect_to  :action => 'index', :group => flexi_group_id,  :object =>params[:object] and return false
+      end
     end
+    
+    # if size is > 4GB, redirect to have user enter email for asynch compression (skipping streaming)
+    if @exceeds_size then
+      #if user canceled out of enterering email redirect to object landing page
+      if session[:perform_async].eql?("cancel") then
+        session[:perform_async] = false;  #reinitalize flag to false
+        redirect_to  :action => 'index', :group => flexi_group_id, :object =>params[:object] and return false
+      elsif session[:perform_async] then #do not stream, redirect to object landing page
+        session[:perform_async] = false;  #reinitalize flag to false
+        redirect_to  :action => 'index', :group => flexi_group_id, :object =>params[:object] and return false
+      else #allow user to enter email
+        store_location
+        store_object
+        redirect_to :controller => "lostorage",  :action => "index" and return false 
+      end
+    end
+    
+    response.headers["Content-Disposition"] = "attachment; filename=#{Orchard::Pairtree.encode(@object.identifier.to_s)}_object.zip"
+    response.headers["Content-Type"] = "application/zip"
+    self.response_body = Streamer.new("#{@object.bytestream_uri}?t=zip")
   end
 
 
@@ -260,9 +248,14 @@ class ObjectController < ApplicationController
 
   def recent
     @collection_ark = params[:collection]
-    @objects = MrtObject.paginate(:collection => RDF_ARK_URI + @collection_ark,
-                                  :page       => (params[:page] || 1),
-                                  :per_page   => 20)
+    @objects = MrtCollection.
+      where(:ark=>@collection_ark).
+      first.
+      mrt_objects.
+      order('last_add_version desc').
+      includes(:mrt_versions, :mrt_version_metadata).
+      paginate(:page       => (params[:page] || 1), 
+               :per_page   => 20)
     respond_to do |format|
       format.html
       format.atom

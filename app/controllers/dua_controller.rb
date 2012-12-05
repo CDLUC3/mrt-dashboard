@@ -13,6 +13,9 @@ class DuaController < ApplicationController
   end
   
   def index 
+    @dua_hash =
+      Dua.parse_file(fetch_to_tempfile(session[:dua_file_uri]))
+
     if params['commit'].eql?("Accept") then  
       if params[:accept].nil? then
         flash[:message] = 'You must check that you accept the terms.'

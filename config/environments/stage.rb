@@ -11,7 +11,6 @@ MrtDashboard::Application.configure do
   MERRITT_SERVER      = 'http://merritt-stage.cdlib.org'
   MINT_SERVICE        = 'http://dp01.cdlib.org:33121/ingest/request-identifier'
   N2T_URI             = "http://n2t-wf.cdlib.org/"
-  SPARQL_ENDPOINT     = "http://dp01.cdlib.org:38082/sparql/"
   RDF_ARK_URI         = "http://ark.cdlib.org/"
   RDF_COLLECTION_URI  = "http://uc3.cdlib.org/collection/"
   STORAGE_SERVICE     = 'http://store-stage.cdlib.org:35121/async/910/'
