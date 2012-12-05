@@ -13,12 +13,6 @@ class ObjectController < ApplicationController
       params[:object] = session[:object] if !session[:object].nil? && params[:object].nil?
       session[:version] = nil if !session[:version].nil?  #clear out version
   end
-
-  def require_size
-     @size = @object.total_actual_size
-     if @size > MAX_ARCHIVE_SIZE ? @exceeds_size = true : @exceeds_size = false
-     end
-  end
   
   def ingest
     if !current_user then
