@@ -16,5 +16,6 @@ gem "unicode"
 gem "orchard"
 gem "activerecord-mysql2-adapter", "0.0.3"
 gem "mrt-ingest", "0.0.2"
-gem "rsolr", "1.0.6"
-gem "rsolr-ext"
+gem "builder"
+gem 'uuidtools'
+

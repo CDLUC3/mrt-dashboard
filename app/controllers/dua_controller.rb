@@ -1,6 +1,16 @@
+require 'net/http'
 class DuaController < ApplicationController
   before_filter :require_user
   before_filter :require_group
+  before_filter :require_dua
+  
+  def require_dua
+    if @dua_hash.nil? then
+      tmp_dua_file = fetch_to_tempfile(session[:dua_file_uri])
+      @dua_hash = Dua.parse_file(tmp_dua_file)
+    end
+    Dua.dua_hash = @dua_hash
+  end
   
   def index 
     @dua_hash =
@@ -23,28 +33,36 @@ class DuaController < ApplicationController
       
       # configure the email
       to_email = [params[:user_agent_email] , 
-                  (@dua_hash["Notification"]  || ''),
-                  APP_CONFIG['dua_email_to']].join(", ")
-      
+                 (@dua_hash["Notification"]  || ''),
+                 APP_CONFIG['dua_email_to']].join(", ")
+                 
       DuaMailer.dua_email(@dua_hash,
-                          {'title'      => @dua_hash["Title"],
-                            'to_email'   => to_email,
-                            'name'       => params[:name],
-                            'affiliation'=> params[:affiliation],
-                            'email'      => params[:user_agent_email],
-                            'object'     => session[:object],
-                            'collection' => @group.description, 
-                            'body'     => @dua_hash["Terms"]
-                          }).deliver
-      
+              {'title'      => @dua_hash["Title"],
+               'to_email'   => to_email,
+               'name'       => params[:name],
+               'affiliation'=> params[:affiliation],
+               'email'      => params[:user_agent_email],
+               'object'     => session[:object],
+               'collection' => @group.description, 
+               'body'     => @dua_hash["Terms"]
+                  }).deliver
+       
       #user accepted DUA, go ahead and process file/object/version download
-      session[:collection_acceptance][@group.id] = true
-      # return to where user came from 
-      redirect_to session[:return_to]
+      # set the persistence flag for session level so DUA doesn't get displayed again for this session
+      if @dua_hash["Persistence"].eql?("session") then
+         session[:collection_acceptance][@group.id] = true
+      end
+       # return to where user came from 
+       session[:perform_download] = true;
+       redirect_to session[:return_to]
     elsif params[:commit].eql?("Do Not Accept") then
-      session[:collection_acceptance][@group.id] = "not accepted"
-      # return to where user came from 
-      redirect_to session[:return_to]
+       puts "did not accept DUA"
+       session[:collection_acceptance][@group.id] = "not accepted"
+       # return to where user came from 
+       redirect_to session[:return_to]
     end
-  end
+   end
+   
+   def send_email
+   end
 end

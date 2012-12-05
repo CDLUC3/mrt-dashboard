@@ -8,11 +8,15 @@ MrtDashboard::Application.configure do
   config.consider_all_requests_local         = true
   config.whiny_nils                          = true
 
-  INGEST_SERVICE        = 'http://badger.cdlib.org:33121/poster/submit/'
-  INGEST_SERVICE_UPDATE = 'http://badger.cdlib.org:33121/poster/update/'
-  MINT_SERVICE          = 'http://badger.cdlib.org:33121/request-identifier'
-  N2T_URI               = "http://n2t-wf.cdlib.org/"
-  RDF_ARK_URI           = "http://ark.cdlib.org/"
-  RDF_COLLECTION_URI    = "http://uc3.cdlib.org/collection/"
-  SOLR_SERVER           = "http://badger.cdlib.org:39680/solr/"
+  INGEST_SERVICE      = 'http://badger.cdlib.org:33121/poster/submit/'
+  INGEST_SERVICE_UPDATE   = 'http://badger.cdlib.org:33121/poster/update/'
+  MINT_SERVICE        = 'http://badger.cdlib.org:33121/request-identifier'
+  N2T_URI             = "http://n2t-wf.cdlib.org/"
+  RDF_ARK_URI         = "http://ark.cdlib.org/"
+  RDF_COLLECTION_URI  = "http://uc3.cdlib.org/collection/"
+  SPARQL_ENDPOINT     = "http://badger.cdlib.org:8082/sparql/"
+  STORAGE_SERVICE     = 'http://uc3a-dev.cdlib.org:35121/async/910/'
+  CONTAINER_URL       = 'http://uc3a-dev.cdlib.org:35121/container/'
+
+  MAX_ARCHIVE_SIZE    = 2147483648
 end
