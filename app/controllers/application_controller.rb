@@ -261,7 +261,7 @@ class ApplicationController < ActionController::Base
 
   def fetch_to_tempfile(*args)
     require 'open-uri'
-    require 'ftools'
+    require 'fileutils'
     open(*args) do |data|
       tmp_file = Tempfile.new('mrt_http')
       if data.instance_of? File then
@@ -280,7 +280,7 @@ class ApplicationController < ActionController::Base
   end
  
   def collection_ark
-    @collection ||= (/https?:\/\/\S+?\/(\S+)/.match(MrtObject.get_collection(params[:object])))[1]
+    @collection ||= MrtObject.find_by_primary_id(params[:object]).member_of.first
   end 
     
   #
@@ -288,7 +288,7 @@ class ApplicationController < ActionController::Base
   def construct_dua_uri(rx, component_uri)
      md = rx.match(component_uri.to_s)
      dua_filename = "#{md[1]}/" + urlencode(collection_ark)  + "/0/" + urlencode(APP_CONFIG['mrt_dua_file']) 
-     dua_file_uri = UriInfo.new(dua_filename)
+     dua_file_uri = dua_filename
      Rails.logger.debug("DUA File URI: " + dua_file_uri)
      return dua_file_uri
   end
