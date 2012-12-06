@@ -11,12 +11,6 @@ class VersionController < ApplicationController
       params[:version] = session[:version] if !session[:version].nil? && params[:version].nil?
   end
 
-  def require_size
-     @size = @object.total_actual_size
-     if @size > MAX_ARCHIVE_SIZE ? @exceeds_size = true : @exceeds_size = false
-     end
-  end
-  
   def index
     #files for current version
     (@system_files, @files) = @version.files.sort_by { |file|

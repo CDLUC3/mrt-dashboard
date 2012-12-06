@@ -5,7 +5,6 @@ class LostorageController < ApplicationController
   before_filter :require_user
   before_filter :require_group
   
-  
   def index 
     if params['commit'].eql?("Submit") then  
       if params[:user_agent_email].blank? then
@@ -20,13 +19,14 @@ class LostorageController < ApplicationController
      
       # configure the post request & email
       # send POST request along with email to storage
-      begin
+#      begin
         response_code = post_los_email(params[:user_agent_email])
         puts response_code
         @doc = Nokogiri::XML(@response) do |config|
           config.strict.noent.noblanks
         end
-  
+
+=begin  
       rescue Exception => ex
         begin
           puts ex
@@ -43,6 +43,7 @@ class LostorageController < ApplicationController
         end
         render :action => "async_error" and return      
       end
+=end
       # process return response code
       #TODO: flash error messages are not displaying properly
       if response_code != 200 then
@@ -80,29 +81,26 @@ class LostorageController < ApplicationController
     end
 
   def create_email_msg_body(email)
-     to_email = email             
-#     to_email = [email, APP_CONFIG['lostorage_email_to']]          
+     to_email = [email, APP_CONFIG['lostorage_email_to'].to_s]          
      session[:version].nil? ? container_type = "object" : container_type = "version"
-     #Create email URL to include in the body which includes a random name for stored container
+     #Create theemail URL to include in the body which includes a random name for stored container
      uri_name = UUIDTools::UUID.random_create().hash.to_s + '.tar.gz'
      link_info = "The #{container_type} that you requested is ready for you to download. " +
                    "Please click on the URI link: \n\n #{CONTAINER_URL + uri_name} \n\nto access your archive." 
      puts link_info
-
-#TODO: clean this up so all the text is in the template       
+      #TODO: clean this up so all the text is in a template       
       @email_data = (
               {'from'       => APP_CONFIG['lostorage_email_from'],
                'to_email'   => to_email,
                'collection' => @group.description,
                'object'     => session[:object],
                'version'    => session[:version],
-               'subject'    => "Merritt #{container_type.capitalize} File Processing Completed ",
+               'subject'    => "Merritt #{container_type.capitalize} Download Processing Completed ",
                'link_info'  => link_info,
                'name'       => uri_name
                })
       email_body = render_to_string( :partial => "lostorage/los_email_body.text.erb")      
       @email_data['email_body'] = email_body    
-      puts "name = " + @email_data['name']
    end
 
   def create_los_email
@@ -111,11 +109,9 @@ class LostorageController < ApplicationController
       xml.instruct!
       xml.email do
         xml.from @email_data['from']
-        #TODO: fix to so that it can accept multiple addresses
-#        xml.to do
-#          @email_d
-#        end
-        xml.to @email_data['to_email']
+            @email_data['to_email'].each do |x|
+          xml.to x
+        end
         xml.subject @email_data['subject']
         xml.msg @email_data['email_body']
     end
