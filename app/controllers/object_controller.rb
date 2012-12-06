@@ -232,17 +232,12 @@ class ObjectController < ApplicationController
       @batch_id = @doc.xpath("//bat:batchState/bat:batchID")[0].child.text
       @obj_count = @doc.xpath("//bat:batchState/bat:jobStates").length
     rescue Exception => ex
-      begin
-        # see if we can parse the error from ingest, if not then unknown error
-        @doc = Nokogiri::XML(ex.response) do |config|
-          config.strict.noent.noblanks
-        end
-        @description = "ingest: #{@doc.xpath("//exc:statusDescription")[0].child.text}"
-        @error = "ingest: #{@doc.xpath("//exc:error")[0].child.text}"
-      rescue Exception => ex
-        @description = "ui: #{ex.message}"
-        @error = ""
+      # see if we can parse the error from ingest, if not then unknown error
+      @doc = Nokogiri::XML(ex.response) do |config|
+        config.strict.noent.noblanks
       end
+      @description = "ingest: #{@doc.xpath("//exc:statusDescription")[0].child.text}"
+      @error = "ingest: #{@doc.xpath("//exc:error")[0].child.text}"
       render :action => "upload_error"
     end
   end
