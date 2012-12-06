@@ -37,10 +37,6 @@ class ApplicationController < ActionController::Base
     render :file => "#{Rails.root}/public/unavailable.html", :status => 500
   end
 
-  def store
-    return Mrt::Sparql::Store.new(SPARQL_ENDPOINT)
-  end
-
   helper :all
   helper_method :current_user
   
@@ -94,10 +90,9 @@ class ApplicationController < ActionController::Base
   def require_permissions(which)
     if (@permissions.nil? || !@permissions.include?(which)) then
       flash[:error] = 'You do not have #{which} permissions.'     
-      redirect_to(:action  => 'index', 
-                  :group   => flexi_group_id,
-                  :object  => params[:object],
-                  :version => params[:version]) and return false
+      redirect_to(:action => 'index', 
+                  :group => flexi_group_id,
+                  :object =>params[:object]) and return false
     end
   end
 
@@ -166,10 +161,13 @@ class ApplicationController < ActionController::Base
     raise ErrorUnavailable if !@permissions.include?('write')
   end
 
-  
   def require_object
-    #wtf
-    return require_mrt_object
+    redirect_to(ObjectList.merge({:group => flexi_group_id})) and return false if params[:object].nil?
+    begin
+      @object = UriInfo.new("#{RDF_ARK_URI}#{params[:object]}")
+    rescue Exception => ex
+      redirect_to(ObjectList.merge({:group => flexi_group_id})) and return false
+    end
   end
 
   def require_mrt_object
@@ -282,27 +280,24 @@ class ApplicationController < ActionController::Base
   end
  
   def collection_ark
-    @collection ||= MrtObject.find_by_primary_id(params[:object]).member_of
+    @collection ||= (/https?:\/\/\S+?\/(\S+)/.match(MrtObject.get_collection(params[:object])))[1]
   end 
     
   #
   # parse the component (object, file, or version) uri to construct the DUA URI
-  def construct_dua_uri
-    o = MrtObject.find_by_primary_id(collection_ark)
-    if o.nil? then
-      return nil
-    else
-      dua_file = o.current_version.files.find {|f| f.filename == APP_CONFIG['mrt_dua_file'] }
-      return dua_file.bytestream
-    end
+  def construct_dua_uri(rx, component_uri)
+     md = rx.match(component_uri.to_s)
+     dua_filename = "#{md[1]}/" + urlencode(collection_ark)  + "/0/" + urlencode(APP_CONFIG['mrt_dua_file']) 
+     dua_file_uri = UriInfo.new(dua_filename)
+     Rails.logger.debug("DUA File URI: " + dua_file_uri)
+     return dua_file_uri
   end
         
   # returns the response of the HTTP request for the DUA URI
   def process_dua_request(dua_file_uri)
-    return nil if dua_file_uri.nil?
-    uri = URI.parse(dua_file_uri)
-    http = Net::HTTP.new(uri.host, uri.port)
-    uri_response = http.request(Net::HTTP::Get.new(uri.request_uri))
-    return uri_response
+     uri = URI.parse(dua_file_uri)
+     http = Net::HTTP.new(uri.host, uri.port)
+     uri_response = http.request(Net::HTTP::Get.new(uri.request_uri))
+     return uri_response
   end 
 end
