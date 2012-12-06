@@ -175,24 +175,6 @@ class ApplicationController < ActionController::Base
     @version = @object.versions[params[:version].to_i - 1]
   end
 
-  def require_version
-    redirect_to(:controller => :object, :action => 'index', :group => flexi_group_id, :object => params[:object]) and return false if params[:version].nil?
-    #get version of specific object
-    q = Q.new("?vers dc:identifier \"#{no_inject(params[:version])}\"^^<http://www.w3.org/2001/XMLSchema#string> .
-                ?vers rdf:type version:Version .
-                ?vers version:inObject ?obj .
-                ?obj rdf:type object:Object .
-                ?obj object:isStoredObjectFor ?meta .
-                ?obj dc:identifier \"#{no_inject(params[:object])}\"^^<http://www.w3.org/2001/XMLSchema#string>",
-      :select => "?vers")
-
-    res = store().select(q)
-
-    redirect_to(:controller => :object, :action => 'index', :group => flexi_group_id, :object => params[:object]) and return false if res.length != 1
-
-    @version = UriInfo.new(res[0]['vers'])
-  end
-
   def require_size
      @size = @object.total_actual_size
      if @size > MAX_ARCHIVE_SIZE ? @exceeds_size = true : @exceeds_size = false
