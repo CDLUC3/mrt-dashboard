@@ -31,12 +31,14 @@ class CollectionController < ApplicationController
   end
 
   def index
-    @recent_objects = MrtObject.joins(:mrt_collections).
-      where("mrt_collections.ark = ?", @group.ark_id).
-      order('last_add_version desc').
-      includes(:mrt_versions, :mrt_version_metadata).
-      paginate(:page       => (params[:page] || 1), 
-               :per_page   => 10)
+    #redirect objects to the object controller
+    if !params[:object].nil? then
+        redirect_to :controller=>'object', :action=>'index', :group=>params[:group], :object=>params[:object]
+    end
+      
+    @recent_objects = MrtObject.paginate(:collection => no_inject(@group.sparql_id),
+                                         :page       => (params[:page] || 1), 
+                                         :per_page   => 10)
   end
 
   def search_results
