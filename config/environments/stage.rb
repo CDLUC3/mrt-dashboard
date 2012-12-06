@@ -13,7 +13,7 @@ MrtDashboard::Application.configure do
   N2T_URI             = "http://n2t-wf.cdlib.org/"
   RDF_ARK_URI         = "http://ark.cdlib.org/"
   RDF_COLLECTION_URI  = "http://uc3.cdlib.org/collection/"
-  STORAGE_SERVICE     = 'http://store-stage.cdlib.org:35121/async/910/'
+  STORAGE_SERVICE     = 'http://store-stage.cdlib.org:35121/async/2111/'
   CONTAINER_URL       = 'http://store-stage.cdlib.org:35121/container/'
 
   MAX_ARCHIVE_SIZE    = 4294967295  #maximum size threshhold for download of object/versions without compression
