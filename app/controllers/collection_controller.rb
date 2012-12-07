@@ -40,11 +40,11 @@ class CollectionController < ApplicationController
   end
 
   def search_results
-    terms = Unicode.downcase(params[:terms]).gsub('%', '\%').gsub('_', '\_').split(/\s+/)
+    terms = Unicode.downcase(params[:terms]).gsub('%', '\%').gsub('_', '\_').split(/\s+/).delete_if{|t|t.blank?}
     terms_q = terms.map{|t| "%#{t}%" }
-    @results = MrtObject.paginate(:page=>params[:page], :per_page=>10)
+    @results = MrtObject.includes(:mrt_versions, :mrt_version_metadata).paginate(:page=>params[:page], :per_page=>10)
     terms_q.each do |q|
-      @results = @results.where("primary_id LIKE ? OR local_id LIKE ?", q, q)
+      @results = @results.where("mrt_objects.primary_id LIKE ? OR mrt_objects.local_id LIKE ? OR mrt_version_metadata.value LIKE ?", q, q, q)
     end
   end
 end
