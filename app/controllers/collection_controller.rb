@@ -40,15 +40,8 @@ class CollectionController < ApplicationController
   end
 
   def search_results
-    terms = no_inject(Unicode.downcase(params[:terms])).split(/[\s:\/_-]+/)
-    terms_q = terms.map {|term| "<http://4store.org/fulltext#token> \"#{term}\"" }.join("; ")
-    q = Q.new("?s a object:Object ;
-                  #{terms_q} ;
-                  base:isInCollection <#{@group.sparql_id}> ;
-                  dc:modified ?mod .",
-              :select => "DISTINCT ?s",
-              :order_by => "DESC(?mod)")
-    @results = store().select(q).map{|s| MrtObject.new(s['s']) }.
+    terms = Unicode.downcase(params[:terms]).gsub('%', '\%').gsub('_', '\_')
+    @results = MrtObject.where("primary_id LIKE ?", "%#{terms}%").
       paginate(:page=>params[:page], :per_page=>10)
   end
 end
