@@ -81,7 +81,8 @@ class LostorageController < ApplicationController
     end
 
   def create_email_msg_body(email)
-     to_email = [email, APP_CONFIG['lostorage_email_to'].to_s]          
+    debugger
+     to_email = Array(email).concat( APP_CONFIG['lostorage_email_to'])          
      session[:version].nil? ? container_type = "object" : container_type = "version"
      #Create theemail URL to include in the body which includes a random name for stored container
      uri_name = UUIDTools::UUID.random_create().hash.to_s + '.tar.gz'
