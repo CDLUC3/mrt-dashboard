@@ -1,3 +1,4 @@
+require 'active_record/errors'
 MrtDashboard::Application.configure do
   config.action_controller.perform_caching = true
   config.autoload_paths                   += %W(#{config.root}/lib)
@@ -5,7 +6,8 @@ MrtDashboard::Application.configure do
   config.consider_all_requests_local       = false
   config.i18n.fallbacks                    = true
   config.serve_static_assets               = true
-  
+  config.active_support.deprecation        = :log
+
   INGEST_SERVICE      = 'http://dp01.cdlib.org:33121/poster/submit/'
   INGEST_SERVICE_UPDATE   = 'http://dp01.cdlib.org:33121/poster/update/'
   MERRITT_SERVER      = 'http://merritt-stage.cdlib.org'
@@ -14,7 +16,7 @@ MrtDashboard::Application.configure do
   RDF_ARK_URI         = "http://ark.cdlib.org/"
   RDF_COLLECTION_URI  = "http://uc3.cdlib.org/collection/"
   STORAGE_SERVICE     = 'http://store-stage.cdlib.org:35121/async/2111/'
-  CONTAINER_URL       = 'http://store-stage.cdlib.org:35121/container/'
+  CONTAINER_URL       = 'http://merritt-stage.cdlib.org/container/'
 
   MAX_ARCHIVE_SIZE    = 4294967295  #maximum size threshhold for download of object/versions without compression
 end
