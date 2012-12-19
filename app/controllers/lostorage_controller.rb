@@ -86,7 +86,9 @@ class LostorageController < ApplicationController
      #Create theemail URL to include in the body which includes a random name for stored container
      uri_name = UUIDTools::UUID.random_create().hash.to_s + '.tar.gz'
      link_info = "The #{container_type} that you requested is ready for you to download. " +
-                   "Please click on the URI link: \n\n #{CONTAINER_URL + uri_name} \n\nto access your archive." 
+                   "Please click on the link to download your file: \n\n #{CONTAINER_URL + uri_name} \n\n" +
+                   "The content is stored as a compressed file in the “tar.gz” format. For an explanation of " +
+                   "how to extract the files in this container, see http://www.gzip.org/#faq6. " 
      puts link_info
       #TODO: clean this up so all the text is in a template       
       @email_data = (
