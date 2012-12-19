@@ -121,7 +121,6 @@ class ApplicationController < ActionController::Base
       # check for collection existance.  if a collection exists, it an object otherwise it's a collection     
         @collection = MrtObject.joins(:mrt_collections).
                       where("mrt_objects.primary_id = ?", params[:group]).first.mrt_collections.first
-        debugger
         if !@collection.nil? then
           params[:object] = params[:group] 
           params[:group] = @collection.ark 
@@ -131,7 +130,7 @@ class ApplicationController < ActionController::Base
     else  #obtain the group if its not yet been set
       if params[:group].nil? && !params[:object].nil? then
           params[:group]= MrtObject.joins(:mrt_collections).
-                      where("mrt_objects.primary_id = ?", params[:group]).first.mrt_collections.first.ark
+                      where("mrt_objects.primary_id = ?", params[:object]).first.mrt_collections.first.ark
       end
     end
 
