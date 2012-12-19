@@ -21,7 +21,6 @@ class ApplicationController < ActionController::Base
   class ErrorUnavailable < StandardError; end
   rescue_from ErrorUnavailable, :with => :render_unavailable
 
-  Q = Mrt::Sparql::Q
   protect_from_forgery
   layout 'application'
 
@@ -36,10 +35,6 @@ class ApplicationController < ActionController::Base
 
   def render_unavailable
     render :file => "#{Rails.root}/public/unavailable.html", :status => 500
-  end
-
-  def store
-    return Mrt::Sparql::Store.new(SPARQL_ENDPOINT)
   end
 
   helper :all
@@ -84,6 +79,25 @@ class ApplicationController < ActionController::Base
       # redirect_to login_url
       return false
     end
+  end
+
+  def require_user_or_401
+    unless current_user 
+      render :status=>401, :text=>"" and return
+    end
+  end
+
+  def require_permissions(which)
+    if (@permissions.nil? || !@permissions.include?(which)) then
+      flash[:error] = 'You do not have #{which} permissions.'     
+      redirect_to(:action => 'index', 
+                  :group => flexi_group_id,
+                  :object =>params[:object]) and return false
+    end
+  end
+
+  def require_download_permissions
+    require_permissions('download')
   end
 
   # tries to get the group for help files, but otherwise skips
@@ -147,22 +161,9 @@ class ApplicationController < ActionController::Base
     raise ErrorUnavailable if !@permissions.include?('write')
   end
 
-  def require_object
-    redirect_to(ObjectList.merge({:group => flexi_group_id})) and return false if params[:object].nil?
-    begin
-      @object = UriInfo.new("#{RDF_ARK_URI}#{params[:object]}")
-    rescue Exception => ex
-      redirect_to(ObjectList.merge({:group => flexi_group_id})) and return false
-    end
-  end
-
   def require_mrt_object
     redirect_to(ObjectList.merge({:group => flexi_group_id})) and return false if params[:object].nil?
-    begin
-      @object = MrtObject.find_by_identifier(params[:object])
-    rescue Exception => ex
-      redirect_to(ObjectList.merge({:group => flexi_group_id})) and return false
-    end
+    @object = MrtObject.find_by_primary_id(params[:object])
   end
   
   def require_mrt_version
@@ -174,40 +175,20 @@ class ApplicationController < ActionController::Base
     @version = @object.versions[params[:version].to_i - 1]
   end
 
-  def require_version
-    redirect_to(:controller => :object, :action => 'index', :group => flexi_group_id, :object => params[:object]) and return false if params[:version].nil?
-    #get version of specific object
-    q = Q.new("?vers dc:identifier \"#{no_inject(params[:version])}\"^^<http://www.w3.org/2001/XMLSchema#string> .
-                ?vers rdf:type version:Version .
-                ?vers version:inObject ?obj .
-                ?obj rdf:type object:Object .
-                ?obj object:isStoredObjectFor ?meta .
-                ?obj dc:identifier \"#{no_inject(params[:object])}\"^^<http://www.w3.org/2001/XMLSchema#string>",
-      :select => "?vers")
-
-    res = store().select(q)
-
-    redirect_to(:controller => :object, :action => 'index', :group => flexi_group_id, :object => params[:object]) and return false if res.length != 1
-
-    @version = UriInfo.new(res[0]['vers'])
+  def require_size
+     @size = @object.total_actual_size
+     if @size > MAX_ARCHIVE_SIZE ? @exceeds_size = true : @exceeds_size = false
+     end
   end
-
+  
   def file_state_uri(id, version, fn)
     "#{FILE_STATE_URI}#{esc(id)}/#{esc(version)}/#{esc(fn)}"
   end
 
-  def require_no_user
-    if current_user
-      store_location
-      flash[:notice] = "You must be logged out to access this page"
-      redirect_to '/'
-      return false
-    end
-  end
-  
   def store_location
     session[:return_to] = request.fullpath
   end
+
   def store_object
     session[:object] = request.params[:object]
   end
@@ -249,7 +230,7 @@ class ApplicationController < ActionController::Base
 
   def fetch_to_tempfile(*args)
     require 'open-uri'
-    require 'ftools'
+    require 'fileutils'
     open(*args) do |data|
       tmp_file = Tempfile.new('mrt_http')
       if data.instance_of? File then
@@ -267,19 +248,16 @@ class ApplicationController < ActionController::Base
     end  
   end
  
-    def collection_ark
-      if @collection.nil? then
-          @collection = (/https?:\/\/\S+?\/(\S+)/.match(MrtObject.get_collection(params[:object])))[1]
-      end
-      return @collection
-    end 
+  def collection_ark
+    @collection ||= MrtObject.find_by_primary_id(params[:object]).member_of.first
+  end 
     
   #
   # parse the component (object, file, or version) uri to construct the DUA URI
   def construct_dua_uri(rx, component_uri)
      md = rx.match(component_uri.to_s)
      dua_filename = "#{md[1]}/" + urlencode(collection_ark)  + "/0/" + urlencode(APP_CONFIG['mrt_dua_file']) 
-     dua_file_uri = UriInfo.new(dua_filename)
+     dua_file_uri = dua_filename
      Rails.logger.debug("DUA File URI: " + dua_file_uri)
      return dua_file_uri
   end

@@ -8,13 +8,14 @@ gem "net-ldap", "0.1.2",
     :git=>"git://github.com/RoryO/ruby-net-ldap.git", 
     :ref=>"74e994eed11a011cb73311e164a65a7dd7a62c01"
 gem "nokogiri"
-gem "rdf"
 gem "rest-client"
 gem "unicorn", "3.1.0"
-gem "will_paginate", "3.0.pre2"
+gem "will_paginate", "~> 3.0.0"
 gem "rack-cache"
-gem "ruby-debug"
 gem "unicode"
 gem "orchard"
+gem "activerecord-mysql2-adapter", "0.0.3"
 gem "mrt-ingest", "0.0.2"
+gem "builder"
+gem 'uuidtools'
 

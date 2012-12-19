@@ -1,15 +1,12 @@
-<% 
-download_disp = !@permissions.nil? && @permissions.include?('download')
-%>
 <% version = line_sidebar %>
-<% if download_disp then %>
-<%= link_to "Version #{version.identifier}",
-            :controller     => :version,
-            :action         => :index,
-            :group          => params[:group],
-            :object         => params[:object],
-            :version        => version.identifier %>:
+<% if have_permission('download') then %>
+  <%= link_to "Version #{version.identifier}",
+              :controller => :version,
+              :action     => :index,
+              :group      => params[:group],
+              :object     => params[:object],
+              :version    => version.identifier %>:
 <% else %>
-	<%= "Version #{version.identifier}"%>:
+  <%= "Version #{version.identifier}" %>:
 <% end %>
 <%= merritt_time(version.created) %><br/>	

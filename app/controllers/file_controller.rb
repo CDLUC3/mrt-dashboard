@@ -1,8 +1,5 @@
 class FileController < ApplicationController
-  before_filter :require_user
-  before_filter :require_object
   before_filter :require_group
-  before_filter :require_version
 
   def display
     filename = params[:file]
@@ -10,26 +7,19 @@ class FileController < ApplicationController
     if !@permissions.nil? && @permissions.include?('download') then
       # determine if user is retrieving a system file; otherwise assume they are obtaining
       # a producer file which needs to prepended to the filename
-      if !filename.include? "producer"
-        if !filename.include? "system"
-         filename.insert(0, "producer/")     
-        end
+      if !filename.match(/^(producer|system)/)
+        filename = "producer/#{filename}"
       end
       # the router removes the file extension from the filename - need to add it back on if one exists
       if !params[:format].blank?
-        filename.concat "." + params[:format]
+         filename = "#{filename}.#{params[:format]}"
       end
-      
-      q = Q.new("?obj dc:identifier \"#{no_inject(params[:object])}\"^^<http://www.w3.org/2001/XMLSchema#string> ;
-                      a object:Object .
-                 ?vers version:inObject ?obj ;
-                       dc:identifier \"#{no_inject(params[:version])}\"^^<http://www.w3.org/2001/XMLSchema#string> ;
-                       version:hasFile ?file .
-                 ?file dc:identifier \"#{no_inject(filename)}\"^^<http://www.w3.org/2001/XMLSchema#string> .",
-                :select => "?file")
-  
-      file = MrtFile.new(store().select(q)[0]['file'])
-      file_uri = file.first(Mrt::Model::Base.bytestream).to_uri
+
+      file = MrtObject.where(:primary_id=>params[:object]).first.
+        versions.where(:version_number=>params[:version]).first.
+        files.where(:filename=>filename).first
+      puts file
+      file_uri = URI.parse(file.bytestream)
       Rails.logger.info(file_uri)
       
       # bypass DUA processing for python scripts - indicated by special param
@@ -59,18 +49,15 @@ class FileController < ApplicationController
         end
       end
       
-      # the user has accepted the DUA for this collection or there is no DUA to process -  just display file
-      dl_url = file.first(Mrt::Model::Base.bytestream).to_uri
+      # the user has accepted the DUA for this collection or there is no DUA to process 
       response.headers["Content-Length"] = file.size.to_s
       response.headers["Content-Disposition"] = "inline; filename=\"#{File.basename(file.identifier)}\""
       response.headers["Content-Type"] = file.media_type
-      self.response_body = Streamer.new(dl_url)
+      self.response_body = Streamer.new(file.bytestream_uri)
       session[:perform_download] = false  
    else
       flash[:error] = 'You do not have download permissions.'     
       redirect_to  :controller => 'version', :action => 'index', :group => flexi_group_id,  :object =>params[:object], :version => params[:version] and return false
    end
  end 
- 
- 
 end

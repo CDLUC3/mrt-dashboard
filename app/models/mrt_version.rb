@@ -1,63 +1,47 @@
-class MrtVersion < UriInfo
-  Q = Mrt::Sparql::Q
+class MrtVersion < ActiveRecord::Base
+  belongs_to :mrt_object
+  has_many :mrt_files
+  has_many :mrt_version_metadata
 
   def identifier
-    # this works with current storage service and saves a trip to
-    # SPARQL when we just need the identifier
-    return self.to_uri.path.match(/\/([0-9]+)$/)[1]
-#    return self.first(RDF::DC['identifier']).value
-  end
-
-  def bytestream
-    return self.first(Mrt::Model::Base['bytestream'])
+    return self.version_number.to_s
   end
 
   def bytestream_uri
-    return self.bytestream.to_uri
-  end
-  
-  def total_actual_size
-    return self.first(Mrt::Model::Base['totalActualSize']).value.to_i
-  end
-  
-  def created
-    return DateTime.parse(self.first(RDF::DC['created']).value)
-  end
-
-  def size
-    return self.first(Mrt::Model::Base['size']).value.to_i
-  end
-
-  def num_actual_files
-    return self.first(Mrt::Model::Object['numActualFiles']).value.to_i
-  end
-
-  def files
-    return @files ||= MrtFile.bulk_loader(self[Mrt::Model::Version['hasFile']]).
-      sort_by{|f| f.identifier}
+    return URI.parse(self.bytestream)
   end
 
   def system_files 
-    return self.files.select {|f| f.identifier.match(/^system\//) }
+    return self.files.select {|f| f.identifier.match(/^system\//) }.
+      sort_by {|x| File.basename(x.identifier.downcase) }     
   end
 
   def producer_files 
-    return self.files.select {|f| f.identifier.match(/^producer\//) }
+    return self.files.select {|f| f.identifier.match(/^producer\//) }.
+      sort_by {|x| File.basename(x.identifier.downcase) }     
   end
 
-  def in_object
-    return @in_object ||= MrtObject.new(self.first(Mrt::Model::Version['inObject']))
+  def metadata(name)
+    self.mrt_version_metadata.select {|md| md.name == name }.map {|md| md.value }
+  end
+
+  def files
+    return self.mrt_files
   end
 
   def who
-    return self[Mrt::Model::Kernel['who']].map{ |w| w.value.to_s }
+    return self.metadata('who')
+  end
+
+  def member_of
+    return self.metadata('collection')
   end
 
   def what
-    return self[Mrt::Model::Kernel['what']].map{ |w| w.value.to_s }
+    return self.metadata('what')
   end
 
   def when
-    return self[Mrt::Model::Kernel['when']].map{ |w| w.value.to_s }
+    return self.metadata('when')
   end
 end

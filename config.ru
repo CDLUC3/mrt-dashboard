@@ -1,6 +1,6 @@
 # This file is used by Rack-based servers to start the application.
 #require 'rack/cache'
-require 'lib/rack/munge_headers'
+require File.expand_path('../lib/rack/munge_headers', __FILE__)
 
 use Rack::ConditionalGet
 use Rack::ETag

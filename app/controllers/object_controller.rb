@@ -6,10 +6,12 @@ class ObjectController < ApplicationController
   before_filter :require_write,      :only => [:add, :upload]
   before_filter :require_session_object, :only => [:download]
   before_filter :require_mrt_object, :only => [:download]
+  before_filter :require_size,		 :only => [:download]
   protect_from_forgery :except => [:ingest, :mint, :update]
 
   def require_session_object
       params[:object] = session[:object] if !session[:object].nil? && params[:object].nil?
+      session[:version] = nil if !session[:version].nil?  #clear out version
   end
   
   def ingest
@@ -133,17 +135,12 @@ class ObjectController < ApplicationController
   end
 
   def index
-    begin
-      @object = MrtObject.find_by_identifier(params[:object])
-      @versions = @object.versions
-      #files for current version
-      @files = @object.files.
-        reject {|file| file.identifier.match(/^system\/mrt-/) }.
-        sort_by {|x| File.basename(x.identifier.downcase) }     
-    rescue Exception => ex
-      raise ErrorUnavailable
-    end
-
+    @object = MrtObject.find_by_primary_id(params[:object])
+    @versions = @object.versions
+    #files for current version
+    @files = @object.files.
+      reject {|file| file.identifier.match(/^system\/mrt-/) }.
+      sort_by {|x| File.basename(x.identifier.downcase) }    
   end
 
   def download
@@ -177,7 +174,22 @@ class ObjectController < ApplicationController
         end
        end
        
-      # the user has accepted the DUA for this collection or there is no DUA to process -  download the object       
+       # if size is > 4GB, redirect to have user enter email for asynch compression (skipping streaming)
+       if @exceeds_size then
+         #if user canceled out of enterering email redirect to object landing page
+         if session[:perform_async].eql?("cancel") then
+           session[:perform_async] = false;  #reinitalize flag to false
+           redirect_to  :action => 'index', :group => flexi_group_id, :object =>params[:object] and return false
+         elsif session[:perform_async] then #do not stream, redirect to object landing page
+           session[:perform_async] = false;  #reinitalize flag to false
+           redirect_to  :action => 'index', :group => flexi_group_id, :object =>params[:object] and return false
+         else #allow user to enter email
+           store_location
+           store_object
+           redirect_to :controller => "lostorage",  :action => "index" and return false 
+         end
+       end
+
       response.headers["Content-Disposition"] = "attachment; filename=#{Orchard::Pairtree.encode(@object.identifier.to_s)}_object.zip"
       response.headers["Content-Type"] = "application/zip"
       self.response_body = Streamer.new("#{@object.bytestream_uri}?t=zip")
@@ -220,26 +232,26 @@ class ObjectController < ApplicationController
       @batch_id = @doc.xpath("//bat:batchState/bat:batchID")[0].child.text
       @obj_count = @doc.xpath("//bat:batchState/bat:jobStates").length
     rescue Exception => ex
-      begin
-        # see if we can parse the error from ingest, if not then unknown error
-        @doc = Nokogiri::XML(ex.response) do |config|
-          config.strict.noent.noblanks
-        end
-        @description = "ingest: #{@doc.xpath("//exc:statusDescription")[0].child.text}"
-        @error = "ingest: #{@doc.xpath("//exc:error")[0].child.text}"
-      rescue Exception => ex
-        @description = "ui: #{ex.message}"
-        @error = ""
+      # see if we can parse the error from ingest, if not then unknown error
+      @doc = Nokogiri::XML(ex.response) do |config|
+        config.strict.noent.noblanks
       end
+      @description = "ingest: #{@doc.xpath("//exc:statusDescription")[0].child.text}"
+      @error = "ingest: #{@doc.xpath("//exc:error")[0].child.text}"
       render :action => "upload_error"
     end
   end
 
   def recent
     @collection_ark = params[:collection]
-    @objects = MrtObject.paginate(:collection => RDF_ARK_URI + @collection_ark,
-                                  :page       => (params[:page] || 1),
-                                  :per_page   => 20)
+    @objects = MrtCollection.
+      where(:ark=>@collection_ark).
+      first.
+      mrt_objects.
+      order('last_add_version desc').
+      includes(:mrt_versions, :mrt_version_metadata).
+      paginate(:page       => (params[:page] || 1), 
+               :per_page   => 20)
     respond_to do |format|
       format.html
       format.atom

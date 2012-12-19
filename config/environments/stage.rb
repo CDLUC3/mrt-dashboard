@@ -1,3 +1,4 @@
+require 'active_record/errors'
 MrtDashboard::Application.configure do
   config.action_controller.perform_caching = true
   config.autoload_paths                   += %W(#{config.root}/lib)
@@ -5,23 +6,26 @@ MrtDashboard::Application.configure do
   config.consider_all_requests_local       = false
   config.i18n.fallbacks                    = true
   config.serve_static_assets               = true
-  
+  config.active_support.deprecation        = :log
+
   INGEST_SERVICE      = 'http://dp01.cdlib.org:33121/poster/submit/'
   INGEST_SERVICE_UPDATE   = 'http://dp01.cdlib.org:33121/poster/update/'
   MERRITT_SERVER      = 'http://merritt-stage.cdlib.org'
   MINT_SERVICE        = 'http://dp01.cdlib.org:33121/ingest/request-identifier'
   N2T_URI             = "http://n2t-wf.cdlib.org/"
-  SPARQL_ENDPOINT     = "http://dp01.cdlib.org:38082/sparql/"
   RDF_ARK_URI         = "http://ark.cdlib.org/"
   RDF_COLLECTION_URI  = "http://uc3.cdlib.org/collection/"
+  STORAGE_SERVICE     = 'http://store-stage.cdlib.org:35121/async/2111/'
+  CONTAINER_URL       = 'http://merritt-stage.cdlib.org/container/'
+
+  MAX_ARCHIVE_SIZE    = 4294967295  #maximum size threshhold for download of object/versions without compression
 end
 
 require 'exception_notifier'
 MrtDashboard::Application.config.middleware.use ExceptionNotifier,
   :email_prefix => "[Merritt UI] ",
   :sender_address => "\"notifier\" <no-reply@#{Socket.gethostname}>",
-  :exception_recipients => ["erik.hetzner@ucop.edu",
-                            "marisa.strong@ucop.edu",
+  :exception_recipients => ["marisa.strong@ucop.edu",
                             "mark.reyes@ucop.edu",
                             "perry.willett@ucop.edu",
                             "scott.fisher@ucop.edu"]

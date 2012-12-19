@@ -8,13 +8,9 @@ class Group
           :admin_password  => LDAP_CONFIG["admin_password"],
           :minter          => LDAP_CONFIG["ark_minter_url"]})
 
-  Q = Mrt::Sparql::Q
-  STORE = Mrt::Sparql::Store.new(SPARQL_ENDPOINT)
-
   attr_accessor :id, :submission_profile, :ark_id, :owner, :description
 
   def initialize
-
   end
 
   def self.find_all
@@ -44,32 +40,44 @@ class Group
     return "http://ark.cdlib.org/#{self.ark_id}"
   end
 
-  def object_count
-    return STORE.select(Q.new("?obj base:isInCollection <#{self.sparql_id}> ;
-                                    a object:Object .",
-                              :select=>"(count(?obj) as c)"))[0]["c"].value.to_i
+  def mrt_collection
+    @mrt_collection ||= MrtCollection.find_by_ark(self.ark_id)
   end
 
+  def mrt_collection_id
+    @mrt_collection_id ||= if self.mrt_collection then self.mrt_collection.id else nil end
+  end
+
+  def object_count
+    if self.mrt_collection_id.nil? then
+      0
+    else
+      MrtObject.connection.select_all("SELECT COUNT(DISTINCT(`mrt_objects`.id)) as `count` FROM `mrt_objects` INNER JOIN `mrt_collections_mrt_objects` ON `mrt_objects`.id = `mrt_collections_mrt_objects`.mrt_object_id WHERE ((`mrt_collections_mrt_objects`.mrt_collection_id = #{self.mrt_collection_id}))")[0]["count"].to_i
+    end
+  end
+  
   def version_count
-    return STORE.select(Q.new("?obj a object:Object ;
-                                    base:isInCollection <#{self.sparql_id}> ;
-                                    dc:hasVersion ?vers .",
-                              :select=>"(count(?vers) as c)"))[0]["c"].value.to_i
+    if self.mrt_collection_id.nil? then
+      0
+    else
+      MrtObject.connection.select_all("SELECT COUNT(DISTINCT(`mrt_versions`.id)) AS `count` FROM `mrt_versions` INNER JOIN `mrt_objects` ON `mrt_objects`.`id` = `mrt_versions`.`mrt_object_id` INNER JOIN `mrt_collections_mrt_objects` ON `mrt_objects`.`id` = `mrt_collections_mrt_objects`.`mrt_object_id` WHERE ((`mrt_collections_mrt_objects`.mrt_collection_id = #{self.mrt_collection_id}))")[0]["count"].to_i
+    end
   end
 
   def file_count
-    q = Q.new("?obj base:isInCollection <#{self.sparql_id}> .
-               ?vers version:inObject ?obj ;
-                     version:hasFile ?file .",
-              :select=>"(count(?file) as c)")
-    return STORE.select(q)[0]["c"].value.to_i
+    if self.mrt_collection_id.nil? then
+      0
+    else
+      MrtFile.connection.select_all("SELECT COUNT(DISTINCT(`mrt_files`.`id`)) AS `count` FROM `mrt_files` INNER JOIN `mrt_versions` ON `mrt_versions`.`id` = `mrt_files`.`mrt_version_id` INNER JOIN `mrt_objects` ON `mrt_objects`.`id` = `mrt_versions`.`mrt_object_id` INNER JOIN `mrt_collections_mrt_objects` ON `mrt_objects`.`id` = `mrt_collections_mrt_objects`.`mrt_object_id` WHERE ((`mrt_collections_mrt_objects`.mrt_collection_id = #{self.mrt_collection_id}))")[0]["count"].to_i
+    end
   end
 
   def total_size
-    q = Q.new("?obj base:isInCollection <#{self.sparql_id}> ;
-                    object:totalActualSize ?size",
-      :select => "(sum(?size) as total)")
-    return STORE.select(q)[0]["total"].value.to_i
+    if self.mrt_collection.nil? then
+      0
+    else
+      self.mrt_collection.mrt_objects.sum('total_actual_size')
+    end
   end
 
   #get all groups and email addresses of members, this is a stopgap for our own use
@@ -85,8 +93,6 @@ class Group
     end
     out_str
   end
-
-
   
   private
 
