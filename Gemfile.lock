@@ -6,10 +6,11 @@ GIT
     net-ldap (0.1.2)
 
 GIT
-  remote: git://github.com/rails/exception_notification.git
-  revision: 192a49a02d63d28b23ed41cebadfedd490929cf1
+  remote: git://github.com/chrisfinne/eco_exception_notification.git
+  revision: 7fea2a178bc4b784130aa6debce67a5800a03c51
   specs:
-    exception_notification (1.0.0)
+    eco_exception_notification (3.0.0.rc1)
+      actionmailer (>= 3.0.4)
 
 GEM
   remote: http://rubygems.org/
@@ -45,12 +46,15 @@ GEM
     activesupport (3.0.13)
     arel (2.0.10)
     builder (2.1.2)
+    columnize (0.3.6)
     erubis (2.6.6)
       abstract (>= 1.0.0)
     httpclient (2.2.5)
     i18n (0.5.0)
     json (1.6.5)
     kgio (2.0.0)
+    linecache (0.46)
+      rbx-require-relative (> 0.0.4)
     mail (2.2.19)
       activesupport (>= 2.3.6)
       i18n (>= 0.4.0)
@@ -86,10 +90,16 @@ GEM
       rdoc (~> 3.4)
       thor (~> 0.14.4)
     rake (0.9.2.2)
+    rbx-require-relative (0.0.9)
     rdoc (3.12)
       json (~> 1.4)
     rest-client (1.6.7)
       mime-types (>= 1.16)
+    ruby-debug (0.10.4)
+      columnize (>= 0.1)
+      ruby-debug-base (~> 0.10.4.0)
+    ruby-debug-base (0.10.4)
+      linecache (>= 0.3)
     thor (0.14.6)
     treetop (1.4.10)
       polyglot
@@ -108,7 +118,7 @@ PLATFORMS
 DEPENDENCIES
   activerecord-mysql2-adapter (= 0.0.3)
   builder
-  exception_notification!
+  eco_exception_notification!
   httpclient (~> 2.2.5)
   json (> 1.5.0)
   mrt-ingest (= 0.0.2)
@@ -118,6 +128,7 @@ DEPENDENCIES
   rack-cache
   rails (= 3.0.13)
   rest-client
+  ruby-debug
   unicode
   unicorn (= 3.1.0)
   uuidtools
