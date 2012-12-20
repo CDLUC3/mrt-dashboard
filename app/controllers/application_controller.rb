@@ -132,7 +132,9 @@ class ApplicationController < ActionController::Base
     else  #obtain the group if its not yet been set
       if params[:group].nil? && !params[:object].nil? then
           params[:group]= MrtObject.joins(:mrt_collections).
-                      where("mrt_objects.primary_id = ?", params[:object]).first.mrt_collections.first.ark
+          where("mrt_objects.primary_id = ?", params[:object]).
+          map {|c| c.mrt_collections.first }.
+          first.ark
       end
     end
 
