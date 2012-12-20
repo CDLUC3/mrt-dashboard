@@ -32,6 +32,11 @@ class CollectionController < ApplicationController
 
   
   def index
+    #redirect objects to the object controller
+    if !params[:object].nil? then
+        redirect_to :controller=>'object', :action=>'index', :group=>params[:group], :object=>params[:object]
+    end
+
     @recent_objects = MrtObject.joins(:mrt_collections).
       where("mrt_collections.ark = ?", @group.ark_id).
       order('last_add_version desc').
