@@ -119,20 +119,23 @@ class ApplicationController < ActionController::Base
     if !params[:group].nil? then
       if  (params[:group].include? "ark:") then
       # check for collection existance.  if a collection exists, it an object otherwise it's a collection     
-        @collection = MrtObject.get_collection(params[:group])
+        @collection = MrtObject.joins(:mrt_collections).
+                      where("mrt_objects.primary_id = ?", params[:group]).first.mrt_collections.first
         if !@collection.nil? then
           params[:object] = params[:group] 
-          params[:group] = (/https?:\/\/\S+?\/(\S+)/.match(@collection))[1]  #remove the sparql part of the ark_id
+          params[:group] = @collection.ark 
+
         end 
       end
     else  #obtain the group if its not yet been set
       if params[:group].nil? && !params[:object].nil? then
-          params[:group]= (/https?:\/\/\S+?\/(\S+)/.match(MrtObject.get_collection(params[:object])))[1]
+          params[:group]= MrtObject.joins(:mrt_collections).
+                      where("mrt_objects.primary_id = ?", params[:object]).first.mrt_collections.first.ark
       end
     end
 
     raise ErrorUnavailable if flexi_group_id.nil?
-    begin
+   begin
       @group = Group.find(flexi_group_id)
       session[:group] = @group.id
       params[:group] = @group.id
