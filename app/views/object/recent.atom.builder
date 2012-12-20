@@ -58,7 +58,7 @@ xml.tag!('feed', :xmlns => "http://www.w3.org/2005/Atom",
                    "href" => local_id)
         end
       end
-      xml.tag!("title", obj.what)
+      xml.tag!("title", obj.what.join("; "))
       w = obj.who
       w = [w] if !w.instance_of?(Array)
       w.each do |name|
