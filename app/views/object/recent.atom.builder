@@ -46,7 +46,6 @@ xml.tag!('feed', :xmlns => "http://www.w3.org/2005/Atom",
                "type" => "application/zip",
                "href" => url_for(:controller => 'object', 
                                  :action     => 'download',
-                                 :group      => @collection_ark,
                                  :object     => obj.primary_id))
 
       xml.tag!("dct:extent", "#{obj.size}")
