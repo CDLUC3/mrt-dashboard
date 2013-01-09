@@ -1,6 +1,6 @@
 source 'http://rubygems.org'
 gem "httpclient", "~> 2.2.5"
-gem 'rails', '3.0.13'
+gem 'rails', '3.0.19'
 gem "eco_exception_notification",
     :git => "git://github.com/chrisfinne/eco_exception_notification.git"
 gem "json", "> 1.5.0"
