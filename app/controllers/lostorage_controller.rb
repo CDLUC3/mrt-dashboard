@@ -73,7 +73,10 @@ class LostorageController < ApplicationController
         'name'              => @email_data['name']        
       }.reject{|k, v| v.blank? }
       
-      storage_async_url = STORAGE_SERVICE + urlencode(session[:object]) 
+      debugger
+      #construct the async storage URL using the object's state storage URL-  Sub async for state in URL.
+      storage_url = MrtObject.find_by_primary_id(session[:object]).storage_url
+      storage_async_url = storage_url.gsub(/state/,'async')
       @response = RestClient.post(storage_async_url, @lostorage_args, {:multipart => true })
       puts @response
       lostorage_xml_email_profile.close!
