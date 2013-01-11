@@ -73,7 +73,6 @@ class LostorageController < ApplicationController
         'name'              => @email_data['name']        
       }.reject{|k, v| v.blank? }
       
-      debugger
       #construct the async storage URL using the object's state storage URL-  Sub async for state in URL.
       storage_url = MrtObject.find_by_primary_id(session[:object]).storage_url
       storage_async_url = storage_url.gsub(/state/,'async')
