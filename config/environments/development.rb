@@ -8,8 +8,8 @@ MrtDashboard::Application.configure do
   config.consider_all_requests_local         = true
   config.whiny_nils                          = true
 
-  INGEST_SERVICE      = 'http://badger.cdlib.org:33121/poster/submit/'
-  INGEST_SERVICE_UPDATE   = 'http://badger.cdlib.org:33121/poster/update/'
+  INGEST_SERVICE      = 'http://uc3c-dev.cdlib.org:33121/poster/submit/'
+  INGEST_SERVICE_UPDATE   = 'http://uc3c-dev.cdlib.org:33121/poster/update/'
   MINT_SERVICE        = 'http://badger.cdlib.org:33121/request-identifier'
   N2T_URI             = "http://n2t-wf.cdlib.org/"
   RDF_ARK_URI         = "http://ark.cdlib.org/"
