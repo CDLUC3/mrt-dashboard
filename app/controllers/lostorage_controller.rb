@@ -89,8 +89,11 @@ class LostorageController < ApplicationController
      uri_name = UUIDTools::UUID.random_create().hash.to_s + '.tar.gz'
      link_info = "The #{container_type} that you requested is ready for you to download. " +
                    "Please click on the link to download your file: \n\n #{CONTAINER_URL + uri_name} \n\n" +
+                   "Please note that this link will expire in 7 days from the date of this email.   \n\n" +
                    "The content is stored as a compressed file in the “tar.gz” format. For an explanation of " +
-                   "how to extract the files in this container, see http://www.gzip.org/#faq6. " 
+                   "how to extract the files in this container, see http://www.gzip.org/#faq6. \n\n" +
+                   "If you have any questions regarding the download of this archive, please contact uc3@cdlib.org."
+ 
      puts link_info
       #TODO: clean this up so all the text is in a template       
       @email_data = (
