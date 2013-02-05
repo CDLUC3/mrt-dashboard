@@ -13,6 +13,6 @@ pid File.join(Dir.pwd, "log", "unicorn.pid")
 
 # timeout is long because we upload files
 # switch to nginx to fix
-timeout 3000
+timeout 7200
 
 logger Logger.new(File.join(Dir.pwd, "log", "unicorn.log"))
