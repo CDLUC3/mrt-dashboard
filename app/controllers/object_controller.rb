@@ -56,8 +56,10 @@ class ObjectController < ApplicationController
         'type'              => params[:type]
       }.reject{|k, v| v.blank? }
       
-      response = RestClient.post(INGEST_SERVICE, ingest_args, { :multipart => true })
-      render :status=>response.code, :content_type=>response.headers[:content_type], :text=>response.body
+      client = HTTPClient.new
+      response = client.post(INGEST_SERVICE, ingest_args, {"Content-Type" => "multipart/form-data"})
+
+      render :status=>response.status, :content_type=>response.headers['Content-Type'], :text=>response.content
     end
   end
   
@@ -72,8 +74,10 @@ class ObjectController < ApplicationController
         'responseForm'     => params[:responseForm]
       }.reject{|k, v| v.blank? }
       
-      response = RestClient.post(MINT_SERVICE, mint_args, { :multipart => true, :accept => '*/*'})
-      render :status=>response.code, :content_type=>response.headers[:content_type], :text=>response.body
+      client = HTTPClient.new
+      response = client.post(INGEST_SERVICE, mint_args, {"Content-Type" => "multipart/form-data"})
+
+      render :status=>response.status, :content_type=>response.headers['Content-Type'], :text=>response.content
     end
   end
 
@@ -144,9 +148,10 @@ class ObjectController < ApplicationController
         }.reject{|key, value| value.blank? }
 
       service = (params[:update_object].blank? ? INGEST_SERVICE : INGEST_SERVICE_UPDATE)
-      @response = RestClient.post(service, hsh, { :multipart => true })
+      client = HTTPClient.new
+      response = client.post(INGEST_SERVICE, hsh, {"Content-Type" => "multipart/form-data"})
 
-      @doc = Nokogiri::XML(@response) do |config|
+      @doc = Nokogiri::XML(response.content) do |config|
         config.strict.noent.noblanks
       end
 
