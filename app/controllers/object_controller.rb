@@ -57,6 +57,7 @@ class ObjectController < ApplicationController
       }.reject{|k, v| v.blank? }
       
       client = HTTPClient.new
+      client.receive_timeout = 7200    # setting receivetimeout for HTTPClient!
       response = client.post(INGEST_SERVICE, ingest_args, {"Content-Type" => "multipart/form-data"})
 
       render :status=>response.status, :content_type=>response.headers['Content-Type'], :text=>response.content
@@ -75,6 +76,7 @@ class ObjectController < ApplicationController
       }.reject{|k, v| v.blank? }
       
       client = HTTPClient.new
+      client.receive_timeout = 7200    # setting receivetimeout for HTTPClient!
       response = client.post(INGEST_SERVICE, mint_args, {"Content-Type" => "multipart/form-data"})
 
       render :status=>response.status, :content_type=>response.headers['Content-Type'], :text=>response.content
@@ -149,6 +151,7 @@ class ObjectController < ApplicationController
 
       service = (params[:update_object].blank? ? INGEST_SERVICE : INGEST_SERVICE_UPDATE)
       client = HTTPClient.new
+      client.receive_timeout = 7200    # setting receivetimeout for HTTPClient!
       response = client.post(INGEST_SERVICE, hsh, {"Content-Type" => "multipart/form-data"})
 
       @doc = Nokogiri::XML(response.content) do |config|
