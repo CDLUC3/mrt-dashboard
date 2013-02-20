@@ -133,7 +133,7 @@ class ObjectController < ApplicationController
 
         client = HTTPClient.new
         client.receive_timeout = 7200
-        response = client.post(INGEST_SERVICE, mint_args, {"Content-Type" => "multipart/form-data"})
+        response = client.post(MINT_SERVICE, mint_args, {"Content-Type" => "multipart/form-data"})
 
         render :status=>response.code, :content_type=>response.headers[:content_type], :text=>response.body
       end
