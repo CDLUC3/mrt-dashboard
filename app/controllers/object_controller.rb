@@ -232,7 +232,7 @@ class ObjectController < ApplicationController
       client.send_timeout = 3600
       client.connect_timeout = 7200
       client.keep_alive_timeout = 3600
-      response = client.post(INGEST_SERVICE, hsh, {"Content-Type" => "multipart/form-data"})
+      response = client.post(INGEST_SERVICE_UPDATE, hsh, {"Content-Type" => "multipart/form-data"})
 
       @doc = Nokogiri::XML(response.content) do |config|
         config.strict.noent.noblanks
