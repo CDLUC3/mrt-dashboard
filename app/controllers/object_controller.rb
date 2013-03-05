@@ -208,25 +208,40 @@ class ObjectController < ApplicationController
 
 
   def upload
-    if params[:file].nil? then
+    if params[:file].blank? && params[:dropbox_file].blank? then
       flash[:error] = 'You must choose a filename to submit.'
       redirect_to :controller => 'object', :action => 'add', :group => flexi_group_id and return false
     end
     begin
+      use_dropbox = !params[:dropbox_file].blank?
+      if use_dropbox
+        filename = params[:dropbox_file].split(/\//)[-1]
+        manifest = Tempfile.new("mrt-ingest")
+        manifest.write("#%checkm_0.7\n")
+        manifest.write("#%profile http://uc3.cdlib.org/registry/ingest/manifest/mrt-ingest-manifest\n")
+        manifest.write("#%prefix | mrt: | http://uc3.cdlib.org/ontology/mom#\n")
+        manifest.write("#%prefix | nfo: | http://www.semanticdesktop.org/ontologies/2007/03/22/nfo#\n")
+        manifest.write("#%fields | nfo:fileUrl | nfo:hashAlgorithm | nfo:hashValue | nfo:fileSize | nfo:fileLastModified | nfo:fileName | mrt:mimeType\n")
+        manifest.write("#{params[:dropbox_file]} | | | | | #{filename} | \n")
+        manifest.write("#%EOF\n")
+        # reset to beginning
+        manifest.open
+      end
+      
       hsh = {
-          'file'              => params[:file].tempfile,
-          'type'              => params[:object_type],
-          'submitter'         => "#{current_user.login}/#{current_user.displayname}",
-          'filename'          => params[:file].original_filename,
-          'profile'           => @group.submission_profile,
-          'creator'           => params[:author],
-          'title'             => params[:title],
-          'primaryIdentifier' => params[:primary_id],
-          'date'              => params[:date],
-          'localIdentifier'   => params[:local_id], # local identifier necessary, nulls?
-          'responseForm'      => 'xml'
-        }.reject{|key, value| value.blank? }
-
+        'file'              => if !use_dropbox then params[:file].tempfile else manifest end,
+        'type'              => params[:object_type],
+        'submitter'         => "#{current_user.login}/#{current_user.displayname}",
+        'filename'          => if !use_dropbox then params[:file].original_filename else nil end,
+        'profile'           => @group.submission_profile,
+        'creator'           => params[:author],
+        'title'             => params[:title],
+        'primaryIdentifier' => params[:primary_id],
+        'date'              => params[:date],
+        'localIdentifier'   => params[:local_id], # local identifier necessary, nulls?
+        'responseForm'      => 'xml'
+      }.reject{|key, value| value.blank? }
+      
       client = HTTPClient.new
       client.receive_timeout = 3600
       client.send_timeout = 3600
@@ -240,6 +255,7 @@ class ObjectController < ApplicationController
 
       @batch_id = @doc.xpath("//bat:batchState/bat:batchID")[0].child.text
       @obj_count = @doc.xpath("//bat:batchState/bat:jobStates").length
+      manifest.close if defined?(manifest)
     rescue Exception => ex
       # see if we can parse the error from ingest, if not then unknown error
       @doc = Nokogiri::XML(ex.response) do |config|
