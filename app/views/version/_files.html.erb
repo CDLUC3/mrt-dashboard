@@ -23,8 +23,8 @@ download_disp = !@permissions.nil? && @permissions.include?('download')
         </div>
 	    <% end %>
 	    <div class="value">
-	      <%= file[Mrt::Model::File.mediaType].to_s.gsub(/;.*$/, '') %>
-	      <%=number_to_storage_size(file[Mrt::Model::Base.size].to_s.to_i)%>
+	      <%= file.media_type.gsub(/;.*$/, '') %>
+	      <%=number_to_storage_size(file.size)%>
 	    </div>
   <% end %>
 </div>

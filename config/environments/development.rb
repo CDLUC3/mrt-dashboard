@@ -15,4 +15,7 @@ MrtDashboard::Application.configure do
   RDF_ARK_URI         = "http://ark.cdlib.org/"
   RDF_COLLECTION_URI  = "http://uc3.cdlib.org/collection/"
   SPARQL_ENDPOINT     = "http://badger.cdlib.org:8082/sparql/"
+  CONTAINER_URL       = 'http://uc3a-dev.cdlib.org:35121/container/'
+
+  MAX_ARCHIVE_SIZE    = 2147483648
 end

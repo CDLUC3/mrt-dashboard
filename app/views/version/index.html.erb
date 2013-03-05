@@ -1,6 +1,3 @@
-<% 
-download_disp = !@permissions.nil? && @permissions.include?('download')
-%>
 <% content_for :title do %>
   UC3 Merritt: Version -- <%= @object.identifier %>, Version <%= @version.identifier %>
 <% end %>
@@ -52,7 +49,7 @@ download_disp = !@permissions.nil? && @permissions.include?('download')
 
   <div class="key">&nbsp;</div><div class="value">&nbsp;</div>
   <div class="key">&nbsp;</div>
-<% if download_disp then %>
+<% if have_permission('download') then %>
   <div class="value">
     <%= form_tag(:action => 'download') do %>
       <%= hidden_field_tag 'group', params[:group] %>
@@ -67,6 +64,6 @@ download_disp = !@permissions.nil? && @permissions.include?('download')
 <div class="grid_4 sidebar">
   <%= render :partial => '/shared/side_lookup' %><br/>
   <%= render :partial => '/version/list_sidebar',
-      :locals => {:versions => @versions.reverse,
+      :locals => {:versions => @object.versions.reverse,
                   :title => 'All Versions'} %><br/>
 </div>

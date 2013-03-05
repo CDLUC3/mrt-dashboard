@@ -1,8 +1,13 @@
-<%# takes :obj passed in as local variable as rdf object %>
+<%# takes :obj passed in as local variable %>
 
-<% who, what, whn = dc_nice(obj.who), dc_nice(obj.what), dc_nice(obj.when) %>
-<%= "#{who}." if !who.blank? %>
-<% if !what.blank? then %>
-  <span class="title"><%= what %></span>
+<% if !obj.who.blank? then %>
+  <%= dc_nice(obj.who) %>.
 <% end %>
-<% "(#{whn})" if !whn.blank? %>
+
+<% if !obj.what.blank? then %>
+  <span class="title"><%= dc_nice(obj.what) %></span>
+<% end %>
+
+<% if !obj.when.blank? then %>
+  (<%= dc_nice(obj.when) %>)
+<% end %>
