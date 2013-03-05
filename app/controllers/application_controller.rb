@@ -21,7 +21,6 @@ class ApplicationController < ActionController::Base
   class ErrorUnavailable < StandardError; end
   rescue_from ErrorUnavailable, :with => :render_unavailable
 
-  Q = Mrt::Sparql::Q
   protect_from_forgery
   layout 'application'
 
@@ -36,10 +35,6 @@ class ApplicationController < ActionController::Base
 
   def render_unavailable
     render :file => "#{Rails.root}/public/unavailable.html", :status => 500
-  end
-
-  def store
-    return Mrt::Sparql::Store.new(SPARQL_ENDPOINT)
   end
 
   helper :all
@@ -124,20 +119,27 @@ class ApplicationController < ActionController::Base
     if !params[:group].nil? then
       if  (params[:group].include? "ark:") then
       # check for collection existance.  if a collection exists, it an object otherwise it's a collection     
-        @collection = MrtObject.get_collection(params[:group])
+        @collection = MrtObject.joins(:mrt_collections).
+          where("mrt_objects.primary_id = ?", params[:group]).
+          map {|c| c.mrt_collections.first }.
+          first
         if !@collection.nil? then
           params[:object] = params[:group] 
-          params[:group] = (/https?:\/\/\S+?\/(\S+)/.match(@collection))[1]  #remove the sparql part of the ark_id
+          params[:group] = @collection.ark 
+
         end 
       end
     else  #obtain the group if its not yet been set
       if params[:group].nil? && !params[:object].nil? then
-          params[:group]= (/https?:\/\/\S+?\/(\S+)/.match(MrtObject.get_collection(params[:object])))[1]
+          params[:group]= MrtObject.joins(:mrt_collections).
+          where("mrt_objects.primary_id = ?", params[:object]).
+          map {|c| c.mrt_collections.first }.
+          first.ark
       end
     end
 
     raise ErrorUnavailable if flexi_group_id.nil?
-    begin
+   begin
       @group = Group.find(flexi_group_id)
       session[:group] = @group.id
       params[:group] = @group.id
@@ -166,22 +168,9 @@ class ApplicationController < ActionController::Base
     raise ErrorUnavailable if !@permissions.include?('write')
   end
 
-  def require_object
-    redirect_to(ObjectList.merge({:group => flexi_group_id})) and return false if params[:object].nil?
-    begin
-      @object = UriInfo.new("#{RDF_ARK_URI}#{params[:object]}")
-    rescue Exception => ex
-      redirect_to(ObjectList.merge({:group => flexi_group_id})) and return false
-    end
-  end
-
   def require_mrt_object
     redirect_to(ObjectList.merge({:group => flexi_group_id})) and return false if params[:object].nil?
-    begin
-      @object = MrtObject.find_by_identifier(params[:object])
-    rescue Exception => ex
-      redirect_to(ObjectList.merge({:group => flexi_group_id})) and return false
-    end
+    @object = MrtObject.find_by_primary_id(params[:object])
   end
   
   def require_mrt_version
@@ -193,24 +182,12 @@ class ApplicationController < ActionController::Base
     @version = @object.versions[params[:version].to_i - 1]
   end
 
-  def require_version
-    redirect_to(:controller => :object, :action => 'index', :group => flexi_group_id, :object => params[:object]) and return false if params[:version].nil?
-    #get version of specific object
-    q = Q.new("?vers dc:identifier \"#{no_inject(params[:version])}\"^^<http://www.w3.org/2001/XMLSchema#string> .
-                ?vers rdf:type version:Version .
-                ?vers version:inObject ?obj .
-                ?obj rdf:type object:Object .
-                ?obj object:isStoredObjectFor ?meta .
-                ?obj dc:identifier \"#{no_inject(params[:object])}\"^^<http://www.w3.org/2001/XMLSchema#string>",
-      :select => "?vers")
-
-    res = store().select(q)
-
-    redirect_to(:controller => :object, :action => 'index', :group => flexi_group_id, :object => params[:object]) and return false if res.length != 1
-
-    @version = UriInfo.new(res[0]['vers'])
+  def require_size
+     @size = @object.total_actual_size
+     if @size > MAX_ARCHIVE_SIZE ? @exceeds_size = true : @exceeds_size = false
+     end
   end
-
+  
   def file_state_uri(id, version, fn)
     "#{FILE_STATE_URI}#{esc(id)}/#{esc(version)}/#{esc(fn)}"
   end
@@ -260,7 +237,7 @@ class ApplicationController < ActionController::Base
 
   def fetch_to_tempfile(*args)
     require 'open-uri'
-    require 'ftools'
+    require 'fileutils'
     open(*args) do |data|
       tmp_file = Tempfile.new('mrt_http')
       if data.instance_of? File then
@@ -279,7 +256,7 @@ class ApplicationController < ActionController::Base
   end
  
   def collection_ark
-    @collection ||= (/https?:\/\/\S+?\/(\S+)/.match(MrtObject.get_collection(params[:object])))[1]
+    @collection ||= MrtObject.find_by_primary_id(params[:object]).member_of.first
   end 
     
   #
@@ -287,7 +264,7 @@ class ApplicationController < ActionController::Base
   def construct_dua_uri(rx, component_uri)
      md = rx.match(component_uri.to_s)
      dua_filename = "#{md[1]}/" + urlencode(collection_ark)  + "/0/" + urlencode(APP_CONFIG['mrt_dua_file']) 
-     dua_file_uri = UriInfo.new(dua_filename)
+     dua_file_uri = dua_filename
      Rails.logger.debug("DUA File URI: " + dua_file_uri)
      return dua_file_uri
   end

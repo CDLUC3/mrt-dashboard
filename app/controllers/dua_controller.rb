@@ -9,7 +9,6 @@ class DuaController < ApplicationController
       tmp_dua_file = fetch_to_tempfile(session[:dua_file_uri])
       @dua_hash = Dua.parse_file(tmp_dua_file)
     end
-    Dua.dua_hash = @dua_hash
   end
   
   def index 
@@ -45,8 +44,12 @@ class DuaController < ApplicationController
                   }).deliver
        
       #user accepted DUA, go ahead and process file/object/version download
-      session[:collection_acceptance][@group.id] = true
+      # set the persistence flag for session level so DUA doesn't get displayed again for this session
+      if @dua_hash["Persistence"].eql?("session") then
+         session[:collection_acceptance][@group.id] = true
+      end
        # return to where user came from 
+       session[:perform_download] = true;
        redirect_to session[:return_to]
     elsif params[:commit].eql?("Do Not Accept") then
        puts "did not accept DUA"
