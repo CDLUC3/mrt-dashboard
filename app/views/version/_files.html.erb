@@ -1,0 +1,31 @@
+<% 
+download_disp = !@permissions.nil? && @permissions.include?('download')
+%>
+<%# the following must be passed in
+  files = files to display
+  obj = metadata obj
+  stored_object = Information about object storage
+  version = version of the stored object
+%>
+
+<h3><%=title%></h3>
+<div class ="files">
+  <% files.each do |file| %>
+    <div class="key">
+    	<% if download_disp then %>
+	      <%= link_to(File.basename(file.identifier),
+	          :controller => :file, :action => :display,
+	          :group => params[:group], :object => params[:object],
+	          :version => params[:version], :file => file.identifier)
+	          %></div>
+          <% else %>
+          	  <%= File.basename(file.identifier) %>
+        </div>
+	    <% end %>
+	    <div class="value">
+	      <%= file.media_type.gsub(/;.*$/, '') %>
+	      <%=number_to_storage_size(file.size)%>
+	    </div>
+  <% end %>
+</div>
+<div class="clear"></div>
