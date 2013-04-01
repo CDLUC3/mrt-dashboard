@@ -2,7 +2,6 @@
   UC3 Merritt: Add Object
 <% end %>
 <%= javascript_include_tag 'wztip/wz_tooltip.js' %>
-<script type="text/javascript" src="https://www.dropbox.com/static/api/1/dropbox.js" id="dropboxjs" data-app-key="900rxfl7nyc2ity"></script>
 
 <div class="grid_11">
   <h2>Add Object</h2>
@@ -23,10 +22,11 @@
       <label for="file">File:</label>
     </div>
     <div class="right_field">
-      <%=file_field_tag("file")%> <em>or</em>
-      <input type="dropbox-chooser" name="dropbox_file" style="visibility: hidden;" data-link-type="direct"/>
+      <%=file_field_tag("file")%>
     </div>
 
+  <div class="left_label">
+  </div>
   <div class="clear"></div>
   <h3>Optional description:</h3>
   <p>You will be able to search by the following fields:</p>
