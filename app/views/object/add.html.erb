@@ -2,6 +2,7 @@
   UC3 Merritt: Add Object
 <% end %>
 <%= javascript_include_tag 'wztip/wz_tooltip.js' %>
+
 <div class="grid_11">
   <h2>Add Object</h2>
   <div class="breadcrumbs">
@@ -24,15 +25,8 @@
       <%=file_field_tag("file")%>
     </div>
 
-    <div class="left_label">
-    </div>
-<!--
-    <div class="right_field">
-      <%=check_box_tag("update_object", 1, false, {:onclick => "toggle_update();"})%> <label for="update_object">Update this object instead of adding it</label>
-    </div>
-  <br/><br/>
--->
-
+  <div class="left_label">
+  </div>
   <div class="clear"></div>
   <h3>Optional description:</h3>
   <p>You will be able to search by the following fields:</p>

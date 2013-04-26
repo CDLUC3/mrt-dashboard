@@ -63,7 +63,6 @@ class ObjectController < ApplicationController
         client.send_timeout = 3600
         client.connect_timeout = 7200
         client.keep_alive_timeout = 3600
-
         response = client.post(INGEST_SERVICE, ingest_args, {"Content-Type" => "multipart/form-data"})
 
         render :status=>response.code, :content_type=>response.headers[:content_type], :text=>response.body
