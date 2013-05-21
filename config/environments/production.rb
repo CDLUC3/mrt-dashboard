@@ -6,10 +6,10 @@ MrtDashboard::Application.configure do
   config.i18n.fallbacks                    = true
   config.serve_static_assets               = true
   
-  INGEST_SERVICE      = 'http://uc3.cdlib.org:33121/poster/submit/'
-  INGEST_SERVICE_UPDATE   = 'http://uc3.cdlib.org:33121/poster/update/'
+  INGEST_SERVICE      = 'http://uc3-web.cdlib.org:33121/poster/submit/'
+  INGEST_SERVICE_UPDATE   = 'http://uc3-web.cdlib.org:33121/poster/update/'
   MERRITT_SERVER      = 'http://merritt.cdlib.org'
-  MINT_SERVICE        = 'http://uc3.cdlib.org:33121/ingest/request-identifier'
+  MINT_SERVICE        = 'http://uc3-web.cdlib.org:33121/ingest/request-identifier'
   N2T_URI             = "http://n2t.net/"
   RDF_ARK_URI         = "http://ark.cdlib.org/"
   RDF_COLLECTION_URI  = "http://uc3.cdlib.org/collection/"
