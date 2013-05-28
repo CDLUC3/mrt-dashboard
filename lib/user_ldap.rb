@@ -1,7 +1,13 @@
+require 'rubygems'
+require 'net/ldap'
+require 'lib/ldap_mixin'
+
 module UserLdap
   class Server
 
     include LdapMixin
+
+
 
     def find_all
       return @admin_ldap.search(:base => @base,

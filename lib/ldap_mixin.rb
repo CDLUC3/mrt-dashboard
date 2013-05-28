@@ -2,12 +2,15 @@
 #mixed in modules must define ns_dn(id) and obj_filter(id) methods which differ
 #for each (like a Java abstract class) as well as any specific methods for each
 
+require 'lib/noid'
+
 module LdapMixin
 
   class LdapException < Exception ; end
 
   attr_reader :ldap_connect, :minter
   attr_accessor :base, :admin_ldap
+
 
   def initialize(init_hash)
 

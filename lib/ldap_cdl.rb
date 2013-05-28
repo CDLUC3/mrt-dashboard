@@ -1,6 +1,7 @@
 require 'rubygems'
-require 'noid'
 require 'net/ldap'
+require 'noid'
+
 
 module LdapCdl
   class LdapException < Exception ; end
