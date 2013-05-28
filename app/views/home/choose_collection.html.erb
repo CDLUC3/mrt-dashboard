@@ -1,0 +1,36 @@
+<% content_for :title do %>
+  UC3 Merritt: Choose Collection
+<% end %>
+<div class="grid_11">
+  
+  
+  <h2>Welcome</h2>
+  <p>
+  The collections you have access to are listed below.  Choose a collection to search, display, download and (if authorized) add objects.  The guides at the right are accessible from the <strong>Help</strong> link available on any page.  Please contact UC3 support if you encounter any questions or issues as you use Merritt.  You can email uc3@ucop.edu or use the <strong>contact UC3</strong> link on any page.
+  </p>
+
+  <h3>Collections</h3>
+
+  <table width=100%>
+    <thead>
+      <tr>
+        <th style="width: 60%;">Collection</th>
+        <th style="width: 20%;">Permissions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @groups.each do |grp| %>
+      <tr class="<%=cycle('even', 'odd') %>">
+        <td><%= link_to(grp.description, :controller => 'collection', :action => 'index', :group => grp.id) %></td>
+        <td><%= permissions(grp.permission(current_user.login)) %></td>
+      </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+<div class="grid_1">&nbsp;</div>
+<div class="grid_4 sidebar">
+  
+  <%= render :partial => 'help/help_sidebar' %>
+  
+</div>

@@ -1,0 +1,27 @@
+syntax: glob
+
+.bundle
+db/*.sqlite3
+log/*.log
+tmp/*
+mrt-dashboard_development
+mrt-dashboard_test
+mrt-dashboard_production
+console
+help/*
+sqlite/*
+config/ldap.yml
+db/schema.rb
+.DS_Store
+.project
+.rvmrc
+
+#moved these down here since they look like regexen and they were in glob section
+
+syntax: regexp
+
+\.orig\..*$
+\.orig$
+\.chg\..*$
+\.rej$
+\.conflict\~$
