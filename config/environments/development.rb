@@ -18,4 +18,14 @@ MrtDashboard::Application.configure do
   CONTAINER_URL       = 'http://uc3-mrt-store-dev.cdlib.org:35121/container/'
 
   MAX_ARCHIVE_SIZE    = 2147483648
+
+  # Raise exception on mass assignment protection for Active Record models
+  config.active_record.mass_assignment_sanitizer = :strict
+
+  # Log the query plan for queries taking more than this (works
+  # with SQLite, MySQL, and PostgreSQL)
+  config.active_record.auto_explain_threshold_in_seconds = 0.5
+
+  config.log_tags = [:uuid, :remote_ip]
+
 end
