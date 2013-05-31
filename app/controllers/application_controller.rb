@@ -33,7 +33,7 @@ class ApplicationController < ActionController::Base
   end
 
   def urlunencode(item)
-    URI.unescape(item, Regexp.new("[^#{URI::PATTERN::UNRESERVED}]"))
+    URI.unescape(item)
   end
 
 
