@@ -121,7 +121,7 @@ class ApplicationController < ActionController::Base
   def require_group
     # parms{:group] that do not contain an ark id are a collection; all objects contain an ark.
     if !params[:group].nil? then
-      if  (params[:group].include? "ark:") then
+      if  (params[:group].start_with? "ark") then
       # check for collection existance.  if a collection exists, it an object otherwise it's a collection    
       # unencode the ark for the db lookup
       params[:group] =  urlunencode(params[:group])
