@@ -60,6 +60,20 @@ module LdapMixin
     replace_attribute(id, attribute, attr)
   end
 
+  # returns in unspecified order
+  def fetch_batch(ids)
+    # ids must be complete CNs
+    filter = nil
+    ids.each do |id|
+      if filter.nil? then
+        filter = obj_filter(id)
+      else
+        filter = filter | obj_filter(id)
+      end
+    end
+    @admin_ldap.search(:base=>@base, :filter=>filter)
+  end
+
   def fetch(id)
     results = @admin_ldap.search(:base => @base, :filter => obj_filter(id))
     raise LdapException.new('id does not exist') if results.length < 1
