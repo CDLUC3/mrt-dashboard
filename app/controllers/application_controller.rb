@@ -32,6 +32,10 @@ class ApplicationController < ActionController::Base
     URI.escape(item, Regexp.new("[^#{URI::PATTERN::UNRESERVED}]"))
   end
 
+  def urlunencode(item)
+    URI.unescape(item)
+  end
+
 
   def render_unavailable
     render :file => "#{Rails.root}/public/unavailable.html", :status => 500
@@ -118,7 +122,9 @@ class ApplicationController < ActionController::Base
     # parms{:group] that do not contain an ark id are a collection; all objects contain an ark.
     if !params[:group].nil? then
       if  (params[:group].include? "ark:") then
-      # check for collection existance.  if a collection exists, it an object otherwise it's a collection     
+      # check for collection existance.  if a collection exists, it an object otherwise it's a collection    
+      # unencode the ark for the db lookup
+      params[:group] =  urlunencode(params[:group])
         @collection = MrtObject.joins(:mrt_collections).
           where("mrt_objects.primary_id = ?", params[:group]).
           map {|c| c.mrt_collections.first }.
@@ -131,6 +137,7 @@ class ApplicationController < ActionController::Base
       end
     else  #obtain the group if its not yet been set
       if params[:group].nil? && !params[:object].nil? then
+          params[:object] =  urlunencode(params[:object])
           params[:group]= MrtObject.joins(:mrt_collections).
           where("mrt_objects.primary_id = ?", params[:object]).
           map {|c| c.mrt_collections.first }.
