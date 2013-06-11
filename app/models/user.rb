@@ -41,7 +41,7 @@ class User
  
   def groups(permission=nil)
     grp_ids = Group::LDAP.find_groups_for_user(self.login, User::LDAP, permission)
-    grp_ids.map{|id| Group.find(id)}
+    Group.find_batch(grp_ids)
   end
 
   def self.find_by_id(user_id)
