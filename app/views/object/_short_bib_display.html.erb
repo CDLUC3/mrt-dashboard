@@ -1,0 +1,13 @@
+<%# takes :obj passed in as local variable %>
+
+<% if !obj.who.blank? then %>
+  <%= dc_nice(obj.who) %>.
+<% end %>
+
+<% if !obj.what.blank? then %>
+  <span class="title"><%= dc_nice(obj.what) %></span>
+<% end %>
+
+<% if !obj.when.blank? then %>
+  (<%= dc_nice(obj.when) %>)
+<% end %>
