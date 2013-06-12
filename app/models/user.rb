@@ -1,6 +1,11 @@
-require 'lib/user_ldap'
+#require 'lib/user_ldap'
 
 class User 
+
+  # < ActiveRecord::Base
+
+  # atrr_accessible :login
+  # validates :login, :length => {:min => 4}
 
   
   LDAP = UserLdap::Server.
