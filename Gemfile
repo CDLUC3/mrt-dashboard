@@ -27,5 +27,8 @@ gem "mrt-ingest", "0.0.2"
 gem "builder"
 gem 'uuidtools'
 gem 'ruby-debug'
-gem "awesome_print"
+
+group :test, :development do
+	gem 'rspec-rails'
+end
 

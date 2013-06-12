@@ -1,3 +1,7 @@
+require 'lib/user_ldap'
+require 'lib/ldap_mixin'
+
+
 class UserController < ApplicationController
   before_filter :require_user
   before_filter :group_optional
@@ -25,7 +29,15 @@ class UserController < ApplicationController
       elsif params[:userpassword] != params[:repeatuserpassword] then
         @display_text += "Your password and repeated password do not match."
       else
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        
+        params[:telephonenumber] = "0" if (params[:telephonenumber] == "")
+        
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
         ['givenname', 'sn', 'mail', 'tzregion', 'telephonenumber'].each do |i|
+
           User::LDAP.replace_attribute(current_user.login, i, params[i])
         end
         ['cn', 'displayname'].each do |i|
