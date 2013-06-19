@@ -1,10 +1,15 @@
 class MrtFile < ActiveRecord::Base
+
+   include Encoder
+
   belongs_to :mrt_version
 
   # TODO deprecated
   def identifier
     return self.filename
   end
+
+  
 
   def bytestream_uri
     return URI.parse(self.bytestream)
@@ -13,4 +18,9 @@ class MrtFile < ActiveRecord::Base
   def message_digest
     return self.sha1
   end
+
+   def file_urlencode
+     return  urlencode_mod(self.identifier)
+  end
+
 end

@@ -29,8 +29,8 @@ class ApplicationController < ActionController::Base
 
 
   def urlencode(item)
-    URI.escape(item, Regexp.new("[^#{URI::PATTERN::UNRESERVED}]"))
-  end
+      URI.escape(item, Regexp.new("[^#{URI::PATTERN::UNRESERVED}]"))
+    end
 
 
   def render_unavailable
