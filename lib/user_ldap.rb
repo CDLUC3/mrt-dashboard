@@ -1,6 +1,6 @@
 require 'rubygems'
 require 'net/ldap'
-require 'lib/ldap_mixin'
+#require 'lib/ldap_mixin'
 
 module UserLdap
   class Server
