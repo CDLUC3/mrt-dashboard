@@ -25,3 +25,7 @@ syntax: regexp
 \.chg\..*$
 \.rej$
 \.conflict\~$
+
+
+.gitingnore
+.git/*
