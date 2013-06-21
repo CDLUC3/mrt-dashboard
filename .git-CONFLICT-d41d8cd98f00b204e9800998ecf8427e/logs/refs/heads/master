@@ -1,3 +1,8 @@
 0000000000000000000000000000000000000000 6dae64104179fd91bac3aa9c6d29320d692747af shirin238 <cinzia.faenza@gmail.com> 1371075677 -0700	commit (initial): added rspec, refactored css, added temporary patch for ldap telephonenumber in user_controller.rb
 6dae64104179fd91bac3aa9c6d29320d692747af f89e021581d85f0b49b656e52a45c21cf02f255d shirin238 <cinzia.faenza@gmail.com> 1371660090 -0700	commit: some changes
 f89e021581d85f0b49b656e52a45c21cf02f255d f82dc9b53b806662a155273046ee3b38811cc0c2 shirin238 <cinzia.faenza@gmail.com> 1371661196 -0700	commit (merge): changes
+f82dc9b53b806662a155273046ee3b38811cc0c2 3f9048c7ea91ab34914102c06a933a51988e9e71 shirin238 <cinzia.faenza@gmail.com> 1371830529 -0700	commit: nothing
+3f9048c7ea91ab34914102c06a933a51988e9e71 4025d321fcca0ebf0c92a0fcc624ebd55910976d shirin238 <cinzia.faenza@gmail.com> 1371830834 -0700	commit (merge): nothing
+4025d321fcca0ebf0c92a0fcc624ebd55910976d ac208cddc510cd6f1326df09c1b4d0173008bce8 shirin238 <cinzia.faenza@gmail.com> 1371831011 -0700	commit (merge): nothing
+ac208cddc510cd6f1326df09c1b4d0173008bce8 da210ac7cee0a7fb78da3ff849f55aba4a014ac8 shirin238 <cinzia.faenza@gmail.com> 1371842762 -0700	commit (merge): Merge branch 'ruby193'
+da210ac7cee0a7fb78da3ff849f55aba4a014ac8 8768e95239844debaae474ddf752ccc8429ff60f shirin238 <cinzia.faenza@gmail.com> 1371842873 -0700	commit: fixed Timezone bug

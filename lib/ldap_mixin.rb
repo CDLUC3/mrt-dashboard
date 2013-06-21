@@ -2,7 +2,7 @@
 #mixed in modules must define ns_dn(id) and obj_filter(id) methods which differ
 #for each (like a Java abstract class) as well as any specific methods for each
 
-require 'lib/noid'
+#require 'lib/noid'
 
 module LdapMixin
 
