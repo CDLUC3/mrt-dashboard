@@ -15,6 +15,10 @@ db/schema.rb
 .DS_Store
 .project
 .rvmrc
+.rvmrc.06.20.2013-10:03:30
+.gitignore
+.git/*
+^.git/*
 
 #moved these down here since they look like regexen and they were in glob section
 
@@ -25,7 +29,7 @@ syntax: regexp
 \.chg\..*$
 \.rej$
 \.conflict\~$
+^\.git$
 
 
-.gitingnore
-.git/*
+
