@@ -33,7 +33,7 @@ group :test, :development do
 	gem 'debugger'
 end
 
-# group :test do
-# 	gem 'capybara'
-# end
+group :test do
+ 	gem 'capybara', '1.1.2'
+end
 
