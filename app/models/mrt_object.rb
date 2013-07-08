@@ -6,6 +6,8 @@ class MrtObject < ActiveRecord::Base
   has_many :mrt_collections_mrt_objects
   has_many :mrt_collections, :through => :mrt_collections_mrt_objects
 
+  include Encoder
+
   def bytestream_uri
     return URI.parse(self.bytestream)
   end
@@ -66,4 +68,9 @@ class MrtObject < ActiveRecord::Base
   def producer_files 
     return self.files.select {|f| f.identifier.match(/^producer\//) }
   end
+
+  def ark_urlencode
+     return urlencode_mod(self.primary_id)
+  end
+  
 end
