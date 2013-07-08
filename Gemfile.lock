@@ -1,0 +1,124 @@
+GIT
+  remote: git://github.com/RoryO/ruby-net-ldap.git
+  revision: 74e994eed11a011cb73311e164a65a7dd7a62c01
+  ref: 74e994eed11a011cb73311e164a65a7dd7a62c01
+  specs:
+    net-ldap (0.1.2)
+
+GIT
+  remote: git://github.com/chrisfinne/eco_exception_notification.git
+  revision: 7fea2a178bc4b784130aa6debce67a5800a03c51
+  specs:
+    eco_exception_notification (3.0.0.rc1)
+      actionmailer (>= 3.0.4)
+
+GEM
+  remote: http://rubygems.org/
+  specs:
+    abstract (1.0.0)
+    actionmailer (3.0.20)
+      actionpack (= 3.0.20)
+      mail (~> 2.2.19)
+    actionpack (3.0.20)
+      activemodel (= 3.0.20)
+      activesupport (= 3.0.20)
+      builder (~> 2.1.2)
+      erubis (~> 2.6.6)
+      i18n (~> 0.5.0)
+      rack (~> 1.2.5)
+      rack-mount (~> 0.6.14)
+      rack-test (~> 0.5.7)
+      tzinfo (~> 0.3.23)
+    activemodel (3.0.20)
+      activesupport (= 3.0.20)
+      builder (~> 2.1.2)
+      i18n (~> 0.5.0)
+    activerecord (3.0.20)
+      activemodel (= 3.0.20)
+      activesupport (= 3.0.20)
+      arel (~> 2.0.10)
+      tzinfo (~> 0.3.23)
+    activerecord-mysql2-adapter (0.0.3)
+      mysql2
+    activeresource (3.0.20)
+      activemodel (= 3.0.20)
+      activesupport (= 3.0.20)
+    activesupport (3.0.20)
+    arel (2.0.10)
+    builder (2.1.2)
+    erubis (2.6.6)
+      abstract (>= 1.0.0)
+    httpclient (2.2.5)
+    i18n (0.5.0)
+    json (1.7.7)
+    kgio (2.0.0)
+    mail (2.2.19)
+      activesupport (>= 2.3.6)
+      i18n (>= 0.4.0)
+      mime-types (~> 1.16)
+      treetop (~> 1.4.8)
+    mime-types (1.21)
+    mrt-ingest (0.0.2)
+      json (>= 1.5.0)
+      rest-client (>= 1.6.0)
+    mysql2 (0.3.11)
+    nokogiri (1.5.0)
+    orchard (0.2)
+    polyglot (0.3.3)
+    rack (1.2.8)
+    rack-cache (1.1)
+      rack (>= 0.4)
+    rack-mount (0.6.14)
+      rack (>= 1.0.0)
+    rack-test (0.5.7)
+      rack (>= 1.0)
+    rails (3.0.20)
+      actionmailer (= 3.0.20)
+      actionpack (= 3.0.20)
+      activerecord (= 3.0.20)
+      activeresource (= 3.0.20)
+      activesupport (= 3.0.20)
+      bundler (~> 1.0)
+      railties (= 3.0.20)
+    railties (3.0.20)
+      actionpack (= 3.0.20)
+      activesupport (= 3.0.20)
+      rake (>= 0.8.7)
+      rdoc (~> 3.4)
+      thor (~> 0.14.4)
+    rake (10.0.3)
+    rdoc (3.12.1)
+      json (~> 1.4)
+    rest-client (1.6.7)
+      mime-types (>= 1.16)
+    thor (0.14.6)
+    treetop (1.4.12)
+      polyglot
+      polyglot (>= 0.3.1)
+    tzinfo (0.3.35)
+    unicode (0.4.2)
+    unicorn (3.1.0)
+      kgio (~> 2.0.0)
+      rack
+    uuidtools (2.1.3)
+    will_paginate (3.0.4)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  activerecord-mysql2-adapter (= 0.0.3)
+  builder
+  eco_exception_notification!
+  httpclient (~> 2.2.5)
+  mrt-ingest (= 0.0.2)
+  net-ldap (= 0.1.2)!
+  nokogiri
+  orchard
+  rack-cache
+  rails (= 3.0.20)
+  rest-client
+  unicode
+  unicorn (= 3.1.0)
+  uuidtools
+  will_paginate (~> 3.0.0)

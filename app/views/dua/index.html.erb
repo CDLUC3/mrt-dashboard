@@ -1,0 +1,55 @@
+<div class="grid_11">
+
+  <h2><%= @dua_hash["Title"] %></h2>
+
+  <br/>
+  <% if !flash[:message].blank? then %>
+    <p class="dynamic_message"><%= flash[:message] %></p>
+  <% end %>
+  <p><%= @dua_hash["Terms"] %></p>
+  
+  <%= form_tag({:action => 'index'}, :class => 'indented_form') do%>
+    <div class='short_text_description'>I accept all terms</div>
+	<%= check_box_tag 'accept', 'accept_checkbox', false%>
+
+    <br/><br/>
+    <div class='short_left_label'>
+    <%= label_tag('name', '* Name: ') %>
+    </div>
+      <div class='right_field'>
+    <%= text_field_tag('name', params[:name], :size => 50) %>
+    </div>
+    <div class="clear"></div>
+    
+    <br/>
+    <div class='short_left_label'>
+    <%= label_tag('affiliation', '* Affiliation: ') %>
+      </div>
+      <div class='right_field'>
+    <%= text_field_tag('affiliation', params[:affiliation], :size => 50) %>
+    </div>
+    <div class="clear"></div>
+
+    <br/>
+    <div class='short_left_label'>
+      <%= label_tag('user_agent_email', '* Email: ') %>
+      </div>
+      <div class='long_right_field'>
+      <%= text_field_tag('user_agent_email', params[:user_agent_email], :size => 50) %>
+    </div>
+    <div class="clear"></div><br/>
+
+    <div class='short_left_label'>
+      <span class="smaller">* Required</span>
+    </div>
+
+    <%= submit_tag('Accept') %>
+    <%= submit_tag('Do Not Accept', {:onClick => "window.close()"}) %>
+    
+    <br/><br/>
+    <div class='long_left_text'>
+    NOTE: Following acceptance, a copy of these agreement terms will be emailed to the email entered above
+    </div>
+  <% end%>
+
+</div>

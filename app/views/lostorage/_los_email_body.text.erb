@@ -1,0 +1,8 @@
+Collection: <%= @email_data['collection'] %> 
+Object: <%= @email_data['object'] %> 
+<% if @email_data['version'] then %>
+Version:  <%= @email_data['version'] %> 
+<% end %>
+Date: <%= Time.now.strftime("%Y-%m-%d %H:%M:%S %z") %>  
+
+<%= @email_data['link_info'] %> 
