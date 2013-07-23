@@ -10,7 +10,7 @@ gem "eco_exception_notification",
     :git => "git://github.com/chrisfinne/eco_exception_notification.git"
 
 gem "net-ldap" 
-gem "nokogiri"
+gem "nokogiri", "1.5.0"
 gem "rest-client"
 gem "unicorn", "3.1.0"
 gem "will_paginate"
