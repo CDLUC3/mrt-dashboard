@@ -6,7 +6,10 @@ class FileController < ApplicationController
   before_filter :require_group
 
   def display
+    params[:file] =  urlunencode(params[:file]) unless params[:file].nil?
+    
     filename = params[:file]
+
     # check if user has download permissions 
     if !@permissions.nil? && @permissions.include?('download') then
       # determine if user is retrieving a system file; otherwise assume they are obtaining
