@@ -21,6 +21,10 @@ class Group
     LDAP.find_users(grp_id)
   end
 
+  def self.find_batch(ids)
+    Group::LDAP.fetch_batch(ids).map{|l| self.make_from_ldap(l)}
+  end
+
   def self.find(id)
     #fetch by groupid, but otherwise, fall back to arkid
     ldap_group = begin
