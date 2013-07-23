@@ -130,7 +130,7 @@ class ApplicationController < ActionController::Base
           where("mrt_objects.primary_id = ?", params[:group]).
           map {|c| c.mrt_collections.first }.
           first
-        if !@collection.nil? then
+        unless @collection.nil? 
           params[:object] = params[:group] 
           params[:group] = @collection.ark 
 
