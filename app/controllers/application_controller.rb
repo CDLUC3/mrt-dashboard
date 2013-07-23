@@ -136,8 +136,8 @@ class ApplicationController < ActionController::Base
         end 
       end
     else  #obtain the group if its not yet been set
+      params[:object] =  urlunencode(params[:object])
       if params[:group].nil? && !params[:object].nil? then
-          params[:object] =  urlunencode(params[:object])
           params[:group]= MrtObject.joins(:mrt_collections).
           where("mrt_objects.primary_id = ?", params[:object]).
           map {|c| c.mrt_collections.first }.
