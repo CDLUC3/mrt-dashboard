@@ -78,15 +78,13 @@ GEM
       mime-types (~> 1.16)
       treetop (~> 1.4.8)
     mime-types (1.23)
-    mini_portile (0.5.0)
     mrt-ingest (0.0.2)
       json (>= 1.5.0)
       rest-client (>= 1.6.0)
     multi_json (1.7.7)
     mysql2 (0.3.11)
     net-ldap (0.3.1)
-    nokogiri (1.6.0)
-      mini_portile (~> 0.5.0)
+    nokogiri (1.5.0)
     orchard (0.2)
     polyglot (0.3.3)
     rack (1.4.5)
@@ -178,7 +176,7 @@ DEPENDENCIES
   mrt-ingest (= 0.0.2)
   mysql2
   net-ldap
-  nokogiri
+  nokogiri (= 1.5.0)
   orchard
   rack-cache
   rails (= 3.2.13)
