@@ -100,7 +100,7 @@ GEM
       polyglot (>= 0.3.1)
     tzinfo (0.3.37)
     unicode (0.4.4)
-    unicorn (4.6.3)
+    unicorn (4.5.0)
       kgio (~> 2.6)
       rack
       raindrops (~> 0.7)
@@ -124,6 +124,6 @@ DEPENDENCIES
   rails (= 3.2.13)
   rest-client
   unicode
-  unicorn
+  unicorn (= 4.5.0)
   uuidtools
   will_paginate
