@@ -25,16 +25,16 @@ end
 
 # augment to include terminate processing info [mjr]
 def up_to_date?(local_id, collection_id, last_updated, stopdate)
-  obj = MrtObject.joins(:mrt_collections).where(["local_id = ?", local_id]).where(:mrt_collections => { :ark => collection})
+  obj = MrtObject.joins(:mrt_collections).where(["local_id = ?", local_id]).where(:mrt_collections => { :ark => collection_id})
 
+  puts "checking date: #{last_updated}"
   # terminate processing?
   if ! stopdate.nil? && ! stopdate.nil?  then
     last_updated_date = DateTime.parse(last_updated)
     stopdate_date = DateTime.parse(stopdate)
 
-    puts "last update: #{last_updated_date}"
-    puts "stop: #{stopdate_date}"
-    if last_updated_date >= stopdate_date then
+    if stopdate_date >= last_updated_date then
+      puts "Exiting: #{stopdate_date} > #{last_updated_date}"
       return nil
     end
   end
@@ -71,8 +71,11 @@ def process_atom_feed(submitter, profile, collection, stopdate, starting_point)
         }.join("; ")
 
         p =  up_to_date?(local_id, collection, updated, stopdate)
-	break if p.nil?
-        next if p?
+	# exit
+        return if p.nil? 
+
+	# advance to next
+        return if p
 
         # pull out the urls
         urls = entry.xpath("atom:link", NS).map do |link| 
@@ -119,7 +122,12 @@ def process_atom_feed(submitter, profile, collection, stopdate, starting_point)
     next_page = xpath_content(doc, "/atom:feed/atom:link[@rel=\"next\"]/@href")
     sleep(PAGE_DELAY)
   end
-  server.join_server
+  ensure
+    puts "waiting for processing to finish"
+    begin
+      server.join_server
+    rescue
+    end
 end
 
 # call as rake "atom:update[atom URL, User Agent, Ingest Profile, Collection ID, Process until Date]"
