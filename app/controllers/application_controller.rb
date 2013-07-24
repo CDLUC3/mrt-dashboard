@@ -24,7 +24,6 @@ class ApplicationController < ActionController::Base
   protect_from_forgery
   layout 'application'
 
-  CollectionHome = {:controller => 'home', :action => 'choose_collection'}
   ObjectList = {:controller => 'collection', :action => 'index'}
 
 
