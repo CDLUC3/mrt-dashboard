@@ -3,7 +3,6 @@ class UserSessionsController < ApplicationController
   
   def login
     session[:expiry_time] = Time.now
-#    reset_session
   end
   
   def login_post
