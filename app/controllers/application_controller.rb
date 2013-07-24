@@ -171,8 +171,11 @@ class ApplicationController < ActionController::Base
   end
 
   def require_mrt_object
-    redirect_to({:controller => 'collection', :action => 'index', :group => flexi_group_id}) and return false if params[:object].nil?
-    @object = MrtObject.find_by_primary_id(params[:object])
+    if params[:object].nil? then    
+      redirect_to({:controller => 'collection', :action => 'index', :group => flexi_group_id}) and return false
+    else
+      @object = MrtObject.find_by_primary_id(params[:object])
+    end
   end
   
   def require_mrt_version
