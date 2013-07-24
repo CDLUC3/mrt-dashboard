@@ -24,9 +24,6 @@ class ApplicationController < ActionController::Base
   protect_from_forgery
   layout 'application'
 
-  ObjectList = {:controller => 'collection', :action => 'index'}
-
-
   def urlencode(item)
     URI.escape(item, Regexp.new("[^#{URI::PATTERN::UNRESERVED}]"))
   end
@@ -175,7 +172,7 @@ class ApplicationController < ActionController::Base
   end
 
   def require_mrt_object
-    redirect_to(ObjectList.merge({:group => flexi_group_id})) and return false if params[:object].nil?
+    redirect_to({:controller => 'collection', :action => 'index', :group => flexi_group_id}) and return false if params[:object].nil?
     @object = MrtObject.find_by_primary_id(params[:object])
   end
   
