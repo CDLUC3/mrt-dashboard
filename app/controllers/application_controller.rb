@@ -32,7 +32,6 @@ class ApplicationController < ActionController::Base
     URI.unescape(item)
   end
 
-
   def render_unavailable
     render :file => "#{Rails.root}/public/unavailable.html", :status => 500
   end
@@ -118,9 +117,9 @@ class ApplicationController < ActionController::Base
     # parms{:group] that do not contain an ark id are a collection; all objects contain an ark.
     if !params[:group].nil? then
       if  (params[:group].start_with? "ark") then
-      # check for collection existance.  if a collection exists, it an object otherwise it's a collection    
-      # unencode the ark for the db lookup
-      params[:group] =  urlunencode(params[:group])
+        # check for collection existance.  if a collection exists, it an object otherwise it's a collection    
+        # unencode the ark for the db lookup
+        params[:group] = urlunencode(params[:group])
         @collection = MrtObject.joins(:mrt_collections).
           where("mrt_objects.primary_id = ?", params[:group]).
           map {|c| c.mrt_collections.first }.
@@ -128,19 +127,19 @@ class ApplicationController < ActionController::Base
         if !@collection.nil? then
           params[:object] = params[:group] 
           params[:group] = @collection.ark 
-
         end 
       end
-    else  #obtain the group if its not yet been set
+    else
+      # obtain the group if its not yet been set
       if params[:group].nil? && !params[:object].nil? then
-          params[:object] =  urlunencode(params[:object])
-          params[:group]= MrtObject.joins(:mrt_collections).
+        params[:object] =  urlunencode(params[:object])
+        params[:group]= MrtObject.joins(:mrt_collections).
           where("mrt_objects.primary_id = ?", params[:object]).
           map {|c| c.mrt_collections.first }.
           first.ark
       end
     end
-
+    
     raise ErrorUnavailable if flexi_group_id.nil?
    begin
       @group = Group.find(flexi_group_id)
@@ -262,8 +261,8 @@ class ApplicationController < ActionController::Base
     @collection ||= MrtObject.find_by_primary_id(params[:object]).member_of.first
   end 
     
-  #
-  # parse the component (object, file, or version) uri to construct the DUA URI
+  # parse the component (object, file, or version) uri to construct
+  # the DUA URI
   def construct_dua_uri(rx, component_uri)
      md = rx.match(component_uri.to_s)
      dua_filename = "#{md[1]}/" + urlencode(collection_ark)  + "/0/" + urlencode(APP_CONFIG['mrt_dua_file']) 
