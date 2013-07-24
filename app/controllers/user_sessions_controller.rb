@@ -6,14 +6,7 @@ class UserSessionsController < ApplicationController
   end
   
   def login_post
-    if User.valid_ldap_credentials?(params[:login], params[:password]) then
-      flash[:notice] = "Login was successful"
-      session[:uid] = params[:login]
-      redirect_back_or_default "/home/choose_collection"
-    else
-      flash[:notice] = "Login unsuccessful"
-      render :action => :login
-    end
+    handle_login(params[:login], params[:password])
   end
   
   def logout
@@ -23,14 +16,16 @@ class UserSessionsController < ApplicationController
   end
   
   def guest_login
-    if User.valid_ldap_credentials?(User::GUEST_USER[:guest_user], User::GUEST_USER[:guest_password]) then
+    handle_login(User::GUEST_USER[:guest_user], User::GUEST_USER[:guest_password])
+  end
+  
+  protected
+
+  def handle_login(user_id, password)
+    if User.valid_ldap_credentials?(user_id, password) then
       flash[:notice] = "Login was successful"
-      session[:uid] = User::GUEST_USER[:guest_user]
-      if !session[:return_to].nil? then
-        redirect_to session[:return_to] 
-      else
-        redirect_back_or_default "/home/choose_collection"
-      end
+      session[:uid] = user_id
+      redirect_back_or_default "/home/choose_collection"
     else
       flash[:notice] = "Login unsuccessful"
       render :action => :login
