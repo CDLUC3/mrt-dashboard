@@ -19,7 +19,7 @@ root {
 body {
   background-color:#fff;
   font-family: Helvetica, Verdana, Tahoma, Arial, sans-serif;
-  font-size: 12px; 
+  font-size: 12px/1.5; 
 }
 
 .home {
@@ -356,12 +356,12 @@ div.value {
 }
 
 /* table styles */
-table {
+table{
     border-collapse:collapse;
 	font-size: 11px;
 }
 
-table, th {
+table, th, {
     /*border: 1px solid #cccccc;*/
 	border:0;
 }

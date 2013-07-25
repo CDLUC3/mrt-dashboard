@@ -24,10 +24,10 @@ class UserSessionsController < ApplicationController
   end
   
   def guest_login
-    if User.valid_ldap_credentials?(User::GUEST_USER[:guest_user], User::GUEST_USER[:guest_password])
+    if User.valid_ldap_credentials?(User::GUEST_USER[:guest_user], User::GUEST_USER[:guest_password]) then
       flash[:notice] = "Login was successful"
       session[:uid] = User::GUEST_USER[:guest_user]
-      if !session[:return_to].nil?
+      if !session[:return_to].nil? then
         redirect_to session[:return_to] 
       else
         redirect_back_or_default "/home/choose_collection"

@@ -8,9 +8,9 @@ download_disp = !@permissions.nil? && @permissions.include?('download')
           :controller       => :file,
           :action           => :display,
           :group            => params[:group],
-          :object           => @object.ark_urlencode,
+          :object           => params[:object],
           :version          => version.identifier,
-          :file             => file.file_urlencode %>
+          :file             => file.identifier %>
  <% else %>
 	 <%= File.basename(file.identifier) %>
  <% end %>
