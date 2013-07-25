@@ -29,7 +29,7 @@ def up_to_date?(local_id, collection_id, last_updated, stopdate)
 
   puts "checking date: #{last_updated}"
   # terminate processing?
-  if ! stopdate.nil? && ! stopdate.nil?  then
+  if ! last_updated.nil? && ! stopdate.nil?  then
     last_updated_date = DateTime.parse(last_updated)
     stopdate_date = DateTime.parse(stopdate)
 
