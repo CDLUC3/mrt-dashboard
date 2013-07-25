@@ -51,12 +51,11 @@
     <div class="clear"></div>
 
     <div class="left_label">Time zone:</div>
-
-    <% zones = TZInfo::Timezone.all_country_zone_identifiers.sort  %>
-   
-    <% zones = zones.map { |zone| [zone.gsub('_',' '), zone] } %>
+    <% zones = TZInfo::Timezone.all_country_zone_identifiers.sort
+        zones = zones.map { |zone| [zone.gsub('_',' '), zone] }
+    %>
     <div class="right_field">
-      <%= select_tag('tzregion', options_for_select(zones, @ldap_user['tzregion'].first) ) %>
+      <%= select_tag('tzregion', options_for_select(zones, @ldap_user['tzregion'].to_s) ) %>
     </div>
     <div class="clear"></div>
 

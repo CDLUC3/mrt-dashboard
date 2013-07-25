@@ -1,9 +1,4 @@
-
-
 class MrtObject < ActiveRecord::Base
-
-  include Encoder
-
   has_many :mrt_versions
   has_many :mrt_version_metadata, :through=>:mrt_versions
   has_many :mrt_files, :through=>:mrt_versions
@@ -71,9 +66,4 @@ class MrtObject < ActiveRecord::Base
   def producer_files 
     return self.files.select {|f| f.identifier.match(/^producer\//) }
   end
-
-  def ark_urlencode
-     return  urlencode_mod(self.primary_id)
-  end
-
 end

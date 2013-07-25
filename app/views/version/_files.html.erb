@@ -15,8 +15,8 @@ download_disp = !@permissions.nil? && @permissions.include?('download')
     	<% if download_disp then %>
 	      <%= link_to(File.basename(file.identifier),
 	          :controller => :file, :action => :display,
-	          :group => params[:group], :object => @object.ark_urlencode,
-	          :version => params[:version], :file => file.file_urlencode)
+	          :group => params[:group], :object => params[:object],
+	          :version => params[:version], :file => file.identifier)
 	          %></div>
           <% else %>
           	  <%= File.basename(file.identifier) %>
