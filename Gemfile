@@ -24,10 +24,6 @@ gem "mrt-ingest", "0.0.2"
 gem "builder"
 gem 'uuidtools'
 
-
 # Rails 3.1 - JavaScript
 gem 'jquery-rails'
 
-# group :test, :development do
-# 	gem 'debugger'
-# end
