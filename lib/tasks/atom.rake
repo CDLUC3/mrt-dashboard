@@ -27,9 +27,8 @@ end
 def up_to_date?(local_id, collection_id, last_updated, stopdate)
   obj = MrtObject.joins(:mrt_collections).where(["local_id = ?", local_id]).where(:mrt_collections => { :ark => collection_id})
 
-  puts "checking date: #{last_updated}"
   # terminate processing?
-  if ! stopdate.nil? && ! stopdate.nil?  then
+  if ! last_updated.nil? && ! stopdate.nil?  then
     last_updated_date = DateTime.parse(last_updated)
     stopdate_date = DateTime.parse(stopdate)
 
@@ -46,7 +45,14 @@ def up_to_date?(local_id, collection_id, last_updated, stopdate)
       return false 
     else
       last_updated_date = DateTime.parse(last_updated)
-      return last_updated_date >= obj.first.last_add_version
+      updated = last_updated_date <= obj.first.last_add_version
+      if (! updated) then
+	puts "Updating #{local_id}"
+      else
+	puts "NO need to update: #{local_id}"
+	puts "                   #{last_updated_date} <= #{obj.first.last_add_version}"
+      end
+      return updated
     end
   end
 end
@@ -71,11 +77,10 @@ def process_atom_feed(submitter, profile, collection, stopdate, starting_point)
         }.join("; ")
 
         p =  up_to_date?(local_id, collection, updated, stopdate)
-	# exit
         return if p.nil? 
 
 	# advance to next
-        return if p
+        next if p
 
         # pull out the urls
         urls = entry.xpath("atom:link", NS).map do |link| 
@@ -113,6 +118,8 @@ def process_atom_feed(submitter, profile, collection, stopdate, starting_point)
         end
         iobject.start_ingest(client, profile, submitter)
       rescue Exception=>ex
+	puts ex.message
+	puts ex.backtrace
         local_id = xpath_content(entry, "atom:id")
         puts "Exception processing #{local_id} from #{next_page}."
       end

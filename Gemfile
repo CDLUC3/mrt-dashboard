@@ -17,3 +17,4 @@ gem "activerecord-mysql2-adapter", "0.0.3"
 gem "mrt-ingest", "0.0.2"
 gem "builder"
 gem 'uuidtools'
+
