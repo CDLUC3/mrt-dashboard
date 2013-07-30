@@ -6,7 +6,7 @@ class Rack::Response
 end
 
 class ApplicationController < ActionController::Base
-  helper_method :available_groups, :current_user, :current_uid
+  helper_method :available_groups, :current_user, :current_uid, :current_user_displayname
 
   class Streamer
     def initialize(url)
@@ -95,6 +95,10 @@ class ApplicationController < ActionController::Base
   # basic auth. Will not hit LDAP unless using basic auth
   def current_uid
     session[:uid] || current_user.id
+  end
+
+  def current_user_displayname
+    session[:user_displayname] ||= current_user.displayname
   end
 
   # if a user is not logged in then it will default to looging them in as a guest user
