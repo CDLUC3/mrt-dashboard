@@ -17,9 +17,8 @@
   </head>
   <body>
     <div class="container_16">
-      <% usr = current_user
-      if usr then
-        if @group.nil? then %>
+      <% if current_user then %>
+        <% if @group.nil? then %>
           <%= render :partial => "shared/no_collection_head" %>
         <% else %>
           <%= render :partial => "shared/collection_head" %>
