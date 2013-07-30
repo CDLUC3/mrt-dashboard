@@ -190,9 +190,7 @@ class ApplicationController < ActionController::Base
   end
 
   def require_size
-     @size = @object.total_actual_size
-     if @size > MAX_ARCHIVE_SIZE ? @exceeds_size = true : @exceeds_size = false
-     end
+    @exceeds_size = (@object.total_actual_size > MAX_ARCHIVE_SIZE)
   end
   
   def file_state_uri(id, version, fn)
