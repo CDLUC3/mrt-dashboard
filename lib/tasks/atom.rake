@@ -23,25 +23,42 @@ def xpath_content(node, xpath)
   return nodes[0].content
 end
 
-def up_to_date?(store, local_id, last_updated)
-  q = Mrt::Sparql::Q.new("?s object:localIdentifier \"#{local_id}\"")
-  res = store.select(q)
-  if res.empty? then
+# augment to include terminate processing info [mjr]
+def up_to_date?(local_id, collection_id, last_updated, stopdate)
+  obj = MrtObject.joins(:mrt_collections).where(["local_id = ?", local_id]).where(:mrt_collections => { :ark => collection_id})
+
+  # terminate processing?
+  if ! last_updated.nil? && ! stopdate.nil?  then
+    last_updated_date = DateTime.parse(last_updated)
+    stopdate_date = DateTime.parse(stopdate)
+
+    if stopdate_date >= last_updated_date then
+      puts "Exiting: #{stopdate_date} > #{last_updated_date}"
+      return nil
+    end
+  end
+
+  if obj.empty? then
     return false
   else
-    obj = MrtObject.new(res[0]['s'])
     if last_updated.nil? then
       return false 
     else
       last_updated_date = DateTime.parse(last_updated)
-      return last_updated_date >= obj.modified
+      updated = last_updated_date <= obj.first.last_add_version
+      if (! updated) then
+	puts "Updating #{local_id}"
+      else
+	puts "NO need to update: #{local_id}"
+	puts "                   #{last_updated_date} <= #{obj.first.last_add_version}"
+      end
+      return updated
     end
   end
 end
 
-def process_atom_feed(submitter, profile, starting_point)
-  store = Mrt::Sparql::Store.new(SPARQL_ENDPOINT)
-  client = Mrt::Ingest::Client.new(INGEST_SERVICE_ADD)
+def process_atom_feed(submitter, profile, collection, stopdate, starting_point)
+  client = Mrt::Ingest::Client.new(INGEST_SERVICE)
   server = Mrt::Ingest::OneTimeServer.new
   server.start_server
   next_page = starting_point
@@ -59,7 +76,11 @@ def process_atom_feed(submitter, profile, starting_point)
           xpath_content(au, "atom:name")
         }.join("; ")
 
-        next if up_to_date? (store, local_id, updated)
+        p =  up_to_date?(local_id, collection, updated, stopdate)
+        return if p.nil? 
+
+	# advance to next
+        next if p
 
         # pull out the urls
         urls = entry.xpath("atom:link", NS).map do |link| 
@@ -97,21 +118,29 @@ def process_atom_feed(submitter, profile, starting_point)
         end
         iobject.start_ingest(client, profile, submitter)
       rescue Exception=>ex
+	puts ex.message
+	puts ex.backtrace
         local_id = xpath_content(entry, "atom:id")
         puts "Exception processing #{local_id} from #{next_page}."
       end
     end
     i = i + 1
-    break if (i > 20)
+    # break if (i > 20)
     next_page = xpath_content(doc, "/atom:feed/atom:link[@rel=\"next\"]/@href")
     sleep(PAGE_DELAY)
   end
-  server.join_server
+  ensure
+    puts "waiting for processing to finish"
+    begin
+      server.join_server
+    rescue
+    end
 end
 
-# call as rake "atom:update[http://opencontext.org/all/.atom, egh/Erik Hetzner, ucb_open_context_content]"
+# call as rake "atom:update[atom URL, User Agent, Ingest Profile, Collection ID, Process until Date]"
+# e.g. rake "atom:update[http://opencontext.org/all/.atom, mreyes/Mark Reyes, ucb_open_context_content, ark:/99999/abcdefhi, <DATE>]"
 namespace :atom do
-  task :update, [:root, :user, :profile] => :environment do |cmd, args|
-    process_atom_feed(args[:user], args[:profile], args[:root])
+  task :update, [:root, :user, :profile, :collection, :stopdate] => :environment do |cmd, args|
+    process_atom_feed(args[:user], args[:profile], args[:collection], args[:stopdate], args[:root])
   end
 end
