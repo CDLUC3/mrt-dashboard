@@ -8,14 +8,14 @@ They display differently depending on what is set.
 2. add object displays if the person has write permissions
    otherwise, if nil or no write permissions it's skipped.
 
-3. "change collection" only displays if there if @groups set and its length is > 1
+3. "change collection" only displays if available_groups has length > 1
 
 4. further, the css has to insert last into the li css class if a menu is the last one displayed
 =end
 
 home_disp = !@group.nil?
 add_disp = have_permission('write')
-change_disp = !@groups.nil? && @groups.length > 1 && !@group.nil?
+change_disp = @group && available_groups().length > 1
 
 last_menu = if change_disp then 'change' elsif add_disp then 'add' else 'home' end
 
@@ -43,9 +43,9 @@ last_menu = if change_disp then 'change' elsif add_disp then 'add' else 'home' e
           {:role => 'menuitem', :tabindex => "0", :class => 'sub', 'aria-haspopup' => "true"}) %>
       <ul role="menu">
         <% curr_item = 0
-        @groups.each do |grp|
+        available_groups.each do |grp|
           curr_item += 1 %>
-          <li id="" class="<%= curr_item == @groups.length ? 'last' : '' %>">
+          <li id="" class="<%= curr_item == available_groups.length ? 'last' : '' %>">
             <%= link_to(grp.description, {:controller => 'collection', :action => 'index', :group => grp.id}) %>
           </li>
         <% end %>

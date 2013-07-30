@@ -6,6 +6,8 @@ class Rack::Response
 end
 
 class ApplicationController < ActionController::Base
+  helper_method :available_groups
+
   class Streamer
     def initialize(url)
       @url = url
@@ -50,6 +52,14 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  # Return the groups which the user may be a member of
+  def available_groups
+    if !defined?(@_available_groups) then
+      @_available_groups = current_user.groups.sort_by{|group| group.description.downcase } || []
+    end
+    return @_available_groups
+  end
+
   private
 
   #lets the group get itself from the params, but if not, from the session
@@ -75,7 +85,7 @@ class ApplicationController < ActionController::Base
     end
     return @_current_user
   end
-  
+
   # if a user is not logged in then it will default to looging them in as a guest user
   # if the object is not public then the user will need to navigate to the login page and
   # login with their own credentials - mstrong 4/12/12
@@ -151,8 +161,7 @@ class ApplicationController < ActionController::Base
       raise ErrorUnavailable
     end
     raise ErrorUnavailable if @permissions.length < 1
-    @groups = current_user.groups.sort{|x, y| x.description.downcase <=> y.description.downcase}
-    raise ErrorUnavailable if !@groups.map{|grp| grp.id}.include?(flexi_group_id)
+    raise ErrorUnavailable if !available_groups.map{|grp| grp.id}.include?(flexi_group_id)
     # initialize the DUA acceptance to false - once the user accepts for a collection, it will be set to true.  
     # Resets at logout
     if session[:collection_acceptance].nil? then 
