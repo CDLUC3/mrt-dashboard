@@ -164,13 +164,9 @@ class ApplicationController < ActionController::Base
     end
     
     raise ErrorUnavailable if flexi_group_id.nil?
-    begin
-      @group = Group.find(flexi_group_id)
-      store_group(@group)
-      params[:group] = @group.id
-    rescue Exception => ex
-      raise ErrorUnavailable
-    end
+    @group = Group.find(flexi_group_id)
+    store_group(@group)
+    params[:group] = @group.id
     raise ErrorUnavailable if current_permissions.length < 1
     # initialize the DUA acceptance to false - once the user accepts for a collection, it will be set to true.  
     # Resets at logout
