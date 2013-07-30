@@ -226,6 +226,7 @@ class ApplicationController < ActionController::Base
   
   def store_group(group)
     session[:group_id] = group.id
+    session[:group_ark] = group.ark_id
   end
 
   def redirect_back_or_default(default)
