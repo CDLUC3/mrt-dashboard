@@ -39,6 +39,17 @@ class ApplicationController < ActionController::Base
   helper :all
   helper_method :current_user
   
+  def require_permissions(which, redirect=nil)
+    if (@permissions.nil? || !@permissions.include?(which)) then
+      flash[:error] = "You do not have #{which} permissions."
+      redirect ||= {
+        :action => 'index',
+        :group => flexi_group_id,
+        :object =>params[:object]  }
+      redirect_to(redirect) and return false
+    end
+  end
+
   private
 
   #lets the group get itself from the params, but if not, from the session
@@ -82,15 +93,6 @@ class ApplicationController < ActionController::Base
   def require_user_or_401
     unless current_user 
       render :status=>401, :text=>"" and return
-    end
-  end
-
-  def require_permissions(which)
-    if (@permissions.nil? || !@permissions.include?(which)) then
-      flash[:error] = 'You do not have #{which} permissions.'     
-      redirect_to(:action => 'index', 
-                  :group => flexi_group_id,
-                  :object =>params[:object]) and return false
     end
   end
 
