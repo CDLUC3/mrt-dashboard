@@ -1,31 +1,31 @@
 class CollectionController < ApplicationController
   before_filter :require_user
-  before_filter :require_group
+  before_filter :require_group, :only=>[:index, :search_results]
 
   def object_count
-    @object_count = my_cache("#{@group.id}_object_count") do
-      @group.object_count
+    @object_count = my_cache("#{session[:group_id]}_object_count") do
+      current_group.object_count
     end
     render :partial=>"object_count"
   end
 
   def version_count
-    @version_count = my_cache("#{@group.id}_version_count") do
-      @group.version_count
+    @version_count = my_cache("#{session[:group_id]}_version_count") do
+      current_group.version_count
     end
     render :partial=>"version_count"
   end
 
   def file_count
-    @file_count = my_cache("#{@group.id}_file_count") do 
-      @group.file_count
+    @file_count = my_cache("#{session[:group_id]}_file_count") do 
+      current_group.file_count
     end
     render :partial=>"file_count"
   end
 
   def total_size
-    @total_size = my_cache("#{@group.id}_total_size") do
-      @group.total_size
+    @total_size = my_cache("#{session[:group_id]}_total_size") do
+      current_group.total_size
     end
     render :partial=>"total_size"
   end
