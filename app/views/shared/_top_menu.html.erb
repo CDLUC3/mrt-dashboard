@@ -5,7 +5,7 @@ They display differently depending on what is set.
 1. collection home displays either "/group/index?group=<id>" if @group set or
    or displays /home/choose_collection if @group NOT set.
 
-2. add object displays if the person has write permissions (@permissions.include?('write'))
+2. add object displays if the person has write permissions
    otherwise, if nil or no write permissions it's skipped.
 
 3. "change collection" only displays if there if @groups set and its length is > 1
@@ -14,7 +14,7 @@ They display differently depending on what is set.
 =end
 
 home_disp = !@group.nil?
-add_disp = !@permissions.nil? && @permissions.include?('write')
+add_disp = have_permission('write')
 change_disp = !@groups.nil? && @groups.length > 1 && !@group.nil?
 
 last_menu = if change_disp then 'change' elsif add_disp then 'add' else 'home' end
