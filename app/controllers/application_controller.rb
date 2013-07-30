@@ -6,7 +6,7 @@ class Rack::Response
 end
 
 class ApplicationController < ActionController::Base
-  helper_method :available_groups
+  helper_method :available_groups, :current_user, :current_uid
 
   class Streamer
     def initialize(url)
@@ -39,7 +39,6 @@ class ApplicationController < ActionController::Base
   end
 
   helper :all
-  helper_method :current_user
   
   def require_permissions(which, redirect=nil)
     if (@permissions.nil? || !@permissions.include?(which)) then
