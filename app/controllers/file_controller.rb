@@ -23,7 +23,6 @@ class FileController < ApplicationController
     file = MrtObject.where(:primary_id=>params[:object]).first.
       versions.where(:version_number=>params[:version]).first.
       files.where(:filename=>filename).first
-    puts file
     file_uri = URI.parse(file.bytestream)
     Rails.logger.info(file_uri)
     
