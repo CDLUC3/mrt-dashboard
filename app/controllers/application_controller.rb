@@ -140,9 +140,9 @@ class ApplicationController < ActionController::Base
     end
     
     raise ErrorUnavailable if flexi_group_id.nil?
-   begin
+    begin
       @group = Group.find(flexi_group_id)
-     store_group(@group)
+      store_group(@group)
       params[:group] = @group.id
     rescue Exception => ex
       raise ErrorUnavailable
@@ -161,7 +161,6 @@ class ApplicationController < ActionController::Base
     if session[:collection_acceptance].nil? then 
       session[:collection_acceptance] = Hash.new(false)
     end
-
   end
 
   #require write access to this group
