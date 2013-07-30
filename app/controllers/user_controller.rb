@@ -1,6 +1,5 @@
 class UserController < ApplicationController
   before_filter :require_user
-  before_filter :group_optional
 
   REQUIRED = {
     'givenname'          => 'First name', 
