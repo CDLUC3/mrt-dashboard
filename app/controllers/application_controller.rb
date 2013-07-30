@@ -92,11 +92,17 @@ class ApplicationController < ActionController::Base
     return @_current_user
   end
 
+  # either return the uid from the session OR get the user id from
+  # basic auth. Will not hit LDAP unless using basic auth
+  def current_uid
+    session[:uid] || current_user.id
+  end
+
   # if a user is not logged in then it will default to looging them in as a guest user
   # if the object is not public then the user will need to navigate to the login page and
   # login with their own credentials - mstrong 4/12/12
   def require_user
-    unless current_user
+    unless current_uid
       store_location
       flash[:notice] = "You must be logged in to access the page you requested"
       # finish encoding the ark: if it wasn't already (apache only encodes slashes)
