@@ -58,22 +58,22 @@ class ApplicationController < ActionController::Base
   end
   
   def current_user
-    if !defined?(@current_user) then
+    if !defined?(@_current_user) then
       if !session[:uid].nil? then
         # normal form login
-        @current_user = User.find_by_id(session[:uid])
+        @_current_user = User.find_by_id(session[:uid])
       else
         # http basic auth
         auth = request.headers['HTTP_AUTHORIZATION']
         if (!auth.blank? && auth.match(/Basic /)) then
           (login, password) = Base64.decode64(auth.gsub(/Basic /,'')).split(/:/)
           if User.valid_ldap_credentials?(login, password)
-            @current_user = User.find_by_id(login)
+            @_current_user = User.find_by_id(login)
           end
         end
       end
     end
-    return @current_user
+    return @_current_user
   end
   
   # if a user is not logged in then it will default to looging them in as a guest user
