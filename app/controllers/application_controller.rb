@@ -54,10 +54,16 @@ class ApplicationController < ActionController::Base
 
   # Return the groups which the user may be a member of
   def available_groups
-    if !defined?(@_available_groups) then
-      @_available_groups = current_user.groups.sort_by{|group| group.description.downcase } || []
+    if !session[:available_groups] then
+      # store the groups in the session as an array of hashes
+      groups = current_user.groups.sort_by{|g| g.description.downcase } || []
+      session[:available_groups] = groups.map do |group|
+        { :id => group.id, 
+          :description => group.description,
+          :permissions => group.permission(current_user.login) }
+      end
     end
-    return @_available_groups
+    return session[:available_groups]
   end
 
   private
@@ -66,7 +72,7 @@ class ApplicationController < ActionController::Base
   def flexi_group_id
     params[:group] or session[:group]
   end
-  
+
   def current_user
     if !defined?(@_current_user) then
       if !session[:uid].nil? then
