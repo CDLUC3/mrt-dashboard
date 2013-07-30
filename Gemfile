@@ -27,3 +27,6 @@ gem 'uuidtools'
 # Rails 3.1 - JavaScript
 gem 'jquery-rails'
 
+group :test, :development do
+ 	gem 'ruby-debug'
+end

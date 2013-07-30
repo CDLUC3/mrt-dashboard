@@ -37,6 +37,7 @@ GEM
       multi_json (~> 1.0)
     arel (3.0.2)
     builder (3.0.4)
+    columnize (0.3.6)
     erubis (2.7.0)
     hike (1.2.3)
     httpclient (2.2.7)
@@ -47,6 +48,8 @@ GEM
       thor (>= 0.14, < 2.0)
     json (1.8.0)
     kgio (2.8.0)
+    linecache (0.46)
+      rbx-require-relative (> 0.0.4)
     mail (2.5.4)
       mime-types (~> 1.16)
       treetop (~> 1.4.8)
@@ -84,10 +87,16 @@ GEM
       thor (>= 0.14.6, < 2.0)
     raindrops (0.11.0)
     rake (10.1.0)
+    rbx-require-relative (0.0.9)
     rdoc (3.12.2)
       json (~> 1.4)
     rest-client (1.6.7)
       mime-types (>= 1.16)
+    ruby-debug (0.10.4)
+      columnize (>= 0.1)
+      ruby-debug-base (~> 0.10.4.0)
+    ruby-debug-base (0.10.4)
+      linecache (>= 0.3)
     sprockets (2.2.2)
       hike (~> 1.2)
       multi_json (~> 1.0)
@@ -123,6 +132,7 @@ DEPENDENCIES
   rack-cache
   rails (= 3.2.13)
   rest-client
+  ruby-debug
   unicode
   unicorn (= 4.5.0)
   uuidtools
