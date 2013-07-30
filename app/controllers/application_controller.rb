@@ -144,10 +144,6 @@ class ApplicationController < ActionController::Base
       @group = Group.find(flexi_group_id)
       store_group(@group)
       params[:group] = @group.id
-    rescue Exception => ex
-      raise ErrorUnavailable
-    end
-    begin
       @permissions = @group.permission(current_user.login)
     rescue Exception => ex
       raise ErrorUnavailable
