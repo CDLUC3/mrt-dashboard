@@ -178,12 +178,15 @@ class ApplicationController < ActionController::Base
   end
   
   def require_mrt_version
-    redirect_to(:controller => :object,
-                :action => 'index', 
-                :group => flexi_group_id,
-                :object => params[:object]) and return false if params[:version].nil?
-    require_mrt_object() if @object.nil?
-    @version = @object.versions[params[:version].to_i - 1]
+    if params[:version].nil? then
+      redirect_to(:controller => :object,
+                  :action => 'index', 
+                  :group => flexi_group_id,
+                  :object => params[:object]) and return false
+    else
+      require_mrt_object() if @object.nil?
+      @version = @object.versions[params[:version].to_i - 1]
+    end
   end
 
   def require_size
