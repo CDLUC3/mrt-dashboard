@@ -142,7 +142,7 @@ class ApplicationController < ActionController::Base
     raise ErrorUnavailable if flexi_group_id.nil?
    begin
       @group = Group.find(flexi_group_id)
-      session[:group] = @group.id
+     store_group(@group)
       params[:group] = @group.id
     rescue Exception => ex
       raise ErrorUnavailable
@@ -205,6 +205,10 @@ class ApplicationController < ActionController::Base
     session[:version] = request.params[:version]
   end
   
+  def store_group(group)
+    session[:group] = group.id
+  end
+
   def redirect_back_or_default(default)
     redirect_to(session[:return_to] || default)
     session[:return_to] = nil
