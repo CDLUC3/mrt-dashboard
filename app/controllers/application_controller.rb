@@ -70,7 +70,7 @@ class ApplicationController < ActionController::Base
 
   #lets the group get itself from the params, but if not, from the session
   def flexi_group_id
-    params[:group] or session[:group]
+    params[:group] or session[:group_id]
   end
 
   def current_user
@@ -126,7 +126,11 @@ class ApplicationController < ActionController::Base
       require_group
     end
   end
-  
+
+  def current_group
+    @_current_group ||= Group.find(session[:group_id])
+  end
+
   #require a group if user logged in
   #but hackish thing to get group from session instead of params if help files didn't pass it along
   # 3.30.12 mstrong added logic to determine if :group is an object or collection
@@ -216,7 +220,7 @@ class ApplicationController < ActionController::Base
   end
   
   def store_group(group)
-    session[:group] = group.id
+    session[:group_id] = group.id
   end
 
   def redirect_back_or_default(default)
