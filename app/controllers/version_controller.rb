@@ -7,8 +7,8 @@ class VersionController < ApplicationController
   before_filter :require_size,                    :only => [:download]
 
   def require_session_object_version
-      params[:object] = session[:object] if !session[:object].nil? && params[:object].nil?
-      params[:version] = session[:version] if !session[:version].nil? && params[:version].nil?
+    params[:object] = session[:object] if !session[:object].nil? && params[:object].nil?
+    params[:version] = session[:version] if !session[:version].nil? && params[:version].nil?
   end
 
   def index
