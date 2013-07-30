@@ -4,7 +4,6 @@ class VersionController < ApplicationController
   before_filter :require_session_object_version,  :only => [:download]
   before_filter :require_mrt_object
   before_filter :require_mrt_version
-  before_filter :require_size,                    :only => [:download]
   before_filter :require_download_permissions,    :only => [:download]
 
   def require_session_object_version
@@ -60,7 +59,7 @@ class VersionController < ApplicationController
     end
 
     # if size is > 4GB, redirect to have user enter email for asynch compression (skipping streaming)
-    if @exceeds_size then
+    if exceeds_size() then
       #if user canceled out of enterering email redirect to object landing page
       if session[:perform_async].eql?("cancel") then
         session[:perform_async] = false;  #reinitalize flag to false
