@@ -1,6 +1,5 @@
 class AdminController < ApplicationController
   before_filter :require_user
-  before_filter :group_optional
 
   def create_user
     @ldap_user = {'tzregion' => 'America/Los_Angeles'}

@@ -1,6 +1,5 @@
 class HomeController < ApplicationController
   before_filter :require_user,    :only => :choose_collection
-  before_filter :group_optional
 
   def choose_collection
     if (available_groups.length == 1) then

@@ -129,17 +129,6 @@ class ApplicationController < ActionController::Base
     require_permissions('download')
   end
 
-  # tries to get the group for help files, but otherwise skips
-  def group_optional
-    grp = flexi_group_id
-    if grp.nil? then
-      @group = nil
-    else
-      @group = Group.find(flexi_group_id)
-      require_group
-    end
-  end
-
   def current_group
     @_current_group ||= Group.find(session[:group_id])
   end
