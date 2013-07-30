@@ -1,4 +1,6 @@
-class User
+class User 
+
+  
   LDAP = UserLdap::Server.
     new({ :host            => LDAP_CONFIG["host"],
           :port            => LDAP_CONFIG["port"],

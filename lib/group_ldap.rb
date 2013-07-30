@@ -1,4 +1,5 @@
 require 'rubygems'
+require 'net/ldap'
 require 'noid'
 require 'ldap_mixin'
 
