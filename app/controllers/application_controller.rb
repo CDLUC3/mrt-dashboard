@@ -218,10 +218,6 @@ class ApplicationController < ActionController::Base
     URI.escape(i, Regexp.new("[^#{URI::PATTERN::UNRESERVED}]"))
   end
 
-  def no_inject(str)
-    str.gsub('"', '\\"')
-  end
-
   def my_cache(key, expires_in = 600)
     Mrt::Cache.cache(key, expires_in) do
       yield()
