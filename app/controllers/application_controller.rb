@@ -6,7 +6,7 @@ class Rack::Response
 end
 
 class ApplicationController < ActionController::Base
-  helper_method :available_groups, :current_user, :current_uid, :current_user_displayname
+  helper_method :available_groups, :current_user, :current_uid, :current_user_displayname, :current_permissions
 
   class Streamer
     def initialize(url)
@@ -40,8 +40,12 @@ class ApplicationController < ActionController::Base
 
   helper :all
   
+  def current_permissions
+    session[:permissions] ||= (current_group.permission(current_uid) || [])
+  end
+  
   def require_permissions(which, redirect=nil)
-    if (@permissions.nil? || !@permissions.include?(which)) then
+    if (!current_permissions.include?(which)) then
       flash[:error] = "You do not have #{which} permissions."
       redirect ||= {
         :action => 'index',
@@ -175,11 +179,10 @@ class ApplicationController < ActionController::Base
       @group = Group.find(flexi_group_id)
       store_group(@group)
       params[:group] = @group.id
-      @permissions = @group.permission(current_user.login)
     rescue Exception => ex
       raise ErrorUnavailable
     end
-    raise ErrorUnavailable if @permissions.length < 1
+    raise ErrorUnavailable if current_permissions.length < 1
     # initialize the DUA acceptance to false - once the user accepts for a collection, it will be set to true.  
     # Resets at logout
     if session[:collection_acceptance].nil? then 
@@ -189,7 +192,7 @@ class ApplicationController < ActionController::Base
 
   #require write access to this group
   def require_write
-    raise ErrorUnavailable if !@permissions.include?('write')
+    raise ErrorUnavailable if !current_permissions.include?('write')
   end
 
   def require_mrt_object
