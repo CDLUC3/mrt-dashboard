@@ -185,7 +185,6 @@ class ApplicationController < ActionController::Base
   end
 
   def exceeds_size
-    return false
     return (@object.total_actual_size > MAX_ARCHIVE_SIZE)
   end
   
