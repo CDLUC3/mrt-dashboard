@@ -83,7 +83,7 @@ module GroupLdap
                    Net::LDAP::Filter.eq("cn", permission)
                end
       grps = @admin_ldap.search(:base => @base, :filter => filter)
-      re = Regexp.new("^cn=(read|write),ou=([^, ]+),#{@base}$", Regexp::IGNORECASE)
+      re = Regexp.new("^cn=(read|write|download),ou=([^, ]+),#{@base}$", Regexp::IGNORECASE)
       grps.map do |grp|
         m = re.match(grp[:dn].first)
         (!m.nil? ? m[2].to_s : nil )
