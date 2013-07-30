@@ -21,8 +21,8 @@
     <tbody>
       <% available_groups.each do |grp| %>
       <tr class="<%=cycle('even', 'odd') %>">
-        <td><%= link_to(grp.description, :controller => 'collection', :action => 'index', :group => grp.id) %></td>
-        <td><%= permissions(grp.permission(current_user.login)) %></td>
+        <td><%= link_to(grp[:description], :controller => 'collection', :action => 'index', :group => grp[:id]) %></td>
+        <td><%= permissions(grp[:permissions]) %></td>
       </tr>
       <% end %>
     </tbody>

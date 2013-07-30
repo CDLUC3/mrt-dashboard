@@ -46,7 +46,7 @@ last_menu = if change_disp then 'change' elsif add_disp then 'add' else 'home' e
         available_groups.each do |grp|
           curr_item += 1 %>
           <li id="" class="<%= curr_item == available_groups.length ? 'last' : '' %>">
-            <%= link_to(grp.description, {:controller => 'collection', :action => 'index', :group => grp.id}) %>
+            <%= link_to(grp[:description], {:controller => 'collection', :action => 'index', :group => grp[:id]}) %>
           </li>
         <% end %>
       </ul>
