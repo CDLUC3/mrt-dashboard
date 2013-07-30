@@ -193,10 +193,6 @@ class ApplicationController < ActionController::Base
     @exceeds_size = (@object.total_actual_size > MAX_ARCHIVE_SIZE)
   end
   
-  def file_state_uri(id, version, fn)
-    "#{FILE_STATE_URI}#{esc(id)}/#{esc(version)}/#{esc(fn)}"
-  end
-
   def store_location
     session[:return_to] = request.fullpath
   end
