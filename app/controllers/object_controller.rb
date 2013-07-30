@@ -6,7 +6,6 @@ class ObjectController < ApplicationController
   before_filter :require_write,      :only => [:add, :upload]
   before_filter :require_session_object, :only => [:download]
   before_filter :require_mrt_object, :only => [:download]
-  before_filter :require_size,		 :only => [:download]
   protect_from_forgery :except => [:ingest, :mint, :update]
 
   def require_session_object
@@ -184,7 +183,7 @@ class ObjectController < ApplicationController
        end
        
        # if size is > 4GB, redirect to have user enter email for asynch compression (skipping streaming)
-       if @exceeds_size then
+       if exceeds_size() then
          #if user canceled out of enterering email redirect to object landing page
          if session[:perform_async].eql?("cancel") then
            session[:perform_async] = false;  #reinitalize flag to false

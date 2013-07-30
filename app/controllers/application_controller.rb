@@ -184,8 +184,9 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  def require_size
-    @exceeds_size = (@object.total_actual_size > MAX_ARCHIVE_SIZE)
+  def exceeds_size
+    return false
+    return (@object.total_actual_size > MAX_ARCHIVE_SIZE)
   end
   
   def store_location
