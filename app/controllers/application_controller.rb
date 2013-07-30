@@ -161,7 +161,6 @@ class ApplicationController < ActionController::Base
       raise ErrorUnavailable
     end
     raise ErrorUnavailable if @permissions.length < 1
-    raise ErrorUnavailable if !available_groups.map{|grp| grp.id}.include?(flexi_group_id)
     # initialize the DUA acceptance to false - once the user accepts for a collection, it will be set to true.  
     # Resets at logout
     if session[:collection_acceptance].nil? then 
