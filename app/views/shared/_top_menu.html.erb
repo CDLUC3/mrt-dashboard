@@ -14,7 +14,7 @@ They display differently depending on what is set.
 =end
 
 home_disp = !session[:group_id].nil?
-add_disp = have_permission('write')
+add_disp = session[:group_id] && have_permission('write')
 change_disp = session[:group_id] && available_groups().length > 1
 
 last_menu = if change_disp then 'change' elsif add_disp then 'add' else 'home' end
