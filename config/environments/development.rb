@@ -8,6 +8,10 @@ MrtDashboard::Application.configure do
   config.consider_all_requests_local         = true
   config.whiny_nils                          = true
 
+  
+  config.assets.enabled = false
+  config.assets.debug = false
+
   # Raise exception on mass assignment protection for Active Record models
   config.active_record.mass_assignment_sanitizer = :strict
 
