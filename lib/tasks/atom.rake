@@ -15,7 +15,8 @@ OPEN_URI_ARGS = {"User-Agent" => "Ruby/#{RUBY_VERSION}"}
 NS = { "atom"  => "http://www.w3.org/2005/Atom",
        "xhtml" => "http://www.w3.org/1999/xhtml" }
 
-PAGE_DELAY = 10 # delay between each page we process
+# PAGE_DELAY = 10 # delay between each page we process
+PAGE_DELAY = 900 	# delay between each page we process (15 minutes)
 
 def xpath_content(node, xpath)
   nodes = node.xpath(xpath, NS)
@@ -64,6 +65,7 @@ def process_atom_feed(submitter, profile, collection, stopdate, starting_point)
   next_page = starting_point
   i = 0
   until next_page.nil? do
+    wait = false
     doc = Nokogiri::XML(open(next_page, OPEN_URI_ARGS))
     doc.xpath("//atom:entry", NS).each do |entry|
       begin
@@ -76,11 +78,14 @@ def process_atom_feed(submitter, profile, collection, stopdate, starting_point)
           xpath_content(au, "atom:name")
         }.join("; ")
 
+	puts "Processing #{local_id}"
         p =  up_to_date?(local_id, collection, updated, stopdate)
         return if p.nil? 
 
 	# advance to next
         next if p
+
+	wait = true
 
         # pull out the urls
         urls = entry.xpath("atom:link", NS).map do |link| 
@@ -127,7 +132,11 @@ def process_atom_feed(submitter, profile, collection, stopdate, starting_point)
     i = i + 1
     # break if (i > 20)
     next_page = xpath_content(doc, "/atom:feed/atom:link[@rel=\"next\"]/@href")
-    sleep(PAGE_DELAY)
+    if (wait) then
+      sleep(PAGE_DELAY)
+    else 
+      sleep(15)
+    end
   end
   ensure
     puts "waiting for processing to finish"
