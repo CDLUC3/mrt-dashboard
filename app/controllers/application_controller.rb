@@ -125,7 +125,7 @@ class ApplicationController < ActionController::Base
       if  (params[:group].start_with? "ark") then
       # check for collection existance.  if a collection exists, it an object otherwise it's a collection    
       # unencode the ark for the db lookup
-      params[:group] =  urlunencode(params[:group])
+        params[:group] =  urlunencode(params[:group])
         @collection = MrtObject.joins(:mrt_collections).
           where("mrt_objects.primary_id = ?", params[:group]).
           map {|c| c.mrt_collections.first }.
