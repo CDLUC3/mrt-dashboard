@@ -137,25 +137,26 @@ class ApplicationController < ActionController::Base
   #but hackish thing to get group from session instead of params if help files didn't pass it along
   # 3.30.12 mstrong added logic to determine if :group is an object or collection
   def require_group
+    params[:object] =  urlunencode(params[:object]) unless params[:object].nil?
     # parms{:group] that do not contain an ark id are a collection; all objects contain an ark.
     if !params[:group].nil? then
       if  (params[:group].start_with? "ark") then
         # check for collection existance.  if a collection exists, it an object otherwise it's a collection    
         # unencode the ark for the db lookup
-        params[:group] = urlunencode(params[:group])
+        params[:group] =  urlunencode(params[:group])
         @collection = MrtObject.joins(:mrt_collections).
           where("mrt_objects.primary_id = ?", params[:group]).
           map {|c| c.mrt_collections.first }.
           first
-        if !@collection.nil? then
+        unless @collection.nil? 
           params[:object] = params[:group] 
           params[:group] = @collection.ark 
+
         end 
       end
     else
       # obtain the group if its not yet been set
       if params[:group].nil? && !params[:object].nil? then
-        params[:object] =  urlunencode(params[:object])
         params[:group]= MrtObject.joins(:mrt_collections).
           where("mrt_objects.primary_id = ?", params[:object]).
           map {|c| c.mrt_collections.first }.

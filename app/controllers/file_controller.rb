@@ -1,4 +1,7 @@
 class FileController < ApplicationController
+
+  include Encoder
+
   before_filter :require_user
   before_filter :require_group
   before_filter(:only=>[:display]) { require_permissions('download',
@@ -9,10 +12,15 @@ class FileController < ApplicationController
                                                            :version => params[:version]}) }
 
   def display
+    params[:file] =  urlunencode(params[:file]) unless params[:file].nil?
+    params[:format] =  urlunencode(params[:format]) unless params[:format].nil?
+    
     filename = params[:file]
+
     # determine if user is retrieving a system file; otherwise assume they are obtaining
     # a producer file which needs to prepended to the filename
     if !filename.match(/^(producer|system)/)
+        
       filename = "producer/#{filename}"
     end
     # the router removes the file extension from the filename - need to add it back on if one exists
