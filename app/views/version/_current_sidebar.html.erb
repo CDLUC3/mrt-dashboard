@@ -17,6 +17,6 @@
               :controller     => :version,
               :action         => :index,
               :group          => params[:group],
-              :object         => params[:object],
+              :object         => @object.ark_urlencode,
               :version        => version.identifier %>
 <% end %>

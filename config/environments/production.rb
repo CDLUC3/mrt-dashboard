@@ -5,6 +5,10 @@ MrtDashboard::Application.configure do
   config.consider_all_requests_local       = false
   config.i18n.fallbacks                    = true
   config.serve_static_assets               = true
+
+  # Compress both stylesheets and JavaScripts
+  config.assets.js_compressor  = :uglifier
+  config.assets.css_compressor = :scss
   
   INGEST_SERVICE      = 'http://uc3-web.cdlib.org:33121/poster/submit/'
   INGEST_SERVICE_UPDATE   = 'http://uc3-web.cdlib.org:33121/poster/update/'
