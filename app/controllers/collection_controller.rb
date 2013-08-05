@@ -33,7 +33,9 @@ class CollectionController < ApplicationController
   
   def index
     #redirect objects to the object controller
-    if !params[:object].nil? then
+    #params[:object] =  urlunencode(params[:object]) unless params[:object].nil?
+    #params[:group] =  urlunencode(params[:group]) unless params[:group].nil?
+    unless params[:object].nil? 
       redirect_to :controller=>'object', :action=>'index', :group=>params[:group], :object=>params[:object]
     end
 

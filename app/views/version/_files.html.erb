@@ -12,8 +12,8 @@
     	<% if have_permission('download') then %>
 	      <%= link_to(File.basename(file.identifier),
 	          :controller => :file, :action => :display,
-	          :group => params[:group], :object => params[:object],
-	          :version => params[:version], :file => file.identifier)
+	          :group => params[:group], :object => @object.ark_urlencode,
+	          :version => params[:version], :file => file.file_urlencode)
 	          %></div>
           <% else %>
           	  <%= File.basename(file.identifier) %>

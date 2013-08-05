@@ -44,4 +44,5 @@ class MrtVersion < ActiveRecord::Base
   def when
     return self.metadata('when')
   end
+
 end
