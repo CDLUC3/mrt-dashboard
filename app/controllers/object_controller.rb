@@ -55,6 +55,7 @@ class ObjectController < ApplicationController
           'DC.type'           => params["DC.type"],
           'submitter'         => "#{current_user.login}/#{current_user.displayname}",
           'title'             => params[:title],
+          'synchronousMode'   => params[:synchronousMode],
           'type'              => params[:type]
         }.reject{|k, v| v.blank? }
         
@@ -111,6 +112,7 @@ class ObjectController < ApplicationController
           'DC.type'           => params["DC.type"],
           'submitter'         => "#{current_user.login}/#{current_user.displayname}",
           'title'             => params[:title],
+          'synchronousMode'   => params[:synchronousMode],
           'type'              => params[:type]
         }.reject{|k, v| v.blank? }
 
