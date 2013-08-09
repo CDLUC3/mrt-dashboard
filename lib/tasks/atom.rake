@@ -16,7 +16,7 @@ NS = { "atom"  => "http://www.w3.org/2005/Atom",
        "xhtml" => "http://www.w3.org/1999/xhtml" }
 
 # PAGE_DELAY = 10 # delay between each page we process
-PAGE_DELAY = 900 	# delay between each page we process (15 minutes)
+PAGE_DELAY = 600 	# delay between each page (25 object/page) we process (10 minutes)
 
 def xpath_content(node, xpath)
   nodes = node.xpath(xpath, NS)
@@ -49,6 +49,7 @@ def up_to_date?(local_id, collection_id, last_updated, stopdate)
       updated = last_updated_date <= obj.first.last_add_version
       if (! updated) then
 	puts "Updating #{local_id}"
+	puts "         #{last_updated_date} > #{obj.first.last_add_version}"
       else
 	puts "NO need to update: #{local_id}"
 	puts "                   #{last_updated_date} <= #{obj.first.last_add_version}"
@@ -66,7 +67,16 @@ def process_atom_feed(submitter, profile, collection, stopdate, starting_point)
   i = 0
   until next_page.nil? do
     wait = false
-    doc = Nokogiri::XML(open(next_page, OPEN_URI_ARGS))
+    for j in 0..2
+      begin
+        doc = Nokogiri::XML(open(next_page, OPEN_URI_ARGS))
+	break
+      rescue Exception=>ex
+        puts ex.message
+        puts ex.backtrace
+	puts "Error processing page #{next_page}"
+      end
+    end
     doc.xpath("//atom:entry", NS).each do |entry|
       begin
         # get the basic stuff
@@ -79,7 +89,10 @@ def process_atom_feed(submitter, profile, collection, stopdate, starting_point)
         }.join("; ")
 
 	puts "Processing #{local_id}"
+	puts "Processing #{title}"
+	puts "Processing #{updated}"
         p =  up_to_date?(local_id, collection, updated, stopdate)
+
         return if p.nil? 
 
 	# advance to next
@@ -137,6 +150,7 @@ def process_atom_feed(submitter, profile, collection, stopdate, starting_point)
     else 
       sleep(5)
     end
+    puts "Next #{next_page}"
   end
   ensure
     puts "waiting for processing to finish"
