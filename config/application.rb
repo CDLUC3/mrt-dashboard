@@ -49,5 +49,8 @@ module MrtDashboard
     config.filter_parameters += [:password]
 
     config.autoload_paths += %W(#{config.root}/lib)
+
+    config.assets.enabled = false
+    
   end
 end
