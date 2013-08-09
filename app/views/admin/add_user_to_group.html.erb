@@ -1,0 +1,50 @@
+<% content_for :title do %>
+  UC3 Merritt: Modify User Permissions in Collection
+<% end %>
+
+<div class="grid_11">
+  <%= render :partial => 'quick_nav' %>
+  <h2>Modify User's Permissions in collection</h2>
+  <div class="breadcrumbs"><%= link_to('Merritt', :controller => 'home', :action => 'index') %> &gt;
+    Modify User's Permissions in Collection</div>
+  <br/>
+  <% if !@display_text.eql?('') then %>
+    <p class="dynamic_message"><%=@display_text%></p>
+  <% end %>
+
+  <%= form_tag({:action => :add_user_to_group}) do %>
+    <div class="left_label">User:</div>
+    <div class="right_field">
+      <%= select_tag('uid', options_for_select(@m_usrs, @ldap[:uid]) ) %>
+    </div>
+    <div class="clear"></div>
+
+    <div class="left_label">Collection:</div>
+    <div class="right_field">
+      <%= select_tag('ou', options_for_select(@m_grps, @ldap[:ou]) ) %>
+    </div>
+    <div class="clear"></div>
+
+    <div class="left_label">Permissions:</div>
+    <div class="right_field">
+      <% [ 'read', 'write'].each do |p| %>
+        &nbsp;&nbsp;<%= check_box_tag 'permissions[]', p, @perms.include?(p), :id => "permission_#{p}" %>
+      <%= label_tag "permission_#{p}", p %>
+  <% end %>
+    </div>
+    <div class="clear"></div>
+    <%= hidden_field_tag('submitted','true')  %>
+    <div class="left_label">&nbsp;</div>
+    <div class="right_field">
+      <%= submit_tag %><input type="button" name="reset_form" value="Reset Form" onclick="this.form.reset();"/>
+    </div>
+    <div class="clear"></div>
+  <% end %>
+
+</div>
+<div class="grid_1">&nbsp;</div>
+<div class="grid_4 sidebar">
+  <%= render :partial => '/shared/side_lookup' %><br/>
+  <%# render :partial => 'overview' %><br/>
+
+</div>
