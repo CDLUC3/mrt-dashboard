@@ -1,12 +1,6 @@
 <h2>Editing Objects in Merritt</h2>
 
-  <% if !@group.nil? then %>
-  <div class="breadcrumbs"><%= link_to('Merritt', :controller => 'home', :action => 'index') %> &gt;
-    <%= link_to("Collection: #{@group.description}", :controller => 'collection', :action => 'index') %> &gt;
-    <%= link_to("Help", :controller => 'help', :action => 'index') %> &gt;
-    Editing Objects
-   </div>
-   <% end %>
+<%= render :partial=>"breadcrumbs", :locals=>{:page_title=> "Editing Objects"} %>
  
 <br />
 
