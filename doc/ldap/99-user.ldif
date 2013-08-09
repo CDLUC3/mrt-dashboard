@@ -1,0 +1,25 @@
+dn: cn=schema
+objectClass: top
+objectClass: ldapSubentry
+objectClass: subschema
+cn: schema
+attributeTypes: ( arkId-oid NAME 'arkId' DESC 'ARK identifier, must begin with ark:/' EQUALITY caseExactMatch ORDERING caseExactOrderingMatch SUBSTR caseExactSubstringsMatch SYNTAX 1.3.6.1.4.1.1466.115.121.1.15 SINGLE-VALUE USAGE userApplications )
+attributeTypes: ( shoulderList-oid NAME 'shoulderList' DESC 'List of identifier shoulder labels separated by spaces and/or commas' EQUALITY caseExactMatch ORDERING caseExactOrderingMatch SUBSTR caseExactSubstringsMatch SYNTAX 1.3.6.1.4.1.1466.115.121.1.15 SINGLE-VALUE USAGE userApplications )
+attributeTypes: ( tzregion-oid NAME 'tzRegion' DESC 'The Linux Timezone based on its list of cities and regions' EQUALITY caseIgnoreMatch ORDERING caseIgnoreOrderingMatch SUBSTR caseIgnoreSubstringsMatch SYNTAX 1.3.6.1.4.1.1466.115.121.1.15 SINGLE-VALUE USAGE userApplications )
+attributeTypes: ( submissionprofile-oid NAME 'submissionProfile' DESC 'The submission profile associated with a group' EQUALITY caseIgnoreMatch ORDERING caseIgnoreOrderingMatch SUBSTR caseIgnoreSubstringsMatch SYNTAX 1.3.6.1.4.1.1466.115.121.1.15 SINGLE-VALUE USAGE userApplications )
+attributeTypes: ( institution-oid NAME 'institution' DESC 'DN of institution that this user is a member of.' SUP distinguishedName EQUALITY distinguishedNameMatch SUBSTR caseIgnoreSubstringsMatch SYNTAX 1.3.6.1.4.1.1466.115.121.1.12 SINGLE-VALUE USAGE userApplications )
+attributeTypes: (ezidCoOwners-oid NAME 'ezidCoOwners' DESC 'List of uids separated by spaces and/or commas' EQUALITY caseExactMatch ORDERING caseExactOrderingMatch SUBSTR caseExactSubstringsMatch SYNTAX 1.3.6.1.4.1.1466.115.121.1.15 SINGLE-VALUE USAGE userApplications )
+attributeTypes: ( gid-oid NAME 'gid' SUP uid EQUALITY caseIgnoreMatch ORDERING caseIgnoreOrderingMatch SUBSTR caseIgnoreSubstringsMatch SYNTAX 1.3.6.1.4.1.1466.115.121.1.15 SINGLE-VALUE USAGE userApplications )
+attributeTypes: ( ezidOwnerGroup-oid NAME 'ezidOwnerGroup' DESC 'EZID owner group' EQUALITY distinguishedNameMatch SUBSTR caseIgnoreSubstringsMatch SYNTAX 1.3.6.1.4.1.1466.115.121.1.12 SINGLE-VALUE USAGE userApplications )
+attributeTypes: ( agreementOnFile-oid NAME 'agreementOnFile' EQUALITY booleanMatch SYNTAX 1.3.6.1.4.1.1466.115.121.1.7 SINGLE-VALUE USAGE userApplications )
+attributeTypes: ( groupArkId-oid NAME 'groupArkId' DESC 'ARK identifier, must begin with ark:/' SUP arkId EQUALITY caseExactMatch ORDERING caseExactOrderingMatch SUBSTR caseExactSubstringsMatch SYNTAX 1.3.6.1.4.1.1466.115.121.1.15 SINGLE-VALUE USAGE userApplications )
+objectClasses: ( merrittuser-oid NAME 'merrittUser' DESC 'Users of the Merritt system' SUP top AUXILIARY MUST ( objectClass $ arkId ) MAY ( tzRegion $ institution ) )
+objectClasses: ( ezidUser-oid NAME 'ezidUser' DESC 'EZID user' SUP top AUXILIARY MUST ( objectClass $ arkId $ uid $ ezidOwnerGroup ) MAY ezidCoOwners )
+objectClasses: ( merrittClass-oid NAME 'merrittClass' DESC 'Merritt Class' SUP top AUXILIARY MUST ( objectClass $ arkId ) MAY submissionProfile )
+objectClasses: ( ezidGroup-oid NAME 'ezidGroup' DESC 'EZID group' SUP top AUXILIARY MUST ( objectClass $ shoulderList ) MAY ( groupArkId $ arkId $ uid $ gid $ agreementOnFile ) )
+ds-sync-generation-id: 8468
+modifiersName: cn=Directory Manager,cn=Root DNs,cn=config
+modifyTimestamp: 20110420202252Z
+ds-sync-state: 0000012b9c8ab1d213da00000001
+ds-sync-state: 0000012f7494651522c300000004
+
