@@ -1,16 +1,13 @@
-<% 
-download_disp = !@permissions.nil? && @permissions.include?('download')
-%>
 <% file = line_sidebar %>
 <li style="word-wrap:break-word;">
-<% if download_disp then %>
+<% if have_permission('download') then %>
   <%= link_to File.basename(file.identifier),
           :controller       => :file,
           :action           => :display,
           :group            => params[:group],
-          :object           => params[:object],
+          :object           => @object.ark_urlencode,
           :version          => version.identifier,
-          :file             => file.identifier %>
+          :file             => file.file_urlencode %>
  <% else %>
 	 <%= File.basename(file.identifier) %>
  <% end %>
