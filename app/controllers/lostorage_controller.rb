@@ -74,7 +74,7 @@ class LostorageController < ApplicationController
       }.reject{|k, v| v.blank? }
       
       #construct the async storage URL using the object's state storage URL-  Sub async for state in URL.
-      storage_url = MrtObject.find_by_primary_id(session[:object]).storage_url
+      storage_url = InvObject.find_by_ark(session[:object]).storage_url
       storage_async_url = storage_url.gsub(/state/,'async')
       @response = RestClient.post(storage_async_url, @lostorage_args, {:multipart => true })
       puts @response

@@ -144,9 +144,9 @@ class ApplicationController < ActionController::Base
         # check for collection existance.  if a collection exists, it an object otherwise it's a collection    
         # unencode the ark for the db lookup
         params[:group] =  urlunencode(params[:group])
-        @collection = MrtObject.joins(:mrt_collections).
-          where("mrt_objects.primary_id = ?", params[:group]).
-          map {|c| c.mrt_collections.first }.
+        @collection = InvObject.joins(:inv_collections).
+          where("inv_objects.primary_id = ?", params[:group]).
+          map {|c| c.inv_collections.first }.
           first
         unless @collection.nil? 
           params[:object] = params[:group] 
@@ -157,9 +157,9 @@ class ApplicationController < ActionController::Base
     else
       # obtain the group if its not yet been set
       if params[:group].nil? && !params[:object].nil? then
-        params[:group]= MrtObject.joins(:mrt_collections).
-          where("mrt_objects.primary_id = ?", params[:object]).
-          map {|c| c.mrt_collections.first }.
+          params[:group]= InvObject.joins(:inv_collections).
+          where("inv_objects.primary_id = ?", params[:object]).
+          map {|c| c.inv_collections.first }.
           first.ark
       end
     end
@@ -259,15 +259,15 @@ class ApplicationController < ActionController::Base
   end
  
   def collection_ark
-    @collection ||= MrtObject.find_by_primary_id(params[:object]).member_of.first
+    #@collection ||= MrtObject.find_by_primary_id(params[:object]).member_of.first
+    @collection ||= InvObject.find_by_ark(params[:object]).member_of
   end 
     
   # parse the component (object, file, or version) uri to construct
   # the DUA URI
   def construct_dua_uri(rx, component_uri)
      md = rx.match(component_uri.to_s)
-     dua_filename = "#{md[1]}/" + urlencode(collection_ark)  + "/0/" + urlencode(APP_CONFIG['mrt_dua_file']) 
-     dua_file_uri = dua_filename
+     dua_filename = "#{md[1]}/" + urlencode(collection_ark)  + "/0/" + urlencode(APP_CONFIG['mrt_dua_file'])      dua_file_uri = dua_filename
      Rails.logger.debug("DUA File URI: " + dua_file_uri)
      return dua_file_uri
   end
