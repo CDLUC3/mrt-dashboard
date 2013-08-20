@@ -65,8 +65,17 @@ def process_atom_feed(submitter, profile, collection, stopdate, starting_point)
   server.start_server
   next_page = starting_point
   i = 0
+  pause = ENV['HOME'] + '/apps/ui/atom/PAUSE_ATOM'
+
   until next_page.nil? do
     wait = false
+
+    while (File.exist?(pause)) do
+      # pause 
+      puts "Processed paused: #{pause}"
+      sleep(PAGE_DELAY)
+    end
+
     for j in 0..2
       begin
         doc = Nokogiri::XML(open(next_page, OPEN_URI_ARGS))
