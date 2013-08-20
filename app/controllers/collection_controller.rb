@@ -24,18 +24,16 @@ class CollectionController < ApplicationController
   end
 
   def total_size
-    #@total_size = my_cache("#{session[:group_id]}_total_size") do
-      #current_group.total_size
-    #end
-    @total_size = @group.total_size
+    @total_size = my_cache("#{session[:group_id]}_total_size") do
+      current_group.total_size
+    end
+    #@total_size = @group.total_size
     render :partial=>"total_size"
   end
 
   
   def index
     #redirect objects to the object controller
-    #params[:object] =  urlunencode(params[:object]) unless params[:object].nil?
-    #params[:group] =  urlunencode(params[:group]) unless params[:group].nil?
     unless params[:object].nil? 
       redirect_to :controller=>'object', :action=>'index', :group=>params[:group], :object=>params[:object]
     end
@@ -56,7 +54,6 @@ class CollectionController < ApplicationController
       includes(:inv_versions, :inv_dublinkernels).paginate(:page=>params[:page], :per_page=>10)
     terms_q.each do |q|
       @results = @results.where("inv_objects.ark LIKE ? OR inv_objects.erc_where LIKE ? OR inv_dublinkernels.value LIKE ?", q, q, q)
-      #@results = @results.where("inv_objects.ark LIKE ? OR inv_dublinkernels.value LIKE ?", q, q)
     end
   end
 end
