@@ -24,9 +24,10 @@ class CollectionController < ApplicationController
   end
 
   def total_size
-    @total_size = my_cache("#{session[:group_id]}_total_size") do
-      current_group.total_size
-    end
+    #@total_size = my_cache("#{session[:group_id]}_total_size") do
+      #current_group.total_size
+    #end
+    @total_size = @group.total_size
     render :partial=>"total_size"
   end
 
@@ -39,10 +40,10 @@ class CollectionController < ApplicationController
       redirect_to :controller=>'object', :action=>'index', :group=>params[:group], :object=>params[:object]
     end
 
-    @recent_objects = MrtObject.joins(:mrt_collections).
-      where("mrt_collections.ark = ?", @group.ark_id).
-      order('last_add_version desc').
-      includes(:mrt_versions, :mrt_version_metadata).
+    @recent_objects = InvObject.joins(:inv_collections).
+      where("inv_collections.ark = ?", @group.ark_id).
+      order('version_number desc').
+      includes(:inv_versions, :inv_dublinkernels).
       paginate(:page       => (params[:page] || 1), 
                :per_page   => 10)
   end
@@ -50,11 +51,12 @@ class CollectionController < ApplicationController
   def search_results
     terms = Unicode.downcase(params[:terms]).gsub('%', '\%').gsub('_', '\_').split(/\s+/).delete_if{|t|t.blank?}
      terms_q = terms.map{|t| "%#{t}%" }
-    @results = MrtObject.joins(:mrt_collections).
-      where("mrt_collections.ark = ?", @group.ark_id).
-      includes(:mrt_versions, :mrt_version_metadata).paginate(:page=>params[:page], :per_page=>10)
+    @results = InvObject.joins(:inv_collections).
+      where("inv_collections.ark = ?", @group.ark_id).
+      includes(:inv_versions, :inv_dublinkernels).paginate(:page=>params[:page], :per_page=>10)
     terms_q.each do |q|
-      @results = @results.where("mrt_objects.primary_id LIKE ? OR mrt_objects.local_id LIKE ? OR mrt_version_metadata.value LIKE ?", q, q, q)
+      @results = @results.where("inv_objects.ark LIKE ? OR inv_objects.erc_where LIKE ? OR inv_dublinkernels.value LIKE ?", q, q, q)
+      #@results = @results.where("inv_objects.ark LIKE ? OR inv_dublinkernels.value LIKE ?", q, q)
     end
   end
 end

@@ -28,9 +28,9 @@ class FileController < ApplicationController
       filename = "#{filename}.#{params[:format]}"
     end
 
-    file = MrtObject.where(:primary_id=>params[:object]).first.
-      versions.where(:version_number=>params[:version]).first.
-      files.where(:filename=>filename).first
+    file = InvObject.where(:ark=>params[:object]).first.
+            files.where(:pathname=>filename).first
+            
     file_uri = URI.parse(file.bytestream)
     Rails.logger.info(file_uri)
     
