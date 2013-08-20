@@ -3,14 +3,9 @@ source 'http://rubygems.org'
 gem 'rails', '3.2.12'
 
 gem 'mysql2'
-
 gem "httpclient", "~> 2.2.5"
-
 gem "eco_exception_notification",
     :git => "git://github.com/chrisfinne/eco_exception_notification.git"
-# gem "net-ldap", "0.1.2", 
-#     :git=>"git://github.com/RoryO/ruby-net-ldap.git", 
-#     :ref=>"74e994eed11a011cb73311e164a65a7dd7a62c01"
 gem "net-ldap"
 gem "nokogiri"
 gem "rest-client"
@@ -23,7 +18,6 @@ gem "mrt-ingest", "0.0.2"
 gem "builder"
 gem 'uuidtools'
 gem 'thin'
-
 gem 'jquery-rails'
 
 group :test, :development do

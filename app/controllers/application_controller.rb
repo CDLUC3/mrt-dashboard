@@ -137,13 +137,14 @@ class ApplicationController < ActionController::Base
   #but hackish thing to get group from session instead of params if help files didn't pass it along
   # 3.30.12 mstrong added logic to determine if :group is an object or collection
   def require_group
+    
     params[:object] =  urlunencode(params[:object]) unless params[:object].nil?
     # parms{:group] that do not contain an ark id are a collection; all objects contain an ark.
     if !params[:group].nil? then
       if  (params[:group].start_with? "ark") then
-        # check for collection existance.  if a collection exists, it an object otherwise it's a collection    
-        # unencode the ark for the db lookup
-        params[:group] =  urlunencode(params[:group])
+      # check for collection existance.  if a collection exists, it an object otherwise it's a collection    
+      # unencode the ark for the db lookup
+      params[:group] =  urlunencode(params[:group])
         @collection = InvObject.joins(:inv_collections).
           where("inv_objects.primary_id = ?", params[:group]).
           map {|c| c.inv_collections.first }.
@@ -154,8 +155,7 @@ class ApplicationController < ActionController::Base
 
         end 
       end
-    else
-      # obtain the group if its not yet been set
+    else  #obtain the group if its not yet been set
       if params[:group].nil? && !params[:object].nil? then
           params[:group]= InvObject.joins(:inv_collections).
           where("inv_objects.primary_id = ?", params[:object]).
@@ -181,24 +181,18 @@ class ApplicationController < ActionController::Base
     raise ErrorUnavailable if !current_permissions.include?('write')
   end
 
-  def require_mrt_object
-    if params[:object].nil? then    
-      redirect_to({:controller => 'collection', :action => 'index', :group => flexi_group_id}) and return false
-    else
-      @object = MrtObject.find_by_primary_id(params[:object])
-    end
+  def require_inv_object
+    redirect_to(ObjectList.merge({:group => flexi_group_id})) and return false if params[:object].nil?
+    @object = InvObject.find_by_ark(params[:object])
   end
   
-  def require_mrt_version
-    if params[:version].nil? then
-      redirect_to(:controller => :object,
-                  :action => 'index', 
-                  :group => flexi_group_id,
-                  :object => params[:object]) and return false
-    else
-      require_mrt_object() if @object.nil?
-      @version = @object.versions[params[:version].to_i - 1]
-    end
+  def require_inv_version
+    redirect_to(:controller => :object,
+                :action => 'index', 
+                :group => flexi_group_id,
+                :object => params[:object]) and return false if params[:version].nil?
+    require_inv_object() if @object.nil?
+    @version = @object.versions[params[:version].to_i - 1]
   end
 
   def exceeds_size
@@ -259,18 +253,18 @@ class ApplicationController < ActionController::Base
   end
  
   def collection_ark
-    #@collection ||= MrtObject.find_by_primary_id(params[:object]).member_of.first
     @collection ||= InvObject.find_by_ark(params[:object]).member_of
   end 
     
-  # parse the component (object, file, or version) uri to construct
-  # the DUA URI
+  # parse the component (object, file, or version) uri to construct the DUA URI
   def construct_dua_uri(rx, component_uri)
      md = rx.match(component_uri.to_s)
-     dua_filename = "#{md[1]}/" + urlencode(collection_ark)  + "/0/" + urlencode(APP_CONFIG['mrt_dua_file'])      dua_file_uri = dua_filename
+     dua_filename = "#{md[1]}/" + urlencode(collection_ark)  + "/0/" + urlencode(APP_CONFIG['mrt_dua_file']) 
+     dua_file_uri = dua_filename
      Rails.logger.debug("DUA File URI: " + dua_file_uri)
      return dua_file_uri
   end
+        
         
   # returns the response of the HTTP request for the DUA URI
   def process_dua_request(dua_file_uri)
