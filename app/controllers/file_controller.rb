@@ -62,9 +62,10 @@ class FileController < ApplicationController
     end
     
     # the user has accepted the DUA for this collection or there is no DUA to process 
-    response.headers["Content-Length"] = file.size.to_s
+    response.headers["Content-Length"] = file.full_size.to_s
     response.headers["Content-Disposition"] = "inline; filename=\"#{File.basename(file.identifier)}\""
-    response.headers["Content-Type"] = file.media_type
+    response.headers["Content-Type"] = file.mime_type
+
     self.response_body = Streamer.new(file.bytestream_uri)
     session[:perform_download] = false  
   end 
