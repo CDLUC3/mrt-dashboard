@@ -24,7 +24,7 @@ class ApplicationController < ActionController::Base
   rescue_from ErrorUnavailable, :with => :render_unavailable
 
   protect_from_forgery
-  layout 'application'
+#  layout 'application'
 
   def urlencode(item)
     URI.escape(item, Regexp.new("[^#{URI::PATTERN::UNRESERVED}]"))
@@ -146,7 +146,7 @@ class ApplicationController < ActionController::Base
       # unencode the ark for the db lookup
       params[:group] =  urlunencode(params[:group])
         @collection = InvObject.joins(:inv_collections).
-          where("inv_objects.primary_id = ?", params[:group]).
+          where("inv_objects.ark = ?", params[:group]).
           map {|c| c.inv_collections.first }.
           first
         unless @collection.nil? 
@@ -158,7 +158,7 @@ class ApplicationController < ActionController::Base
     else  #obtain the group if its not yet been set
       if params[:group].nil? && !params[:object].nil? then
           params[:group]= InvObject.joins(:inv_collections).
-          where("inv_objects.primary_id = ?", params[:object]).
+          where("inv_objects.ark = ?", params[:object]).
           map {|c| c.inv_collections.first }.
           first.ark
       end
