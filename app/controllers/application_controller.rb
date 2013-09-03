@@ -24,7 +24,7 @@ class ApplicationController < ActionController::Base
   rescue_from ErrorUnavailable, :with => :render_unavailable
 
   protect_from_forgery
-  layout 'application'
+  #layout 'application'
 
   def urlencode(item)
     URI.escape(item, Regexp.new("[^#{URI::PATTERN::UNRESERVED}]"))
