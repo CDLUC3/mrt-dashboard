@@ -54,7 +54,8 @@ class MrtObject < ActiveRecord::Base
   end
 
   def permalink
-    return "#{N2T_URI}#{urlencode_mod(identifier.to_s)}"
+    p = "#{N2T_URI}#{self.primary_id.to_s}"
+    return p
   end
   
   def files
