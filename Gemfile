@@ -23,11 +23,11 @@ gem 'jquery-rails'
 group :test, :development do
  	gem 'debugger'
   gem 'rspec-rails'
-  gem 'sqlite3'
   gem 'factory_girl_rails'
 end
 
 group :test do  
   gem 'selenium-webdriver'
   gem 'capybara'
+  gem 'sqlite3'
 end
