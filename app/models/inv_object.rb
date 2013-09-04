@@ -85,7 +85,8 @@ class InvObject < ActiveRecord::Base
   end
 
   def permalink
-    return "#{N2T_URI}#{identifier.to_s}"
+    p = "#{N2T_URI}#{self.ark.to_s}"
+    return p
   end
   
   def files
