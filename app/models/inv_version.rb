@@ -15,7 +15,7 @@ class InvVersion < ActiveRecord::Base
     @version_number = self.number
     @bytestream = "#{URI_1}" + "#{@node_number}" + "/"+ "#{@obj_ark}" + "/"+ "#{@version_number}" 
 
-    return URI.parse(self.bytestream)
+    return URI.parse(@bytestream)
   end
 
   def total_size
