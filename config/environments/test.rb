@@ -34,4 +34,7 @@ MrtDashboard::Application.configure do
   config.active_record.mass_assignment_sanitizer = :strict
 
   config.active_support.deprecation = :stderr
+
+  config.active_record.schema_format = :sql
+  
 end

@@ -12,3 +12,4 @@ MrtDashboard::Application.initialize!
 
 require 'webrick/httputils'
 Rack::Mime::MIME_TYPES['.xlsm'] = "application/vnd.ms-excel.sheet.macroEnabled.12"
+

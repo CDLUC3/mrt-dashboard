@@ -11,7 +11,7 @@ describe 'guest' do
     expect(page).to have_content('Welcome')
   end
 
-  it "should be able to click on a collection" , :js => true do
+  it "should be able to click on a collection" do #, :js => true do
     find(:xpath, "//table/tbody/tr[1]/td[1]/a[1]").click
     within("#menu-1") do
       expect(page).to have_content('Collection home')

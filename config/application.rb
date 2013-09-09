@@ -38,11 +38,12 @@ module MrtDashboard
     # Configure generators values. Many other options are available, be sure to check the documentation.
     config.generators do |g| 
         g.test_framework    :rspec, 
+                            #:fixtures => false, #specifies to generate a fixture for each model (using a Factory Girl factory, instead of an actual fixture)
                             :fixtures => true, #specifies to generate a fixture for each model (using a Factory Girl factory, instead of an actual fixture)
                             :view_specs => false, 
                             :helper_specs => false, 
                             :routing_specs => false, 
-                            :controller_specs => true, 
+                            :controller_specs => false, 
                             :request_specs => true 
         g.fixture_replacement   :factory_girl, 
                                 :dir => "spec/factories" 
