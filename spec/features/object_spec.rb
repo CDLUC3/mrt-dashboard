@@ -7,10 +7,11 @@ feature 'object' do
   end
 
   
-  scenario "object TEST TO BE COMPLETED" do #, :js => true do
+  scenario "object TEST TO BE COMPLETED" , :js => true do
     find(:xpath, "//table/tbody/tr[1]/td[1]/a[1]").click # goes to collection landing page
     expect(page).to have_content('Demo Merritt')
-    Factory.create(:inv_object).should be_valid
+    find(:xpath, "//table/tbody/tr[1]/td[1]/a[1]").click
+   # FactoryGirl.create(:inv_object).should be_valid
   end
 
 

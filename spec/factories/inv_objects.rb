@@ -1,5 +1,6 @@
 FactoryGirl.define do 
   factory :inv_object do |f|
+    f.id "6228"
     f.inv_owner_id "6"
     f.ark "ark:/99999/fk4qv5n4z"
     f.object_type "MRT-curatorial"
@@ -14,3 +15,6 @@ FactoryGirl.define do
     f.modified "2013-08-09 14:41:34"
   end
 end
+
+
+
