@@ -23,13 +23,13 @@ gem 'jquery-rails'
 group :test, :development do
  	gem 'debugger'
   gem 'rspec-rails'
-  gem 'factory_girl_rails'
-  gem 'sqlite3'
+  gem 'factory_girl_rails', :require => false
   gem 'launchy'
 end
 
 group :test do  
   gem 'selenium-webdriver'
+  gem 'sqlite3'
   #gem "capybara-webkit"
   gem 'capybara' 
   gem "database_cleaner", "~> 1.0.1"

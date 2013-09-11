@@ -2,10 +2,9 @@
 ENV["RAILS_ENV"] ||= 'test'
 require File.expand_path("../../config/environment", __FILE__)
 require 'rspec/rails'
-#require 'rspec/autorun'
 require 'capybara/rspec'
-require 'factory_girl_rails'
-FactoryGirl.find_definitions 
+
+#require 'factory_girl_rails'
 #require 'capybara-webkit'
 
 # Requires supporting ruby files with custom matchers and macros, etc,
@@ -50,7 +49,6 @@ RSpec.configure do |config|
   #     --seed 1234
   config.order = "random"
 
-  
   
   config.before(:each) do
     DatabaseCleaner.strategy = if example.metadata[:js]
