@@ -1,10 +1,8 @@
 require "selenium-webdriver"
 require "spec_helper"
-require "rubygems"
-
 include RSpec::Expectations
 
-describe "VersionDownloadNonDua" do
+describe "PermanentLinks" do
 
   before(:each) do
     @driver = Selenium::WebDriver.for :firefox
@@ -19,17 +17,21 @@ describe "VersionDownloadNonDua" do
     @verification_errors.should == []
   end
   
-  it "test_version_download_non_dua" do
+  it "test_permanent_links" do
     @driver.get(@base_url + "/")
     @driver.find_element(:link, "Login").click
     @driver.find_element(:id, "login").send_keys "testuser01"
     @driver.find_element(:id, "password").send_keys "testuser01"
     @driver.find_element(:css, "div.grid_8.prefix_2 > form > div.right_field > input[name=\"commit\"]").click
-    @driver.find_element(:link, "Open context").click
-    @driver.find_element(:link, "ark:/99999/fk4qv5n4z").click
+    @driver.find_element(:link, "Demo Merritt").click
+    @driver.find_element(:css, "tr.odd > td > a").click
     @driver.find_element(:link, "Version 1").click
-    @driver.find_element(:name, "commit").click
+    @driver.find_element(:css, "div.value > a").click
+    @driver.find_element(:xpath, "//div[6]/div/a[3]").click
+    @driver.find_element(:css, "div.value > a").click
     
+    @driver.find_element(:css, "BODY").text.should_not =~ /Error/i
+    @driver.find_element(:css, "BODY").text.should_not =~ /We\'re sorry/
   end
   
   def element_present?(how, what)
