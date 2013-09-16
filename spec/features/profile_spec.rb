@@ -7,16 +7,16 @@ feature 'profile' do
     find(:xpath, "//table/tbody/tr[1]/td[1]/a[1]").click #collection landing page
   end
 
-  scenario "link should be visible" , :js => true do
+  scenario "link should be visible" do #, :js => true do
     expect(page).to have_content('Profile')
   end
 
-  scenario "profile page should be available" , :js => true do
+  scenario "profile page should be available" do # , :js => true do
     click_link('Profile')
     expect(page).to have_title('Update Profile')
   end
 
-  scenario "updating telephone number" , :js => true do
+  scenario "updating telephone number" do #, :js => true do
     click_link('Profile')
     fill_in "telephonenumber", :with => "000000000"
     click_button "Save changes"
@@ -24,7 +24,7 @@ feature 'profile' do
     find_field('telephonenumber').value.should eq '000000000'
   end
 
-  scenario "updating timezone" , :js => true do
+  scenario "updating timezone" do #, :js => true do
     click_link('Profile')
     select 'Europe/Helsinki', :from => "tzregion"
     click_button "Save changes"

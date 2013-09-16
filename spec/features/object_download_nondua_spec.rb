@@ -1,10 +1,8 @@
 require "selenium-webdriver"
 require "spec_helper"
-require "rubygems"
-
 include RSpec::Expectations
 
-describe "VersionDownloadNonDua" do
+describe "ObjectDownloadNondua" do
 
   before(:each) do
     @driver = Selenium::WebDriver.for :firefox
@@ -19,7 +17,7 @@ describe "VersionDownloadNonDua" do
     @verification_errors.should == []
   end
   
-  it "test_version_download_non_dua" do
+  it "test_object_download_nondua" do
     @driver.get(@base_url + "/")
     @driver.find_element(:link, "Login").click
     @driver.find_element(:id, "login").send_keys "testuser01"
@@ -27,9 +25,8 @@ describe "VersionDownloadNonDua" do
     @driver.find_element(:css, "div.grid_8.prefix_2 > form > div.right_field > input[name=\"commit\"]").click
     @driver.find_element(:link, "Open context").click
     @driver.find_element(:link, "ark:/99999/fk4qv5n4z").click
-    @driver.find_element(:link, "Version 1").click
     @driver.find_element(:name, "commit").click
-    
+    #@driver.switch_to.alert
   end
   
   def element_present?(how, what)
