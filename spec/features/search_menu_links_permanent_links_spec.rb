@@ -2,7 +2,7 @@ require "selenium-webdriver"
 require "spec_helper"
 include RSpec::Expectations
 
-describe "PermanentLinks" do
+describe "SearchAndMenuLinksSpec" do
 
   before(:each) do
     @driver = Selenium::WebDriver.for :firefox
@@ -17,13 +17,28 @@ describe "PermanentLinks" do
     @verification_errors.should == []
   end
   
-  it "test_permanent_links" do
+  it "search_menu_links_permanent_links_spec" do
+
+    #search and menu links test
     @driver.get(@base_url + "/")
     @driver.find_element(:link, "Login").click
     @driver.find_element(:id, "login").send_keys "testuser01"
     @driver.find_element(:id, "password").send_keys "testuser01"
     @driver.find_element(:css, "div.grid_8.prefix_2 > form > div.right_field > input[name=\"commit\"]").click
+    @driver.find_element(:link, "Home").click
     @driver.find_element(:link, "Demo Merritt").click
+    @driver.find_element(:link, "Collection home").click
+    @driver.find_element(:link, "Add object").click
+    (@driver.find_element(:css, "h2").text).should == "Add Object"
+    @driver.find_element(:xpath, "//ul[@id='menu-1']/li[3]/a").click # click on "Change collection"
+    @driver.find_element(:link, "Demo Merritt").click
+    @driver.find_element(:name, "commit").click
+    @driver.find_element(:id, "terms").send_keys "Shirin"
+    @driver.find_element(:name, "commit").click
+    verify { element_present?(:xpath, "//td[2]").should be_true }
+
+    #permanent links test
+    @driver.find_element(:link, "Collection: Demo Merritt").click
     @driver.find_element(:css, "tr.odd > td > a").click
     @driver.find_element(:link, "Version 1").click
     @driver.find_element(:css, "div.value > a").click
