@@ -17,5 +17,3 @@ feature 'homepage' do
 
 end
 
-#title home:  UC3 Merritt Home: development
-#title login:  UC3 Merritt Login: development

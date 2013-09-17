@@ -26,9 +26,14 @@ describe "VersionDownloadNonDua" do
     @driver.find_element(:id, "password").send_keys "testuser01"
     @driver.find_element(:css, "div.grid_8.prefix_2 > form > div.right_field > input[name=\"commit\"]").click
     @driver.find_element(:link, "Open context").click
-    @driver.find_element(:link, "ark:/99999/fk4qv5n4z").click
+    @driver.find_element(:xpath, "//tr[3]/td/a").click
     @driver.find_element(:link, "Version 1").click
     @driver.find_element(:name, "commit").click
+
+    
+    @driver.find_element(:css, "BODY").text.should_not =~ /Error/i
+    @driver.find_element(:css, "BODY").text.should_not =~ /We\'re sorry/
+    
     
   end
   

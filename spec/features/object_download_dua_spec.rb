@@ -24,8 +24,9 @@ describe "ObjDownloadDua" do
     @driver.find_element(:id, "password").send_keys "testuser01"
     @driver.find_element(:css, "div.grid_8.prefix_2 > form > div.right_field > input[name=\"commit\"]").click
     @driver.find_element(:link, "Demo Merritt").click
-    @driver.find_element(:link, "ark:/99999/fk40k2sqf").click
+    @driver.find_element(:css, "tr.odd > td > a").click
     @driver.find_element(:name, "commit").click
+    
     @driver.find_element(:id, "accept")
   end
   
