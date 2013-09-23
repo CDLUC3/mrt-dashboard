@@ -1,0 +1,14 @@
+<tr class="<%= cycle('even', 'odd') %>">
+  <td>
+    <% ark = clean_id(table_row.identifier) %>
+    <%= link_to ark, 
+                :controller => "object", 
+                :action     => "index", 
+                :group      => @group.id, 
+                :object     => ark %>
+  </td>
+  <td colspan="2">
+    <%= render :partial => "/object/short_bib_display", 
+               :locals  => { :obj => table_row } %>
+  </td>
+</tr>
