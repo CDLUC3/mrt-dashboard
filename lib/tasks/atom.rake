@@ -15,8 +15,9 @@ OPEN_URI_ARGS = {"User-Agent" => "Ruby/#{RUBY_VERSION}"}
 NS = { "atom"  => "http://www.w3.org/2005/Atom",
        "xhtml" => "http://www.w3.org/1999/xhtml" }
 
-# PAGE_DELAY = 10 # delay between each page we process
-PAGE_DELAY = 600 	# delay between each page (25 object/page) we process (10 minutes)
+# PAGE_DELAY = 10 	# delay between each page we process
+# PAGE_DELAY = 600 	# delay between each page (25 object/page) we process (10 minutes)
+PAGE_DELAY = 1800 	# trickle feed due to cloud storage error code issue (30 minutes/page @ 25 objects/page)
 
 def xpath_content(node, xpath)
   nodes = node.xpath(xpath, NS)
