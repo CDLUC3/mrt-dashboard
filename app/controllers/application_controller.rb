@@ -57,16 +57,12 @@ class ApplicationController < ActionController::Base
 
   # Return the groups which the user may be a member of
   def available_groups
-    if !session[:available_groups] then
-      # store the groups in the session as an array of hashes
-      groups = current_user.groups.sort_by{|g| g.description.downcase } || []
-      session[:available_groups] = groups.map do |group|
-        { :id => group.id, 
-          :description => group.description,
-          :permissions => group.permission(current_user.login) }
-      end
+    groups = current_user.groups.sort_by{|g| g.description.downcase } || []
+    groups.map do |group|
+      { :id => group.id, 
+        :description => group.description,
+        :permissions => group.permission(current_user.login) }
     end
-    return session[:available_groups]
   end
 
   private
