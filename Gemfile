@@ -25,6 +25,7 @@ gem 'uuidtools'
 gem 'thin'
 
 gem 'jquery-rails'
+#gem 'dalli'
 
 group :test, :development do
  	gem 'debugger'
