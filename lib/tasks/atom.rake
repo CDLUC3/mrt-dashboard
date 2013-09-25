@@ -19,6 +19,8 @@ NS = { "atom"  => "http://www.w3.org/2005/Atom",
 # PAGE_DELAY = 600 	# delay between each page (25 object/page) we process (10 minutes)
 PAGE_DELAY = 1800 	# trickle feed due to cloud storage error code issue (30 minutes/page @ 25 objects/page)
 
+RESTART_SERVER = 10
+
 def xpath_content(node, xpath)
   nodes = node.xpath(xpath, NS)
   return nil if (nodes.nil? || nodes.size == 0)
@@ -154,6 +156,13 @@ def process_atom_feed(submitter, profile, collection, stopdate, starting_point)
     end
     i = i + 1
     # break if (i > 20)
+    if ( i % RESTART_SERVER == 0 ) then
+       puts "Restarting server after iteration: #{i}"
+       server.join_server
+       server = Mrt::Ingest::OneTimeServer.new
+       server.start_server
+    end
+
     next_page = xpath_content(doc, "/atom:feed/atom:link[@rel=\"next\"]/@href")
     if (wait) then
       sleep(PAGE_DELAY)
