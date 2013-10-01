@@ -154,6 +154,7 @@ def process_atom_feed(submitter, profile, collection, stopdate, starting_point)
     end
     i = i + 1
     # break if (i > 20)
+
     next_page = xpath_content(doc, "/atom:feed/atom:link[@rel=\"next\"]/@href")
     if (wait) then
       sleep(PAGE_DELAY)

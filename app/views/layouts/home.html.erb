@@ -14,9 +14,7 @@
   </head>
   <body>
     <div class="container_16">
-      <% usr = current_user
-      if usr then
-      %>
+      <% if current_user then %>
           <%= render :partial => "shared/collection_head" %>
       <% else %>
         <%= render :partial => "shared/unlogged_head" %>

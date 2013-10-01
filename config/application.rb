@@ -1,5 +1,6 @@
 require File.expand_path('../boot', __FILE__)
 
+require "rails/all"
 require "active_record/railtie"
 require "action_controller/railtie"
 require "action_mailer/railtie"
@@ -13,6 +14,7 @@ Bundler.require(:default, Rails.env) if defined?(Bundler)
 module MrtDashboard
   class Application < Rails::Application
     # Settings in config/environments/* take precedence over those specified here.
+    
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.
 
@@ -46,5 +48,10 @@ module MrtDashboard
 
     # Configure sensitive parameters which will be filtered from the log file.
     config.filter_parameters += [:password]
+
+    config.autoload_paths += %W(#{config.root}/lib)
+
+    config.assets.enabled = false
+    
   end
 end

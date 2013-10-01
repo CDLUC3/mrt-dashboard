@@ -1,6 +1,5 @@
 class UserController < ApplicationController
   before_filter :require_user
-  before_filter :group_optional
 
   REQUIRED = {
     'givenname'          => 'First name', 
@@ -25,6 +24,13 @@ class UserController < ApplicationController
       elsif params[:userpassword] != params[:repeatuserpassword] then
         @display_text += "Your password and repeated password do not match."
       else
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        
+        params[:telephonenumber] = nil if (params[:telephonenumber] == "")
+        
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
         ['givenname', 'sn', 'mail', 'tzregion', 'telephonenumber'].each do |i|
           User::LDAP.replace_attribute(current_user.login, i, params[i])
         end

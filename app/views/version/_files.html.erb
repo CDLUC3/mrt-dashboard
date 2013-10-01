@@ -1,6 +1,3 @@
-<% 
-download_disp = !@permissions.nil? && @permissions.include?('download')
-%>
 <%# the following must be passed in
   files = files to display
   obj = metadata obj
@@ -12,11 +9,11 @@ download_disp = !@permissions.nil? && @permissions.include?('download')
 <div class ="files">
   <% files.each do |file| %>
     <div class="key">
-    	<% if download_disp then %>
+    	<% if have_permission('download') then %>
 	      <%= link_to(File.basename(file.identifier),
 	          :controller => :file, :action => :display,
-	          :group => params[:group], :object => params[:object],
-	          :version => params[:version], :file => file.identifier)
+	          :group => params[:group], :object => @object.ark_urlencode,
+	          :version => params[:version], :file => file.file_urlencode)
 	          %></div>
           <% else %>
           	  <%= File.basename(file.identifier) %>
