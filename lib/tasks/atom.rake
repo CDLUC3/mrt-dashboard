@@ -17,7 +17,10 @@ NS = { "atom"  => "http://www.w3.org/2005/Atom",
 
 # PAGE_DELAY = 10 	# delay between each page we process
 # PAGE_DELAY = 600 	# delay between each page (25 object/page) we process (10 minutes)
-PAGE_DELAY = 1800 	# trickle feed due to cloud storage error code issue (30 minutes/page @ 25 objects/page)
+# PAGE_DELAY = 1800 	# trickle feed due to cloud storage error code issue (30 minutes/page @ 25 objects/page)
+PAGE_DELAY = 900 	# increase (15 minutes/page @ 25 objects/page)
+
+RESTART_SERVER = 10
 
 def xpath_content(node, xpath)
   nodes = node.xpath(xpath, NS)
@@ -144,7 +147,10 @@ def process_atom_feed(submitter, profile, collection, stopdate, starting_point)
                                 # workaround for funky site
                                 :prefetch_options=>{"Accept"=>"text/html, */*"})
         end
-        iobject.start_ingest(client, profile, submitter)
+        resp = iobject.start_ingest(client, profile, submitter)
+	puts "User Agent: #{resp.user_agent}"
+	puts "Batch ID: #{resp.batch_id}"
+	puts "Submission Date: #{resp.submission_date}"
       rescue Exception=>ex
 	puts ex.message
 	puts ex.backtrace
@@ -154,6 +160,16 @@ def process_atom_feed(submitter, profile, collection, stopdate, starting_point)
     end
     i = i + 1
     # break if (i > 20)
+    #if ( i % RESTART_SERVER == 0 ) then
+       #begin
+          #puts "Restarting server after iteration: #{i}"
+          #server.join_server
+       #rescue
+       #end
+       #server.stop_server
+       #server = Mrt::Ingest::OneTimeServer.new
+       #server.start_server
+    #end
 
     next_page = xpath_content(doc, "/atom:feed/atom:link[@rel=\"next\"]/@href")
     if (wait) then
