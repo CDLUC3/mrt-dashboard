@@ -5,6 +5,13 @@ GIT
     eco_exception_notification (3.0.0.rc1)
       actionmailer (>= 3.0.4)
 
+GIT
+  remote: git://github.com/ruby-ldap/ruby-net-ldap.git
+  revision: bbef82f22494864f5c0e53d4dffb21cead3fc274
+  branch: master
+  specs:
+    net-ldap (0.5.0)
+
 GEM
   remote: http://rubygems.org/
   specs:
@@ -86,7 +93,6 @@ GEM
       rest-client (>= 1.6.0)
     multi_json (1.8.0)
     mysql2 (0.3.13)
-    net-ldap (0.3.1)
     nokogiri (1.6.0)
       mini_portile (~> 0.5.0)
     orchard (0.2)
@@ -178,7 +184,7 @@ DEPENDENCIES
   launchy
   mrt-ingest (= 0.0.2)
   mysql2
-  net-ldap
+  net-ldap!
   nokogiri
   orchard
   rack-cache
