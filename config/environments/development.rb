@@ -33,5 +33,5 @@ MrtDashboard::Application.configure do
   # SPARQL_ENDPOINT     = "http://badger.cdlib.org:8082/sparql/"
   CONTAINER_URL       = 'http://uc3-mrt-store-dev.cdlib.org:35121/container/'
 
-  MAX_ARCHIVE_SIZE    = 2147483648
+  MAX_ARCHIVE_SIZE    = 1073741824 
 end
