@@ -25,7 +25,8 @@ class InvObject < ActiveRecord::Base
     @node_number = InvNode.joins(:inv_nodes_inv_objects).select("number").where("role = ?", "primary").limit(1).map(&:number)[0]
   end
 
-  def billable_size
+  #def billable_size
+  def size
     @size = InvFile.where("inv_object_id = ?", self.id).sum("billable_size")
   end
  

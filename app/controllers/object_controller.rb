@@ -262,9 +262,9 @@ class ObjectController < ApplicationController
     @objects = InvCollection.
       where(:ark=>@collection_ark).
       first.
-      mrt_objects.
-      order('last_add_version desc').
-      includes(:mrt_versions, :mrt_version_metadata).
+      inv_objects.
+      order('version_number desc').
+      includes(:inv_versions, :inv_dublinkernels).
       paginate(:page       => (params[:page] || 1), 
                :per_page   => 20)
     respond_to do |format|
