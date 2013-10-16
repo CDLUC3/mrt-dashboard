@@ -44,43 +44,44 @@ class Group
     return "http://ark.cdlib.org/#{self.ark_id}"
   end
 
-  def mrt_collection
-    @mrt_collection ||= MrtCollection.find_by_ark(self.ark_id)
+  def inv_collection
+    @inv_collection ||= InvCollection.find_by_ark(self.ark_id)
   end
 
-  def mrt_collection_id
-    @mrt_collection_id ||= if self.mrt_collection then self.mrt_collection.id else nil end
+  def inv_collection_id
+    @inv_collection_id ||= if self.inv_collection then self.inv_collection.id else nil end
   end
 
   def object_count
-    if self.mrt_collection_id.nil? then
+    if self.inv_collection_id.nil? then
       0
     else
-      MrtObject.connection.select_all("SELECT COUNT(DISTINCT(`mrt_objects`.id)) as `count` FROM `mrt_objects` INNER JOIN `mrt_collections_mrt_objects` ON `mrt_objects`.id = `mrt_collections_mrt_objects`.mrt_object_id WHERE ((`mrt_collections_mrt_objects`.mrt_collection_id = #{self.mrt_collection_id}))")[0]["count"].to_i
+      InvObject.connection.select_all("SELECT COUNT(DISTINCT(`inv_objects`.id)) as `count` FROM `inv_objects` INNER JOIN `inv_collections_inv_objects` ON `inv_objects`.id = `inv_collections_inv_objects`.inv_object_id WHERE ((`inv_collections_inv_objects`.inv_collection_id = #{self.inv_collection_id}))")[0]["count"].to_i
     end
   end
   
   def version_count
-    if self.mrt_collection_id.nil? then
+    if self.inv_collection_id.nil? then
       0
     else
-      MrtObject.connection.select_all("SELECT COUNT(DISTINCT(`mrt_versions`.id)) AS `count` FROM `mrt_versions` INNER JOIN `mrt_objects` ON `mrt_objects`.`id` = `mrt_versions`.`mrt_object_id` INNER JOIN `mrt_collections_mrt_objects` ON `mrt_objects`.`id` = `mrt_collections_mrt_objects`.`mrt_object_id` WHERE ((`mrt_collections_mrt_objects`.mrt_collection_id = #{self.mrt_collection_id}))")[0]["count"].to_i
+      InvObject.connection.select_all("SELECT COUNT(DISTINCT(`inv_versions`.id)) AS `count` FROM `inv_versions` INNER JOIN `inv_objects` ON `inv_objects`.`id` = `inv_versions`.`inv_object_id` INNER JOIN `inv_collections_inv_objects` ON `inv_objects`.`id` = `inv_collections_inv_objects`.`inv_object_id` WHERE ((`inv_collections_inv_objects`.inv_collection_id = #{self.inv_collection_id}))")[0]["count"].to_i
     end
   end
 
   def file_count
-    if self.mrt_collection_id.nil? then
+    if self.inv_collection_id.nil? then
       0
     else
-      MrtFile.connection.select_all("SELECT COUNT(DISTINCT(`mrt_files`.`id`)) AS `count` FROM `mrt_files` INNER JOIN `mrt_versions` ON `mrt_versions`.`id` = `mrt_files`.`mrt_version_id` INNER JOIN `mrt_objects` ON `mrt_objects`.`id` = `mrt_versions`.`mrt_object_id` INNER JOIN `mrt_collections_mrt_objects` ON `mrt_objects`.`id` = `mrt_collections_mrt_objects`.`mrt_object_id` WHERE ((`mrt_collections_mrt_objects`.mrt_collection_id = #{self.mrt_collection_id}))")[0]["count"].to_i
+      InvFile.connection.select_all("SELECT COUNT(DISTINCT(`inv_files`.`id`)) AS `count` FROM `inv_files` INNER JOIN `inv_versions` ON `inv_versions`.`id` = `inv_files`.`inv_version_id` INNER JOIN `inv_objects` ON `inv_objects`.`id` = `inv_versions`.`inv_object_id` INNER JOIN `inv_collections_inv_objects` ON `inv_objects`.`id` = `inv_collections_inv_objects`.`inv_object_id` WHERE ((`inv_collections_inv_objects`.inv_collection_id = #{self.inv_collection_id}))")[0]["count"].to_i
     end
   end
 
   def total_size
-    if self.mrt_collection.nil? then
+    Rails.logger.info("Im in the total_size method of group model")
+    if self.inv_collection.nil? then
       0
-    else
-      self.mrt_collection.mrt_objects.sum('total_actual_size')
+    else    
+      InvFile.connection.select_all("SELECT SUM(full_size) AS `total_size` FROM `inv_files` INNER JOIN `inv_collections_inv_objects` ON `inv_collections_inv_objects`.`inv_object_id` = `inv_files`.`inv_object_id` WHERE (`inv_collections_inv_objects`.inv_collection_id = #{self.inv_collection_id})")[0]["total_size"].to_i
     end
   end
 
