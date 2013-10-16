@@ -22,7 +22,7 @@ MrtDashboard::Application.configure do
 
   URI_1 = 'http://store.cdlib.org:35121/content/'
   
-  MAX_ARCHIVE_SIZE    = 4294967295
+  MAX_ARCHIVE_SIZE    = 1073741824 #maximum byte size threshhold for download of object/versions without compression 
 end
 
 require 'exception_notifier'
