@@ -25,7 +25,6 @@ class InvObject < ActiveRecord::Base
     @node_number = InvNode.joins(:inv_nodes_inv_objects).select("number").where("role = ?", "primary").limit(1).map(&:number)[0]
   end
 
-  #def billable_size
   def size
     @size = InvFile.where("inv_object_id = ?", self.id).sum("billable_size")
   end
@@ -38,10 +37,6 @@ class InvObject < ActiveRecord::Base
     @storage_url = self.bytestream_uri
   end
 
-  # def modified
-  #   return self.modified
-  # end
-
   def versions
     return self.inv_versions
   end
@@ -49,15 +44,6 @@ class InvObject < ActiveRecord::Base
   def current_version
     return self.versions[-1]
   end
-
-  # def metadata_type(element)
-  #   @metadata_type = "erc_" + "#{element}"
-  # end
-
-  # def metadata(element)
-  #   #self.current_version.inv_dublinkernel(element)
-  #   self.metadata_type(element)
-  # end
 
   def who
     self.erc_who
@@ -72,7 +58,6 @@ class InvObject < ActiveRecord::Base
   end
 
    def member_of
-  #   return metadata('collection')
     self.inv_collections.first.ark
    end
     
