@@ -14,4 +14,7 @@ MrtDashboard::Application.configure do
   N2T_URI             = "http://n2t.net/"
   RDF_ARK_URI         = "http://ark.cdlib.org/"
   RDF_COLLECTION_URI  = "http://uc3.cdlib.org/collection/"
+
+  URI_1 = 'http://store.cdlib.org:35121/content/'
+  
 end
