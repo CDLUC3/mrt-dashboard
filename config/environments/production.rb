@@ -20,7 +20,8 @@ MrtDashboard::Application.configure do
   RDF_COLLECTION_URI  = "http://uc3.cdlib.org/collection/"
   CONTAINER_URL       = 'http://merritt.cdlib.org/container/'
   
-  MAX_ARCHIVE_SIZE    = 4294967295 #maximum byte size threshhold for download of object/versions without compression 
+  #maximum byte size threshhold for download of object/versions without compression 
+  MAX_ARCHIVE_SIZE    = 536870912 
 end
 
 require 'exception_notifier'
@@ -29,5 +30,6 @@ MrtDashboard::Application.config.middleware.use ExceptionNotifier,
   :sender_address => "\"notifier\" <no-reply@#{Socket.gethostname}>",
   :exception_recipients => ["marisa.strong@ucop.edu",
                             "mark.reyes@ucop.edu",
+                            "shirin.faenza@ucop.edu",
                             "perry.willett@ucop.edu",
                             "scott.fisher@ucop.edu"]
