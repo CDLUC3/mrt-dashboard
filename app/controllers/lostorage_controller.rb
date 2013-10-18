@@ -72,7 +72,7 @@ class LostorageController < ApplicationController
         'containerForm'     => "targz",
         'name'              => @email_data['name']        
       }.reject{|k, v| v.blank? }
-      
+ 
       #construct the async storage URL using the object's state storage URL-  Sub async for state in URL.
       storage_url = MrtObject.find_by_primary_id(session[:object]).storage_url
       storage_async_url = storage_url.gsub(/state/,'async')
@@ -116,7 +116,7 @@ class LostorageController < ApplicationController
       xml.instruct!
       xml.email do
         xml.from @email_data['from']
-            @email_data['to_email'].each do |x|
+        @email_data['to_email'].each do |x|
           xml.to x
         end
         xml.subject @email_data['subject']
