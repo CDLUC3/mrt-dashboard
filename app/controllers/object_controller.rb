@@ -191,7 +191,7 @@ class ObjectController < ApplicationController
       end
     end
     
-    # if size is > 4GB, redirect to have user enter email for asynch compression (skipping streaming)
+    # if size is > MAX_ARCHIVE_SIZE, redirect to have user enter email for asynch compression (skipping streaming)
     if exceeds_size() then
       #if user canceled out of enterering email redirect to object landing page
       if session[:perform_async].eql?("cancel") then
