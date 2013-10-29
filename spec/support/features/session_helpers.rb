@@ -16,5 +16,9 @@ module Features
       click_button "Login"
     end
 
+    def logs_in_as_guest
+      visit login_path
+      click_button "Guest"
+    end
   end
 end
