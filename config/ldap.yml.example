@@ -13,6 +13,9 @@ development:
 development_nonlocal:
   development
 
+test:
+  development
+
 stage:
   admin_password: XXXXXXXX
   admin_user:     cn=Directory Manager
