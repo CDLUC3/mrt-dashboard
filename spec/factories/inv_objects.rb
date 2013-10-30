@@ -13,8 +13,11 @@ FactoryGirl.define do
     f.erc_where "ark:/99999/fk4qv5n4z ; (:unas)"
     f.created "2013-08-09 14:41:23"
     f.modified "2013-08-09 14:41:34"
+    f.inv_versions { |a|  [ a.association(:inv_version) ] }
+  end
+
+  factory :inv_collections_inv_object do
+    association :inv_object, :factory => :inv_object
+    association :inv_collection, :factory => :demo_collection
   end
 end
-
-
-
