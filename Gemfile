@@ -21,9 +21,9 @@ gem 'thin'
 gem 'jquery-rails'
 
 group :test, :development do
- 	gem 'debugger'
+  gem 'debugger'
   gem 'rspec-rails'
-  gem 'factory_girl_rails', :require => false
+  gem 'factory_girl_rails'
   gem 'launchy'
 end
 
