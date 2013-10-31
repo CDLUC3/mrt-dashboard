@@ -36,5 +36,6 @@ MrtDashboard::Application.configure do
   config.active_support.deprecation = :stderr
 
   config.active_record.schema_format = :sql
-  
+
+  N2T_URI             = "http://n2t-wf.cdlib.org/"  
 end
