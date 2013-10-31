@@ -1,0 +1,13 @@
+object1:
+  inv_owner_id: "6"
+  ark: "ark:/99999/fk4qv5n4z"
+  object_type: "MRT-curatorial"
+  role: "MRT-content"
+  aggregate_role: "MRT-none"
+  version_number: "1"
+  erc_who: "(:unas)"
+  erc_what: "Robotic Workstation"
+  erc_when: "(:unas)"
+  erc_where: "ark:/99999/fk4qv5n4z ; (:unas)"
+  created: "2013-08-09 14:41:23"
+  modified: "2013-08-09 14:41:34"
