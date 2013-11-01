@@ -7,6 +7,8 @@ class ObjectViewTest < ActionDispatch::IntegrationTest
     visit(login_path)
     click_button("Guest")
     click_link("Demo Merritt")
-    click_link("ark:/99999/fk4qv5n4z")
+    click_link("ark:/99999/fk40k2sqf")
+    click_button("Download object")
+    
   end
 end
