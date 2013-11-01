@@ -4,6 +4,7 @@ class ObjectViewTest < ActionDispatch::IntegrationTest
   fixtures :inv_objects, :inv_collections_inv_objects, :inv_collections
 
   test "view object works" do
+    visit(logout_path)
     visit(login_path)
     click_button("Guest")
     click_link("Demo Merritt")
@@ -11,6 +12,7 @@ class ObjectViewTest < ActionDispatch::IntegrationTest
   end
 
   test "dua works" do
+    visit(logout_path)
     visit(login_path)
     click_button("Guest")
     click_link("Demo Merritt")
