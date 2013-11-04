@@ -222,12 +222,6 @@ class ApplicationController < ActionController::Base
     URI.escape(i, Regexp.new("[^#{URI::PATTERN::UNRESERVED}]"))
   end
 
-  def my_cache(key, expires_in = 600)
-    Mrt::Cache.cache(key, expires_in) do
-      yield()
-    end
-  end
-
   def fetch_to_tempfile(*args)
     require 'open-uri'
     require 'fileutils'
