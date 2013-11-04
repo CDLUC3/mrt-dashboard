@@ -27,7 +27,7 @@ class LostorageController < ApplicationController
       if response_code != 200 then
         flash[:error] = "Error processing large object in storage service.  Please contact uc3@ucop.edu"
       else
-        session[:perform_async] = true;
+        session[:perform_async] = true
         flash[:notice] = "Processing of large object compression has begun.  Please look for an email in your inbox"
       end
       redirect_to session[:return_to]
