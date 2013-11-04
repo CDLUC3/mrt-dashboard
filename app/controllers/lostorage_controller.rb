@@ -18,7 +18,6 @@ class LostorageController < ApplicationController
       end   
      
         response_code = post_los_email(params[:user_agent_email])
-        puts response_code
         @doc = Nokogiri::XML(@response) do |config|
           config.strict.noent.noblanks
         end
@@ -53,7 +52,6 @@ class LostorageController < ApplicationController
       storage_url = InvObject.find_by_ark(session[:object]).storage_url
       storage_async_url = storage_url.gsub(/state/,'async')
       @response = RestClient.post(storage_async_url, @lostorage_args, {:multipart => true })
-      puts @response
       lostorage_xml_email_profile.close!
       return @response.code
     end
@@ -70,7 +68,6 @@ class LostorageController < ApplicationController
                    "how to extract the files in this container, see http://www.gzip.org/#faq6. \n\n" +
                    "If you have any questions regarding the download of this archive, please contact uc3@cdlib.org."
  
-     puts link_info
       #TODO: clean this up so all the text is in a template       
       @email_data = (
               {'from'       => APP_CONFIG['lostorage_email_from'],
