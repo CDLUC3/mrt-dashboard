@@ -12,7 +12,7 @@ class LostorageController < ApplicationController
         return
       end
 
-      if  (params[:user_agent_email] =~ /^.+@.+$/).nil? then
+      if !params[:user_agent_email].match(/^.+@.+$/) then
         flash[:message] = 'You must fill in a valid return email address.'
         return
       end   
