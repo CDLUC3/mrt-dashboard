@@ -17,41 +17,17 @@ class LostorageController < ApplicationController
         return
       end   
      
-      # configure the post request & email
-      # send POST request along with email to storage
-#      begin
         response_code = post_los_email(params[:user_agent_email])
         puts response_code
         @doc = Nokogiri::XML(@response) do |config|
           config.strict.noent.noblanks
         end
 
-=begin  
-      rescue Exception => ex
-        begin
-          puts ex
-          # see if we can parse the error from async, if not then unknown error
-          @doc = Nokogiri::XML(ex.response) do |config|
-            config.strict.noent.noblanks
-          end
-          #TODO:  fix this so it processes the error response correctly
-          @description = "async: #{@doc.xpath("//body")[0].children.text}"
-          @error = "async: #{@doc.xpath("//exc:error")[0].child.text}"
-        rescue Exception => ex
-          @description = "ui: #{ex.message}"
-          @error = ""
-        end
-        render :action => "async_error" and return      
-      end
-=end
       # process return response code
       #TODO: flash error messages are not displaying properly
       if response_code != 200 then
-      #   report error message
           flash[:error] = "Error processing large object in storage service.  Please contact uc3@ucop.edu"
-      #   Rails.Logger.error = "Error sending POST to storage service : response code = #{response_code}"
       else
-      #    user entered email, set flags to continue processing object/version download
           session[:perform_async] = true;
           flash[:notice] = "Processing of large object compression has begun.  Please look for an email in your inbox"
        end
