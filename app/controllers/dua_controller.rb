@@ -52,7 +52,6 @@ class DuaController < ApplicationController
        session[:perform_download] = true;
        redirect_to session[:return_to]
     elsif params[:commit].eql?("Do Not Accept") then
-       puts "did not accept DUA"
        session[:collection_acceptance][@group.id] = "not accepted"
        # return to where user came from 
        redirect_to session[:return_to]
