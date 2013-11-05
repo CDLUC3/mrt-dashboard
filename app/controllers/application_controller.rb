@@ -217,10 +217,6 @@ class ApplicationController < ActionController::Base
     session[:return_to] = nil
   end
 
-  def esc(i)
-    URI.escape(i, Regexp.new("[^#{URI::PATTERN::UNRESERVED}]"))
-  end
-
   def fetch_to_tempfile(*args)
     require 'open-uri'
     require 'fileutils'
