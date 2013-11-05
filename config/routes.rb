@@ -25,8 +25,10 @@ MrtDashboard::Application.routes.draw do
   # m: metadata (landing page)
   # s: search 
    
-  # route objects and collections to the collection index since they share the same URL syntax 
-  match( 'm/:group/' => 'collection#index') 
+  # m/ark... can route to either collection or object depending on the constraint
+  match('m/:group' => 'collection#index',
+        :constraints => CollectionConstraint.new)
+  match('m/:object' => 'object#show')
   match( 'm/:group/:version' => 'version#index')#, :constraints => {:group => /ark(%3A|:)(%2F|\/).+/i})
   match('d/:object' => 'object#download')
   match('d/:object/:version' => 'version#download')
