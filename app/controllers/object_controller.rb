@@ -259,7 +259,7 @@ class ObjectController < ApplicationController
       where(:ark=>@collection_ark).
       first.
       inv_objects.
-      order('version_number desc').
+      order('inv_objects.modified desc').
       includes(:inv_versions, :inv_dublinkernels).
       paginate(:page       => (params[:page] || 1), 
                :per_page   => 20)
