@@ -29,7 +29,7 @@ class CollectionController < ApplicationController
 
   def search_results
     terms = Unicode.downcase(params[:terms]).gsub('%', '\%').gsub('_', '\_').split(/\s+/).delete_if{|t|t.blank?}
-     terms_q = terms.map{|t| "%#{t}%" }
+    terms_q = terms.map{|t| "%#{t}%" }
     @results = InvObject.joins(:inv_collections).
       where("inv_collections.ark = ?", @group.ark_id).
       includes(:inv_versions, :inv_dublinkernels).paginate(paginate_args)
