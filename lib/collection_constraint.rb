@@ -7,9 +7,10 @@ class CollectionConstraint
       return true
     else
       # TODO: pass this result in to controller so we don't fetch twice
-      if !Group.find(request.params[:group]).nil? then
+      begin
+        Group.find(request.params[:group])
         return true
-      else
+      rescue LdapMixin::LdapException
         return false
       end
     end
