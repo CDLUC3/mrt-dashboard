@@ -36,16 +36,10 @@
               :number_files => (@files.length + @system_files.length)} %>
   <div class="clear"></div>
 
-  <%= render :partial => '/version/files', 
-             :locals => {:title   => 'User Files', 
-                         :files   => @files, 
-                         :obj     => @object, 
-                         :version => @version} %>
-  <%= render :partial => '/version/files',
-             :locals => {:title   => 'System Files', 
-                         :files   => @system_files,
-                         :obj     => @object, 
-                         :version => @version} %>
+  <h3>User Files</h3>
+  <%= render :partial => '/version/files', :locals => {:files => @files } %>
+  <h3>System Files</h3>
+  <%= render :partial => '/version/files', :locals => {:files => @system_files } %>
 
   <div class="key">&nbsp;</div><div class="value">&nbsp;</div>
   <div class="key">&nbsp;</div>
