@@ -1,7 +1,7 @@
 class CollectionController < ApplicationController
   before_filter :require_user
-  prepend_before_filter :set_group_session_via_group, :only => [:index, :search_results]
   before_filter :require_group
+  prepend_before_filter :set_group_session_via_group, :only => [:index, :search_results]
 
   def object_count
     render :partial=>"object_count"
