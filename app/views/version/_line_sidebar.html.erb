@@ -6,6 +6,7 @@
               :object     => version.inv_object.ark_urlencode,
               :version    => version.identifier %>:
 <% else %>
-  <%= "Version #{version.identifier}" %>:
+  Version <%= version.identifier %>:
 <% end %>
-<%= merritt_time(version.created) %><br/>	
+<%= merritt_time(version.created) %>
+<br/>
