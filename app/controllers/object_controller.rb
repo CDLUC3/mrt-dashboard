@@ -261,8 +261,7 @@ class ObjectController < ApplicationController
       inv_objects.
       order('inv_objects.modified desc').
       includes(:inv_versions, :inv_dublinkernels).
-      paginate(:page       => (params[:page] || 1), 
-               :per_page   => 20)
+      paginate(paginate_args)
     respond_to do |format|
       format.html
       format.atom

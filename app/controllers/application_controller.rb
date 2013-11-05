@@ -266,4 +266,10 @@ class ApplicationController < ActionController::Base
      uri_response = http.request(Net::HTTP::Get.new(uri.request_uri))
      return uri_response
   end 
+  
+  def paginate_args
+    return { 
+      :page => (params[:page] || 1), 
+      :per_page => 10 }
+  end
 end
