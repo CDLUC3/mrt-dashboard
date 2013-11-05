@@ -8,6 +8,10 @@ class InvVersion < ActiveRecord::Base
     self.number.to_s
   end
 
+  def permalink
+    "#{MERRITT_SERVER}/m/#{self.inv_object.ark_urlencode}/#{self.identifier}"
+  end
+  
   def bytestream_uri 
     obj = self.inv_object
     URI.parse("#{URI_1}#{obj.node_number}/#{obj.ark_urlencode}/#{self.number}")
