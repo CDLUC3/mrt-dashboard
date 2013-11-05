@@ -22,7 +22,7 @@ class CollectionController < ApplicationController
   def index
     @recent_objects = InvObject.joins(:inv_collections).
       where("inv_collections.ark = ?", @group.ark_id).
-      order('version_number desc').
+      order('inv_objects.modified desc').
       includes(:inv_versions, :inv_dublinkernels).
       paginate(:page       => (params[:page] || 1), 
                :per_page   => 10)
