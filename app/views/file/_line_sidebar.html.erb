@@ -4,7 +4,6 @@
   <%= link_to File.basename(file.identifier),
           :controller       => :file,
           :action           => :display,
-          :group            => params[:group],
           :object           => @object.ark_urlencode,
           :version          => version.identifier,
           :file             => file.file_urlencode %>
