@@ -24,6 +24,7 @@ MrtDashboard::Application.configure do
 
   config.log_tags = [:uuid, :remote_ip]
 
+  MERRITT_SERVER      = 'http://merritt-dev.cdlib.org'
   INGEST_SERVICE      = 'http://uc3-mrt-wrk1-dev.cdlib.org:33121/poster/submit/'
   INGEST_SERVICE_UPDATE   = 'http://uc3-mrt-wrk1-dev.cdlib.org:33121/poster/update/'
   MINT_SERVICE        = 'http://uc3-mrt-wrk1-dev.cdlib.org:33121/request-identifier'
