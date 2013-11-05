@@ -54,7 +54,7 @@
 <div class="grid_1">&nbsp;</div>
 <div class="grid_4 sidebar">
   <%= render :partial => '/shared/side_lookup' %><br/>
-  <%= render :partial => '/version/list_sidebar',
-      :locals => {:versions => @object.versions.reverse,
-                  :title => 'All Versions'} %><br/>
+  <h3>All Versions</h3>
+  <%= render :partial => 'line_sidebar', :collection => @object.versions.reverse %>
+  <br/>
 </div>
