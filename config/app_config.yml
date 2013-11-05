@@ -1,0 +1,36 @@
+development:
+  dua_email_to:         [marisa.strong@ucop.edu]
+  dua_email_from:       no-reply-merritt@ucop.edu
+  mrt_dua_file:         producer/mrt-dua.txt
+  lostorage_email_to:   [marisa.strong@ucop.edu]
+  lostorage_email_from: [marisa.strong@ucop.edu]
+
+development_nonlocal:
+  development
+
+stage:
+  dua_email_to:         [marisa.strong@ucop.edu, perry.willett@ucop.edu]
+  dua_email_from:       no-reply-merritt@ucop.edu
+  mrt_dua_file:         producer/mrt-dua.txt
+  lostorage_email_to:   [marisa.strong@ucop.edu, perry.willett@ucop.edu]
+  lostorage_email_from: [uc3@ucop.edu]
+
+stage_development:
+  stage
+
+production:
+  dua_email_to:         [uc3@ucop.edu]
+  dua_email_from:       no-reply-merritt@ucop.edu
+  mrt_dua_file:         producer/mrt-dua.txt
+  lostorage_email_to:   [marisa.strong@ucop.edu, perry.willett@ucop.edu]
+  lostorage_email_from: [uc3@ucop.edu]
+
+production_development:
+  production
+
+test:
+  dua_email_to:         [shirin.faenza@ucop.edu]
+  dua_email_from:       no-reply-merritt@ucop.edu
+  mrt_dua_file:         producer/mrt-dua.txt
+  lostorage_email_to:   [shirin.faenza@ucop.edu]
+  lostorage_email_from: [shirin.faenza@ucop.edu]

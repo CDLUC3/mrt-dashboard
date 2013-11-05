@@ -1,0 +1,11 @@
+fk40k2sqf_node910:
+  inv_node: node910
+  inv_object: fk40k2sqf
+  role: "primary"
+  created: "2013-01-31 02:43"
+
+fk4qv5n4z_node910:
+  inv_node: node910
+  inv_object: fk4qv5n4z
+  role: "primary"
+  created: "2013-08-09 14:41:23"

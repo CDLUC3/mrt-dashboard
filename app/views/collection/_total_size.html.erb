@@ -1,0 +1,3 @@
+<% cache("total_size_#{@group.id}",:expires_in => 600) do %>
+  <%= number_to_storage_size(@group.total_size) %>
+<% end %>

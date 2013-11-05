@@ -1,0 +1,425 @@
+/* 
+    Document   : main_styles
+    Created on : Aug 9, 2010, 10:06:19 AM
+    Author     : sfisher
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+/* 
+   TODO customize this sample style
+   Syntax recommendation http://www.w3.org/TR/REC-CSS2/
+*/
+
+/* Overall styles */
+root { 
+    display: block;
+}
+
+body {
+  background-color:#fff;
+  font-family: Helvetica, Verdana, Tahoma, Arial, sans-serif;
+  font-size: 12px/1.5; 
+}
+
+.home {
+	background-image:url('/images/merritt_bg.jpg');
+	background-repeat:no-repeat;
+}
+
+.container_16 {
+  background-color: #fff;
+}
+
+/* section styles */
+
+.head_left {
+    text-align: left;
+}
+
+.head_right {
+    text-align: right;
+}
+
+.foot_full {
+    text-align: center;
+    font-size: 85%;
+}
+
+
+/* subsection styles */
+.foot_full hr {
+    margin: 10px 0px 6px 0px;
+    padding: 0px 0px 0px 0px;
+}
+
+
+/* text styles */
+.caption {
+    font-size: 85%;  
+}
+
+.title {
+    font-weight: bold;
+}
+
+.dynamic_message {
+    font-weight: bold;
+    color: #bb0000;
+    font-size: 110%;
+}
+
+.centered {
+    display: block;
+    margin-left: auto;
+    margin-right: auto 
+}
+
+a {
+  text-decoration: none;
+}
+
+h1 {
+  display: block;
+	font: 26px Helvetica, Arial;
+	color: #363636;
+	margin-top: 20px;
+}
+
+h2 {
+	display: block;
+	margin-top: 20px;
+  font: 18px Helvetica, Arial;
+	color: #363636;
+	margin-bottom: 5px;
+}
+
+h3 {
+  display: block;
+  width: 100%;
+  border-bottom-color: #cccccc;
+  border-bottom-style: solid;
+  border-bottom-width: 1px;
+  font: 16px Helvetica, Arial;
+  color: #363636;
+  margin-top: 25px;
+  margin-bottom: 5px;
+}
+
+
+dl { 
+  width:100%; 
+  overflow:hidden; 
+} 
+
+dt {
+ float: left;
+ clear: left;
+ width: 150px;
+ text-align: right;
+ font-weight: bold;
+ padding: 5px;
+}
+
+dd {
+ margin: 0 0 0 160px;
+ padding: 5px;
+}
+
+
+.sidebar {font-size: 85%;}
+.sidebar p{
+  margin-top: 1em;
+}
+
+
+.sidebar h3 {
+  display: block;
+  width: 100%;
+  font: 16px Helvetica, Arial;
+	color: #363636;
+  border-bottom-color: #cccccc;
+  border-bottom-style: solid;
+  border-bottom-width: 1px;
+	margin-top: 20px;
+  margin-bottom: 1em;
+}
+
+
+.help li {
+  margin-bottom: 6px;
+}
+
+
+.breadcrumbs {
+  font-size: 85%;
+}
+
+div.env_disp {
+    height: 67px;
+    display: table;
+    float: left;
+    font-family: Arial, Helvetica, sans-serif; font-size: 200%;
+    color: #f3a249;
+}
+
+div.env_disp div{
+    display: table-cell;
+    vertical-align:bottom;
+}
+
+div.line {  
+	border-bottom-color: #cccccc;
+  	border-bottom-style: solid;
+  	border-bottom-width: 1px;
+  	margin-bottom: 25px;
+}
+
+/* form styles */
+/* for 2 column forms */
+div.left_label {
+  margin-top: 0.25em;
+  margin-bottom:0.25em;
+  margin-right:0.5em;
+  display: block;
+  clear: left;
+  float:left;
+  width: 150px;
+  text-align: left;
+}
+
+/* form styles */
+/* for 2 column forms */
+div.long_left_label {
+  margin-top: 0.25em;
+  margin-bottom:0.25em;
+  margin-right:0.5em;
+  display: block;
+  clear: left;
+  float:left;
+  width: 325px;
+  text-align: left;
+}
+
+/* form styles */
+/* for 2 column forms */
+div.long_left_text {
+  margin-top: 0.25em;
+  margin-bottom:0.25em;
+  margin-right:0.5em;
+  display: block;
+  clear: left;
+  float:left;
+  width: 1000px;
+  text-align: left;
+}
+
+div.short_left_label {
+  margin-top: 0.25em;
+  margin-bottom:0.25em;
+  margin-right:0.5em;
+  display: block;
+  clear: left;
+  float:left;
+  width: 75px;
+  text-align: left;
+}
+
+div.short_label {
+  padding-right: 10px;
+  text-align: right;
+  display: block;
+  width: 70px;
+  float: left;
+  clear: left;
+}
+div.checkbox_label {
+  text-align: left;
+  display: block;
+  width: 100px;
+  float: left;
+  clear: right;
+}
+
+.smaller {
+  font-size: 80%;
+}
+
+
+div.right_field {
+  margin-top: 0.25em;
+  margin-bottom:0.25em;
+  display: block;
+  float: left;
+  width: 250px;
+  text-align: left;
+}
+
+div.long_right_field {
+  margin-top: 0.25em;
+  margin-bottom:0.25em;
+  display: block;
+  float: left;
+  width: 500px;
+  text-align: left;
+}
+
+div.login_right_field {
+  margin-top: 0.25em;
+  margin-bottom:0.25em;
+  display: block;
+  float: left;
+  width: 250px;
+  text-align: left;
+}
+
+/* for 3 column forms with help icon to the side
+add this to the side of right_field to add another column*/
+div.short_text_description {
+  margin-top: 0.25em;
+  margin-bottom:0.25em;
+  float: left;
+  clear: right;
+  height: 1.2em;
+  width:12em;
+  vertical-align: text-bottom;
+}
+
+/* for 3 column radio buttons with help icon to the side
+contain the short_option and short_option_description within
+option_container in place of "right_field" */
+
+div.option_container {
+  float: left;
+  margin-top: 0.25em;
+  margin-bottom: 0.25em;
+}
+
+div.short_option {
+  float:left;
+  clear:left;
+  height:1.2em;
+  width:8em;
+}
+
+div.short_option_description {
+  float: left;
+  clear: right;
+  height: 1.2em;
+  width:12em;
+  vertical-align: text-bottom;
+}
+
+/* normal key-value styles */
+div.key {
+  /*margin-top: 0.25em;
+  margin-bottom:0.25em; */
+  font-weight: bold;
+  margin-right:0.5em;
+  display: block;
+  clear: left;
+  float:left;
+  width: 200px;
+  text-align: right;
+  word-wrap: break-word;
+}
+
+div.value {
+  /* margin-top: 0.25em;
+  margin-bottom:0.25em; */
+  display: block;
+  float: left;
+  width: 420px;
+  text-align: left;
+}
+
+/* small key-value styles in sidebar */
+.sidebar div.key {
+  /*margin-top: 0.25em;
+  margin-bottom:0.25em; */
+  font-weight: bold;
+  margin-right:0.5em;
+  display: block;
+  clear: left;
+  float:left;
+  width: 100px;
+  text-align: right;
+}
+
+.sidebar div.value {
+  /* margin-top: 0.25em;
+  margin-bottom:0.25em; */
+  display: block;
+  float: left;
+  width: 75px;
+  text-align: right;
+}
+
+/* table styles */
+table{
+    border-collapse:collapse;
+	font-size: 11px;
+}
+
+table, th, {
+    /*border: 1px solid #cccccc;*/
+	border:0;
+}
+
+th {
+  text-align: left;
+  vertical-align: top;
+  font-weight: bold;
+	border-bottom: 1px solid #363636;
+  color: #1C1C1C;
+	padding-left: 5px;
+}
+tr {
+	/*border-top:1px solid #1C1C1C;*/
+}
+
+tr.even, tr.even td {
+  background-color: #ffffff;
+}
+
+tr.odd, tr.odd td {
+  background-color: #ffffff;
+}
+
+td {
+	border-top:1px solid #b5b5b5;
+  text-align: left;
+  vertical-align: top;
+  padding: 5px;
+	padding-bottom: 8px;
+	border-bottom:0;
+	border-left:0;
+	border-right:0;
+}
+
+/* guest login page */
+div.login_choice_box {
+  margin-bottom: 50px;
+  border-style: solid;
+  border-width: 1px;
+  border-color: #516935;
+}
+
+div.login_choice_box div {
+  padding: 8px 12px;
+}
+
+div.login_choice_box h2 {
+  text-align: center;
+  background-color: #516935;
+  color: #ffffff;
+  padding: 5px 0 5px 0;
+  font-size:110%;
+  font-weight: bold;
+  margin-top:0px;
+}
+
+div.login_choice_box label {
+  font-weight: normal;
+  padding-right: 24px;
+}
