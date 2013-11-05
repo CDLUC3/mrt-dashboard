@@ -12,12 +12,6 @@ class VersionController < ApplicationController
   end
 
   def index
-    #files for current version
-    (@system_files, @files) = @version.files.sort_by { |file|
-      file.identifier.downcase
-    }.partition { |file|
-      file.identifier.match(/^system\//)
-    }
   end
 
   def download

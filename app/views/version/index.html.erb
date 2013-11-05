@@ -33,9 +33,9 @@
   <div class="clear"></div>
 
   <h3>User Files</h3>
-  <%= render :partial => '/version/files', :locals => {:files => @files } %>
+  <%= render :partial => '/version/files', :locals => {:files => @version.producer_files } %>
   <h3>System Files</h3>
-  <%= render :partial => '/version/files', :locals => {:files => @system_files } %>
+  <%= render :partial => '/version/files', :locals => {:files => @version.system_files } %>
 
   <div class="key">&nbsp;</div><div class="value">&nbsp;</div>
   <div class="key">&nbsp;</div>
