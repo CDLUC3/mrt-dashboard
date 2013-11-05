@@ -40,12 +40,27 @@ class ObjectViewTest < ActionDispatch::IntegrationTest
     assert_equal("attachment; filename=ark+=99999=fk40k2sqf_object.zip", page.response_headers["Content-Disposition"])
   end
 
-  test "direct download works without redirect" do
-    # visit("/d/ark%3A%2F20775%2Fbb03080025")
+  test "large object download works" do 
+    click_button("Guest")
+    click_link("Demo Merritt")
+    click_link("ark:/99999/fk40k2sqf")
+  end
+
+  test "blue param avoids DUA" do
+    get("/d/ark%3A%2F99999%2Ffk40k2sqf", {"blue" => "true"})
+    assert_response :success
+  end
+
+  test "/m/ access to object works" do
+    click_button("Guest")
+    click_link("Demo Merritt")
+    visit("/m/ark%3A%2F99999%2Ffk40k2sqf")
+    assert_equal(200, page.status_code)
   end
 
   test "authentication works" do
-    # api access
-    # should be able to download restricted object by supplying credentials via http basic auth
+    env = {"HTTP_AUTHORIZATION" => "Basic " + Base64::encode64("merrritt-test:test")}
+    get("/d/ark%3A%2F99999%2Ffk4qv5n4z", env)
+    assert_response(:success)
   end
 end
