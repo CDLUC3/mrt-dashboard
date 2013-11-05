@@ -1,6 +1,4 @@
 class InvObject < ActiveRecord::Base
-
-
   has_many :inv_versions
   has_many :inv_files
   
@@ -15,34 +13,31 @@ class InvObject < ActiveRecord::Base
   include Encoder
 
   def bytestream_uri
-    @ark = self.ark_urlencode
-    @node_number = self.node_number
-    @bytestream = "#{URI_1}" + "#{@node_number}" + "/"+ "#{@ark}"
-    return URI.parse(@bytestream)
+    URI.parse("#{URI_1}#{self.node_number}/#{self.ark_urlencode}")
   end
 
   def node_number
-    @node_number = InvNode.joins(:inv_nodes_inv_objects).select("number").where("role = ?", "primary").limit(1).map(&:number)[0]
+    InvNode.joins(:inv_nodes_inv_objects).select("number").where("role = ?", "primary").limit(1).map(&:number)[0]
   end
 
   def size
-    @size = InvFile.where("inv_object_id = ?", self.id).sum("billable_size")
+    InvFile.where("inv_object_id = ?", self.id).sum("billable_size")
   end
  
   def total_actual_size
-   @total_actual_size = InvFile.where("inv_object_id = ?", self.id).sum("full_size")
+    InvFile.where("inv_object_id = ?", self.id).sum("full_size")
   end
   
   def storage_url
-    @storage_url = self.bytestream_uri
+    self.bytestream_uri
   end
 
   def versions
-    return self.inv_versions
+    self.inv_versions
   end
 
   def current_version
-    return self.versions[-1]
+    self.versions[-1]
   end
 
   def who
@@ -56,11 +51,11 @@ class InvObject < ActiveRecord::Base
   def when
     self.erc_when
   end
-
-   def member_of
+  
+  def member_of
     self.inv_collections.first.ark
-   end
-    
+  end
+  
   def identifier
     self.ark
   end
@@ -71,24 +66,22 @@ class InvObject < ActiveRecord::Base
   end
 
   def permalink
-    p = "#{N2T_URI}#{self.ark.to_s}"
-    return p
+    "#{N2T_URI}#{self.ark.to_s}"
   end
   
   def files
-    return self.current_version.files
+    self.current_version.files
   end
 
   def system_files 
-    return self.files.select {|f| f.identifier.match(/^system\//) }
+    self.files.select {|f| f.identifier.match(/^system\//) }
   end
 
   def producer_files 
-    return self.files.select {|f| f.identifier.match(/^producer\//) }
+    self.files.select {|f| f.identifier.match(/^producer\//) }
   end
 
   def ark_urlencode
-     return urlencode_mod(self.ark)
+    urlencode_mod(self.ark)
   end
-  
 end
