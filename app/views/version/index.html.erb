@@ -51,12 +51,9 @@
   <div class="key">&nbsp;</div>
 <% if have_permission('download') then %>
   <div class="value">
-    <%= form_tag(:action => 'download') do %>
-      <%= hidden_field_tag 'group', params[:group] %>
-      <%= hidden_field_tag 'object', @object.identifier %>
-      <%= hidden_field_tag 'version', @version.identifier %>
-      <%= submit_tag 'Download version' %>
-    <% end %>
+    <form action="/d/<%= @object.ark_urlencode %>/<%= @version.identifier %>">
+      <input type="submit" value="Download version">
+    </form>
   </div>
 <% end %>
 </div>
