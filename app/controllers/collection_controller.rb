@@ -1,6 +1,7 @@
 class CollectionController < ApplicationController
   before_filter :require_user
   before_filter :require_group
+  prepend_before_filter :set_group_session_via_group, :only => [:index, :search_results]
 
   def object_count
     render :partial=>"object_count"
@@ -19,11 +20,6 @@ class CollectionController < ApplicationController
   end
   
   def index
-    #redirect objects to the object controller
-    unless params[:object].nil? 
-      redirect_to :controller=>'object', :action=>'index', :group=>params[:group], :object=>params[:object]
-    end
-
     @recent_objects = InvObject.joins(:inv_collections).
       where("inv_collections.ark = ?", @group.ark_id).
       order('version_number desc').

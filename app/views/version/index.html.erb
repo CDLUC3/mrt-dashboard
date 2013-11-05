@@ -12,12 +12,11 @@
     <%= link_to('Merritt', :controller => 'home', :action => 'index') %> &gt;
     <%= link_to("Collection: #{@group.description}", 
                 :controller => 'collection',
-                :action => 'index', 
-                :group => params[:group]) %> &gt;
+                :group => @group.id,
+                :action => 'index') %> &gt;
     <%= link_to("Object: #{@object.identifier}", 
                 :controller => 'object', 
-                :action => 'index', 
-                :group => params[:group], 
+                :action => 'index',
                 :object => @object.identifier) %> &gt;
     Version <%= @version.identifier %>
   </div>
@@ -36,34 +35,25 @@
               :number_files => (@files.length + @system_files.length)} %>
   <div class="clear"></div>
 
-  <%= render :partial => '/version/files', 
-             :locals => {:title   => 'User Files', 
-                         :files   => @files, 
-                         :obj     => @object, 
-                         :version => @version} %>
-  <%= render :partial => '/version/files',
-             :locals => {:title   => 'System Files', 
-                         :files   => @system_files,
-                         :obj     => @object, 
-                         :version => @version} %>
+  <h3>User Files</h3>
+  <%= render :partial => '/version/files', :locals => {:files => @files } %>
+  <h3>System Files</h3>
+  <%= render :partial => '/version/files', :locals => {:files => @system_files } %>
 
   <div class="key">&nbsp;</div><div class="value">&nbsp;</div>
   <div class="key">&nbsp;</div>
 <% if have_permission('download') then %>
   <div class="value">
-    <%= form_tag(:action => 'download') do %>
-      <%= hidden_field_tag 'group', params[:group] %>
-      <%= hidden_field_tag 'object', @object.identifier %>
-      <%= hidden_field_tag 'version', @version.identifier %>
-      <%= submit_tag 'Download version' %>
-    <% end %>
+    <form action="/d/<%= @object.ark_urlencode %>/<%= @version.identifier %>">
+      <input type="submit" value="Download version">
+    </form>
   </div>
 <% end %>
 </div>
 <div class="grid_1">&nbsp;</div>
 <div class="grid_4 sidebar">
   <%= render :partial => '/shared/side_lookup' %><br/>
-  <%= render :partial => '/version/list_sidebar',
-      :locals => {:versions => @object.versions.reverse,
-                  :title => 'All Versions'} %><br/>
+  <h3>All Versions</h3>
+  <%= render :partial => 'line_sidebar', :collection => @object.versions.reverse %>
+  <br/>
 </div>

@@ -128,6 +128,14 @@ class ApplicationController < ActionController::Base
     @_current_group ||= Group.find(session[:group_id])
   end
 
+  # Set group session data via :group param
+  def set_group_session_via_group
+    group = Group.find(params[:group])
+    session[:group_id] = group.id
+    session[:group_ark] = group.ark_id
+    session[:group_description] = group.description
+  end
+  
   #require a group if user logged in
   #but hackish thing to get group from session instead of params if help files didn't pass it along
   # 3.30.12 mstrong added logic to determine if :group is an object or collection
@@ -215,10 +223,6 @@ class ApplicationController < ActionController::Base
   def redirect_back_or_default(default)
     redirect_to(session[:return_to] || default)
     session[:return_to] = nil
-  end
-
-  def esc(i)
-    URI.escape(i, Regexp.new("[^#{URI::PATTERN::UNRESERVED}]"))
   end
 
   def fetch_to_tempfile(*args)
