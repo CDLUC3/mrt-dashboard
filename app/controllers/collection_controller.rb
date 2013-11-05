@@ -20,11 +20,6 @@ class CollectionController < ApplicationController
   end
   
   def index
-    #redirect objects to the object controller
-    unless params[:object].nil? 
-      redirect_to :controller=>'object', :action=>'index', :group=>params[:group], :object=>params[:object]
-    end
-
     @recent_objects = InvObject.joins(:inv_collections).
       where("inv_collections.ark = ?", @group.ark_id).
       order('version_number desc').
