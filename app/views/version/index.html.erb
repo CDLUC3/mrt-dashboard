@@ -17,7 +17,7 @@
     <%= link_to("Object: #{@object.identifier}", 
                 :controller => 'object', 
                 :action => 'index',
-                :object => @object.identifier) %> &gt;
+                :object => @object.ark_urlencode) %> &gt;
     Version <%= @version.identifier %>
   </div>
   <br/>
