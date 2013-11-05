@@ -29,7 +29,7 @@ MrtDashboard::Application.routes.draw do
   match('m/:group' => 'collection#index',
         :constraints => CollectionConstraint.new)
   match('m/:object' => 'object#index')
-  match( 'm/:group/:version' => 'version#index')#, :constraints => {:group => /ark(%3A|:)(%2F|\/).+/i})
+  match('m/:group/:version' => 'version#index')#, :constraints => {:group => /ark(%3A|:)(%2F|\/).+/i})
   match('d/:object' => 'object#download')
   match('d/:object/:version' => 'version#download')
   match('d/:object/:version/:file' => 'file#display' , :constraints => {:file => /.+/i})
