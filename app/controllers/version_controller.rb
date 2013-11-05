@@ -18,7 +18,6 @@ class VersionController < ApplicationController
     }.partition { |file|
       file.identifier.match(/^system\//)
     }
-    @permalink = "#{MERRITT_SERVER}/m/#{@object.ark_urlencode}/#{@version.identifier}"
   end
 
   def download
