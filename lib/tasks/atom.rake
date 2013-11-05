@@ -30,7 +30,7 @@ end
 
 # augment to include terminate processing info [mjr]
 def up_to_date?(local_id, collection_id, last_updated, stopdate)
-  obj = MrtObject.joins(:mrt_collections).where(["local_id = ?", local_id]).where(:mrt_collections => { :ark => collection_id})
+  obj = InvObject.joins(:inv_collections).where(["erc_where LIKE ?", "%#{local_id}%"]).where(:inv_collections => { :ark => collection_id})
 
   # terminate processing?
   if ! last_updated.nil? && ! stopdate.nil?  then
@@ -50,13 +50,13 @@ def up_to_date?(local_id, collection_id, last_updated, stopdate)
       return false 
     else
       last_updated_date = DateTime.parse(last_updated)
-      updated = last_updated_date <= obj.first.last_add_version
+      updated = last_updated_date <= obj.first.modified
       if (! updated) then
 	puts "Updating #{local_id}"
-	puts "         #{last_updated_date} > #{obj.first.last_add_version}"
+	puts "         #{last_updated_date} > #{obj.first.modified}"
       else
 	puts "NO need to update: #{local_id}"
-	puts "                   #{last_updated_date} <= #{obj.first.last_add_version}"
+	puts "                   #{last_updated_date} <= #{obj.first.modified}"
       end
       return updated
     end
