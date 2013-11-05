@@ -39,7 +39,8 @@
   <%= render :partial => '/version/current_sidebar',
       :locals => {:version => @object.current_version} %><br/>
   <% if @object.versions.length > 1 then %>
-    <%= render :partial => '/version/list_sidebar',
-      :locals => {:versions => @object.versions.reverse[1..-1], :title => 'Prior Versions'} %><br/>
+    <h3>Prior Versions</h3>
+    <%= render :partial => '/version/line_sidebar', :collection => @object.versions.reverse[1..-1] %>
+    <br/>
   <% end %>
 </div>
