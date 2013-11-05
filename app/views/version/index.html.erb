@@ -29,10 +29,7 @@
                :locals => {:obj => @object} %>
   </h3>
 
-  <%= render :partial => '/version/details_display', 
-  :locals => {:obj => @object,
-              :version => @version, 
-              :number_files => (@files.length + @system_files.length)} %>
+  <%= render :partial => '/version/details_display', :object => @version %>
   <div class="clear"></div>
 
   <h3>User Files</h3>
