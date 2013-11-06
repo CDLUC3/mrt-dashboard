@@ -100,4 +100,9 @@ eos
   def guest_logged_in?
     user_logged_in? && (session[:uid] == (User::GUEST_USER[:guest_user]))
   end
+  
+  # Return true if user has choosen a group
+  def group_choosen?
+    return !session[:group_id].nil?
+  end
 end
