@@ -1,9 +1,4 @@
 module ApplicationHelper
-  def version_no(uri)
-    md = uri.to_s.match(/\/([0-9]+)$/)
-    return md[1]
-  end
-
   def w3cdtf(time)
     case time
     when Time, DateTime
