@@ -1,13 +1,11 @@
-<% file = line_sidebar %>
 <li style="word-wrap:break-word;">
-<% if have_permission('download') then %>
-  <%= link_to File.basename(file.identifier),
-          :controller       => :file,
+  <% if have_permission('download') then %>
+    <%= link_to File.basename(line_sidebar.identifier),
           :action           => :display,
-          :object           => @object.ark_urlencode,
-          :version          => version.identifier,
-          :file             => file.file_urlencode %>
- <% else %>
-	 <%= File.basename(file.identifier) %>
- <% end %>
+          :object           => line_sidebar.inv_object.ark_urlencode,
+          :version          => line_sidebar.inv_version.identifier,
+          :file             => line_sidebar.file_urlencode %>
+  <% else %>
+    <%= File.basename(line_sidebar.identifier) %>
+  <% end %>
 </li>
