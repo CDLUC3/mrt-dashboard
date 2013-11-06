@@ -1,7 +1,7 @@
 require 'test_helper'
 
 class ObjectViewTest < ActionDispatch::IntegrationTest
-  fixtures :inv_objects, :inv_collections_inv_objects, :inv_collections
+  fixtures :inv_objects, :inv_collections_inv_objects, :inv_collections, :inv_files
 
   setup do
     visit(logout_path)
@@ -43,7 +43,17 @@ class ObjectViewTest < ActionDispatch::IntegrationTest
   test "large object download works" do 
     click_button("Guest")
     click_link("Demo Merritt")
-    click_link("ark:/99999/fk40k2sqf")
+    click_link("ark:/99999/fk41z6855")
+    click_button("Download object")
+
+    # should be sent to dua page
+    fill_in('Name', :with => 'Jane Doe')
+    fill_in('Affiliation', :with => 'Doe International')
+    fill_in('Email', :with => 'doe@mailinator.com')
+    check("accept")
+    click_button("Accept")
+    fill_in("Email", :with => "doe@mailinator")
+    click_button("Submit")
   end
 
   test "blue param avoids DUA" do

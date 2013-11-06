@@ -5,3 +5,7 @@ fk40k2sqf_demo:
 fk4qv5n4z_opencontext:
   inv_collection: opencontext
   inv_object: fk4qv5n4z
+
+fk41z6855_demo:
+  inv_collection: demo_collection
+  inv_object: fk41z6855

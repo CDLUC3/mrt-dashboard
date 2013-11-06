@@ -39,5 +39,6 @@ MrtDashboard::Application.configure do
 
   N2T_URI             = "http://n2t-wf.cdlib.org/"  
   URI_1 = 'http://uc3-mrt-store-dev.cdlib.org:35121/content/'
-  MAX_ARCHIVE_SIZE    = 1073741824
+  MAX_ARCHIVE_SIZE    = 999999
+  CONTAINER_URL       = 'http://uc3-mrt-store-dev.cdlib.org:35121/container/'
 end
