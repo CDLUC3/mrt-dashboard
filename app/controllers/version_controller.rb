@@ -77,7 +77,7 @@ class VersionController < ApplicationController
       end
     end
 
-    filename = "#{Orchard::Pairtree.encode(@object.identifier.to_s)}_version_#{Orchard::Pairtree.encode(@version.identifier.to_s)}.zip"
+    filename = "#{Orchard::Pairtree.encode(@version.inv_object.identifier.to_s)}_version_#{Orchard::Pairtree.encode(@version.identifier.to_s)}.zip"
     response.headers["Content-Type"] = "application/zip"
     response.headers["Content-Disposition"] = "attachment; filename= #{filename}"
     self.response_body = Streamer.new("#{@version.bytestream_uri}?t=zip")    
