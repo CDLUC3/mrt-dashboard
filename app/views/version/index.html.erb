@@ -1,10 +1,10 @@
 <% content_for :title do %>
-  UC3 Merritt: Version -- <%= @object.identifier %>, Version <%= @version.identifier %>
+  UC3 Merritt: Version -- <%= @version.inv_object.identifier %>, Version <%= @version.identifier %>
 <% end %>
 
 <div class="grid_11">
   <h2>
-    <%= @object.identifier %> - 
+    <%= @version.inv_object.identifier %> - 
     Version <%= @version.identifier %>:
     <%= merritt_time(@version.created)%>
   </h2>
@@ -14,10 +14,10 @@
                 :controller => 'collection',
                 :group => @group.id,
                 :action => 'index') %> &gt;
-    <%= link_to("Object: #{@object.identifier}", 
+    <%= link_to("Object: #{@version.inv_object.identifier}", 
                 :controller => 'object', 
                 :action => 'index',
-                :object => @object.ark_urlencode) %> &gt;
+                :object => @version.inv_object.ark_urlencode) %> &gt;
     Version <%= @version.identifier %>
   </div>
   <br/>
@@ -26,7 +26,7 @@
   <br/>
   <h3 style="font-weight: normal;">
     <%= render :partial => "/object/short_bib_display", 
-               :locals => {:obj => @object} %>
+               :locals => {:obj => @version.inv_object} %>
   </h3>
 
   <%= render :partial => '/version/details_display', :object => @version %>
@@ -41,7 +41,7 @@
   <div class="key">&nbsp;</div>
 <% if have_permission('download') then %>
   <div class="value">
-    <form action="/d/<%= @object.ark_urlencode %>/<%= @version.identifier %>">
+    <form action="/d/<%= @version.inv_object.ark_urlencode %>/<%= @version.identifier %>">
       <input type="submit" value="Download version">
     </form>
   </div>
@@ -51,6 +51,6 @@
 <div class="grid_4 sidebar">
   <%= render :partial => '/shared/side_lookup' %><br/>
   <h3>All Versions</h3>
-  <%= render :partial => 'line_sidebar', :collection => @object.versions.reverse %>
+  <%= render :partial => 'line_sidebar', :collection => @version.inv_object.versions.reverse %>
   <br/>
 </div>
