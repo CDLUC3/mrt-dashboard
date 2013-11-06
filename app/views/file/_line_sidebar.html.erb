@@ -1,6 +1,7 @@
 <li style="word-wrap:break-word;">
   <% if have_permission('download') then %>
     <%= link_to File.basename(line_sidebar.identifier),
+          :controller       => :file,
           :action           => :display,
           :object           => line_sidebar.inv_object.ark_urlencode,
           :version          => line_sidebar.inv_version.identifier,
