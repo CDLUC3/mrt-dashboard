@@ -35,8 +35,7 @@
 <div class="grid_1">&nbsp;</div>
 <div class="grid_4 sidebar">
   <%= render :partial => '/shared/side_lookup' %><br/>
-  <%= render :partial => '/version/current_sidebar',
-      :locals => {:version => @object.current_version} %><br/>
+  <%= render :partial => '/version/current_sidebar', :object => @object.current_version %><br/>
   <% if @object.versions.length > 1 then %>
     <h3>Prior Versions</h3>
     <%= render :partial => '/version/line_sidebar', :collection => @object.versions.reverse[1..-1] %>
