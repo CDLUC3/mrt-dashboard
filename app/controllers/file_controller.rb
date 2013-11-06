@@ -11,9 +11,6 @@ class FileController < ApplicationController
                                                            :version => params[:version]}) }
 
   def display
-    params[:file] =  urlunencode(params[:file]) unless params[:file].nil?
-    params[:format] =  urlunencode(params[:format]) unless params[:format].nil?
-    
     filename = params[:file]
 
     # determine if user is retrieving a system file; otherwise assume they are obtaining
