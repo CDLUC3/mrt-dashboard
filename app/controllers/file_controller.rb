@@ -21,7 +21,7 @@ class FileController < ApplicationController
     filename = "#{filename}.#{params[:format]}" if !params[:format].blank?
 
     file = InvObject.where(:ark=>params[:object]).first.
-            files.where(:pathname=>filename).first
+      files.where(:pathname=>filename).first
             
     file_uri = URI.parse(file.bytestream)
     Rails.logger.info(file_uri)
