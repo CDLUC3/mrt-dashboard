@@ -6,8 +6,7 @@ class FileController < ApplicationController
   before_filter :require_group
   before_filter(:only=>[:display]) { require_permissions('download',
                                                          { :controller => 'version',
-                                                           :action => 'index', 
-                                                           :group => flexi_group_id,
+                                                           :action => 'index',
                                                            :object =>params[:object], 
                                                            :version => params[:version]}) }
 
