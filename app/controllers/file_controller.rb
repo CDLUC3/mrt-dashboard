@@ -13,16 +13,12 @@ class FileController < ApplicationController
   def display
     filename = params[:file]
 
-    # determine if user is retrieving a system file; otherwise assume they are obtaining
-    # a producer file which needs to prepended to the filename
-    if !filename.match(/^(producer|system)/)
-        
-      filename = "producer/#{filename}"
-    end
+    # determine if user is retrieving a system file; otherwise assume
+    # they are obtaining a producer file which needs to prepended to
+    # the filename
+    filename = "producer/#{filename}" if !filename.match(/^(producer|system)/)
     # the router removes the file extension from the filename - need to add it back on if one exists
-    if !params[:format].blank?
-      filename = "#{filename}.#{params[:format]}"
-    end
+    filename = "#{filename}.#{params[:format]}" if !params[:format].blank?
 
     file = InvObject.where(:ark=>params[:object]).first.
             files.where(:pathname=>filename).first
