@@ -1,4 +1,3 @@
-
 module ApplicationHelper
   def version_no(uri)
     md = uri.to_s.match(/\/([0-9]+)$/)
@@ -90,5 +89,15 @@ eos
     if !Rails.env.include?('production') then
       Rails.env
     end
+  end
+
+  # Return true if a user is logged in
+  def user_logged_in?
+    return !session[:uid].blank?
+  end
+  
+  # Return true if logged in as guest
+  def guest_logged_in?
+    user_logged_in? && (session[:uid] == (User::GUEST_USER[:guest_user]))
   end
 end
