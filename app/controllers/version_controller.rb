@@ -6,6 +6,22 @@ class VersionController < ApplicationController
   before_filter :require_inv_version
   before_filter :require_download_permissions,    :only => [:download]
 
+  include Encoder
+
+  def require_inv_version
+    if (params[:version].to_i == 0) then
+      latest_version = InvObject.find_by_ark(params[:object]).versions[-1].number
+      redirect_to(:object => urlencode_mod(params[:object]),
+                  :version => latest_version)
+    else
+      @version = InvVersion.joins(:inv_object).
+        where("inv_objects.ark = ?", params[:object]).
+        where("inv_versions.number = ?", params[:version].to_i).
+        first
+      render :status => 404 and return if @version.nil?
+    end
+  end
+
   def require_session_object_version
     params[:object] = session[:object] if !session[:object].nil? && params[:object].nil?
     params[:version] = session[:version] if !session[:version].nil? && params[:version].nil?

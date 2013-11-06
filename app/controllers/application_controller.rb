@@ -189,15 +189,6 @@ class ApplicationController < ActionController::Base
     @object = InvObject.find_by_ark(params[:object])
   end
   
-  def require_inv_version
-    redirect_to(:controller => :object,
-                :action => 'index', 
-                :group => flexi_group_id,
-                :object => params[:object]) and return false if params[:version].nil?
-    require_inv_object() if @object.nil?
-    @version = @object.versions[params[:version].to_i - 1]
-  end
-
   def exceeds_size
     return (@object.total_actual_size > MAX_ARCHIVE_SIZE)
   end
