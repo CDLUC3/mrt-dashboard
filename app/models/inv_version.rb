@@ -9,12 +9,12 @@ class InvVersion < ActiveRecord::Base
   end
 
   def permalink
-    "#{MERRITT_SERVER}/m/#{self.inv_object.ark_urlencode}/#{self.identifier}"
+    "#{MERRITT_SERVER}/m/#{self.inv_object.to_param}/#{self.identifier}"
   end
   
   def bytestream_uri 
     obj = self.inv_object
-    URI.parse("#{URI_1}#{obj.node_number}/#{obj.ark_urlencode}/#{self.number}")
+    URI.parse("#{URI_1}#{obj.node_number}/#{obj.to_param}/#{self.number}")
   end
 
   def total_size
