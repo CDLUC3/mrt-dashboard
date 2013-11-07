@@ -1,0 +1,12 @@
+fk41z6855_1_file:
+  inv_object: fk41z6855
+  inv_version: fk41z6855_1
+  pathname: "producer/hugeimage"
+  source: "producer"
+  role: "data"
+  full_size: 9999999
+  billable_size: 999999
+  mime_type: "image/jpeg"
+  digest_type: "sha-256"
+  digest_value: "0000000000000000000000000000000000000000000000000000000000000000"
+  created: "2013-08-09 14:41:23"
