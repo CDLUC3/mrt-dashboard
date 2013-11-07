@@ -31,54 +31,35 @@ class LostorageController < ApplicationController
     end
   end
   
-  def post_los_email(email)
-    create_email_msg_body(email)
-    xml_file = build_email_xml()
-    
+  def post_los_email(to_addr)
+    unique_name = UUIDTools::UUID.random_create().hash.to_s
+    @container_type = (session[:version] && "version") || "object"
+    @dl_url = "#{CONTAINER_URL}#{unique_name}.tar.gz"
+    @object = urlencode_mod(session[:object])
+    @version = session[:version]
     #construct the async storage URL using the object's state storage URL-  Sub async for state in URL.
+    email_xml_file = build_email_xml(to_addr,
+                                     "Merritt #{@container_type.capitalize} Download Processing Completed ",
+                                     render_to_string(:partial => "lostorage/los_email_body.text.erb"))
     resp = RestClient.post(InvObject.find_by_ark(session[:object]).bytestream_uri.to_s.gsub(/content/,'async'),
-                           { 'email'             => lostorage_xml_email_profile,
+                           { 'email'             => email_xml_file,
                              'responseForm'      => 'xml',
                              'containerForm'     => "targz",
-                             'name'              => @email_data['name'] },
-                           {:multipart => true })
-    xml_file.close!
+                             'name'              => unique_name },
+                           { :multipart => true })
+    email_xml_file.close!
     return resp
   end
 
-  def create_email_msg_body(email)
-    container_type = (session[:version] && "version") || "object"
-    #Create theemail URL to include in the body which includes a random name for stored container
-    uri_name = UUIDTools::UUID.random_create().hash.to_s + '.tar.gz'
-    link_info = "The #{container_type} that you requested is ready for you to download. " +
-      "Please click on the link to download your file: \n\n #{CONTAINER_URL + uri_name} \n\n" +
-      "Please note that this link will expire in 7 days from the date of this email.   \n\n" +
-      "The content is stored as a compressed file in the \"tar.gz\" format. For an explanation of " +
-      "how to extract the files in this container, see http://www.gzip.org/#faq6. \n\n" +
-      "If you have any questions regarding the download of this archive, please contact uc3@cdlib.org."
-    
-    #TODO: clean this up so all the text is in a template       
-    @email_data = {
-      'from'       => APP_CONFIG['lostorage_email_from'],
-      'to_email'   => [email] + APP_CONFIG['lostorage_email_to'],
-      'collection' => @group.description,
-      'object'     => urlencode_mod(session[:object]),
-      'version'    => session[:version],
-      'subject'    => "Merritt #{container_type.capitalize} Download Processing Completed ",
-      'link_info'  => link_info,
-      'name'       => uri_name }
-    email_body = render_to_string( :partial => "lostorage/los_email_body.text.erb")      
-    @email_data['email_body'] = email_body    
-  end
-
-  def build_email_xml(from_addr, to_addr, subject, body)
+  def build_email_xml(to_addr, subject, body)
     tempfile = Tempfile.new("mail.xml")
     xml = Builder::XmlMarkup.new :target => tempfile
     xml.instruct!
     xml.email do
-      xml.from(from_addr)
-      to_addr.each do |x|
-        xml.to(x)
+      xml.from(APP_CONFIG['lostorage_email_from'])
+      xml.to(to_addr)
+      APP_CONFIG['lostorage_email_to'].each do |addr|
+        xml.to(addr)
       end
       xml.subject(subject)
       xml.msg(body)
