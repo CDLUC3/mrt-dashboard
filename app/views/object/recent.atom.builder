@@ -48,8 +48,8 @@ xml.tag!('feed', :xmlns => "http://www.w3.org/2005/Atom",
                                  :action     => 'download',
                                  :object     => obj))
       xml.tag!("dct:extent", "#{obj.size}")
-      if (!obj.local_identifier.nil?) then
-        local_id = obj.local_identifier
+      if (!obj.erc_where.nil?) then
+        local_id = obj.erc_where
         if (local_id.blank? && local_id.match(/^http/)) then
           xml.tag!("link",
                    "rel"  => "alternate",
