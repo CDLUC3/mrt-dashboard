@@ -70,7 +70,7 @@ class VersionController < ApplicationController
         session[:perform_async] = false;  #reinitalize flag to false
         redirect_to  :action => 'index', :group => flexi_group_id, :object =>params[:object], :version => params[:version]  and return false
       else #allow user to enter email
-        store_location
+        session[:redirect_to] = url_for(:action => 'display', :version => @version, :object => @version.inv_object)
         store_object
         store_version
         redirect_to :controller => "lostorage",  :action => "index" and return false 
