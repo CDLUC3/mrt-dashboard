@@ -22,21 +22,17 @@ class InvVersion < ActiveRecord::Base
   end
 
   def system_files 
-    self.files.select {|f| f.pathname.match(/^system\//) }.
+    self.inv_files.select {|f| f.pathname.match(/^system\//) }.
       sort_by {|x| File.basename(x.pathname.downcase) }
   end
 
   def producer_files 
-    self.files.select {|f| f.pathname.match(/^producer\//) }.
+    self.inv_files.select {|f| f.pathname.match(/^producer\//) }.
       sort_by {|x| File.basename(x.pathname.downcase) }
   end
 
   def metadata(element)
     self.inv_dublinkernels.select {|md| md.element == element }.map {|md| md.value }
-  end
-
-  def files
-    self.inv_files
   end
 
   def who

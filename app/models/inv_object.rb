@@ -1,6 +1,5 @@
 class InvObject < ActiveRecord::Base
   has_many :inv_versions
-  has_many :inv_files
   
   has_many :inv_dublinkernels
 
@@ -71,17 +70,5 @@ class InvObject < ActiveRecord::Base
 
   def permalink
     "#{N2T_URI}#{self.ark.to_s}"
-  end
-  
-  def files
-    self.current_version.files
-  end
-
-  def system_files 
-    self.files.select {|f| f.pathname.match(/^system\//) }
-  end
-
-  def producer_files 
-    self.files.select {|f| f.pathname.match(/^producer\//) }
   end
 end
