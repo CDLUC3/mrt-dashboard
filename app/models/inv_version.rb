@@ -38,10 +38,6 @@ class InvVersion < ActiveRecord::Base
     self.metadata('who')[0]
   end
 
-  def member_of
-    self.inv_object.inv_collections.first.ark
-  end
-
   def what
     self.metadata('what')[0]
   end
