@@ -6,7 +6,7 @@
                     :controller => :file, 
                     :action => :display,
                     :object => file.inv_object,
-                    :version => file.inv_version.identifier,
+                    :version => file.inv_version,
                     :file => file) %>
       <% else %>
         <%= File.basename(file.pathname) %>

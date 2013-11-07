@@ -1,12 +1,12 @@
 <% version = line_sidebar %>
 <% if have_permission('download') then %>
-  <%= link_to "Version #{version.identifier}",
+  <%= link_to "Version #{version.number}",
               :controller => :version,
               :action     => :index,
               :object     => version.inv_object,
-              :version    => version.identifier %>:
+              :version    => version %>:
 <% else %>
-  Version <%= version.identifier %>:
+  Version <%= version.number %>:
 <% end %>
 <%= merritt_time(version.created) %>
 <br/>
