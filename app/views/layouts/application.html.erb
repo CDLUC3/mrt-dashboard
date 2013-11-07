@@ -18,7 +18,7 @@
   <body>
     <div class="container_16">
       <% if user_logged_in? then %>
-        <% if group_choosen? then %>
+        <% if !group_choosen? then %>
           <%= render :partial => "/shared/logged_in_top" %>
           <div class="clear"></div>
           <div class="grid_16">&nbsp;</div>
