@@ -237,7 +237,7 @@ class ApplicationController < ActionController::Base
   end
  
   def collection_ark
-    @collection ||= InvObject.find_by_ark(params[:object]).member_of
+    @collection ||= InvObject.find_by_ark(params[:object]).inv_collection.ark
   end 
     
   # parse the component (object, file, or version) uri to construct the DUA URI

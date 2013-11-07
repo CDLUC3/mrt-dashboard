@@ -51,8 +51,8 @@ class InvObject < ActiveRecord::Base
     self.erc_when
   end
   
-  def member_of
-    self.inv_collections.first.ark
+  def inv_collection
+    self.inv_collections.first
   end
   
   def identifier
