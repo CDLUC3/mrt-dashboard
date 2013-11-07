@@ -30,10 +30,6 @@ class InvObject < ActiveRecord::Base
   def total_actual_size
     InvFile.where("inv_object_id = ?", self.id).sum("full_size")
   end
-  
-  def storage_url
-    self.bytestream_uri
-  end
 
   def current_version
     self.inv_versions[-1]
