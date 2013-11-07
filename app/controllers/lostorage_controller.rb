@@ -36,14 +36,11 @@ class LostorageController < ApplicationController
     lostorage_xml_email_profile = build_email_xml()
     
     #construct the async storage URL using the object's state storage URL-  Sub async for state in URL.
-    storage_url = InvObject.find_by_ark(session[:object]).bytestream_uri
-    storage_async_url = storage_url.to_s.gsub(/content/,'async')
-    resp = RestClient.post(storage_async_url, {
-                             'email'             => lostorage_xml_email_profile,
+    resp = RestClient.post(InvObject.find_by_ark(session[:object]).bytestream_uri.to_s.gsub(/content/,'async'),
+                           { 'email'             => lostorage_xml_email_profile,
                              'responseForm'      => 'xml',
                              'containerForm'     => "targz",
-                             'name'              => @email_data['name']        
-                           }, 
+                             'name'              => @email_data['name'] },
                            {:multipart => true })
     lostorage_xml_email_profile.close!
     return resp
