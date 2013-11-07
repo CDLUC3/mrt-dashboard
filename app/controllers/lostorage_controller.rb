@@ -8,33 +8,28 @@ class LostorageController < ApplicationController
   include Encoder
 
   def index 
-    if params['commit'].eql?("Submit") then  
+    if params[:commit] == "Submit" then
       if params[:user_agent_email].blank? then
-        flash[:message] = 'Please enter the required fields'
-        return
+        flash[:message] = 'Please enter the required fields' and return
+      elsif !params[:user_agent_email].match(/^.+@.+$/) then
+        flash[:message] = 'You must fill in a valid return email address.' and return
+      else 
+        response_code = post_los_email(params[:user_agent_email])
+        @doc = Nokogiri::XML(@response) do |config|
+          config.strict.noent.noblanks
+        end
+        
+        if (response_code == 200) then
+          session[:perform_async] = true
+          flash[:notice] = "Processing of large object compression has begun.  Please look for an email in your inbox"
+        else
+          #TODO: flash error messages are not displaying properly
+          flash[:error] = "Error processing large object in storage service.  Please contact uc3@ucop.edu" and return
+        end
+        redirect_to session[:return_to]
       end
-
-      if !params[:user_agent_email].match(/^.+@.+$/) then
-        flash[:message] = 'You must fill in a valid return email address.'
-        return
-      end   
-      
-      response_code = post_los_email(params[:user_agent_email])
-      @doc = Nokogiri::XML(@response) do |config|
-        config.strict.noent.noblanks
-      end
-
-      # process return response code
-      #TODO: flash error messages are not displaying properly
-      if response_code != 200 then
-        flash[:error] = "Error processing large object in storage service.  Please contact uc3@ucop.edu"
-      else
-        session[:perform_async] = true
-        flash[:notice] = "Processing of large object compression has begun.  Please look for an email in your inbox"
-      end
-      redirect_to session[:return_to]
-    elsif params[:commit].eql?("Cancel") 
-      session[:perform_async] = "cancel";
+    elsif params[:commit] == "Cancel" then
+      session[:perform_async] = "cancel"
       redirect_to session[:return_to]
     end
   end
