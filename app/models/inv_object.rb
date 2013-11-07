@@ -12,6 +12,10 @@ class InvObject < ActiveRecord::Base
 
   include Encoder
 
+  def to_param
+    self.ark_urlencode
+  end
+
   def bytestream_uri
     URI.parse("#{URI_1}#{self.node_number}/#{self.ark_urlencode}")
   end

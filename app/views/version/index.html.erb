@@ -17,7 +17,7 @@
     <%= link_to("Object: #{@version.inv_object.identifier}", 
                 :controller => 'object', 
                 :action => 'index',
-                :object => @version.inv_object.ark_urlencode) %> &gt;
+                :object => @version.inv_object) %> &gt;
     Version <%= @version.identifier %>
   </div>
   <br/>
@@ -41,7 +41,7 @@
   <div class="key">&nbsp;</div>
 <% if have_permission('download') then %>
   <div class="value">
-    <form action="/d/<%= @version.inv_object.ark_urlencode %>/<%= @version.identifier %>">
+    <form action="<%= url_for(:action=>:download, :object=> @version.inv_object, :version => @version.identifier) %>">
       <input type="submit" value="Download version">
     </form>
   </div>

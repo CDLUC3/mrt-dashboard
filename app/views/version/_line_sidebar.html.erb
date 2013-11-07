@@ -3,7 +3,7 @@
   <%= link_to "Version #{version.identifier}",
               :controller => :version,
               :action     => :index,
-              :object     => version.inv_object.ark_urlencode,
+              :object     => version.inv_object,
               :version    => version.identifier %>:
 <% else %>
   Version <%= version.identifier %>:
