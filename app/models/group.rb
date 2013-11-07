@@ -13,6 +13,10 @@ class Group
   def initialize
   end
 
+  def param_to
+    self.id
+  end
+  
   def self.find_all
     LDAP.find_all
   end
