@@ -43,7 +43,7 @@ class LostorageController < ApplicationController
       'responseForm'      => 'xml',
       'containerForm'     => "targz",
       'name'              => @email_data['name']        
-    }.reject{|k, v| v.blank? }
+    }
     
     #construct the async storage URL using the object's state storage URL-  Sub async for state in URL.
     storage_url = InvObject.find_by_ark(session[:object]).bytestream_uri
