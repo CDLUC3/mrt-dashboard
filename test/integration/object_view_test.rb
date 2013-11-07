@@ -12,6 +12,7 @@ class ObjectViewTest < ActionDispatch::IntegrationTest
     click_button("Guest")
     click_link("Demo Merritt")
     click_link("ark:/99999/fk40k2sqf")
+    assert_equal(current_path, "/m/ark%3A%2F99999%2Ffk40k2sqf")
   end
 
   test "dua works" do
