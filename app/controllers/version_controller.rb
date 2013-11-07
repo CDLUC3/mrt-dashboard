@@ -62,19 +62,7 @@ class VersionController < ApplicationController
 
     # if size is > 4GB, redirect to have user enter email for asynch compression (skipping streaming)
     if exceeds_size() then
-      #if user canceled out of enterering email redirect to object landing page
-      if session[:perform_async].eql?("cancel") then
-        session[:perform_async] = false;  #reinitalize flag to false
-        redirect_to  :action => 'index', :object =>params[:object], :version => params[:version] and return false
-      elsif session[:perform_async] then #do not stream, redirect to object landing page
-        session[:perform_async] = false;  #reinitalize flag to false
-        redirect_to  :action => 'index', :object =>params[:object], :version => params[:version]  and return false
-      else #allow user to enter email
-        session[:redirect_to] = url_for(:action => 'display', :version => @version, :object => @version.inv_object)
-        store_object
-        store_version
-        redirect_to :controller => "lostorage",  :action => "index" and return false 
-      end
+      redirect_to(:controller => "lostorage", :action => "index", :object => @version.inv_object, :version => @version) and return
     end
 
     filename = "#{Orchard::Pairtree.encode(@version.inv_object.ark.to_s)}_version_#{Orchard::Pairtree.encode(@version.ark.to_s)}.zip"
