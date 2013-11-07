@@ -10,7 +10,7 @@ class VersionController < ApplicationController
 
   def require_inv_version
     if (params[:version].to_i == 0) then
-      latest_version = InvObject.find_by_ark(params[:object]).inv_versions[-1].number
+      latest_version = InvObject.find_by_ark(params[:object]).current_version.number
       redirect_to(:object => urlencode_mod(params[:object]),
                   :version => latest_version)
     else
