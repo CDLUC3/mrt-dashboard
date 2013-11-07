@@ -35,12 +35,8 @@ class InvObject < ActiveRecord::Base
     self.bytestream_uri
   end
 
-  def versions
-    self.inv_versions
-  end
-
   def current_version
-    self.versions[-1]
+    self.inv_versions[-1]
   end
 
   def who
