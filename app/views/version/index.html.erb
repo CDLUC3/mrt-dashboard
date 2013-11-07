@@ -10,9 +10,9 @@
   </h2>
   <div class="breadcrumbs">
     <%= link_to('Merritt', :controller => 'home', :action => 'index') %> &gt;
-    <%= link_to("Collection: #{@group.description}", 
+    <%= link_to("Collection: #{@version.inv_object.group.description}", 
                 :controller => 'collection',
-                :group => @group.id,
+                :group => @version.inv_object.group.id,
                 :action => 'index') %> &gt;
     <%= link_to("Object: #{@version.inv_object.identifier}", 
                 :controller => 'object', 
