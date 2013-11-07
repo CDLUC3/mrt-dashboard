@@ -28,6 +28,7 @@ MrtDashboard::Application.routes.draw do
   # m/ark... can route to either collection or object depending on the constraint
   match('m/:group' => 'collection#index',
         :constraints => CollectionConstraint.new)
+  match('s/:group' => 'collection#search_results')
   match('m/:object' => 'object#index')
   match('m/:object/:version' => 'version#index')
   match('d/:object' => 'object#download')
