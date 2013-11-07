@@ -4,7 +4,9 @@ require 'tempfile'
 class LostorageController < ApplicationController
   before_filter :require_user
   before_filter :require_group
-  
+
+  include Encoder
+
   def index 
     if params['commit'].eql?("Submit") then  
       if params[:user_agent_email].blank? then
@@ -73,7 +75,7 @@ class LostorageController < ApplicationController
                    {'from'       => APP_CONFIG['lostorage_email_from'],
                      'to_email'   => to_email,
                      'collection' => @group.description,
-                     'object'     => session[:object],
+                     'object'     => urlencode_mod(session[:object]),
                      'version'    => session[:version],
                      'subject'    => "Merritt #{container_type.capitalize} Download Processing Completed ",
                      'link_info'  => link_info,
