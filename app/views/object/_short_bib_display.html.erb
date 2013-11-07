@@ -2,7 +2,7 @@
   <%= dc_nice(short_bib_display.erc_who) %>.
 <% end %>
 
-<% if !dc_nice(short_bib_display.erc_what)blank? then %>
+<% if !dc_nice(short_bib_display.erc_what).blank? then %>
   <span class="title"><%= dc_nice(short_bib_display.erc_what) %></span>
 <% end %>
 
