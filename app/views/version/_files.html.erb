@@ -2,14 +2,14 @@
   <% files.each do |file| %>
     <div class="key">
       <% if have_permission('download') then %>
-        <%= link_to(File.basename(file.identifier), 
+        <%= link_to(File.basename(file.pathname), 
                     :controller => :file, 
                     :action => :display,
                     :object => file.inv_object,
                     :version => file.inv_version.identifier,
                     :file => file) %>
       <% else %>
-        <%= File.basename(file.identifier) %>
+        <%= File.basename(file.pathname) %>
       <% end %>
     </div>
     <div class="value">

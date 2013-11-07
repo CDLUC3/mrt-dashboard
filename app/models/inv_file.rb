@@ -4,10 +4,6 @@ class InvFile < ActiveRecord::Base
 
   include Encoder
 
-  def identifier
-    self.pathname
-  end
-
   def to_param
     urlencode_mod(self.pathname)
   end
