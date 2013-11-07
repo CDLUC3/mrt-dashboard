@@ -13,8 +13,7 @@ class InvVersion < ActiveRecord::Base
   end
   
   def bytestream_uri 
-    obj = self.inv_object
-    URI.parse("#{URI_1}#{obj.node_number}/#{obj.to_param}/#{self.number}")
+    URI.parse("#{URI_1}#{self.inv_object.node_number}/#{self.inv_object.to_param}/#{self.number}")
   end
 
   def total_size
