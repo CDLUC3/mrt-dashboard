@@ -188,18 +188,7 @@ class ObjectController < ApplicationController
     
     # if size is > 4GB, redirect to have user enter email for asynch compression (skipping streaming)
     if exceeds_size() then
-      #if user canceled out of enterering email redirect to object landing page
-      if session[:perform_async].eql?("cancel") then
-        session[:perform_async] = false;  #reinitalize flag to false
-        redirect_to  :action => 'index', :group => flexi_group_id, :object =>params[:object] and return false
-      elsif session[:perform_async] then #do not stream, redirect to object landing page
-        session[:perform_async] = false;  #reinitalize flag to false
-        redirect_to  :action => 'index', :group => flexi_group_id, :object =>params[:object] and return false
-      else #allow user to enter email
-        store_location
-        store_object
-        redirect_to :controller => "lostorage",  :action => "index" and return false 
-      end
+      redirect_to(:controller => "lostorage", :action => "index", :object => @object) and return
     end
 
     response.headers["Content-Disposition"] = "attachment; filename=#{Orchard::Pairtree.encode(@object.ark.to_s)}_object.zip"
