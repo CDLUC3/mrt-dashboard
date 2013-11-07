@@ -33,7 +33,7 @@ class LostorageController < ApplicationController
   
   def post_los_email(email)
     create_email_msg_body(email)
-    lostorage_xml_email_profile = create_los_email
+    lostorage_xml_email_profile = build_email_xml()
     
     @lostorage_args = {
       'email'             => lostorage_xml_email_profile,
@@ -75,7 +75,7 @@ class LostorageController < ApplicationController
     @email_data['email_body'] = email_body    
   end
 
-  def create_los_email
+  def build_email_xml
     tempfile = Tempfile.new("mail.xml")
     xml = Builder::XmlMarkup.new :target => tempfile
     xml.instruct!
