@@ -29,8 +29,4 @@ production_development:
   production
 
 test:
-  dua_email_to:         [shirin.faenza@ucop.edu]
-  dua_email_from:       no-reply-merritt@ucop.edu
-  mrt_dua_file:         producer/mrt-dua.txt
-  lostorage_email_to:   [shirin.faenza@ucop.edu]
-  lostorage_email_from: [shirin.faenza@ucop.edu]
+  development
