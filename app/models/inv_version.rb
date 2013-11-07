@@ -44,4 +44,8 @@ class InvVersion < ActiveRecord::Base
   def erc_when
     self.metadata('when')[0]
   end
+
+  def erc_where
+    self.metadata('where')[0]
+  end
 end
