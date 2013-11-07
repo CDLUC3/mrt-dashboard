@@ -17,8 +17,8 @@
   </head>
   <body>
     <div class="container_16">
-      <% if !session[:uid].blank? then %>
-        <% if session[:group_id].blank? then %>
+      <% if user_logged_in? then %>
+        <% if group_choosen? then %>
           <%= render :partial => "shared/no_collection_head" %>
         <% else %>
           <%= render :partial => "shared/collection_head" %>
