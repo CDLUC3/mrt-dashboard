@@ -1,7 +1,7 @@
 <div class="grid_12">
   <h2>Search Results</h2>
   <div class="breadcrumbs"><%= link_to('Merritt', :controller => 'home', :action => 'index') %> &gt;
-    <%= link_to("Collection: #{@request_group.description}", :controller => 'collection', :action => 'index', :group => params[:group]) %>
+    <%= link_to("Collection: #{@request_group.description}", :controller => 'collection', :action => 'index', :group => @request_group.id) %>
     &gt; Search Results
   </div>
   <br/>
