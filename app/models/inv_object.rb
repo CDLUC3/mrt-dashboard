@@ -13,11 +13,11 @@ class InvObject < ActiveRecord::Base
   include Encoder
 
   def to_param
-    self.ark_urlencode
+    urlencode_mod(self.ark)
   end
 
   def bytestream_uri
-    URI.parse("#{URI_1}#{self.node_number}/#{self.ark_urlencode}")
+    URI.parse("#{URI_1}#{self.node_number}/#{self.to_param}")
   end
 
   def node_number
@@ -83,9 +83,5 @@ class InvObject < ActiveRecord::Base
 
   def producer_files 
     self.files.select {|f| f.pathname.match(/^producer\//) }
-  end
-
-  def ark_urlencode
-    urlencode_mod(self.ark)
   end
 end
