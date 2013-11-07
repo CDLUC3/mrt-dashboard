@@ -15,9 +15,6 @@ class LostorageController < ApplicationController
         flash[:message] = 'You must fill in a valid return email address.' and return
       else 
         resp = post_los_email(params[:user_agent_email])
-        @doc = Nokogiri::XML(resp) do |config|
-          config.strict.noent.noblanks
-        end
         
         if (resp.code == 200) then
           session[:perform_async] = true
