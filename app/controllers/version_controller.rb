@@ -38,7 +38,7 @@ class VersionController < ApplicationController
         # if DUA was not accepted, redirect to object landing page 
         if session[:collection_acceptance][@version.inv_object.group.id].eql?("not accepted") then
           session[:collection_acceptance][@version.inv_object.group.id] = false  # reinitialize to false so user can again be given option to accept DUA 
-          redirect_to :action => 'index', :group => flexi_group_id,  :object =>params[:object], :version => params[:version] and return false
+          redirect_to :action => 'index', :object =>params[:object], :version => params[:version] and return false
           # if DUA for this collection has not yet been displayed to user, perform logic to retrieve DUA.
           # if persistance is at the session level and user already saw DUA, this section will be skipped
         elsif !session[:collection_acceptance][@version.inv_object.group.id]
@@ -65,10 +65,10 @@ class VersionController < ApplicationController
       #if user canceled out of enterering email redirect to object landing page
       if session[:perform_async].eql?("cancel") then
         session[:perform_async] = false;  #reinitalize flag to false
-        redirect_to  :action => 'index', :group => flexi_group_id, :object =>params[:object], :version => params[:version] and return false
+        redirect_to  :action => 'index', :object =>params[:object], :version => params[:version] and return false
       elsif session[:perform_async] then #do not stream, redirect to object landing page
         session[:perform_async] = false;  #reinitalize flag to false
-        redirect_to  :action => 'index', :group => flexi_group_id, :object =>params[:object], :version => params[:version]  and return false
+        redirect_to  :action => 'index', :object =>params[:object], :version => params[:version]  and return false
       else #allow user to enter email
         session[:redirect_to] = url_for(:action => 'display', :version => @version, :object => @version.inv_object)
         store_object
