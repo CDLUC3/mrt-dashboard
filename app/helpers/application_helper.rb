@@ -67,9 +67,10 @@ module ApplicationHelper
   # Format kernel metadata, filtering out unassigned values
   def dc_nice(i)
     if i.nil? || i.match(/\(:unas\)/)
-      return ''
-    end 
-    i 
+      ''
+    else
+      i
+    end
   end
 
   #makes a tip over a question mark item, just pass in the text
