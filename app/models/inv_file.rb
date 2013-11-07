@@ -11,9 +11,4 @@ class InvFile < ActiveRecord::Base
   def bytestream_uri
     URI.parse("#{URI_1}#{self.inv_object.node_number}/#{self.inv_object.to_param}/#{self.inv_version.number}/#{self.to_param}")
   end
-  
-  #this value may not be a SHA-1 digest value 
-  def message_digest
-    self.digest_value
-  end
 end
