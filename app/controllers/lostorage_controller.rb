@@ -51,7 +51,6 @@ class LostorageController < ApplicationController
   end
 
   def create_email_msg_body(email)
-    to_email = [email] + APP_CONFIG['lostorage_email_to']
     container_type = (session[:version] && "version") || "object"
     #Create theemail URL to include in the body which includes a random name for stored container
     uri_name = UUIDTools::UUID.random_create().hash.to_s + '.tar.gz'
@@ -65,7 +64,7 @@ class LostorageController < ApplicationController
     #TODO: clean this up so all the text is in a template       
     @email_data = {
       'from'       => APP_CONFIG['lostorage_email_from'],
-      'to_email'   => to_email,
+      'to_email'   => [email] + APP_CONFIG['lostorage_email_to'],
       'collection' => @group.description,
       'object'     => urlencode_mod(session[:object]),
       'version'    => session[:version],
