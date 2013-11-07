@@ -1,19 +1,18 @@
 class InvVersion < ActiveRecord::Base
-
   belongs_to :inv_object
   has_many :inv_files
   has_many :inv_dublinkernels
 
-  def identifier
-    self.number.to_s
+  def to_param
+    self.number
   end
 
   def permalink
-    "#{MERRITT_SERVER}/m/#{self.inv_object.to_param}/#{self.identifier}"
+    "#{MERRITT_SERVER}/m/#{self.inv_object.to_param}/#{self.to_param}"
   end
   
   def bytestream_uri 
-    URI.parse("#{URI_1}#{self.inv_object.node_number}/#{self.inv_object.to_param}/#{self.number}")
+    URI.parse("#{URI_1}#{self.inv_object.node_number}/#{self.inv_object.to_param}/#{self.to_param}")
   end
 
   def total_size

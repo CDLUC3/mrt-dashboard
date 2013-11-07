@@ -4,7 +4,7 @@
           :controller       => :file,
           :action           => :display,
           :object           => line_sidebar.inv_object,
-          :version          => line_sidebar.inv_version.identifier,
+          :version          => line_sidebar.inv_version,
           :file             => line_sidebar %>
   <% else %>
     <%= File.basename(line_sidebar.pathname) %>
