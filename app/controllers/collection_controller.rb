@@ -5,7 +5,7 @@ class CollectionController < ApplicationController
 
   # Load the group specified in the params[:group]
   def require_request_group
-    @group = Group.find(params[:group])
+    @request_group = Group.find(params[:group])
   end
 
   def object_count
@@ -26,7 +26,7 @@ class CollectionController < ApplicationController
   
   def index
     @recent_objects = InvObject.joins(:inv_collections).
-      where("inv_collections.ark = ?", @group.ark_id).
+      where("inv_collections.ark = ?", @request_group.ark_id).
       order('inv_objects.modified desc').
       includes(:inv_versions, :inv_dublinkernels).
       paginate(paginate_args)
@@ -36,7 +36,7 @@ class CollectionController < ApplicationController
     terms = Unicode.downcase(params[:terms]).gsub('%', '\%').gsub('_', '\_').split(/\s+/).delete_if{|t|t.blank?}
     terms_q = terms.map{|t| "%#{t}%" }
     @results = InvObject.joins(:inv_collections).
-      where("inv_collections.ark = ?", @group.ark_id).
+      where("inv_collections.ark = ?", @request_group.ark_id).
       includes(:inv_versions, :inv_dublinkernels).paginate(paginate_args)
     terms_q.each do |q|
       @results = @results.where("inv_objects.ark LIKE ? OR inv_objects.erc_where LIKE ? OR inv_dublinkernels.value LIKE ?", q, q, q)

@@ -1,3 +1,3 @@
-<% cache("version_count_#{@group.id}", :expires_in => 600) do %>
-  <%= formatted_int(@group.version_count) %>
+<% cache("version_count_#{@request_group.id}", :expires_in => 600) do %>
+  <%= formatted_int(@request_group.version_count) %>
 <% end %>
