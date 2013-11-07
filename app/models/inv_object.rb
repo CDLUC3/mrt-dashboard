@@ -47,11 +47,6 @@ class InvObject < ActiveRecord::Base
     self.ark
   end
 
-  # deprecated
-  def local_identifier
-    self.erc_where
-  end
-
   def permalink
     "#{N2T_URI}#{self.ark.to_s}"
   end
