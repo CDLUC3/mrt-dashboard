@@ -198,11 +198,11 @@ class ApplicationController < ActionController::Base
   end
 
   def store_object
-    session[:object] = request.params[:object]
+    session[:object] = params[:object]
   end
   
   def store_version
-    session[:version] = request.params[:version]
+    session[:version] = params[:version]
   end
   
   def store_group(group)
