@@ -9,8 +9,7 @@ class InvFile < ActiveRecord::Base
   end
   
   def bytestream
-    obj = self.inv_object
-    "#{URI_1}#{obj.node_number}/#{obj.to_param}/#{self.inv_version.number}/#{self.to_param}"
+    "#{URI_1}#{self.inv_object.node_number}/#{self.inv_object.to_param}/#{self.inv_version.number}/#{self.to_param}"
   end
 
   def bytestream_uri
