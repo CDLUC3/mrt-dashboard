@@ -71,17 +71,17 @@ class LostorageController < ApplicationController
     @email_data['email_body'] = email_body    
   end
 
-  def build_email_xml
+  def build_email_xml(from_addr, to_addr, subject, body)
     tempfile = Tempfile.new("mail.xml")
     xml = Builder::XmlMarkup.new :target => tempfile
     xml.instruct!
     xml.email do
-      xml.from @email_data['from']
-      @email_data['to_email'].each do |x|
-        xml.to x
+      xml.from(from_addr)
+      to_addr.each do |x|
+        xml.to(x)
       end
-      xml.subject @email_data['subject']
-      xml.msg @email_data['email_body']
+      xml.subject(subject)
+      xml.msg(body)
     end
     tempfile.rewind  #POST request needs this done to process the file properly as an argument
     return tempfile
