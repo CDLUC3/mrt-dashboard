@@ -1,13 +1,11 @@
-<%# takes :obj passed in as local variable %>
-
-<% if !obj.erc_who.blank? and !obj.erc_who.match(/\(:unas\)/) then %>
-  <%= dc_nice(obj.erc_who) %>.
+<% if !short_bib_display.erc_who.blank? and !short_bib_display.erc_who.match(/\(:unas\)/) then %>
+  <%= dc_nice(short_bib_display.erc_who) %>.
 <% end %>
 
-<% if !obj.erc_what.blank? then %>
-  <span class="title"><%= dc_nice(obj.erc_what) %></span>
+<% if !short_bib_display.erc_what.blank? then %>
+  <span class="title"><%= dc_nice(short_bib_display.erc_what) %></span>
 <% end %>
 
-<% if !obj.erc_when.blank? and !obj.erc_who.match(/\(:unas\)/) then %>
-  (<%= dc_nice(obj.erc_when) %>)
+<% if !short_bib_display.erc_when.blank? and !short_bib_display.erc_who.match(/\(:unas\)/) then %>
+  (<%= dc_nice(short_bib_display.erc_when) %>)
 <% end %>

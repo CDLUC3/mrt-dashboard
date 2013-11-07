@@ -15,9 +15,7 @@
 <br/>
   <%= render :partial => '/shared/flash_show' %>
   <h3 style="font-weight: normal;">
-    <%= render :partial => "/object/short_bib_display", 
-               :locals => {:obj => @object} %></h3>
-
+    <%= render :partial => "/object/short_bib_display", :object => @object %></h3>
     <%= render :partial => 'details_display', :object => @object %>
   <div class="clear"></div>
   <div class="key">&nbsp;</div><div class="value">&nbsp;</div>
