@@ -50,7 +50,7 @@ class LostorageController < ApplicationController
     
     #construct the async storage URL using the object's state storage URL-  Sub async for state in URL.
     storage_url = InvObject.find_by_ark(session[:object]).storage_url
-    storage_async_url = storage_url.gsub(/state/,'async')
+    storage_async_url = storage_url.to_s.gsub(/content/,'async')
     @response = RestClient.post(storage_async_url, @lostorage_args, {:multipart => true })
     lostorage_xml_email_profile.close!
     return @response.code
