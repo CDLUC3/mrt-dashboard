@@ -69,12 +69,13 @@ xml.tag!('feed', :xmlns => "http://www.w3.org/2005/Atom",
       if (!obj.created.blank?) then
         xml.tag!("published", obj.created)
       end
-      obj.files.each do |file|
+      current_version = obj.current_version
+      current_version.inv_files.each do |file|
         xml.tag!("link", 
                  "href" => url_for(:controller => 'file', 
                                    :action     => 'display',
                                    :object     => obj,
-                                   :version    => obj.versions.last.identifier,
+                                   :version    => current_version.identifier,
                                    :file       => file),
                  "rel"  => "http://purl.org/dc/terms/hasPart",
                  "length" => file.full_size,
