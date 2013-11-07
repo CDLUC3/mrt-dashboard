@@ -1,23 +1,25 @@
 require 'test_helper'
 
 class LoginTest < ActionDispatch::IntegrationTest
+  setup do
+    visit(logout_path)
+    visit(login_path)
+  end
+
   test "guest login works" do
-    visit login_path
     click_button "Guest"
   end
   
   test "login works" do
-    visit(login_path)
     fill_in("login", :with=>"merritt-test")
     fill_in("password", :with=>"test")
     click_button("Login")
   end
 
   test "user with single collection is redirected" do
-    visit(login_path)
     fill_in("login", :with=>"merritt-test")
     fill_in("password", :with=>"test")
     click_button("Login")
-    assert_equal(current_path, "/m/opencontext")
+    assert_equal("/m/opencontext", current_path)
   end
 end
