@@ -60,6 +60,10 @@ module ApplicationHelper
     t.strftime("%Y-%m-%d  %I:%M %p UTC")
   end
 
+  def clean_mime_type(mt)
+    mt.gsub(/;.*$/, '')
+  end
+
   # Format kernel metadata, filtering out unassigned values
   def dc_nice(i)
     if i.nil? || i.match(/\(:unas\)/)

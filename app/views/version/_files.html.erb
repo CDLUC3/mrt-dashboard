@@ -13,7 +13,7 @@
       <% end %>
     </div>
     <div class="value">
-      <%= file.mime_type.gsub(/;.*$/, '') %>          
+      <%= clean_mime_type(file.mime_type) %>       
       <%= number_to_storage_size(file.full_size) %>
     </div>
   <% end %>
