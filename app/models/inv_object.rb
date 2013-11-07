@@ -38,6 +38,10 @@ class InvObject < ActiveRecord::Base
   def inv_collection
     self.inv_collections.first
   end
+
+  def group
+    @_group ||= Group.find(self.inv_collection.ark)
+  end
   
   def identifier
     self.ark
