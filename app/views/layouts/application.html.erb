@@ -18,13 +18,13 @@
   <body>
     <div class="container_16">
       <% if user_logged_in? then %>
+        <%= render :partial => "/shared/logged_in_top" %>
         <% if !group_choosen? then %>
-          <%= render :partial => "/shared/logged_in_top" %>
           <div class="clear"></div>
           <div class="grid_16">&nbsp;</div>
           <div class="clear"></div>
         <% else %>
-          <%= render :partial => "shared/collection_head" %>
+          <%= render :partial => "/shared/top_menu" %>
         <% end %>
       <% else %>
         <div class="grid_12 head_left">
