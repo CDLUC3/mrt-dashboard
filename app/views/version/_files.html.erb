@@ -7,7 +7,7 @@
                     :action => :display,
                     :object => file.inv_object,
                     :version => file.inv_version.identifier,
-                    :file => file.file_urlencode) %>
+                    :file => file) %>
       <% else %>
         <%= File.basename(file.identifier) %>
       <% end %>

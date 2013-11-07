@@ -8,9 +8,13 @@ class InvFile < ActiveRecord::Base
     self.pathname
   end
 
+  def to_param
+    urlencode_mod(self.pathname)
+  end
+  
   def bytestream
     obj = self.inv_object
-    "#{URI_1}#{obj.node_number}/#{obj.ark_urlencode}/#{self.inv_version.number}/#{self.file_urlencode}"
+    "#{URI_1}#{obj.node_number}/#{obj.to_param}/#{self.inv_version.number}/#{self.to_param}"
   end
 
   def bytestream_uri
@@ -20,9 +24,5 @@ class InvFile < ActiveRecord::Base
   #this value may not be a SHA-1 digest value 
   def message_digest
     self.digest_value
-  end
-
-  def file_urlencode
-    urlencode_mod(self.pathname)
   end
 end

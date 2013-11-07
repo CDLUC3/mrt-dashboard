@@ -5,7 +5,7 @@
           :action           => :display,
           :object           => line_sidebar.inv_object,
           :version          => line_sidebar.inv_version.identifier,
-          :file             => line_sidebar.file_urlencode %>
+          :file             => line_sidebar %>
   <% else %>
     <%= File.basename(line_sidebar.identifier) %>
   <% end %>
