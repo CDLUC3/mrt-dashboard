@@ -14,12 +14,12 @@ class LostorageController < ApplicationController
       elsif !params[:user_agent_email].match(/^.+@.+$/) then
         flash[:message] = 'You must fill in a valid return email address.' and return
       else 
-        response_code = post_los_email(params[:user_agent_email])
-        @doc = Nokogiri::XML(@response) do |config|
+        resp = post_los_email(params[:user_agent_email])
+        @doc = Nokogiri::XML(resp) do |config|
           config.strict.noent.noblanks
         end
         
-        if (response_code == 200) then
+        if (resp.code == 200) then
           session[:perform_async] = true
           flash[:notice] = "Processing of large object compression has begun.  Please look for an email in your inbox"
         else
@@ -48,9 +48,9 @@ class LostorageController < ApplicationController
     #construct the async storage URL using the object's state storage URL-  Sub async for state in URL.
     storage_url = InvObject.find_by_ark(session[:object]).bytestream_uri
     storage_async_url = storage_url.to_s.gsub(/content/,'async')
-    @response = RestClient.post(storage_async_url, @lostorage_args, {:multipart => true })
+    resp = RestClient.post(storage_async_url, @lostorage_args, {:multipart => true })
     lostorage_xml_email_profile.close!
-    return @response.code
+    return resp
   end
 
   def create_email_msg_body(email)
