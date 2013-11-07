@@ -78,11 +78,11 @@ class InvObject < ActiveRecord::Base
   end
 
   def system_files 
-    self.files.select {|f| f.identifier.match(/^system\//) }
+    self.files.select {|f| f.pathname.match(/^system\//) }
   end
 
   def producer_files 
-    self.files.select {|f| f.identifier.match(/^producer\//) }
+    self.files.select {|f| f.pathname.match(/^producer\//) }
   end
 
   def ark_urlencode

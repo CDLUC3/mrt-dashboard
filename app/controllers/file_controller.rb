@@ -55,7 +55,7 @@ class FileController < ApplicationController
     
     # the user has accepted the DUA for this collection or there is no DUA to process 
     response.headers["Content-Length"] = file.full_size.to_s
-    response.headers["Content-Disposition"] = "inline; filename=\"#{File.basename(file.identifier)}\""
+    response.headers["Content-Disposition"] = "inline; filename=\"#{File.basename(file.pathname)}\""
     response.headers["Content-Type"] = file.mime_type
 
     self.response_body = Streamer.new(file.bytestream_uri)

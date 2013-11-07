@@ -1,12 +1,12 @@
 <li style="word-wrap:break-word;">
   <% if have_permission('download') then %>
-    <%= link_to File.basename(line_sidebar.identifier),
+    <%= link_to File.basename(line_sidebar.pathname),
           :controller       => :file,
           :action           => :display,
           :object           => line_sidebar.inv_object,
           :version          => line_sidebar.inv_version.identifier,
           :file             => line_sidebar %>
   <% else %>
-    <%= File.basename(line_sidebar.identifier) %>
+    <%= File.basename(line_sidebar.pathname) %>
   <% end %>
 </li>
