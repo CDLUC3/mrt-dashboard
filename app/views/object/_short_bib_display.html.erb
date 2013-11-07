@@ -1,16 +1,16 @@
 <%# takes :obj passed in as local variable %>
 
-<% if !obj.who.blank? and !obj.who.match(/\(:unas\)/) and !obj.who.empty? and !obj.who.nil?  then %>
-  <%= dc_nice(obj.who) %>
+<% if !obj.erc_who.blank? and !obj.erc_who.match(/\(:unas\)/) and !obj.erc_who.empty? and !obj.erc_who.nil?  then %>
+  <%= dc_nice(obj.erc_who) %>
   <%= "." %>
 <% end %>
 
-<% if !obj.what.blank? then %>
-  <span class="title"><%= dc_nice(obj.what) %></span>
+<% if !obj.erc_what.blank? then %>
+  <span class="title"><%= dc_nice(obj.erc_what) %></span>
 <% end %>
 
-<% if !obj.when.blank? and !obj.who.match(/\(:unas\)/) and !obj.who.empty? and !obj.who.nil? then %>
+<% if !obj.erc_when.blank? and !obj.erc_who.match(/\(:unas\)/) and !obj.erc_who.empty? and !obj.erc_who.nil? then %>
   <%= "(" %>
-  <%= dc_nice(obj.when) %>
+  <%= dc_nice(obj.erc_when) %>
   <%= ")" %>
 <% end %>

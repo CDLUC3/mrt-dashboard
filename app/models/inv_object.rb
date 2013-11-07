@@ -34,18 +34,6 @@ class InvObject < ActiveRecord::Base
   def current_version
     self.inv_versions[-1]
   end
-
-  def who
-    self.erc_who
-  end
-
-  def what
-    self.erc_what
-  end
-
-  def when
-    self.erc_when
-  end
   
   def inv_collection
     self.inv_collections.first
