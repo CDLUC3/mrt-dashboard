@@ -12,7 +12,6 @@ class ObjectController < ApplicationController
 
   before_filter(:only=>[:download]) { require_permissions('download',
                                                           { :action => 'index', 
-                                                            :group => flexi_group_id,
                                                             :object =>params[:object] }) }
 
   protect_from_forgery :except => [:ingest, :mint, :update]
