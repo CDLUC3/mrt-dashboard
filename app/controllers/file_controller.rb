@@ -23,7 +23,7 @@ class FileController < ApplicationController
     file = InvObject.where(:ark=>params[:object]).first.
       files.where(:pathname=>filename).first
             
-    file_uri = URI.parse(file.bytestream)
+    file_uri = file.bytestream_uri
     Rails.logger.info(file_uri)
     
     # bypass DUA processing for python scripts - indicated by special param
