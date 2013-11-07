@@ -5,7 +5,7 @@
         <%= link_to(File.basename(file.identifier), 
                     :controller => :file, 
                     :action => :display,
-                    :object => file.inv_object.ark_urlencode,
+                    :object => file.inv_object,
                     :version => file.inv_version.identifier,
                     :file => file.file_urlencode) %>
       <% else %>

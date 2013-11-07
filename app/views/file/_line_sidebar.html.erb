@@ -3,7 +3,7 @@
     <%= link_to File.basename(line_sidebar.identifier),
           :controller       => :file,
           :action           => :display,
-          :object           => line_sidebar.inv_object.ark_urlencode,
+          :object           => line_sidebar.inv_object,
           :version          => line_sidebar.inv_version.identifier,
           :file             => line_sidebar.file_urlencode %>
   <% else %>

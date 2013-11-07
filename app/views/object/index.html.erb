@@ -24,7 +24,7 @@
   <div class="key">&nbsp;</div>
   <div class="value">
     <% if have_permission('download') then %>
-      <form action="/d/<%= @object.ark_urlencode %>">
+      <form action="<%= url_for(:action=>:download, :object => @object) %>">
         <input type="submit" value="Download object">
       </form>
     <% end %>

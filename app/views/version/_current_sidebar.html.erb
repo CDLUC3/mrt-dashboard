@@ -12,6 +12,6 @@
   <%= link_to "#{(files.length - show_only)} more files",
               :controller     => :version,
               :action         => :index,
-              :object         => version.inv_object.ark_urlencode,
+              :object         => version.inv_object,
               :version        => version.identifier %>
 <% end %>
