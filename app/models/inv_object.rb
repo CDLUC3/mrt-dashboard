@@ -43,10 +43,6 @@ class InvObject < ActiveRecord::Base
     @_group ||= Group.find(self.inv_collection.ark)
   end
   
-  def identifier
-    self.ark
-  end
-
   def permalink
     "#{N2T_URI}#{self.ark.to_s}"
   end

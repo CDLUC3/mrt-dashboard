@@ -1,10 +1,10 @@
 <% content_for :title do %>
-  UC3 Merritt: Version -- <%= @version.inv_object.identifier %>, Version <%= @version.number %>
+  UC3 Merritt: Version -- <%= @version.inv_object.ark %>, Version <%= @version.number %>
 <% end %>
 
 <div class="grid_11">
   <h2>
-    <%= @version.inv_object.identifier %> - 
+    <%= @version.inv_object.ark %> - 
     Version <%= @version.number %>:
     <%= merritt_time(@version.created)%>
   </h2>
@@ -14,7 +14,7 @@
                 :controller => 'collection',
                 :group => @version.inv_object.group.id,
                 :action => 'index') %> &gt;
-    <%= link_to("Object: #{@version.inv_object.identifier}", 
+    <%= link_to("Object: #{@version.inv_object.ark}", 
                 :controller => 'object', 
                 :action => 'index',
                 :object => @version.inv_object) %> &gt;

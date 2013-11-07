@@ -202,7 +202,7 @@ class ObjectController < ApplicationController
       end
     end
 
-    response.headers["Content-Disposition"] = "attachment; filename=#{Orchard::Pairtree.encode(@object.identifier.to_s)}_object.zip"
+    response.headers["Content-Disposition"] = "attachment; filename=#{Orchard::Pairtree.encode(@object.ark.to_s)}_object.zip"
     response.headers["Content-Type"] = "application/zip"
     self.response_body = Streamer.new("#{@object.bytestream_uri}?t=zip")
     session[:perform_download] = false  
