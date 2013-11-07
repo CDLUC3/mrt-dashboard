@@ -66,16 +66,15 @@ class LostorageController < ApplicationController
       "If you have any questions regarding the download of this archive, please contact uc3@cdlib.org."
     
     #TODO: clean this up so all the text is in a template       
-    @email_data = (
-                   {'from'       => APP_CONFIG['lostorage_email_from'],
-                     'to_email'   => to_email,
-                     'collection' => @group.description,
-                     'object'     => urlencode_mod(session[:object]),
-                     'version'    => session[:version],
-                     'subject'    => "Merritt #{container_type.capitalize} Download Processing Completed ",
-                     'link_info'  => link_info,
-                     'name'       => uri_name
-                   })
+    @email_data = {
+      'from'       => APP_CONFIG['lostorage_email_from'],
+      'to_email'   => to_email,
+      'collection' => @group.description,
+      'object'     => urlencode_mod(session[:object]),
+      'version'    => session[:version],
+      'subject'    => "Merritt #{container_type.capitalize} Download Processing Completed ",
+      'link_info'  => link_info,
+      'name'       => uri_name }
     email_body = render_to_string( :partial => "lostorage/los_email_body.text.erb")      
     @email_data['email_body'] = email_body    
   end
