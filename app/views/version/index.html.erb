@@ -25,8 +25,7 @@
 
   <br/>
   <h3 style="font-weight: normal;">
-    <%= render :partial => "/object/short_bib_display", 
-               :locals => {:obj => @version.inv_object} %>
+    <%= render :partial => "/object/short_bib_display", :object => @version.inv_object %>
   </h3>
 
   <%= render :partial => '/version/details_display', :object => @version %>
