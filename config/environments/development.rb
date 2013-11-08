@@ -23,5 +23,4 @@ MrtDashboard::Application.configure do
   config.active_record.auto_explain_threshold_in_seconds = 0.5
 
   config.log_tags = [:uuid, :remote_ip]
-  URI_1 = 'http://uc3-mrt-store-dev.cdlib.org:35121/content/'
 end

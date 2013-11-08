@@ -7,8 +7,6 @@ MrtDashboard::Application.configure do
   config.i18n.fallbacks                    = true
   config.serve_static_assets               = true
   config.active_support.deprecation        = :log
-
-  URI_1 = 'http://uc3-mrt-store-stg.cdlib.org:35121/content/'  
 end
 
 require 'exception_notifier'

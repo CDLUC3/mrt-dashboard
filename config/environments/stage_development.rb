@@ -6,6 +6,4 @@ MrtDashboard::Application.configure do
   config.cache_classes                     = true
   config.consider_all_requests_local       = false
   config.whiny_nils                        = true
-  
-  URI_1 = 'http://store.cdlib.org:35121/content/'
 end
