@@ -52,7 +52,7 @@ class VersionController < ApplicationController
     end
 
     # if size is > 4GB, redirect to have user enter email for asynch compression (skipping streaming)
-    if exceeds_size() then
+    if exceeds_size(@version.inv_object) then
       redirect_to(:controller => "lostorage", :action => "index", :object => @version.inv_object, :version => @version) and return
     end
 

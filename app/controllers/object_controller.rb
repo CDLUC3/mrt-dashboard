@@ -179,7 +179,7 @@ class ObjectController < ApplicationController
     end
     
     # if size is > 4GB, redirect to have user enter email for asynch compression (skipping streaming)
-    if exceeds_size() then
+    if exceeds_size(@object) then
       redirect_to(:controller => "lostorage", :action => "index", :object => @object) and return
     end
 

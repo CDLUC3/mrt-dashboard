@@ -189,8 +189,8 @@ class ApplicationController < ActionController::Base
     @object = InvObject.find_by_ark(params[:object])
   end
   
-  def exceeds_size
-    return (@object.total_actual_size > MAX_ARCHIVE_SIZE)
+  def exceeds_size(object)
+    return (object.total_actual_size > MAX_ARCHIVE_SIZE)
   end
   
   def store_location
