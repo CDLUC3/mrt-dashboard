@@ -9,6 +9,5 @@ MrtDashboard::Application.configure do
   config.whiny_nils                          = true
 
   INGEST_SERVICE      = 'http://uc3.cdlib.org:33121/poster/submit/'
-  MINT_SERVICE      = 'http://uc3.cdlib.org:33121/ingest/request-identifier'
   URI_1 = 'http://store.cdlib.org:35121/content/'
 end
