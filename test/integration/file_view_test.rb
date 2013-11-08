@@ -24,4 +24,17 @@ class FileViewTest < ActionDispatch::IntegrationTest
     assert_equal(200, page.status_code)
     assert_equal("inline; filename=\"mrt-erc.txt\"", page.response_headers["Content-Disposition"])
   end
+
+  test "cancel dua works" do
+    click_button("Guest")
+    click_link("Demo Merritt")
+    click_link("ark:/99999/fk40k2sqf")
+    click_link("Version 1")
+    click_link("mrt-erc.txt")
+
+    # should be sent to dua page
+    click_button("Do Not Accept")
+    assert_equal(200, page.status_code)
+    assert_equal(current_path, "/m/ark%3A%2F99999%2Ffk40k2sqf/1")
+  end
 end
