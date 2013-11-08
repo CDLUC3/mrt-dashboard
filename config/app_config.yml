@@ -12,6 +12,7 @@ development: &development
   merritt_server:       "http://merritt-dev.cdlib.org"
   container_url:        "http://uc3-mrt-store-dev.cdlib.org:35121/container/"
   n2t_uri:              "http://n2t-wf.cdlib.org/"
+  mint_service:         "http://uc3-mrt-wrk1-dev.cdlib.org:33121/request-identifier"
 
 stage:
   <<: *defaults
@@ -21,6 +22,7 @@ stage:
   merritt_server:       "http://merritt-stage.cdlib.org"
   container_url:        "http://merritt-stage.cdlib.org/container/"
   n2t_uri:              "http://n2t-wf.cdlib.org/"
+  mint_service:         "http://uc3-web-stg.cdlib.org:33121/ingest/request-identifier"
 
 stage_development:
   stage
@@ -33,6 +35,7 @@ production:
   merritt_server:       "http://merritt.cdlib.org"
   container_url:        "http://merritt.cdlib.org/container/"
   n2t_uri:              "http://n2t.net/"
+  mint_service:         "http://uc3-web.cdlib.org:33121/ingest/request-identifier"
 
 production_development:
   production

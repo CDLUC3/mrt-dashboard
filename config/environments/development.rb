@@ -26,6 +26,5 @@ MrtDashboard::Application.configure do
 
   INGEST_SERVICE      = 'http://uc3-mrt-wrk1-dev.cdlib.org:33121/poster/submit/'
   INGEST_SERVICE_UPDATE   = 'http://uc3-mrt-wrk1-dev.cdlib.org:33121/poster/update/'
-  MINT_SERVICE        = 'http://uc3-mrt-wrk1-dev.cdlib.org:33121/request-identifier'
   URI_1 = 'http://uc3-mrt-store-dev.cdlib.org:35121/content/'
 end
