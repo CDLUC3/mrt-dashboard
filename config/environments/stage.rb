@@ -8,8 +8,6 @@ MrtDashboard::Application.configure do
   config.serve_static_assets               = true
   config.active_support.deprecation        = :log
 
-  INGEST_SERVICE      = 'http://uc3-web-stg.cdlib.org:33121/poster/submit/'
-  INGEST_SERVICE_UPDATE   = 'http://uc3-web-stg.cdlib.org:33121/poster/update/'
   URI_1 = 'http://uc3-mrt-store-stg.cdlib.org:35121/content/'  
 end
 

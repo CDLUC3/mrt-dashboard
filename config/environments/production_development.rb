@@ -8,6 +8,5 @@ MrtDashboard::Application.configure do
   config.consider_all_requests_local         = false
   config.whiny_nils                          = true
 
-  INGEST_SERVICE      = 'http://uc3.cdlib.org:33121/poster/submit/'
   URI_1 = 'http://store.cdlib.org:35121/content/'
 end

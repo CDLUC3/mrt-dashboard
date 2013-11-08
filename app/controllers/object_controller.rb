@@ -65,7 +65,7 @@ class ObjectController < ApplicationController
         client.send_timeout = 3600
         client.connect_timeout = 7200
         client.keep_alive_timeout = 3600
-        response = client.post(INGEST_SERVICE, ingest_args, {"Content-Type" => "multipart/form-data"})
+        response = client.post(APP_CONFIG['ingest_service'], ingest_args, {"Content-Type" => "multipart/form-data"})
 
         render :status=>response.code, :content_type=>response.headers[:content_type], :text=>response.body
       end
@@ -117,7 +117,7 @@ class ObjectController < ApplicationController
           'type'              => params[:type]
         }.reject{|k, v| v.blank? }
 
-        response = RestClient.post(INGEST_SERVICE_UPDATE, ingest_args, { :multipart => true })
+        response = RestClient.post(APP_CONFIG['ingest_service_update'], ingest_args, { :multipart => true })
         render :status=>response.code, :content_type=>response.headers[:content_type], :text=>response.body
       end
     end  
@@ -212,7 +212,7 @@ class ObjectController < ApplicationController
       client.send_timeout = 3600
       client.connect_timeout = 7200
       client.keep_alive_timeout = 3600
-      response = client.post(INGEST_SERVICE_UPDATE, hsh, {"Content-Type" => "multipart/form-data"})
+      response = client.post(APP_CONFIG['ingest_service_update'], hsh, {"Content-Type" => "multipart/form-data"})
 
       @doc = Nokogiri::XML(response.content) do |config|
         config.strict.noent.noblanks
