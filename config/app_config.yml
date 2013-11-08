@@ -9,12 +9,14 @@ development: &development
   dua_email_to:         [marisa.strong@ucop.edu]
   lostorage_email_to:   [marisa.strong@ucop.edu]
   lostorage_email_from: [marisa.strong@ucop.edu]
+  merritt_server:       "http://merritt-dev.cdlib.org"
 
 stage:
   <<: *defaults
   dua_email_to:         [marisa.strong@ucop.edu, perry.willett@ucop.edu]
   lostorage_email_to:   [marisa.strong@ucop.edu, perry.willett@ucop.edu]
   lostorage_email_from: [uc3@ucop.edu]
+  merritt_server:       "http://merritt-stage.cdlib.org"
 
 stage_development:
   stage
@@ -24,6 +26,7 @@ production:
   dua_email_to:         [uc3@ucop.edu]
   lostorage_email_to:   [marisa.strong@ucop.edu, perry.willett@ucop.edu]
   lostorage_email_from: [uc3@ucop.edu]
+  merritt_server:       "http://merritt.cdlib.org"
 
 production_development:
   production

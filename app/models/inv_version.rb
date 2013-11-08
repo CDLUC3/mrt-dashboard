@@ -8,7 +8,7 @@ class InvVersion < ActiveRecord::Base
   end
 
   def permalink
-    "#{MERRITT_SERVER}/m/#{self.inv_object.to_param}/#{self.to_param}"
+    "#{APP_CONFIG['merritt_server']}/m/#{self.inv_object.to_param}/#{self.to_param}"
   end
   
   def bytestream_uri 
