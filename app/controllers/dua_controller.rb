@@ -35,7 +35,6 @@ class DuaController < ApplicationController
       # TODO too many slashes here if some params are empty
       redirect_to "/d/#{params[:object]}/#{params[:version]}/#{params[:file]}"
     elsif (params[:commit] == "Do Not Accept") then
-      session[:collection_acceptance][group.id] = "not accepted"
       # TODO too many slashes here if some params are empty
       redirect_to "/m/#{params[:object]}/#{params[:version]}"
     end
