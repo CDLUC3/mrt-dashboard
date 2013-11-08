@@ -44,6 +44,6 @@ class InvObject < ActiveRecord::Base
   end
   
   def permalink
-    "#{N2T_URI}#{self.ark.to_s}"
+    "#{APP_CONFIG['n2t_uri']}#{self.ark.to_s}"
   end
 end
