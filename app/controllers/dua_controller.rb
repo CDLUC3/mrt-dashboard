@@ -12,18 +12,12 @@ class DuaController < ApplicationController
   
   def index 
     if params['commit'].eql?("Accept") then  
-      if params[:accept].nil? then
-        flash[:message] = 'You must check that you accept the terms.'
-        return
-      end
+      flash[:message] = 'You must check that you accept the terms.' and return if params[:accept].blank?
       if params[:name].blank? || params[:affiliation].blank? || params[:user_agent_email].blank? then
-        flash[:message] = 'Please enter the required fields'
-        return
+        flash[:message] = 'Please enter the required fields' and return
       end
-
-      if  (params[:user_agent_email] =~ /^.+@.+$/).nil? then
-        flash[:message] = 'You must fill in a valid return email address.'
-        return
+      if !params[:user_agent_email].match(/^.+@.+$/)
+        flash[:message] = 'You must fill in a valid return email address.' and return
       end   
       
       # configure the email
