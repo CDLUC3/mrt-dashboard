@@ -29,9 +29,6 @@ MrtDashboard::Application.configure do
   INGEST_SERVICE_UPDATE   = 'http://uc3-mrt-wrk1-dev.cdlib.org:33121/poster/update/'
   MINT_SERVICE        = 'http://uc3-mrt-wrk1-dev.cdlib.org:33121/request-identifier'
   N2T_URI             = "http://n2t-wf.cdlib.org/"
-  RDF_ARK_URI         = "http://ark.cdlib.org/"
-  RDF_COLLECTION_URI  = "http://uc3.cdlib.org/collection/"
-  # SPARQL_ENDPOINT     = "http://badger.cdlib.org:8082/sparql/"
   CONTAINER_URL       = 'http://uc3-mrt-store-dev.cdlib.org:35121/container/'
 
   URI_1 = 'http://uc3-mrt-store-dev.cdlib.org:35121/content/'
