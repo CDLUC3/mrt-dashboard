@@ -5,8 +5,8 @@ class DuaController < ApplicationController
   include Encoder
 
   def index 
-    dua_hash ||= Dua.parse_file(fetch_to_tempfile(session[:dua_file_uri]))
     if params['commit'] == "Accept" then
+      dua_hash = Dua.parse_file(fetch_to_tempfile(session[:dua_file_uri]))
       flash[:message] = 'You must check that you accept the terms.' and return if params[:accept].blank?
       if params[:name].blank? || params[:affiliation].blank? || params[:user_agent_email].blank? then
         flash[:message] = 'Please enter the required fields' and return
@@ -39,5 +39,8 @@ class DuaController < ApplicationController
       # TODO too many slashes here if some params are empty
       redirect_to "/d/#{urlencode_mod(params[:object])}/#{params[:version]}/#{params[:file]}"
     end
-   end
+  else
+    dua_hash = Dua.parse_file(fetch_to_tempfile(session[:dua_file_uri]))
+    @title, @terms = dua_hash['Title'], dua_hash['Terms']
+  end
 end
