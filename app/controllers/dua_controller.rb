@@ -5,7 +5,7 @@ class DuaController < ApplicationController
   include Encoder
 
   def index 
-    @dua_hash ||= Dua.parse_file(fetch_to_tempfile(session[:dua_file_uri]))
+    dua_hash ||= Dua.parse_file(fetch_to_tempfile(session[:dua_file_uri]))
     if params['commit'].eql?("Accept") then  
       flash[:message] = 'You must check that you accept the terms.' and return if params[:accept].blank?
       if params[:name].blank? || params[:affiliation].blank? || params[:user_agent_email].blank? then
@@ -17,17 +17,17 @@ class DuaController < ApplicationController
       
       group = InvObject.find_by_ark(params[:object]).group
       DuaMailer.dua_email(:to          => params[:user_agent_email],
-                          :cc          => APP_CONFIG['dua_email_to'] + [@dua_hash["Notification"] || ''],
-                          :reply_to    => @dua_hash["Notification"],
-                          :title       => @dua_hash["Title"],
+                          :cc          => APP_CONFIG['dua_email_to'] + [dua_hash["Notification"] || ''],
+                          :reply_to    => dua_hash["Notification"],
+                          :title       => dua_hash["Title"],
                           :name        => params[:name],
                           :affiliation => params[:affiliation],
                           :object      => params[:object],
                           :collection  => group.description,
-                          :terms       => @dua_hash["Terms"]).deliver
+                          :terms       => dua_hash["Terms"]).deliver
       #user accepted DUA, go ahead and process file/object/version download
       # set the persistence flag for session level so DUA doesn't get displayed again for this session
-      if @dua_hash["Persistence"].eql?("session") then
+      if dua_hash["Persistence"].eql?("session") then
         session[:collection_acceptance][group.id] = true
       end
       # return to where user came from 
