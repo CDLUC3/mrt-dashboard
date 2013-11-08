@@ -231,10 +231,7 @@ class ApplicationController < ActionController::Base
   # parse the component (object, file, or version) uri to construct the DUA URI
   def construct_dua_uri(rx, component_uri)
     md = rx.match(component_uri.to_s)
-    dua_filename = "#{md[1]}/" + urlencode(InvObject.find_by_ark(params[:object]).inv_collection.ark)  + "/0/" + urlencode(APP_CONFIG['mrt_dua_file']) 
-    dua_file_uri = dua_filename
-    Rails.logger.debug("DUA File URI: " + dua_file_uri)
-    return dua_file_uri
+    return "#{md[1]}/" + urlencode(InvObject.find_by_ark(params[:object]).inv_collection.ark)  + "/0/" + urlencode(APP_CONFIG['mrt_dua_file']) 
   end
   
   # returns the response of the HTTP request for the DUA URI
