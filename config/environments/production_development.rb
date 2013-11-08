@@ -10,10 +10,7 @@ MrtDashboard::Application.configure do
 
   INGEST_SERVICE      = 'http://uc3.cdlib.org:33121/poster/submit/'
   MINT_SERVICE      = 'http://uc3.cdlib.org:33121/ingest/request-identifier'
-  SPARQL_ENDPOINT     = "http://inventory.cdlib.org:8082/sparql/"
   N2T_URI             = "http://n2t.net/"
-  RDF_ARK_URI         = "http://ark.cdlib.org/"
-  RDF_COLLECTION_URI  = "http://uc3.cdlib.org/collection/"
 
   URI_1 = 'http://store.cdlib.org:35121/content/'
   

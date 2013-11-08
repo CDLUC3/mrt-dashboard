@@ -13,8 +13,6 @@ MrtDashboard::Application.configure do
   MERRITT_SERVER      = 'http://merritt-stage.cdlib.org'
   MINT_SERVICE        = 'http://uc3-web-stg.cdlib.org:33121/ingest/request-identifier'
   N2T_URI             = "http://n2t-wf.cdlib.org/"
-  RDF_ARK_URI         = "http://ark.cdlib.org/"
-  RDF_COLLECTION_URI  = "http://uc3.cdlib.org/collection/"
   CONTAINER_URL       = 'http://merritt-stage.cdlib.org/container/'
 
   URI_1 = 'http://uc3-mrt-store-stg.cdlib.org:35121/content/'  
