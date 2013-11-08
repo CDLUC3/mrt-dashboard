@@ -33,11 +33,11 @@ class DuaController < ApplicationController
       # return to where user came from 
       session[:perform_download] = true
       # TODO too many slashes here if some params are empty
-      redirect_to "/d/#{urlencode_mod(params[:object])}/#{params[:version]}/#{params[:file]}"
+      redirect_to "/d/#{params[:object]}/#{params[:version]}/#{params[:file]}"
     elsif (params[:commit] == "Do Not Accept") then
       session[:collection_acceptance][group.id] = "not accepted"
       # TODO too many slashes here if some params are empty
-      redirect_to "/d/#{urlencode_mod(params[:object])}/#{params[:version]}/#{params[:file]}"
+      redirect_to "/m/#{params[:object]}/#{params[:version]}"
     end
   else
     dua_hash = Dua.parse_file(fetch_to_tempfile(session[:dua_file_uri]))
