@@ -145,9 +145,9 @@ class ApplicationController < ActionController::Base
     # parms{:group] that do not contain an ark id are a collection; all objects contain an ark.
     if !params[:group].nil? then
       if  (params[:group].start_with? "ark") then
-      # check for collection existance.  if a collection exists, it an object otherwise it's a collection    
-      # unencode the ark for the db lookup
-      params[:group] =  urlunencode(params[:group])
+        # check for collection existance.  if a collection exists, it an object otherwise it's a collection    
+        # unencode the ark for the db lookup
+        params[:group] =  urlunencode(params[:group])
         @collection = InvObject.joins(:inv_collections).
           where("inv_objects.ark = ?", params[:group]).
           map {|c| c.inv_collections.first }.
@@ -160,7 +160,7 @@ class ApplicationController < ActionController::Base
       end
     else  #obtain the group if its not yet been set
       if params[:group].nil? && !params[:object].nil? then
-          params[:group]= InvObject.joins(:inv_collections).
+        params[:group]= InvObject.joins(:inv_collections).
           where("inv_objects.ark = ?", params[:object]).
           map {|c| c.inv_collections.first }.
           first.ark
@@ -214,35 +214,35 @@ class ApplicationController < ActionController::Base
     open(*args) do |data|
       tmp_file = Tempfile.new('mrt_http')
       if data.instance_of? File then
-         File.copy(data.path, tmp_file.path)
+        File.copy(data.path, tmp_file.path)
       else
-         begin
-           while (!(buff = data.read(4096)).nil?)do 
-             tmp_file << buff
-           end
-         ensure
-           tmp_file.close
-         end
+        begin
+          while (!(buff = data.read(4096)).nil?)do 
+            tmp_file << buff
+          end
+        ensure
+          tmp_file.close
+        end
       end
       return tmp_file
     end  
   end
- 
+  
   # parse the component (object, file, or version) uri to construct the DUA URI
   def construct_dua_uri(rx, component_uri)
-     md = rx.match(component_uri.to_s)
-     dua_filename = "#{md[1]}/" + urlencode(InvObject.find_by_ark(params[:object]).inv_collection.ark)  + "/0/" + urlencode(APP_CONFIG['mrt_dua_file']) 
-     dua_file_uri = dua_filename
-     Rails.logger.debug("DUA File URI: " + dua_file_uri)
-     return dua_file_uri
+    md = rx.match(component_uri.to_s)
+    dua_filename = "#{md[1]}/" + urlencode(InvObject.find_by_ark(params[:object]).inv_collection.ark)  + "/0/" + urlencode(APP_CONFIG['mrt_dua_file']) 
+    dua_file_uri = dua_filename
+    Rails.logger.debug("DUA File URI: " + dua_file_uri)
+    return dua_file_uri
   end
-        
+  
   # returns the response of the HTTP request for the DUA URI
   def process_dua_request(dua_file_uri)
-     uri = URI.parse(dua_file_uri)
-     http = Net::HTTP.new(uri.host, uri.port)
-     uri_response = http.request(Net::HTTP::Get.new(uri.request_uri))
-     return uri_response
+    uri = URI.parse(dua_file_uri)
+    http = Net::HTTP.new(uri.host, uri.port)
+    uri_response = http.request(Net::HTTP::Get.new(uri.request_uri))
+    return uri_response
   end 
   
   def paginate_args
