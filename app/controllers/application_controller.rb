@@ -197,14 +197,6 @@ class ApplicationController < ActionController::Base
     session[:return_to] = request.fullpath
   end
 
-  def store_object
-    session[:object] = params[:object]
-  end
-  
-  def store_version
-    session[:version] = params[:version]
-  end
-  
   def store_group(group)
     session[:group_id] = group.id
     session[:group_ark] = group.ark_id
@@ -244,7 +236,6 @@ class ApplicationController < ActionController::Base
      Rails.logger.debug("DUA File URI: " + dua_file_uri)
      return dua_file_uri
   end
-        
         
   # returns the response of the HTTP request for the DUA URI
   def process_dua_request(dua_file_uri)

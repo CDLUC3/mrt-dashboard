@@ -7,7 +7,6 @@ class ObjectController < ApplicationController
   before_filter :require_user,       :except => [:jupload_add, :recent, :ingest, :mint, :update]
   before_filter :require_group,      :except => [:jupload_add, :recent, :ingest, :mint, :update]
   before_filter :require_write,      :only => [:add, :upload]
-  before_filter :require_session_object, :only => [:download]
   before_filter :require_inv_object, :only => [:download]
 
   before_filter(:only=>[:download]) { require_permissions('download',
@@ -16,11 +15,6 @@ class ObjectController < ApplicationController
 
   protect_from_forgery :except => [:ingest, :mint, :update]
 
-  def require_session_object
-    params[:object] = session[:object] if !session[:object].nil? && params[:object].nil?
-    session[:version] = nil if !session[:version].nil?  #clear out version
-  end
-  
   def ingest
     if !current_user then
       render :status=>401, :text=>"" and return
@@ -178,9 +172,7 @@ class ObjectController < ApplicationController
           if (uri_response.class == Net::HTTPOK) then
             tmp_dua_file = fetch_to_tempfile(dua_file_uri) 
             session[:dua_file_uri] = dua_file_uri
-            store_location
-            store_object
-            redirect_to :controller => "dua",  :action => "index" and return false 
+            redirect_to :controller => "dua",  :action => "index", :object => @object and return false 
           end
         end
       end

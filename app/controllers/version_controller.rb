@@ -1,7 +1,6 @@
 class VersionController < ApplicationController
   before_filter :require_user
   before_filter :require_group
-  before_filter :require_session_object_version,  :only => [:download]
   before_filter :require_inv_object, :only => [:download]
   before_filter :require_inv_version
   before_filter :require_download_permissions,    :only => [:download]
@@ -20,11 +19,6 @@ class VersionController < ApplicationController
         first
       render :status => 404 and return if @version.nil?
     end
-  end
-
-  def require_session_object_version
-    params[:object] = session[:object] if !session[:object].nil? && params[:object].nil?
-    params[:version] = session[:version] if !session[:version].nil? && params[:version].nil?
   end
 
   def index
@@ -51,10 +45,7 @@ class VersionController < ApplicationController
           if (uri_response.class == Net::HTTPOK) then
             tmp_dua_file = fetch_to_tempfile(dua_file_uri) 
             session[:dua_file_uri] = dua_file_uri
-            store_location
-            store_object
-            store_version
-            redirect_to :controller => "dua",  :action => "index" and return false 
+            redirect_to(:controller => "dua", :action => "index", :object => @version.inv_object, :version => @version) and return false 
           end
         end
       end

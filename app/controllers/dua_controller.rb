@@ -3,7 +3,9 @@ class DuaController < ApplicationController
   before_filter :require_user
   before_filter :require_group
   before_filter :require_dua
-  
+
+  include Encoder
+
   def require_dua
     if @dua_hash.nil? then
       tmp_dua_file = fetch_to_tempfile(session[:dua_file_uri])
@@ -38,7 +40,7 @@ class DuaController < ApplicationController
                'name'       => params[:name],
                'affiliation'=> params[:affiliation],
                'email'      => params[:user_agent_email],
-               'object'     => session[:object],
+               'object'     => params[:object],
                'collection' => @group.description, 
                'body'     => @dua_hash["Terms"]
                   }).deliver
@@ -49,12 +51,12 @@ class DuaController < ApplicationController
          session[:collection_acceptance][@group.id] = true
       end
        # return to where user came from 
-       session[:perform_download] = true;
-       redirect_to session[:return_to]
+       session[:perform_download] = true
+       redirect_to "/d/#{urlencode_mod(params[:object])}/#{params[:version]}"
     elsif params[:commit].eql?("Do Not Accept") then
-       session[:collection_acceptance][@group.id] = "not accepted"
-       # return to where user came from 
-       redirect_to session[:return_to]
+      session[:collection_acceptance][@group.id] = "not accepted"
+      # TODO too many slashes here if some params are empty
+      redirect_to "/d/#{urlencode_mod(params[:object])}/#{params[:version]}"
     end
    end
    
