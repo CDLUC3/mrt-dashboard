@@ -156,13 +156,7 @@ class ObjectController < ApplicationController
     if params[:blue].nil? 
       #check if user already saw DUA and accepted- if so, skip all this & download the file
       if !session[:perform_download]  
-        # if DUA was not accepted, redirect to object landing page 
-        if session[:collection_acceptance][@object.group.id].eql?("not accepted") then
-          session[:collection_acceptance][@object.group.id] = false  # reinitialize to false so user can again be given option to accept DUA 
-          redirect_to  :action => 'index', :group => flexi_group_id,  :object =>params[:object] and return false
-          # if DUA for this collection has not yet been displayed to user, perform logic to retrieve DUA.
-          # if persistance is at the session level and user already saw DUA, this section will be skipped
-        elsif !session[:collection_acceptance][@object.group.id] then
+        if !session[:collection_acceptance][@object.group.id] then
           # perform DUA logic to retrieve DUA
           #construct the dua_file_uri based off the object URI, the object's parent collection, version 0, and  DUA filename
           rx = /^(.*)\/([^\/]+)$/  
