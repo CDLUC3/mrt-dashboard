@@ -50,13 +50,14 @@ class DuaController < ApplicationController
       if @dua_hash["Persistence"].eql?("session") then
          session[:collection_acceptance][@group.id] = true
       end
-       # return to where user came from 
-       session[:perform_download] = true
-       redirect_to "/d/#{urlencode_mod(params[:object])}/#{params[:version]}"
+      # return to where user came from 
+      session[:perform_download] = true
+      # TODO too many slashes here if some params are empty
+      redirect_to "/d/#{urlencode_mod(params[:object])}/#{params[:version]}/#{params[:file]}"
     elsif params[:commit].eql?("Do Not Accept") then
       session[:collection_acceptance][@group.id] = "not accepted"
       # TODO too many slashes here if some params are empty
-      redirect_to "/d/#{urlencode_mod(params[:object])}/#{params[:version]}"
+      redirect_to "/d/#{urlencode_mod(params[:object])}/#{params[:version]}/#{params[:file]}"
     end
    end
    
