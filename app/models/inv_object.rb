@@ -16,7 +16,7 @@ class InvObject < ActiveRecord::Base
   end
 
   def bytestream_uri
-    URI.parse("#{URI_1}#{self.node_number}/#{self.to_param}")
+    URI.parse("#{APP_CONFIG['uri_1']}#{self.node_number}/#{self.to_param}")
   end
 
   def node_number

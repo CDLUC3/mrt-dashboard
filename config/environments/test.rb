@@ -36,6 +36,4 @@ MrtDashboard::Application.configure do
   config.active_support.deprecation = :stderr
 
   config.active_record.schema_format = :sql
-
-  URI_1 = 'http://uc3-mrt-store-dev.cdlib.org:35121/content/'
 end

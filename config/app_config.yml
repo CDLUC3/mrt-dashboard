@@ -15,6 +15,7 @@ development: &development
   mint_service:         "http://uc3-mrt-wrk1-dev.cdlib.org:33121/request-identifier"
   ingest_service:       "http://uc3-mrt-wrk1-dev.cdlib.org:33121/poster/submit/"
   ingest_service_update: "http://uc3-mrt-wrk1-dev.cdlib.org:33121/poster/update/"
+  uri_1:                "http://uc3-mrt-store-dev.cdlib.org:35121/content/"
 
 stage:
   <<: *defaults
@@ -27,6 +28,7 @@ stage:
   mint_service:         "http://uc3-web-stg.cdlib.org:33121/ingest/request-identifier"
   ingest_service:       "http://uc3-web-stg.cdlib.org:33121/poster/submit/"
   ingest_service_update: "http://uc3-web-stg.cdlib.org:33121/poster/update/"
+  uri_1:                "http://uc3-mrt-store-stg.cdlib.org:35121/content/"
 
 stage_development:
   stage
@@ -41,7 +43,8 @@ production:
   n2t_uri:              "http://n2t.net/"
   mint_service:         "http://uc3-web.cdlib.org:33121/ingest/request-identifier"
   ingest_service:       "http://uc3-web.cdlib.org:33121/poster/submit/"
-  ingest_service_update: "http://uc3-web.cdlib.org:33121/poster/update/"
+  ingest_service_update: "http://uc3-web.cdlib.org:33121/poster/update/"  
+  uri_1:                "http://store.cdlib.org:35121/content/"
 
 production_development:
   production

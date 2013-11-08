@@ -10,8 +10,6 @@ MrtDashboard::Application.configure do
   # Compress both stylesheets and JavaScripts
   config.assets.js_compressor  = :uglifier
   config.assets.css_compressor = :scss
-  
-  URI_1 = 'http://store.cdlib.org:35121/content/'
 end
 
 require 'exception_notifier'
