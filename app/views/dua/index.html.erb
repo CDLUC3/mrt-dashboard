@@ -1,12 +1,12 @@
 <div class="grid_11">
 
-  <h2><%= @dua_hash["Title"] %></h2>
+  <h2><%= @title %></h2>
 
   <br/>
   <% if !flash[:message].blank? then %>
     <p class="dynamic_message"><%= flash[:message] %></p>
   <% end %>
-  <p><%= @dua_hash["Terms"] %></p>
+  <p><%= @terms %></p>
   
   <%= form_tag({:action => 'index'}, :class => 'indented_form') do%>
     <div class='short_text_description'>I accept all terms</div>
