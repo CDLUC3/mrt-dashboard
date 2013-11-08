@@ -262,6 +262,10 @@ class ApplicationController < ActionController::Base
 
 
 
+  def params_u(param)
+    urlunencode(params[param])
+  end
+
   def paginate_args
     return { 
       :page => (params[:page] || 1), 
