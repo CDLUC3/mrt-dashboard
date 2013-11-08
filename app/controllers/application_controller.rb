@@ -242,7 +242,7 @@ class ApplicationController < ActionController::Base
     uri = URI.parse(dua_file_uri)
     http = Net::HTTP.new(uri.host, uri.port)
     uri_response = http.request(Net::HTTP::Get.new(uri.request_uri))
-    return uri_response
+    return (uri_response.class == Net::HTTPOK)
   end 
   
   def paginate_args
