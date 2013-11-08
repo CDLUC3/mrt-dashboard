@@ -32,7 +32,4 @@ MrtDashboard::Application.configure do
   CONTAINER_URL       = 'http://uc3-mrt-store-dev.cdlib.org:35121/container/'
 
   URI_1 = 'http://uc3-mrt-store-dev.cdlib.org:35121/content/'
-  
-  MAX_ARCHIVE_SIZE    = 1073741824 #maximum byte size threshhold for download of object/versions without compression 
-
 end
