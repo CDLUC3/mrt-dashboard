@@ -12,8 +12,6 @@ MrtDashboard::Application.configure do
   INGEST_SERVICE_UPDATE   = 'http://uc3-web-stg.cdlib.org:33121/poster/update/'
   MINT_SERVICE        = 'http://uc3-web-stg.cdlib.org:33121/ingest/request-identifier'
   N2T_URI             = "http://n2t-wf.cdlib.org/"
-  CONTAINER_URL       = 'http://merritt-stage.cdlib.org/container/'
-
   URI_1 = 'http://uc3-mrt-store-stg.cdlib.org:35121/content/'  
 end
 
