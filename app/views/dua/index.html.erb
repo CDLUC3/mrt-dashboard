@@ -45,6 +45,7 @@
 
     <%= hidden_field_tag('object', params[:object]) %>
     <%= hidden_field_tag('version', params[:version]) %>
+    <%= hidden_field_tag('file', params[:file]) %>
     <%= submit_tag('Accept') %>
     <%= submit_tag('Do Not Accept', {:onClick => "window.close()"}) %>
     
