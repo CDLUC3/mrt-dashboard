@@ -15,14 +15,14 @@ class DuaController < ApplicationController
         flash[:message] = 'You must fill in a valid return email address.' and return
       end   
       
-      group = InvObject.find_by_ark(params[:object]).group
+      group = InvObject.find_by_ark(params_u(:object)).group
       DuaMailer.dua_email(:to          => params[:user_agent_email],
                           :cc          => APP_CONFIG['dua_email_to'] + [dua_hash["Notification"] || ''],
                           :reply_to    => dua_hash["Notification"],
                           :title       => dua_hash["Title"],
                           :name        => params[:name],
                           :affiliation => params[:affiliation],
-                          :object      => params[:object],
+                          :object      => params_u(:object),
                           :collection  => group.description,
                           :terms       => dua_hash["Terms"]).deliver
       #user accepted DUA, go ahead and process file/object/version download
