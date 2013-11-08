@@ -20,21 +20,15 @@ class DuaController < ApplicationController
         flash[:message] = 'You must fill in a valid return email address.' and return
       end   
       
-      # configure the email
-      to_email = [params[:user_agent_email] , 
-                 (@dua_hash["Notification"]  || ''),
-                 APP_CONFIG['dua_email_to']].join(", ")
-                 
-      DuaMailer.dua_email(@dua_hash,
-              {'title'      => @dua_hash["Title"],
-               'to_email'   => to_email,
-               'name'       => params[:name],
-               'affiliation'=> params[:affiliation],
-               'email'      => params[:user_agent_email],
-               'object'     => params[:object],
-               'collection' => @group.description, 
-               'body'     => @dua_hash["Terms"]
-                  }).deliver
+      DuaMailer.dua_email(:to          => params[:user_agent_email],
+                          :cc          => APP_CONFIG['dua_email_to'] + [@dua_hash["Notification"] || ''],
+                          :reply_to    => @dua_hash["Notification"],
+                          :title       => @dua_hash["Title"],
+                          :name        => params[:name],
+                          :affiliation => params[:affiliation],
+                          :object      => params[:object],
+                          :collection  => @group.description,
+                          :terms       => @dua_hash["Terms"]).deliver
        
       #user accepted DUA, go ahead and process file/object/version download
       # set the persistence flag for session level so DUA doesn't get displayed again for this session

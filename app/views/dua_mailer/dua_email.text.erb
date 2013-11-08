@@ -1,12 +1,12 @@
-Data Use Agreement <%= @hsh['title'] %>
+Data Use Agreement <%= @title %>
 
-Name: <%= @hsh['name'] %>
-Affiliation: <%= @hsh['affiliation'] %> 
-Email: <%= @hsh['email'] %>
-Collection: <%= @hsh['collection'] %> 
-Object: <%= @hsh['object'] %> 
+Name: <%= @name %>
+Affiliation: <%= @affiliation %> 
+Email: <%= @to %>
+Collection: <%= @collection %> 
+Object: <%= @object %> 
 Date: <%= Time.now.strftime("%Y-%m-%d %H:%M:%S %z") %>  
 Terms of Use: 
 
-<%= word_wrap(@hsh['body']) %>
+<%= word_wrap(@terms) %>
 
