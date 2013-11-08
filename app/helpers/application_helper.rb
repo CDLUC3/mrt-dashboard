@@ -3,8 +3,6 @@ module ApplicationHelper
     case time
     when Time, DateTime
       return time.strftime("%Y-%m-%dT%H:%M:%S#{time.formatted_offset}")
-    when RDF::Literal
-      w3cdtf(DateTime.parse(time.to_s))
     end
   end
 
