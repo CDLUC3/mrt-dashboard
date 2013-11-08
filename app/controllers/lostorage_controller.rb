@@ -19,7 +19,7 @@ class LostorageController < ApplicationController
           flash[:message] = "Processing of large object compression has begun.  Please look for an email in your inbox"
         else
           #TODO: flash error messages are not displaying properly
-          flash[:error] = "Error processing large object in storage service.  Please contact uc3@ucop.edu" and return
+          flash[:error] = "Error processing large object in storage service.  Please contact uc3@ucop.edu"
         end
         redirect_to "/m/#{urlencode_mod(params[:object])}/#{params[:version]}"
       end
