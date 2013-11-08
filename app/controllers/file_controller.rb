@@ -1,9 +1,5 @@
 class FileController < ApplicationController
-
-  include Encoder
-
   before_filter :require_user
-  before_filter :require_group
   before_filter(:only=>[:display]) { require_permissions('download',
                                                          { :controller => 'version',
                                                            :action => 'index',
