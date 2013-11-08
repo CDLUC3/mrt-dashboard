@@ -11,8 +11,6 @@ MrtDashboard::Application.configure do
   config.assets.js_compressor  = :uglifier
   config.assets.css_compressor = :scss
   
-  INGEST_SERVICE      = 'http://uc3-web.cdlib.org:33121/poster/submit/'
-  INGEST_SERVICE_UPDATE   = 'http://uc3-web.cdlib.org:33121/poster/update/'
   URI_1 = 'http://store.cdlib.org:35121/content/'
 end
 
