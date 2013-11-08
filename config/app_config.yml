@@ -10,6 +10,7 @@ development: &development
   lostorage_email_to:   [marisa.strong@ucop.edu]
   lostorage_email_from: [marisa.strong@ucop.edu]
   merritt_server:       "http://merritt-dev.cdlib.org"
+  container_url:        "http://uc3-mrt-store-dev.cdlib.org:35121/container/"
 
 stage:
   <<: *defaults
@@ -17,6 +18,7 @@ stage:
   lostorage_email_to:   [marisa.strong@ucop.edu, perry.willett@ucop.edu]
   lostorage_email_from: [uc3@ucop.edu]
   merritt_server:       "http://merritt-stage.cdlib.org"
+  container_url:        "http://merritt-stage.cdlib.org/container/"
 
 stage_development:
   stage
@@ -27,6 +29,7 @@ production:
   lostorage_email_to:   [marisa.strong@ucop.edu, perry.willett@ucop.edu]
   lostorage_email_from: [uc3@ucop.edu]
   merritt_server:       "http://merritt.cdlib.org"
+  container_url:        "http://merritt.cdlib.org/container/"
 
 production_development:
   production

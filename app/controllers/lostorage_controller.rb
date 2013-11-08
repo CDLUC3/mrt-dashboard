@@ -31,7 +31,7 @@ class LostorageController < ApplicationController
   def post_los_email(to_addr)
     unique_name = UUIDTools::UUID.random_create().hash.to_s
     @container_type = (params[:version] && "version") || "object"
-    @dl_url = "#{CONTAINER_URL}#{unique_name}.tar.gz"
+    @dl_url = "#{APP_CONFIG['container_url']}#{unique_name}.tar.gz"
     @object = urlencode_mod(params[:object])
     @version = params[:version]
     #construct the async storage URL using the object's state storage URL-  Sub async for state in URL.
