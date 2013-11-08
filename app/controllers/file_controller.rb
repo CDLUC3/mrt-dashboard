@@ -16,8 +16,11 @@ class FileController < ApplicationController
     # the router removes the file extension from the filename - need to add it back on if one exists
     filename = "#{filename}.#{params[:format]}" if !params[:format].blank?
 
-    file = InvObject.where(:ark=>params[:object]).first.
-      files.where(:pathname=>filename).first
+    file = InvFile.joins(:inv_version, :inv_object).
+      where("inv_objects.ark = ?", params[:object]).
+      where("inv_versions.number = ?", params[:version]).
+      where("inv_files.pathname = ?", filename).
+      first
             
     file_uri = file.bytestream_uri
     Rails.logger.info(file_uri)
