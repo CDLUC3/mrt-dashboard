@@ -170,7 +170,6 @@ class ObjectController < ApplicationController
           uri_response = process_dua_request(dua_file_uri)
           # if the DUA exists, display DUA to user for acceptance before displaying file
           if (uri_response.class == Net::HTTPOK) then
-            tmp_dua_file = fetch_to_tempfile(dua_file_uri) 
             session[:dua_file_uri] = dua_file_uri
             redirect_to :controller => "dua",  :action => "index", :object => @object and return false 
           end
