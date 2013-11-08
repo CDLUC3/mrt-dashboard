@@ -51,7 +51,4 @@ class DuaController < ApplicationController
       redirect_to "/d/#{urlencode_mod(params[:object])}/#{params[:version]}/#{params[:file]}"
     end
    end
-   
-   def send_email
-   end
 end
