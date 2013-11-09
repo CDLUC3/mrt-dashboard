@@ -6,7 +6,6 @@ class ObjectController < ApplicationController
 
   before_filter :require_user,       :except => [:jupload_add, :recent, :ingest, :mint, :update]
   before_filter :require_write,      :only => [:add, :upload]
-  before_filter :require_inv_object, :only => [:download]
 
   before_filter(:only=>[:download]) { require_permissions('download',
                                                           { :action => 'index', 

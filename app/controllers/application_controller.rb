@@ -183,11 +183,6 @@ class ApplicationController < ActionController::Base
   def require_write
     raise ErrorUnavailable if !current_permissions.include?('write')
   end
-
-  def require_inv_object
-    redirect_to(ObjectList.merge({:group => flexi_group_id})) and return false if params[:object].nil?
-    @object = InvObject.find_by_ark(params[:object])
-  end
   
   def exceeds_size(object)
     return (object.total_actual_size > APP_CONFIG['max_archive_size'])
