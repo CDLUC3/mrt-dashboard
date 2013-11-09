@@ -11,8 +11,7 @@ class LostorageController < ApplicationController
       elsif !params[:user_agent_email].match(/^.+@.+$/) then
         flash[:message] = 'You must fill in a valid return email address.' and return
       else 
-        resp = post_los_email(params[:user_agent_email])
-        if (resp.code == 200) then
+        if post_los_email(params[:user_agent_email]) then
           flash[:message] = "Processing of large object compression has begun.  Please look for an email in your inbox"
         else
           #TODO: flash error messages are not displaying properly
@@ -42,7 +41,7 @@ class LostorageController < ApplicationController
                              'name'              => unique_name },
                            { :multipart => true })
     email_xml_file.close!
-    return resp
+    return (resp.code == 200)
   end
 
   def build_email_xml(to_addr, subject, body)
