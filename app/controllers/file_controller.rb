@@ -7,7 +7,7 @@ class FileController < ApplicationController
                                                            :version => params[:version]}) }
 
   def display
-    filename = params[:file]
+    filename = params_u(:file)
 
     # determine if user is retrieving a system file; otherwise assume
     # they are obtaining a producer file which needs to prepended to
@@ -17,7 +17,7 @@ class FileController < ApplicationController
     filename = "#{filename}.#{params[:format]}" if !params[:format].blank?
 
     file = InvFile.joins(:inv_version, :inv_object).
-      where("inv_objects.ark = ?", params[:object]).
+      where("inv_objects.ark = ?", params_u(:object)).
       where("inv_versions.number = ?", params[:version]).
       where("inv_files.pathname = ?", filename).
       first
