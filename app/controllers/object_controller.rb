@@ -153,6 +153,7 @@ class ObjectController < ApplicationController
   def download
     # bypass DUA processing for python scripts (indicated by special param) or if dua has already been accepted
     if params[:blue].nil? 
+      session[:collection_acceptance] ||= Hash.new(false)
       #check if user already saw DUA and accepted- if so, skip all this & download the file
       if !session[:perform_download]  
         if !session[:collection_acceptance][@object.group.id] then
