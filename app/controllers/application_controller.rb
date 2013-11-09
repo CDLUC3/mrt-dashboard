@@ -136,49 +136,6 @@ class ApplicationController < ActionController::Base
     session[:group_description] = group.description
   end
   
-  #require a group if user logged in
-  #but hackish thing to get group from session instead of params if help files didn't pass it along
-  # 3.30.12 mstrong added logic to determine if :group is an object or collection
-  def require_group
-    
-    params[:object] =  urlunencode(params[:object]) unless params[:object].nil?
-    # parms{:group] that do not contain an ark id are a collection; all objects contain an ark.
-    if !params[:group].nil? then
-      if  (params[:group].start_with? "ark") then
-        # check for collection existance.  if a collection exists, it an object otherwise it's a collection    
-        # unencode the ark for the db lookup
-        params[:group] =  urlunencode(params[:group])
-        @collection = InvObject.joins(:inv_collections).
-          where("inv_objects.ark = ?", params[:group]).
-          map {|c| c.inv_collections.first }.
-          first
-        unless @collection.nil? 
-          params[:object] = params[:group] 
-          params[:group] = @collection.ark 
-
-        end 
-      end
-    else  #obtain the group if its not yet been set
-      if params[:group].nil? && !params[:object].nil? then
-        params[:group]= InvObject.joins(:inv_collections).
-          where("inv_objects.ark = ?", params[:object]).
-          map {|c| c.inv_collections.first }.
-          first.ark
-      end
-    end
-    
-    raise ErrorUnavailable if flexi_group_id.nil?
-    @group = Group.find(flexi_group_id)
-    store_group(@group)
-    params[:group] = @group.id
-    raise ErrorUnavailable if current_permissions.length < 1
-    # initialize the DUA acceptance to false - once the user accepts for a collection, it will be set to true.  
-    # Resets at logout
-    if session[:collection_acceptance].nil? then 
-      session[:collection_acceptance] = Hash.new(false)
-    end
-  end
-
   #require write access to this group
   def require_write
     raise ErrorUnavailable if !current_permissions.include?('write')
