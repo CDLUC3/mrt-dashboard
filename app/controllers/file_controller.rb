@@ -12,7 +12,6 @@ class FileController < ApplicationController
     @group = current_group
   end
   
-  def display
     filename = params_u(:file)
 
     # determine if user is retrieving a system file; otherwise assume
@@ -28,6 +27,7 @@ class FileController < ApplicationController
       where("inv_files.pathname = ?", filename).
       first
     
+  def download
     # bypass DUA processing for python scripts - indicated by special param
     if params[:blue].nil? then
       session[:collection_acceptance] ||= Hash.new(false)
