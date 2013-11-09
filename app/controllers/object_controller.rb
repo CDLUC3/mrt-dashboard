@@ -5,7 +5,6 @@ class ObjectController < ApplicationController
   include Encoder
 
   before_filter :require_user,       :except => [:jupload_add, :recent, :ingest, :mint, :update]
-  before_filter :require_group,      :except => [:jupload_add, :recent, :ingest, :mint, :update]
   before_filter :require_write,      :only => [:add, :upload]
   before_filter :require_inv_object, :only => [:download]
 
@@ -147,10 +146,12 @@ class ObjectController < ApplicationController
   end
 
   def index
-    @object = InvObject.find_by_ark(params[:object])
+    @object = InvObject.find_by_ark(params_u(:object))
   end
 
   def download
+    @object = InvObject.find_by_ark(params_u(:object))
+    
     # bypass DUA processing for python scripts (indicated by special param) or if dua has already been accepted
     if params[:blue].nil? 
       session[:collection_acceptance] ||= Hash.new(false)
@@ -168,7 +169,7 @@ class ObjectController < ApplicationController
         end
       end
     end
-    
+
     # if size is > 4GB, redirect to have user enter email for asynch compression (skipping streaming)
     if exceeds_size(@object) then
       redirect_to(:controller => "lostorage", :action => "index", :object => @object) and return
