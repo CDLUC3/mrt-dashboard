@@ -37,9 +37,9 @@ class DuaController < ApplicationController
     elsif (params[:commit] == "Do Not Accept") then
       # TODO too many slashes here if some params are empty
       redirect_to "/m/#{params[:object]}/#{params[:version]}"
+    else
+      dua_hash = Dua.parse_file(fetch_to_tempfile(session[:dua_file_uri]))
+      @title, @terms = dua_hash['Title'], dua_hash['Terms']
     end
-  else
-    dua_hash = Dua.parse_file(fetch_to_tempfile(session[:dua_file_uri]))
-    @title, @terms = dua_hash['Title'], dua_hash['Terms']
   end
 end
