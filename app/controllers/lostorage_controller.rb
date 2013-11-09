@@ -27,15 +27,15 @@ class LostorageController < ApplicationController
   
   def post_los_email(to_addr)
     unique_name = UUIDTools::UUID.random_create().hash.to_s
+    @object = InvObject.find_by_ark(params_u(:object))
     @container_type = (params[:version] && "version") || "object"
     @dl_url = "#{APP_CONFIG['container_url']}#{unique_name}.tar.gz"
-    @object = urlencode_mod(params[:object])
-    @version = params[:version]
+    @version_number = params[:version]
     #construct the async storage URL using the object's state storage URL-  Sub async for state in URL.
     email_xml_file = build_email_xml(to_addr,
                                      "Merritt #{@container_type.capitalize} Download Processing Completed ",
                                      render_to_string(:partial => "lostorage/los_email_body.text.erb"))
-    resp = RestClient.post(InvObject.find_by_ark(params[:object]).bytestream_uri.to_s.gsub(/content/,'async'),
+    resp = RestClient.post(@object.bytestream_uri.to_s.gsub(/content/,'async'),
                            { 'email'             => email_xml_file,
                              'responseForm'      => 'xml',
                              'containerForm'     => "targz",
