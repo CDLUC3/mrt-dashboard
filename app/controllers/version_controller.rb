@@ -2,7 +2,6 @@ class VersionController < ApplicationController
   before_filter :require_user
   before_filter :require_download_permissions,    :only => [:download]
 
-  include Encoder
 
   def load_version
     if (params[:version].to_i == 0) then
