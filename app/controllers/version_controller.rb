@@ -1,7 +1,6 @@
 class VersionController < ApplicationController
   before_filter :require_user
   before_filter :require_group
-  before_filter :require_inv_object, :only => [:download]
   before_filter :require_inv_version
   before_filter :require_download_permissions,    :only => [:download]
 
