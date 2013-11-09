@@ -1,6 +1,5 @@
 class VersionController < ApplicationController
   before_filter :require_user
-  before_filter :require_group
   before_filter :require_inv_version
   before_filter :require_download_permissions,    :only => [:download]
 
@@ -8,13 +7,13 @@ class VersionController < ApplicationController
 
   def require_inv_version
     if (params[:version].to_i == 0) then
-      latest_version = InvObject.find_by_ark(params[:object]).current_version.number
-      redirect_to(:object => urlencode_mod(params[:object]),
+      latest_version = InvObject.find_by_ark(params_u(:object)).current_version.number
+      redirect_to(:object => urlencode_mod(params_u(:object)),
                   :version => latest_version)
     else
       @version = InvVersion.joins(:inv_object).
-        where("inv_objects.ark = ?", params[:object]).
-        where("inv_versions.number = ?", params[:version].to_i).
+        where("inv_objects.ark = ?", params_u(:object)).
+        where("inv_versions.number = ?", params_u(:version).to_i).
         first
       render :status => 404 and return if @version.nil?
     end
