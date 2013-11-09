@@ -1,11 +1,10 @@
 class VersionController < ApplicationController
   before_filter :require_user
-  before_filter :require_inv_version
   before_filter :require_download_permissions,    :only => [:download]
 
   include Encoder
 
-  def require_inv_version
+  def load_version
     if (params[:version].to_i == 0) then
       latest_version = InvObject.find_by_ark(params_u(:object)).current_version.number
       redirect_to(:object => params[:object],
