@@ -52,6 +52,9 @@ class ApplicationController < ActionController::Base
         :object =>params[:object]  }
       redirect_to(redirect) and return false
     end
+
+  def has_object_permission?(object, which)
+    return object.group.permission(current_user).member?(which)
   end
 
   # Return the groups which the user may be a member of
