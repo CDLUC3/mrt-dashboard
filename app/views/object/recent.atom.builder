@@ -73,7 +73,7 @@ xml.tag!('feed', :xmlns => "http://www.w3.org/2005/Atom",
       current_version.inv_files.each do |file|
         xml.tag!("link", 
                  "href" => url_for(:controller => 'file', 
-                                   :action     => 'display',
+                                   :action     => :download,
                                    :object     => obj,
                                    :version    => current_version,
                                    :file       => file),

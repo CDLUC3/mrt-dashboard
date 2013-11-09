@@ -2,7 +2,7 @@
   <% if have_permission('download') then %>
     <%= link_to File.basename(line_sidebar.pathname),
           :controller       => :file,
-          :action           => :display,
+          :action           => :download,
           :object           => line_sidebar.inv_object,
           :version          => line_sidebar.inv_version,
           :file             => line_sidebar %>
