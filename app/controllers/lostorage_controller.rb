@@ -3,9 +3,6 @@ require 'tempfile'
 
 class LostorageController < ApplicationController
   before_filter :require_user
-  before_filter :require_group
-
-  include Encoder
 
   def index 
     if params[:commit] == "Submit" then
@@ -21,10 +18,10 @@ class LostorageController < ApplicationController
           #TODO: flash error messages are not displaying properly
           flash[:error] = "Error processing large object in storage service.  Please contact uc3@ucop.edu"
         end
-        redirect_to "/m/#{urlencode_mod(params[:object])}/#{params[:version]}"
+        redirect_to "/m/#{params[:object]}/#{params[:version]}"
       end
     elsif params[:commit] == "Cancel" then
-      redirect_to "/m/#{urlencode_mod(params[:object])}/#{params[:version]}"
+      redirect_to "/m/#{params[:object]}/#{params[:version]}"
     end
   end
   
