@@ -1,11 +1,17 @@
 class FileController < ApplicationController
   before_filter :require_user
+  before_filter :load_session_group
+  
   before_filter(:only=>[:display]) { require_permissions('download',
                                                          { :controller => 'version',
                                                            :action => 'index',
                                                            :object =>params[:object], 
                                                            :version => params[:version]}) }
 
+  def load_session_group
+    @group = current_group
+  end
+  
   def display
     filename = params_u(:file)
 
