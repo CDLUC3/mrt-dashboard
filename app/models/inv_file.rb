@@ -11,4 +11,8 @@ class InvFile < ActiveRecord::Base
   def bytestream_uri
     URI.parse("#{APP_CONFIG['uri_1']}#{self.inv_object.node_number}/#{self.inv_object.to_param}/#{self.inv_version.number}/#{self.to_param}")
   end
+  
+  def dua_rx
+    /^(.*)\/([^\/]+)\/([0-9]+)\/([^\/]+)$/
+  end
 end

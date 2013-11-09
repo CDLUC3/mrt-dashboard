@@ -48,4 +48,8 @@ class InvVersion < ActiveRecord::Base
   def erc_where
     self.metadata('where')[0]
   end
+  
+  def dua_rx
+    /^(.*)\/([^\/]+)\/([0-9]+)$/  
+  end
 end
