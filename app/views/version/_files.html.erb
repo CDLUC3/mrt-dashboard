@@ -4,7 +4,7 @@
       <% if have_permission('download') then %>
         <%= link_to(File.basename(file.pathname), 
                     :controller => :file, 
-                    :action => :display,
+                    :action => :download,
                     :object => file.inv_object,
                     :version => file.inv_version,
                     :file => file) %>
