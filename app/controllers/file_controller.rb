@@ -9,10 +9,6 @@ class FileController < ApplicationController
                                                            :version => params[:version]}) }
   before_filter :load_file
 
-  def load_session_group
-    @group = current_group
-  end
-  
   def load_file
     filename = params_u(:file)
 
