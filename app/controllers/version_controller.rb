@@ -25,6 +25,7 @@ class VersionController < ApplicationController
   def download
     # bypass DUA processing for python scripts - indicated by special param
     if params[:blue].nil? then
+      session[:collection_acceptance] ||= Hash.new(false)
       #check if user already saw DUA and accepted- if so, skip all this & download the file
       if !session[:perform_download]   
         if !session[:collection_acceptance][@version.inv_object.group.id]
