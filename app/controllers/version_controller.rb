@@ -32,8 +32,7 @@ class VersionController < ApplicationController
         if !session[:collection_acceptance][@version.inv_object.group.id]
           # perform DUA logic to retrieve DUA
           #construct the dua_file_uri based off the version uri, the object's parent collection, version 0, and  DUA filename
-          rx = /^(.*)\/([^\/]+)\/([0-9]+)$/  
-          dua_file_uri = construct_dua_uri(rx, @version.bytestream_uri)
+          dua_file_uri = construct_dua_uri(@version.dua_rx, @version.bytestream_uri)
           if process_dua_request(dua_file_uri) then
             # if the DUA for this collection exists, display DUA to user for acceptance before displaying file
             session[:dua_file_uri] = dua_file_uri

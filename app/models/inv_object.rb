@@ -46,4 +46,8 @@ class InvObject < ActiveRecord::Base
   def permalink
     "#{APP_CONFIG['n2t_uri']}#{self.ark.to_s}"
   end
+  
+  def dua_rx
+    /^(.*)\/([^\/]+)$/  
+  end
 end

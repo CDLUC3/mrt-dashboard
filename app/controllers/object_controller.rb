@@ -159,8 +159,7 @@ class ObjectController < ApplicationController
         if !session[:collection_acceptance][@object.group.id] then
           # perform DUA logic to retrieve DUA
           #construct the dua_file_uri based off the object URI, the object's parent collection, version 0, and  DUA filename
-          rx = /^(.*)\/([^\/]+)$/  
-          dua_file_uri = construct_dua_uri(rx, @object.bytestream_uri)
+          dua_file_uri = construct_dua_uri(@object.dua_rx, @object.bytestream_uri)
           if process_dua_request(dua_file_uri) then
             # if the DUA exists, display DUA to user for acceptance before displaying file
             session[:dua_file_uri] = dua_file_uri

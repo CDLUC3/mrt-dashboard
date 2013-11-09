@@ -21,9 +21,6 @@ class FileController < ApplicationController
       where("inv_versions.number = ?", params[:version]).
       where("inv_files.pathname = ?", filename).
       first
-            
-    file_uri = file.bytestream_uri
-    Rails.logger.info(file_uri)
     
     # bypass DUA processing for python scripts - indicated by special param
     if params[:blue].nil? then
@@ -33,8 +30,7 @@ class FileController < ApplicationController
         if !session[:collection_acceptance][file.inv_version.inv_object.group.id]
           # perform DUA logic to retrieve DUA
           #construct the dua_file_uri based off the file_uri, the object's parent collection, version 0, and  DUA filename
-          rx = /^(.*)\/([^\/]+)\/([0-9]+)\/([^\/]+)$/
-          dua_file_uri = construct_dua_uri(rx, file_uri)
+          dua_file_uri = construct_dua_uri(file.dua_rx, file.bytestream_uri)
           if process_dua_request(dua_file_uri) then
           # if the DUA for this collection exists, display DUA to user for acceptance before displaying file
             session[:dua_file_uri] = dua_file_uri
