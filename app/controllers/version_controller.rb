@@ -2,6 +2,7 @@ class VersionController < ApplicationController
   before_filter :require_user
   before_filter :require_download_permissions,    :only => [:download]
 
+  before_filter :load_version
 
   def load_version
     if (params[:version].to_i == 0) then
