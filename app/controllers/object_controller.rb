@@ -148,7 +148,6 @@ class ObjectController < ApplicationController
 
   def index
     @object = InvObject.find_by_ark(params[:object])
-    @versions = @object.inv_versions
   end
 
   def download
