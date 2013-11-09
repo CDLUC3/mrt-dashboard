@@ -10,8 +10,13 @@ class ObjectController < ApplicationController
   before_filter(:only=>[:download]) { require_permissions('download',
                                                           { :action => 'index', 
                                                             :object =>params[:object] }) }
+  before_filter :load_object, :only=> [:index, :download]
 
   protect_from_forgery :except => [:ingest, :mint, :update]
+
+  def load_object
+    @object = InvObject.find_by_ark(params_u(:object))
+  end    
 
   def ingest
     if !current_user then
@@ -145,12 +150,9 @@ class ObjectController < ApplicationController
   end
 
   def index
-    @object = InvObject.find_by_ark(params_u(:object))
   end
 
   def download
-    @object = InvObject.find_by_ark(params_u(:object))
-    
     # bypass DUA processing for python scripts (indicated by special param) or if dua has already been accepted
     if params[:blue].nil? 
       session[:collection_acceptance] ||= Hash.new(false)
