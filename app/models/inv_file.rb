@@ -1,5 +1,5 @@
 class InvFile < ActiveRecord::Base
-  belongs_to :inv_version
+  belongs_to :inv_version, :inverse_of => :inv_files
   belongs_to :inv_object
 
   include Encoder
