@@ -33,7 +33,8 @@ class LostorageController < ApplicationController
     #construct the async storage URL using the object's state storage URL-  Sub async for state in URL.
     email_xml_file = build_email_xml(to_addr,
                                      "Merritt #{@container_type.capitalize} Download Processing Completed ",
-                                     render_to_string(:partial => "lostorage/los_email_body.text.erb"))
+                                     render_to_string(:formats => [:text],
+                                                      :partial => "lostorage/los_email_body"))
     resp = RestClient.post(@object.bytestream_uri.to_s.gsub(/content/,'async'),
                            { 'email'             => email_xml_file,
                              'responseForm'      => 'xml',
