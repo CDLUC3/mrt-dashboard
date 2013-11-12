@@ -178,9 +178,10 @@ class ObjectController < ApplicationController
       redirect_to(:controller => "lostorage", :action => "index", :object => @object) and return
     end
 
-    response.headers["Content-Disposition"] = "attachment; filename=#{Orchard::Pairtree.encode(@object.ark.to_s)}_object.zip"
-    response.headers["Content-Type"] = "application/zip"
-    self.response_body = Streamer.new("#{@object.bytestream_uri}?t=zip")
+    stream_response("#{@object.bytestream_uri}?t=zip", 
+                    "attachment",
+                    "#{Orchard::Pairtree.encode(@object.ark.to_s)}_object.zip",
+                    "application/zip")
     session[:perform_download] = false  
   end
 

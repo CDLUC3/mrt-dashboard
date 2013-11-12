@@ -203,4 +203,13 @@ class ApplicationController < ActionController::Base
       :page => (params[:page] || 1), 
       :per_page => 10 }
   end
+  
+  def stream_response(url, disposition, filename, mediatype, length=nil)
+    response.headers["Content-Type"] = mediatype
+    response.headers["Content-Disposition"] = "#{disposition}; filename=\"#{filename}\""
+    if !length.nil? then 
+      response.headers["Content-Length"] = length.to_s
+    end
+    self.response_body = Streamer.new(url)
+  end
 end
