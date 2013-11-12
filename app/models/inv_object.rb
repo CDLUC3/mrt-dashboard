@@ -12,7 +12,7 @@ class InvObject < ActiveRecord::Base
   include Encoder
 
   def to_param
-    urlencode_mod(self.ark)
+    urlencode(self.ark)
   end
 
   def bytestream_uri

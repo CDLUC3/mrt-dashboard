@@ -1,5 +1,5 @@
 module Encoder
-  def urlencode_mod(item)
+  def urlencode(item)
     URI.escape(item, Regexp.new("[^#{URI::PATTERN::UNRESERVED}]"))
   end
 end 

@@ -5,7 +5,7 @@ class InvFile < ActiveRecord::Base
   include Encoder
 
   def to_param
-    urlencode_mod(self.pathname)
+    urlencode(self.pathname)
   end
   
   def bytestream_uri
