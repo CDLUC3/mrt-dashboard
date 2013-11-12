@@ -22,6 +22,6 @@ class VersionViewTest < ActionDispatch::IntegrationTest
     check("accept")
     click_button("Accept")
     assert_equal(200, page.status_code)
-    assert_equal("attachment; filename=ark+=99999=fk40k2sqf_version_1.zip", page.response_headers["Content-Disposition"])
+    assert_equal("attachment; filename=\"ark+=99999=fk40k2sqf_version_1.zip\"", page.response_headers["Content-Disposition"])
   end
 end

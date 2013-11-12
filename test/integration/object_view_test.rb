@@ -28,7 +28,7 @@ class ObjectViewTest < ActionDispatch::IntegrationTest
     check("accept")
     click_button("Accept")
     assert_equal(200, page.status_code)
-    assert_equal("attachment; filename=ark+=99999=fk40k2sqf_object.zip", page.response_headers["Content-Disposition"])
+    assert_equal("attachment; filename=\"ark+=99999=fk40k2sqf_object.zip\"", page.response_headers["Content-Disposition"])
     
     # this dua has Persistence: request, so downloading again send us to DUA page
     visit("/d/ark%3A%2F99999%2Ffk40k2sqf")
@@ -38,7 +38,7 @@ class ObjectViewTest < ActionDispatch::IntegrationTest
     check("accept")
     click_button("Accept")
     assert_equal(200, page.status_code)
-    assert_equal("attachment; filename=ark+=99999=fk40k2sqf_object.zip", page.response_headers["Content-Disposition"])
+    assert_equal("attachment; filename=\"ark+=99999=fk40k2sqf_object.zip\"", page.response_headers["Content-Disposition"])
   end
 
   test "blue param avoids DUA" do

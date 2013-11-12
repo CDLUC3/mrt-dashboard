@@ -51,10 +51,10 @@ class VersionController < ApplicationController
       redirect_to(:controller => "lostorage", :action => "index", :object => @version.inv_object, :version => @version) and return
     end
 
-    filename = "#{Orchard::Pairtree.encode(@version.inv_object.ark.to_s)}_version_#{@version.number}.zip"
-    response.headers["Content-Type"] = "application/zip"
-    response.headers["Content-Disposition"] = "attachment; filename=#{filename}"
-    self.response_body = Streamer.new("#{@version.bytestream_uri}?t=zip")    
+    stream_response("#{@version.bytestream_uri}?t=zip",
+                    "attachment",
+                    "#{Orchard::Pairtree.encode(@version.inv_object.ark.to_s)}_version_#{@version.number}.zip",
+                    "application/zip")
     session[:perform_download] = false  
   end
 end
