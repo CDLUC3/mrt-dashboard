@@ -97,9 +97,6 @@ class ApplicationController < ActionController::Base
     unless current_uid
       store_location
       flash[:notice] = "You must be logged in to access the page you requested"
-      # finish encoding the ark: if it wasn't already (apache only encodes slashes)
-      session[:return_to].sub!(/ark:/) {|a| urlencode(a) }  
-      # redirect_to login_url
       redirect_to :controller=>'user_sessions', :action=>'guest_login' and return
     end
   end
