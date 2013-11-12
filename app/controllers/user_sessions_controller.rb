@@ -2,7 +2,7 @@ class UserSessionsController < ApplicationController
   before_filter :require_user,    :only => [:logout]
   
   def login
-    session[:expiry_time] = Time.now
+    reset_session
   end
   
   def login_post
@@ -22,6 +22,7 @@ class UserSessionsController < ApplicationController
   protected
 
   def handle_login(user_id, password)
+    session[:expiry_time] = Time.now
     if User.valid_ldap_credentials?(user_id, password) then
       flash[:notice] = "Login was successful"
       session[:uid] = user_id
