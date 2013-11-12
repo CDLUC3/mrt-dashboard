@@ -174,7 +174,7 @@ class ObjectController < ApplicationController
   def upload
     if params[:file].nil? then
       flash[:error] = 'You must choose a filename to submit.'
-      redirect_to :controller => 'object', :action => 'add', :group => @group and return false
+      redirect_to :controller => 'object', :action => 'add', :group => current_group and return false
     end
     begin
       hsh = {
@@ -182,7 +182,7 @@ class ObjectController < ApplicationController
           'type'              => params[:object_type],
           'submitter'         => "#{current_user.login}/#{current_user.displayname}",
           'filename'          => params[:file].original_filename,
-          'profile'           => @group.submission_profile,
+          'profile'           => current_group.submission_profile,
           'creator'           => params[:author],
           'title'             => params[:title],
           'primaryIdentifier' => params[:primary_id],
