@@ -16,6 +16,13 @@ class ObjectController < ApplicationController
     check_dua(@object.group.id, @object, {:object => @object})
   end
 
+  before_filter(:only => [:download]) do
+    # if size is > 4GB, redirect to have user enter email for asynch compression (skipping streaming)
+    if exceeds_size(@object) then
+      redirect_to(:controller => "lostorage", :action => "index", :object => @object) and return
+    end
+  end
+
   protect_from_forgery :except => [:ingest, :mint, :update]
 
   def load_object
@@ -157,11 +164,6 @@ class ObjectController < ApplicationController
   end
 
   def download
-    # if size is > 4GB, redirect to have user enter email for asynch compression (skipping streaming)
-    if exceeds_size(@object) then
-      redirect_to(:controller => "lostorage", :action => "index", :object => @object) and return
-    end
-
     stream_response("#{@object.bytestream_uri}?t=zip", 
                     "attachment",
                     "#{Orchard::Pairtree.encode(@object.ark.to_s)}_object.zip",
