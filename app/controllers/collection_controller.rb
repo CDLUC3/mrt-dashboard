@@ -8,6 +8,12 @@ class CollectionController < ApplicationController
     @request_group = Group.find(params[:group])
   end
 
+  def set_group_session_via_group
+    session[:group_id] = @request_group.id
+    session[:group_ark] = @request_group.ark_id
+    session[:group_description] = @request_group.description
+  end
+
   def object_count
     render :partial=>"object_count"
   end
