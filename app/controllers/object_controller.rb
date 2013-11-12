@@ -26,7 +26,7 @@ class ObjectController < ApplicationController
   protect_from_forgery :except => [:ingest, :mint, :update]
 
   def load_object
-    @object = InvObject.find_by_ark(params_u(:object))
+    @object = InvObject.where("ark = ?", params_u(:object)).includes(:inv_collections, :inv_versions=>[:inv_files]).first
   end    
 
   def ingest
