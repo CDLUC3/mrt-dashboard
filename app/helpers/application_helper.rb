@@ -44,9 +44,9 @@ module ApplicationHelper
   end
 
   def permissions(array)
-    return "none" if array.length < 1
-    return "#{array[0]} only" if array.length == 1
-    return array.join('/')
+    if (array.length == 0) then "none"
+    elsif (array.length == 1) then "#{array[0]} only"
+    else array.join("/") end
   end
 
   def merritt_time(t)
@@ -60,10 +60,8 @@ module ApplicationHelper
 
   # Format kernel metadata, filtering out unassigned values
   def dc_nice(i)
-    if i.nil? || i.match(/\(:unas\)/)
-      ''
-    else
-      i
+    if i.nil? || i.match(/\(:unas\)/) then ""
+    else i
     end
   end
 
