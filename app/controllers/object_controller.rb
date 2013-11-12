@@ -2,8 +2,6 @@ require 'tempfile'
 
 class ObjectController < ApplicationController
 
-  include Encoder
-
   before_filter :require_user,       :except => [:jupload_add, :recent, :ingest, :mint, :update]
   before_filter :load_object, :only=> [:index, :download]
   before_filter(:only=>[:download]) do

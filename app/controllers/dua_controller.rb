@@ -2,8 +2,6 @@ require 'net/http'
 class DuaController < ApplicationController
   before_filter :require_user
 
-  include Encoder
-
   def index 
     if params['commit'] == "Accept" then
       dua_hash = Dua.parse_file(fetch_to_tempfile(session[:dua_file_uri]))
