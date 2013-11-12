@@ -41,7 +41,8 @@ class Group
   
   # permissions are returned as an array like ['read','write'], maybe more in the future
   def permission(userid)
-    Group::LDAP.get_user_permissions(userid, self.id, User::LDAP)
+    @permissions ||= {}
+    @permissions[userid] ||= Group::LDAP.get_user_permissions(userid, self.id, User::LDAP)
   end
 
   def sparql_id
