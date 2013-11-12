@@ -23,15 +23,11 @@ class CollectionController < ApplicationController
     render :partial=>"total_size"
   end
 
-  def select
+  def index
     # load the requested group into the session
     session[:group_id] = @request_group.id
     session[:group_ark] = @request_group.ark_id
     session[:group_description] = @request_group.description
-    redirect_to(:action => :index, :group => @request_group)
-  end
-
-  def index
     @recent_objects = InvObject.joins(:inv_collections).
       where("inv_collections.ark = ?", @request_group.ark_id).
       order('inv_objects.modified desc').
