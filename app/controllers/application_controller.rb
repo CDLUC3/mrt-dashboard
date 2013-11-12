@@ -7,18 +7,6 @@ end
 
 class ApplicationController < ActionController::Base
   helper_method :available_groups, :current_user, :current_uid, :current_user_displayname, :has_object_permission?, :has_session_group_write_permission?, :current_group
-
-  class Streamer
-    def initialize(url)
-      @url = url
-    end
-    
-    def each 
-      HTTPClient.new.get_content(@url) { |chunk|
-        yield chunk
-      }
-    end
-  end
   
   class ErrorUnavailable < StandardError; end
   rescue_from ErrorUnavailable, :with => :render_unavailable
