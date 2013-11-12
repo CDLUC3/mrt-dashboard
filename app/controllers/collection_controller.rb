@@ -25,9 +25,11 @@ class CollectionController < ApplicationController
 
   def index
     # load the requested group into the session
-    session[:group_id] = @request_group.id
-    session[:group_ark] = @request_group.ark_id
-    session[:group_description] = @request_group.description
+    if (session[:group_id] != params[:group]) then
+      session[:group_id] = @request_group.id
+      session[:group_ark] = @request_group.ark_id
+      session[:group_description] = @request_group.description
+    end
     @recent_objects = InvObject.joins(:inv_collections).
       where("inv_collections.ark = ?", @request_group.ark_id).
       order('inv_objects.modified desc').
