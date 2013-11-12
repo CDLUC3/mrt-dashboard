@@ -1,5 +1,5 @@
 class InvObject < ActiveRecord::Base
-  has_many :inv_versions
+  has_many :inv_versions, :inverse_of => :inv_object
   
   has_many :inv_dublinkernels
 
