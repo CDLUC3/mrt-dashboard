@@ -16,7 +16,7 @@ class UserSessionsController < ApplicationController
   end
   
   def guest_login
-    handle_login(User::GUEST_USER[:guest_user], User::GUEST_USER[:guest_password])
+    handle_login(LDAP_CONFIG["guest_user"], LDAP_CONFIG["guest_password"])
   end
   
   protected

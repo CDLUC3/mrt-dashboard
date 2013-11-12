@@ -90,7 +90,7 @@ eos
   
   # Return true if logged in as guest
   def guest_logged_in?
-    user_logged_in? && (session[:uid] == (User::GUEST_USER[:guest_user]))
+    user_logged_in? && (session[:uid] == (LDAP_CONFIG["guest_user"]))
   end
   
   # Return true if user has choosen a group
