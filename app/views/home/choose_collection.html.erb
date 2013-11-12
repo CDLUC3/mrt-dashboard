@@ -25,7 +25,7 @@
         <tr class="<%=cycle('even', 'odd') %>">
           <td><%= link_to(grp[:description], 
                          :controller => :collection, 
-                         :action => :select, 
+                         :action => :index, 
                          :group => grp[:id]) %></td>
           <td><%= permissions(grp[:permissions]) %></td>
         </tr>
