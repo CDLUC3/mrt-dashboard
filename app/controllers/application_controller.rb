@@ -61,11 +61,6 @@ class ApplicationController < ActionController::Base
 
   private
 
-  #lets the group get itself from the params, but if not, from the session
-  def flexi_group_id
-    params[:group] or session[:group_id]
-  end
-
   def current_user
     if !defined?(@_current_user) then
       if !session[:uid].nil? then
