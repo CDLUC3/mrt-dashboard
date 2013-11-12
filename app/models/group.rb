@@ -13,7 +13,7 @@ class Group
   def initialize
   end
 
-  def param_to
+  def to_param
     self.id
   end
   
