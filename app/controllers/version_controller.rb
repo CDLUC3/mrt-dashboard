@@ -1,8 +1,14 @@
 class VersionController < ApplicationController
   before_filter :require_user
-  before_filter :require_download_permissions,    :only => [:download]
-
   before_filter :load_version
+  before_filter(:only => [:download]) do
+    if (!has_object_permission?(@version.inv_object, 'download')) then
+      flash[:error] = "You do not have download permissions."
+      redirect_to(:action=>:index,
+                  :object=>@version.inv_object,
+                  :version=>@version) and return false
+    end
+  end
 
   def load_version
     if (params[:version].to_i == 0) then

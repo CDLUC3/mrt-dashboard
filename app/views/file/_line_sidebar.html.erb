@@ -1,5 +1,5 @@
 <li style="word-wrap:break-word;">
-  <% if have_permission('download') then %>
+  <% if has_object_permission?(line_sidebar.inv_object, 'download') then %>
     <%= link_to File.basename(line_sidebar.pathname),
           :controller       => :file,
           :action           => :download,

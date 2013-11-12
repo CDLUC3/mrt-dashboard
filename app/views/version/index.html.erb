@@ -38,7 +38,7 @@
 
   <div class="key">&nbsp;</div><div class="value">&nbsp;</div>
   <div class="key">&nbsp;</div>
-<% if have_permission('download') then %>
+<% if has_object_permission?(@version.inv_object, 'download') then %>
   <div class="value">
     <form action="<%= url_for(:action=>:download, :object=> @version.inv_object, :version => @version) %>">
       <input type="submit" value="Download version">

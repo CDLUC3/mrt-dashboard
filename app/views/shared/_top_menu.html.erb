@@ -15,7 +15,7 @@ They display differently depending on what is set.
 
 
 cache("top_menu_#{current_uid}_#{session[:group_id]}", {:expires_in=>1.hour}) do
-  add_disp = session[:group_id] && have_permission('write')
+  add_disp = session[:group_id] && has_session_group_write_permission?
   ag = available_groups()
   change_disp = session[:group_id] && ag.length > 1
 

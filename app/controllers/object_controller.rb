@@ -5,12 +5,14 @@ class ObjectController < ApplicationController
   include Encoder
 
   before_filter :require_user,       :except => [:jupload_add, :recent, :ingest, :mint, :update]
-  before_filter :require_write,      :only => [:add, :upload]
-
-  before_filter(:only=>[:download]) { require_permissions('download',
-                                                          { :action => 'index', 
-                                                            :object =>params[:object] }) }
   before_filter :load_object, :only=> [:index, :download]
+  before_filter(:only=>[:download]) do
+    if (!has_object_permission?(@object, 'download')) then
+      flash[:error] = "You do not have download permissions."
+      redirect_to(:action=>:index,
+                  :object=>@object) and return false
+    end
+  end
 
   protect_from_forgery :except => [:ingest, :mint, :update]
 

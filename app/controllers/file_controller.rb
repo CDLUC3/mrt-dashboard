@@ -1,13 +1,14 @@
 class FileController < ApplicationController
   before_filter :require_user
-  before_filter :load_session_group
-  
-  before_filter(:only=>[:display]) { require_permissions('download',
-                                                         { :controller => 'version',
-                                                           :action => 'index',
-                                                           :object =>params[:object], 
-                                                           :version => params[:version]}) }
   before_filter :load_file
+  before_filter do
+    if (!has_object_permission?(@file.inv_version.inv_object, 'download')) then
+      flash[:error] = "You do not have download permissions."
+      redirect_to(:action=>:index, 
+                  :object=>@file.inv_version.inv_object, 
+                  :version=>@file.inv_version) and return false
+    end
+  end
 
   def load_file
     filename = params_u(:file)
