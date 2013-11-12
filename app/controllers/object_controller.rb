@@ -7,8 +7,8 @@ class ObjectController < ApplicationController
   before_filter(:only=>[:download]) do
     if (!has_object_permission?(@object, 'download')) then
       flash[:error] = "You do not have download permissions."
-      redirect_to(:action=>:index,
-                  :object=>@object) and return false
+      redirect_to(:action => :index,
+                  :object => @object) and return false
     end
   end
 

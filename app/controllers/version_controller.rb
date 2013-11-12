@@ -4,9 +4,9 @@ class VersionController < ApplicationController
   before_filter(:only => [:download]) do
     if (!has_object_permission?(@version.inv_object, 'download')) then
       flash[:error] = "You do not have download permissions."
-      redirect_to(:action=>:index,
-                  :object=>@version.inv_object,
-                  :version=>@version) and return false
+      redirect_to(:action  => :index,
+                  :object  => @version.inv_object,
+                  :version => @version) and return false
     end
   end
 
@@ -22,9 +22,9 @@ class VersionController < ApplicationController
     # compression (skipping streaming)
     if exceeds_size(@version.inv_object) then
       redirect_to(:controller => "lostorage", 
-                  :action => "index", 
-                  :object => @version.inv_object, 
-                  :version => @version) and return
+                  :action     => "index", 
+                  :object     => @version.inv_object, 
+                  :version    => @version) and return
     end
   end
 
