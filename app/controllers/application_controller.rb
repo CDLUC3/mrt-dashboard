@@ -119,14 +119,6 @@ class ApplicationController < ActionController::Base
     @_current_group ||= Group.find(session[:group_id])
   end
 
-  # Set group session data via :group param
-  def set_group_session_via_group
-    group = Group.find(params[:group])
-    session[:group_id] = group.id
-    session[:group_ark] = group.ark_id
-    session[:group_description] = group.description
-  end
-  
   def exceeds_size(object)
     return (object.total_actual_size > APP_CONFIG['max_archive_size'])
   end
