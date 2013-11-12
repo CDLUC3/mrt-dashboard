@@ -1,17 +1,10 @@
 class CollectionController < ApplicationController
   before_filter :require_user
   before_filter :require_request_group
-  prepend_before_filter :set_group_session_via_group, :only => [:index, :search_results]
 
   # Load the group specified in the params[:group]
   def require_request_group
     @request_group = Group.find(params[:group])
-  end
-
-  def set_group_session_via_group
-    session[:group_id] = @request_group.id
-    session[:group_ark] = @request_group.ark_id
-    session[:group_description] = @request_group.description
   end
 
   def object_count
@@ -29,7 +22,15 @@ class CollectionController < ApplicationController
   def total_size
     render :partial=>"total_size"
   end
-  
+
+  def select
+    # load the requested group into the session
+    session[:group_id] = @request_group.id
+    session[:group_ark] = @request_group.ark_id
+    session[:group_description] = @request_group.description
+    redirect_to(:action => :index, :group => @request_group)
+  end
+
   def index
     @recent_objects = InvObject.joins(:inv_collections).
       where("inv_collections.ark = ?", @request_group.ark_id).
