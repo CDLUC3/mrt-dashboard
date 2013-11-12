@@ -6,17 +6,11 @@ class Rack::Response
 end
 
 class ApplicationController < ActionController::Base
+  include Encoder
+
   helper_method :available_groups, :current_user, :current_uid, :current_user_displayname, :has_object_permission?, :has_session_group_write_permission?, :current_group
   
   protect_from_forgery
-
-  def urlencode(item)
-    URI.escape(item, Regexp.new("[^#{URI::PATTERN::UNRESERVED}]"))
-  end
-
-  def urlunencode(item)
-    URI.unescape(item)
-  end
 
   def render_unavailable
     render :file => "#{Rails.root}/public/unavailable.html", :status => 500
