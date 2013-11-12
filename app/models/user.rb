@@ -18,13 +18,8 @@ class User
     { :guest_user     => LDAP_CONFIG["guest_user"],
       :guest_password => LDAP_CONFIG["guest_password"]}
       
-  def initialize(*args)
-    if args.length == 1 and args[0].class == Net::LDAP::Entry then
-      @user = args[0]
-    elsif args.length == 1 and args[0].class == Hash then
-      #creating an object from some attributes
-      puts "this would be for creating an object from a hash of attributes, not implemented yet"
-    end
+  def initialize(user)
+    @user = user
   end
 
   def self.find_all
