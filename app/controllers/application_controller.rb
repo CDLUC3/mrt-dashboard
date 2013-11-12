@@ -46,6 +46,9 @@ class ApplicationController < ActionController::Base
 
   private
 
+  # Return the current user. Uses either the session user OR if the
+  # user supplied HTTP basic auth info, uses that. Returns nil if
+  # there is no session user and HTTP basic auth did not succeed
   def current_user
     if !defined?(@current_user) then
       if !session[:uid].nil? then
