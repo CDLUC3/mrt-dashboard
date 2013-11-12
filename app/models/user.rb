@@ -40,8 +40,7 @@ class User
   end
 
   def self.find_by_id(user_id)
-    u = LDAP.fetch(user_id)
-    self.new(u)
+    return User.new(LDAP.fetch(user_id))
   end
 
   #these would be LDAP attributes, not database ones.  maybe they should sync up more to
