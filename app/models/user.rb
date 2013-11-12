@@ -14,10 +14,6 @@ class User
       'email'         => 'mail',
       'tz_region'     => 'tzregion'}
 
-  GUEST_USER = 
-    { :guest_user     => LDAP_CONFIG["guest_user"],
-      :guest_password => LDAP_CONFIG["guest_password"]}
-      
   def initialize(user)
     @user = user
   end
