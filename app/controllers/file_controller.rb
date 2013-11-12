@@ -5,9 +5,9 @@ class FileController < ApplicationController
   before_filter do
     if (!has_object_permission?(@file.inv_version.inv_object, 'download')) then
       flash[:error] = "You do not have download permissions."
-      redirect_to(:action=>:index, 
-                  :object=>@file.inv_version.inv_object, 
-                  :version=>@file.inv_version) and return false
+      redirect_to(:action  => :index, 
+                  :object  => @file.inv_version.inv_object, 
+                  :version => @file.inv_version) and return false
     end
   end
 
