@@ -83,7 +83,7 @@ class ApplicationController < ActionController::Base
   # either return the uid from the session OR get the user id from
   # basic auth. Will not hit LDAP unless using basic auth
   def current_uid    
-    session[:uid] || (!current_user.nil? && current_user.id)
+    session[:uid] || (!current_user.nil? && current_user.uid)
   end
 
   def current_user_displayname
