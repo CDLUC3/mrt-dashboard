@@ -54,8 +54,8 @@ class ObjectViewTest < ActionDispatch::IntegrationTest
   end
 
   test "authentication works" do
-    env = {"HTTP_AUTHORIZATION" => "Basic " + Base64::encode64("merrritt-test:test")}
-    get("/d/ark%3A%2F99999%2Ffk4qv5n4z", env)
+    env = {"HTTP_AUTHORIZATION" => "Basic " + Base64::encode64("merritt-test:test")}
+    get("/d/ark%3A%2F99999%2Ffk4qv5n4z", {"blue"=>"true"}, env)
     assert_response(:success)
   end
 end
