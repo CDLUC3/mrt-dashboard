@@ -17,6 +17,17 @@ class VersionController < ApplicationController
                 :version => @version})
   end
 
+  before_filter(:only => [:download]) do
+    # if size is > 4GB, redirect to have user enter email for asynch
+    # compression (skipping streaming)
+    if exceeds_size(@version.inv_object) then
+      redirect_to(:controller => "lostorage", 
+                  :action => "index", 
+                  :object => @version.inv_object, 
+                  :version => @version) and return
+    end
+  end
+
   def load_version
     if (params[:version].to_i == 0) then
       latest_version = InvObject.find_by_ark(params_u(:object)).current_version.number
@@ -35,11 +46,6 @@ class VersionController < ApplicationController
   end
 
   def download
-    # if size is > 4GB, redirect to have user enter email for asynch compression (skipping streaming)
-    if exceeds_size(@version.inv_object) then
-      redirect_to(:controller => "lostorage", :action => "index", :object => @version.inv_object, :version => @version) and return
-    end
-
     stream_response("#{@version.bytestream_uri}?t=zip",
                     "attachment",
                     "#{Orchard::Pairtree.encode(@version.inv_object.ark.to_s)}_version_#{@version.number}.zip",
