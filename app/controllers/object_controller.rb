@@ -14,6 +14,10 @@ class ObjectController < ApplicationController
     end
   end
 
+  before_filter(:only => [:download]) do
+    check_dua(@object.group.id, @object, {:object => @object})
+  end
+
   protect_from_forgery :except => [:ingest, :mint, :update]
 
   def load_object
@@ -155,24 +159,6 @@ class ObjectController < ApplicationController
   end
 
   def download
-    # bypass DUA processing for python scripts (indicated by special param) or if dua has already been accepted
-    if params[:blue].nil? 
-      session[:collection_acceptance] ||= Hash.new(false)
-      #check if user already saw DUA and accepted- if so, skip all this & download the file
-      if !session[:perform_download]  
-        if !session[:collection_acceptance][@object.group.id] then
-          # perform DUA logic to retrieve DUA
-          #construct the dua_file_uri based off the object URI, the object's parent collection, version 0, and  DUA filename
-          dua_file_uri = construct_dua_uri(@object.dua_rx, @object.bytestream_uri)
-          if process_dua_request(dua_file_uri) then
-            # if the DUA exists, display DUA to user for acceptance before displaying file
-            session[:dua_file_uri] = dua_file_uri
-            redirect_to :controller => "dua",  :action => "index", :object => @object and return false 
-          end
-        end
-      end
-    end
-
     # if size is > 4GB, redirect to have user enter email for asynch compression (skipping streaming)
     if exceeds_size(@object) then
       redirect_to(:controller => "lostorage", :action => "index", :object => @object) and return
