@@ -181,8 +181,10 @@ class ApplicationController < ActionController::Base
   end
   
   def check_dua(group_id, what, redirect_args)
-    # bypass DUA processing for python scripts - indicated by special param
-    if params[:blue].nil? then
+    if params[:blue] then
+      # bypass DUA processing for python scripts - indicated by special param
+      return
+    else
       session[:collection_acceptance] ||= Hash.new(false)
       #check if user already saw DUA and accepted- if so, skip all this & download the file
       if !session[:perform_download]  
