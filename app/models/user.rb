@@ -1,6 +1,4 @@
 class User 
-
-  
   LDAP = UserLdap::Server.
     new({ :host            => LDAP_CONFIG["host"],
           :port            => LDAP_CONFIG["port"],
@@ -79,5 +77,4 @@ class User
     return arr[0] if arr.length == 1
     arr
   end
-
 end
