@@ -6,7 +6,7 @@ class Rack::Response
 end
 
 class ApplicationController < ActionController::Base
-  helper_method :available_groups, :current_user, :current_uid, :current_user_displayname, :current_permissions
+  helper_method :available_groups, :current_user, :current_uid, :current_user_displayname, :has_object_permission?, :has_session_group_write_permission?
 
   class Streamer
     def initialize(url)
@@ -38,25 +38,17 @@ class ApplicationController < ActionController::Base
   end
 
   helper :all
-  
-  def current_permissions
-    session[:permissions] ||= (current_group.permission(current_uid) || [])
-  end
-  
-  def require_permissions(which, redirect=nil)
-    if (!current_permissions.include?(which)) then
-      flash[:error] = "You do not have #{which} permissions."
-      redirect ||= {
-        :action => 'index',
-        :group => flexi_group_id,
-        :object =>params[:object]  }
-      redirect_to(redirect) and return false
-    end
-
+    
+  # Returns true if the current user has which permissions on the object.
   def has_object_permission?(object, which)
-    return object.group.permission(current_user).member?(which)
+    return object.group.permission(current_uid).member?(which)
   end
 
+  # Returns true if the user can upload to the session group
+  def has_session_group_write_permission?
+    return current_group.permission(current_uid).member?('write')
+  end
+    
   # Return the groups which the user may be a member of
   def available_groups
     groups = current_user.groups.sort_by{|g| g.description.downcase } || []
@@ -123,10 +115,6 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  def require_download_permissions
-    require_permissions('download')
-  end
-
   def current_group
     @_current_group ||= Group.find(session[:group_id])
   end
@@ -139,23 +127,12 @@ class ApplicationController < ActionController::Base
     session[:group_description] = group.description
   end
   
-  #require write access to this group
-  def require_write
-    raise ErrorUnavailable if !current_permissions.include?('write')
-  end
-  
   def exceeds_size(object)
     return (object.total_actual_size > APP_CONFIG['max_archive_size'])
   end
   
   def store_location
     session[:return_to] = request.fullpath
-  end
-
-  def store_group(group)
-    session[:group_id] = group.id
-    session[:group_ark] = group.ark_id
-    session[:group_description] = group.description
   end
 
   def redirect_back_or_default(default)
