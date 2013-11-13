@@ -11,8 +11,7 @@ class VersionController < ApplicationController
   end
 
   before_filter(:only => [:download]) do
-    check_dua(@version.inv_object.group.id, 
-              @version,
+    check_dua(@version.inv_object,
               { :object  => @version.inv_object,
                 :version => @version})
   end

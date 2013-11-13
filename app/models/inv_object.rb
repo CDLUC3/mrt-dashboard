@@ -20,6 +20,10 @@ class InvObject < ActiveRecord::Base
     URI.parse("#{APP_CONFIG['uri_1']}#{self.node_number}/#{self.to_param}")
   end
 
+  def dua_uri
+    URI.parse("#{APP_CONFIG['uri_1']}#{self.node_number}/#{self.inv_collection.to_param}/0/#{urlencode(APP_CONFIG['mrt_dua_file'])}")
+  end
+
   def node_number
     InvNode.joins(:inv_nodes_inv_objects).select("number").where("role = ?", "primary").limit(1).map(&:number)[0]
   end
@@ -46,9 +50,5 @@ class InvObject < ActiveRecord::Base
   
   def permalink
     "#{APP_CONFIG['n2t_uri']}#{self.ark.to_s}"
-  end
-  
-  def dua_rx
-    /^(.*)\/([^\/]+)$/  
   end
 end

@@ -13,7 +13,7 @@ class ObjectController < ApplicationController
   end
 
   before_filter(:only => [:download]) do
-    check_dua(@object.group.id, @object, {:object => @object})
+    check_dua(@object, {:object => @object})
   end
 
   before_filter(:only => [:download]) do

@@ -3,7 +3,8 @@ class DuaController < ApplicationController
 
   def index 
     if params['commit'] == "Accept" then
-      dua_hash = Dua.parse_file(fetch_to_tempfile(session[:dua_file_uri]))
+      object = InvObject.where("inv_objects.ark = ?", params_u(:object)).first
+      dua_hash = Dua.parse_file(fetch_to_tempfile(object.dua_uri))
       flash[:message] = 'You must check that you accept the terms.' and return if params[:accept].blank?
       if params[:name].blank? || params[:affiliation].blank? || params[:user_agent_email].blank? then
         flash[:message] = 'Please enter the required fields' and return
@@ -12,7 +13,7 @@ class DuaController < ApplicationController
         flash[:message] = 'You must fill in a valid return email address.' and return
       end   
       
-      group = InvObject.find_by_ark(params_u(:object)).group
+      group = object.group
       DuaMailer.dua_email(:to          => params[:user_agent_email],
                           :cc          => APP_CONFIG['dua_email_to'] + [dua_hash["Notification"] || ''],
                           :reply_to    => dua_hash["Notification"],
@@ -30,7 +31,8 @@ class DuaController < ApplicationController
       # TODO too many slashes here if some params are empty
       redirect_to "/m/#{params[:object]}/#{params[:version]}"
     else
-      dua_hash = Dua.parse_file(fetch_to_tempfile(session[:dua_file_uri]))
+      object = InvObject.where("inv_objects.ark = ?", params_u(:object)).first
+      dua_hash = Dua.parse_file(fetch_to_tempfile(object.dua_uri))
       @title, @terms = dua_hash['Title'], dua_hash['Terms']
     end
   end

@@ -17,7 +17,7 @@ class ApplicationController < ActionController::Base
   end
 
   helper :all
-    
+
   # Returns true if the current user has which permissions on the object.
   def has_object_permission?(object, which)
     permissions = Rails.cache.fetch("permissions_#{current_uid}_#{object.inv_collection.ark}", :expires_in =>600) do
@@ -132,15 +132,8 @@ class ApplicationController < ActionController::Base
     end  
   end
   
-  # parse the component (object, file, or version) uri to construct the DUA URI
-  def construct_dua_uri(rx, component_uri)
-    md = rx.match(component_uri.to_s)
-    return "#{md[1]}/" + urlencode(InvObject.find_by_ark(urlunencode(params[:object])).inv_collection.ark)  + "/0/" + urlencode(APP_CONFIG['mrt_dua_file']) 
-  end
-  
   # returns the response of the HTTP request for the DUA URI
-  def process_dua_request(dua_file_uri)
-    uri = URI.parse(dua_file_uri)
+  def process_dua_request(uri)
     http = Net::HTTP.new(uri.host, uri.port)
     uri_response = http.request(Net::HTTP::Get.new(uri.request_uri))
     return (uri_response.class == Net::HTTPOK)
@@ -165,26 +158,22 @@ class ApplicationController < ActionController::Base
     self.response_body = Streamer.new(url)
   end
   
-  def check_dua(group_id, what, redirect_args)
+  def check_dua(object, redirect_args)
     if params[:blue] then
       # bypass DUA processing for python scripts - indicated by special param
       return
     else
       session[:collection_acceptance] ||= Hash.new(false)
       # check if user already saw DUA and accepted: if so, return
-      if session[:collection_acceptance][group_id] then
+      if session[:collection_acceptance][object.group.id] then
         # clear out acceptance if it does not have session persistence
-        if (session[:collection_acceptance][group_id] != "session")
-          session[:collection_acceptance].delete(group_id)
+        if (session[:collection_acceptance][object.group.id] != "session")
+          session[:collection_acceptance].delete(object.group.id)
         end
         return
       else
-        # perform DUA logic to retrieve DUA
-        #construct the dua_file_uri based off the file_uri, the object's parent collection, version 0, and  DUA filename
-        dua_file_uri = construct_dua_uri(what.dua_rx, what.bytestream_uri)
-        if process_dua_request(dua_file_uri) then
+        if process_dua_request(object.dua_uri) then
           # if the DUA for this collection exists, display DUA to user for acceptance before displaying file
-          session[:dua_file_uri] = dua_file_uri
           redirect_to({:controller => "dua", :action => "index"}.merge(redirect_args)) and return
         end
       end
