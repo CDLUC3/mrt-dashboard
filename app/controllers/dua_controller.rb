@@ -1,4 +1,3 @@
-require 'net/http'
 class DuaController < ApplicationController
   before_filter :require_user
 
