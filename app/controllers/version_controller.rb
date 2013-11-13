@@ -51,6 +51,5 @@ class VersionController < ApplicationController
                     "attachment",
                     "#{Orchard::Pairtree.encode(@version.inv_object.ark.to_s)}_version_#{@version.number}.zip",
                     "application/zip")
-    session[:perform_download] = false  
   end
 end
