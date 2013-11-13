@@ -41,8 +41,9 @@ class Group
   
   # permissions are returned as an array like ['read','write'], maybe more in the future
   def permission(userid)
-    @permissions ||= {}
-    @permissions[userid] ||= Group::LDAP.get_user_permissions(userid, self.id, User::LDAP)
+    return Rails.cache.fetch("permissions_#{userid}_#{self.id}", :expires_in =>600) do
+      Group::LDAP.get_user_permissions(userid, self.id, User::LDAP)
+    end
   end
 
   def sparql_id
