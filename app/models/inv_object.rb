@@ -25,7 +25,7 @@ class InvObject < ActiveRecord::Base
   end
 
   def node_number
-    InvNode.joins(:inv_nodes_inv_objects).select("number").where("role = ?", "primary").limit(1).map(&:number)[0]
+    self.inv_nodes.where("inv_nodes_inv_objects.role" => "primary").select("inv_nodes.number").map(&:number).first
   end
 
   def size

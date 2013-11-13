@@ -9,3 +9,9 @@ fk4qv5n4z_node910:
   inv_object: fk4qv5n4z
   role: "primary"
   created: "2013-08-09 14:41:23"
+
+fk41z6855_node910:
+  inv_node: node910
+  inv_object: fk41z6855
+  role: "primary"
+  created: "2013-08-09 14:41:23"
