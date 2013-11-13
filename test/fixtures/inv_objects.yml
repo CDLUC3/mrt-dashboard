@@ -1,0 +1,41 @@
+fk40k2sqf:
+  inv_owner_id: 6
+  ark: "ark:/99999/fk40k2sqf"
+  object_type: "MRT-curatorial"
+  role: "MRT-content"
+  aggregate_role: "MRT-none"
+  version_number: 1
+  erc_who: "Dorothea Lange"
+  erc_what: "Fairs and Markets"
+  erc_when: "ca. 1954"
+  erc_where: "ark:/99999/fk40k2sqf ; ark:/13030/ft4b69n700"
+  created: "2013-01-31 02:43"
+  modified: "2013-01-31 02:43"
+
+fk4qv5n4z:
+  inv_owner_id: 6
+  ark: "ark:/99999/fk4qv5n4z"
+  object_type: "MRT-curatorial"
+  role: "MRT-content"
+  aggregate_role: "MRT-none"
+  version_number: 1
+  erc_who: "(:unas)"
+  erc_what: "Robotic Workstation"
+  erc_when: "(:unas)"
+  erc_where: "ark:/99999/fk4qv5n4z ; (:unas)"
+  created: "2013-08-09 14:41:23"
+  modified: "2013-08-09 14:41:34"
+
+fk41z6855:
+  inv_owner_id: 6
+  ark: "ark:/99999/fk41z6855"
+  object_type: "MRT-curatorial"
+  role: "MRT-content"
+  aggregate_role: "MRT-none"
+  version_number: 1
+  erc_who: "(:unas)"
+  erc_what: "Giant"
+  erc_when: "(:unas)"
+  erc_where: "ark:/99999/fk41z6855 ; (:unas)"
+  created: "2013-08-09 14:41:23"
+  modified: "2013-08-09 14:41:34"

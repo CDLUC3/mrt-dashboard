@@ -1,0 +1,31 @@
+<div class="key">permanent link:</div>
+<div class="value"><%= link_to(details_display.permalink, details_display.permalink) %></div>
+
+<div class="key">primary identifier:</div>
+<div class="value"><%= details_display.ark %></div>
+
+<div class="key">title:</div>
+<div class="value"><%= dc_nice(details_display.erc_what) %>&nbsp;</div>
+
+<div class="key">creator:</div>
+<div class="value"><%= dc_nice(details_display.erc_who) %>&nbsp;</div>
+
+<div class="key">date:</div>
+<div class="value"><%= dc_nice(details_display.erc_when) %>&nbsp;</div>
+
+<div class="key">local id:</div>
+<div class="value"><%= details_display.erc_where %>&nbsp;</div>
+
+<div class="key">last modified:</div>
+<div class="value"><%= merritt_time(details_display.modified) %></div>
+
+<div class="key">created:</div>
+<div class="value"><%= merritt_time(details_display.inv_versions[0].created) %></div>
+
+<div class="key">total size <span style="font-weight: normal">(all versions)</span>:</div>
+<div class="value"><%= number_to_storage_size(details_display.total_actual_size) %></div>
+
+<div class="key">total versions:</div>
+<div class="value"><%= details_display.inv_versions.size %></div>
+
+<div class="clear"></div>

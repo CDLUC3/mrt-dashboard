@@ -1,0 +1,28 @@
+<% content_for :title do %>
+  UC3 Merritt: Asynchronous Compression POST Error
+<% end %>
+<div class="grid_12">
+  <h2>Asynchronous Compression POST Error</h2>
+  <div class="breadcrumbs">
+    <%= link_to('Merritt', :controller => 'home', :action => 'index') %> &gt;
+    <%= link_to("Collection: #{@object.group.description}", :controller => 'collection', :action => 'index', :group => @object.group.id) %>
+    &gt; Asynchronous Compression POST Error
+  </div>
+
+  <br/>
+
+  <p>Your request to the Merritt Storage system ran into a problem.  It
+  returned the following error:</p>
+
+  <p><strong><%=@description%></strong></p>
+
+  <p><strong><%=@error%></strong></p>
+
+  <p>Please 
+   <a href="http://www.cdlib.org/services/uc3/contact.html">Contact us</a>
+  for assistance in the issue.</p>
+
+</div>
+<div class="grid_4 sidebar">
+  <%= render :partial => '/shared/side_lookup' %><br/>
+</div>
