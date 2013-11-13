@@ -4,7 +4,11 @@ class CollectionController < ApplicationController
 
   # Load the group specified in the params[:group]
   def require_request_group
-    @request_group = Group.find(params[:group])
+    begin
+      @request_group = Group.find(params[:group])
+    rescue LdapMixin::LdapException 
+      raise ActiveRecord::RecordNotFound
+    end
   end
 
   def object_count
