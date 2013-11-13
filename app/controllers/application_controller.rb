@@ -29,7 +29,7 @@ class ApplicationController < ActionController::Base
   # Returns true if the user can upload to the session group
   def has_session_group_write_permission?
     permissions = Rails.cache.fetch("permissions_#{current_uid}_#{session[:group_id]}", :expires_in =>600) do
-      current_group.permission(current_uid).member?('write')
+      current_group.permission(current_uid)
     end
     return permissions.member?('write')
   end
