@@ -7,4 +7,8 @@ class InvCollection < ActiveRecord::Base
   def to_param
     urlencode(self.ark)
   end
+
+  def group
+    @_group ||= Group.find(self.ark)
+  end
 end

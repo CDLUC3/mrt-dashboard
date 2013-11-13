@@ -45,7 +45,7 @@ class InvObject < ActiveRecord::Base
   end
 
   def group
-    @_group ||= Group.find(self.inv_collection.ark)
+    self.inv_collection.group
   end
   
   def permalink
