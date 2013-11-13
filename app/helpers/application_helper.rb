@@ -78,9 +78,8 @@ eos
 
   # outputs a formatted string for the current environment, except production
   def show_environment
-    if !Rails.env.include?('production') then
-      Rails.env
-    end
+    if !Rails.env.include?('production') then Rails.env
+    else "" end
   end
 
   # Return true if a user is logged in
