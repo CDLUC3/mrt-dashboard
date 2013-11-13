@@ -16,7 +16,7 @@ class InvVersion < ActiveRecord::Base
   end
 
   def total_size
-    InvFile.where("inv_version_id = ?", self.id).sum("full_size")
+    self.inv_files.sum("full_size")
   end
 
   def system_files 
