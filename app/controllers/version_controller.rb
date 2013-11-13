@@ -31,7 +31,7 @@ class VersionController < ApplicationController
   def load_version
     if (params[:version].to_i == 0) then
       latest_version = InvObject.find_by_ark(params_u(:object)).current_version.number
-      redirect_to(:object => params[:object],
+      redirect_to(:object => urlencode(params[:object]),
                   :version => latest_version)
     else
       @version = InvVersion.joins(:inv_object).
