@@ -12,8 +12,7 @@ class FileController < ApplicationController
   end
 
   before_filter(:only => [:download]) do
-    check_dua(@file.inv_version.inv_object.group.id, 
-              @file, 
+    check_dua(@file.inv_version.inv_object,
               { :object  => @file.inv_version.inv_object,
                 :version => @file.inv_version,
                 :file    => @file})
