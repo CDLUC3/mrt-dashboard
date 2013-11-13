@@ -112,7 +112,7 @@ class ApplicationController < ActionController::Base
     session[:return_to] = nil
   end
 
-  def fetch_to_tempfile(*args)
+  def with_fetched_tempfile(*args)
     require 'open-uri'
     require 'fileutils'
     open(*args) do |data|
@@ -124,11 +124,13 @@ class ApplicationController < ActionController::Base
           while (!(buff = data.read(4096)).nil?)do 
             tmp_file << buff
           end
+          tmp_file.rewind
+          yield(tmp_file)
         ensure
           tmp_file.close
+          tmp_file.delete
         end
       end
-      return tmp_file
     end  
   end
   
