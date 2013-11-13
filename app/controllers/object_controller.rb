@@ -26,8 +26,9 @@ class ObjectController < ApplicationController
   protect_from_forgery :except => [:ingest, :mint, :update]
 
   def load_object
-    @object = InvObject.where("ark = ?", params_u(:object)).includes(:inv_collections, :inv_versions=>[:inv_files]).first
-  end    
+    @object = InvObject.where("ark = ?", params_u(:object)).includes(:inv_collections, :inv_versions=>[:inv_files]).first 
+    raise ActiveRecord::RecordNotFound if @object.nil?
+  end
 
   def ingest
     if !current_user then

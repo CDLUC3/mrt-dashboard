@@ -33,6 +33,7 @@ class FileController < ApplicationController
       where("inv_versions.number = ?", params[:version]).
       where("inv_files.pathname = ?", filename).
       first
+    raise ActiveRecord::RecordNotFound if @file.nil?
   end
 
   def download
