@@ -8,8 +8,10 @@ end
 class ApplicationController < ActionController::Base
   include Encoder
 
-  helper_method :available_groups, :current_user, :current_uid, :current_user_displayname, :has_object_permission?, :has_session_group_write_permission?, :current_group
-  
+  helper_method(:available_groups, :current_user, :current_uid,
+                :current_user_displayname, :has_group_permission?,
+                :has_object_permission?, :has_session_group_write_permission?,
+                :current_group)
   protect_from_forgery
 
   def render_unavailable
@@ -19,19 +21,18 @@ class ApplicationController < ActionController::Base
   helper :all
 
   # Returns true if the current user has which permissions on the object.
+  def has_group_permission?(group, which)
+    group.permission(current_uid).member?(which)
+  end
+  
+  # Returns true if the current user has which permissions on the object.
   def has_object_permission?(object, which)
-    permissions = Rails.cache.fetch("permissions_#{current_uid}_#{object.inv_collection.ark}", :expires_in =>600) do
-      object.group.permission(current_uid)
-    end
-    return permissions.member?(which)
+    has_group_permission?(object.inv_collection.group, which)
   end
 
   # Returns true if the user can upload to the session group
   def has_session_group_write_permission?
-    permissions = Rails.cache.fetch("permissions_#{current_uid}_#{session[:group_id]}", :expires_in =>600) do
-      current_group.permission(current_uid)
-    end
-    return permissions.member?('write')
+    has_group_permission?(current_group, 'write')
   end
     
   # Return the groups which the user may be a member of
