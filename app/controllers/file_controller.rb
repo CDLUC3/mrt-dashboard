@@ -42,6 +42,5 @@ class FileController < ApplicationController
                     File.basename(@file.pathname), 
                     @file.mime_type,
                     @file.full_size)
-    session[:perform_download] = false  
   end 
 end

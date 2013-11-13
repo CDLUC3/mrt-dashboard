@@ -24,12 +24,7 @@ class DuaController < ApplicationController
                           :collection  => group.description,
                           :terms       => dua_hash["Terms"]).deliver
       #user accepted DUA, go ahead and process file/object/version download
-      # set the persistence flag for session level so DUA doesn't get displayed again for this session
-      if dua_hash["Persistence"] == "session" then
-        session[:collection_acceptance][group.id] = true
-      end
-      # return to where user came from 
-      session[:perform_download] = true
+      session[:collection_acceptance][group.id] = (dua_hash["Persistence"] || "single")
       # TODO too many slashes here if some params are empty
       redirect_to "/d/#{params[:object]}/#{params[:version]}/#{params[:file]}"
     elsif (params[:commit] == "Do Not Accept") then

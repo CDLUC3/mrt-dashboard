@@ -168,7 +168,6 @@ class ObjectController < ApplicationController
                     "attachment",
                     "#{Orchard::Pairtree.encode(@object.ark.to_s)}_object.zip",
                     "application/zip")
-    session[:perform_download] = false  
   end
 
   def upload

@@ -171,18 +171,21 @@ class ApplicationController < ActionController::Base
       return
     else
       session[:collection_acceptance] ||= Hash.new(false)
-      #check if user already saw DUA and accepted- if so, skip all this & download the file
-      if !session[:perform_download]  
-        # if DUA was not accepted, redirect to object landing page 
-        if !session[:collection_acceptance][group_id]
-          # perform DUA logic to retrieve DUA
-          #construct the dua_file_uri based off the file_uri, the object's parent collection, version 0, and  DUA filename
-          dua_file_uri = construct_dua_uri(what.dua_rx, what.bytestream_uri)
-          if process_dua_request(dua_file_uri) then
+      # check if user already saw DUA and accepted: if so, return
+      if session[:collection_acceptance][group_id] then
+        # clear out acceptance if it does not have session persistence
+        if (session[:collection_acceptance][group_id] != "session")
+          session[:collection_acceptance].delete(group_id)
+        end
+        return
+      else
+        # perform DUA logic to retrieve DUA
+        #construct the dua_file_uri based off the file_uri, the object's parent collection, version 0, and  DUA filename
+        dua_file_uri = construct_dua_uri(what.dua_rx, what.bytestream_uri)
+        if process_dua_request(dua_file_uri) then
           # if the DUA for this collection exists, display DUA to user for acceptance before displaying file
-            session[:dua_file_uri] = dua_file_uri
-            redirect_to({:controller => "dua", :action => "index"}.merge(redirect_args)) and return
-          end
+          session[:dua_file_uri] = dua_file_uri
+          redirect_to({:controller => "dua", :action => "index"}.merge(redirect_args)) and return
         end
       end
     end
