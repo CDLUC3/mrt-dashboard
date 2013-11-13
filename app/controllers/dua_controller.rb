@@ -1,10 +1,10 @@
 class DuaController < ApplicationController
   before_filter :require_user
-
+  
   def index 
+    object = InvObject.where("inv_objects.ark = ?", params_u(:object)).first
+    dua_hash = with_fetched_tempfile(object.dua_uri) { |f| Dua.parse_file(f) }
     if params['commit'] == "Accept" then
-      object = InvObject.where("inv_objects.ark = ?", params_u(:object)).first
-      dua_hash = Dua.parse_file(fetch_to_tempfile(object.dua_uri))
       flash[:message] = 'You must check that you accept the terms.' and return if params[:accept].blank?
       if params[:name].blank? || params[:affiliation].blank? || params[:user_agent_email].blank? then
         flash[:message] = 'Please enter the required fields' and return
@@ -31,8 +31,6 @@ class DuaController < ApplicationController
       # TODO too many slashes here if some params are empty
       redirect_to "/m/#{params[:object]}/#{params[:version]}"
     else
-      object = InvObject.where("inv_objects.ark = ?", params_u(:object)).first
-      dua_hash = Dua.parse_file(fetch_to_tempfile(object.dua_uri))
       @title, @terms = dua_hash['Title'], dua_hash['Terms']
     end
   end
