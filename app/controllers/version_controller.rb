@@ -38,7 +38,7 @@ class VersionController < ApplicationController
         where("inv_versions.number = ?", params_u(:version).to_i).
         includes(:inv_files, :inv_dublinkernels, :inv_object => [:inv_versions]).
         first
-      render :status => 404 and return if @version.nil?
+      raise ActiveRecord::RecordNotFound if @version.nil?
     end
   end
 
