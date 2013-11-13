@@ -20,12 +20,18 @@ class ApplicationController < ActionController::Base
     
   # Returns true if the current user has which permissions on the object.
   def has_object_permission?(object, which)
-    return object.group.permission(current_uid).member?(which)
+    permissions = Rails.cache.fetch("permissions_#{current_uid}_#{object.inv_collection.ark}", :expires_in =>600) do
+      object.group.permission(current_uid)
+    end
+    return permissions.member?(which)
   end
 
   # Returns true if the user can upload to the session group
   def has_session_group_write_permission?
-    return current_group.permission(current_uid).member?('write')
+    permissions = Rails.cache.fetch("permissions_#{current_uid}_#{session[:group_id]}", :expires_in =>600) do
+      current_group.permission(current_uid).member?('write')
+    end
+    return permissions.member?('write')
   end
     
   # Return the groups which the user may be a member of
