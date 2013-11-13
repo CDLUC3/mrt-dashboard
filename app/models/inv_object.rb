@@ -25,11 +25,11 @@ class InvObject < ActiveRecord::Base
   end
 
   def size
-    InvFile.where("inv_object_id = ?", self.id).sum("billable_size")
+    self.inv_files.sum("billable_size")
   end
  
   def total_actual_size
-    InvFile.where("inv_object_id = ?", self.id).sum("full_size")
+    self.inv_files.sum("full_size")
   end
 
   def current_version
