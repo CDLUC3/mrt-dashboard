@@ -183,24 +183,22 @@ class ObjectController < ApplicationController
     end
     begin
       hsh = {
-          'file'              => params[:file].tempfile,
-          'type'              => params[:object_type],
-          'submitter'         => "#{current_user.login}/#{current_user.displayname}",
-          'filename'          => params[:file].original_filename,
-          'profile'           => current_group.submission_profile,
-          'creator'           => params[:author],
-          'title'             => params[:title],
-          'primaryIdentifier' => params[:primary_id],
-          'date'              => params[:date],
-          'localIdentifier'   => params[:local_id], # local identifier necessary, nulls?
-          'responseForm'      => 'xml'
-        }.reject{|key, value| value.blank? }
+        'file'              => params[:file].tempfile,
+        'type'              => params[:object_type],
+        'submitter'         => "#{current_user.login}/#{current_user.displayname}",
+        'filename'          => params[:file].original_filename,
+        'profile'           => current_group.submission_profile,
+        'creator'           => params[:author],
+        'title'             => params[:title],
+        'primaryIdentifier' => params[:primary_id],
+        'date'              => params[:date],
+        'localIdentifier'   => params[:local_id], # local identifier necessary, nulls?
+        'responseForm'      => 'xml'
+      }.reject{|key, value| value.blank? }
       response = mk_httpclient.post(APP_CONFIG['ingest_service_update'], hsh)
-      
       @doc = Nokogiri::XML(response.content) do |config|
         config.strict.noent.noblanks
       end
-
       @batch_id = @doc.xpath("//bat:batchState/bat:batchID")[0].child.text
       @obj_count = @doc.xpath("//bat:batchState/bat:jobStates").length
     rescue Exception => ex
