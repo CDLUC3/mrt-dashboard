@@ -26,7 +26,7 @@ class LargeObjectStorageTest < ActionDispatch::IntegrationTest
     fill_out_dua()
 
     # now at large object page
-    fill_in("Email", :with => "doe@mailinator")
+    fill_in("Email", :with => "doe@mailinator.com")
     click_button("Submit")
     assert_equal("/m/ark%3A%2F99999%2Ffk41z6855", current_path)
     
