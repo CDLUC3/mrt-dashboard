@@ -182,7 +182,7 @@ class ObjectController < ApplicationController
       redirect_to :controller => 'object', :action => 'add', :group => current_group and return false
     end
     begin
-      hsh = {
+      ingest_params = {
         'file'              => params[:file].tempfile,
         'type'              => params[:object_type],
         'submitter'         => "#{current_user.login}/#{current_user.displayname}",
@@ -195,8 +195,8 @@ class ObjectController < ApplicationController
         'localIdentifier'   => params[:local_id], # local identifier necessary, nulls?
         'responseForm'      => 'xml'
       }.reject{|key, value| value.blank? }
-      response = mk_httpclient.post(APP_CONFIG['ingest_service_update'], hsh)
-      @doc = Nokogiri::XML(response.content) do |config|
+      resp = mk_httpclient.post(APP_CONFIG['ingest_service_update'], ingest_params)
+      @doc = Nokogiri::XML(resp.content) do |config|
         config.strict.noent.noblanks
       end
       @batch_id = @doc.xpath("//bat:batchState/bat:batchID")[0].child.text
