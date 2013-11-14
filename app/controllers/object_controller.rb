@@ -195,14 +195,8 @@ class ObjectController < ApplicationController
           'localIdentifier'   => params[:local_id], # local identifier necessary, nulls?
           'responseForm'      => 'xml'
         }.reject{|key, value| value.blank? }
-
-      client = HTTPClient.new
-      client.receive_timeout = 3600
-      client.send_timeout = 3600
-      client.connect_timeout = 7200
-      client.keep_alive_timeout = 3600
-      response = client.post(APP_CONFIG['ingest_service_update'], hsh, {"Content-Type" => "multipart/form-data"})
-
+      response = mk_httpclient.post(APP_CONFIG['ingest_service_update'], hsh)
+      
       @doc = Nokogiri::XML(response.content) do |config|
         config.strict.noent.noblanks
       end
