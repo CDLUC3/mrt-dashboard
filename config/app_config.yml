@@ -9,7 +9,7 @@ development: &development
   max_archive_size:     536870912 
   dua_email_to:         [marisa.strong@ucop.edu]
   lostorage_email_to:   [marisa.strong@ucop.edu]
-  lostorage_email_from: [marisa.strong@ucop.edu]
+  lostorage_email_from: marisa.strong@ucop.edu
   merritt_server:       "http://merritt-dev.cdlib.org"
   container_url:        "http://uc3-mrt-store-dev.cdlib.org:35121/container/"
   n2t_uri:              "http://n2t-wf.cdlib.org/"
@@ -22,7 +22,7 @@ stage:
   <<: *defaults
   dua_email_to:         [marisa.strong@ucop.edu, perry.willett@ucop.edu]
   lostorage_email_to:   [marisa.strong@ucop.edu, perry.willett@ucop.edu]
-  lostorage_email_from: [uc3@ucop.edu]
+  lostorage_email_from: uc3@ucop.edu
   merritt_server:       "http://merritt-stage.cdlib.org"
   container_url:        "http://merritt-stage.cdlib.org/container/"
   n2t_uri:              "http://n2t-wf.cdlib.org/"
@@ -38,7 +38,7 @@ production:
   <<: *defaults
   dua_email_to:         [uc3@ucop.edu]
   lostorage_email_to:   [marisa.strong@ucop.edu, perry.willett@ucop.edu]
-  lostorage_email_from: [uc3@ucop.edu]
+  lostorage_email_from: uc3@ucop.edu
   merritt_server:       "http://merritt.cdlib.org"
   container_url:        "http://merritt.cdlib.org/container/"
   n2t_uri:              "http://n2t.net/"
