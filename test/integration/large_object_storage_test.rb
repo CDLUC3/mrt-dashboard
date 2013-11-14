@@ -28,14 +28,13 @@ class LargeObjectStorageTest < ActionDispatch::IntegrationTest
     # now at large object page
     fill_in("Email", :with => "doe@mailinator")
     click_button("Submit")
-    # ideally this should NOT end in slash, but right now it ends in slash
-    assert_equal(current_path, "/m/ark%3A%2F99999%2Ffk41z6855/")
+    assert_equal("/m/ark%3A%2F99999%2Ffk41z6855", current_path)
     
     visit("/d/ark%3A%2F99999%2Ffk41z6855")
     fill_out_dua()
 
     # now at large object page, see if we can cancel
     click_button("Cancel")
-    assert_equal(current_path, "/m/ark%3A%2F99999%2Ffk41z6855/")
+    assert_equal("/m/ark%3A%2F99999%2Ffk41z6855", current_path)
   end
 end
