@@ -35,14 +35,14 @@ class LostorageController < ApplicationController
                                      "Merritt #{@container_type.capitalize} Download Processing Completed ",
                                      render_to_string(:formats => [:text],
                                                       :partial => "lostorage/los_email_body"))
-    resp = RestClient.post(@object.bytestream_uri.to_s.gsub(/content/,'async'),
-                           { 'email'             => email_xml_file,
-                             'responseForm'      => 'xml',
-                             'containerForm'     => "targz",
-                             'name'              => unique_name },
-                           { :multipart => true })
-    email_xml_file.close!
-    return (resp.code == 200)
+    resp = HTTPClient.new.post(@object.bytestream_uri.to_s.gsub(/content/,'async'),
+                               { 'email'             => email_xml_file,
+                                 'responseForm'      => 'xml',
+                                 'containerForm'     => "targz",
+                                 'name'              => unique_name })
+    email_xml_file.close
+    email_xml_file.unlink
+    return (resp.status == 200)
   end
 
   def build_email_xml(to_addr, subject, body)
