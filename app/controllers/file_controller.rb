@@ -19,6 +19,15 @@ class FileController < ApplicationController
                 :file    => @file})
   end
   
+  def download
+    stream_response(@file.bytestream_uri, 
+                    "inline",
+                    File.basename(@file.pathname), 
+                    @file.mime_type,
+                    @file.full_size)
+  end 
+  
+  private
   def load_file
     filename = params_u(:file)
 
@@ -36,12 +45,4 @@ class FileController < ApplicationController
       first
     raise ActiveRecord::RecordNotFound if @file.nil?
   end
-
-  def download
-    stream_response(@file.bytestream_uri, 
-                    "inline",
-                    File.basename(@file.pathname), 
-                    @file.mime_type,
-                    @file.full_size)
-  end 
 end
