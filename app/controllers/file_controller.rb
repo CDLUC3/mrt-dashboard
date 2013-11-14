@@ -1,5 +1,6 @@
 class FileController < ApplicationController
   before_filter :require_user
+  before_filter :redirect_to_latest_version
   before_filter :load_file
 
   before_filter do

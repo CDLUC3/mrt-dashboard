@@ -20,6 +20,13 @@ class ApplicationController < ActionController::Base
 
   helper :all
 
+  def redirect_to_latest_version
+    if (params[:version].to_i == 0) then
+      latest_version = InvObject.find_by_ark(params_u(:object)).current_version.number
+      redirect_to request.url.sub(/\/0($|\/)/, "/#{latest_version}\\1")
+    end
+  end
+
   # Returns true if the current user has which permissions on the object.
   def has_group_permission?(group, which)
     group.permission(current_uid).member?(which)

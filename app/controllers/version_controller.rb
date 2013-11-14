@@ -1,6 +1,8 @@
 class VersionController < ApplicationController
   before_filter :require_user
+  before_filter :redirect_to_latest_version
   before_filter :load_version
+
   before_filter(:only => [:download]) do
     if (!has_object_permission?(@version.inv_object, 'download')) then
       flash[:error] = "You do not have download permissions."
@@ -28,18 +30,12 @@ class VersionController < ApplicationController
   end
 
   def load_version
-    if (params[:version].to_i == 0) then
-      latest_version = InvObject.find_by_ark(params_u(:object)).current_version.number
-      redirect_to(:object => urlencode(params[:object]),
-                  :version => latest_version)
-    else
-      @version = InvVersion.joins(:inv_object).
-        where("inv_objects.ark = ?", params_u(:object)).
-        where("inv_versions.number = ?", params_u(:version).to_i).
-        includes(:inv_files, :inv_dublinkernels, :inv_object => [:inv_versions]).
-        first
-      raise ActiveRecord::RecordNotFound if @version.nil?
-    end
+    @version = InvVersion.joins(:inv_object).
+      where("inv_objects.ark = ?", params_u(:object)).
+      where("inv_versions.number = ?", params_u(:version).to_i).
+      includes(:inv_files, :inv_dublinkernels, :inv_object => [:inv_versions]).
+      first
+    raise ActiveRecord::RecordNotFound if @version.nil?
   end
 
   def index
