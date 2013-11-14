@@ -188,7 +188,6 @@ DEPENDENCIES
   orchard
   rack-cache
   rails (= 3.2.15)
-  rest-client
   rspec-rails
   selenium-webdriver
   sqlite3
