@@ -19,6 +19,6 @@ class CollectionControllerTest < ActionController::TestCase
   end
 
   test "search collection" do
-    get(:search_results, {:group => "demo_merritt"}, {:uid => "anonymous"})
+    get(:search_results, {:group => "demo_merritt", :terms=>"test"}, {:uid => "anonymous"})
   end
 end
