@@ -4,7 +4,7 @@ class CollectionController < ApplicationController
 
   before_filter do
     if (!has_group_permission?(@request_group, 'read')) then
-      raise ActiveResource::UnauthorizedAccess
+      raise ActiveResource::UnauthorizedAccess.new("You do not have access to that collection")
     end
   end
 
