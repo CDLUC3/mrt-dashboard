@@ -6,6 +6,7 @@ defaults: &defaults
 
 development: &development
   <<: *defaults
+  max_archive_size:     536870912 
   dua_email_to:         [marisa.strong@ucop.edu]
   lostorage_email_to:   [marisa.strong@ucop.edu]
   lostorage_email_from: [marisa.strong@ucop.edu]
