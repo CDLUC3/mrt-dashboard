@@ -20,6 +20,11 @@ class ApplicationController < ActionController::Base
 
   helper :all
 
+  # Makes a url of the form /m/ark.../1/file with optionally blank versions and files
+  def mk_merritt_url(letter, object, version=nil, file=nil)
+    "/#{letter}/" + [object, version, file].reject{|x| x.blank?}.join("/")
+  end
+  
   def redirect_to_latest_version
     if (params[:version].to_i == 0) then
       latest_version = InvObject.find_by_ark(params_u(:object)).current_version.number
