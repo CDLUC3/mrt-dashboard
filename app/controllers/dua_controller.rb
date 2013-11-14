@@ -25,11 +25,9 @@ class DuaController < ApplicationController
                           :terms       => dua_hash["Terms"]).deliver
       #user accepted DUA, go ahead and process file/object/version download
       session[:collection_acceptance][group.id] = (dua_hash["Persistence"] || "single")
-      # TODO too many slashes here if some params are empty
-      redirect_to "/d/#{params[:object]}/#{params[:version]}/#{params[:file]}"
+      redirect_to mk_merritt_url("d", params[:object], params[:version], params[:file])
     elsif (params[:commit] == "Do Not Accept") then
-      # TODO too many slashes here if some params are empty
-      redirect_to "/m/#{params[:object]}/#{params[:version]}"
+      redirect_to mk_merritt_url("m", params[:object], params[:version])
     else
       @title, @terms = dua_hash['Title'], dua_hash['Terms']
     end
