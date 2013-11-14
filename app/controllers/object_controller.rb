@@ -129,9 +129,8 @@ class ObjectController < ApplicationController
           'synchronousMode'   => params[:synchronousMode],
           'type'              => params[:type]
         }.reject{|k, v| v.blank? }
-
-        response = RestClient.post(APP_CONFIG['ingest_service_update'], ingest_args, { :multipart => true })
-        render :status=>response.code, :content_type=>response.headers[:content_type], :text=>response.body
+        resp = mk_httpclient.post(APP_CONFIG['ingest_service_update'], ingest_args, {"Content-Type" => "multipart/form-data"})
+        render :status=>resp.status, :content_type=>resp.headers[:content_type], :text=>resp.body
       end
     end  
   end
