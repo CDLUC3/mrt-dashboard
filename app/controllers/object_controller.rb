@@ -79,15 +79,8 @@ class ObjectController < ApplicationController
           'synchronousMode'   => params[:synchronousMode],
           'type'              => params[:type]
         }.reject{|k, v| v.blank? }
-        
-        client = HTTPClient.new
-        client.receive_timeout = 3600
-        client.send_timeout = 3600
-        client.connect_timeout = 7200
-        client.keep_alive_timeout = 3600
-        response = client.post(APP_CONFIG['ingest_service'], ingest_args, {"Content-Type" => "multipart/form-data"})
-
-        render :status=>response.code, :content_type=>response.headers[:content_type], :text=>response.body
+        resp = mk_httpclient.post(APP_CONFIG['ingest_service'], ingest_args, {"Content-Type" => "multipart/form-data"})
+        render :status=>resp.status, :content_type=>resp.headers[:content_type], :text=>resp.body
       end
     end
   end
@@ -156,12 +149,8 @@ class ObjectController < ApplicationController
           'file'             =>  Tempfile.new('restclientbug'), 
           'responseForm'     => params[:responseForm]
         }.reject{|k, v| v.blank? }
-
-        client = HTTPClient.new
-        client.receive_timeout = 7200
-        response = client.post(APP_CONFIG['mint_service'], mint_args, {"Content-Type" => "multipart/form-data"})
-
-        render :status=>response.code, :content_type=>response.headers[:content_type], :text=>response.body
+        resp = mk_httpclient.post(APP_CONFIG['mint_service'], mint_args, {"Content-Type" => "multipart/form-data"})
+        render :status=>resp.status, :content_type=>resp.headers[:content_type], :text=>resp.body
       end
     end
   end
