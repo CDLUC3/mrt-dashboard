@@ -50,6 +50,6 @@ class InvVersion < ActiveRecord::Base
   end
   
   def local_id
-    self.dk_where.reject {|v| v == self.ark}
+    self.dk_where.reject {|v| v == self.ark || v == "(:unas)"}
   end
 end
