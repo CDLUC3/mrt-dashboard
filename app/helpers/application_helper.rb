@@ -60,7 +60,7 @@ module ApplicationHelper
 
   # Format kernel metadata lists
   def dc_nice(vals)
-    if vals.nil? then ""
+    if (vals.nil? || vals.empty?) then "[this space intentionally left blank]"
     else vals.join("; ") end
   end
 
