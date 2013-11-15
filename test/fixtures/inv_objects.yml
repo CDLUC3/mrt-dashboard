@@ -53,3 +53,17 @@ unas_test:
   erc_where: "ark:/99999/unas ; (:unas)"
   created: "2013-08-09 14:41:23"
   modified: "2013-08-09 14:41:34"
+
+diff_meta:
+  inv_owner_id: 6
+  ark: "ark:/99999/diffmeta"
+  object_type: "MRT-curatorial"
+  role: "MRT-content"
+  aggregate_role: "MRT-none"
+  version_number: 1
+  erc_who: "Author 2"
+  erc_what: "Title 2"
+  erc_when: "2002"
+  erc_where: "ark:/99999/diffmeta ; (:unas)"
+  created: "2013-08-09 14:41:23"
+  modified: "2013-08-09 14:41:34"
