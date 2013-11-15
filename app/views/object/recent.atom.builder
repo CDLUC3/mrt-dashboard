@@ -48,19 +48,16 @@ xml.tag!('feed', :xmlns => "http://www.w3.org/2005/Atom",
                                  :action     => 'download',
                                  :object     => obj))
       xml.tag!("dct:extent", "#{obj.size}")
-      if (!obj.erc_where.nil?) then
-        local_id = obj.erc_where
-        if (local_id.blank? && local_id.match(/^http/)) then
+      if (!obj.current_version.local_id.blank?) then
+        local_id = obj.current_version.local_id[0]
+        if (!local_id.blank? && local_id.match(/^http/)) then
           xml.tag!("link",
                    "rel"  => "alternate",
                    "href" => local_id)
         end
       end
-      #xml.tag!("title", obj.erc_what.join("; "))
-      xml.tag!("title", obj.erc_what << "; ")
-      w = obj.erc_who
-      w = [w] if !w.instance_of?(Array)
-      w.each do |name|
+      xml.tag!("title", dc_nice(obj.current_version.dk_what))
+      obj.current_version.dk_who.each do |name|
         xml.tag!("author") do
           xml.tag!("name", name)
         end

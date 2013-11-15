@@ -33,19 +33,23 @@ class InvVersion < ActiveRecord::Base
     self.inv_dublinkernels.select {|md| md.element == element }.map {|md| md.value }
   end
 
-  def erc_who
-    self.metadata('who')[0]
+  def dk_who
+    self.metadata('who')
   end
 
-  def erc_what
-    self.metadata('what')[0]
+  def dk_what
+    self.metadata('what')
   end
 
-  def erc_when
-    self.metadata('when')[0]
+  def dk_when
+    self.metadata('when')
   end
 
-  def erc_where
-    self.metadata('where')[0]
+  def dk_where
+    self.metadata('where')
+  end
+  
+  def local_id
+    self.dk_where.reject {|v| v == self.ark}
   end
 end
