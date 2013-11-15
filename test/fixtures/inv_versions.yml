@@ -21,3 +21,15 @@ unas_test_1:
   ark: "ark:/99999/unas"
   number: 1
   created: "2013-01-31 02:43"
+
+diff_meta_1:
+  inv_object: diff_meta
+  ark: "ark:/99999/diffmeta"
+  number: 1
+  created: "2013-01-31 02:43"
+
+diff_meta_2:
+  inv_object: diff_meta
+  ark: "ark:/99999/diffmeta"
+  number: 2
+  created: "2013-02-31 02:43"

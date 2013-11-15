@@ -9,3 +9,7 @@ fk4qv5n4z_opencontext:
 fk41z6855_demo:
   inv_collection: demo_collection
   inv_object: fk41z6855
+
+diff_meta_demo:
+  inv_collection: demo_collection
+  inv_object: diff_meta
