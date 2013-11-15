@@ -14,5 +14,17 @@ class VersionControllerTest < ActionController::TestCase
   test "index" do
     get(:index, {:object => "ark:/99999/fk40k2sqf", :version=>1}, {:uid => "anonymous"})
     assert_response(:success)
+    assert_select(HTML::Selector.new("div.key:content(version number:) + div.value"), 
+                  :text=>"1")
+    assert_select(HTML::Selector.new("div.key:content(title:) + div.value"), 
+                  :text=>"Fairs and Markets&nbsp;")
+    assert_select(HTML::Selector.new("div.key:content(creator:) + div.value"), 
+                  :text=>"Dorothea Lange&nbsp;")
+    assert_select(HTML::Selector.new("div.key:content(date:) + div.value"), 
+                  :text=>"ca. 1954&nbsp;")
+    assert_select(HTML::Selector.new("div.key:content(local id:) + div.value"), 
+                  :text=>"ark:/13030/ft4b69n700&nbsp;")
+    assert_select(HTML::Selector.new("div.key:content(object primary identifier:) + div.value"), 
+                  :text=>"ark:/99999/fk40k2sqf")
   end
 end

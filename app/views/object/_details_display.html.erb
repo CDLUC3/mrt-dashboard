@@ -5,16 +5,16 @@
 <div class="value"><%= details_display.ark %></div>
 
 <div class="key">title:</div>
-<div class="value"><%= dc_nice(details_display.erc_what) %>&nbsp;</div>
+<div class="value"><%= dc_nice(details_display.current_version.dk_what) %>&nbsp;</div>
 
 <div class="key">creator:</div>
-<div class="value"><%= dc_nice(details_display.erc_who) %>&nbsp;</div>
+<div class="value"><%= dc_nice(details_display.current_version.dk_who) %>&nbsp;</div>
 
 <div class="key">date:</div>
-<div class="value"><%= dc_nice(details_display.erc_when) %>&nbsp;</div>
+<div class="value"><%= dc_nice(details_display.current_version.dk_when) %>&nbsp;</div>
 
 <div class="key">local id:</div>
-<div class="value"><%= details_display.erc_where %>&nbsp;</div>
+<div class="value"><%= dc_nice(details_display.current_version.local_id) %>&nbsp;</div>
 
 <div class="key">last modified:</div>
 <div class="value"><%= merritt_time(details_display.modified) %></div>
