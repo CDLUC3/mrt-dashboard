@@ -8,9 +8,9 @@ module ApplicationHelper
 
   # from http://codesnippets.joyent.com/posts/show/1812
   def formatted_int(i)
-    return "0" if i.nil?
-    return i.to_s if i<1000 and i>-1000
-    i.to_s.gsub!(/(\d)(?=(\d\d\d)+(?!\d))/, "\\1,")
+    if i.nil? then "0"
+    elsif (i.abs < 1000) i.to_s
+    else i.to_s.gsub!(/(\d)(?=(\d\d\d)+(?!\d))/, "\\1,") end
   end
 
   # Modeled after the rails helper that does all sizes in binary representations
