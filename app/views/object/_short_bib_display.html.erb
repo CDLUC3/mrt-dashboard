@@ -1,16 +1,11 @@
-<%# takes :obj passed in as local variable %>
-
-<% if !obj.who.blank? and !obj.who.match(/\(:unas\)/) and !obj.who.empty? and !obj.who.nil?  then %>
-  <%= dc_nice(obj.who) %>
-  <%= "." %>
+<% if !dc_nice(short_bib_display.current_version.dk_who).blank? then %>
+  <%= dc_nice(short_bib_display.current_version.dk_who) %>.
 <% end %>
 
-<% if !obj.what.blank? then %>
-  <span class="title"><%= dc_nice(obj.what) %></span>
+<% if !dc_nice(short_bib_display.current_version.dk_what).blank? then %>
+  <span class="title"><%= dc_nice(short_bib_display.current_version.dk_what) %></span>
 <% end %>
 
-<% if !obj.when.blank? and !obj.who.match(/\(:unas\)/) and !obj.who.empty? and !obj.who.nil? then %>
-  <%= "(" %>
-  <%= dc_nice(obj.when) %>
-  <%= ")" %>
+<% if !dc_nice(short_bib_display.current_version.dk_when).blank? %>
+  (<%= dc_nice(short_bib_display.current_version.dk_when) %>)
 <% end %>

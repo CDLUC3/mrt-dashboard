@@ -2,7 +2,7 @@ class UserSessionsController < ApplicationController
   before_filter :require_user,    :only => [:logout]
   
   def login
-    session[:expiry_time] = Time.now
+    reset_session
   end
   
   def login_post
@@ -16,12 +16,13 @@ class UserSessionsController < ApplicationController
   end
   
   def guest_login
-    handle_login(User::GUEST_USER[:guest_user], User::GUEST_USER[:guest_password])
+    handle_login(LDAP_CONFIG["guest_user"], LDAP_CONFIG["guest_password"])
   end
   
   protected
 
   def handle_login(user_id, password)
+    session[:expiry_time] = Time.now
     if User.valid_ldap_credentials?(user_id, password) then
       flash[:notice] = "Login was successful"
       session[:uid] = user_id

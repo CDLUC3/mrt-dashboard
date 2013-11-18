@@ -17,14 +17,29 @@
   </head>
   <body>
     <div class="container_16">
-      <% if !session[:uid].blank? then %>
-        <% if session[:group_id].blank? then %>
-          <%= render :partial => "shared/no_collection_head" %>
+      <% if user_logged_in? then %>
+        <%= render :partial => "/shared/logged_in_top" %>
+        <% if !group_choosen? then %>
+          <div class="clear"></div>
+          <div class="grid_16">&nbsp;</div>
+          <div class="clear"></div>
         <% else %>
-          <%= render :partial => "shared/collection_head" %>
+          <%= render :partial => "/shared/top_menu" %>
         <% end %>
       <% else %>
-        <%= render :partial => "shared/unlogged_head" %>
+        <div class="grid_12 head_left">
+          <%= image_tag("logos/merritt_logo_front.jpg", :style=>"margin-top:8px;margin-bottom:4px; float:left;") %>
+          <div class="env_disp">
+            <div><%= show_environment %></div>
+          </div>
+        </div>
+        <div class="grid_4 head_right">
+          <%= link_to("Login", :controller => 'user_sessions', :action => 'login') %>
+          | <a href="http://www.cdlib.org/services/uc3/contact.html">Contact UC3</a>
+        </div>
+        <div class="clear"></div>
+        <div class="grid_16">&nbsp;</div>
+        <div class="clear"></div>
       <% end %>
       <%= yield %>
       <%= render :partial => "shared/footer" %>

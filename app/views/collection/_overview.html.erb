@@ -14,8 +14,8 @@
 <div class="clear"></div>
 
 <%= javascript_tag do %>
-new Ajax.Updater({success : 'object_count'}, '/collection/object_count', { method: 'get' });
-new Ajax.Updater({success : 'version_count'}, '/collection/version_count', { method: 'get' });
-new Ajax.Updater({success : 'file_count'}, '/collection/file_count', { method: 'get' });
-new Ajax.Updater({success : 'total_size'}, '/collection/total_size', { method: 'get' });
+new Ajax.Updater({success : 'object_count'}, '/collection/object_count?group=<%= @request_group.id %>', { method: 'get' });
+new Ajax.Updater({success : 'version_count'}, '/collection/version_count?group=<%= @request_group.id %>', { method: 'get' });
+new Ajax.Updater({success : 'file_count'}, '/collection/file_count?group=<%= @request_group.id %>', { method: 'get' });
+new Ajax.Updater({success : 'total_size'}, '/collection/total_size?group=<%= @request_group.id %>', { method: 'get' });
 <% end %>

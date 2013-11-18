@@ -46,22 +46,18 @@ xml.tag!('feed', :xmlns => "http://www.w3.org/2005/Atom",
                "type" => "application/zip",
                "href" => url_for(:controller => 'object', 
                                  :action     => 'download',
-                                 :object     => obj.ark_urlencode))
-
+                                 :object     => obj))
       xml.tag!("dct:extent", "#{obj.size}")
-      if (!obj.local_identifier.nil?) then
-        local_id = obj.local_identifier
-        if (local_id.blank? && local_id.match(/^http/)) then
+      if (!obj.current_version.local_id.blank?) then
+        local_id = obj.current_version.local_id[0]
+        if (!local_id.blank? && local_id.match(/^http/)) then
           xml.tag!("link",
                    "rel"  => "alternate",
                    "href" => local_id)
         end
       end
-      #xml.tag!("title", obj.what.join("; "))
-      xml.tag!("title", obj.what << "; ")
-      w = obj.who
-      w = [w] if !w.instance_of?(Array)
-      w.each do |name|
+      xml.tag!("title", dc_nice(obj.current_version.dk_what))
+      obj.current_version.dk_who.each do |name|
         xml.tag!("author") do
           xml.tag!("name", name)
         end
@@ -70,13 +66,14 @@ xml.tag!('feed', :xmlns => "http://www.w3.org/2005/Atom",
       if (!obj.created.blank?) then
         xml.tag!("published", obj.created)
       end
-      obj.files.each do |file|
+      current_version = obj.current_version
+      current_version.inv_files.each do |file|
         xml.tag!("link", 
                  "href" => url_for(:controller => 'file', 
-                                   :action     => 'display',
-                                   :object     => obj.ark_urlencode,
-                                   :version    => obj.versions.last.identifier,
-                                   :file       => file.identifier),
+                                   :action     => :download,
+                                   :object     => obj,
+                                   :version    => current_version,
+                                   :file       => file),
                  "rel"  => "http://purl.org/dc/terms/hasPart",
                  "length" => file.full_size,
                  "type"  => file.mime_type)

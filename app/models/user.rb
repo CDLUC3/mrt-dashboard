@@ -1,6 +1,4 @@
 class User 
-
-  
   LDAP = UserLdap::Server.
     new({ :host            => LDAP_CONFIG["host"],
           :port            => LDAP_CONFIG["port"],
@@ -16,17 +14,8 @@ class User
       'email'         => 'mail',
       'tz_region'     => 'tzregion'}
 
-  GUEST_USER = 
-    { :guest_user     => LDAP_CONFIG["guest_user"],
-      :guest_password => LDAP_CONFIG["guest_password"]}
-      
-  def initialize(*args)
-    if args.length == 1 and args[0].class == Net::LDAP::Entry then
-      @user = args[0]
-    elsif args.length == 1 and args[0].class == Hash then
-      #creating an object from some attributes
-      puts "this would be for creating an object from a hash of attributes, not implemented yet"
-    end
+  def initialize(user)
+    @user = user
   end
 
   def self.find_all
@@ -47,8 +36,7 @@ class User
   end
 
   def self.find_by_id(user_id)
-    u = LDAP.fetch(user_id)
-    self.new(u)
+    return User.new(LDAP.fetch(user_id))
   end
 
   #these would be LDAP attributes, not database ones.  maybe they should sync up more to
@@ -79,5 +67,4 @@ class User
     return arr[0] if arr.length == 1
     arr
   end
-
 end

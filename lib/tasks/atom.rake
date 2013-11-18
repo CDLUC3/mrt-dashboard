@@ -64,7 +64,7 @@ def up_to_date?(local_id, collection_id, last_updated, stopdate)
 end
 
 def process_atom_feed(submitter, profile, collection, stopdate, starting_point)
-  client = Mrt::Ingest::Client.new(INGEST_SERVICE)
+  client = Mrt::Ingest::Client.new(APP_CONFIG['ingest_service'])
   server = Mrt::Ingest::OneTimeServer.new
   server.start_server
   next_page = starting_point

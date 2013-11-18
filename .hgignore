@@ -1,9 +1,8 @@
 syntax: glob
-
 .bundle
 db/*.sqlite3
-log/*.log
-tmp/*
+log/
+tmp/
 mrt-dashboard_development
 mrt-dashboard_test
 mrt-dashboard_production
@@ -17,15 +16,9 @@ db/schema.rb
 .project
 .rvmrc
 .rvmrc.06.20.2013-10:03:30
-.gitignore
-.git/*
 public/stylesheets/most.css
 public/javascripts/all.js
+nbproject
 
 syntax: regexp
-\.orig\..*$
-\.orig$
-\.chg\..*$
-\.rej$
-\.conflict\~$
 ^\.git$

@@ -1,36 +1,31 @@
-<%# the following must be passed in
-  obj = metadata obj
-  version = version of the stored object
-  number_files = number of files
-%>
-  <div class="key">object primary identifier:</div>
-  <div class="value"><%= obj.identifier %></div>
+<div class="key">object primary identifier:</div>
+<div class="value"><%= details_display.inv_object.ark %></div>
 
-  <div class="key">permanent link:</div>
-  <div class="value"><%= link_to(@permalink, @relative_link ) %></div>
+<div class="key">permanent link:</div>
+<div class="value"><%= link_to(details_display.permalink, details_display.permalink) %></div>
 
-  <div class="key">title:</div>
-  <div class="value"><%= dc_nice(version.what) %>&nbsp;</div>
+<div class="key">title:</div>
+<div class="value"><%= dc_nice(details_display.dk_what) %>&nbsp;</div>
 
-  <div class="key">creator:</div>
-  <div class="value"><%= dc_nice(version.who) %>&nbsp;</div>
+<div class="key">creator:</div>
+<div class="value"><%= dc_nice(details_display.dk_who) %>&nbsp;</div>
 
-  <div class="key">date:</div>
-  <div class="value"><%= dc_nice(version.when) %>&nbsp;</div>
+<div class="key">date:</div>
+<div class="value"><%= dc_nice(details_display.dk_when) %>&nbsp;</div>
 
-  <div class="key">local id:</div>
-  <div class="value"><%= obj.local_identifier %>&nbsp;</div>
+<div class="key">local id:</div>
+<div class="value"><%= dc_nice(details_display.local_id) %>&nbsp;</div>
 
-  <div class="key">version number:</div>
-  <div class="value"><%= version.identifier %></div>
+<div class="key">version number:</div>
+<div class="value"><%= details_display.number %></div>
 
-  <div class="key">version date:</div>
-  <div class="value"><%= merritt_time(version.created) %></div>
+<div class="key">version date:</div>
+<div class="value"><%= merritt_time(details_display.created) %></div>
 
-  <div class="key">version size:</div>
-  <div class="value"><%= number_to_storage_size(version.total_size)%></div>
+<div class="key">version size:</div>
+<div class="value"><%= number_to_storage_size(details_display.total_size)%></div>
 
-  <div class="key">version files:</div>
-  <div class="value"><%= number_files %></div>
+<div class="key">version files:</div>
+<div class="value"><%= details_display.inv_files.size %></div>
 
-  <div class="clear"></div>
+<div class="clear"></div>

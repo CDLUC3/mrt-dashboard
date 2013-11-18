@@ -1,6 +1,6 @@
 source 'http://rubygems.org'
 
-gem 'rails', '3.2.12'
+gem 'rails', '3.2.15'
 
 gem 'mysql2'
 gem "httpclient", "~> 2.2.5"
@@ -8,7 +8,6 @@ gem "eco_exception_notification",
     :git => "git://github.com/chrisfinne/eco_exception_notification.git"
 gem "net-ldap", :git => "git://github.com/ruby-ldap/ruby-net-ldap.git", :branch => "master"
 gem "nokogiri"
-gem "rest-client"
 gem "unicorn", "4.5.0"
 gem "will_paginate"
 gem "rack-cache"
@@ -21,9 +20,9 @@ gem 'thin'
 gem 'jquery-rails'
 
 group :test, :development do
- 	gem 'debugger'
+  gem 'debugger'
   gem 'rspec-rails'
-  gem 'factory_girl_rails', :require => false
+  gem 'factory_girl_rails'
   gem 'launchy'
 end
 

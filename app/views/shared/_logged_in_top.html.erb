@@ -5,17 +5,17 @@
   </div>
 </div>
 <div class="grid_6 head_right">
-  <% if session[:uid] then %>
+  <% if user_logged_in? then %>
     <%= link_to("Logout", :controller => 'user_sessions', :action => 'logout') %>
   <% else %>
     <%= link_to("Login", :controller => 'user_sessions', :action => 'login') %>
   <% end %>
   <!-- do not display Profile link for Guest user -->
-  <% if session[:uid] && session[:uid] != (User::GUEST_USER[:guest_user]) then %>
+  <% if !guest_logged_in? then %>
     | <%= link_to('Profile', params.merge({:controller => 'user', :action => 'update'}))  %>
   <% end %>
   | <a href="http://www.cdlib.org/services/uc3/contact.html">Contact UC3</a> | <%= link_to("Help", :controller => 'help', :action => 'index') %>
-  <% if session[:uid] then %>
+  <% if user_logged_in? then %>
     <br/>Logged in as <%= current_user_displayname %>
   <% end %>
 </div>

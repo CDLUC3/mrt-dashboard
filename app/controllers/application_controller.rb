@@ -6,55 +6,48 @@ class Rack::Response
 end
 
 class ApplicationController < ActionController::Base
-  helper_method :available_groups, :current_user, :current_uid, :current_user_displayname, :current_permissions
+  include Encoder
 
-  class Streamer
-    def initialize(url)
-      @url = url
-    end
-    
-    def each 
-      HTTPClient.new.get_content(@url) { |chunk|
-        yield chunk
-      }
-    end
-  end
-  
-  class ErrorUnavailable < StandardError; end
-  rescue_from ErrorUnavailable, :with => :render_unavailable
-
+  helper_method(:available_groups, :current_user, :current_uid,
+                :current_user_displayname, :has_group_permission?,
+                :has_object_permission?, :has_session_group_write_permission?,
+                :current_group)
   protect_from_forgery
-  #layout 'application'
-
-  def urlencode(item)
-    URI.escape(item, Regexp.new("[^#{URI::PATTERN::UNRESERVED}]"))
-  end
-
-  def urlunencode(item)
-    URI.unescape(item)
-  end
 
   def render_unavailable
     render :file => "#{Rails.root}/public/unavailable.html", :status => 500
   end
 
   helper :all
-  
-  def current_permissions
-    session[:permissions] ||= (current_group.permission(current_uid) || [])
+
+  # Makes a url of the form /m/ark.../1/file with optionally blank versions and files
+  def mk_merritt_url(letter, object, version=nil, file=nil)
+    "/#{letter}/" + [object, version, file].reject{|x| x.blank?}.join("/")
   end
   
-  def require_permissions(which, redirect=nil)
-    if (!current_permissions.include?(which)) then
-      flash[:error] = "You do not have #{which} permissions."
-      redirect ||= {
-        :action => 'index',
-        :group => flexi_group_id,
-        :object =>params[:object]  }
-      redirect_to(redirect) and return false
+  def redirect_to_latest_version
+    if (params[:version].to_i == 0) then
+      latest_version = InvObject.find_by_ark(params_u(:object)).current_version.number
+      letter = request.path.match(/^\/(.)\//)[1]
+      redirect_to mk_merritt_url(letter, params[:object], latest_version, params[:file])
     end
   end
 
+  # Returns true if the current user has which permissions on the object.
+  def has_group_permission?(group, which)
+    group.permission(current_uid).member?(which)
+  end
+  
+  # Returns true if the current user has which permissions on the object.
+  def has_object_permission?(object, which)
+    has_group_permission?(object.inv_collection.group, which)
+  end
+
+  # Returns true if the user can upload to the session group
+  def has_session_group_write_permission?
+    has_group_permission?(current_group, 'write')
+  end
+    
   # Return the groups which the user may be a member of
   def available_groups
     groups = current_user.groups.sort_by{|g| g.description.downcase } || []
@@ -67,34 +60,32 @@ class ApplicationController < ActionController::Base
 
   private
 
-  #lets the group get itself from the params, but if not, from the session
-  def flexi_group_id
-    params[:group] or session[:group_id]
-  end
-
+  # Return the current user. Uses either the session user OR if the
+  # user supplied HTTP basic auth info, uses that. Returns nil if
+  # there is no session user and HTTP basic auth did not succeed
   def current_user
-    if !defined?(@_current_user) then
+    if !defined?(@current_user) then
       if !session[:uid].nil? then
         # normal form login
-        @_current_user = User.find_by_id(session[:uid])
+        @current_user = User.find_by_id(session[:uid])
       else
         # http basic auth
         auth = request.headers['HTTP_AUTHORIZATION']
         if (!auth.blank? && auth.match(/Basic /)) then
           (login, password) = Base64.decode64(auth.gsub(/Basic /,'')).split(/:/)
           if User.valid_ldap_credentials?(login, password)
-            @_current_user = User.find_by_id(login)
+            @current_user = User.find_by_id(login)
           end
         end
       end
     end
-    return @_current_user
+    return @current_user
   end
 
   # either return the uid from the session OR get the user id from
   # basic auth. Will not hit LDAP unless using basic auth
   def current_uid    
-    session[:uid] || (!current_user.nil? && current_user.id)
+    session[:uid] || (!current_user.nil? && current_user.uid)
   end
 
   def current_user_displayname
@@ -108,9 +99,6 @@ class ApplicationController < ActionController::Base
     unless current_uid
       store_location
       flash[:notice] = "You must be logged in to access the page you requested"
-      # finish encoding the ark: if it wasn't already (apache only encodes slashes)
-      session[:return_to].sub!(/ark:/) {|a| urlencode(a) }  
-      # redirect_to login_url
       redirect_to :controller=>'user_sessions', :action=>'guest_login' and return
     end
   end
@@ -121,96 +109,16 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  def require_download_permissions
-    require_permissions('download')
-  end
-
   def current_group
     @_current_group ||= Group.find(session[:group_id])
   end
 
-  #require a group if user logged in
-  #but hackish thing to get group from session instead of params if help files didn't pass it along
-  # 3.30.12 mstrong added logic to determine if :group is an object or collection
-  def require_group
-    
-    params[:object] =  urlunencode(params[:object]) unless params[:object].nil?
-    # parms{:group] that do not contain an ark id are a collection; all objects contain an ark.
-    if !params[:group].nil? then
-      if  (params[:group].start_with? "ark") then
-      # check for collection existance.  if a collection exists, it an object otherwise it's a collection    
-      # unencode the ark for the db lookup
-      params[:group] =  urlunencode(params[:group])
-        @collection = InvObject.joins(:inv_collections).
-          where("inv_objects.ark = ?", params[:group]).
-          map {|c| c.inv_collections.first }.
-          first
-        unless @collection.nil? 
-          params[:object] = params[:group] 
-          params[:group] = @collection.ark 
-
-        end 
-      end
-    else  #obtain the group if its not yet been set
-      if params[:group].nil? && !params[:object].nil? then
-          params[:group]= InvObject.joins(:inv_collections).
-          where("inv_objects.ark = ?", params[:object]).
-          map {|c| c.inv_collections.first }.
-          first.ark
-      end
-    end
-    
-    raise ErrorUnavailable if flexi_group_id.nil?
-    @group = Group.find(flexi_group_id)
-    store_group(@group)
-    params[:group] = @group.id
-    raise ErrorUnavailable if current_permissions.length < 1
-    # initialize the DUA acceptance to false - once the user accepts for a collection, it will be set to true.  
-    # Resets at logout
-    if session[:collection_acceptance].nil? then 
-      session[:collection_acceptance] = Hash.new(false)
-    end
-  end
-
-  #require write access to this group
-  def require_write
-    raise ErrorUnavailable if !current_permissions.include?('write')
-  end
-
-  def require_inv_object
-    redirect_to(ObjectList.merge({:group => flexi_group_id})) and return false if params[:object].nil?
-    @object = InvObject.find_by_ark(params[:object])
-  end
-  
-  def require_inv_version
-    redirect_to(:controller => :object,
-                :action => 'index', 
-                :group => flexi_group_id,
-                :object => params[:object]) and return false if params[:version].nil?
-    require_inv_object() if @object.nil?
-    @version = @object.versions[params[:version].to_i - 1]
-  end
-
-  def exceeds_size
-    return (@object.total_actual_size > MAX_ARCHIVE_SIZE)
+  def exceeds_size(object)
+    return (object.total_actual_size > APP_CONFIG['max_archive_size'])
   end
   
   def store_location
     session[:return_to] = request.fullpath
-  end
-
-  def store_object
-    session[:object] = request.params[:object]
-  end
-  
-  def store_version
-    session[:version] = request.params[:version]
-  end
-  
-  def store_group(group)
-    session[:group_id] = group.id
-    session[:group_ark] = group.ark_id
-    session[:group_description] = group.description
   end
 
   def redirect_back_or_default(default)
@@ -218,55 +126,73 @@ class ApplicationController < ActionController::Base
     session[:return_to] = nil
   end
 
-  def esc(i)
-    URI.escape(i, Regexp.new("[^#{URI::PATTERN::UNRESERVED}]"))
-  end
-
-  def my_cache(key, expires_in = 600)
-    Mrt::Cache.cache(key, expires_in) do
-      yield()
-    end
-  end
-
-  def fetch_to_tempfile(*args)
+  def with_fetched_tempfile(*args)
     require 'open-uri'
     require 'fileutils'
     open(*args) do |data|
       tmp_file = Tempfile.new('mrt_http')
       if data.instance_of? File then
-         File.copy(data.path, tmp_file.path)
+        File.copy(data.path, tmp_file.path)
       else
-         begin
-           while (!(buff = data.read(4096)).nil?)do 
-             tmp_file << buff
-           end
-         ensure
-           tmp_file.close
-         end
+        begin
+          while (!(buff = data.read(4096)).nil?)do 
+            tmp_file << buff
+          end
+          tmp_file.rewind
+          yield(tmp_file)
+        ensure
+          tmp_file.close
+          tmp_file.delete
+        end
       end
-      return tmp_file
     end  
   end
- 
-  def collection_ark
-    @collection ||= InvObject.find_by_ark(params[:object]).member_of
-  end 
-    
-  # parse the component (object, file, or version) uri to construct the DUA URI
-  def construct_dua_uri(rx, component_uri)
-     md = rx.match(component_uri.to_s)
-     dua_filename = "#{md[1]}/" + urlencode(collection_ark)  + "/0/" + urlencode(APP_CONFIG['mrt_dua_file']) 
-     dua_file_uri = dua_filename
-     Rails.logger.debug("DUA File URI: " + dua_file_uri)
-     return dua_file_uri
-  end
-        
-        
+  
   # returns the response of the HTTP request for the DUA URI
-  def process_dua_request(dua_file_uri)
-     uri = URI.parse(dua_file_uri)
-     http = Net::HTTP.new(uri.host, uri.port)
-     uri_response = http.request(Net::HTTP::Get.new(uri.request_uri))
-     return uri_response
+  def process_dua_request(uri)
+    http = Net::HTTP.new(uri.host, uri.port)
+    uri_response = http.request(Net::HTTP::Get.new(uri.request_uri))
+    return (uri_response.class == Net::HTTPOK)
   end 
+
+  def params_u(param)
+    urlunencode(params[param])
+  end
+
+  def paginate_args
+    return { 
+      :page => (params[:page] || 1), 
+      :per_page => 10 }
+  end
+  
+  def stream_response(url, disposition, filename, mediatype, length=nil)
+    response.headers["Content-Type"] = mediatype
+    response.headers["Content-Disposition"] = "#{disposition}; filename=\"#{filename}\""
+    if !length.nil? then 
+      response.headers["Content-Length"] = length.to_s
+    end
+    self.response_body = Streamer.new(url)
+  end
+  
+  def check_dua(object, redirect_args)
+    if params[:blue] then
+      # bypass DUA processing for python scripts - indicated by special param
+      return
+    else
+      session[:collection_acceptance] ||= Hash.new(false)
+      # check if user already saw DUA and accepted: if so, return
+      if session[:collection_acceptance][object.group.id] then
+        # clear out acceptance if it does not have session persistence
+        if (session[:collection_acceptance][object.group.id] != "session")
+          session[:collection_acceptance].delete(object.group.id)
+        end
+        return
+      else
+        if process_dua_request(object.dua_uri) then
+          # if the DUA for this collection exists, display DUA to user for acceptance before displaying file
+          redirect_to({:controller => "dua", :action => "index"}.merge(redirect_args)) and return
+        end
+      end
+    end
+  end
 end
