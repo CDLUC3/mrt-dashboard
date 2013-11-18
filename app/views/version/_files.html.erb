@@ -1,0 +1,21 @@
+<div class="files">
+  <% files.each do |file| %>
+    <div class="key">
+      <% if has_object_permission?(file.inv_version.inv_object, 'download') then %>
+        <%= link_to(File.basename(file.pathname), 
+                    :controller => :file, 
+                    :action => :download,
+                    :object => file.inv_version.inv_object,
+                    :version => file.inv_version,
+                    :file => file) %>
+      <% else %>
+        <%= File.basename(file.pathname) %>
+      <% end %>
+    </div>
+    <div class="value">
+      <%= clean_mime_type(file.mime_type) %>       
+      <%= number_to_storage_size(file.full_size) %>
+    </div>
+  <% end %>
+</div>
+<div class="clear"></div>

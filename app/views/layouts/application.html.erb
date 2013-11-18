@@ -1,0 +1,47 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<% #this layout chooses display elements based on which data elements are present so it acts 'smart'
+%>
+<html>
+  <head>
+    <title><%= yield :title %><%=(show_environment ? ": #{show_environment}" : '')%></title>
+    <%= stylesheet_link_tag 'reset', 'text', '960', 'main_styles', 'menu' %>
+    <%= stylesheet_link_tag 'print', :media =>"print" %>
+    <!--[if IE 6]><link rel="stylesheet" type="text/css" href="css/ie6.css" media="screen" /><![endif]-->
+    <!--[if IE 7]><link rel="stylesheet" type="text/css" href="css/ie.css" media="screen" /><![endif]-->
+
+    <%= javascript_include_tag "effects", "controls", "dragdrop", "protofish", "prototype", "rails"%>
+    
+    <%= csrf_meta_tag %>
+    <%= yield :extra_head %>
+  </head>
+  <body>
+    <div class="container_16">
+      <% if user_logged_in? then %>
+        <%= render :partial => "/shared/logged_in_top" %>
+        <% if !group_choosen? then %>
+          <div class="clear"></div>
+          <div class="grid_16">&nbsp;</div>
+          <div class="clear"></div>
+        <% else %>
+          <%= render :partial => "/shared/top_menu" %>
+        <% end %>
+      <% else %>
+        <div class="grid_12 head_left">
+          <%= image_tag("logos/merritt_logo_front.jpg", :style=>"margin-top:8px;margin-bottom:4px; float:left;") %>
+          <div class="env_disp">
+            <div><%= show_environment %></div>
+          </div>
+        </div>
+        <div class="grid_4 head_right">
+          <%= link_to("Login", :controller => 'user_sessions', :action => 'login') %>
+          | <a href="http://www.cdlib.org/services/uc3/contact.html">Contact UC3</a>
+        </div>
+        <div class="clear"></div>
+        <div class="grid_16">&nbsp;</div>
+        <div class="clear"></div>
+      <% end %>
+      <%= yield %>
+      <%= render :partial => "shared/footer" %>
+    </div>
+  </body>
+</html>
