@@ -57,7 +57,8 @@ xml.tag!('feed', :xmlns => "http://www.w3.org/2005/Atom",
                    "href" => local_id)
         end
       end
-      xml.tag!("title", obj.what.join("; "))
+      #xml.tag!("title", obj.what.join("; "))
+      xml.tag!("title", obj.what << "; ")
       w = obj.who
       w = [w] if !w.instance_of?(Array)
       w.each do |name|
@@ -77,8 +78,8 @@ xml.tag!('feed', :xmlns => "http://www.w3.org/2005/Atom",
                                    :version    => obj.versions.last.identifier,
                                    :file       => file.identifier),
                  "rel"  => "http://purl.org/dc/terms/hasPart",
-                 "length" => file.size,
-                 "type"  => file.media_type)
+                 "length" => file.full_size,
+                 "type"  => file.mime_type)
       end
     end
   end

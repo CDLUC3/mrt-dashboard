@@ -28,11 +28,9 @@ MrtDashboard::Application.routes.draw do
   # route objects and collections to the collection index since they share the same URL syntax 
   match( 'm/:group/' => 'collection#index') 
   match( 'm/:group/:version' => 'version#index')#, :constraints => {:group => /ark(%3A|:)(%2F|\/).+/i})
- 
   match('d/:object' => 'object#download')
   match('d/:object/:version' => 'version#download')
   match('d/:object/:version/:file' => 'file#display' , :constraints => {:file => /.+/i})
-
   match('s/:group' => 'collection#search_results')
   match('a/:group' => 'object#add')
 

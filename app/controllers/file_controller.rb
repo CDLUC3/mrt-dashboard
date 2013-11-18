@@ -28,9 +28,9 @@ class FileController < ApplicationController
       filename = "#{filename}.#{params[:format]}"
     end
 
-    file = MrtObject.where(:primary_id=>params[:object]).first.
-      versions.where(:version_number=>params[:version]).first.
-      files.where(:filename=>filename).first
+    file = InvObject.where(:ark=>params[:object]).first.
+            files.where(:pathname=>filename).first
+            
     file_uri = URI.parse(file.bytestream)
     Rails.logger.info(file_uri)
     
@@ -62,9 +62,10 @@ class FileController < ApplicationController
     end
     
     # the user has accepted the DUA for this collection or there is no DUA to process 
-    response.headers["Content-Length"] = file.size.to_s
+    response.headers["Content-Length"] = file.full_size.to_s
     response.headers["Content-Disposition"] = "inline; filename=\"#{File.basename(file.identifier)}\""
-    response.headers["Content-Type"] = file.media_type
+    response.headers["Content-Type"] = file.mime_type
+
     self.response_body = Streamer.new(file.bytestream_uri)
     session[:perform_download] = false  
   end 

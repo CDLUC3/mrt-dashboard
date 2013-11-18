@@ -8,7 +8,7 @@ class ObjectController < ApplicationController
   before_filter :require_group,      :except => [:jupload_add, :recent, :ingest, :mint, :update]
   before_filter :require_write,      :only => [:add, :upload]
   before_filter :require_session_object, :only => [:download]
-  before_filter :require_mrt_object, :only => [:download]
+  before_filter :require_inv_object, :only => [:download]
 
   before_filter(:only=>[:download]) { require_permissions('download',
                                                           { :action => 'index', 
@@ -154,7 +154,7 @@ class ObjectController < ApplicationController
   end
 
   def index
-    @object = MrtObject.find_by_primary_id(params[:object])
+    @object = InvObject.find_by_ark(params[:object])
     @versions = @object.versions
     #files for current version
     @files = @object.files.
@@ -260,12 +260,12 @@ class ObjectController < ApplicationController
 
   def recent
     @collection_ark = params[:collection]
-    @objects = MrtCollection.
+    @objects = InvCollection.
       where(:ark=>@collection_ark).
       first.
-      mrt_objects.
-      order('last_add_version desc').
-      includes(:mrt_versions, :mrt_version_metadata).
+      inv_objects.
+      order('version_number desc').
+      includes(:inv_versions, :inv_dublinkernels).
       paginate(:page       => (params[:page] || 1), 
                :per_page   => 20)
     respond_to do |format|

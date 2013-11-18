@@ -76,11 +76,12 @@ module ApplicationHelper
     t.strftime("%Y-%m-%d  %I:%M %p UTC")
   end
 
-  # Format kernel metadata, filtering out unassigned values and
-  # joining with ;.
+  # Format kernel metadata, filtering out unassigned values
   def dc_nice(i)
-    return '' if i.nil?
-    ((i.map { |el| el.to_s }) - ['(:unas)']).join("; ")
+    if i.nil? || i.match(/\(:unas\)/)
+      return ''
+    end 
+    i 
   end
 
   #makes a tip over a question mark item, just pass in the text

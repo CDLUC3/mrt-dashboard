@@ -2,8 +2,8 @@ class VersionController < ApplicationController
   before_filter :require_user
   before_filter :require_group
   before_filter :require_session_object_version,  :only => [:download]
-  before_filter :require_mrt_object
-  before_filter :require_mrt_version
+  before_filter :require_inv_object
+  before_filter :require_inv_version
   before_filter :require_download_permissions,    :only => [:download]
 
   def require_session_object_version
