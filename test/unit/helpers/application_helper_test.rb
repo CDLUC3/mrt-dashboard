@@ -2,8 +2,8 @@ require 'test_helper'
 
 class ApplicationHelperTest < ActionView::TestCase
   test "dc_nice" do
-    assert_equal(dc_nice([]), "[this space intentionally left blank]")
-    assert_equal(dc_nice(nil), "[this space intentionally left blank]")
-    assert_equal(dc_nice(["hello", "world"]), "hello; world")
+    assert_equal("", dc_nice([]))
+    assert_equal("", dc_nice(nil))
+    assert_equal("hello; world", dc_nice(["hello", "world"]))
   end
 end
