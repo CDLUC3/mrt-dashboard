@@ -30,7 +30,7 @@ class InvVersion < ActiveRecord::Base
   end
 
   def metadata(element)
-    self.inv_dublinkernels.select {|md| md.element == element }.map {|md| md.value }
+    self.inv_dublinkernels.select {|md| md.element == element && md.value != "(:unas)"}.map {|md| md.value }
   end
 
   def dk_who
@@ -50,6 +50,6 @@ class InvVersion < ActiveRecord::Base
   end
   
   def local_id
-    self.dk_where.reject {|v| v == self.ark || v == "(:unas)"}
+    self.dk_where.reject {|v| v == self.ark }
   end
 end
