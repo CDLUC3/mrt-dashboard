@@ -14,17 +14,17 @@ module LdapMixin
 
   def initialize(init_hash)
 
-      #sample hash
-      #host => "badger.cdlib.org",
-      #port => 1636,
-      #base => 'ou=People,ou=uc3,dc=cdlib,dc=org',
-      #admin_user => 'Directory Manager',
-      #admin_password => 'XXXXXXX',
-      #minter => 'http://noid.cdlib.org/nd/noidu_g9'
+    #sample hash
+    #host => "badger.cdlib.org",
+    #port => 1636,
+    #base => 'ou=People,ou=uc3,dc=cdlib,dc=org',
+    #admin_user => 'Directory Manager',
+    #admin_password => 'XXXXXXX',
+    #minter => 'http://noid.cdlib.org/nd/noidu_g9'
 
-      host, port, base, admin_user, admin_password, minter =
-        init_hash[:host], init_hash[:port], init_hash[:base],
-        init_hash[:admin_user], init_hash[:admin_password], init_hash[:minter]
+    host, port, base, admin_user, admin_password, minter =
+      init_hash[:host], init_hash[:port], init_hash[:base],
+    init_hash[:admin_user], init_hash[:admin_password], init_hash[:minter]
 
     @minter = Noid::Minter.new(minter)
     @base = base
@@ -86,8 +86,8 @@ module LdapMixin
 
   def fetch_by_ark_id(ark_id)
     results = @admin_ldap.search(:base => @base,
-                :filter => Net::LDAP::Filter.eq('arkid', ark_id),
-                                :scope => Net::LDAP::SearchScope_SingleLevel)
+                                 :filter => Net::LDAP::Filter.eq('arkid', ark_id),
+                                 :scope => Net::LDAP::SearchScope_SingleLevel)
     raise LdapException.new('id does not exist') if results.length < 1
     raise LdapException.new('ambigulous results, duplicate ids') if results.length > 1
     results[0]
@@ -115,5 +115,4 @@ module LdapMixin
       true
     end
   end
-  
 end

@@ -1,28 +1,21 @@
-<%# the following must be passed in
-  files = files to display
-  obj = metadata obj
-  stored_object = Information about object storage
-  version = version of the stored object
-%>
-
-<h3><%=title%></h3>
-<div class ="files">
+<div class="files">
   <% files.each do |file| %>
     <div class="key">
-    	<% if have_permission('download') then %>
-	      <%= link_to(File.basename(file.identifier),
-	          :controller => :file, :action => :display,
-	          :group => params[:group], :object => @object.ark_urlencode,
-	          :version => params[:version], :file => file.file_urlencode)
-	          %></div>
-          <% else %>
-          	  <%= File.basename(file.identifier) %>
-        </div>
-	    <% end %>
-	    <div class="value">
-        <%= file.mime_type.gsub(/;.*$/, '') %>          
-        <%=number_to_storage_size(file.full_size)%>
-	    </div>
+      <% if has_object_permission?(file.inv_version.inv_object, 'download') then %>
+        <%= link_to(File.basename(file.pathname), 
+                    :controller => :file, 
+                    :action => :download,
+                    :object => file.inv_version.inv_object,
+                    :version => file.inv_version,
+                    :file => file) %>
+      <% else %>
+        <%= File.basename(file.pathname) %>
+      <% end %>
+    </div>
+    <div class="value">
+      <%= clean_mime_type(file.mime_type) %>       
+      <%= number_to_storage_size(file.full_size) %>
+    </div>
   <% end %>
 </div>
 <div class="clear"></div>

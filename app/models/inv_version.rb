@@ -1,58 +1,55 @@
 class InvVersion < ActiveRecord::Base
-
-  belongs_to :inv_object
-  has_many :inv_files
+  belongs_to :inv_object, :inverse_of => :inv_versions
+  has_many :inv_files, :inverse_of => :inv_version
   has_many :inv_dublinkernels
 
-  def identifier
-    return self.number.to_s
+  def to_param
+    self.number
   end
 
+  def permalink
+    "#{APP_CONFIG['merritt_server']}/m/#{self.inv_object.to_param}/#{self.to_param}"
+  end
+  
   def bytestream_uri 
-    @obj = self.inv_object
-    @obj_ark = @obj.ark_urlencode
-    @node_number = @obj.node_number
-    @version_number = self.number
-    @bytestream = "#{URI_1}" + "#{@node_number}" + "/"+ "#{@obj_ark}" + "/"+ "#{@version_number}" 
-
-    return URI.parse(@bytestream)
+    URI.parse("#{APP_CONFIG['uri_1']}#{self.inv_object.node_number}/#{self.inv_object.to_param}/#{self.to_param}")
   end
 
   def total_size
-   @total_size = InvFile.where("inv_version_id = ?", self.id).sum("full_size")
+    self.inv_files.sum("full_size")
   end
 
   def system_files 
-    self.files.select {|f| f.identifier.match(/^system\//) }.
-      sort_by {|x| File.basename(x.identifier.downcase) }     
+    self.inv_files.select {|f| f.pathname.match(/^system\//) }.
+      sort_by {|x| File.basename(x.pathname.downcase) }
   end
 
   def producer_files 
-    self.files.select {|f| f.identifier.match(/^producer\//) }.
-      sort_by {|x| File.basename(x.identifier.downcase) }     
+    self.inv_files.select {|f| f.pathname.match(/^producer\//) }.
+      sort_by {|x| File.basename(x.pathname.downcase) }
   end
 
   def metadata(element)
-    self.inv_dublinkernels.select {|md| md.element == element }.map {|md| md.value }
+    self.inv_dublinkernels.select {|md| md.element == element && md.value != "(:unas)"}.map {|md| md.value }
   end
 
-  def files
-    self.inv_files
+  def dk_who
+    self.metadata('who')
   end
 
-  def who
-    self.metadata('who')[0]
+  def dk_what
+    self.metadata('what')
   end
 
-  def member_of
-    self.inv_object.inv_collections.first.ark
+  def dk_when
+    self.metadata('when')
   end
 
-  def what
-    self.metadata('what')[0]
+  def dk_where
+    self.metadata('where')
   end
-
-  def when
-    self.metadata('when')[0]
+  
+  def local_id
+    self.dk_where.reject {|v| v == self.ark }
   end
- end
+end

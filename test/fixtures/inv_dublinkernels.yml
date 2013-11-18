@@ -1,0 +1,95 @@
+fk40k2sqf_1_who:
+  inv_object: fk40k2sqf
+  inv_version: fk40k2sqf_1
+  seq_num: 1
+  element: "who"
+  value: "Dorothea Lange"
+  qualifier: NULL
+
+fk40k2sqf_1_what:
+  inv_object: fk40k2sqf
+  inv_version: fk40k2sqf_1
+  seq_num: 2
+  element: "what"
+  value: "Fairs and Markets"
+  qualifier: NULL
+
+fk40k2sqf_1_when:
+  inv_object: fk40k2sqf
+  inv_version: fk40k2sqf_1
+  seq_num: 3
+  element: "when"
+  value: "ca. 1954"
+  qualifier: NULL
+
+fk40k2sqf_1_where_1:
+  inv_object: fk40k2sqf
+  inv_version: fk40k2sqf_1
+  seq_num: 4
+  element: "where"
+  value: "ark:/99999/fk40k2sqf"
+  qualifier: NULL
+
+fk40k2sqf_1_where_2:
+  inv_object: fk40k2sqf
+  inv_version: fk40k2sqf_1
+  seq_num: 5
+  element: "where"
+  value: "ark:/13030/ft4b69n700"
+  qualifier: NULL
+
+unas_test_1_where:
+  inv_object: unas
+  inv_version: unas_1
+  seq_num: 4
+  element: "where"
+  qualifier: NULL
+  value: "(:unas)"
+
+diff_meta_1_who:
+  inv_object: diff_meta
+  inv_version: diff_meta_1
+  seq_num: 1
+  element: "who"
+  qualifier: NULL
+  value: "Author 1"
+
+diff_meta_1_what:
+  inv_object: diff_meta
+  inv_version: diff_meta_1
+  seq_num: 2
+  element: "what"
+  qualifier: NULL
+  value: "Title 1"
+
+diff_meta_1_when:
+  inv_object: diff_meta
+  inv_version: diff_meta_1
+  seq_num: 3
+  element: "when"
+  qualifier: NULL
+  value: "2002"
+
+diff_meta_2_who:
+  inv_object: diff_meta
+  inv_version: diff_meta_2
+  seq_num: 1
+  element: "who"
+  qualifier: NULL
+  value: "Author 2"
+
+diff_meta_2_what:
+  inv_object: diff_meta
+  inv_version: diff_meta_2
+  seq_num: 2
+  element: "what"
+  qualifier: NULL
+  value: "Title 2"
+
+diff_meta_2_when:
+  inv_object: diff_meta
+  inv_version: diff_meta_2
+  seq_num: 3
+  element: "when"
+  qualifier: NULL
+  value: "2012"

@@ -1,34 +1,16 @@
-
 module ApplicationHelper
-  #takes an ark id and strips it down to just that if it's a RDF full uri
-  def clean_id(id)
-    id.to_s.match(/ark:\/[0-9a-z]+\/\S+$/)[0].to_s
-  end
-
-  #takes an ark id and returns full rdf uri
-  def rdf_id(id)
-    "#{RDF_ARK_URI}#{clean_id(id)}"
-  end
-  
-  def version_no(uri)
-    md = uri.to_s.match(/\/([0-9]+)$/)
-    return md[1]
-  end
-
   def w3cdtf(time)
     case time
     when Time, DateTime
       return time.strftime("%Y-%m-%dT%H:%M:%S#{time.formatted_offset}")
-    when RDF::Literal
-      w3cdtf(DateTime.parse(time.to_s))
     end
   end
 
   # from http://codesnippets.joyent.com/posts/show/1812
   def formatted_int(i)
-    return "0" if i.nil?
-    return i.to_s if i<1000 and i>-1000
-    i.to_s.gsub!(/(\d)(?=(\d\d\d)+(?!\d))/, "\\1,")
+    if i.nil? then "0"
+    elsif (i.abs < 1000) then i.to_s
+    else i.to_s.gsub!(/(\d)(?=(\d\d\d)+(?!\d))/, "\\1,") end
   end
 
   # Modeled after the rails helper that does all sizes in binary representations
@@ -62,26 +44,24 @@ module ApplicationHelper
   end
 
   def permissions(array)
-    return "none" if array.length < 1
-    return "#{array[0]} only" if array.length == 1
-    return array.join('/')
-  end
-
-  def have_permission(which)
-    return current_permissions.include?(which)
+    if (array.length == 0) then "none"
+    elsif (array.length == 1) then "#{array[0]} only"
+    else array.join("/") end
   end
 
   def merritt_time(t)
     t = DateTime.parse(t.to_s) if (t.class != DateTime)
-    t.strftime("%Y-%m-%d  %I:%M %p UTC")
+    t.strftime("%Y-%m-%d %I:%M %p UTC")
   end
 
-  # Format kernel metadata, filtering out unassigned values
-  def dc_nice(i)
-    if i.nil? || i.match(/\(:unas\)/)
-      return ''
-    end 
-    i 
+  def clean_mime_type(mt)
+    mt.gsub(/;.*$/, '')
+  end
+
+  # Format kernel metadata lists
+  def dc_nice(vals)
+    if (vals.nil? || vals.empty?) then ""
+    else vals.join("; ") end
   end
 
   #makes a tip over a question mark item, just pass in the text
@@ -97,8 +77,22 @@ eos
 
   # outputs a formatted string for the current environment, except production
   def show_environment
-    if !Rails.env.include?('production') then
-      Rails.env
-    end
+    if !Rails.env.include?('production') then Rails.env
+    else "" end
+  end
+
+  # Return true if a user is logged in
+  def user_logged_in?
+    return !session[:uid].blank?
+  end
+  
+  # Return true if logged in as guest
+  def guest_logged_in?
+    user_logged_in? && (session[:uid] == (LDAP_CONFIG["guest_user"]))
+  end
+  
+  # Return true if user has choosen a group
+  def group_choosen?
+    return !session[:group_id].nil?
   end
 end

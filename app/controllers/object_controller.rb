@@ -2,26 +2,39 @@ require 'tempfile'
 
 class ObjectController < ApplicationController
 
-  include Encoder
-
   before_filter :require_user,       :except => [:jupload_add, :recent, :ingest, :mint, :update]
-  before_filter :require_group,      :except => [:jupload_add, :recent, :ingest, :mint, :update]
-  before_filter :require_write,      :only => [:add, :upload]
-  before_filter :require_session_object, :only => [:download]
-  before_filter :require_inv_object, :only => [:download]
+  before_filter :load_object, :only=> [:index, :download]
+  before_filter(:only=>[:download]) do
+    if (!has_object_permission?(@object, 'download')) then
+      flash[:error] = "You do not have download permissions."
+      redirect_to(:action => :index, :object => @object) and return
+    end
+  end
 
-  before_filter(:only=>[:download]) { require_permissions('download',
-                                                          { :action => 'index', 
-                                                            :group => flexi_group_id,
-                                                            :object =>params[:object] }) }
+  before_filter(:only=>[:index]) do
+    if (!has_object_permission?(@object, 'read')) then
+      redirect_to(:controller => :home, :action => :index) and return
+    end
+  end
+
+  before_filter(:only => [:download]) do
+    check_dua(@object, {:object => @object})
+  end
+
+  before_filter(:only => [:download]) do
+    # if size is > 4GB, redirect to have user enter email for asynch compression (skipping streaming)
+    if exceeds_size(@object) then
+      redirect_to(:controller => "lostorage", :action => "index", :object => @object) and return
+    end
+  end
 
   protect_from_forgery :except => [:ingest, :mint, :update]
 
-  def require_session_object
-    params[:object] = session[:object] if !session[:object].nil? && params[:object].nil?
-    session[:version] = nil if !session[:version].nil?  #clear out version
+  def load_object
+    @object = InvObject.where("ark = ?", params_u(:object)).includes(:inv_collections, :inv_versions=>[:inv_files]).first 
+    raise ActiveRecord::RecordNotFound if @object.nil?
   end
-  
+
   def ingest
     if !current_user then
       render :status=>401, :text=>"" and return
@@ -66,15 +79,8 @@ class ObjectController < ApplicationController
           'synchronousMode'   => params[:synchronousMode],
           'type'              => params[:type]
         }.reject{|k, v| v.blank? }
-        
-        client = HTTPClient.new
-        client.receive_timeout = 3600
-        client.send_timeout = 3600
-        client.connect_timeout = 7200
-        client.keep_alive_timeout = 3600
-        response = client.post(INGEST_SERVICE, ingest_args, {"Content-Type" => "multipart/form-data"})
-
-        render :status=>response.code, :content_type=>response.headers[:content_type], :text=>response.body
+        resp = mk_httpclient.post(APP_CONFIG['ingest_service'], ingest_args, {"Content-Type" => "multipart/form-data"})
+        render :status=>resp.status, :content_type=>resp.headers[:content_type], :text=>resp.body
       end
     end
   end
@@ -123,9 +129,8 @@ class ObjectController < ApplicationController
           'synchronousMode'   => params[:synchronousMode],
           'type'              => params[:type]
         }.reject{|k, v| v.blank? }
-
-        response = RestClient.post(INGEST_SERVICE_UPDATE, ingest_args, { :multipart => true })
-        render :status=>response.code, :content_type=>response.headers[:content_type], :text=>response.body
+        resp = mk_httpclient.post(APP_CONFIG['ingest_service_update'], ingest_args, {"Content-Type" => "multipart/form-data"})
+        render :status=>resp.status, :content_type=>resp.headers[:content_type], :text=>resp.body
       end
     end  
   end
@@ -143,108 +148,45 @@ class ObjectController < ApplicationController
           'file'             =>  Tempfile.new('restclientbug'), 
           'responseForm'     => params[:responseForm]
         }.reject{|k, v| v.blank? }
-
-        client = HTTPClient.new
-        client.receive_timeout = 7200
-        response = client.post(MINT_SERVICE, mint_args, {"Content-Type" => "multipart/form-data"})
-
-        render :status=>response.code, :content_type=>response.headers[:content_type], :text=>response.body
+        resp = mk_httpclient.post(APP_CONFIG['mint_service'], mint_args, {"Content-Type" => "multipart/form-data"})
+        render :status=>resp.status, :content_type=>resp.headers[:content_type], :text=>resp.body
       end
     end
   end
 
   def index
-    @object = InvObject.find_by_ark(params[:object])
-    @versions = @object.versions
-    #files for current version
-    @files = @object.files.
-      reject {|file| file.identifier.match(/^system\/mrt-/) }.
-      sort_by {|x| File.basename(x.identifier.downcase) }    
   end
 
   def download
-    # bypass DUA processing for python scripts (indicated by special param) or if dua has already been accepted
-    if params[:blue].nil? 
-      #check if user already saw DUA and accepted- if so, skip all this & download the file
-      if !session[:perform_download]  
-        # if DUA was not accepted, redirect to object landing page 
-        if session[:collection_acceptance][@group.id].eql?("not accepted") then
-          session[:collection_acceptance][@group.id] = false  # reinitialize to false so user can again be given option to accept DUA 
-          redirect_to  :action => 'index', :group => flexi_group_id,  :object =>params[:object] and return false
-          # if DUA for this collection has not yet been displayed to user, perform logic to retrieve DUA.
-          # if persistance is at the session level and user already saw DUA, this section will be skipped
-        elsif !session[:collection_acceptance][@group.id] then
-          # perform DUA logic to retrieve DUA
-          #construct the dua_file_uri based off the object URI, the object's parent collection, version 0, and  DUA filename
-          rx = /^(.*)\/([^\/]+)$/  
-          dua_file_uri = construct_dua_uri(rx, @object.bytestream_uri)
-          uri_response = process_dua_request(dua_file_uri)
-          # if the DUA exists, display DUA to user for acceptance before displaying file
-          if (uri_response.class == Net::HTTPOK) then
-            tmp_dua_file = fetch_to_tempfile(dua_file_uri) 
-            session[:dua_file_uri] = dua_file_uri
-            store_location
-            store_object
-            redirect_to :controller => "dua",  :action => "index" and return false 
-          end
-        end
-      end
-    end
-    
-    # if size is > MAX_ARCHIVE_SIZE, redirect to have user enter email for asynch compression (skipping streaming)
-      if exceeds_size() then
-
-      #if user canceled out of enterering email redirect to object landing page
-      if session[:perform_async].eql?("cancel") then
-        session[:perform_async] = false;  #reinitalize flag to false
-        redirect_to  :action => 'index', :group => flexi_group_id, :object =>params[:object] and return false
-      elsif session[:perform_async] then #do not stream, redirect to object landing page
-        session[:perform_async] = false;  #reinitalize flag to false
-        redirect_to  :action => 'index', :group => flexi_group_id, :object =>params[:object] and return false
-      else #allow user to enter email
-        store_location
-        store_object
-        redirect_to :controller => "lostorage",  :action => "index" and return false 
-      end
-    end
-
-    response.headers["Content-Disposition"] = "attachment; filename=#{Orchard::Pairtree.encode(@object.identifier.to_s)}_object.zip"
-    response.headers["Content-Type"] = "application/zip"
-    self.response_body = Streamer.new("#{@object.bytestream_uri}?t=zip")
-    session[:perform_download] = false  
+    stream_response("#{@object.bytestream_uri}?t=zip", 
+                    "attachment",
+                    "#{Orchard::Pairtree.encode(@object.ark.to_s)}_object.zip",
+                    "application/zip")
   end
 
   def upload
     if params[:file].nil? then
       flash[:error] = 'You must choose a filename to submit.'
-      redirect_to :controller => 'object', :action => 'add', :group => flexi_group_id and return false
+      redirect_to :controller => 'object', :action => 'add', :group => current_group and return false
     end
     begin
-      hsh = {
-          'file'              => params[:file].tempfile,
-          'type'              => params[:object_type],
-          'submitter'         => "#{current_user.login}/#{current_user.displayname}",
-          'filename'          => params[:file].original_filename,
-          'profile'           => @group.submission_profile,
-          'creator'           => params[:author],
-          'title'             => params[:title],
-          'primaryIdentifier' => params[:primary_id],
-          'date'              => params[:date],
-          'localIdentifier'   => params[:local_id], # local identifier necessary, nulls?
-          'responseForm'      => 'xml'
-        }.reject{|key, value| value.blank? }
-
-      client = HTTPClient.new
-      client.receive_timeout = 3600
-      client.send_timeout = 3600
-      client.connect_timeout = 7200
-      client.keep_alive_timeout = 3600
-      response = client.post(INGEST_SERVICE_UPDATE, hsh, {"Content-Type" => "multipart/form-data"})
-
-      @doc = Nokogiri::XML(response.content) do |config|
+      ingest_params = {
+        'file'              => params[:file].tempfile,
+        'type'              => params[:object_type],
+        'submitter'         => "#{current_user.login}/#{current_user.displayname}",
+        'filename'          => params[:file].original_filename,
+        'profile'           => current_group.submission_profile,
+        'creator'           => params[:author],
+        'title'             => params[:title],
+        'primaryIdentifier' => params[:primary_id],
+        'date'              => params[:date],
+        'localIdentifier'   => params[:local_id], # local identifier necessary, nulls?
+        'responseForm'      => 'xml'
+      }.reject{|key, value| value.blank? }
+      resp = mk_httpclient.post(APP_CONFIG['ingest_service_update'], ingest_params)
+      @doc = Nokogiri::XML(resp.content) do |config|
         config.strict.noent.noblanks
       end
-
       @batch_id = @doc.xpath("//bat:batchState/bat:batchID")[0].child.text
       @obj_count = @doc.xpath("//bat:batchState/bat:jobStates").length
     rescue Exception => ex
@@ -264,13 +206,22 @@ class ObjectController < ApplicationController
       where(:ark=>@collection_ark).
       first.
       inv_objects.
-      order('version_number desc').
+      order('inv_objects.modified desc').
       includes(:inv_versions, :inv_dublinkernels).
-      paginate(:page       => (params[:page] || 1), 
-               :per_page   => 20)
+      paginate(paginate_args)
     respond_to do |format|
       format.html
       format.atom
     end
+  end
+  
+  private
+  def mk_httpclient
+    client = HTTPClient.new
+    client.receive_timeout = 7200
+    client.send_timeout = 3600
+    client.connect_timeout = 7200
+    client.keep_alive_timeout = 3600
+    client
   end
 end

@@ -1,8 +1,6 @@
 class InvObject < ActiveRecord::Base
-
-
-  has_many :inv_versions
-  has_many :inv_files
+  has_many :inv_versions, :inverse_of => :inv_object
+  has_many :inv_files, :through => :inv_versions
   
   has_many :inv_dublinkernels
 
@@ -14,81 +12,43 @@ class InvObject < ActiveRecord::Base
 
   include Encoder
 
+  def to_param
+    urlencode(self.ark)
+  end
+
   def bytestream_uri
-    @ark = self.ark_urlencode
-    @node_number = self.node_number
-    @bytestream = "#{URI_1}" + "#{@node_number}" + "/"+ "#{@ark}"
-    return URI.parse(@bytestream)
+    URI.parse("#{APP_CONFIG['uri_1']}#{self.node_number}/#{self.to_param}")
+  end
+
+  def dua_uri
+    URI.parse("#{APP_CONFIG['uri_1']}#{self.node_number}/#{self.inv_collection.to_param}/0/#{urlencode(APP_CONFIG['mrt_dua_file'])}")
   end
 
   def node_number
-    @node_number = InvNode.joins(:inv_nodes_inv_objects).select("number").where("role = ?", "primary").limit(1).map(&:number)[0]
+    self.inv_nodes.where("inv_nodes_inv_objects.role" => "primary").select("inv_nodes.number").map(&:number).first
   end
 
   def size
-    @size = InvFile.where("inv_object_id = ?", self.id).sum("billable_size")
+    self.inv_files.sum("billable_size")
   end
  
   def total_actual_size
-   @total_actual_size = InvFile.where("inv_object_id = ?", self.id).sum("full_size")
-  end
-  
-  def storage_url
-    @storage_url = self.bytestream_uri
-  end
-
-  def versions
-    return self.inv_versions
+    self.inv_files.sum("full_size")
   end
 
   def current_version
-    return self.versions[-1]
+    self.inv_versions.order("number desc").first
+  end
+  
+  def inv_collection
+    self.inv_collections.first
   end
 
-  def who
-    self.erc_who
+  def group
+    self.inv_collection.group
   end
-
-  def what
-    self.erc_what
-  end
-
-  def when
-    self.erc_when
-  end
-
-   def member_of
-    self.inv_collections.first.ark
-   end
-    
-  def identifier
-    self.ark
-  end
-
-  # deprecated
-  def local_identifier
-    self.erc_where
-  end
-
+  
   def permalink
-    p = "#{N2T_URI}#{self.ark.to_s}"
-    return p
+    "#{APP_CONFIG['n2t_uri']}#{self.ark.to_s}"
   end
-  
-  def files
-    return self.current_version.files
-  end
-
-  def system_files 
-    return self.files.select {|f| f.identifier.match(/^system\//) }
-  end
-
-  def producer_files 
-    return self.files.select {|f| f.identifier.match(/^producer\//) }
-  end
-
-  def ark_urlencode
-     return urlencode_mod(self.ark)
-  end
-  
 end
