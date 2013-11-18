@@ -17,8 +17,9 @@ MrtDashboard::Application.configure do
   RDF_COLLECTION_URI  = "http://uc3.cdlib.org/collection/"
   CONTAINER_URL       = 'http://merritt-stage.cdlib.org/container/'
 
-  #maximum byte size threshhold for download of object/versions without compression 
-  MAX_ARCHIVE_SIZE    = 536870912 
+  URI_1 = 'http://uc3-mrt-store-stg.cdlib.org:35121/content/'  
+
+  MAX_ARCHIVE_SIZE    = 536870912 #maximum byte size threshhold for download of object/versions without compression 
 end
 
 require 'exception_notifier'

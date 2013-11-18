@@ -2,7 +2,7 @@ development:
   admin_password: XXXXXXXX
   admin_user:     cn=Directory Manager
   group_base:     ou=mrt-classes,ou=uc3,dc=cdlib,dc=org
-  host:           badger.cdlib.org
+  host:           uc3-mrt-wrk1-dev.cdlib.org
   port:           1636
   user_base:      ou=People,ou=uc3,dc=cdlib,dc=org
   inst_base:      o=institutions,ou=uc3,dc=cdlib,dc=org
@@ -13,25 +13,32 @@ development:
 development_nonlocal:
   development
 
+test:
+  development
+
 stage:
   admin_password: XXXXXXXX
   admin_user:     cn=Directory Manager
   group_base:     ou=mrt-classes,ou=uc3,dc=cdlib,dc=org
-  host:           dp08.cdlib.org
+  host:           uc3-mrt-wrk1-stg.cdlib.org
   port:           1636
   user_base:      ou=People,ou=uc3,dc=cdlib,dc=org
   inst_base:      o=institutions,ou=uc3,dc=cdlib,dc=org
   ark_minter_url: http://noid.cdlib.org/nd/noidu_p9
+  guest_password: guest
+  guest_user:     anonymous
 
 production:
   admin_password: XXXXXXXX
   admin_user:     cn=Directory Manager
   group_base:     ou=mrt-classes,ou=uc3,dc=cdlib,dc=org
-  host:           dp01.cdlib.org
+  host:           uc3-ldap.cdlib.org
   port:           1636
   user_base:      ou=People,ou=uc3,dc=cdlib,dc=org
   inst_base:      o=institutions,ou=uc3,dc=cdlib,dc=org
   ark_minter_url: http://noid.cdlib.org/nd/noidu_p9
+  guest_password: guest
+  guest_user:     anonymous
 
 production_development:
   production

@@ -19,18 +19,13 @@ db/schema.rb
 .rvmrc.06.20.2013-10:03:30
 .gitignore
 .git/*
-^.git/*
-
-#moved these down here since they look like regexen and they were in glob section
+public/stylesheets/most.css
+public/javascripts/all.js
 
 syntax: regexp
-
 \.orig\..*$
 \.orig$
 \.chg\..*$
 \.rej$
 \.conflict\~$
 ^\.git$
-
-
-
