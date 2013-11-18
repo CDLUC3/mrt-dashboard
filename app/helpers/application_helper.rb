@@ -9,7 +9,7 @@ module ApplicationHelper
   # from http://codesnippets.joyent.com/posts/show/1812
   def formatted_int(i)
     if i.nil? then "0"
-    elsif (i.abs < 1000) i.to_s
+    elsif (i.abs < 1000) then i.to_s
     else i.to_s.gsub!(/(\d)(?=(\d\d\d)+(?!\d))/, "\\1,") end
   end
 
