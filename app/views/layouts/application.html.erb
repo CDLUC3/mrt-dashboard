@@ -4,8 +4,7 @@
 <html>
   <head>
     <title><%= yield :title %><%=(show_environment ? ": #{show_environment}" : '')%></title>
-    <%= stylesheet_link_tag 'reset', 'text', '960', 'main_styles', 'menu',
-                            :cache=>"most" %>
+    <%= stylesheet_link_tag 'reset', 'text', '960', 'main_styles', 'menu' %>
     <%= stylesheet_link_tag 'print', :media =>"print" %>
     <!--[if IE 6]><link rel="stylesheet" type="text/css" href="css/ie6.css" media="screen" /><![endif]-->
     <!--[if IE 7]><link rel="stylesheet" type="text/css" href="css/ie.css" media="screen" /><![endif]-->
