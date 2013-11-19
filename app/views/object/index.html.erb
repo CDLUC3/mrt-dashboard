@@ -36,7 +36,9 @@
   <%= render :partial => '/version/current_sidebar', :object => @object.current_version %><br/>
   <% if @object.inv_versions.length > 1 then %>
     <h3>Prior Versions</h3>
-    <%= render :partial => '/version/line_sidebar', :collection => @object.inv_versions.reverse[1..-1] %>
+    <%= render :partial => '/version/line_sidebar', 
+               :collection => @object.inv_versions.reverse[1..-1],
+               :locals => {:can_download => has_object_permission?(@object, 'download') } %>
     <br/>
   <% end %>
 </div>
