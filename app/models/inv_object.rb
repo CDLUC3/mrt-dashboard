@@ -41,7 +41,7 @@ class InvObject < ActiveRecord::Base
   end
   
   def inv_collection
-    self.inv_collections.first
+    @inv_collection ||= self.inv_collections.first
   end
 
   def group
