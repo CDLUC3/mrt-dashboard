@@ -37,7 +37,7 @@ class InvObject < ActiveRecord::Base
   end
 
   def current_version
-    self.inv_versions.order("number desc").first
+    @current_version ||= self.inv_versions.order("number desc").first
   end
   
   def inv_collection
