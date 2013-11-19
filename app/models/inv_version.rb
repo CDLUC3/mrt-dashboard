@@ -20,13 +20,11 @@ class InvVersion < ActiveRecord::Base
   end
 
   def system_files 
-    self.inv_files.select {|f| f.pathname.match(/^system\//) }.
-      sort_by {|x| File.basename(x.pathname.downcase) }
+    self.inv_files.system_files.order(:pathname)
   end
 
   def producer_files 
-    self.inv_files.select {|f| f.pathname.match(/^producer\//) }.
-      sort_by {|x| File.basename(x.pathname.downcase) }
+    self.inv_files.producer_files.order(:pathname)
   end
 
   def metadata(element)
