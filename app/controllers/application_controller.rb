@@ -18,6 +18,15 @@ class ApplicationController < ActionController::Base
     render :file => "#{Rails.root}/public/unavailable.html", :status => 500
   end
 
+  # there are supposed to be handled by Rails, but 401 is not.
+  rescue_from ActiveResource::UnauthorizedAccess do |ex|
+    render :file => "public/401", :status => 401, :layout=>nil
+  end
+
+  rescue_from ActiveRecord::RecordNotFound do |ex|
+    render :file => "public/404", :status => 404, :layout=>nil
+  end
+
   helper :all
 
   # Makes a url of the form /m/ark.../1/file with optionally blank versions and files
