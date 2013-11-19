@@ -1,9 +1,10 @@
 <% version = line_sidebar %>
-<% if has_object_permission?(version.inv_object, 'download') then %>
+<% object = version.inv_object %>
+<% if (can_download) then  %>
   <%= link_to "Version #{version.number}",
               :controller => :version,
               :action     => :index,
-              :object     => version.inv_object,
+              :object     => object,
               :version    => version %>:
 <% else %>
   Version <%= version.number %>:
