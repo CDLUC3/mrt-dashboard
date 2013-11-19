@@ -1,7 +1,10 @@
 <div class="files">
+  <% can_download = if (files.size > 0) then
+                      has_object_permission?(files[0].inv_version.inv_object, 'download')
+                    end %>
   <% files.each do |file| %>
     <div class="key">
-      <% if has_object_permission?(file.inv_version.inv_object, 'download') then %>
+      <% if (can_download) then %>
         <%= link_to(File.basename(file.pathname), 
                     :controller => :file, 
                     :action => :download,
