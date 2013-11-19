@@ -1,0 +1,10 @@
+<% if !session[:group_description].blank? then %>
+  <div class="breadcrumbs">
+    <%= link_to('Merritt', :controller => 'home', :action => 'index') %> &gt;
+    <%= link_to("Collection: #{session[:group_description]}", :controller => 'collection', :action => 'index') %> &gt;
+    <% if !defined?(dont_show_index) || !dont_show_index %>
+      <%= link_to("Help", :controller => 'help', :action => 'index') %> &gt;
+    <% end %>
+    <%= page_title %>
+  </div>
+<% end %>

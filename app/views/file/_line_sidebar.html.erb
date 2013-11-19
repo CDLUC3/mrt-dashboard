@@ -1,0 +1,15 @@
+<% file = line_sidebar %>
+<% version = file.inv_version %>
+<% object = version.inv_object %>
+<li style="word-wrap:break-word;">
+  <% if (can_download) then %>
+    <%= link_to File.basename(file.pathname),
+          :controller       => :file,
+          :action           => :download,
+          :object           => object,
+          :version          => version,
+          :file             => file %>
+  <% else %>
+    <%= File.basename(file.pathname) %>
+  <% end %>
+</li>

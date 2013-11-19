@@ -1,0 +1,21 @@
+<h3>Overview</h3>
+
+<div class="key">object count:</div>
+<div id="object_count" class="value">calculating</div>
+<div class="clear"></div>
+<div class="key">version count:</div>
+<div id="version_count" class="value">calculating</div>
+<div class="clear"></div>
+<div class="key">file count:</div>
+<div id="file_count" class="value">calculating</div>
+<div class="clear"></div>
+<div class="key">total size:</div>
+<div id="total_size" class="value">calculating</div>
+<div class="clear"></div>
+
+<%= javascript_tag do %>
+new Ajax.Updater({success : 'object_count'}, '/collection/object_count?group=<%= @request_group.id %>', { method: 'get' });
+new Ajax.Updater({success : 'version_count'}, '/collection/version_count?group=<%= @request_group.id %>', { method: 'get' });
+new Ajax.Updater({success : 'file_count'}, '/collection/file_count?group=<%= @request_group.id %>', { method: 'get' });
+new Ajax.Updater({success : 'total_size'}, '/collection/total_size?group=<%= @request_group.id %>', { method: 'get' });
+<% end %>
