@@ -1,11 +1,13 @@
 <% file = line_sidebar %>
+<% version = file.inv_version %>
+<% object = version.inv_object %>
 <li style="word-wrap:break-word;">
-  <% if has_object_permission?(file.inv_version.inv_object, 'download') then %>
+  <% if (can_download) then %>
     <%= link_to File.basename(file.pathname),
           :controller       => :file,
           :action           => :download,
-          :object           => file.inv_version.inv_object,
-          :version          => file.inv_version,
+          :object           => object,
+          :version          => version,
           :file             => file %>
   <% else %>
     <%= File.basename(file.pathname) %>
