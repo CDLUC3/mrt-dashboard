@@ -1,0 +1,15 @@
+development:
+  adapter: mysql2
+  encoding: utf8
+  host: mysql-dev.cdlib.org
+  database: inv
+  pool: 5
+  port: 3360
+  username: invro
+  password: XXXXX
+
+test:
+  adapter: sqlite3
+  database: db/test.sqlite3
+  pool: 5
+  timeout: 5000

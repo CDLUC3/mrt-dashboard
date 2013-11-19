@@ -1,0 +1,17 @@
+<h3>Current Version</h3>
+
+<% version = current_sidebar %>
+<% files = version.producer_files %>
+<% show_only = 4 %>
+
+<%= render :partial => '/version/line_sidebar', :collection => [version] %>
+<ul>
+  <%= render :partial => '/file/line_sidebar', :collection => files[0..(show_only-1)] %>
+</ul>
+<% if (files.length > show_only) then%>
+  <%= link_to "#{(files.length - show_only)} more files",
+              :controller     => :version,
+              :action         => :index,
+              :object         => version.inv_object,
+              :version        => version %>
+<% end %>

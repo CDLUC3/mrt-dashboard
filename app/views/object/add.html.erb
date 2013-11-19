@@ -1,0 +1,138 @@
+<% content_for :title do %>
+  UC3 Merritt: Add Object
+<% end %>
+<%= javascript_include_tag 'wztip/wz_tooltip.js' %>
+
+<div class="grid_11">
+  <h2>Add Object</h2>
+  <div class="breadcrumbs">
+    <%= link_to('Merritt', :controller => 'home', :action => 'index') %> &gt;
+    <%= link_to("Collection: #{current_group.description}", :controller => 'collection', :action => 'index', :group => current_group.id) %>
+    &gt; Add Object
+  </div>
+  <br/>
+  <% if flash[:error] then %>
+    <p class="dynamic_message"><%=flash[:error]%></p>
+  <% end %>
+  <p>Upload objects directly from your local drive or submit a manifest to add objects posted on a web server.</p>
+  <h3>Object info</h3>
+  <%= form_tag({:action => :upload}, :multipart => true) do %>
+
+    <div class="left_label">
+      <label for="file">File:</label>
+    </div>
+    <div class="right_field">
+      <%=file_field_tag("file")%>
+    </div>
+
+  <div class="left_label">
+  </div>
+  <div class="clear"></div>
+  <h3>Optional description:</h3>
+  <p>You will be able to search by the following fields:</p>
+
+  <div class="left_label">Title:</div>
+  <div class="right_field">
+    <%= text_field_tag('title', nil, :size => 30)  %>
+  </div>
+  <div class="short_text_description">
+    <%= help_tip('We strongly recommend that you provide at least a title.') %>
+  </div>
+
+  <div class="left_label">Creator:</div>
+  <div class="right_field">
+    <%= text_field_tag('author', nil, :size => 30)  %>
+  </div>
+  <div class="short_text_description">
+    <%= help_tip('Author or creator of the object.') %>
+  </div>
+
+  <div class="left_label">Date:</div>
+  <div class="right_field">
+    <%= text_field_tag('date', nil, :size => 30)  %>
+  </div>
+  <div class="short_text_description">
+    <%= help_tip('Publication date of object') %>
+  </div>
+
+  <div class="left_label">Local ID:</div>
+  <div class="right_field">
+    <%= text_field_tag('local_id', nil, :size => 30)  %>
+  </div>
+  <div class="short_text_description">
+    <%= help_tip('An existing identifier you use to track the object.') %>
+  </div>
+
+  <div class="left_label">Primary ID:</div>
+  <div class="right_field">
+    <%= text_field_tag('primary_id', nil, :size => 30)  %>
+  </div>
+  <div class="short_text_description">
+    <%= help_tip('Most commonly used for updates, this is the previously assigned primary identifier.') %>
+  </div>
+
+  <!--
+  <div class="left_label">Curatorial note:</div>
+  <div class="right_field">
+    <%= text_area_tag('note', nil, :size => "30x5")  %>
+  </div>
+  <div class="short_text_description">
+    <%= help_tip('') %>
+  </div>
+  -->
+  <div class="clear"></div>
+  <div class="left_label">&nbsp;</div>
+  <div class="right_area">
+    <%= hidden_field_tag('group', params[:group]) %>
+    <%= submit_tag("Submit") %>
+  </div>
+
+  <% end #form_tag
+  %>
+
+  
+</div>
+<div class="grid_1">&nbsp;</div>
+<div class="grid_4 sidebar">
+  <%= render :partial => '/shared/side_lookup' %>
+  <%= render :partial => '/help/add' %>
+  
+</div>
+
+<script type="text/javascript">
+
+  function disable_meta(){
+    document.getElementById('title').disabled = true;
+    document.getElementById('author').disabled = true;
+    document.getElementById('date').disabled = true;
+    document.getElementById('local_id').disabled = true;
+  }
+
+  function enable_meta(){
+    document.getElementById('title').disabled = false;
+    document.getElementById('author').disabled = false;
+    document.getElementById('date').disabled = false;
+    document.getElementById('local_id').disabled = false;
+  }
+
+  function toggle_update(){
+    if(document.getElementById('update_object').checked == true){
+      document.getElementById('primary_id').disabled = false;
+      document.getElementById('object_type_single-file-batch-manifest').disabled = true;
+      document.getElementById('object_type_container-batch-manifest').disabled = true;
+      document.getElementById('object_type_batch-manifest').disabled = true;
+      document.getElementById('batchy_files').style.color = '#999999';
+      document.getElementById('batchy_containers').style.color = '#999999';
+      document.getElementById('batchy_manifests').style.color = '#999999';
+    }else{
+      document.getElementById('primary_id').disabled = true;
+      document.getElementById('object_type_single-file-batch-manifest').disabled = false;
+      document.getElementById('object_type_container-batch-manifest').disabled = false;
+      document.getElementById('object_type_batch-manifest').disabled = false;
+      document.getElementById('batchy_files').style.color = '#000000';
+      document.getElementById('batchy_containers').style.color = '#000000';
+      document.getElementById('batchy_manifests').style.color = '#000000';
+    }
+  }
+</script>
+
