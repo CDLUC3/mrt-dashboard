@@ -6,10 +6,10 @@
 
 <%= render :partial => '/version/line_sidebar', :collection => [version] %>
 <ul>
-  <%= render :partial => '/file/line_sidebar', :collection => files[0..(show_only-1)] %>
+  <%= render :partial => '/file/line_sidebar', :collection => files.limit(show_only) %>
 </ul>
-<% if (files.length > show_only) then%>
-  <%= link_to "#{(files.length - show_only)} more files",
+<% if (files.count > show_only) then%>
+  <%= link_to "#{(files.count - show_only)} more files",
               :controller     => :version,
               :action         => :index,
               :object         => version.inv_object,
