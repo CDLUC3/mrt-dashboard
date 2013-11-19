@@ -22,6 +22,8 @@ class ApplicationController < ActionController::Base
 
   # Makes a url of the form /m/ark.../1/file with optionally blank versions and files
   def mk_merritt_url(letter, object, version=nil, file=nil)
+    object = urlencode(urlunencode(object))
+    file = if file.blank? then nil else urlencode(urlunencode(file)) end
     "/#{letter}/" + [object, version, file].reject{|x| x.blank?}.join("/")
   end
   
@@ -29,7 +31,9 @@ class ApplicationController < ActionController::Base
     if (params[:version].to_i == 0) then
       latest_version = InvObject.find_by_ark(params_u(:object)).current_version.number
       letter = request.path.match(/^\/(.)\//)[1]
-      redirect_to mk_merritt_url(letter, params[:object], latest_version, params[:file])
+      file = if !params[:format].blank? then "#{params[:file]}.#{params[:format]}"
+             else params[:file] end
+      redirect_to mk_merritt_url(letter, params[:object], latest_version, file)
     end
   end
 
