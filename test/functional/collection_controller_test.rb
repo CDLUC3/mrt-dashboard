@@ -7,15 +7,13 @@ class CollectionControllerTest < ActionController::TestCase
   end
 
   test "unauthorized collection access" do
-    assert_raises(ActiveResource::UnauthorizedAccess) do
-      get(:index, {:group => "cdl_escholarship"}, {:uid => "anonymous"})
-    end
+    get(:index, {:group => "cdl_escholarship"}, {:uid => "anonymous"})
+    assert_response(401)
   end
 
   test "nonexistent collection" do
-    assert_raises(ActiveRecord::RecordNotFound) do
-      get(:index, {:group => "FOOBAR"}, {:uid => "anonymous"})
-    end
+    get(:index, {:group => "FOOBAR"}, {:uid => "anonymous"})
+    assert_response(404)
   end
 
   test "search collection" do
