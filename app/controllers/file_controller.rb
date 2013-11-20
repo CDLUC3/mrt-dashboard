@@ -36,8 +36,6 @@ class FileController < ApplicationController
     # they are obtaining a producer file which needs to prepended to
     # the filename
     filename = "producer/#{filename}" if !filename.match(/^(producer|system)/)
-    # the router removes the file extension from the filename - need to add it back on if one exists
-    filename = "#{filename}.#{params[:format]}" if !params[:format].blank?
 
     @file = InvFile.joins(:inv_version, :inv_object).
       where("inv_objects.ark = ?", params_u(:object)).
