@@ -19,10 +19,25 @@ class FileViewTest < ActionDispatch::IntegrationTest
     fill_in('Name', :with => 'Jane Doe')
     fill_in('Affiliation', :with => 'Doe International')
     fill_in('Email', :with => 'doe@mailinator.com')
-    check("accept")
+    check("accept") 
     click_button("Accept")
     assert_equal(200, page.status_code)
     assert_equal("inline; filename=\"mrt-erc.txt\"", page.response_headers["Content-Disposition"])
+  end
+
+  test "download object with double extension works" do
+    click_link("ark:/99999/fk4gf2zbp")
+    click_link("Version 1")
+    click_link("foo.bar.baz")
+
+    # should be sent to dua page
+    fill_in('Name', :with => 'Jane Doe')
+    fill_in('Affiliation', :with => 'Doe International')
+    fill_in('Email', :with => 'doe@mailinator.com')
+    check("accept")
+    click_button("Accept")
+    assert_equal(200, page.status_code)
+    assert_equal("inline; filename=\"foo.bar.baz\"", page.response_headers["Content-Disposition"])
   end
 
   test "download file redirect to latest version works" do

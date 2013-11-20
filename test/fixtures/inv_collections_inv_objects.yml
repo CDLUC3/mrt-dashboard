@@ -13,3 +13,7 @@ fk41z6855_demo:
 diff_meta_demo:
   inv_collection: demo_collection
   inv_object: diff_meta
+
+double_ext_demo:
+  inv_collection: demo_collection
+  inv_object: double_ext
