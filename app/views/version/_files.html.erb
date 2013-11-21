@@ -1,24 +1,28 @@
 <div class="files">
-  <% can_download = if (files.size > 0) then
-                      has_object_permission?(files[0].inv_version.inv_object, 'download')
-                    end %>
-  <% files.each do |file| %>
-    <div class="key">
-      <% if (can_download) then %>
-        <%= link_to(File.basename(file.pathname), 
-                    :controller => :file, 
-                    :action => :download,
-                    :object => file.inv_version.inv_object,
-                    :version => file.inv_version,
-                    :file => file) %>
-      <% else %>
-        <%= File.basename(file.pathname) %>
-      <% end %>
-    </div>
-    <div class="value">
-      <%= clean_mime_type(file.mime_type) %>       
-      <%= number_to_storage_size(file.full_size) %>
-    </div>
+  <% if files.size > 0 then %>
+    <%# this is the same for every file and if we don't cache it here
+        it will hit the db for every file %>
+    <% version = files[0].inv_version %>
+    <% object = version.inv_object %>
+    <% can_download = has_object_permission?(object, 'download') %>
+    <% files.each do |file| %>
+      <div class="key">
+        <% if (can_download) then %>
+          <%= link_to(File.basename(file.pathname), 
+                      :controller => :file, 
+                      :action => :download,
+                      :object => object,
+                      :version => version,
+                      :file => file) %>
+        <% else %>
+          <%= File.basename(file.pathname) %>
+        <% end %>
+      </div>
+      <div class="value">
+        <%= clean_mime_type(file.mime_type) %>       
+        <%= number_to_storage_size(file.full_size) %>
+      </div>
+    <% end %>
   <% end %>
 </div>
 <div class="clear"></div>
