@@ -1,0 +1,19 @@
+fk40k2sqf_demo:
+  inv_collection: demo_collection
+  inv_object: fk40k2sqf
+
+fk4qv5n4z_opencontext:
+  inv_collection: opencontext
+  inv_object: fk4qv5n4z
+
+fk41z6855_demo:
+  inv_collection: demo_collection
+  inv_object: fk41z6855
+
+diff_meta_demo:
+  inv_collection: demo_collection
+  inv_object: diff_meta
+
+double_ext_demo:
+  inv_collection: demo_collection
+  inv_object: double_ext

@@ -1,0 +1,10 @@
+<% if group_choosen? then %>
+  <h3>Object Lookup</h3>
+  <%= form_tag({:controller => 'collection', :action => 'search_results'}, :method => :get) do %>
+    <%= text_field_tag 'terms', params[:terms] %>
+    <%= hidden_field_tag 'group', session[:group_id] %>
+    <%= submit_tag('Go') %>
+  <% end %>
+  
+  <p>Search object author, title, date or identifier.</p>
+<% end %>
