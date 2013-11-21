@@ -10,6 +10,11 @@ class InvObject < ActiveRecord::Base
   has_many :inv_nodes_inv_objects
   has_many :inv_nodes, :through => :inv_nodes_inv_objects
 
+  # hack to fix erc_ tables taking forever to load
+  scope :quickloadhack, lambda { 
+    select(["inv_objects.id", "inv_objects.version_number", "inv_objects.inv_owner_id", "inv_objects.object_type", "inv_objects.role", "inv_objects.aggregate_role", "inv_objects.ark", "inv_objects.created", "inv_objects.modified", "inv_objects.id", "inv_objects.ark", "inv_objects.created", "inv_objects.modified"])
+  }
+
   include Encoder
 
   def to_param
@@ -37,11 +42,11 @@ class InvObject < ActiveRecord::Base
   end
 
   def current_version
-    self.inv_versions.order("number desc").first
+    @current_version ||= self.inv_versions.order("number desc").first
   end
   
   def inv_collection
-    self.inv_collections.first
+    @inv_collection ||= self.inv_collections.first
   end
 
   def group

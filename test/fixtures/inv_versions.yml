@@ -33,3 +33,9 @@ diff_meta_2:
   ark: "ark:/99999/diffmeta"
   number: 2
   created: "2013-02-31 02:43"
+
+double_ext_1:
+  inv_object: double_ext
+  ark: "ark:/99999/fk4gf2zbp"
+  number: 1
+  created: "2013-11-20 14:17:54"

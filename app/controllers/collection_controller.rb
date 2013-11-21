@@ -44,6 +44,7 @@ class CollectionController < ApplicationController
       where("inv_collections.ark = ?", @request_group.ark_id).
       order('inv_objects.modified desc').
       includes(:inv_versions, :inv_dublinkernels).
+      quickloadhack.
       paginate(paginate_args)
   end
 
@@ -52,7 +53,9 @@ class CollectionController < ApplicationController
     terms_q = terms.map{|t| "%#{t}%" }
     @results = InvObject.joins(:inv_collections).
       where("inv_collections.ark = ?", @request_group.ark_id).
-      includes(:inv_versions, :inv_dublinkernels).paginate(paginate_args)
+      includes(:inv_versions, :inv_dublinkernels).
+      quickloadhack.
+      paginate(paginate_args)
     terms_q.each do |q|
       @results = @results.where("inv_objects.ark LIKE ? OR inv_objects.erc_where LIKE ? OR inv_dublinkernels.value LIKE ?", q, q, q)
     end

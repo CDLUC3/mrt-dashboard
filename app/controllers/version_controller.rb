@@ -33,7 +33,7 @@ class VersionController < ApplicationController
     @version = InvVersion.joins(:inv_object).
       where("inv_objects.ark = ?", params_u(:object)).
       where("inv_versions.number = ?", params_u(:version).to_i).
-      includes(:inv_files, :inv_dublinkernels, :inv_object => [:inv_versions]).
+      includes(:inv_dublinkernels, :inv_object => [:inv_versions]).
       first
     raise ActiveRecord::RecordNotFound if @version.nil?
   end

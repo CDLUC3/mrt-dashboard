@@ -18,6 +18,15 @@ class ApplicationController < ActionController::Base
     render :file => "#{Rails.root}/public/unavailable.html", :status => 500
   end
 
+  # there are supposed to be handled by Rails, but 401 is not.
+  rescue_from ActiveResource::UnauthorizedAccess do |ex|
+    render :file => "public/401", :status => 401, :layout=>nil
+  end
+
+  rescue_from ActiveRecord::RecordNotFound do |ex|
+    render :file => "public/404", :status => 404, :layout=>nil
+  end
+
   helper :all
 
   # Makes a url of the form /m/ark.../1/file with optionally blank versions and files
@@ -31,9 +40,7 @@ class ApplicationController < ActionController::Base
     if (params[:version].to_i == 0) then
       latest_version = InvObject.find_by_ark(params_u(:object)).current_version.number
       letter = request.path.match(/^\/(.)\//)[1]
-      file = if !params[:format].blank? then "#{params[:file]}.#{params[:format]}"
-             else params[:file] end
-      redirect_to mk_merritt_url(letter, params[:object], latest_version, file)
+      redirect_to mk_merritt_url(letter, params[:object], latest_version, params[:file])
     end
   end
 

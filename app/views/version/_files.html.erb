@@ -1,21 +1,37 @@
 <div class="files">
-  <% files.each do |file| %>
-    <div class="key">
-      <% if has_object_permission?(file.inv_version.inv_object, 'download') then %>
-        <%= link_to(File.basename(file.pathname), 
-                    :controller => :file, 
-                    :action => :download,
-                    :object => file.inv_version.inv_object,
-                    :version => file.inv_version,
-                    :file => file) %>
-      <% else %>
-        <%= File.basename(file.pathname) %>
+  <% if !files[0].nil? then %>
+    <%# this is the same for every file and if we don't cache it here
+        it will hit the db for every file %>
+    <% version = files[0].inv_version %>
+    <% version_id = version.to_param %>
+    <% object = version.inv_object %>
+    <% object_id = object.to_param %>
+    <%# would be cleaner code if we had this check inside the
+        file.each but it is slower for pages with many files %>
+    <% if has_object_permission?(object, 'download') %>
+      <% files.each do |file| %>
+        <div class="key">
+          <%# not using link_to speeds this up %>
+          <a href="/d/<%= object_id %>/<%= version_id %>/<%= file.to_param %>">
+            <%= File.basename(file.pathname) %>
+          </a>
+        </div>
+        <div class="value">
+          <%= clean_mime_type(file.mime_type) %>       
+          <%= number_to_storage_size(file.full_size) %>
+        </div>
       <% end %>
-    </div>
-    <div class="value">
-      <%= clean_mime_type(file.mime_type) %>       
-      <%= number_to_storage_size(file.full_size) %>
-    </div>
+    <% else %>
+      <% files.each do |file| %>
+        <div class="key">
+          <%= File.basename(file.pathname) %>
+        </div>
+        <div class="value">
+          <%= clean_mime_type(file.mime_type) %>       
+          <%= number_to_storage_size(file.full_size) %>
+        </div>
+      <% end %>
+    <% end %>
   <% end %>
 </div>
 <div class="clear"></div>

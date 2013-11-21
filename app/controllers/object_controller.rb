@@ -206,6 +206,7 @@ class ObjectController < ApplicationController
       where(:ark=>@collection_ark).
       first.
       inv_objects.
+      quickloadhack.
       order('inv_objects.modified desc').
       includes(:inv_versions, :inv_dublinkernels).
       paginate(paginate_args)

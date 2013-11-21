@@ -67,3 +67,18 @@ diff_meta:
   erc_where: "ark:/99999/diffmeta ; (:unas)"
   created: "2013-08-09 14:41:23"
   modified: "2013-08-09 14:41:34"
+
+
+double_ext:
+  inv_owner_id: 1
+  ark: "ark:/99999/fk4gf2zbp"
+  object_type: "MRT-curatorial"
+  role: "MRT-content"
+  aggregate_role: "MRT-none"
+  version_number: 1
+  erc_who: "P. Dant"
+  erc_what: "double extension test"
+  erc_when: "(:unas)"
+  erc_where: "ark:/99999/fk4gf2zbp ; (:unas)"
+  created: "2013-11-20 14:17:52"
+  modified: "2013-11-20 14:17:56"
