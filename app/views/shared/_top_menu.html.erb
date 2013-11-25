@@ -14,7 +14,7 @@ They display differently depending on what is set.
 =end
 
 
-cache("top_menu_#{current_uid}_#{session[:group_id]}", {:expires_in=>1.hour}) do
+cache("top_menu_#{current_uid}_#{session[:group_id]}", {:expires_in=>10.minutes}) do
   add_disp = session[:group_id] && has_session_group_write_permission?
   ag = available_groups()
   change_disp = session[:group_id] && ag.length > 1
