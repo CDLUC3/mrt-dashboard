@@ -1,11 +1,4 @@
 module ApplicationHelper
-  def w3cdtf(time)
-    case time
-    when Time, DateTime
-      return time.strftime("%Y-%m-%dT%H:%M:%S#{time.formatted_offset}")
-    end
-  end
-
   # from http://codesnippets.joyent.com/posts/show/1812
   def formatted_int(i)
     if i.nil? then "0"
