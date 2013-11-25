@@ -41,7 +41,7 @@ class Group
   
   # permissions are returned as an array like ['read','write'], maybe more in the future
   def permission(userid)
-    return Rails.cache.fetch("permissions_#{userid}_#{self.id}", :expires_in =>600) do
+    return Rails.cache.fetch("permissions_#{userid}_#{self.id}", :expires_in =>10.minutes) do
       Group::LDAP.get_user_permissions(userid, self.id, User::LDAP)
     end
   end
