@@ -182,6 +182,7 @@ class ApplicationController < ActionController::Base
     if !length.nil? then 
       response.headers["Content-Length"] = length.to_s
     end
+    response.headers['Last-Modified'] = Time.now.httpdate
     self.response_body = Streamer.new(url)
   end
   
