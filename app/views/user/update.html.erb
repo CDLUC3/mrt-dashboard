@@ -1,0 +1,81 @@
+<% content_for :title do %>
+  UC3 Merritt: Update Profile for <%= current_user.displayname %>
+<% end %>
+
+<%
+  # firstname
+  # lastname
+  # userPassword
+  # email
+  # tzRegion
+  # telephoneNumber
+%>
+<div class="grid_11">
+  <h2>Update profile for <%= current_user.displayname %></h2>
+  <div class="breadcrumbs"><%= link_to('Merritt', :controller => 'home', :action => 'index') %> &gt;
+    Update profile for <%= current_user.displayname %></div>
+  <br/>
+  <% if !@display_text.eql?('') then %>
+    <p class="dynamic_message"><%=@display_text%></p>
+  <% end %>
+
+  <%= form_tag({:action => :update}) do %>
+    <div class="left_label">*First name:</div>
+    <div class="right_field">
+      <%= text_field_tag('givenname', @ldap_user['givenname'], :size => 30)  %>
+    </div>
+    <div class="clear"></div>
+
+    <div class="left_label">*Last name:</div>
+    <div class="right_field">
+      <%= text_field_tag('sn', @ldap_user['sn'], :size => 30)  %>
+    </div>
+    <div class="clear"></div>
+
+    <div class="left_label">*Password:</div>
+    <div class="right_field">
+      <%= password_field_tag('userpassword', '!unchanged', :size => 30)  %>
+    </div>
+    <div class="clear"></div>
+
+    <div class="left_label">*Repeat Password:</div>
+    <div class="right_field">
+      <%= password_field_tag('repeatuserpassword', '!unchanged', :size => 30)  %>
+    </div>
+    <div class="clear"></div>
+
+    <div class="left_label">*Email:</div>
+    <div class="right_field">
+      <%= text_field_tag('mail', @ldap_user['mail'], :size => 30)  %>
+    </div>
+    <div class="clear"></div>
+
+    <div class="left_label">Time zone:</div>
+    <% zones = TZInfo::Timezone.all_country_zone_identifiers.sort
+        zones = zones.map { |zone| [zone.gsub('_',' '), zone] }
+    %>
+    <div class="right_field">
+      <%= select_tag('tzregion', options_for_select(zones, @ldap_user['tzregion'].first) ) %>
+    </div>
+    <div class="clear"></div>
+
+    <div class="left_label">Phone:</div>
+    <div class="right_field">
+      <%= text_field_tag('telephonenumber', @ldap_user['telephonenumber'], :size => 30)  %>
+    </div>
+    <div class="clear"></div>
+    <div class="left_label">&nbsp;</div>
+    <div class="right_field">
+      <%= submit_tag %>
+    </div>
+    <div class="clear"></div>
+  <% end %>
+  
+</div>
+<div class="grid_1">&nbsp;</div>
+<div class="grid_4 sidebar">
+  <%= render :partial => '/shared/side_lookup' %><br/>
+  <%# render :partial => 'overview' %><br/>
+
+</div>
+
