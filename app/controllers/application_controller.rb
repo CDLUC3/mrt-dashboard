@@ -207,4 +207,8 @@ class ApplicationController < ActionController::Base
       end
     end
   end
+  
+  def is_ark?(str)
+    return !str.match(/ark:\/[0-9]{5}\/[a-z0-9+]/).nil?
+  end
 end
