@@ -53,7 +53,10 @@ class CollectionController < ApplicationController
       split(/\s+/).
       map { |t| # special ark handling
         if is_ark?(t) then t[11..-1] else t end
-      }.delete_if{|t| t.blank? } 
+      }.delete_if { |t| 
+        (t.blank? || t.size < 4) # sql search doesn't work with terms less than 4 characters long
+      }
+    terms = terms[0..50] # we can't have more than 60 terms, so just drop > 50
 
     if terms.size == 0 then
       # no real search, just display 
