@@ -1,0 +1,3 @@
+<% cache("object_count_#{@request_group.id}", :expires_in => 10.minutes) do %>
+  <%= formatted_int(@request_group.object_count) %>
+<% end %>
