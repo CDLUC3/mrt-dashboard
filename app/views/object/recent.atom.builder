@@ -29,9 +29,9 @@ xml.tag!('feed', :xmlns => "http://www.w3.org/2005/Atom",
   xml.tag!("id", "urn:uuid:8dd71209-616a-4723-bfc1-b46572499932")
   xml.tag!("title", "Recent objects")
   if @objects[0] then
-    xml.tag!("updated", w3cdtf(@objects[0].modified))
+    xml.tag!("updated", @objects[0].modified.to_formatted_s(:w3cdtf))
   else
-    xml.tag!("updated", w3cdtf(Time.now))
+    xml.tag!("updated", Time.now.to_formatted_s(:w3cdtf))
   end
   xml.tag!("author") do
     xml.tag!("name", "California Digital Library")
@@ -62,9 +62,9 @@ xml.tag!('feed', :xmlns => "http://www.w3.org/2005/Atom",
           xml.tag!("name", name)
         end
       end
-      xml.tag!("updated", obj.modified)
+      xml.tag!("updated", obj.modified.to_formatted_s(:w3cdtf))
       if (!obj.created.blank?) then
-        xml.tag!("published", obj.created)
+        xml.tag!("published", obj.created.to_formatted_s(:w3cdtf))
       end
       current_version = obj.current_version
       current_version.inv_files.each do |file|
@@ -75,6 +75,7 @@ xml.tag!('feed', :xmlns => "http://www.w3.org/2005/Atom",
                                    :version    => current_version,
                                    :file       => file),
                  "rel"  => "http://purl.org/dc/terms/hasPart",
+                 "title" => file.pathname,
                  "length" => file.full_size,
                  "type"  => file.mime_type)
       end

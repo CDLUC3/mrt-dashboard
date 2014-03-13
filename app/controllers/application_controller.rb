@@ -182,6 +182,7 @@ class ApplicationController < ActionController::Base
     if !length.nil? then 
       response.headers["Content-Length"] = length.to_s
     end
+    response.headers['Last-Modified'] = Time.now.httpdate
     self.response_body = Streamer.new(url)
   end
   
@@ -205,5 +206,9 @@ class ApplicationController < ActionController::Base
         end
       end
     end
+  end
+  
+  def is_ark?(str)
+    return !str.match(/ark:\/[0-9]{5}\/[a-z0-9+]/).nil?
   end
 end
