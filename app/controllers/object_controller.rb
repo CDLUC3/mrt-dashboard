@@ -74,7 +74,7 @@ class ObjectController < ApplicationController
           'DC.subject'        => params["DC.subject"],
           'DC.title'          => params["DC.title"],
           'DC.type'           => params["DC.type"],
-          'submitter'         => "#{current_user.login}/#{current_user.displayname}",
+          'submitter'         => (params["submitter"] || "#{current_user.login}/#{current_user.displayname}"),
           'title'             => params[:title],
           'synchronousMode'   => params[:synchronousMode],
           'type'              => params[:type]
