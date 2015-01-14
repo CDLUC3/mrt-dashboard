@@ -45,7 +45,7 @@ production:
   mint_service:         "http://uc3-web.cdlib.org:33121/ingest/request-identifier"
   ingest_service:       "http://uc3-web.cdlib.org:33121/poster/submit/"
   ingest_service_update: "http://uc3-web.cdlib.org:33121/poster/update/"  
-  uri_1:                "http://store.cdlib.org:35121/content/"
+  uri_1:                "http://storage.cdlib.org:35121/content/"
 
 production_development:
   production
