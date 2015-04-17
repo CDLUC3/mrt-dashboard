@@ -200,9 +200,11 @@ class ApplicationController < ActionController::Base
         end
         return
       else
-        if process_dua_request(object.dua_uri) then
-          # if the DUA for this collection exists, display DUA to user for acceptance before displaying file
-          redirect_to({:controller => "dua", :action => "index"}.merge(redirect_args)) and return
+        if object.dua_exists? then
+          if process_dua_request(object.dua_uri) then
+            # if the DUA for this collection exists, display DUA to user for acceptance before displaying file
+            redirect_to({:controller => "dua", :action => "index"}.merge(redirect_args)) and return
+          end
         end
       end
     end
