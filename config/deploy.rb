@@ -59,6 +59,14 @@ namespace :deploy do
   end
   before "deploy:start", "bundle:install"
 
+  desc 'Status Unicorn'
+  task :status do
+    on roles(:app) do
+       # check pid
+       execute "cd #{deploy_to}/current; cat #{fetch(:unicorn_pid)} | xargs ps -lp"
+    end
+  end
+
   desc 'Restart Unicorn'
   task :restart do
     on roles(:app), wait: 5 do
