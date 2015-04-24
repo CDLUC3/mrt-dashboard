@@ -9,7 +9,7 @@ worker_processes 16
 # for super-fast worker spawn times
 preload_app true
 
-pid File.join(Dir.pwd, "log", "unicorn.pid")
+pid File.join(Dir.pwd, "pid", "unicorn.pid")
 
 # timeout is long because we upload files
 # switch to nginx to fix
