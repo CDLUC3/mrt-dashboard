@@ -52,7 +52,7 @@ namespace :deploy do
     on roles(:app) do
       within current_path do
         with rails_env: fetch(:rails_env) do
-          execute "cd #{deploy_to}/current; bundle exec unicorn --config-file config/unicorn.rb --port #{fetch(:unicorn_port)} --env #{fetch(:rails_env)} --daemonize"
+          execute "cd #{deploy_to}/current; bundle exec unicorn --config-file config/unicorn/#{fetch(:rails_env)}.rb --port #{fetch(:unicorn_port)} --env #{fetch(:rails_env)} --daemonize"
         end
       end
     end
