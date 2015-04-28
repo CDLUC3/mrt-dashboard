@@ -8,14 +8,6 @@ set :deploy_to, '/dpr2/apps/ui'
 set :scm, :hg
 
 set :stages, ["development", "stage", "production"]
-# set branch based on env
-if $RAILS_ENV == 'stage' 
-	set :branch, 'stage'
-elsif $RAILS_ENV == 'production' 
-	set :branch, 'prod'
-else
-	set :branch, 'default'
-end
 
 set :default_env, { path: "/dpr2/local/bin:$PATH" }
 

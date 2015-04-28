@@ -16,6 +16,8 @@
 # used to set extended properties on the server.
 
 set :rails_env, "stage"
+puts "STAGE branch"
+set :branch, 'stage'
 
 # Default deploy_to directory is /var/www/my_app
 set :deploy_to, '/dpr2/apps/ui'
