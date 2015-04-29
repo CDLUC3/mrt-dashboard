@@ -200,15 +200,18 @@ class ApplicationController < ActionController::Base
         end
         return
       else
-        if process_dua_request(object.dua_uri) then
-          # if the DUA for this collection exists, display DUA to user for acceptance before displaying file
-          redirect_to({:controller => "dua", :action => "index"}.merge(redirect_args)) and return
+        if object.dua_exists? then
+          if process_dua_request(object.dua_uri) then
+            # if the DUA for this collection exists, display DUA to user for acceptance before displaying file
+            redirect_to({:controller => "dua", :action => "index"}.merge(redirect_args)) and return
+          end
         end
       end
     end
   end
   
   def is_ark?(str)
-    return !str.match(/ark:\/[0-9]{5}\/[a-z0-9+]/).nil?
+    # return !str.match(/ark:\/[0-9]{5}\/[a-z0-9+]/).nil?
+    return !str.match(/ark:\/[0-9a-zA-Z]{1}[0-9]{4}\/[a-z0-9+]/).nil?
   end
 end

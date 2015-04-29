@@ -18,6 +18,7 @@ gem "builder"
 gem 'uuidtools'
 gem 'thin'
 gem 'jquery-rails'
+gem 'capistrano', '~> 3.1.0'
 
 group :test, :development do
   gem 'debugger'
