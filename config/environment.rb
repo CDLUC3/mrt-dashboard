@@ -13,3 +13,4 @@ MrtDashboard::Application.initialize!
 require 'webrick/httputils'
 Rack::Mime::MIME_TYPES['.xlsm'] = "application/vnd.ms-excel.sheet.macroEnabled.12"
 
+ENV['TMPDIR'] = Rails.root.join('/dpr2/tmpdir').to_s
