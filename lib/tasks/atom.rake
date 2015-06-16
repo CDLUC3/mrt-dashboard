@@ -187,6 +187,7 @@ end
 # call as rake "atom:update[atom URL, User Agent, Ingest Profile, Collection ID, Process until Date]"
 # e.g. rake "atom:update[http://opencontext.org/all/.atom, mreyes/Mark Reyes, ucb_open_context_content, ark:/99999/abcdefhi, <DATE>]"
 namespace :atom do
+  desc "Generic ATOM to Merritt processor"
   task :update, [:root, :user, :profile, :collection, :stopdate] => :environment do |cmd, args|
     process_atom_feed(args[:user], args[:profile], args[:collection], args[:stopdate], args[:root])
   end
