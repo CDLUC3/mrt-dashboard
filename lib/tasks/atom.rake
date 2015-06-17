@@ -66,7 +66,7 @@ def process_atom_feed(submitter, profile, collection, stopdate, starting_point)
   server.start_server
   next_page = starting_point
   i = 0
-  pause = ENV['HOME'] + '/apps/ui/atom/PAUSE_ATOM'
+  pause = ENV['HOME'] + "/apps/ui/atom/PAUSE_ATOM_#{profile}"
 
   until next_page.nil? do
     wait = false

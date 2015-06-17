@@ -9,6 +9,7 @@ mrt-dashboard_production
 console
 help/*
 sqlite/*
+config/atom.yml
 config/ldap.yml
 config/database.yml
 db/schema.rb
