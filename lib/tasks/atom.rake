@@ -87,6 +87,18 @@ def process_atom_feed(submitter, profile, collection, stopdate, starting_point)
 	puts "Error processing page #{next_page}"
       end
     end
+
+    # Merritt Collection (optional)
+    begin
+       merrittCollection = doc.at_xpath("//xmlns:merritt_collection_id").text
+       merrittCollectionCredentials = ATOM_CONFIG["#{merrittCollection}"]
+    rescue Exception => ex
+       merrittCollection = ""
+       merrittCollectionCredentials = ""
+    end
+    puts "Processing merritt collection #{merrittCollection}" if ! merrittCollection.empty?
+    puts "Found merritt collection credentials" if ! merrittCollectionCredentials.empty?
+
     doc.xpath("//atom:entry", NS).each do |entry|
       begin
         # get the basic stuff
