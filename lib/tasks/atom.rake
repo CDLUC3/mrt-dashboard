@@ -91,18 +91,24 @@ def process_atom_feed(submitter, profile, collection, stopdate, starting_point)
     # Merritt Collection (optional)
     begin
        merrittCollection = doc.at_xpath("//xmlns:merritt_collection_id").text
-       merrittCollectionCredentials = ATOM_CONFIG["#{merrittCollection}"]
+       merrittCollectionCredentials = ATOM_CONFIG["#{merrittCollection}_credentials"]
+       merrittCollectionLocalidElement = ATOM_CONFIG["#{merrittCollection}_localidElement"]
     rescue Exception => ex
-       merrittCollection = ""
-       merrittCollectionCredentials = ""
     end
-    puts "Processing merritt collection #{merrittCollection}" if ! merrittCollection.empty?
-    puts "Found merritt collection credentials" if ! merrittCollectionCredentials.empty?
+    puts "Processing merritt collection #{merrittCollection}" if ! merrittCollection.nil?
+    puts "Found merritt collection credentials #{merrittCollectionCredentials}" if ! merrittCollectionCredentials.nil?
+    puts "Found merritt collection localID element #{merrittCollectionLocalidElement}" if ! merrittCollectionLocalidElement.nil?
 
     doc.xpath("//atom:entry", NS).each do |entry|
       begin
+        begin
+	   # Nuxeo
+           local_id = entry.at_xpath("#{merrittCollectionLocalidElement}").text 
+        rescue Exception => ex
+	   # default
+           local_id = xpath_content(entry, "atom:id")
+        end
         # get the basic stuff
-        local_id = xpath_content(entry, "atom:id")
         published = xpath_content(entry, "atom:published")
         updated = xpath_content(entry, "atom:updated")
         title = xpath_content(entry, "atom:title")
@@ -110,9 +116,9 @@ def process_atom_feed(submitter, profile, collection, stopdate, starting_point)
           xpath_content(au, "atom:name")
         }.join("; ")
 
-	puts "Processing #{local_id}"
-	puts "Processing #{title}"
-	puts "Processing #{updated}"
+	puts "Processing local_id: #{local_id}"
+	puts "Processing Title:    #{title}"
+	puts "Processing updated:  #{updated}"
         p =  up_to_date?(local_id, collection, updated, stopdate)
 
         return if p.nil? 
@@ -187,6 +193,7 @@ def process_atom_feed(submitter, profile, collection, stopdate, starting_point)
       sleep(5)
     end
     puts "Next #{next_page}"
+exit
   end
   ensure
     puts "waiting for processing to finish"
