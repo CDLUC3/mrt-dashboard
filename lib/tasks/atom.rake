@@ -15,7 +15,9 @@ OPEN_URI_ARGS = {"User-Agent" => "Ruby/#{RUBY_VERSION}"}
 NS = { "atom"  => "http://www.w3.org/2005/Atom",
        "xhtml" => "http://www.w3.org/1999/xhtml" }
 
-PAGE_DELAY = 600 	# delay between submission (10 minutes/page @ 25 objects/page = 150 objects/hr)
+PAGE_DELAY = 600 	# PAGE FEED: delay between submission (10 minutes/page @ 25 objects/page = 150 objects/hr)
+PAGE_DELAY = 15		# PAGE FEED: delay between submission (10 minutes/page @ 25 objects/page = 150 objects/hr)
+BATCH_SIZE = 10		# COMPLETE FEED
 
 RESTART_SERVER = 10
 
@@ -64,7 +66,7 @@ def process_atom_feed(submitter, profile, collection, stopdate, starting_point)
   client = Mrt::Ingest::Client.new(APP_CONFIG['ingest_service'])
   server = Mrt::Ingest::OneTimeServer.new
   server.start_server
-  next_page = starting_point
+  next_page = starting_point	# page feed processing
   i = 0
   pause = ENV['HOME'] + "/apps/ui/atom/PAUSE_ATOM_#{profile}"
 
@@ -79,7 +81,12 @@ def process_atom_feed(submitter, profile, collection, stopdate, starting_point)
 
     for j in 0..2
       begin
-        doc = Nokogiri::XML(open(next_page, OPEN_URI_ARGS))
+        p = open(next_page, OPEN_URI_ARGS)
+        if (p.status.first == "404")
+           puts "Page not found, exiting... #{next_page}"
+           return
+        end
+        doc = Nokogiri::XML(p)
 	break
       rescue Exception=>ex
         puts ex.message
@@ -99,6 +106,7 @@ def process_atom_feed(submitter, profile, collection, stopdate, starting_point)
     puts "Found merritt collection credentials #{merrittCollectionCredentials}" if ! merrittCollectionCredentials.nil?
     puts "Found merritt collection localID element #{merrittCollectionLocalidElement}" if ! merrittCollectionLocalidElement.nil?
 
+    onum = 0
     doc.xpath("//atom:entry", NS).each do |entry|
       begin
         begin
@@ -172,6 +180,12 @@ def process_atom_feed(submitter, profile, collection, stopdate, starting_point)
         local_id = xpath_content(entry, "atom:id")
         puts "Exception processing #{local_id} from #{next_page}."
       end
+      onum = onum + 1
+
+      if (onum % BATCH_SIZE == 0) 
+	puts "Total entries processed: #{onum}"
+	sleep(PAGE_DELAY)
+      end
     end
     i = i + 1
     # break if (i > 20)
@@ -186,17 +200,28 @@ def process_atom_feed(submitter, profile, collection, stopdate, starting_point)
        #server.start_server
     #end
 
+    current_page = next_page
     next_page = xpath_content(doc, "/atom:feed/atom:link[@rel=\"next\"]/@href")
+
+    if (! next_page.nil?) then
+       if (current_page == next_page || next_page.empty) 
+          puts "No page processing or no new page."
+          next_page = nil
+       else
+          puts "Next page: #{next_page}"
+       end
+    else
+       puts "No paging element found."
+    end
+
     if (wait) then
       sleep(PAGE_DELAY)
     else 
       sleep(5)
     end
-    puts "Next #{next_page}"
-exit
   end
   ensure
-    puts "waiting for processing to finish"
+    puts "Waiting for processing to finish"
     begin
       server.join_server
     rescue
