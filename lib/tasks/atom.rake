@@ -15,9 +15,8 @@ OPEN_URI_ARGS = {"User-Agent" => "Ruby/#{RUBY_VERSION}"}
 NS = { "atom"  => "http://www.w3.org/2005/Atom",
        "xhtml" => "http://www.w3.org/1999/xhtml" }
 
-PAGE_DELAY = 600 	# PAGE FEED: delay between submission (10 minutes/page @ 25 objects/page = 150 objects/hr)
-PAGE_DELAY = 15		# PAGE FEED: delay between submission (10 minutes/page @ 25 objects/page = 150 objects/hr)
-BATCH_SIZE = 10		# COMPLETE FEED
+DELAY = 15
+BATCH_SIZE = 10	
 
 RESTART_SERVER = 10
 
@@ -76,7 +75,7 @@ def process_atom_feed(submitter, profile, collection, stopdate, starting_point)
     while (File.exist?(pause)) do
       # pause 
       puts "Processed paused: #{pause}"
-      sleep(PAGE_DELAY)
+      sleep(DELAY)
     end
 
     for j in 0..2
@@ -100,21 +99,22 @@ def process_atom_feed(submitter, profile, collection, stopdate, starting_point)
        merrittCollection = doc.at_xpath("//xmlns:merritt_collection_id").text
        merrittCollectionCredentials = ATOM_CONFIG["#{merrittCollection}_credentials"]
        merrittCollectionLocalidElement = ATOM_CONFIG["#{merrittCollection}_localidElement"]
+       if (merrittCollectionLocalidElement.empty) then
+          merrittCollectionLocalidElement.empty = "atom:id"     # default
+       end
     rescue Exception => ex
     end
     puts "Processing merritt collection #{merrittCollection}" if ! merrittCollection.nil?
-    puts "Found merritt collection credentials #{merrittCollectionCredentials}" if ! merrittCollectionCredentials.nil?
+    puts "Found merritt collection credentials" if ! merrittCollectionCredentials.nil?
     puts "Found merritt collection localID element #{merrittCollectionLocalidElement}" if ! merrittCollectionLocalidElement.nil?
 
     onum = 0
     doc.xpath("//atom:entry", NS).each do |entry|
       begin
         begin
-	   # Nuxeo
            local_id = entry.at_xpath("#{merrittCollectionLocalidElement}").text 
         rescue Exception => ex
-	   # default
-           local_id = xpath_content(entry, "atom:id")
+           ex.backtrace
         end
         # get the basic stuff
         published = xpath_content(entry, "atom:published")
@@ -164,11 +164,20 @@ def process_atom_feed(submitter, profile, collection, stopdate, starting_point)
 
         # add componenets
         urls.each do |url|
-          iobject.add_component(URI.parse(url[:url]), 
-                                :name=>url[:name], 
-                                :prefetch=>true,
-                                # workaround for funky site
-                                :prefetch_options=>{"Accept"=>"text/html, */*"})
+          obj = URI.parse(url[:url])
+
+	  # Basic auth 
+	  if (obj.path.include? "Nuxeo") then
+	    puts "Using basic authentication: #{url[:url]}"
+            obj.user = merrittCollectionCredentials.split(':')[0]
+            obj.password = merrittCollectionCredentials.split(':')[1]
+	  end 
+
+          iobject.add_component(obj,
+		  :name=>url[:name], 
+                  :prefetch=>true,
+                  # workaround for funky site
+                  :prefetch_options=>{"Accept"=>"text/html, */*"})
         end
         resp = iobject.start_ingest(client, profile, submitter)
 	puts "User Agent: #{resp.user_agent}"
@@ -215,9 +224,9 @@ def process_atom_feed(submitter, profile, collection, stopdate, starting_point)
     end
 
     if (wait) then
-      sleep(PAGE_DELAY)
+      # sleep(PAGE_DELAY)
     else 
-      sleep(5)
+      sleep(5)	    # process quickly
     end
   end
   ensure
