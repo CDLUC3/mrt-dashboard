@@ -15,10 +15,10 @@ OPEN_URI_ARGS = {"User-Agent" => "Ruby/#{RUBY_VERSION}"}
 NS = { "atom"  => "http://www.w3.org/2005/Atom",
        "xhtml" => "http://www.w3.org/1999/xhtml" }
 
-DELAY = 15
-BATCH_SIZE = 10	
+DELAY = 50000
+BATCH_SIZE = 1
 
-RESTART_SERVER = 10
+# RESTART_SERVER = 10
 
 def xpath_content(node, xpath)
   nodes = node.xpath(xpath, NS)
@@ -26,48 +26,51 @@ def xpath_content(node, xpath)
   return nodes[0].content
 end
 
-# augment to include terminate processing info [mjr]
-def up_to_date?(local_id, collection_id, last_updated, stopdate)
-  obj = InvObject.joins(:inv_collections).where(["erc_where LIKE ?", "%#{local_id}%"]).where(:inv_collections => { :ark => collection_id})
+def up_to_date?(local_id, collection_id, updated, feeddate)
 
-  # terminate processing?
-  if ! last_updated.nil? && ! stopdate.nil?  then
-    last_updated_date = DateTime.parse(last_updated)
-    stopdate_date = DateTime.parse(stopdate)
+  updated_date = DateTime.parse(updated)
+  feeddate_date = DateTime.parse(feeddate)
 
-    if stopdate_date >= last_updated_date then
-      puts "Exiting: #{stopdate_date} > #{last_updated_date}"
-      return nil
+  # Has feed been updated since our last run?
+  if ! updated.nil? && ! feeddate.nil? && local_id.nil? && collection_id.nil? then
+    if feeddate_date >= updated_date then
+      puts "No update in feed since last run"
+      puts "Exiting: #{feeddate_date} >= #{updated_date}"
+      return true
+    else
+      return false
     end
   end
+
+  obj = InvObject.joins(:inv_collections).where(["erc_where LIKE ?", "%#{local_id}%"]).where(:inv_collections => { :ark => collection_id})
 
   if obj.empty? then
     return false
   else
-    if last_updated.nil? then
+    if updated.nil? then
       return false 
     else
-      last_updated_date = DateTime.parse(last_updated)
-      updated = last_updated_date <= obj.first.modified
-      if (! updated) then
+      submit = updated_date <= obj.first.modified
+      if (! submit) then
 	puts "Updating #{local_id}"
-	puts "         #{last_updated_date} > #{obj.first.modified}"
+	puts "         #{updated_date} > #{obj.first.modified}"
       else
 	puts "NO need to update: #{local_id}"
-	puts "                   #{last_updated_date} <= #{obj.first.modified}"
+	puts "                   #{updated_date} <= #{obj.first.modified}"
       end
-      return updated
+      return submit
     end
   end
 end
 
-def process_atom_feed(submitter, profile, collection, stopdate, starting_point)
+def process_atom_feed(submitter, profile, collection, feeddate, starting_point)
   client = Mrt::Ingest::Client.new(APP_CONFIG['ingest_service'])
   server = Mrt::Ingest::OneTimeServer.new
   server.start_server
   next_page = starting_point	# page feed processing
-  i = 0
+  # i = 0
   pause = ENV['HOME'] + "/apps/ui/atom/PAUSE_ATOM_#{profile}"
+  lastFeedUpdate = false
 
   until next_page.nil? do
     wait = false
@@ -94,11 +97,20 @@ def process_atom_feed(submitter, profile, collection, stopdate, starting_point)
       end
     end
 
+    # Has feed been updated?
+    feedUpdated = doc.at_xpath("//xmlns:updated").text
+    lastFeedUpdate = up_to_date?(nil, nil, feedUpdated, feeddate)
+    if lastFeedUpdate then
+       puts "Feed has not been modified since last run.  Exiting..."
+       return
+    end
+
     # Merritt Collection (optional)
     begin
        merrittCollection = doc.at_xpath("//xmlns:merritt_collection_id").text
        merrittCollectionCredentials = ATOM_CONFIG["#{merrittCollection}_credentials"]
        merrittCollectionLocalidElement = ATOM_CONFIG["#{merrittCollection}_localidElement"]
+       merrittCollectionLastFeedUpdatedFile = ATOM_CONFIG["#{merrittCollection}_lastFeedUpdate"]
        if (merrittCollectionLocalidElement.empty) then
           merrittCollectionLocalidElement.empty = "atom:id"     # default
        end
@@ -127,7 +139,7 @@ def process_atom_feed(submitter, profile, collection, stopdate, starting_point)
 	puts "Processing local_id: #{local_id}"
 	puts "Processing Title:    #{title}"
 	puts "Processing updated:  #{updated}"
-        p =  up_to_date?(local_id, collection, updated, stopdate)
+        p =  up_to_date?(local_id, collection, updated, feeddate)
 
         return if p.nil? 
 
@@ -155,12 +167,13 @@ def process_atom_feed(submitter, profile, collection, stopdate, starting_point)
           "who" => creator,
           "what" => title,
           "when" => published,
-          "where" => (archival_id || local_id),
+          "where" => archival_id,
           "when/created" => published,
           "when/modified" => updated }
-        iobject = Mrt::Ingest::IObject.new(:erc         => erc,
-                                           :server      => server,
-                                           :archival_id => archival_id)
+        iobject = Mrt::Ingest::IObject.new(:erc              => erc,
+                                           :server           => server,
+                                           :local_identifier => local_id,
+                                           :archival_id      => archival_id)
 
         # add componenets
         urls.each do |url|
@@ -180,9 +193,9 @@ def process_atom_feed(submitter, profile, collection, stopdate, starting_point)
                   :prefetch_options=>{"Accept"=>"text/html, */*"})
         end
         resp = iobject.start_ingest(client, profile, submitter)
-	puts "User Agent: #{resp.user_agent}"
-	puts "Batch ID: #{resp.batch_id}"
-	puts "Submission Date: #{resp.submission_date}"
+	# puts "User Agent: #{resp.user_agent}"
+	# puts "Batch ID: #{resp.batch_id}"
+	# puts "Submission Date: #{resp.submission_date}"
       rescue Exception=>ex
 	puts ex.message
 	puts ex.backtrace
@@ -191,12 +204,12 @@ def process_atom_feed(submitter, profile, collection, stopdate, starting_point)
       end
       onum = onum + 1
 
-      if (onum % BATCH_SIZE == 0) 
+      if (onum % BATCH_SIZE == 0) then
 	puts "Total entries processed: #{onum}"
-	sleep(PAGE_DELAY)
+	sleep(DELAY)
       end
     end
-    i = i + 1
+    #i = i + 1
     # break if (i > 20)
     #if ( i % RESTART_SERVER == 0 ) then
        #begin
@@ -224,12 +237,23 @@ def process_atom_feed(submitter, profile, collection, stopdate, starting_point)
     end
 
     if (wait) then
-      # sleep(PAGE_DELAY)
+      # sleep(DELAY)
     else 
       sleep(5)	    # process quickly
     end
   end
   ensure
+    if ! lastFeedUpdate then
+       puts "Updating file: #{merrittCollectionLastFeedUpdatedFile}"
+       puts "Updating feed date to: #{feedUpdated}"
+       begin
+         file = File.open("#{merrittCollectionLastFeedUpdatedFile}", "w")
+         file.write("#{feedUpdated}") 
+       rescue IOError => e
+       ensure
+         file.close unless file.nil?
+       end
+    end
     puts "Waiting for processing to finish"
     begin
       server.join_server
@@ -237,11 +261,11 @@ def process_atom_feed(submitter, profile, collection, stopdate, starting_point)
     end
 end
 
-# call as rake "atom:update[atom URL, User Agent, Ingest Profile, Collection ID, Process until Date]"
+# call as rake "atom:update[atom URL, User Agent, Ingest Profile, Collection ID, Feed last update]"
 # e.g. rake "atom:update[http://opencontext.org/all/.atom, mreyes/Mark Reyes, ucb_open_context_content, ark:/99999/abcdefhi, <DATE>]"
 namespace :atom do
   desc "Generic ATOM to Merritt processor"
-  task :update, [:root, :user, :profile, :collection, :stopdate] => :environment do |cmd, args|
-    process_atom_feed(args[:user], args[:profile], args[:collection], args[:stopdate], args[:root])
+  task :update, [:root, :user, :profile, :collection, :feeddate] => :environment do |cmd, args|
+    process_atom_feed(args[:user], args[:profile], args[:collection], args[:feeddate], args[:root])
   end
 end
