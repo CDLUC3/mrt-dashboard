@@ -38,7 +38,12 @@ class ApplicationController < ActionController::Base
   
   def redirect_to_latest_version
     if (params[:version].to_i == 0) then
-      latest_version = InvObject.find_by_ark(params_u(:object)).current_version.number
+      ark = InvObject.find_by_ark(params_u(:object))
+      if ! ark.nil? then
+          latest_version = ark.current_version.number
+      else
+          latest_version = nil
+      end
       letter = request.path.match(/^\/(.)\//)[1]
       redirect_to mk_merritt_url(letter, params[:object], latest_version, params[:file])
     end
