@@ -7,12 +7,12 @@ set :repo_url, 'https://hg.cdlib.org/mrt-dashboard'
 set :deploy_to, '/dpr2/apps/ui'
 set :scm, :hg
 
-set :stages, ["development", "stage", "production"]
+set :stages, ["local", "development", "stage", "production"]
 
 set :default_env, { path: "/dpr2/local/bin:$PATH" }
 
 # persistent dirs
-set :linked_files, %w{config/database.yml config/ldap.yml}
+set :linked_files, %w{config/database.yml config/ldap.yml config/atom.yml}
 set :linked_dirs, %w{log pid}
 
 

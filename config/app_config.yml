@@ -53,3 +53,5 @@ production_development:
 test:
   <<: *development
   max_archive_size: 999999
+local:
+  <<: *development
