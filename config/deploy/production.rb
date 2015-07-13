@@ -15,9 +15,9 @@
 # server list. The second argument is a, or duck-types, Hash and is
 # used to set extended properties on the server.
 
-set :rails_env, "stage"
-puts "STAGE branch"
-set :branch, 'stage'
+set :rails_env, "production"
+puts "PRODUCTION branch"
+set :branch, 'prod'
 
 # Default deploy_to directory is /var/www/my_app
 set :deploy_to, '/dpr2/apps/ui'
