@@ -202,10 +202,16 @@ class ObjectController < ApplicationController
 
   def recent
     @collection_ark = params[:collection]
-    @objects = InvCollection.
-      where(:ark=>@collection_ark).
-      first.
-      inv_objects.
+
+    # prevent stack trace when collection does not exist
+    c = InvCollection.where(:ark=>@collection_ark).first
+    if c.nil? || c.to_s == "" then
+       respond_to do |format|
+          format.html
+       end
+       return
+    end
+    @objects = c.inv_objects.
       quickloadhack.
       order('inv_objects.modified desc').
       includes(:inv_versions, :inv_dublinkernels).
