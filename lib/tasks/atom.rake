@@ -15,8 +15,8 @@ OPEN_URI_ARGS = {"User-Agent" => "Ruby/#{RUBY_VERSION}"}
 NS = { "atom"  => "http://www.w3.org/2005/Atom",
        "xhtml" => "http://www.w3.org/1999/xhtml" }
 
-DELAY = 50000
-BATCH_SIZE = 1
+DELAY = 300
+BATCH_SIZE = 10
 
 # RESTART_SERVER = 10
 
@@ -123,22 +123,41 @@ def process_atom_feed(submitter, profile, collection, feeddate, starting_point)
     onum = 0
     doc.xpath("//atom:entry", NS).each do |entry|
       begin
-        begin
-           local_id = entry.at_xpath("#{merrittCollectionLocalidElement}").text 
-        rescue Exception => ex
-           ex.backtrace
-        end
         # get the basic stuff
         published = xpath_content(entry, "atom:published")
         updated = xpath_content(entry, "atom:updated")
         title = xpath_content(entry, "atom:title")
+
+	# DC metadata
+        begin
+           local_id = entry.at_xpath("#{merrittCollectionLocalidElement}").text 
+        rescue Exception => ex
+           # ex.backtrace
+        end
+        begin
+           dc_title = entry.at_xpath("dc:title").text
+        rescue Exception => ex
+           dc_title = nil
+        end
+        begin
+           dc_date = entry.at_xpath("dc:date").text
+        rescue Exception => ex
+           dc_date = nil
+        end
+        begin
+           dc_creator = entry.at_xpath("dc:creator").text
+        rescue Exception => ex
+           dc_creator = nil
+        end
         creator = entry.xpath("atom:author", NS).map { |au|
           xpath_content(au, "atom:name")
         }.join("; ")
 
-	puts "Processing local_id: #{local_id}"
-	puts "Processing Title:    #{title}"
-	puts "Processing updated:  #{updated}"
+	puts "Processing local_id:	#{local_id}"
+	puts "Processing Title:		" + (dc_title || title)
+	puts "Processing Date:		" + (dc_date || published)
+	puts "Processing Creator:	" + (dc_creator || creator)
+	puts "Processing Updated:	#{updated}"
         p =  up_to_date?(local_id, collection, updated, feeddate)
 
         return if p.nil? 
@@ -164,9 +183,9 @@ def process_atom_feed(submitter, profile, collection, feeddate, starting_point)
         urls = urls.delete_if {|u| u[:rel] == 'archival'}
 
         erc = {
-          "who" => creator,
-          "what" => title,
-          "when" => published,
+          "who" => (dc_creator || creator),
+          "what" => (dc_title || title),
+          "when" => (dc_date || published),
           "where" => archival_id,
           "when/created" => published,
           "when/modified" => updated }
