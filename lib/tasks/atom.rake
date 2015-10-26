@@ -199,7 +199,7 @@ def process_atom_feed(submitter, profile, collection, feeddate, starting_point)
           obj = URI.parse(url[:url])
 
 	  # Basic auth 
-	  if (obj.path.include? "Nuxeo") then
+          if (obj.host.include? "nuxeo.cdlib.org") then
 	    puts "Using basic authentication: #{url[:url]}"
             obj.user = merrittCollectionCredentials.split(':')[0]
             obj.password = merrittCollectionCredentials.split(':')[1]
