@@ -69,7 +69,7 @@ def process_atom_feed(submitter, profile, collection, feeddate, starting_point)
   server.start_server
   next_page = starting_point	# page feed processing
   # i = 0
-  pause = ENV['HOME'] + "/apps/ui/atom/PAUSE_ATOM_#{profile}"
+  pause = ENV['HOME'] + "/dpr2/apps/ui/atom/PAUSE_ATOM_#{profile}"
   lastFeedUpdate = false
 
   until next_page.nil? do
