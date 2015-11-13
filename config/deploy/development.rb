@@ -24,7 +24,8 @@ set :branch, 'default'
 set :deploy_to, '/dpr2/apps/ui'
 
 # server 'linux-mjr.ad.ucop.edu', user: 'mreyes', roles: %w{web app}
-server 'uc3-mrt-wrk1-dev.cdlib.org', user: 'dpr2', roles: %w{web app}
+# server 'uc3-mrt-wrk1-dev.cdlib.org', user: 'dpr2', roles: %w{web app}
+server 'ui-aws-dev.cdlib.org', user: 'dpr2', roles: %w{web app}
 
 set :unicorn_pid, "#{deploy_to}/shared/pid/unicorn.pid"
 set :unicorn_log, "#{deploy_to}/shared/log/unicorn.log"
