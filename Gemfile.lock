@@ -96,7 +96,7 @@ GEM
       json (>= 1.5.0)
       rest-client (>= 1.6.0)
     multi_json (1.9.0)
-    mysql2 (0.4.1)
+    mysql2 (0.3.14)
     net-scp (1.2.1)
       net-ssh (>= 2.6.5)
     net-ssh (2.9.2)
