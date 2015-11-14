@@ -1,5 +1,5 @@
 # config valid only for Capistrano 3.1
-lock '3.1.0'
+lock '3.4.0'
 
 set :application, 'merritt-ui'
 set :repo_url, 'https://hg.cdlib.org/mrt-dashboard'
