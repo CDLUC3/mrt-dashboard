@@ -54,8 +54,10 @@ namespace :deploy do
   desc 'Status Unicorn'
   task :status do
     on roles(:app) do
-       # check pid
-       execute "cd #{deploy_to}/current; cat #{fetch(:unicorn_pid)} | xargs ps -lp"
+      if test("[ -f #{fetch(:unicorn_pid)} ]")
+         # check pid
+         execute "cd #{deploy_to}/current; cat #{fetch(:unicorn_pid)} | xargs ps -lp"
+      end
     end
   end
 
