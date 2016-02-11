@@ -16,15 +16,16 @@
 # used to set extended properties on the server.
 
 set :rails_env, "stage"
-puts "STAGE branch"
+
+puts "Stage branch"
 set :branch, 'stage'
 
 # Default deploy_to directory is /var/www/my_app
 set :deploy_to, '/dpr2/apps/ui'
 
-# server 'uc3-mrt-wrk1-stg.cdlib.org', user: 'dpr2', roles: %w{web app}
-# server 'uc3-mrt-wrk2-stg.cdlib.org', user: 'dpr2', roles: %w{web app}
-server 'localhost', user: 'dpr2', roles: %w{web app}
+# server 'linux-mjr.ad.ucop.edu', user: 'mreyes', roles: %w{web app}
+# server 'uc3-mrt-wrk1-dev.cdlib.org', user: 'dpr2', roles: %w{web app}
+server 'ui01-aws-dev.cdlib.org', user: 'dpr2', roles: %w{web app}
 
 set :unicorn_pid, "#{deploy_to}/shared/pid/unicorn.pid"
 set :unicorn_log, "#{deploy_to}/shared/log/unicorn.log"
