@@ -21,7 +21,7 @@ gem 'jquery-rails'
 gem 'capistrano', '~> 3.1.0'
 
 group :test, :development do
-  gem 'debugger'
+  gem 'byebug'
   gem 'rspec-rails'
   gem 'factory_girl_rails'
   gem 'launchy'
