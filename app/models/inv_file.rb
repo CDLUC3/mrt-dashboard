@@ -12,6 +12,6 @@ class InvFile < ActiveRecord::Base
   end
 
   def bytestream_uri
-    URI.parse("#{APP_CONFIG['uri_1']}#{self.inv_version.inv_object.node_number}/#{self.inv_version.inv_object.to_param}/#{self.inv_version.to_param}/#{self.to_param}?fixity=no")
+    URI.parse("#{APP_CONFIG['uri_1']}#{self.inv_version.inv_object.node_number}/#{self.inv_version.inv_object.to_param}/#{self.inv_version.to_param}/#{self.to_param}")
   end
 end

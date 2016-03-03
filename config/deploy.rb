@@ -1,5 +1,5 @@
 # config valid only for Capistrano 3.1
-lock '3.1.0'
+lock '3.4.0'
 
 set :application, 'merritt-ui'
 set :repo_url, 'https://hg.cdlib.org/mrt-dashboard'
@@ -7,7 +7,7 @@ set :repo_url, 'https://hg.cdlib.org/mrt-dashboard'
 set :deploy_to, '/dpr2/apps/ui'
 set :scm, :hg
 
-set :stages, ["local", "development", "stage", "production"]
+set :stages, ["local", "mrt-ui-dev", "mrt-ui01-stg",  "mrt-ui02-stg", "production"]
 
 set :default_env, { path: "/dpr2/local/bin:$PATH" }
 
@@ -54,8 +54,10 @@ namespace :deploy do
   desc 'Status Unicorn'
   task :status do
     on roles(:app) do
-       # check pid
-       execute "cd #{deploy_to}/current; cat #{fetch(:unicorn_pid)} | xargs ps -lp"
+      if test("[ -f #{fetch(:unicorn_pid)} ]")
+         # check pid
+         execute "cd #{deploy_to}/current; cat #{fetch(:unicorn_pid)} | xargs ps -lp"
+      end
     end
   end
 
