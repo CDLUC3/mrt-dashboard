@@ -67,18 +67,13 @@ class CollectionController < ApplicationController
         quickloadhack.
         paginate(paginate_args)
     else
-      # here it gets a little crazy...
+      # new, more efficient full text query (thanks Debra)
       tb_count = 0
       where_clauses = terms.map {|t|
-        # subtable query to retrieve all matching object id for each term
-        tb_count = tb_count + 1
-        """(SELECT inv_object_id FROM inv_dublinkernels INNER JOIN sha_dublinkernels USING (id) 
-          WHERE MATCH (sha_dublinkernels.value) AGAINST (?)) AS tb#{tb_count}""" + 
-        if (tb_count > 1) then " USING (inv_object_id) " else "" end # we need this at the end of each pair of joins
+	"+? "
       }
-      
-      where_clause = "inv_objects.id IN (SELECT inv_object_id FROM (" + where_clauses.join(" JOIN ") + "))"
-      
+      where_clause = "(MATCH (sha_dublinkernels.value) AGAINST (\"" + where_clauses.join("") + "\" in boolean mode))"
+
       ark_id = @request_group.ark_id
       @results = InvObject.
         joins(:inv_collections, :inv_dublinkernels => :sha_dublinkernel).
