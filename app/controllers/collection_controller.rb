@@ -70,18 +70,18 @@ class CollectionController < ApplicationController
       # new, more efficient full text query (thanks Debra)
       tb_count = 0
       where_clauses = terms.map {|t|
-	"+? "
+	"? "
       }
-      where_clause = "(MATCH (sha_dublinkernels.value) AGAINST (\"" + where_clauses.join("") + "\" in boolean mode))"
+      where_clause = "(MATCH (sha_dublinkernels.value) AGAINST (\"" + where_clauses.join("") + "\"))"
 
       ark_id = @request_group.ark_id
       @results = InvObject.
         joins(:inv_collections, :inv_dublinkernels => :sha_dublinkernel).
         where("inv_collections.ark = ?", ark_id).
         where(where_clause, *terms).
-        order('inv_objects.modified desc').
         includes(:inv_versions, :inv_dublinkernels).
         quickloadhack.
+        limit(10).
         uniq.
         paginate(paginate_args)
     end
