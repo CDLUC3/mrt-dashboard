@@ -63,7 +63,7 @@ def up_to_date?(local_id, collection_id, updated, feeddate)
   end
 end
 
-def process_atom_feed(submitter, profile, collection, feeddate, starting_point)
+def process_atom_feed(submitter, profile, collection, feeddatefile, starting_point)
   client = Mrt::Ingest::Client.new(APP_CONFIG['ingest_service'])
   server = Mrt::Ingest::OneTimeServer.new
   server.start_server
@@ -99,6 +99,12 @@ def process_atom_feed(submitter, profile, collection, feeddate, starting_point)
 
     # Has feed been updated?
     feedUpdated = doc.at_xpath("//xmlns:updated").text
+    if File.exists?(feeddatefile)
+       feeddate = `cat #{feeddatefile}` 
+    else
+       puts "Feed date file does not exist: #{feeddatefile}"
+       return nil
+    end
     lastFeedUpdate = up_to_date?(nil, nil, feedUpdated, feeddate)
     if lastFeedUpdate then
        puts "Feed has not been modified since last run.  Exiting..."
@@ -110,7 +116,8 @@ def process_atom_feed(submitter, profile, collection, feeddate, starting_point)
        merrittCollection = doc.at_xpath("//xmlns:merritt_collection_id").text
        merrittCollectionCredentials = ATOM_CONFIG["#{merrittCollection}_credentials"]
        merrittCollectionLocalidElement = ATOM_CONFIG["#{merrittCollection}_localidElement"]
-       merrittCollectionLastFeedUpdatedFile = ATOM_CONFIG["#{merrittCollection}_lastFeedUpdate"]
+       # merrittCollectionLastFeedUpdatedFile = ATOM_CONFIG["#{merrittCollection}_lastFeedUpdate"]
+       merrittCollectionLastFeedUpdatedFile = feeddatefile
        if (merrittCollectionLocalidElement.empty) then
           merrittCollectionLocalidElement.empty = "atom:id"     # default
        end
@@ -284,7 +291,7 @@ end
 # e.g. rake "atom:update[http://opencontext.org/all/.atom, mreyes/Mark Reyes, ucb_open_context_content, ark:/99999/abcdefhi, <DATE>]"
 namespace :atom do
   desc "Generic ATOM to Merritt processor"
-  task :update, [:root, :user, :profile, :collection, :feeddate] => :environment do |cmd, args|
-    process_atom_feed(args[:user], args[:profile], args[:collection], args[:feeddate], args[:root])
+  task :update, [:root, :user, :profile, :collection, :feeddatefile] => :environment do |cmd, args|
+    process_atom_feed(args[:user], args[:profile], args[:collection], args[:feeddatefile], args[:root])
   end
 end
