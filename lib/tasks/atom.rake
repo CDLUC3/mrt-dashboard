@@ -203,7 +203,7 @@ def process_atom_feed(submitter, profile, collection, feeddatefile, starting_poi
 
         # add componenets
         urls.each do |url|
-          obj = URI.parse(url[:url])
+          obj = URI.parse(URI.encode(url[:url]))
 
 	  # Basic auth 
           if (obj.host.include? "nuxeo.cdlib.org") then
