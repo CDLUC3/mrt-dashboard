@@ -1,6 +1,6 @@
 class VersionController < ApplicationController
   before_filter :require_user
-  # before_filter :redirect_to_latest_version
+  before_filter :redirect_to_latest_version
   before_filter :load_version
 
   before_filter(:only => [:download]) do
