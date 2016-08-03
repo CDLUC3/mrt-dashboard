@@ -47,7 +47,7 @@ class ApplicationController < ActionController::Base
       letter = request.path.match(/^\/(.)\//)[1]
       # redirect_to mk_merritt_url(letter, params[:object], latest_version, params[:file])
       # Do not redirect, but just set version to latest
-      params[:version] = latest_version
+      params[:version] = latest_version.to_s
     end
   end
 
