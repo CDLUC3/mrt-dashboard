@@ -77,6 +77,7 @@ class ObjectController < ApplicationController
           'submitter'         => (params["submitter"] || "#{current_user.login}/#{current_user.displayname}"),
           'title'             => params[:title],
           'synchronousMode'   => params[:synchronousMode],
+          'retainTargetURL'   => params[:retainTargetURL],
           'type'              => params[:type]
         }.reject{|k, v| v.blank? }
         resp = mk_httpclient.post(APP_CONFIG['ingest_service'], ingest_args, {"Content-Type" => "multipart/form-data"})
@@ -127,6 +128,7 @@ class ObjectController < ApplicationController
           'submitter'         => "#{current_user.login}/#{current_user.displayname}",
           'title'             => params[:title],
           'synchronousMode'   => params[:synchronousMode],
+          'retainTargetURL'   => params[:retainTargetURL],
           'type'              => params[:type]
         }.reject{|k, v| v.blank? }
         resp = mk_httpclient.post(APP_CONFIG['ingest_service_update'], ingest_args, {"Content-Type" => "multipart/form-data"})
