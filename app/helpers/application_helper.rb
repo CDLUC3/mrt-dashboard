@@ -45,7 +45,7 @@ module ApplicationHelper
   def merritt_time(t)
     t = DateTime.parse(t.to_s) if (t.class != DateTime)
     t = t.utc if (! t.utc?)
-    t.strftime("%Y-%m-%d %I:%M %p %Z")
+    t.strftime("%Y-%m-%d %I:%M %p UTC")
   end
 
   def clean_mime_type(mt)
