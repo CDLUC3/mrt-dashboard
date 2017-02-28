@@ -22,6 +22,7 @@ MrtDashboard::Application.routes.draw do
   # where mode is an underlying action:
   # a: add
   # d: download
+  # u: download (user friendly)
   # m: metadata (landing page)
   # s: search 
    
