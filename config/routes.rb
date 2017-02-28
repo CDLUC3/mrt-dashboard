@@ -34,6 +34,8 @@ MrtDashboard::Application.routes.draw do
   match('d/:object' => 'object#download')
   match('d/:object/:version' => 'version#download')
   match('d/:object/:version/*file' => 'file#download', :format => false)
+  match('u/:object' => 'object#downloadUser')
+  match('u/:object/:version' => 'version#downloadUser')
   match('s/:group' => 'collection#search_results')
   match('a/:group' => 'object#add')
 
