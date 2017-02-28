@@ -3,8 +3,8 @@ require 'tempfile'
 class ObjectController < ApplicationController
 
   before_filter :require_user,       :except => [:jupload_add, :recent, :ingest, :mint, :update]
-  before_filter :load_object, :only=> [:index, :download]
-  before_filter(:only=>[:download]) do
+  before_filter :load_object, :only=> [:index, :download, :downloadUser]
+  before_filter(:only=>[:download, :downloadUser]) do
     if (!has_object_permission?(@object, 'download')) then
       flash[:error] = "You do not have download permissions."
       redirect_to(:action => :index, :object => @object) and return
@@ -17,11 +17,11 @@ class ObjectController < ApplicationController
     end
   end
 
-  before_filter(:only => [:download]) do
+  before_filter(:only => [:download, :downloadUser]) do
     check_dua(@object, {:object => @object})
   end
 
-  before_filter(:only => [:download]) do
+  before_filter(:only => [:download, :downloadUser]) do
     # if size is > 4GB, redirect to have user enter email for asynch compression (skipping streaming)
     if exceeds_size(@object) then
       redirect_to(:controller => "lostorage", :action => "index", :object => @object) and return
@@ -161,6 +161,13 @@ class ObjectController < ApplicationController
 
   def download
     stream_response("#{@object.bytestream_uri}?t=zip", 
+                    "attachment",
+                    "#{Orchard::Pairtree.encode(@object.ark.to_s)}_object.zip",
+                    "application/zip")
+  end
+
+  def downloadUser
+    stream_response("#{@object.bytestream_uri2}?t=zip", 
                     "attachment",
                     "#{Orchard::Pairtree.encode(@object.ark.to_s)}_object.zip",
                     "application/zip")
