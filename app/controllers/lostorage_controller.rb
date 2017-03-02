@@ -35,7 +35,14 @@ class LostorageController < ApplicationController
                                      "Merritt #{@container_type.capitalize} Download Processing Completed ",
                                      render_to_string(:formats => [:text],
                                                       :partial => "lostorage/los_email_body"))
-    resp = HTTPClient.new.post(@object.bytestream_uri.to_s.gsub(/content/,'async'),
+
+    postURL = @object.bytestream_uri.to_s.gsub(/content/,'async')
+    if (request.fullpath =~ /u.*/) then
+	# user friendly download
+	postURL = @object.bytestream_uri.to_s.gsub(/content/,'asyncProducer')
+    end
+
+    resp = HTTPClient.new.post(postURL,
                                { 'email'             => email_xml_file,
                                  'responseForm'      => 'xml',
                                  'containerForm'     => "targz",
