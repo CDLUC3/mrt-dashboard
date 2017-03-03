@@ -37,7 +37,7 @@ class LostorageController < ApplicationController
                                                       :partial => "lostorage/los_email_body"))
 
     postURL = @object.bytestream_uri.to_s.gsub(/content/,'async')
-    if (request.fullpath =~ /u.*/) then
+    if (params[:async]) then
 	# user friendly download
 	postURL = @object.bytestream_uri.to_s.gsub(/content/,'asyncProducer')
     end

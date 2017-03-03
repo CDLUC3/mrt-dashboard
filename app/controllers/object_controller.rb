@@ -22,9 +22,15 @@ class ObjectController < ApplicationController
   end
 
   before_filter(:only => [:download, :downloadUser]) do
+    @async = false
+    if (request.fullpath.include? "/u/") then
+       # user friendly download
+       @async = true
+    end
+
     # if size is > 4GB, redirect to have user enter email for asynch compression (skipping streaming)
     if exceeds_size(@object) then
-      redirect_to(:controller => "lostorage", :action => "index", :object => @object) and return
+      redirect_to(:controller => "lostorage", :action => "index", :object => @object, :async => @async) and return
     end
   end
 
