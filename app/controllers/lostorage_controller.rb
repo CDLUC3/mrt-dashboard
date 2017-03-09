@@ -36,10 +36,11 @@ class LostorageController < ApplicationController
                                      render_to_string(:formats => [:text],
                                                       :partial => "lostorage/los_email_body"))
 
+    userFriendly = params[:uDownload].downcase
     postURL = @object.bytestream_uri.to_s.gsub(/content/,'async')
-    if (params[:uDownload].include? "true") then
+    if (userFriendly.match("true")) then
 	# user friendly download
-	postURL = @object.bytestream_uri.to_s.gsub(/content/,'producerasync')
+	postURL = @object.bytestream_uri2.to_s.gsub(/producer/,'producerasync')
     end
 
     resp = HTTPClient.new.post(postURL,

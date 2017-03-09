@@ -21,16 +21,13 @@ class ObjectController < ApplicationController
     check_dua(@object, {:object => @object})
   end
 
-  before_filter(:only => [:download, :downloadUser]) do
-    @uDownload = false
-    if (request.fullpath.include? "/u/") then
-       # user friendly download
-       @uDownload = true
-    end
+  before_filter(:only => [:download]) do
+    # Interactive large object download does not support userFriendly
+    # Call controller directly
 
     # if size is > 4GB, redirect to have user enter email for asynch compression (skipping streaming)
     if exceeds_size(@object) then
-      redirect_to(:controller => "lostorage", :action => "index", :object => @object, :uDownload => @uDownload) and return
+      redirect_to(:controller => "lostorage", :action => "index", :object => @object) and return
     end
   end
 
