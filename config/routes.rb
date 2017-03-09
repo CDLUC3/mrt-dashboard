@@ -21,6 +21,7 @@ MrtDashboard::Application.routes.draw do
   # pattern of URL is http://merritt.cdlib.org/mode/collectionid|objectid[/versionid[/fileid]]
   # where mode is an underlying action:
   # a: add
+  # async: trigger async download?
   # d: download
   # u: download (user friendly)
   # m: metadata (landing page)
@@ -30,6 +31,7 @@ MrtDashboard::Application.routes.draw do
   match('m/:group' => 'collection#index',
         :constraints => CollectionConstraint.new)
   match('s/:group' => 'collection#search_results')
+  match('async/:object' => 'object#async')
   match('m/:object' => 'object#index')
   match('m/:object/:version' => 'version#index')
   match('d/:object' => 'object#download')

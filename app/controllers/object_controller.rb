@@ -3,8 +3,8 @@ require 'tempfile'
 class ObjectController < ApplicationController
 
   before_filter :require_user,       :except => [:jupload_add, :recent, :ingest, :mint, :update]
-  before_filter :load_object, :only=> [:index, :download, :downloadUser]
-  before_filter(:only=>[:download, :downloadUser]) do
+  before_filter :load_object, :only=> [:index, :download, :downloadUser, :async]
+  before_filter(:only=>[:download, :downloadUser, :async]) do
     if (!has_object_permission?(@object, 'download')) then
       flash[:error] = "You do not have download permissions."
       redirect_to(:action => :index, :object => @object) and return
@@ -174,6 +174,16 @@ class ObjectController < ApplicationController
                     "attachment",
                     "#{Orchard::Pairtree.encode(@object.ark.to_s)}_object.zip",
                     "application/zip")
+  end
+
+  def async
+    if exceeds_size(@object) then
+      # Async Supported
+      render :nothing => true, :status => 200
+    else
+      # Async Not Acceptable
+      render :nothing => true, :status => 406
+    end
   end
 
   def upload
