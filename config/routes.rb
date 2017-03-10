@@ -33,6 +33,8 @@ MrtDashboard::Application.routes.draw do
   match('s/:group' => 'collection#search_results')
   match('async/:object' => 'object#async')
   match('async/:object/:version' => 'version#async')
+  match('asyncd/:object' => 'lostorage#request')
+  match('asyncd/:object/:version' => 'lostorage#request')
   match('m/:object' => 'object#index')
   match('m/:object/:version' => 'version#index')
   match('d/:object' => 'object#download')
