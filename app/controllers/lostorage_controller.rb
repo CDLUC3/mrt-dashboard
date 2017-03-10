@@ -24,6 +24,20 @@ class LostorageController < ApplicationController
     end
   end
   
+  def request
+    if params[:user_agent_email].blank? then
+       render :nothing => true, :status => 406
+    elsif !params[:user_agent_email].match(/^.+@.+$/) then
+       render :nothing => true, :status => 400
+    else
+      if post_los_email(params[:user_agent_email]) then
+         render :nothing => true, :status => 200
+      else
+         render :nothing => true, :status => 503
+      end
+    end
+  end
+
   def post_los_email(to_addr)
     unique_name = "#{UUIDTools::UUID.random_create().hash.to_s}.tar.gz"
     @object = InvObject.find_by_ark(params_u(:object))
@@ -36,7 +50,7 @@ class LostorageController < ApplicationController
                                      render_to_string(:formats => [:text],
                                                       :partial => "lostorage/los_email_body"))
 
-    userFriendly = params[:uDownload].downcase
+    userFriendly = params[:userFriendly].downcase
     postURL = @object.bytestream_uri.to_s.gsub(/content/,'async')
     if (userFriendly.match("true")) then
 	# user friendly download
