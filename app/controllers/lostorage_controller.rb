@@ -27,7 +27,7 @@ class LostorageController < ApplicationController
   def direct
     # Check if a user friendly download request (default: yes)
     if params[:userFriendly].blank? then
-       userFriendly = "true"
+       params[:userFriendly] = "true"
     end
 
     # Check for mandatory email
