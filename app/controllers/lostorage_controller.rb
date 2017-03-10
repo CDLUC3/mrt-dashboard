@@ -25,6 +25,12 @@ class LostorageController < ApplicationController
   end
   
   def direct
+    # Check if a user friendly download request (default: yes)
+    if params[:userFriendly].blank? then
+       userFriendly = "true"
+    end
+
+    # Check for mandatory email
     if params[:user_agent_email].blank? then
        render :nothing => true, :status => 406
     elsif !params[:user_agent_email].match(/^.+@.+$/) then
