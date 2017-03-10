@@ -24,7 +24,7 @@ class LostorageController < ApplicationController
     end
   end
   
-  def request
+  def direct
     if params[:user_agent_email].blank? then
        render :nothing => true, :status => 406
     elsif !params[:user_agent_email].match(/^.+@.+$/) then
