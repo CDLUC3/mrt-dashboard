@@ -42,7 +42,7 @@ class VersionController < ApplicationController
   end
 
  def async
-    if exceeds_size(@version) then
+    if exceeds_size_version(@version) then
       # Async Supported
       render :nothing => true, :status => 200
     else

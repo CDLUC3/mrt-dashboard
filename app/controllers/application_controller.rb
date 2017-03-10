@@ -134,7 +134,11 @@ class ApplicationController < ActionController::Base
   def exceeds_size(object)
     return (object.total_actual_size > APP_CONFIG['max_archive_size'])
   end
-  
+
+  def exceeds_size_version(version)
+    return (version.total_actual_size > APP_CONFIG['max_archive_size'])
+  end
+
   def store_location
     session[:return_to] = request.fullpath
   end

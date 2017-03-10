@@ -54,4 +54,8 @@ class InvVersion < ActiveRecord::Base
   def local_id
     self.dk_where.reject {|v| v == self.ark }
   end
+
+  def total_actual_size
+    self.inv_files.sum("full_size")
+  end
 end
