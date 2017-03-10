@@ -32,6 +32,7 @@ MrtDashboard::Application.routes.draw do
         :constraints => CollectionConstraint.new)
   match('s/:group' => 'collection#search_results')
   match('async/:object' => 'object#async')
+  match('async/:object/:version' => 'version#async')
   match('m/:object' => 'object#index')
   match('m/:object/:version' => 'version#index')
   match('d/:object' => 'object#download')
