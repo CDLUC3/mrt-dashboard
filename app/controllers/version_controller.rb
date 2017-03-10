@@ -3,7 +3,7 @@ class VersionController < ApplicationController
   before_filter :redirect_to_latest_version
   before_filter :load_version
 
-  before_filter(:only => [:download, :downloadUser]) do
+  before_filter(:only => [:download, :downloadUser, :async]) do
     if (!has_object_permission?(@version.inv_object, 'download')) then
       flash[:error] = "You do not have download permissions."
       redirect_to(:action  => :index,
@@ -39,6 +39,16 @@ class VersionController < ApplicationController
   end
 
   def index
+  end
+
+ def async
+    if exceeds_size(@version) then
+      # Async Supported
+      render :nothing => true, :status => 200
+    else
+      # Async Not Acceptable
+      render :nothing => true, :status => 406
+    end
   end
 
   def download
