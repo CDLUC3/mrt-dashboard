@@ -4,6 +4,7 @@ class InvObject < ActiveRecord::Base
   
   has_many :inv_dublinkernels
   has_one  :inv_duas
+  has_one  :inv_embargo
 
   has_many :inv_collections_inv_objects
   has_many :inv_collections, :through => :inv_collections_inv_objects
