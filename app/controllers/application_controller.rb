@@ -56,7 +56,12 @@ class ApplicationController < ActionController::Base
     group.permission(current_uid).member?(which)
   end
   
-  # Returns true if the current user has which permissions on the object.
+  # Returns true if the current user has which permissions on the object 
+  def has_object_permission_no_embargo?(object, which)
+    has_group_permission?(object.inv_collection.group, which)
+  end
+
+  # Returns true if the current user has which permissions on the object with embargo checking
   def has_object_permission?(object, which)
     has_group_permission?(object.inv_collection.group, which) && ! in_embargo?(object)
   end
@@ -68,15 +73,18 @@ class ApplicationController < ActionController::Base
     
   # Is object in Embargo?
   def in_embargo?(object)
-    @in_embargo = true
-    if (Embargo.in_embargo) then
-       if (has_group_permission(object, 'admin')) then
-          @in_embargo = false
+    in_embargo = true
+    if (object.inv_embargo.nil?) then
+       return false
+    end
+    if (object.inv_embargo.in_embargo?) then
+       if (has_group_permission?(object.inv_collection.group, 'admin')) then
+          in_embargo = false
        end
     else
-       @in_embargo = false
+       in_embargo = false
     end
-    @in_embargo
+    in_embargo
   end
 
   # Return the groups which the user may be a member of

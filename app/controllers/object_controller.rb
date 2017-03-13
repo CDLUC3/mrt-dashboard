@@ -12,7 +12,7 @@ class ObjectController < ApplicationController
   end
 
   before_filter(:only=>[:index]) do
-    if (!has_object_permission?(@object, 'read')) then
+    if (!has_object_permission_no_embargo?(@object, 'read')) then
       redirect_to(:controller => :home, :action => :index) and return
     end
   end
