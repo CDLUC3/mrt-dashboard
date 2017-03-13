@@ -58,7 +58,7 @@ class ApplicationController < ActionController::Base
   
   # Returns true if the current user has which permissions on the object.
   def has_object_permission?(object, which)
-    has_group_permission?(object.inv_collection.group, which)
+    has_group_permission?(object.inv_collection.group, which) && ! in_embargo?(object)
   end
 
   # Returns true if the user can upload to the session group
@@ -66,6 +66,19 @@ class ApplicationController < ActionController::Base
     has_group_permission?(current_group, 'write')
   end
     
+  # Is object in Embargo?
+  def in_embargo?(object)
+    @in_embargo = true
+    if (Embargo.in_embargo) then
+       if (has_group_permission(object, 'admin')) then
+          @in_embargo = false
+       end
+    else
+       @in_embargo = false
+    end
+    @in_embargo
+  end
+
   # Return the groups which the user may be a member of
   def available_groups
     groups = current_user.groups.sort_by{|g| g.description.downcase } || []
