@@ -73,18 +73,18 @@ class ApplicationController < ActionController::Base
     
   # Is object in Embargo?
   def in_embargo?(object)
-    in_embargo = true
+    @in_embargo = true
     if (object.inv_embargo.nil?) then
        return false
     end
     if (object.inv_embargo.in_embargo?) then
        if (has_group_permission?(object.inv_collection.group, 'admin')) then
-          in_embargo = false
+          @in_embargo = false
        end
     else
-       in_embargo = false
+       @in_embargo = false
     end
-    in_embargo
+    @in_embargo
   end
 
   # Return the groups which the user may be a member of
