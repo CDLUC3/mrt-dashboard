@@ -27,10 +27,10 @@ stage:
   merritt_server:       "http://merritt-stage.cdlib.org"
   container_url:        "http://merritt-stage.cdlib.org/container/"
   n2t_uri:              "http://n2t-wf.cdlib.org/"
-  mint_service:         "http://uc3-web-stg.cdlib.org:33121/ingest/request-identifier"
-  ingest_service:       "http://uc3-web-stg.cdlib.org:33121/poster/submit/"
-  ingest_service_update: "http://uc3-web-stg.cdlib.org:33121/poster/update/"
-  uri_1:                "http://store-stage.cdlib.org:35121/content/"
+  mint_service:         "http://merritt-stage.cdlib.org:33121/ingest/request-identifier"
+  ingest_service:       "http://merritt-stage.cdlib.org:33121/poster/submit/"
+  ingest_service_update: "http://merritt-stage.cdlib.org:33121/poster/update/"
+  uri_1:                "http://store-aws-stg.cdlib.org:35121/content/"
 
 stage_development:
   stage
