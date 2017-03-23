@@ -31,6 +31,7 @@ stage:
   ingest_service:       "http://merritt-stage.cdlib.org:33121/poster/submit/"
   ingest_service_update: "http://merritt-stage.cdlib.org:33121/poster/update/"
   uri_1:                "http://store-aws-stg.cdlib.org:35121/content/"
+  uri_2:                "http://store-aws-stg.cdlib.org:35121/producer/"
 
 stage_development:
   stage
