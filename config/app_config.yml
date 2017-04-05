@@ -11,7 +11,7 @@ development: &development
   lostorage_email_to:   [marisa.strong@ucop.edu]
   lostorage_email_from: marisa.strong@ucop.edu
   merritt_server:       "http://merritt-dev.cdlib.org"
-  container_url:        "http://merritt-dev.cdlib.org/container/"
+  container_url:        "http://merritt-dev.cdlib.org/cloudcontainer/"
   n2t_uri:              "http://n2t-wf.cdlib.org/"
   mint_service:         "http://merritt-dev.cdlib.org:33121/request-identifier"
   ingest_service:       "http://merritt-dev.cdlib.org:33121/poster/submit/"
