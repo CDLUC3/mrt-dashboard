@@ -1,9 +1,9 @@
 source 'http://rubygems.org'
 
-gem 'rails', '~> 3.2.1'
+gem 'rails', '4.0'
+gem 'activeresource'
+gem 'mysql2', '~> 0.3.18'
 
-gem 'mysql2'
-# gem "httpclient", "~> 2.2.5"
 gem "httpclient", "~> 2.7.0"
 gem "eco_exception_notification",
     :git => "git://github.com/chrisfinne/eco_exception_notification.git"
