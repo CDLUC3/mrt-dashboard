@@ -3,9 +3,8 @@
 #       from the old style incorporated in Unicorn.
 #	- mreyes -
 
-#application_path = ENV['RAILS_ROOT']
-#application_path = "#{Rails.root}"
-application_path = "/dpr2/apps/ui"
+# Variables
+application_path = ENV['RAILS_ROOT']
 
 # The directory to operate out of.
 #
@@ -15,7 +14,6 @@ directory "#{application_path}"
 # Load "path" as a rackup file.
 #
 # The default is "config.ru".
-# rackup      DefaultRackup
 rackup      "#{application_path}/current/config.ru"
 
 # Set the environment in which the rack's app will run. The value must be a string.
@@ -29,8 +27,7 @@ environment ENV['RAILS_ENV'] || 'development'
 #
 # The default is "false".
 #
-#daemonize true
-daemonize false
+daemonize true
 
 # Store the pid of the server in the file at "path".
 #
