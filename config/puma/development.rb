@@ -4,7 +4,7 @@
 #	- mreyes -
 
 # Variables
-application_path = ENV['RAILS_ROOT']
+application_path = ENV['RAILS_ROOT'] || '/dpr2/apps/ui'
 
 # The directory to operate out of.
 #
