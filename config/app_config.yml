@@ -42,12 +42,13 @@ production:
   lostorage_email_to:   [marisa.strong@ucop.edu, perry.willett@ucop.edu]
   lostorage_email_from: uc3@ucop.edu
   merritt_server:       "http://merritt.cdlib.org"
-  container_url:        "http://merritt.cdlib.org/container/"
+  container_url:        "http://merritt.cdlib.org/cloudcontainer/"
   n2t_uri:              "http://n2t.net/"
   mint_service:         "http://merritt.cdlib.org:33121/ingest/request-identifier"
   ingest_service:       "http://merritt.cdlib.org:33121/poster/submit/"
   ingest_service_update: "http://merritt.cdlib.org:33121/poster/update/"  
   uri_1:                "http://store-aws.cdlib.org:35121/content/"
+  uri_2:                "http://store-aws.cdlib.org:35121/producer/"
 
 production_development:
   production
