@@ -15,6 +15,10 @@ class InvVersion < ActiveRecord::Base
     URI.parse("#{APP_CONFIG['uri_1']}#{self.inv_object.node_number}/#{self.inv_object.to_param}/#{self.to_param}")
   end
 
+  def bytestream_uri2 
+    URI.parse("#{APP_CONFIG['uri_2']}#{self.inv_object.node_number}/#{self.inv_object.to_param}/#{self.to_param}")
+  end
+
   def total_size
     self.inv_files.sum("full_size")
   end
@@ -49,5 +53,9 @@ class InvVersion < ActiveRecord::Base
   
   def local_id
     self.dk_where.reject {|v| v == self.ark }
+  end
+
+  def total_actual_size
+    self.inv_files.sum("full_size")
   end
 end
