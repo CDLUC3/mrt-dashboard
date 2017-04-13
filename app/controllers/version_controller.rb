@@ -3,7 +3,7 @@ class VersionController < ApplicationController
   before_filter :redirect_to_latest_version
   before_filter :load_version
 
-  before_filter(:only => [:download]) do
+  before_filter(:only => [:download, :downloadUser, :async]) do
     if (!has_object_permission?(@version.inv_object, 'download')) then
       flash[:error] = "You do not have download permissions."
       redirect_to(:action  => :index,
@@ -12,13 +12,13 @@ class VersionController < ApplicationController
     end
   end
 
-  before_filter(:only => [:download]) do
+  before_filter(:only => [:download, :downloadUser]) do
     check_dua(@version.inv_object,
               { :object  => @version.inv_object,
                 :version => @version})
   end
 
-  before_filter(:only => [:download]) do
+  before_filter(:only => [:download, :downloadUser]) do
     # if size is > 4GB, redirect to have user enter email for asynch
     # compression (skipping streaming)
     if exceeds_size(@version.inv_object) then
@@ -41,8 +41,25 @@ class VersionController < ApplicationController
   def index
   end
 
+ def async
+    if exceeds_size_version(@version) then
+      # Async Supported
+      render :nothing => true, :status => 200
+    else
+      # Async Not Acceptable
+      render :nothing => true, :status => 406
+    end
+  end
+
   def download
     stream_response("#{@version.bytestream_uri}?t=zip",
+                    "attachment",
+                    "#{Orchard::Pairtree.encode(@version.inv_object.ark.to_s)}_version_#{@version.number}.zip",
+                    "application/zip")
+  end
+
+  def downloadUser
+    stream_response("#{@version.bytestream_uri2}?t=zip",
                     "attachment",
                     "#{Orchard::Pairtree.encode(@version.inv_object.ark.to_s)}_version_#{@version.number}.zip",
                     "application/zip")

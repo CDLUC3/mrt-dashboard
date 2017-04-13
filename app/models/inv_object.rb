@@ -4,6 +4,7 @@ class InvObject < ActiveRecord::Base
   
   has_many :inv_dublinkernels
   has_one  :inv_duas
+  has_one  :inv_embargo
 
   has_many :inv_collections_inv_objects
   has_many :inv_collections, :through => :inv_collections_inv_objects
@@ -24,6 +25,10 @@ class InvObject < ActiveRecord::Base
 
   def bytestream_uri
     URI.parse("#{APP_CONFIG['uri_1']}#{self.node_number}/#{self.to_param}")
+  end
+
+  def bytestream_uri2
+    URI.parse("#{APP_CONFIG['uri_2']}#{self.node_number}/#{self.to_param}")
   end
 
   def dua_exists?

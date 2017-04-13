@@ -3,8 +3,8 @@ require 'tempfile'
 class ObjectController < ApplicationController
 
   before_filter :require_user,       :except => [:jupload_add, :recent, :ingest, :mint, :update]
-  before_filter :load_object, :only=> [:index, :download]
-  before_filter(:only=>[:download]) do
+  before_filter :load_object, :only=> [:index, :download, :downloadUser, :async]
+  before_filter(:only=>[:download, :downloadUser, :async]) do
     if (!has_object_permission?(@object, 'download')) then
       flash[:error] = "You do not have download permissions."
       redirect_to(:action => :index, :object => @object) and return
@@ -12,16 +12,19 @@ class ObjectController < ApplicationController
   end
 
   before_filter(:only=>[:index]) do
-    if (!has_object_permission?(@object, 'read')) then
+    if (!has_object_permission_no_embargo?(@object, 'read')) then
       redirect_to(:controller => :home, :action => :index) and return
     end
   end
 
-  before_filter(:only => [:download]) do
+  before_filter(:only => [:download, :downloadUser]) do
     check_dua(@object, {:object => @object})
   end
 
   before_filter(:only => [:download]) do
+    # Interactive large object download does not support userFriendly
+    # Call controller directly
+
     # if size is > 4GB, redirect to have user enter email for asynch compression (skipping streaming)
     if exceeds_size(@object) then
       redirect_to(:controller => "lostorage", :action => "index", :object => @object) and return
@@ -164,6 +167,23 @@ class ObjectController < ApplicationController
                     "attachment",
                     "#{Orchard::Pairtree.encode(@object.ark.to_s)}_object.zip",
                     "application/zip")
+  end
+
+  def downloadUser
+    stream_response("#{@object.bytestream_uri2}?t=zip", 
+                    "attachment",
+                    "#{Orchard::Pairtree.encode(@object.ark.to_s)}_object.zip",
+                    "application/zip")
+  end
+
+  def async
+    if exceeds_size(@object) then
+      # Async Supported
+      render :nothing => true, :status => 200
+    else
+      # Async Not Acceptable
+      render :nothing => true, :status => 406
+    end
   end
 
   def upload

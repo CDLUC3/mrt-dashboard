@@ -27,6 +27,7 @@
     <div class='short_left_label'>
       <span class="smaller">* Required</span>
     </div>
+    <%= hidden_field_tag('userFriendly', params[:userFriendly]) %>
     <%= hidden_field_tag('object', params[:object]) %>
     <%= hidden_field_tag('version', params[:version]) %>
     <%= submit_tag('Submit') %>

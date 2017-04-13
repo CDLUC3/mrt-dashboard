@@ -56,9 +56,14 @@ class ApplicationController < ActionController::Base
     group.permission(current_uid).member?(which)
   end
   
-  # Returns true if the current user has which permissions on the object.
-  def has_object_permission?(object, which)
+  # Returns true if the current user has which permissions on the object 
+  def has_object_permission_no_embargo?(object, which)
     has_group_permission?(object.inv_collection.group, which)
+  end
+
+  # Returns true if the current user has which permissions on the object with embargo checking
+  def has_object_permission?(object, which)
+    has_group_permission?(object.inv_collection.group, which) && ! in_embargo?(object)
   end
 
   # Returns true if the user can upload to the session group
@@ -66,6 +71,22 @@ class ApplicationController < ActionController::Base
     has_group_permission?(current_group, 'write')
   end
     
+  # Is object in Embargo?
+  def in_embargo?(object)
+    @in_embargo = true
+    if (object.inv_embargo.nil?) then
+       return false
+    end
+    if (object.inv_embargo.in_embargo?) then
+       if (has_group_permission?(object.inv_collection.group, 'admin')) then
+          @in_embargo = false
+       end
+    else
+       @in_embargo = false
+    end
+    @in_embargo
+  end
+
   # Return the groups which the user may be a member of
   def available_groups
     groups = current_user.groups.sort_by{|g| g.description.downcase } || []
@@ -134,7 +155,11 @@ class ApplicationController < ActionController::Base
   def exceeds_size(object)
     return (object.total_actual_size > APP_CONFIG['max_archive_size'])
   end
-  
+
+  def exceeds_size_version(version)
+    return (version.total_actual_size > APP_CONFIG['max_archive_size'])
+  end
+
   def store_location
     session[:return_to] = request.fullpath
   end
