@@ -21,7 +21,7 @@ class VersionController < ApplicationController
   before_filter(:only => [:download, :downloadUser]) do
     # if size is > 4GB, redirect to have user enter email for asynch
     # compression (skipping streaming)
-    if exceeds_size(@version.inv_object) then
+    if exceeds_size_version(@version) then
       redirect_to(:controller => "lostorage", 
                   :action     => "index", 
                   :object     => @version.inv_object, 
