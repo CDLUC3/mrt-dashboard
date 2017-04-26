@@ -11,7 +11,7 @@
              :locals => {:can_download => can_download} %>
 </ul>
 <% if (files.count(:pathname) > show_only) then%>
-  <%= link_to "#{(files.count - show_only)} more files",
+  <%= link_to "#{(files.count(:pathname) - show_only)} more files",
               :controller     => :version,
               :action         => :index,
               :object         => version.inv_object,
