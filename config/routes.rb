@@ -14,9 +14,9 @@ MrtDashboard::Application.routes.draw do
         :constraints    => {:method => 'POST'})
   get('logout'        => 'user_sessions#logout',
         :as             => :logout)
-
-  get('guest_login'   => 'user_sessions#guest_login', 
-         :as            => :guest_login)
+  post('guest_login'   => 'user_sessions#guest_login', 
+         :as            => :guest_login,
+        :constraints    => {:method => 'POST'})
 
   # pattern of URL is http://merritt.cdlib.org/mode/collectionid|objectid[/versionid[/fileid]]
   # where mode is an underlying action:
