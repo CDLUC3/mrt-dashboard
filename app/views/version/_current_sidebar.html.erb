@@ -10,8 +10,8 @@
   <%= render :partial => '/file/line_sidebar', :collection => files.limit(show_only),
              :locals => {:can_download => can_download} %>
 </ul>
-<% if (files.count > show_only) then%>
-  <%= link_to "#{(files.count - show_only)} more files",
+<% if (files.count(:pathname) > show_only) then%>
+  <%= link_to "#{(files.count(:pathname) - show_only)} more files",
               :controller     => :version,
               :action         => :index,
               :object         => version.inv_object,

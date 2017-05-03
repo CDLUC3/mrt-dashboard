@@ -1,15 +1,16 @@
 source 'http://rubygems.org'
 
-gem 'rails', '~> 3.2.1'
+gem 'rails', '4.2.8'
+gem 'activeresource'
+gem 'mysql2', '~> 0.3.18'
+gem 'multi_json'
 
-gem 'mysql2'
-# gem "httpclient", "~> 2.2.5"
 gem "httpclient", "~> 2.7.0"
 gem "eco_exception_notification",
     :git => "git://github.com/chrisfinne/eco_exception_notification.git"
 gem "net-ldap", :git => "git://github.com/ruby-ldap/ruby-net-ldap.git", :branch => "master"
 gem "nokogiri"
-gem "unicorn", "4.5.0"
+gem "puma"
 gem "will_paginate"
 gem "rack-cache"
 gem "unicode"

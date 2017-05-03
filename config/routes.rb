@@ -1,22 +1,22 @@
 MrtDashboard::Application.routes.draw do
   resource 'users', :as => 'account'
 
-  match('object/recent(.:format)'  => 'object#recent')
-  match('feeds/recent'  => 'feeds#recent')
-  match('show/view/*id' => 'show#view')
-  match('show/*id'      => 'show#show')
+  get('object/recent(.:format)'  => 'object#recent')
+  get('feeds/recent'  => 'feeds#recent')
+  get('show/view/*id' => 'show#view')
+  get('show/*id'      => 'show#show')
   root(:to => "home#index")
-  match('login'         => 'user_sessions#login',
+  get('login'         => 'user_sessions#login',
         :as             => :login,
         :constraints    => {:method => 'GET'})
-  match('login'         => 'user_sessions#login_post',
+  post('login'         => 'user_sessions#login_post',
         :as             => :login_post,
         :constraints    => {:method => 'POST'})
-  match('logout'        => 'user_sessions#logout',
+  get('logout'        => 'user_sessions#logout',
         :as             => :logout)
-
-  match('guest_login'   => 'user_sessions#guest_login', 
-         :as            => :guest_login)
+  post('guest_login'   => 'user_sessions#guest_login', 
+         :as            => :guest_login,
+        :constraints    => {:method => 'POST'})
 
   # pattern of URL is http://merritt.cdlib.org/mode/collectionid|objectid[/versionid[/fileid]]
   # where mode is an underlying action:
@@ -28,24 +28,25 @@ MrtDashboard::Application.routes.draw do
   # s: search 
    
   # m/ark... can route to either collection or object depending on the constraint
-  match('m/:group' => 'collection#index',
+  get('m/:group' => 'collection#index',
         :constraints => CollectionConstraint.new)
-  match('s/:group' => 'collection#search_results')
-  match('async/:object' => 'object#async')
-  match('async/:object/:version' => 'version#async')
-  match('asyncd/:object' => 'lostorage#direct')
-  match('asyncd/:object/:version' => 'lostorage#direct')
-  match('m/:object' => 'object#index')
-  match('m/:object/:version' => 'version#index')
-  match('d/:object' => 'object#download')
-  match('d/:object/:version' => 'version#download')
-  match('d/:object/:version/*file' => 'file#download', :format => false)
-  match('u/:object' => 'object#downloadUser')
-  match('u/:object/:version' => 'version#downloadUser')
-  match('s/:group' => 'collection#search_results')
-  match('a/:group' => 'object#add')
+  get('s/:group' => 'collection#search_results')
+  get('async/:object' => 'object#async')
+  get('async/:object/:version' => 'version#async')
+  get('asyncd/:object' => 'lostorage#direct')
+  get('asyncd/:object/:version' => 'lostorage#direct')
+  get('m/:object' => 'object#index')
+  get('m/:object/:version' => 'version#index')
+  get('d/:object' => 'object#download')
+  get('d/:object/:version' => 'version#download')
+  get('d/:object/:version/*file' => 'file#download', :format => false)
+  get('u/:object' => 'object#downloadUser')
+  get('u/:object/:version' => 'version#downloadUser')
+  get('s/:group' => 'collection#search_results')
+  get('a/:group' => 'object#add')
 
   # This is a legacy wild controller route that's not recommended for RESTful applications.
   # Note: This route will make all actions in every controller accessible via GET requests.
-  match ':controller(/:action(/:id(.:format)))'
+  match ':controller(/:action(/:id(.:format)))', via: [:get, :post]
+
 end

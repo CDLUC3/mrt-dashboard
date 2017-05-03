@@ -7,6 +7,8 @@ MrtDashboard::Application.configure do
   config.i18n.fallbacks                    = true
   config.serve_static_assets               = true
   config.active_support.deprecation        = :log
+
+  config.eager_load                          = false
 end
 
 require 'exception_notifier'
