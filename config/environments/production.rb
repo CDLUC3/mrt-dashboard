@@ -5,7 +5,7 @@ MrtDashboard::Application.configure do
   config.cache_classes                     = true
   config.consider_all_requests_local       = false
   config.i18n.fallbacks                    = true
-  config.serve_static_assets               = true
+  config.serve_static_files		   = true
 
   # Compress both stylesheets and JavaScripts
   config.assets.js_compressor  = :uglifier
@@ -13,6 +13,8 @@ MrtDashboard::Application.configure do
 
   # Rails 4
   config.eager_load                          = false
+  config.log_level 			     = :info
+
 end
 
 require 'exception_notifier'
