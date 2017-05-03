@@ -23,13 +23,11 @@ set :branch, 'prod'
 # Default deploy_to directory is /var/www/my_app
 set :deploy_to, '/dpr2/apps/ui'
 
-# server 'linux-mjr.ad.ucop.edu', user: 'mreyes', roles: %w{web app}
-# server 'uc3-mrt-wrk1-dev.cdlib.org', user: 'dpr2', roles: %w{web app}
 server 'ui01-aws.cdlib.org', user: 'dpr2', roles: %w{web app}
 
-set :unicorn_pid, "#{deploy_to}/shared/pid/unicorn.pid"
-set :unicorn_log, "#{deploy_to}/shared/log/unicorn.log"
-set :unicorn_port, "26181"
+set :puma_pid, "#{deploy_to}/shared/pid/puma.pid"
+set :puma_log, "#{deploy_to}/shared/log/puma.log"
+set :puma_port, "26181"
 
 # Custom SSH Options
 # ==================
