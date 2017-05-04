@@ -20,11 +20,11 @@ class ApplicationController < ActionController::Base
 
   # there are supposed to be handled by Rails, but 401 is not.
   rescue_from ActiveResource::UnauthorizedAccess do |ex|
-    render :file => "public/401", :status => 401, :layout=>nil
+    render :file => "#{Rails.root}/public/401.html", :status => 401, :layout=>nil
   end
 
   rescue_from ActiveRecord::RecordNotFound do |ex|
-    render :file => "public/404", :status => 404, :layout=>nil
+    render :file => "#{Rails.root}/public/404.html", :status => 404, :layout=>nil
   end
 
   helper :all
