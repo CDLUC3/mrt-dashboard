@@ -7,13 +7,13 @@ class ObjectController < ApplicationController
   before_filter(:only=>[:download, :downloadUser, :async]) do
     if (!has_object_permission?(@object, 'download')) then
       flash[:error] = "You do not have download permissions."
-      redirect_to(:action => :index, :object => @object) and return
+      redirect_to(:action => :index, :object => @object)
     end
   end
 
   before_filter(:only=>[:index]) do
     if (!has_object_permission_no_embargo?(@object, 'read')) then
-      redirect_to(:controller => :home, :action => :index) and return
+      render :file => "#{Rails.root}/public/401.html", :status => 401, :layout => false
     end
   end
 
@@ -27,7 +27,7 @@ class ObjectController < ApplicationController
 
     # if size is > 4GB, redirect to have user enter email for asynch compression (skipping streaming)
     if exceeds_size(@object) then
-      redirect_to(:controller => "lostorage", :action => "index", :object => @object) and return
+      redirect_to(:controller => "lostorage", :action => "index", :object => @object)
     end
   end
 
