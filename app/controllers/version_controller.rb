@@ -8,7 +8,7 @@ class VersionController < ApplicationController
       flash[:error] = "You do not have download permissions."
       redirect_to(:action  => :index,
                   :object  => @version.inv_object,
-                  :version => @version) and return false
+                  :version => @version)
     end
   end
 
@@ -25,7 +25,7 @@ class VersionController < ApplicationController
       redirect_to(:controller => "lostorage", 
                   :action     => "index", 
                   :object     => @version.inv_object, 
-                  :version    => @version) and return
+                  :version    => @version)
     end
   end
 

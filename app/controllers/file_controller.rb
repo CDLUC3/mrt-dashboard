@@ -9,7 +9,7 @@ class FileController < ApplicationController
       redirect_to(:controller => :version,
                   :action  => :index, 
                   :object  => @file.inv_version.inv_object, 
-                  :version => @file.inv_version) and return false
+                  :version => @file.inv_version) 
     end
   end
 
