@@ -7,7 +7,7 @@ class ObjectController < ApplicationController
   before_filter(:only=>[:download, :downloadUser, :async]) do
     if (!has_object_permission?(@object, 'download')) then
       flash[:error] = "You do not have download permissions."
-      redirect_to(:action => :index, :object => @object)
+      render :file => "#{Rails.root}/public/401.html", :status => 401, :layout => false
     end
   end
 
