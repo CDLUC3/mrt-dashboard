@@ -6,9 +6,7 @@ class VersionController < ApplicationController
   before_filter(:only => [:download, :downloadUser, :async]) do
     if (!has_object_permission?(@version.inv_object, 'download')) then
       flash[:error] = "You do not have download permissions."
-      redirect_to(:action  => :index,
-                  :object  => @version.inv_object,
-                  :version => @version)
+      render :file => "#{Rails.root}/public/401.html", :status => 401, :layout => false
     end
   end
 
