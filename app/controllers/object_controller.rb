@@ -228,10 +228,7 @@ class ObjectController < ApplicationController
     # prevent stack trace when collection does not exist
     c = InvCollection.where(:ark=>@collection_ark).first
     if c.nil? || c.to_s == "" then
-       respond_to do |format|
-          format.html
-       end
-       return
+       render(:status=>404, :text=>"404 Not Found") and return
     end
     @objects = c.inv_objects.
       quickloadhack.
