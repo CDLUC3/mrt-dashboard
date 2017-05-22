@@ -49,8 +49,8 @@ stdout_redirect "#{application_path}/shared/log/puma.log", "#{application_path}/
 # requests and "max" the maximum.
 #
 # The default is "0, 16".
-threads_count = Integer(ENV['RAILS_MAX_THREADS'] || 5)
-threads threads_count, threads_count
+threads_count = Integer(ENV['RAILS_MAX_THREADS'] || 16)
+threads 0, threads_count
 
 # # Bind the server to "url". "tcp://", "unix://" and "ssl://" are the only
 # accepted protocols.
@@ -65,7 +65,7 @@ port        ENV['PORT']     || 26181
 #
 # The default is "0".
 #
-workers Integer(ENV['WEB_CONCURRENCY'] || 5)
+workers Integer(ENV['WEB_CONCURRENCY'] || 2)
 
 # Preload the application before starting the workers; this conflicts with
 # phased restart feature. (off by default)
