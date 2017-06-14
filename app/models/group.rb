@@ -6,6 +6,7 @@ class Group
           :base            => LDAP_CONFIG["group_base"],
           :admin_user      => LDAP_CONFIG["admin_user"],
           :admin_password  => LDAP_CONFIG["admin_password"],
+          :connect_timeout => LDAP_CONFIG["connect_timeout"],
           :minter          => LDAP_CONFIG["ark_minter_url"]})
 
   attr_accessor :id, :submission_profile, :ark_id, :owner, :description

@@ -9,6 +9,7 @@ development:
   ark_minter_url: http://noid.cdlib.org/nd/noidu_p9
   guest_password: guest
   guest_user:     anonymous
+  connect_timeout:	60
 
 development_nonlocal:
   development
@@ -27,6 +28,7 @@ stage:
   ark_minter_url: http://noid.cdlib.org/nd/noidu_p9
   guest_password: guest
   guest_user:     anonymous
+  connect_timeout:	60
 
 production:
   admin_password: XXXXXXXX
@@ -39,6 +41,7 @@ production:
   ark_minter_url: http://noid.cdlib.org/nd/noidu_p9
   guest_password: guest
   guest_user:     anonymous
+  connect_timeout:	60
 
 production_development:
   production
