@@ -21,16 +21,18 @@ module LdapMixin
     #admin_user => 'Directory Manager',
     #admin_password => 'XXXXXXX',
     #minter => 'http://noid.cdlib.org/nd/noidu_g9'
+    #connect_timeout => 60
 
-    host, port, base, admin_user, admin_password, minter =
+    host, port, base, admin_user, admin_password, minter, connect_timeout =
       init_hash[:host], init_hash[:port], init_hash[:base],
-    init_hash[:admin_user], init_hash[:admin_password], init_hash[:minter]
+      init_hash[:admin_user], init_hash[:admin_password],
+      init_hash[:minter], init_hash[:connect_timeout]
 
     @minter = Noid::Minter.new(minter)
     @base = base
     @ldap_connect = {:host => host, :port => port,
       :auth => {:method => :simple, :username => admin_user, :password => admin_password},
-      :encryption => :simple_tls
+      :encryption => :simple_tls, :connect_timeout => connect_timeout
     }
     @admin_ldap = Net::LDAP.new(@ldap_connect)
     if !@admin_ldap.bind then

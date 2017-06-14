@@ -5,6 +5,7 @@ class User
           :base            => LDAP_CONFIG["user_base"],
           :admin_user      => LDAP_CONFIG["admin_user"],
           :admin_password  => LDAP_CONFIG["admin_password"],
+          :connect_timeout => LDAP_CONFIG["connect_timeout"],
           :minter          => LDAP_CONFIG["ark_minter_url"]})
 
   AUTHLOGIC_MAP =
