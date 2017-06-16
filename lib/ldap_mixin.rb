@@ -32,7 +32,11 @@ module LdapMixin
     @base = base
     @ldap_connect = {:host => host, :port => port,
       :auth => {:method => :simple, :username => admin_user, :password => admin_password},
-      :encryption => :simple_tls, :connect_timeout => connect_timeout
+      :encryption => {
+          :method  => :simple_tls,
+          :tls_option => { :ssl_version => 'TLSv1_1' }
+      },
+      :connect_timeout => connect_timeout
     }
     @admin_ldap = Net::LDAP.new(@ldap_connect)
     if !@admin_ldap.bind then
