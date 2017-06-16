@@ -3,7 +3,7 @@ require 'socket'
 rails_env = ENV['RAILS_ENV'] || 'production'
 
 # 5 workers and 1 master
-worker_processes 5
+worker_processes 16
 
 # Load rails+github.git into the master before forking workers
 # for super-fast worker spawn times
