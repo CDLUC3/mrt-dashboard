@@ -34,7 +34,7 @@ module LdapMixin
       :auth => {:method => :simple, :username => admin_user, :password => admin_password},
       :encryption => {
           :method  => :simple_tls,
-          :tls_option => { :ssl_version => 'TLSv1_1' }
+          :tls_options => { :ssl_version => 'TLSv1_1' }
       },
       :connect_timeout => connect_timeout
     }
