@@ -5,8 +5,11 @@ MrtDashboard::Application.configure do
   config.cache_classes                     = true
   config.consider_all_requests_local       = false
   config.i18n.fallbacks                    = true
-  config.serve_static_assets               = true
+  config.serve_static_files		   = true
+
   config.active_support.deprecation        = :log
+
+  config.eager_load                          = false
 end
 
 require 'exception_notifier'
