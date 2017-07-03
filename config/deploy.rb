@@ -7,7 +7,7 @@ set :repo_url, 'https://hg.cdlib.org/mrt-dashboard'
 set :deploy_to, '/dpr2/apps/ui'
 set :scm, :hg
 
-set :stages, ["local", "mrt-ui-dev", "stage", "production"]
+set :stages, ["local", "mrt-ui-dev", "mrt-ui01-stg",  "mrt-ui02-stg", "production"]
 
 set :default_env, { path: "/dpr2/local/bin:$PATH" }
 
