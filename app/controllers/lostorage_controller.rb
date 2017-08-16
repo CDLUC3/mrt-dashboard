@@ -60,12 +60,14 @@ class LostorageController < ApplicationController
     # Custom subject?
     if (@losSubject.blank?) 
        @losSubject = "Merritt #{@container_type.capitalize} Download Processing Completed " 
+    end
 
     # Custom body?
-    if (@losBody.blank?) 
+    if (@losBody.blank?) then
        @losBody = render_to_string(:formats => [:text], :partial => "lostorage/los_email_body")
     else
-       @losBody = render_to_string(:formats => [:text], :inline => {@losBody, :layout => true)
+       @losBody = render_to_string(:formats => [:text], :inline => @losBody, :layout => true)
+    end
 
     #construct the async storage URL using the object's state storage URL-  Sub async for state in URL.
     email_xml_file = build_email_xml(@losFrom, to_addr, @losSubject, @losBody)
@@ -93,10 +95,11 @@ class LostorageController < ApplicationController
     xml.instruct!
     xml.email do
       # Custom from?
-      if (from_addr.blank?) 
+      if (from_addr.blank?) then
 	xml.from(APP_CONFIG['lostorage_email_from'])
       else 
 	xml.from(from_addr)
+      end
       xml.to(to_addr)
       APP_CONFIG['lostorage_email_to'].each do |addr|
         xml.to(addr)
