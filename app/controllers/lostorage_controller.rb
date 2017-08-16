@@ -45,16 +45,30 @@ class LostorageController < ApplicationController
   end
 
   def post_los_email(to_addr)
+
+    # Customize return email information
+    @losFrom    = params[:losFrom]
+    @losSubject = params[:losSubject]
+    @losBody    = params[:losBody]
+
     unique_name = "#{UUIDTools::UUID.random_create().hash.to_s}.tar.gz"
     @object = InvObject.find_by_ark(params_u(:object))
     @container_type = (params[:version] && "version") || "object"
     @dl_url = "#{APP_CONFIG['container_url']}#{unique_name}"
     @version_number = params[:version]
+
+    # Custom subject?
+    if (@losSubject.blank?) 
+       @losSubject = "Merritt #{@container_type.capitalize} Download Processing Completed " 
+
+    # Custom body?
+    if (@losBody.blank?) 
+       @losBody = render_to_string(:formats => [:text], :partial => "lostorage/los_email_body")
+    else
+       @losBody = render_to_string(:formats => [:text], :inline => {@losBody, :layout => true)
+
     #construct the async storage URL using the object's state storage URL-  Sub async for state in URL.
-    email_xml_file = build_email_xml(to_addr,
-                                     "Merritt #{@container_type.capitalize} Download Processing Completed ",
-                                     render_to_string(:formats => [:text],
-                                                      :partial => "lostorage/los_email_body"))
+    email_xml_file = build_email_xml(@losFrom, to_addr, @losSubject, @losBody)
 
     userFriendly = params[:userFriendly].downcase
     postURL = @object.bytestream_uri.to_s.gsub(/content/,'async')
@@ -73,12 +87,16 @@ class LostorageController < ApplicationController
     return (resp.status == 200)
   end
 
-  def build_email_xml(to_addr, subject, body)
+  def build_email_xml(from_addr, to_addr, subject, body)
     tempfile = Tempfile.new("mail.xml")
     xml = Builder::XmlMarkup.new :target => tempfile
     xml.instruct!
     xml.email do
-      xml.from(APP_CONFIG['lostorage_email_from'])
+      # Custom from?
+      if (from_addr.blank?) 
+	xml.from(APP_CONFIG['lostorage_email_from'])
+      else 
+	xml.from(from_addr)
       xml.to(to_addr)
       APP_CONFIG['lostorage_email_to'].each do |addr|
         xml.to(addr)
