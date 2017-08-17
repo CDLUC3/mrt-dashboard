@@ -66,7 +66,8 @@ class LostorageController < ApplicationController
     if (@losBody.blank?) then
        @losBody = render_to_string(:formats => [:text], :partial => "lostorage/los_email_body")
     else
-       @losBody = render_to_string(:formats => [:text], :inline => @losBody, :layout => true)
+       @losBody = render_to_string(:formats => [:text], :inline => @losBody)
+
     end
 
     #construct the async storage URL using the object's state storage URL-  Sub async for state in URL.
