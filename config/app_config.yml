@@ -39,7 +39,7 @@ stage_development:
 production:
   <<: *defaults
   dua_email_to:         [uc3@ucop.edu]
-  lostorage_email_to:   [marisa.strong@ucop.edu, perry.willett@ucop.edu]
+  lostorage_email_to:   [marisa.strong@ucop.edu, perry.willett@ucop.edu, jim.vanderveen@ucop.edu]
   lostorage_email_from: uc3@ucop.edu
   merritt_server:       "http://merritt.cdlib.org"
   container_url:        "http://merritt.cdlib.org/cloudcontainer/"
