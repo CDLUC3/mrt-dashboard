@@ -30,9 +30,9 @@ group :test, :development do
 end
 
 group :test do  
-  gem 'selenium-webdriver'
-  gem 'sqlite3'
-  #gem "capybara-webkit"
-  gem 'capybara' 
-  gem "database_cleaner", "~> 1.0.1"
+  # gem 'selenium-webdriver'
+  # gem 'sqlite3'
+  # gem "capybara-webkit"
+  # gem 'capybara' 
+  # gem "database_cleaner", "~> 1.0.1"
 end
