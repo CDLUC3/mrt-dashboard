@@ -23,12 +23,19 @@ class InvObject < ActiveRecord::Base
     urlencode(self.ark)
   end
 
+  # content
   def bytestream_uri
     URI.parse("#{APP_CONFIG['uri_1']}#{self.node_number}/#{self.to_param}")
   end
 
+  # producer
   def bytestream_uri2
     URI.parse("#{APP_CONFIG['uri_2']}#{self.node_number}/#{self.to_param}")
+  end
+
+  # manifest
+  def bytestream_uri3
+    URI.parse("#{APP_CONFIG['uri_3']}#{self.node_number}/#{self.to_param}")
   end
 
   def dua_exists?

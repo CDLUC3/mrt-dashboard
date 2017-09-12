@@ -3,8 +3,8 @@ require 'tempfile'
 class ObjectController < ApplicationController
 
   before_filter :require_user,       :except => [:jupload_add, :recent, :ingest, :mint, :update]
-  before_filter :load_object, :only=> [:index, :download, :downloadUser, :async]
-  before_filter(:only=>[:download, :downloadUser, :async]) do
+  before_filter :load_object, :only=> [:index, :download, :downloadUser, :downloadManifest, :async]
+  before_filter(:only=>[:download, :downloadUser, :downloadManifest, :async]) do
     if (!has_object_permission?(@object, 'download')) then
       flash[:error] = "You do not have download permissions."
       render :file => "#{Rails.root}/public/401.html", :status => 401, :layout => false
@@ -174,6 +174,13 @@ class ObjectController < ApplicationController
                     "attachment",
                     "#{Orchard::Pairtree.encode(@object.ark.to_s)}_object.zip",
                     "application/zip")
+  end
+
+  def downloadManifest
+    stream_response("#{@object.bytestream_uri3}", 
+                    "attachment",
+                    "#{Orchard::Pairtree.encode(@object.ark.to_s)}",
+                    "text/xml")
   end
 
   def async
