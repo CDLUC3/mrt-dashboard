@@ -178,6 +178,7 @@ def process_atom_feed(submitter, profile, collection, feeddatefile, starting_poi
         urls = entry.xpath("atom:link", NS).map do |link| 
           { :rel  => link['rel'], 
             :url  => link['href'],
+            :checksum  => link.xpath('.//opensearch:checksum'),
             :name => link['href'].sub(/^https?:\/\//, '') }
         end
 
@@ -212,9 +213,19 @@ def process_atom_feed(submitter, profile, collection, feeddatefile, starting_poi
             obj.password = merrittCollectionCredentials.split(':')[1]
 	  end 
 
+	  # extract checksum if available
+	  if not url[:checksum].empty? then
+	     # alg = url[:checksum].last['algorithm']
+	     # checksum = url[:checksum].last.text
+	     checksum = Mrt::Ingest::MessageDigest::MD5.new(url[:checksum].last.text)
+	  else
+	     checksum = nil
+	  end
+
           iobject.add_component(obj,
 		  :name=>url[:name], 
                   :prefetch=>true,
+		  :digest=>checksum,
                   # workaround for funky site
                   :prefetch_options=>{"Accept"=>"text/html, */*"})
         end
