@@ -25,8 +25,8 @@ class ObjectController < ApplicationController
     # Interactive large object download does not support userFriendly
     # Call controller directly
 
-    # if size is > 4GB, redirect to have user enter email for asynch compression (skipping streaming)
-    if exceeds_size(@object) then
+    # if size is > max_archive_size, redirect to have user enter email for asynch compression (skipping streaming)
+    if exceeds_sync_size(@object) then
       redirect_to(:controller => "lostorage", :action => "index", :object => @object)
     end
   end
@@ -184,7 +184,7 @@ class ObjectController < ApplicationController
   end
 
   def async
-    if exceeds_size(@object) then
+    if exceeds_sync_size(@object) then
       # Async Supported
       render :nothing => true, :status => 200
     else

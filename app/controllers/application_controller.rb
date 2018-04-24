@@ -152,11 +152,13 @@ class ApplicationController < ActionController::Base
     @_current_group ||= Group.find(session[:group_id])
   end
 
-  def exceeds_size(object)
+  # @return true if the object is too large for synchronous download, false otherwise
+  def exceeds_sync_size(object)
     return (object.total_actual_size > APP_CONFIG['max_archive_size'])
   end
 
-  def exceeds_size_version(version)
+  # @return true if the version is too large for synchronous download, false otherwise
+  def exceeds_sync_size_version(version)
     return (version.total_actual_size > APP_CONFIG['max_archive_size'])
   end
 
