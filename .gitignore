@@ -1,4 +1,3 @@
-syntax: glob
 .bundle
 db/*.sqlite3
 log/
@@ -18,6 +17,3 @@ db/schema.rb
 .rvmrc
 .rvmrc.06.20.2013-10:03:30
 nbproject
-
-syntax: regexp
-^\.git$
