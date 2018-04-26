@@ -8,10 +8,21 @@ end
 class ApplicationController < ActionController::Base
   include Encoder
 
-  helper_method(:available_groups, :current_user, :current_uid,
-                :current_user_displayname, :has_group_permission?,
-                :has_object_permission?, :has_session_group_write_permission?,
-                :current_group)
+  helper_method(
+    :available_groups,
+    :current_group,
+    :current_uid,
+    :current_user,
+    :current_user_displayname,
+    :exceeds_download_size,
+    :exceeds_download_size_version,
+    :exceeds_download_size_file,
+    :has_group_permission?,
+    :has_object_permission?,
+    :has_session_group_write_permission?,
+    :max_download_size_pretty,
+    :number_to_storage_size
+  )
   protect_from_forgery
 
   def render_unavailable
@@ -179,6 +190,37 @@ class ApplicationController < ActionController::Base
 
   def max_download_size_pretty
     @max_download_size_pretty ||= number_to_storage_size(APP_CONFIG['max_download_size'])
+  end
+
+
+  # Modeled after the rails helper that does all sizes in binary representations
+  # but gives sizes in decimal instead with 1kB = 1,000 Bytes, 1 MB = 1,000,000 bytes
+  # etc.
+  #
+  # Formats the bytes in +size+ into a more understandable representation.
+  # Useful for reporting file sizes to users. This method returns nil if
+  # +size+ cannot be converted into a number. You can change the default
+  # precision of 1 in +precision+.
+  #
+  #  number_to_storage_size(123)           => 123 Bytes
+  #  number_to_storage_size(1234)          => 1.2 kB
+  #  number_to_storage_size(12345)         => 12.3 kB
+  #  number_to_storage_size(1234567)       => 1.2 MB
+  #  number_to_storage_size(1234567890)    => 1.2 GB
+  #  number_to_storage_size(1234567890123) => 1.2 TB
+  #  number_to_storage_size(1234567, 2)    => 1.23 MB
+  def number_to_storage_size(size, precision=1)
+    size = Kernel.Float(size)
+    case
+    when size == 1 then "1 Byte"
+    when size < 10**3 then "%d B" % size
+    when size < 10**6 then "%.#{precision}f KB"  % (size / 10.0**3)
+    when size < 10**9 then "%.#{precision}f MB"  % (size / 10.0**6)
+    when size < 10**12 then "%.#{precision}f GB"  % (size / 10.0**9)
+    else                    "%.#{precision}f TB"  % (size / 10.0**12)
+    end.sub('.0', '')
+  rescue
+    nil
   end
 
   def store_location
