@@ -164,12 +164,16 @@ class ApplicationController < ActionController::Base
 
   # @return true if the object is too large even for async download, false otherwise
   def exceeds_download_size(object)
-    return (object.total_actual_size > APP_CONFIG['max_archive_size'])
+    return (object.total_actual_size > APP_CONFIG['max_download_size'])
   end
 
   # @return true if the version is too large even for async download, false otherwise
   def exceeds_download_size_version(version)
-    return (version.total_actual_size > APP_CONFIG['max_archive_size'])
+    return (version.total_actual_size > APP_CONFIG['max_download_size'])
+  end
+
+  def max_download_size_pretty
+    @max_download_size_pretty ||= number_to_storage_size(APP_CONFIG['max_download_size'])
   end
 
   def store_location
