@@ -172,6 +172,11 @@ class ApplicationController < ActionController::Base
     return (version.total_actual_size > APP_CONFIG['max_download_size'])
   end
 
+  # @return true if the file is too large for download, false otherwise
+  def exceeds_download_size_file(file)
+    return (file.full_size > APP_CONFIG['max_download_size'])
+  end
+
   def max_download_size_pretty
     @max_download_size_pretty ||= number_to_storage_size(APP_CONFIG['max_download_size'])
   end

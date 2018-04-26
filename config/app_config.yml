@@ -1,5 +1,5 @@
 defaults: &defaults
-  # maximum byte size threshhold for download of object/versions without compression
+  # maximum byte size threshold for download of object/versions without compression
   max_archive_size:     1073741824  # 1073741824 bytes = 1 GiB
   # maximum byte size threshold for any download whatsoever
   max_download_size:    322122547200  # 322122547200 bytes = 300 GiB
