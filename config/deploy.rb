@@ -2,12 +2,12 @@
 lock '3.4.0'
 
 set :application, 'merritt-ui'
-set :repo_url, 'https://hg.cdlib.org/mrt-dashboard'
+set :repo_url, 'https://github.com/CDLUC3/mrt-dashboard'
 
 set :deploy_to, '/dpr2/apps/ui'
-set :scm, :hg
+set :scm, :git
 
-set :stages, ["local", "mrt-ui-dev", "stage", "production"]
+set :stages, ["master", "max-download-size", "stage", "production"]
 
 set :default_env, { path: "/dpr2/local/bin:$PATH" }
 
