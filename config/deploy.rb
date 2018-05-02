@@ -7,7 +7,7 @@ set :repo_url, 'https://github.com/CDLUC3/mrt-dashboard'
 set :deploy_to, '/dpr2/apps/ui'
 set :scm, :git
 
-set :stages, ["master", "max-download-size", "stage", "production"]
+set :stages, ["local", "mrt-ui-dev", "stage", "production"]
 
 set :default_env, { path: "/dpr2/local/bin:$PATH" }
 
