@@ -8,29 +8,40 @@
     <% object_id = object.to_param %>
     <%# would be cleaner code if we had this check inside the
         file.each but it is slower for pages with many files %>
-    <% if has_object_permission?(object, 'download') %>
-      <% files.each do |file| %>
-        <div class="key">
+    <% can_download_object = has_object_permission?(object, 'download') %>
+    <% any_file_too_large = false %>
+    <% files.each do |file| %>
+      <%
+        file_basename = File.basename(file.pathname)
+        file_too_large = exceeds_download_size_file(file)
+        if file_too_large
+          any_file_too_large = true
+        end
+      %>
+      <div class="key">
+        <% if can_download_object && !file_too_large %>
           <%# not using link_to speeds this up %>
           <a href="/d/<%= object_id %>/<%= version_id %>/<%= file.to_param %>">
-            <%= File.basename(file.pathname) %>
+            <%= file_basename %>
           </a>
-        </div>
-        <div class="value">
-          <%= clean_mime_type(file.mime_type) %>       
-          <%= number_to_storage_size(file.full_size) %>
-        </div>
-      <% end %>
-    <% else %>
-      <% files.each do |file| %>
-        <div class="key">
-          <%= File.basename(file.pathname) %>
-        </div>
-        <div class="value">
-          <%= clean_mime_type(file.mime_type) %>       
-          <%= number_to_storage_size(file.full_size) %>
-        </div>
-      <% end %>
+        <% else %>
+          <%= file_basename %>
+        <% end %>
+      </div>
+      <div class="value">
+        <%= clean_mime_type(file.mime_type) %>
+        <%= number_to_storage_size(file.full_size) %>
+      </div>
+    <% end %>
+    <% if any_file_too_large %>
+      <div class="key">&nbsp;</div>
+      <div class="value">&nbsp;</div>
+      <div class="key">&nbsp;</div>
+      <div class="value">
+        Files larger than <%= max_download_size_pretty %> cannot be downloaded.
+        For access to large files, please
+        <a href="http://www.cdlib.org/services/uc3/contact.html">contact UC3</a>.
+      </div>
     <% end %>
   <% end %>
 </div>
