@@ -18,7 +18,7 @@
 set :rails_env, "development"
 
 puts "DEVELOPMENT branch"
-set :branch, 'default'
+set :branch, 'master'
 
 # Default deploy_to directory is /var/www/my_app
 set :deploy_to, '/dpr2/apps/ui'
