@@ -38,13 +38,16 @@
 
   <div class="key">&nbsp;</div><div class="value">&nbsp;</div>
   <div class="key">&nbsp;</div>
-<% if has_object_permission?(@version.inv_object, 'download') then %>
   <div class="value">
-    <form action="<%= url_for(:action=>:download, :object=> @version.inv_object, :version => @version) %>">
-      <input type="submit" value="Download version">
-    </form>
+    <% if exceeds_download_size_version(@version) %>
+      Versions larger than <%= max_download_size_pretty %> cannot be downloaded as a .zip file.
+      Versions and individual files below that size can still be downloaded.
+    <% elsif has_object_permission?(@version.inv_object, 'download') then %>
+      <form action="<%= url_for(:action=>:download, :object=> @version.inv_object, :version => @version) %>">
+        <input type="submit" value="Download version">
+      </form>
+    <% end %>
   </div>
-<% end %>
 </div>
 <div class="grid_1">&nbsp;</div>
 <div class="grid_4 sidebar">

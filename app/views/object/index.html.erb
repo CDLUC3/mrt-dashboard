@@ -21,7 +21,10 @@
   <div class="key">&nbsp;</div><div class="value">&nbsp;</div>
   <div class="key">&nbsp;</div>
   <div class="value">
-    <% if has_object_permission?(@object, 'download') then %>
+    <% if exceeds_download_size(@object) %>
+      Objects larger than <%= max_download_size_pretty %> cannot be downloaded as a .zip file.
+      Versions and individual files below that size can still be downloaded.
+    <% elsif has_object_permission?(@object, 'download') then %>
       <form action="<%= url_for(:action=>:download, :object => @object) %>">
         <input type="submit" value="Download object">
       </form>

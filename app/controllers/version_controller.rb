@@ -17,10 +17,12 @@ class VersionController < ApplicationController
   end
 
   before_filter(:only => [:download, :downloadUser]) do
-    # if size is > 4GB, redirect to have user enter email for asynch
-    # compression (skipping streaming)
-    if exceeds_size_version(@version) then
-      redirect_to(:controller => "lostorage", 
+    if exceeds_download_size_version(@version) then
+      render :file => "#{Rails.root}/public/403.html", :status => 403, :layout => false
+    elsif exceeds_sync_size_version(@version) then
+      # if size is > max_archive_size, redirect to have user enter email for asynch
+      # compression (skipping streaming)
+      redirect_to(:controller => "lostorage",
                   :action     => "index", 
                   :object     => @version.inv_object, 
                   :version    => @version)
@@ -40,7 +42,9 @@ class VersionController < ApplicationController
   end
 
  def async
-    if exceeds_size_version(@version) then
+   if exceeds_download_size_version(@version) then
+     render :nothing => true, :status => 403
+   elsif exceeds_sync_size_version(@version) then
       # Async Supported
       render :nothing => true, :status => 200
     else
