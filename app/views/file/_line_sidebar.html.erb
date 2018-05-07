@@ -2,13 +2,17 @@
 <% version = file.inv_version %>
 <% object = version.inv_object %>
 <li style="word-wrap:break-word;">
-  <% if (can_download) then %>
-    <%= link_to File.basename(file.pathname),
+  <% if can_download %>
+    <% if exceeds_download_size_file(file) %>
+      <%= File.basename(file.pathname) %> (too large to download)
+    <% else %>
+      <%= link_to File.basename(file.pathname),
           :controller       => :file,
           :action           => :download,
           :object           => object,
           :version          => version,
           :file             => file %>
+    <% end %>
   <% else %>
     <%= File.basename(file.pathname) %>
   <% end %>
