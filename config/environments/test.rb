@@ -30,9 +30,6 @@ MrtDashboard::Application.configure do
   # like if you have constraints or database-specific column types
   # config.active_record.schema_format = :sql
 
-  # Raise exception on mass assignment protection for Active Record models
-  config.active_record.mass_assignment_sanitizer = :strict
-
   config.active_support.deprecation = :stderr
 
   config.active_record.schema_format = :sql
