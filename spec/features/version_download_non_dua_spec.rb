@@ -4,7 +4,7 @@ require "rubygems"
 
 include RSpec::Expectations
 
-describe "VersionDownloadNonDua" do
+describe("VersionDownloadNonDua", type: :feature) do
 
   before(:each) do
     @driver = Selenium::WebDriver.for :firefox

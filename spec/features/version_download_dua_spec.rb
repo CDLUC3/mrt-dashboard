@@ -2,7 +2,7 @@ require "selenium-webdriver"
 require "spec_helper"
 include RSpec::Expectations
 
-describe "VersionDownloadDUA" do
+describe("VersionDownloadDUA", type: :feature) do
 
   before(:each) do
     @driver = Selenium::WebDriver.for :firefox

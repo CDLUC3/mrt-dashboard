@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'guest' do
+describe('guest', type: :feature) do
 
   before :each do
     visit login_path

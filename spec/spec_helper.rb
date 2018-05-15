@@ -49,7 +49,7 @@ RSpec.configure do |config|
   config.order = "random"
 
   
-  config.before(:each) do
+  config.before(:each) do |example|
     DatabaseCleaner.strategy = if example.metadata[:js]
       :truncation
     else
