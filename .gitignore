@@ -1,6 +1,8 @@
 ##################################################
 # Custom ignores
 
+.config-secret
+
 .idea
 mrt-dashboard.iml
 
@@ -137,7 +139,8 @@ flycheck_*.el
 .LSOverride
 
 # Icon must end with two \r
-Icon
+Icon
+
 
 # Thumbnails
 ._*
