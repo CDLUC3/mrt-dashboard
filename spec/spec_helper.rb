@@ -4,6 +4,27 @@ ENV["RAILS_ENV"] ||= 'test'
 # ------------------------------------------------------------
 # Vanilla RSpec
 
+def mock_entry(kv_str)
+  kv_pairs = kv_str.split(',').map {|_entry| _k, _v = _entry.split('=')}
+  user_dn = Hash[kv_pairs]
+  entry = double(Net::LDAP::Entry)
+  allow(entry).to receive(:[]) { |k| user_dn[k] }
+  entry
+end
+
+def to_kv_str(base, filter)
+  left = filter.instance_variable_get(:@left)
+  right = filter.instance_variable_get(:@right)
+
+  if left == "uid"
+    "uid=#{right},#{base}"
+  elsif left == "uniquemember"
+    "#{base},#{right}"
+  else
+    raise ArgumentError("Unknown filter: " + left)
+  end
+end
+
 RSpec.configure do |config|
   config.color = true
   config.tty = true
@@ -14,6 +35,17 @@ RSpec.configure do |config|
   config.before(:each) do |_example| # double() and allow() are only available in example context
     ldap = double(Net::LDAP)
     allow(Net::LDAP).to receive(:new).and_return(ldap)
+
+    allow(ldap).to receive(:search) do |args|
+      kv_str = to_kv_str(args[:base], args[:filter])
+      [mock_entry(kv_str)]
+    end
+
+    allow(ldap).to receive(:auth) do |user_dn, pass|
+      mock_entry(user_dn)
+    end
+
+    allow(ldap).to receive(:bind).and_return(true)
   end
 end
 
