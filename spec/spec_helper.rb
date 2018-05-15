@@ -40,6 +40,8 @@ Capybara.configure do |config|
   config.app_host = 'http://localhost:33000'
 end
 
+Capybara.server = :puma
+
 # ------------------------------------------------------------
 # RSpec/Rails
 
