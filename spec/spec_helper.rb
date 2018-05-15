@@ -1,36 +1,49 @@
 # This file is copied to spec/ when you run 'rails generate rspec:install'
 ENV["RAILS_ENV"] ||= 'test'
+
+# ------------------------------------------------------------
+# Vanilla RSpec
+
+RSpec.configure do |config|
+  config.before(:each) do |example|
+    ldap = double(Net::LDAP)
+    allow(Net::LDAP).to receive(:new).and_return(ldap)
+  end
+end
+
+# ------------------------------------------------------------
+# Capybara
+
+require 'capybara/rspec'
+
+Capybara.register_driver(:selenium) do |app|
+  Capybara::Selenium::Driver.new(
+      app,
+      browser: :chrome,
+      options: Selenium::WebDriver::Chrome::Options.new(args: %w[incognito no-sandbox disable-gpu'])
+  )
+end
+
+Capybara.javascript_driver = :chrome
+
+Capybara.configure do |config|
+  config.default_max_wait_time = 10
+  config.default_driver = :selenium
+  config.server_port = 33_000
+  config.app_host = 'http://localhost:33000'
+end
+
+# ------------------------------------------------------------
+# RSpec/Rails
+
 require File.expand_path("../../config/environment", __FILE__)
 require 'rspec/rails'
-require 'capybara/rspec'
 
 # Requires supporting ruby files with custom matchers and macros, etc,
 # in spec/support/ and its subdirectories.
 Dir[Rails.root.join("spec/support/**/*.rb")].each { |f| require f }
 
 RSpec.configure do |config|
-
-
-  #Capybara.default_wait_time = 20
-
-  Capybara.default_driver = :selenium
-
-  # Capybara.register_driver :selenium do |app|
-  #   Capybara::Selenium::Driver.new(app, :browser => :chrome)
-  # end
-
-  #Capybara.javascript_driver = :webkit
-
-  # ## Mock Framework
-  #
-  # If you prefer to use mocha, flexmock or RR, uncomment the appropriate line:
-  #
-  # config.mock_with :mocha
-  # config.mock_with :flexmock
-  # config.mock_with :rr
-
-  # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
-  #config.fixture_path = "#{::Rails.root}/spec/fixtures"
 
   # If you're not using ActiveRecord, or you'd prefer not to run each of your
   # examples within a transaction, remove the following line or assign false
@@ -48,13 +61,8 @@ RSpec.configure do |config|
   #     --seed 1234
   config.order = "random"
 
-  
   config.before(:each) do |example|
-    DatabaseCleaner.strategy = if example.metadata[:js]
-      :truncation
-    else
-      :transaction
-    end
+    DatabaseCleaner.strategy = example.metadata[:js] ? :truncation : :transaction
     DatabaseCleaner.start
   end
   

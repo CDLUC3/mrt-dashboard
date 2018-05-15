@@ -9,7 +9,7 @@ module LdapMixin
   class LdapException < Exception ; end
 
   attr_reader :ldap_connect, :minter
-  attr_accessor :base, :admin_ldap
+  attr_accessor :base
 
 
   def initialize(init_hash)
@@ -38,28 +38,34 @@ module LdapMixin
       },
       :connect_timeout => connect_timeout
     }
-    @admin_ldap = Net::LDAP.new(@ldap_connect)
-    if !@admin_ldap.bind then
+
+    unless ENV["RAILS_ENV"] == 'test' || admin_ldap.bind
       raise LdapException.new("Unable to bind to LDAP server.")
+    end
+  end
+
+  def admin_ldap
+    @admin_ldap ||= begin
+      Net::LDAP.new(@ldap_connect)
     end
   end
 
   def delete_record(id)
     raise LdapException.new('id does not exist') if !record_exists?(id)
-    true_or_exception(@admin_ldap.delete(:dn => ns_dn(id)))
+    true_or_exception(admin_ldap.delete(:dn => ns_dn(id)))
   end
 
   def add_attribute(id, attribute, value)
     #@admin_ldap.add_attribute(ns_dn(id), attribute, value)
-    true_or_exception(@admin_ldap.add_attribute(ns_dn(id), attribute, value))
+    true_or_exception(admin_ldap.add_attribute(ns_dn(id), attribute, value))
   end
 
   def replace_attribute(id, attribute, value)
-    true_or_exception(@admin_ldap.replace_attribute(ns_dn(id), attribute, value))
+    true_or_exception(admin_ldap.replace_attribute(ns_dn(id), attribute, value))
   end
 
   def delete_attribute(id, attribute)
-    true_or_exception(@admin_ldap.delete_attribute(ns_dn(id), attribute))
+    true_or_exception(admin_ldap.delete_attribute(ns_dn(id), attribute))
   end
 
   def delete_attribute_value(id, attribute, value)
@@ -80,20 +86,20 @@ module LdapMixin
         filter = filter | obj_filter(id)
       end
     end
-    @admin_ldap.search(:base=>@base, :filter=>filter)
+    admin_ldap.search(:base=>@base, :filter=>filter)
   end
 
   def fetch(id)
-    results = @admin_ldap.search(:base => @base, :filter => obj_filter(id))
+    results = admin_ldap.search(:base => @base, :filter => obj_filter(id))
     raise LdapException.new('id does not exist') if results.length < 1
     raise LdapException.new('ambigulous results, duplicate ids') if results.length > 1
     results[0]
   end
 
   def fetch_by_ark_id(ark_id)
-    results = @admin_ldap.search(:base => @base,
-                                 :filter => Net::LDAP::Filter.eq('arkid', ark_id),
-                                 :scope => Net::LDAP::SearchScope_SingleLevel)
+    results = admin_ldap.search(:base => @base,
+                                :filter => Net::LDAP::Filter.eq('arkid', ark_id),
+                                :scope => Net::LDAP::SearchScope_SingleLevel)
     raise LdapException.new('id does not exist') if results.length < 1
     raise LdapException.new('ambigulous results, duplicate ids') if results.length > 1
     results[0]
@@ -116,7 +122,7 @@ module LdapMixin
 
   def true_or_exception(result)
     if result == false then
-      raise LdapException.new(@admin_ldap.get_operation_result.message)
+      raise LdapException.new(admin_ldap.get_operation_result.message)
     else
       true
     end
