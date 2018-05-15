@@ -5,6 +5,12 @@ ENV["RAILS_ENV"] ||= 'test'
 # Vanilla RSpec
 
 RSpec.configure do |config|
+  config.color = true
+  config.tty = true
+  config.formatter = :documentation
+  # config.raise_errors_for_deprecations!  # TODO: uncomment this
+  config.mock_with :rspec
+
   config.before(:each) do |example|
     ldap = double(Net::LDAP)
     allow(Net::LDAP).to receive(:new).and_return(ldap)
