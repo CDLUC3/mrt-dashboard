@@ -5,8 +5,8 @@ include RSpec::Expectations
 describe("VersionDownloadDUA", type: :feature) do
 
   before(:each) do
-    @driver = Selenium::WebDriver.for :firefox
-    @base_url = "http://localhost:3000/"
+    @driver = page.driver.browser
+    @base_url = page.config.app_host
     @accept_next_alert = true
     @driver.manage.timeouts.implicit_wait = 30
     @verification_errors = []

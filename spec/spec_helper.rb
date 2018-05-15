@@ -11,7 +11,7 @@ RSpec.configure do |config|
   # config.raise_errors_for_deprecations!  # TODO: uncomment this
   config.mock_with :rspec
 
-  config.before(:each) do |example|
+  config.before(:each) do |_example| # double() and allow() are only available in example context
     ldap = double(Net::LDAP)
     allow(Net::LDAP).to receive(:new).and_return(ldap)
   end
@@ -21,6 +21,7 @@ end
 # Capybara
 
 require 'capybara/rspec'
+require 'capybara/dsl'
 
 Capybara.register_driver(:selenium) do |app|
   Capybara::Selenium::Driver.new(
