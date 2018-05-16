@@ -38,3 +38,13 @@ for CONFIG_FILENAME in ${CONFIG_FILES}; do
     { set +x; } 2>/dev/null
   fi
 done
+
+# ############################################################
+# Install dependencies
+
+bundle install
+
+# ############################################################
+# Load database schema
+
+RAILS_ENV=test bundle exec rake db:schema:load
