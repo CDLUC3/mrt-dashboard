@@ -1,8 +1,8 @@
 source 'http://rubygems.org'
 
-gem 'rails', '4.2.8'
+gem 'rails', '4.2.10'
 gem 'activeresource'
-gem 'mysql2', '~> 0.3.18'
+gem 'mysql2', '~> 0.4.0' # TODO: update to 0.5 once we're on a Rails that supports it
 gem 'multi_json'
 
 gem "httpclient", "~> 2.7.0"
@@ -22,11 +22,16 @@ gem 'thin'
 gem 'jquery-rails'
 gem 'capistrano', '~> 3.1.0'
 
-group :test, :development do
+group :development do
+  gem 'web-console', '~> 2.0'
+end
+
+group :development, :test do
   gem 'byebug'
-  gem 'rspec-rails'
+  gem 'colorize', '~> 0.8'
   gem 'factory_girl_rails'
   gem 'launchy'
+  gem 'rspec-rails', '~> 3.0'
 end
 
 group :test do  
@@ -34,5 +39,7 @@ group :test do
   gem 'capybara', '~> 2.16'
   gem 'chromedriver-helper', '~> 1.1'
   gem 'selenium-webdriver', '~> 3.7'
-  gem "database_cleaner", "~> 1.0.1"
+  gem 'database_cleaner', '~> 1.5'
+  gem 'simplecov', '~> 0.14'
+  gem 'simplecov-console', '~> 0.4'
 end
