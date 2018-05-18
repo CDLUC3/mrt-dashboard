@@ -12,9 +12,9 @@ Chromedriver.set_version('2.38')
 
 Capybara.register_driver(:selenium) do |app|
   Capybara::Selenium::Driver.new(
-      app,
-      browser: :chrome,
-      options: Selenium::WebDriver::Chrome::Options.new(args: %w[incognito no-sandbox disable-gpu'])
+    app,
+    browser: :chrome,
+    options: Selenium::WebDriver::Chrome::Options.new(args: %w[incognito no-sandbox disable-gpu'])
   )
 end
 
@@ -27,30 +27,42 @@ Capybara.configure do |config|
   config.app_host = 'http://localhost:33000'
 end
 
+Capybara.server = :puma
+
 # ------------------------------------------------------------
 # LDAP
 
 def mock_ldap!
+  test_user_id = 'testuser01'
+  test_password = test_user_id
+  test_user_ldap =   {
+    'dn' => ["uid=#{test_user_id},ou=People,ou=uc3,dc=cdlib,dc=org"],
+    'objectclass' => ["person", "inetOrgPerson", "merrittUser", "organizationalPerson", "top"],
+    'givenname' => ["Test"],
+    'uid' => [test_user_id],
+    'mail' => ["test@example.edu"],
+    'sn' => ["Submitter"],
+    'cn' => ["Test User 01"],
+    'arkid' => ["ark:/99999/fk_testuser01"]
+  }
+
   allow(User::LDAP).to receive(:authenticate).and_raise(LdapMixin::LdapException)
-  allow(User::LDAP).to receive(:authenticate).with("testuser01", "testuser01").and_return(true)
-  allow(User::LDAP).to receive(:fetch).with("testuser01").and_return({})
+  allow(User::LDAP).to receive(:authenticate).with(test_user_id, test_password).and_return(true)
+  allow(User::LDAP).to receive(:fetch).with(test_user_id).and_return(test_user_ldap)
 
-  # TODO: stub this stuff in
-  #
-  # fetch(id) ->
-  # "{:dn=>["uid=ucop_dash_submitter,ou=People,ou=uc3,dc=cdlib,dc=org"], :objectclass=>["person", "inetOrgPerson", "merrittUser", "organizationalPerson", "top"], :givenname=>["UCOP Dash"], :uid=>["ucop_dash_submitter"], :mail=>["uc3@ucop.edu"], :sn=>["Submitter"], :userpassword=>["{SSHA}UWBCYXx6gGorIF+QbypAFAehYEmbBmDn9bqwug=="], :cn=>["UCOP Dash Submitter"], :arkid=>["ark:/99166/p9z60c34s"]}"
-  #
-  # Group::LDAP.find_groups_for_user ->
-  # ["dash_cdl"]
-  #
-  # current_user.groups -> (array of:)
-  # "#<Group:0x007f95968c3a60 @id="dash_cdl", @submission_profile="dash_cdl_content", @ark_id="ark:/99999/fk4pg1qtb", @owner=nil, @description="DASH CDL collection">"
-  #
-  # group.permission('ucop_dash_submitter') -> Array<Net::BER::BERIdentifiedString>
-  # "["read", "write", "download", "admin"]"
+  test_group_id = 'testgroup01'
+  test_group_ldap = {
+    'ou' => [test_group_id],
+    'submissionprofile' => ['test_profile'],
+    'arkid' => ['ark:/99999/fk_testgroup01'],
+    'description' => 'Test Group 01'
+  }
 
-  allow(Group::LDAP).to receive(:find_groups_for_user) do |userid, user_object, permission=nil|
-  end
+  allow(Group::LDAP).to receive(:find_groups_for_user).with(test_user_id, any_args).and_return([test_group_id])
+  allow(Group::LDAP).to receive(:fetch_batch).with([test_group_id]).and_return([test_group_ldap])
+  allow(Group::LDAP).to receive(:fetch).with(test_group_id).and_return(test_group_ldap)
+
+  allow(Group::LDAP).to receive(:get_user_permissions).with(test_user_id, test_group_id, User::LDAP).and_return(["read", "write", "download", "admin"])
 end
 
 RSpec.configure do |config|
