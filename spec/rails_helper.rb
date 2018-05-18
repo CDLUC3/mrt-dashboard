@@ -11,6 +11,18 @@ require File.expand_path('../../config/environment', __FILE__)
 require 'rspec/rails'
 require 'database_cleaner'
 
+# Stop Rails enthusiastically blowing away test database
+# https://github.com/rails/rails/issues/18982
+if ENV['RAILS_ENV'] == 'test'
+  class ActiveRecord::Migrator
+    class << self
+      def any_migrations?
+        true
+      end
+    end
+  end
+end
+
 ActiveRecord::Migration.maintain_test_schema!
 
 def check_connection_config!
