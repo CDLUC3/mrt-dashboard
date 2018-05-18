@@ -9,7 +9,7 @@ describe 'login' do
     fill_in "login", :with => "testuser01"
     fill_in "password", :with => "testuser01"
     click_button "Login"
-    expect(page).to have_content('Welcome')
+    expect(page).to have_content('Logout')
   end
 
   it 'rejects invalid credentials' do
