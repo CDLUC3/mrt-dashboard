@@ -3,4 +3,4 @@ test:
   adapter: mysql2
   database: mrt_dashboard_test
   username: travis
-  encoding: utf8mb4
+  encoding: utf8   # schema won't load if it's utf8mb4
