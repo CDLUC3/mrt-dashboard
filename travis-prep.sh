@@ -40,11 +40,6 @@ for CONFIG_FILENAME in ${CONFIG_FILES}; do
 done
 
 # ############################################################
-# Install dependencies
-
-bundle install
-
-# ############################################################
 # Load database schema
 
 RAILS_ENV=test bundle exec rake db:schema:load
