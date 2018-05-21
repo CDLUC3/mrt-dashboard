@@ -3,6 +3,8 @@ dist: trusty
 
 addons:
   chrome: stable
+  apt:
+    update: true
 
 language: ruby
 
