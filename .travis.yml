@@ -13,8 +13,6 @@ rvm:
 
 cache:
   bundler: true
-  directories:
-    - /home/travis/.rvm/
 
 services:
   - mysql
