@@ -5,10 +5,14 @@ addons:
   chrome: stable
 
 language: ruby
-cache: bundler
 
 rvm:
   - 2.2.3
+
+cache:
+  bundler: true
+  directories:
+    - /home/travis/.rvm/
 
 services:
   - mysql
