@@ -33,6 +33,12 @@ Capybara.server = :puma
 # LDAP
 
 def mock_ldap!
+  # In general, fail for unknown username / password
+  allow(User::LDAP).to receive(:authenticate).and_raise(LdapMixin::LdapException)
+
+  # ------------------------------
+  # Test group
+
   test_group_id = 'testgroup01'
   test_group_ldap = {
     'ou' => [test_group_id],
@@ -43,6 +49,9 @@ def mock_ldap!
 
   allow(Group::LDAP).to receive(:fetch_batch).with([test_group_id]).and_return([test_group_ldap])
   allow(Group::LDAP).to receive(:fetch).with(test_group_id).and_return(test_group_ldap)
+
+  # ------------------------------
+  # Test user
 
   test_user_id = 'testuser01'
   test_password = test_user_id
@@ -62,6 +71,9 @@ def mock_ldap!
   allow(Group::LDAP).to receive(:find_groups_for_user).with(test_user_id, any_args).and_return([test_group_id])
   allow(Group::LDAP).to receive(:get_user_permissions).with(test_user_id, test_group_id, User::LDAP).and_return(["read", "write", "download", "admin"])
 
+  # ------------------------------
+  # Guest user
+
   guest_user_id = 'anonymous'
   guest_password = 'guest'
   guest_user_ldap = {
@@ -79,8 +91,6 @@ def mock_ldap!
   allow(User::LDAP).to receive(:fetch).with(guest_user_id).and_return(guest_user_ldap)
   allow(Group::LDAP).to receive(:find_groups_for_user).with(guest_user_id, any_args).and_return([test_group_id])
   allow(Group::LDAP).to receive(:get_user_permissions).with(guest_user_id, test_group_id, User::LDAP).and_return(["read", "download"])
-
-
 end
 
 RSpec.configure do |config|
