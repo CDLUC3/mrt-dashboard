@@ -1,6 +1,9 @@
-#sudo: required
 sudo: false
 dist: trusty
+
+env:
+  global:
+    - TMPDIR=/tmp
 
 addons:
   chrome: stable
