@@ -7,6 +7,7 @@ require 'capybara/rspec'
 # Capybara etc.
 
 Capybara.register_driver(:selenium) do |app|
+  puts "features_helper: TMPDIR=#{ENV['TMPDIR']}"
   Capybara::Selenium::Driver.new(
     app,
     browser: :chrome,
