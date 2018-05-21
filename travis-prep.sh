@@ -43,9 +43,3 @@ done
 # Load database schema
 
 RAILS_ENV=test bundle exec rake db:schema:load
-
-# ############################################################
-# Debugging
-
-echo travis-prep.sh: TMPDIR=${TMPDIR}
-
