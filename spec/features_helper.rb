@@ -33,9 +33,20 @@ Capybara.server = :puma
 # LDAP
 
 def mock_ldap!
+  test_group_id = 'testgroup01'
+  test_group_ldap = {
+    'ou' => [test_group_id],
+    'submissionprofile' => ['test_profile'],
+    'arkid' => ['ark:/99999/fk_testgroup01'],
+    'description' => 'Test Group 01'
+  }
+
+  allow(Group::LDAP).to receive(:fetch_batch).with([test_group_id]).and_return([test_group_ldap])
+  allow(Group::LDAP).to receive(:fetch).with(test_group_id).and_return(test_group_ldap)
+
   test_user_id = 'testuser01'
   test_password = test_user_id
-  test_user_ldap =   {
+  test_user_ldap = {
     'dn' => ["uid=#{test_user_id},ou=People,ou=uc3,dc=cdlib,dc=org"],
     'objectclass' => ["person", "inetOrgPerson", "merrittUser", "organizationalPerson", "top"],
     'givenname' => ["Test"],
@@ -46,23 +57,30 @@ def mock_ldap!
     'arkid' => ["ark:/99999/fk_testuser01"]
   }
 
-  allow(User::LDAP).to receive(:authenticate).and_raise(LdapMixin::LdapException)
   allow(User::LDAP).to receive(:authenticate).with(test_user_id, test_password).and_return(true)
   allow(User::LDAP).to receive(:fetch).with(test_user_id).and_return(test_user_ldap)
+  allow(Group::LDAP).to receive(:find_groups_for_user).with(test_user_id, any_args).and_return([test_group_id])
+  allow(Group::LDAP).to receive(:get_user_permissions).with(test_user_id, test_group_id, User::LDAP).and_return(["read", "write", "download", "admin"])
 
-  test_group_id = 'testgroup01'
-  test_group_ldap = {
-    'ou' => [test_group_id],
-    'submissionprofile' => ['test_profile'],
-    'arkid' => ['ark:/99999/fk_testgroup01'],
-    'description' => 'Test Group 01'
+  guest_user_id = 'anonymous'
+  guest_password = 'guest'
+  guest_user_ldap = {
+    'dn' => ["uid=#{guest_user_id},ou=People,ou=uc3,dc=cdlib,dc=org"],
+    'objectclass' => ["person", "inetOrgPerson", "merrittUser", "organizationalPerson", "top"],
+    'givenname' => ["Guest"],
+    'uid' => [guest_user_id],
+    'mail' => ["guest@example.edu"],
+    'sn' => ["User"],
+    'cn' => ["Guest User"],
+    'arkid' => ["ark:/99999/fk_guestuser01"]
   }
 
-  allow(Group::LDAP).to receive(:find_groups_for_user).with(test_user_id, any_args).and_return([test_group_id])
-  allow(Group::LDAP).to receive(:fetch_batch).with([test_group_id]).and_return([test_group_ldap])
-  allow(Group::LDAP).to receive(:fetch).with(test_group_id).and_return(test_group_ldap)
+  allow(User::LDAP).to receive(:authenticate).with(guest_user_id, guest_password).and_return(true)
+  allow(User::LDAP).to receive(:fetch).with(guest_user_id).and_return(guest_user_ldap)
+  allow(Group::LDAP).to receive(:find_groups_for_user).with(guest_user_id, any_args).and_return([test_group_id])
+  allow(Group::LDAP).to receive(:get_user_permissions).with(guest_user_id, test_group_id, User::LDAP).and_return(["read", "download"])
 
-  allow(Group::LDAP).to receive(:get_user_permissions).with(test_user_id, test_group_id, User::LDAP).and_return(["read", "write", "download", "admin"])
+
 end
 
 RSpec.configure do |config|

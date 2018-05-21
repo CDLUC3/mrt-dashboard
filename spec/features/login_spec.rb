@@ -9,6 +9,7 @@ describe 'login' do
     fill_in "login", :with => "testuser01"
     fill_in "password", :with => "testuser01"
     click_button "Login"
+    expect(page).not_to have_content('Login unsuccessful')
     expect(page).to have_content('Logout')
   end
 
