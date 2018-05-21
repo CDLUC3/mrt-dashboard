@@ -14,7 +14,6 @@ services:
   - mysql
 
 before_install:
- - sudo apt-get update
  - gem update --system
  - gem install bundler
  - ./travis-prep.sh
