@@ -8,7 +8,7 @@ require 'capybara/rspec'
 
 # Ideally we'd set a minimum Chromedriver version, but that's not an
 # option; see https://github.com/flavorjones/chromedriver-helper
-Chromedriver.set_version('2.38')
+Chromedriver.set_version('2.37')
 
 Capybara.register_driver(:selenium) do |app|
   Capybara::Selenium::Driver.new(
