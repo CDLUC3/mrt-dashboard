@@ -15,7 +15,7 @@ describe 'profile' do
       tzregion: @tzregion,
       telephonenumber: @telephonenumber
     )
-    col_id = mock_collection("Collection 1")
+    col_id = mock_collection(name: "Collection 1")
     mock_permissions(user_id, {col_id => PERMISSIONS_ALL})
     log_in_with(user_id, password)
   end

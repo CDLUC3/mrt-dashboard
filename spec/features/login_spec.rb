@@ -8,7 +8,7 @@ describe 'login' do
     @password = 'correcthorsebatterystaple'
     @user_id = mock_user(name: 'Jane Doe', password: password)
 
-    col_id = mock_collection('Collection 1')
+    col_id = mock_collection(name: 'Collection 1')
     mock_permissions(user_id, {col_id => PERMISSIONS_ALL})
 
     visit login_path

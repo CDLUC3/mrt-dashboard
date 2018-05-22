@@ -3,7 +3,7 @@ require 'features_helper'
 describe 'guest' do
   before :each do
     perms_by_group_id = (0..3).map do |i|
-      [mock_collection("Collection #{i}"), PERMISSIONS_READ_ONLY]
+      [mock_collection(name: "Collection #{i}"), PERMISSIONS_READ_ONLY]
     end.to_h
     mock_permissions(GUEST_USER_ID, perms_by_group_id)
 

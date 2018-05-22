@@ -1,4 +1,5 @@
 require 'active_support/inflector'
+require 'support/ark'
 
 # ------------------------------------------------------------
 # LDAP
@@ -15,16 +16,17 @@ def to_name(user_id)
   user_id.classify.gsub(/([A-Z])/, ' \1').strip
 end
 
-def mock_collection(collection_name)
-  group_id = to_id(collection_name)
+def mock_collection(name:, id: nil, ark: nil)
+  id ||= to_id(name)
+  ark ||= ArkHelper.next_ark
   group_ldap = {
-    'ou' => [group_id],
-    'submissionprofile' => ["#{group_id}_profile"],
-    'arkid' => ["ark:/99999/fk_#{group_id}"],
-    'description' => [collection_name]
+    'ou' => [id],
+    'submissionprofile' => ["#{id}_profile"],
+    'arkid' => [ark],
+    'description' => [name]
   }
-  allow(Group::LDAP).to receive(:fetch).with(group_id).and_return(group_ldap)
-  group_id
+  allow(Group::LDAP).to receive(:fetch).with(id).and_return(group_ldap)
+  id
 end
 
 def mock_user(name: nil, id: nil, password:, tzregion: nil, telephonenumber: nil)
@@ -45,7 +47,7 @@ def mock_user(name: nil, id: nil, password:, tzregion: nil, telephonenumber: nil
     'mail' => ["#{id}@example.edu"],
     'sn' => [surname],
     'cn' => [name],
-    'arkid' => ["ark:/99999/fk_#{id}"],
+    'arkid' => [ArkHelper.next_ark],
     'tzregion' => tzregion ? [tzregion] : [],
     'telephonenumber' => telephonenumber ? [telephonenumber] : []
   }

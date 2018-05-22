@@ -34,10 +34,9 @@ def check_connection_config!
 end
 
 RSpec.configure do |config|
+
   # allow test DB access from multiple connections
   config.use_transactional_fixtures = false
-
-  config.fixture_path = "#{Rails.root}/spec/fixtures"
 
   # Treat specs in features/ as feature specs
   config.infer_spec_type_from_file_location!

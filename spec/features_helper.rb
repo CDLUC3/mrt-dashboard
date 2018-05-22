@@ -1,8 +1,8 @@
 require 'rails_helper'
-require 'ldap_helpers'
 require 'capybara/dsl'
 require 'capybara/rails'
 require 'capybara/rspec'
+require 'support/ldap'
 
 # ------------------------------------------------------------
 # Capybara etc.
