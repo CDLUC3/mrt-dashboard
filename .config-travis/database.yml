@@ -1,6 +1,12 @@
-test:
+default: &default
   host: localhost
   adapter: mysql2
   database: mrt_dashboard_test
   username: travis
   encoding: utf8   # schema won't load if it's utf8mb4
+
+development:
+  <<: *default
+
+test:
+  <<: *default
