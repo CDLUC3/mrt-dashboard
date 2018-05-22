@@ -16,6 +16,10 @@ describe 'guest' do
     expect(page).to have_content('Logout')
   end
 
+  it 'should not have a profile link' do
+    expect(page).not_to have_content('Profile')
+  end
+
   it 'allows guest user to click on a collection' do
     find(:xpath, "//table/tbody/tr[1]/td[1]/a[1]").click
     within("#menu-1") do

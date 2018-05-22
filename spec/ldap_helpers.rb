@@ -27,23 +27,27 @@ def mock_collection(collection_name)
   group_id
 end
 
-def mock_user(name: nil, id: nil, password: nil)
+def mock_user(name: nil, id: nil, password:, tzregion: nil, telephonenumber: nil)
   raise "Can't mock without either a name or an ID" unless (name || id)
 
   id ||= to_id(name)
   name ||= to_name(id)
-  password ||= "password for #{id}"
 
-  given_name = name.scan(/[^ ]+/).first
+  names = name.scan(/[^ ]+/)
+  given_name = names.first
+  surname = names.last
+
   user_ldap = {
     'dn' => ["uid=#{id},ou=People,ou=uc3,dc=cdlib,dc=org"],
     'objectclass' => ['person', 'inetOrgPerson', 'merrittUser', 'organizationalPerson', 'top'],
     'givenname' => [given_name],
     'uid' => [id],
     'mail' => ["#{id}@example.edu"],
-    'sn' => ['User'],
+    'sn' => [surname],
     'cn' => [name],
-    'arkid' => ["ark:/99999/fk_#{id}"]
+    'arkid' => ["ark:/99999/fk_#{id}"],
+    'tzregion' => tzregion ? [tzregion] : [],
+    'telephonenumber' => telephonenumber ? [telephonenumber] : []
   }
 
   allow(User::LDAP).to receive(:authenticate).with(id, password).and_return(true)
