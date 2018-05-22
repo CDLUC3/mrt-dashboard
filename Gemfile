@@ -6,9 +6,9 @@ gem 'mysql2', '~> 0.4.0' # TODO: update to 0.5 once we're on a Rails that suppor
 gem 'multi_json'
 
 gem "httpclient", "~> 2.7.0"
-gem "eco_exception_notification",
+gem "eco_exception_notification", # TODO: find a released version we can use
     :git => "git://github.com/chrisfinne/eco_exception_notification.git"
-gem "net-ldap", :git => "git://github.com/ruby-ldap/ruby-net-ldap.git", :branch => "master"
+gem "net-ldap", "~> 0.16"
 gem "nokogiri"
 gem "puma"
 gem "will_paginate"
