@@ -29,17 +29,17 @@ end
 group :development, :test do
   gem 'byebug'
   gem 'colorize', '~> 0.8'
-  gem 'factory_girl_rails'
   gem 'launchy'
-  gem 'rspec-rails', '~> 3.0'
 end
 
-group :test do  
-  gem 'sqlite3'
+group :test do
   gem 'capybara', '~> 2.16'
   gem 'chromedriver-helper', '~> 1.1'
-  gem 'selenium-webdriver', '~> 3.7'
   gem 'database_cleaner', '~> 1.5'
+  gem 'factory_bot_rails'
+  gem 'rspec-rails', '~> 3.0'
+  gem 'selenium-webdriver', '~> 3.7'
   gem 'simplecov', '~> 0.14'
   gem 'simplecov-console', '~> 0.4'
+  gem 'sqlite3'
 end
