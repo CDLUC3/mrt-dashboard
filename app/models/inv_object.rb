@@ -1,4 +1,6 @@
 class InvObject < ActiveRecord::Base
+  belongs_to :inv_owner
+
   has_many :inv_versions, :inverse_of => :inv_object
   has_many :inv_files, :through => :inv_versions
   

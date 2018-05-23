@@ -5,6 +5,7 @@ FactoryBot.define do
     read_privilege 'public'
     write_privilege 'restricted'
     download_privilege 'public'
+
     storage_tier 'standard'
 
     harvest_privilege 'public'
