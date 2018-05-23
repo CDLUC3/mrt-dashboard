@@ -4,6 +4,8 @@ describe 'objects' do
   attr_reader :user_id
   attr_reader :password
   attr_reader :obj
+  attr_reader :version_str
+
   attr_reader :producer_files
   attr_reader :system_files
 
@@ -17,6 +19,8 @@ describe 'objects' do
 
     @obj = create(:inv_object, erc_who: 'Doe, Jane', erc_what: 'Object 1', erc_when: '2018-01-01')
     inv_collection_1.inv_objects << obj
+
+    @version_str = "Version #{obj.version_number}"
 
     @producer_files = Array.new(3) do |i|
       size = 1024 * (2 ** i)
@@ -54,14 +58,48 @@ describe 'objects' do
     expect(page).to have_content(obj.erc_when)
   end
 
-  it 'should display the producer files' do
-    producer_files.each do |f|
-      basename = f.pathname.sub(/^producer\//, '')
-      expect(page).to have_content(basename)
+  describe 'version info' do
+    it 'should display the version' do
+      expect(page).to have_content(version_str)
+    end
+
+    it 'should let the user navigate to a version' do
+      click_link(version_str)
+      expect(page).to have_content("#{obj.ark} - #{version_str}")
     end
   end
 
-  it 'should display a link to the version' do
-    expect(page).to have_content("Version #{obj.version_number}")
+  describe 'file info' do
+    it 'should display the producer files' do
+      producer_files.each do |f|
+        basename = f.pathname.sub(/^producer\//, '')
+        expect(page).to have_content(basename)
+      end
+    end
+
+    it 'should let the user download a file' do
+      # TODO: something better than these shenanigans
+      self.class.send(:include, RSpec::Rails::Matchers::RoutingMatchers)
+      self.class.send(:include, ActionDispatch::Assertions::RoutingAssertions)
+      self.class.send(:define_method, :message) { |msg, _| msg }
+      @routes = Rails.application.routes
+
+      producer_files.each do |f|
+        basename = f.pathname.sub(/^producer\//, '')
+
+        download_link = find_link(basename)
+        expect(download_link).not_to be_nil
+
+        download_href = download_link['href']
+        expect(get: download_href).to route_to(
+          controller: 'file',
+          action: 'download',
+          object: obj.ark,
+          version: obj.version_number.to_s,
+          file: f.pathname
+        )
+      end
+    end
   end
+
 end
