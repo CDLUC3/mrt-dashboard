@@ -18,7 +18,7 @@ end
 
 def mock_collection(name:, id: nil, ark: nil)
   id ||= to_id(name)
-  ark ||= ArkHelper.next_ark
+  ark ||= ArkHelper.next_ark('collection')
   group_ldap = {
     'ou' => [id],
     'submissionprofile' => ["#{id}_profile"],
@@ -26,6 +26,7 @@ def mock_collection(name:, id: nil, ark: nil)
     'description' => [name]
   }
   allow(Group::LDAP).to receive(:fetch).with(id).and_return(group_ldap)
+  allow(Group::LDAP).to receive(:fetch_by_ark_id).with(ark).and_return(group_ldap)
   id
 end
 
@@ -55,7 +56,7 @@ def mock_user(name: nil, id: nil, password:, tzregion: nil, telephonenumber: nil
     'mail' => ["#{id}@example.edu"],
     'sn' => [surname],
     'cn' => [name],
-    'arkid' => [ArkHelper.next_ark],
+    'arkid' => [ArkHelper.next_ark('user')],
     'tzregion' => tzregion ? [tzregion] : [],
     'telephonenumber' => telephonenumber ? [telephonenumber] : []
   }
@@ -87,6 +88,10 @@ end
 def mock_ldap!
   # In general, fail for unknown username / password
   allow(User::LDAP).to receive(:authenticate).and_raise(LdapMixin::LdapException)
+
+  # In general, fail for unknown collection
+  allow(Group::LDAP).to receive(:fetch).and_raise(LdapMixin::LdapException)
+  allow(Group::LDAP).to receive(:fetch_by_ark_id).and_raise(LdapMixin::LdapException)
 
   # Mock guest user
   mock_user(name: 'Guest User', id: GUEST_USER_ID, password: 'guest')

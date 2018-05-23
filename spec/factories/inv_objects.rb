@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :inv_object do
-    ark { ArkHelper.next_ark }
+    ark { ArkHelper.next_ark('object') }
 
     inv_owner
 

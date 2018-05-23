@@ -44,5 +44,11 @@ describe 'collections' do
       end
     end
 
+    it 'should let the user navigate to an object' do
+      obj = inv_objects[0]
+      click_link(obj.ark)
+      expect(page).to have_content("Object: #{obj.ark}")
+    end
+
   end
 end

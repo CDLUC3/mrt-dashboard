@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :inv_version do
-    ark {ArkHelper.next_ark}
+    ark {ArkHelper.next_ark('version')}
 
     number 1
 

@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :inv_collection do
-    ark { ArkHelper.next_ark }
+    ark { ArkHelper.next_ark('collection') }
 
     read_privilege 'public'
     write_privilege 'restricted'
