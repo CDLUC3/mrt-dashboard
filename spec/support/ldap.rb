@@ -29,6 +29,14 @@ def mock_collection(name:, id: nil, ark: nil)
   id
 end
 
+def mock_ldap_for(inv_collection)
+  mock_collection(
+    name: inv_collection.name,
+    id: inv_collection.mnemonic,
+    ark: inv_collection.ark
+  )
+end
+
 def mock_user(name: nil, id: nil, password:, tzregion: nil, telephonenumber: nil)
   raise "Can't mock without either a name or an ID" unless (name || id)
 
