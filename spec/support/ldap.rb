@@ -29,7 +29,7 @@ def mock_collection(name:, id: nil, ark: nil)
   id
 end
 
-def mock_ldap_for(inv_collection)
+def mock_ldap_for_collection(inv_collection)
   mock_collection(
     name: inv_collection.name,
     id: inv_collection.mnemonic,
@@ -64,6 +64,16 @@ def mock_user(name: nil, id: nil, password:, tzregion: nil, telephonenumber: nil
   allow(User::LDAP).to receive(:fetch).with(id).and_return(user_ldap)
 
   id
+end
+
+def mock_permissions_all(user_id, group_id_or_ids)
+  gids = Array(group_id_or_ids)
+  mock_permissions(user_id, gids.map { |gid| [gid, PERMISSIONS_ALL] }.to_h)
+end
+
+def mock_permissions_read_only(user_id, group_id_or_ids)
+  gids = Array(group_id_or_ids)
+  mock_permissions(user_id, gids.map { |gid| [gid, PERMISSIONS_READ_ONLY] }.to_h)
 end
 
 def mock_permissions(user_id, perms_by_group_id)

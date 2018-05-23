@@ -2,10 +2,9 @@ require 'features_helper'
 
 describe 'guest' do
   before :each do
-    perms_by_group_id = (0..3).map do |i|
-      [mock_collection(name: "Collection #{i}"), PERMISSIONS_READ_ONLY]
-    end.to_h
-    mock_permissions(GUEST_USER_ID, perms_by_group_id)
+    mock_permissions_read_only(GUEST_USER_ID, (0..3).map do |i|
+      mock_collection(name: "Collection #{i}")
+    end)
 
     visit login_path
     click_button 'Guest'

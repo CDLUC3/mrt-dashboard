@@ -10,8 +10,6 @@ describe 'login' do
 
     col_id = mock_collection(name: 'Collection 1')
     mock_permissions(user_id, {col_id => PERMISSIONS_ALL})
-
-    visit login_path
   end
 
   it 'accepts valid credentials' do
