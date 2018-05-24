@@ -58,6 +58,19 @@ describe 'objects' do
     expect(page).to have_content(obj.erc_when)
   end
 
+  it 'should display a download button' do
+    download_button = find_button('Download object')
+    download_form = download_button.find(:xpath, 'ancestor::form')
+    download_action = download_form['action']
+
+    expected_uri = url_for(
+      controller: :object,
+      action: :download,
+      object: obj
+    )
+    expect(URI(download_action).path).to eq(URI(expected_uri).path)
+  end
+
   describe 'version info' do
     it 'should display the version' do
       expect(page).to have_content(version_str)
@@ -82,8 +95,8 @@ describe 'objects' do
         basename = f.pathname.sub(/^producer\//, '')
 
         expected_uri = url_for(
-          controller: 'file',
-          action: 'download',
+          controller: :file,
+          action: :download,
           object: ERB::Util.url_encode(obj.ark), # TODO: figure out why this needs to be double-encoded, then stop doing it
           version: obj.version_number.to_s,
           file: ERB::Util.url_encode(f.pathname) # TODO: should we really encode this, or just escape the '/'?
