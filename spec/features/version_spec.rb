@@ -1,10 +1,11 @@
 require 'features_helper'
 
-describe 'objects' do
+describe 'versions' do
   attr_reader :user_id
   attr_reader :password
   attr_reader :obj
   attr_reader :version_str
+  attr_reader :version
 
   attr_reader :producer_files
   attr_reader :system_files
@@ -21,6 +22,7 @@ describe 'objects' do
     inv_collection_1.inv_objects << obj
 
     @version_str = "Version #{obj.version_number}"
+    @version = obj.current_version
 
     @producer_files = Array.new(3) do |i|
       size = 1024 * (2 ** i)
@@ -40,7 +42,7 @@ describe 'objects' do
       create(
         :inv_file,
         inv_object: obj,
-        inv_version: obj.current_version,
+        inv_version: version,
         pathname: "system/file-#{i}.xml",
         full_size: size,
         billable_size: size,
@@ -50,48 +52,39 @@ describe 'objects' do
 
     log_in_with(user_id, password)
     click_link(obj.ark)
+    click_link(version_str)
   end
 
-  it 'should be the object page' do
-    expect(page.title).to include('Object')
+  it 'should be the version page' do
+    expect(page.title).to include(version_str)
     expect(page.title).to include(obj.ark)
-    expect(page).to have_content("Object: #{obj.ark}")
-  end
-
-  it 'should display minimal metadata' do
-    expect(page).to have_content(obj.erc_who)
-    expect(page).to have_content(obj.erc_what)
-    expect(page).to have_content(obj.erc_when)
   end
 
   it 'should display a download button' do
-    download_button = find_button('Download object')
+    download_button = find_button('Download version')
     download_form = download_button.find(:xpath, 'ancestor::form')
     download_action = download_form['action']
 
     expected_uri = url_for(
-      controller: :object,
+      controller: :version,
       action: :download,
-      object: obj
+      object: obj,
+      version: version
     )
     expect(URI(download_action).path).to eq(URI(expected_uri).path)
   end
 
-  describe 'version info' do
-    it 'should display the version' do
-      expect(page).to have_content(version_str)
-    end
-
-    it 'should let the user navigate to a version' do
-      click_link(version_str)
-      expect(page).to have_content("#{obj.ark} - #{version_str}")
-    end
+  it 'should link back to the object' do
+    click_link("Object: #{obj.ark}")
+    expect(page.title).to include('Object')
+    expect(page.title).to include(obj.ark)
   end
 
-  describe 'file info' do
-    it 'should let the user download a file' do
-      producer_files.each do |f|
-        basename = f.pathname.sub(/^producer\//, '')
+  describe 'files' do
+    it 'should let the user download both system and producer files' do
+      all_files = producer_files + system_files
+      all_files.each do |f|
+        basename = f.pathname.sub(/^(producer|system)\//, '')
 
         expected_uri = url_for(
           controller: :file,
@@ -100,6 +93,8 @@ describe 'objects' do
           version: obj.version_number.to_s,
           file: ERB::Util.url_encode(f.pathname) # TODO: should we really encode this, or just escape the '/'?
         )
+        # TODO: figure out why this is only half-double-encoded, unlike the object page
+        expected_uri = CGI.unescape(expected_uri)
 
         download_link = find_link(basename)
         expect(download_link).not_to be_nil
