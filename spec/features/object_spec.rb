@@ -78,26 +78,22 @@ describe 'objects' do
     end
 
     it 'should let the user download a file' do
-      # TODO: something better than these shenanigans
-      self.class.send(:include, RSpec::Rails::Matchers::RoutingMatchers)
-      self.class.send(:include, ActionDispatch::Assertions::RoutingAssertions)
-      self.class.send(:define_method, :message) { |msg, _| msg }
-      @routes = Rails.application.routes
-
       producer_files.each do |f|
         basename = f.pathname.sub(/^producer\//, '')
 
-        download_link = find_link(basename)
-        expect(download_link).not_to be_nil
-
-        download_href = download_link['href']
-        expect(get: download_href).to route_to(
+        expected_uri = url_for(
           controller: 'file',
           action: 'download',
-          object: obj.ark,
+          object: ERB::Util.url_encode(obj.ark), # TODO: figure out why this needs to be double-encoded, then stop doing it
           version: obj.version_number.to_s,
-          file: f.pathname
+          file: ERB::Util.url_encode(f.pathname) # TODO: should we really encode this, or just escape the '/'?
         )
+
+        download_link = find_link(basename)
+        expect(download_link).not_to be_nil
+        download_href = download_link['href']
+
+        expect(URI(download_href).path).to eq(URI(expected_uri).path)
       end
     end
   end
