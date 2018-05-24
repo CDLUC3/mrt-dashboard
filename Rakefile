@@ -3,3 +3,12 @@
 
 require File.expand_path('../config/application', __FILE__)
 MrtDashboard::Application.load_tasks
+
+# ------------------------------------------------------------
+# Coverage
+
+desc 'Run all tests with coverage'
+task :coverage do
+  ENV['COVERAGE'] = 'true'
+  Rake::Task[:spec].invoke
+end

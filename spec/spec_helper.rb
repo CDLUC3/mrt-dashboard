@@ -1,7 +1,10 @@
 # ------------------------------------------------------------
-# Simplecov
+# SimpleCov
 
-require 'simplecov' if ENV['COVERAGE']
+if ENV['COVERAGE']
+  require 'simplecov'
+  SimpleCov.start 'rails'
+end
 
 # ------------------------------------------------------------
 # Rspec configuration
