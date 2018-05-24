@@ -30,6 +30,7 @@ group :development, :test do
   gem 'byebug'
   gem 'colorize', '~> 0.8'
   gem 'launchy'
+  gem 'rspec-rails', '~> 3.0'
 end
 
 group :test do
@@ -37,7 +38,6 @@ group :test do
   gem 'chromedriver-helper', '~> 1.1'
   gem 'database_cleaner', '~> 1.5'
   gem 'factory_bot_rails'
-  gem 'rspec-rails', '~> 3.0'
   gem 'selenium-webdriver', '~> 3.7'
   gem 'simplecov', '~> 0.14'
   gem 'simplecov-console', '~> 0.4'
