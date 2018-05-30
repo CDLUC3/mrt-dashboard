@@ -1,5 +1,6 @@
 require 'spec_helper'
 require 'colorize'
+require 'support/ark'
 require 'support/factory_bot'
 
 if (env = ENV['RAILS_ENV'])
