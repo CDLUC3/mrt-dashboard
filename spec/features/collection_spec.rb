@@ -50,5 +50,12 @@ describe 'collections' do
       expect(page).to have_content("Object: #{obj.ark}")
     end
 
+    it 'should display an "Add Object" link' do
+      add_obj_link = find_link('Add object')
+      expect(add_obj_link).not_to be_nil
+      add_obj_link.click
+      expect(page.title).to include('Add Object')
+    end
+
   end
 end
