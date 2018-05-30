@@ -171,7 +171,7 @@ class ObjectController < ApplicationController
                     "application/zip")
   end
 
-  def downloadUser
+  def downloadUser # TODO: rename to downloadProducerFiles or similar
     stream_response("#{@object.bytestream_uri2}?t=zip", 
                     "attachment",
                     "#{Orchard::Pairtree.encode(@object.ark.to_s)}_object.zip",
@@ -185,7 +185,7 @@ class ObjectController < ApplicationController
                     "text/xml")
   end
 
-  def async
+  def async # TODO: rename to requestAsyncDownload or something
     if exceeds_download_size(@object) then
       render :nothing => true, :status => 403
     elsif exceeds_sync_size(@object) then
