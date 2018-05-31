@@ -2,7 +2,6 @@ require 'rails_helper'
 require 'capybara/dsl'
 require 'capybara/rails'
 require 'capybara/rspec'
-require 'support/ldap'
 
 # ------------------------------------------------------------
 # Capybara etc.

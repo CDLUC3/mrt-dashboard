@@ -2,6 +2,7 @@ require 'spec_helper'
 require 'colorize'
 require 'support/ark'
 require 'support/factory_bot'
+require 'support/ldap'
 
 if (env = ENV['RAILS_ENV'])
   abort("Can't run tests in environment #{env}") if env != 'test'

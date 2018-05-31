@@ -25,12 +25,14 @@ describe 'collections' do
     attr_reader :inv_objects
 
     before(:each) do
-      @inv_objects = Array.new(3) { |i| create(
-        :inv_object,
-        erc_who: 'Doe, Jane',
-        erc_what: "Object #{i}",
-        erc_when: "2018-01-0#{i}"
-      ) }
+      @inv_objects = Array.new(3) do |i|
+        create(
+          :inv_object,
+          erc_who: 'Doe, Jane',
+          erc_what: "Object #{i}",
+          erc_when: "2018-01-0#{i}"
+        )
+      end
       inv_collection_1.inv_objects << inv_objects
       log_in_with(user_id, password)
     end
