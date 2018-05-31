@@ -9,6 +9,9 @@ PROJECT_ROOT=`pwd`
 # Fail fast
 set -e
 
+# Make sure Rails cache directory exists
+mkdir -p "${PROJECT_ROOT}/tmp/cache"
+
 # ############################################################
 # Test database
 
