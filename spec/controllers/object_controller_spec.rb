@@ -2,6 +2,27 @@ require 'rails_helper'
 
 describe ObjectController do
 
+  attr_reader :user_id
+
+  attr_reader :collection
+  attr_reader :collection_id
+  attr_reader :objects
+
+  attr_reader :object
+  attr_reader :object_ark
+
+  before(:each) do
+    @user_id = mock_user(name: 'Jane Doe', password: 'correcthorsebatterystaple')
+
+    @collection = create(:private_collection, name: 'Collection 1', mnemonic: 'collection_1')
+    @collection_id = mock_ldap_for_collection(collection)
+    @objects = Array.new(3) {|i| create(:inv_object, erc_who: 'Doe, Jane', erc_what: "Object #{i}", erc_when: "2018-01-0#{i}")}
+    collection.inv_objects << objects
+
+    @object_ark = objects[0].ark
+    @object = objects[0]
+  end
+
   # TODO: ditto for update, or shared examples
   describe ':ingest' do
     describe 'request' do
@@ -38,10 +59,53 @@ describe ObjectController do
   end
 
   describe ':download' do
-    it 'prevents download without permissions'
-    it 'prevents download when download size exceeded'
-    it "redirects to #{LostorageController} when sync download size exceeded"
-    it 'streams the object as a zipfile'
+    it 'requires a login' do
+      get(:download, {object: object_ark}, {uid: nil})
+      expect(response.status).to eq(302)
+      expect(response.headers['Location']).to include('guest_login')
+    end
+
+    it 'prevents download without permissions' do
+      get(:download, {object: object_ark}, {uid: user_id})
+      expect(response.status).to eq(401)
+    end
+
+    it 'prevents download when download size exceeded' do
+      mock_permissions_all(user_id, collection_id)
+      allow_any_instance_of(InvObject).to receive(:total_actual_size).and_return(1 + APP_CONFIG['max_download_size'])
+      get(:download, {object: object_ark}, {uid: user_id})
+      expect(response.status).to eq(403)
+    end
+
+    it "redirects to #{LostorageController} when sync download size exceeded" do
+      mock_permissions_all(user_id, collection_id)
+      allow_any_instance_of(InvObject).to receive(:total_actual_size).and_return(1 + APP_CONFIG['max_archive_size'])
+      get(:download, {object: object_ark}, {uid: user_id})
+      expect(response.status).to eq(302)
+      expect(response.headers['Location']).to include('lostorage')
+    end
+
+    it 'streams the object as a zipfile' do
+      mock_permissions_all(user_id, collection_id)
+
+      streamer = double(Streamer)
+      expected_url = "#{object.bytestream_uri}?t=zip"
+      allow(Streamer).to receive(:new).with(expected_url).and_return(streamer)
+
+      get(:download, {object: object_ark}, {uid: user_id})
+
+      expect(response.status).to eq(200)
+
+      expected_filename = "#{Orchard::Pairtree.encode(object_ark)}_object.zip"
+      expected_headers = {
+        'Content-Type' => 'application/zip',
+        'Content-Disposition' => "attachment; filename=\"#{expected_filename}\""
+      }
+      response_headers = response.headers
+      expected_headers.each do |header, value|
+        expect(response_headers[header]).to eq(value)
+      end
+    end
   end
 
   describe ':downloadUser' do
@@ -71,17 +135,13 @@ describe ObjectController do
 
     it '404s cleanly when collection does not exist' do
       bad_ark = ArkHelper.next_ark
-      get :recent, {collection: bad_ark}
+      get(:recent, {collection: bad_ark})
       expect(response.status).to eq(404)
     end
 
     it 'gets the list of objects' do
-      collection = create(:inv_collection, name: 'Collection 1', mnemonic: 'collection_1')
-      objects = Array.new(3) {|i| create(:inv_object, erc_who: 'Doe, Jane', erc_what: "Object #{i}", erc_when: "2018-01-0#{i}")}
-      collection.inv_objects << objects
-
       request.accept = 'application/atom+xml'
-      get :recent, {collection: collection.ark}
+      get(:recent, {collection: collection.ark})
       expect(response.status).to eq(200)
       expect(response.content_type).to eq('application/atom+xml')
 

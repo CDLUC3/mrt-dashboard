@@ -27,6 +27,7 @@ def mock_collection(name:, id: nil, ark: nil)
   }
   allow(Group::LDAP).to receive(:fetch).with(id).and_return(group_ldap)
   allow(Group::LDAP).to receive(:fetch_by_ark_id).with(ark).and_return(group_ldap)
+  allow(Group::LDAP).to receive(:get_user_permissions).with(anything, id, User::LDAP).and_return([])
   id
 end
 
