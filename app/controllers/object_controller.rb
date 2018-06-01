@@ -224,6 +224,7 @@ class ObjectController < ApplicationController
       @obj_count = @doc.xpath("//bat:batchState/bat:jobStates").length
     rescue Exception => ex
       # see if we can parse the error from ingest, if not then unknown error
+      raise unless ex.respond_to?(:response)
       @doc = Nokogiri::XML(ex.response) do |config|
         config.strict.noent.noblanks
       end
