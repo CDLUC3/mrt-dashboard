@@ -109,13 +109,73 @@ describe ObjectController do
   end
 
   describe ':downloadUser' do
-    it 'prevents download without permissions'
-    it "streams the object's producer files as a zipfile"
+    it 'requires a login' do
+      get(:downloadUser, {object: object_ark}, {uid: nil})
+      expect(response.status).to eq(302)
+      expect(response.headers['Location']).to include('guest_login')
+    end
+
+    it 'prevents download without permissions' do
+      get(:downloadUser, {object: object_ark}, {uid: user_id})
+      expect(response.status).to eq(401)
+    end
+
+    it "streams the object's producer files as a zipfile" do
+      mock_permissions_all(user_id, collection_id)
+
+      streamer = double(Streamer)
+      expected_url = "#{object.bytestream_uri2}?t=zip"
+      allow(Streamer).to receive(:new).with(expected_url).and_return(streamer)
+
+      get(:downloadUser, {object: object_ark}, {uid: user_id})
+
+      expect(response.status).to eq(200)
+
+      expected_filename = "#{Orchard::Pairtree.encode(object_ark)}_object.zip"
+      expected_headers = {
+        'Content-Type' => 'application/zip',
+        'Content-Disposition' => "attachment; filename=\"#{expected_filename}\""
+      }
+      response_headers = response.headers
+      expected_headers.each do |header, value|
+        expect(response_headers[header]).to eq(value)
+      end
+    end
   end
 
   describe ':downloadManifest' do
-    it 'prevents download without permissions'
-    it 'streams the manifest as XML'
+    it 'requires a login' do
+      get(:downloadUser, {object: object_ark}, {uid: nil})
+      expect(response.status).to eq(302)
+      expect(response.headers['Location']).to include('guest_login')
+    end
+
+    it 'prevents download without permissions' do
+      get(:downloadUser, {object: object_ark}, {uid: user_id})
+      expect(response.status).to eq(401)
+    end
+
+    it 'streams the manifest as XML' do
+      mock_permissions_all(user_id, collection_id)
+
+      streamer = double(Streamer)
+      expected_url = "#{object.bytestream_uri3}"
+      allow(Streamer).to receive(:new).with(expected_url).and_return(streamer)
+
+      get(:downloadManifest, {object: object_ark}, {uid: user_id})
+
+      expect(response.status).to eq(200)
+
+      expected_filename = "#{Orchard::Pairtree.encode(object_ark)}"
+      expected_headers = {
+        'Content-Type' => 'text/xml',
+        'Content-Disposition' => "attachment; filename=\"#{expected_filename}\""
+      }
+      response_headers = response.headers
+      expected_headers.each do |header, value|
+        expect(response_headers[header]).to eq(value)
+      end
+    end
   end
 
   describe ':async' do
