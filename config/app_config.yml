@@ -62,6 +62,8 @@ test:
   max_download_size: 104857600  # 10485760 bytes = 10 MiB
   uri_1: "http://store.merritt.example.edu/content/"
   uri_2: "http://store.merritt.example.edu/producer/"
+  ingest_service:       "http://ingest.merritt.example.edu/poster/submit/"
+  ingest_service_update: "http://ingest.merritt.example.edu/poster/update/"
 local:
   <<: *development
 

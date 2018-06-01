@@ -11,6 +11,22 @@ describe ObjectController do
   attr_reader :object
   attr_reader :object_ark
 
+  def mock_httpclient
+    params = {
+      receive_timeout: 7200,
+      send_timeout: 3600,
+      connect_timeout: 7200,
+      keep_alive_timeout: 3600
+    }
+    client = instance_double(HTTPClient)
+    params.each do |param, value|
+      writer = "#{param}=".to_sym
+      allow(client).to receive(writer).with(value)
+    end
+    allow(HTTPClient).to receive(:new).and_return(client)
+    client
+  end
+
   before(:each) do
     @user_id = mock_user(name: 'Jane Doe', password: 'correcthorsebatterystaple')
 
@@ -21,6 +37,10 @@ describe ObjectController do
 
     @object_ark = objects[0].ark
     @object = objects[0]
+
+    @client = begin
+
+    end
   end
 
   # TODO: ditto for update, or shared examples
@@ -179,18 +199,26 @@ describe ObjectController do
   end
 
   describe ':async' do
+    it 'requires a login' do
+      get(:async, { object: object_ark }, { uid: nil })
+      expect(response.status).to eq(302)
+      expect(response.headers['Location']).to include('guest_login')
+    end
+
     it 'fails when object is too big for any download' do
       mock_permissions_all(user_id, collection_id)
       allow_any_instance_of(InvObject).to receive(:total_actual_size).and_return(1 + APP_CONFIG['max_download_size'])
       get(:async, { object: object_ark }, { uid: user_id })
       expect(response.status).to eq(403)
     end
+
     it 'fails when object is too small for asynchronous download' do
       mock_permissions_all(user_id, collection_id)
       allow_any_instance_of(InvObject).to receive(:total_actual_size).and_return(APP_CONFIG['max_archive_size'] - 1)
       get(:async, { object: object_ark }, { uid: user_id })
       expect(response.status).to eq(406)
     end
+
     it 'succeeds when object is the right size for synchronous download' do
       mock_permissions_all(user_id, collection_id)
       allow_any_instance_of(InvObject).to receive(:total_actual_size).and_return(1 + APP_CONFIG['max_archive_size'])
@@ -200,9 +228,88 @@ describe ObjectController do
   end
 
   describe ':upload' do
+    attr_reader :file
+    attr_reader :client
+    attr_reader :params
+    attr_reader :session
+
+    before(:each) do
+      # @file = Rack::Test::UploadedFile.new('tempfile.foo', content_type='application/octet-stream', binary=true)
+      @file = double(ActionDispatch::Http::UploadedFile)
+      allow(file).to receive(:tempfile).and_return('tempfile.foo')
+      allow(file).to receive(:original_filename).and_return('original_filename.foo')
+
+      # hack to trick ActionController::TestCase.paramify_values into accepting the double
+      allow(file).to receive(:to_param).and_return(file)
+
+      @params = {
+        object: object_ark, # TODO: is this right?
+        file: file,
+        object_type: 'MRT-curatorial',
+        author: 'N. Herschlag',
+        title: 'An Account of a Very Odd Monstrous Calf',
+        primary_id: object_ark, # TODO: is this right?
+        date: Time.now.to_param,
+        local_id: 'doi:10.1098/rstl.1665.0007'
+      }
+      @session = { uid: user_id, group_id: collection_id }
+
+      @client = mock_httpclient
+    end
+
+    it 'requires a login' do
+      post(:async, params, { uid: nil })
+      expect(response.status).to eq(302)
+      expect(response.headers['Location']).to include('guest_login')
+    end
+
+    # TODO: why not?
+    # it 'requires write permission' do
+    #   post(:upload, params, session)
+    #   expect(response.status).to eq(403)
+    # end
+
     it 'redirects and displays an error when no file provided'
-    it 'posts an update to the ingest service'
-    it 'sets the batch ID for display'
+
+    it 'posts an update to the ingest service' do
+      mock_permissions_all(user_id, collection_id)
+
+      expected_params = {
+        'file'              => params[:file].tempfile,
+        'type'              => params[:object_type],
+        'submitter'         => "#{user_id}/Jane Doe",
+        'filename'          => params[:file].original_filename,
+        'profile'           => "#{collection_id}_profile",
+        'creator'           => params[:author],
+        'title'             => params[:title],
+        'primaryIdentifier' => params[:primary_id],
+        'date'              => params[:date],
+        'localIdentifier'   => params[:local_id],
+        'responseForm'      => 'xml'
+      }
+
+      batch_id = "12345"
+      xml = <<-XML
+        <bat:batchState xmlns:bat='http://example.org/bat'>
+          <bat:batchID>#{batch_id}</bat:batchID>
+          <bat:jobStates/>
+          <bat:jobStates/>
+          <bat:jobStates/>
+        </bat:batchState>
+      XML
+      ingest_response = instance_double(HTTP::Message)
+      allow(ingest_response).to receive(:content).and_return(xml)
+
+      expect(client).to receive(:post).with(APP_CONFIG['ingest_service_update'], expected_params).and_return(ingest_response)
+
+      post(:upload, params, session)
+
+      expect(response.status).to eq(200)
+      expect(controller.instance_variable_get('@batch_id')).to eq(batch_id)
+      expect(controller.instance_variable_get('@obj_count')).to eq(3)
+    end
+
+    it 'handles errors'
   end
 
   describe ':recent' do
@@ -229,19 +336,7 @@ describe ObjectController do
 
   describe ':mk_httpclient' do
     it 'configures and returns an HTTP client' do
-      params = {
-        receive_timeout: 7200,
-        send_timeout: 3600,
-        connect_timeout: 7200,
-        keep_alive_timeout: 3600
-      }
-      client = double(HTTPClient)
-      params.each do |param, value|
-        writer = "#{param}=".to_sym
-        expect(client).to receive(writer).with(value)
-      end
-
-      expect(HTTPClient).to receive(:new).and_return(client)
+      client = mock_httpclient
       result = controller.send(:mk_httpclient) # private method
       expect(result).to be(client)
     end

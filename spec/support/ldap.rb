@@ -53,6 +53,7 @@ def mock_user(name: nil, id: nil, password:, tzregion: nil, telephonenumber: nil
     'dn' => ["uid=#{id},ou=People,ou=uc3,dc=cdlib,dc=org"],
     'objectclass' => ['person', 'inetOrgPerson', 'merrittUser', 'organizationalPerson', 'top'],
     'givenname' => [given_name],
+    'displayname' => [name],
     'uid' => [id],
     'mail' => ["#{id}@example.edu"],
     'sn' => [surname],
