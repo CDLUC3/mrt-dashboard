@@ -16,7 +16,7 @@ describe ObjectController do
 
     @collection = create(:private_collection, name: 'Collection 1', mnemonic: 'collection_1')
     @collection_id = mock_ldap_for_collection(collection)
-    @objects = Array.new(3) {|i| create(:inv_object, erc_who: 'Doe, Jane', erc_what: "Object #{i}", erc_when: "2018-01-0#{i}")}
+    @objects = Array.new(3) { |i| create(:inv_object, erc_who: 'Doe, Jane', erc_what: "Object #{i}", erc_when: "2018-01-0#{i}") }
     collection.inv_objects << objects
 
     @object_ark = objects[0].ark
@@ -60,27 +60,27 @@ describe ObjectController do
 
   describe ':download' do
     it 'requires a login' do
-      get(:download, {object: object_ark}, {uid: nil})
+      get(:download, { object: object_ark }, { uid: nil })
       expect(response.status).to eq(302)
       expect(response.headers['Location']).to include('guest_login')
     end
 
     it 'prevents download without permissions' do
-      get(:download, {object: object_ark}, {uid: user_id})
+      get(:download, { object: object_ark }, { uid: user_id })
       expect(response.status).to eq(401)
     end
 
     it 'prevents download when download size exceeded' do
       mock_permissions_all(user_id, collection_id)
       allow_any_instance_of(InvObject).to receive(:total_actual_size).and_return(1 + APP_CONFIG['max_download_size'])
-      get(:download, {object: object_ark}, {uid: user_id})
+      get(:download, { object: object_ark }, { uid: user_id })
       expect(response.status).to eq(403)
     end
 
     it "redirects to #{LostorageController} when sync download size exceeded" do
       mock_permissions_all(user_id, collection_id)
       allow_any_instance_of(InvObject).to receive(:total_actual_size).and_return(1 + APP_CONFIG['max_archive_size'])
-      get(:download, {object: object_ark}, {uid: user_id})
+      get(:download, { object: object_ark }, { uid: user_id })
       expect(response.status).to eq(302)
       expect(response.headers['Location']).to include('lostorage')
     end
@@ -92,7 +92,7 @@ describe ObjectController do
       expected_url = "#{object.bytestream_uri}?t=zip"
       allow(Streamer).to receive(:new).with(expected_url).and_return(streamer)
 
-      get(:download, {object: object_ark}, {uid: user_id})
+      get(:download, { object: object_ark }, { uid: user_id })
 
       expect(response.status).to eq(200)
 
@@ -110,13 +110,13 @@ describe ObjectController do
 
   describe ':downloadUser' do
     it 'requires a login' do
-      get(:downloadUser, {object: object_ark}, {uid: nil})
+      get(:downloadUser, { object: object_ark }, { uid: nil })
       expect(response.status).to eq(302)
       expect(response.headers['Location']).to include('guest_login')
     end
 
     it 'prevents download without permissions' do
-      get(:downloadUser, {object: object_ark}, {uid: user_id})
+      get(:downloadUser, { object: object_ark }, { uid: user_id })
       expect(response.status).to eq(401)
     end
 
@@ -127,7 +127,7 @@ describe ObjectController do
       expected_url = "#{object.bytestream_uri2}?t=zip"
       allow(Streamer).to receive(:new).with(expected_url).and_return(streamer)
 
-      get(:downloadUser, {object: object_ark}, {uid: user_id})
+      get(:downloadUser, { object: object_ark }, { uid: user_id })
 
       expect(response.status).to eq(200)
 
@@ -145,13 +145,13 @@ describe ObjectController do
 
   describe ':downloadManifest' do
     it 'requires a login' do
-      get(:downloadUser, {object: object_ark}, {uid: nil})
+      get(:downloadUser, { object: object_ark }, { uid: nil })
       expect(response.status).to eq(302)
       expect(response.headers['Location']).to include('guest_login')
     end
 
     it 'prevents download without permissions' do
-      get(:downloadUser, {object: object_ark}, {uid: user_id})
+      get(:downloadUser, { object: object_ark }, { uid: user_id })
       expect(response.status).to eq(401)
     end
 
@@ -162,7 +162,7 @@ describe ObjectController do
       expected_url = "#{object.bytestream_uri3}"
       allow(Streamer).to receive(:new).with(expected_url).and_return(streamer)
 
-      get(:downloadManifest, {object: object_ark}, {uid: user_id})
+      get(:downloadManifest, { object: object_ark }, { uid: user_id })
 
       expect(response.status).to eq(200)
 
@@ -179,9 +179,24 @@ describe ObjectController do
   end
 
   describe ':async' do
-    it 'fails when object is too big for any download'
-    it 'fails when object is too small for asynchronous download'
-    it 'succeeds when object is the right size for synchronous download'
+    it 'fails when object is too big for any download' do
+      mock_permissions_all(user_id, collection_id)
+      allow_any_instance_of(InvObject).to receive(:total_actual_size).and_return(1 + APP_CONFIG['max_download_size'])
+      get(:async, { object: object_ark }, { uid: user_id })
+      expect(response.status).to eq(403)
+    end
+    it 'fails when object is too small for asynchronous download' do
+      mock_permissions_all(user_id, collection_id)
+      allow_any_instance_of(InvObject).to receive(:total_actual_size).and_return(APP_CONFIG['max_archive_size'] - 1)
+      get(:async, { object: object_ark }, { uid: user_id })
+      expect(response.status).to eq(406)
+    end
+    it 'succeeds when object is the right size for synchronous download' do
+      mock_permissions_all(user_id, collection_id)
+      allow_any_instance_of(InvObject).to receive(:total_actual_size).and_return(1 + APP_CONFIG['max_archive_size'])
+      get(:async, { object: object_ark }, { uid: user_id })
+      expect(response.status).to eq(200)
+    end
   end
 
   describe ':upload' do
@@ -195,13 +210,13 @@ describe ObjectController do
 
     it '404s cleanly when collection does not exist' do
       bad_ark = ArkHelper.next_ark
-      get(:recent, {collection: bad_ark})
+      get(:recent, { collection: bad_ark })
       expect(response.status).to eq(404)
     end
 
     it 'gets the list of objects' do
       request.accept = 'application/atom+xml'
-      get(:recent, {collection: collection.ark})
+      get(:recent, { collection: collection.ark })
       expect(response.status).to eq(200)
       expect(response.content_type).to eq('application/atom+xml')
 
