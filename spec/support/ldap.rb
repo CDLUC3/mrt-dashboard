@@ -65,7 +65,7 @@ def mock_user(name: nil, id: nil, password:, tzregion: nil, telephonenumber: nil
 
   allow(User::LDAP).to receive(:authenticate).with(id, password).and_return(true)
   allow(User::LDAP).to receive(:fetch).with(id).and_return(user_ldap)
-
+  allow(Group::LDAP).to receive(:find_groups_for_user).with(id, User::LDAP, anything).and_return([])
   id
 end
 
@@ -80,8 +80,20 @@ def mock_permissions_read_only(user_id, group_id_or_ids)
 end
 
 def mock_permissions(user_id, perms_by_group_id)
-  group_ids = perms_by_group_id.keys
-  allow(Group::LDAP).to receive(:find_groups_for_user).with(user_id, any_args).and_return(group_ids)
+  group_ids_by_perm = {}
+  perms_by_group_id.each do |gid, perms|
+    perms.each do |perm|
+      group_ids_by_perm[perm] ||= []
+      group_ids_by_perm[perm] << gid
+    end
+  end
+  group_ids_by_perm.each do |perm, gids|
+    allow(Group::LDAP).to receive(:find_groups_for_user).with(user_id, User::LDAP, perm).and_return(gids)
+  end
+
+  all_gids = perms_by_group_id.keys
+  allow(Group::LDAP).to receive(:find_groups_for_user).with(user_id, User::LDAP, nil).and_return(all_gids)
+
   perms_by_group_id.each do |group_id, permissions|
     allow(Group::LDAP).to receive(:get_user_permissions).with(user_id, group_id, User::LDAP).and_return(permissions)
   end
