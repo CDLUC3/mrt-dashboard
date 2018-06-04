@@ -332,7 +332,7 @@ describe ObjectController do
     end
 
     it 'requires a login' do
-      post(:async, params, {uid: nil})
+      post(:upload, params, {uid: nil})
       expect(response.status).to eq(302)
       expect(response.headers['Location']).to include('guest_login')
     end
@@ -343,7 +343,12 @@ describe ObjectController do
     #   expect(response.status).to eq(403)
     # end
 
-    it 'redirects and displays an error when no file provided'
+    it 'redirects and displays an error when no file provided' do
+      params.delete(:file)
+      post(:upload, params, session)
+      expect(response.status).to eq(302)
+      expect(response.headers['Location']).to end_with("/a/#{collection_id}")
+    end
 
     it 'posts an update to the ingest service' do
       mock_permissions_all(user_id, collection_id)
