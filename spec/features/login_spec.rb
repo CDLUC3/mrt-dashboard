@@ -18,6 +18,14 @@ describe 'login' do
     expect(page).to have_content('Logout')
   end
 
+  it 'supports logout' do
+    log_in_with(user_id, password)
+    logout_link = find_link('Logout')
+    logout_link.click
+    expect(page).to have_content('You are now logged out')
+    expect(page).to have_content('Login')
+  end
+
   it 'rejects invalid credentials' do
     log_in_with("not #{user_id}", "not #{password}")
     expect(page).to have_content('Login unsuccessful')
