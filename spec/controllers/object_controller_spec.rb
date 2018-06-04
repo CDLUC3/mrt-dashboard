@@ -154,14 +154,64 @@ describe ObjectController do
   end
 
   describe ':mint' do
-    it 'requires a user'
-    it 'requires the user to have write permissions on the current submission profile'
-    it 'posts a mint request'
+    attr_reader :params
+    before(:each) do
+      @params = {
+        profile: "#{collection_id}_profile",
+        erc: 'who: Herschlag, Natalie%0Awhat: An Account of a Very Odd Monstrous Calf',
+        responseForm: 'xml'
+      }
+    end
+
+    it 'requires a user' do
+      @request.headers['HTTP_AUTHORIZATION'] = nil
+      post(:mint, params, {uid: nil})
+      expect(response.status).to eq(401)
+    end
+
+    it 'requires the user to have write permissions on the current submission profile' do
+      mock_permissions_read_only(user_id, collection_id)
+      post(:mint, params, {uid: user_id})
+      expect(response.status).to eq(404)
+    end
+
+    it 'posts a mint request' do
+      mock_permissions_all(user_id, collection_id)
+
+      mint_status = 200
+      mint_headers = {content_type: 'text/xml'}
+      mint_body = "<xml>12345</xml>"
+      mint_response = instance_double(HTTP::Message)
+      allow(mint_response).to receive(:status).and_return(mint_status)
+      allow(mint_response).to receive(:headers).and_return(mint_headers)
+      allow(mint_response).to receive(:body).and_return(mint_body)
+
+      expected_params = {
+        'profile' => params[:profile],
+        'erc' => params[:erc],
+        'responseForm' => params[:responseForm]
+      }
+      expect(client).to receive(:post).with(
+        APP_CONFIG['mint_service'],
+        hash_including(expected_params),
+        {"Content-Type" => "multipart/form-data"}
+      ).and_return(mint_response)
+
+      post(:mint, params, {uid: user_id})
+
+      expect(response.status).to eq(mint_response.status)
+      expect(response.content_type).to eq(mint_response.headers[:content_type])
+      expect(response.body).to eq(mint_response.body)
+    end
+
     it 'forwards the response from the minting service'
   end
 
   describe ':index' do
-    it 'prevents index view without read permission'
+    it 'prevents index view without read permission' do
+      get(:index, {object: object_ark}, {uid: user_id})
+      expect(response.status).to eq(401)
+    end
   end
 
   describe ':download' do
