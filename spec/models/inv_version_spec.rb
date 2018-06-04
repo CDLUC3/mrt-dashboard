@@ -2,12 +2,12 @@ require 'rails_helper'
 
 describe InvVersion do
 
-  attr_accessor :obj, :version
+  attr_reader :obj, :version
 
   before(:each) do
-    inv_collection_1 = create(:inv_collection, name: 'Collection 1', mnemonic: 'collection_1')
+    collection = create(:inv_collection, name: 'Collection 1', mnemonic: 'collection_1')
     @obj = create(:inv_object, erc_who: 'Doe, Jane', erc_what: 'Object 1', erc_when: '2018-01-01')
-    inv_collection_1.inv_objects << obj
+    collection.inv_objects << obj
     @version = obj.current_version
   end
 
