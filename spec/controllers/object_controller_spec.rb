@@ -438,7 +438,29 @@ describe ObjectController do
       expect(controller.instance_variable_get('@obj_count')).to eq(3)
     end
 
-    it 'handles errors'
+    it 'handles errors' do
+      mock_permissions_all(user_id, collection_id)
+
+      status_desc = 'I am the status description'
+      error = 'I am the error'
+
+      xml = <<-XML
+        <exc:batchState xmlns:exc='http://example.org/exc'>
+          <exc:statusDescription>#{status_desc}</exc:statusDescription>
+          <exc:error>#{error}</exc:error>
+        </exc:batchState>
+      XML
+
+      ex = Exception.new
+      allow(ex).to receive(:response).and_return(xml)
+
+      expect(client).to receive(:post).with(APP_CONFIG['ingest_service_update'], anything).and_raise(ex)
+
+      post(:upload, params, session)
+
+      expect(controller.instance_variable_get(:@description)).to eq("ingest: #{status_desc}")
+      expect(controller.instance_variable_get(:@error)).to eq("ingest: #{error}")
+    end
   end
 
   describe ':recent' do
