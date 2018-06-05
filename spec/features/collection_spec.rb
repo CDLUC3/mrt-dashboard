@@ -4,21 +4,21 @@ describe 'collections' do
   attr_reader :user_id
   attr_reader :password
 
-  attr_reader :inv_collection_1
-  attr_reader :collection_1_id
+  attr_reader :collection
+  attr_reader :collection_id
 
   before(:each) do
     @password = 'correcthorsebatterystaple'
     @user_id = mock_user(name: 'Jane Doe', password: password)
 
-    @inv_collection_1 = create(:inv_collection, name: 'Collection 1', mnemonic: 'collection_1')
-    @collection_1_id = mock_ldap_for_collection(inv_collection_1)
-    mock_permissions_all(user_id, collection_1_id)
+    @collection = create(:inv_collection, name: 'Collection 1', mnemonic: 'collection_1')
+    @collection_id = mock_ldap_for_collection(collection)
+    mock_permissions_all(user_id, collection_id)
   end
 
   it 'should display the collection name' do
     log_in_with(user_id, password)
-    expect(page).to have_content("Collection: #{inv_collection_1.name}")
+    expect(page).to have_content("Collection: #{collection.name}")
   end
 
   describe 'objects' do
@@ -33,7 +33,7 @@ describe 'collections' do
           erc_when: "2018-01-0#{i}"
         )
       end
-      inv_collection_1.inv_objects << inv_objects
+      collection.inv_objects << inv_objects
       log_in_with(user_id, password)
     end
 
