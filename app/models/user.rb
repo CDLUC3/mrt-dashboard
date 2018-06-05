@@ -40,11 +40,14 @@ class User
     return User.new(LDAP.fetch(user_id))
   end
 
+  # TODO: figure out whether we still need this & get rid of it if not
+  # :nocov
   #these would be LDAP attributes, not database ones.  maybe they should sync up more to
   #be more active-record-like, but it seems a lot of work to make it completely match AR
   def set_attrib(attribute, value)
     LDAP_USER.replace_attribute(self.login, attribute, value)
   end
+  # :nocov
 
   def self.valid_ldap_credentials?(uid, password)
     begin
@@ -54,7 +57,9 @@ class User
     end
     return res && true
   end
-  
+
+  # TODO: figure out whether we still need this & get rid of it if not
+  # :nocov
   def single_value(record, field)
     if record[field].nil? or record[field][0].nil? or record[field][0].length < 1 then
       return nil 
@@ -62,6 +67,7 @@ class User
       return record[field][0]
     end
   end
+  # :nocov
 
   def array_to_value(arr)
     return arr if !arr.is_a?(Array)
