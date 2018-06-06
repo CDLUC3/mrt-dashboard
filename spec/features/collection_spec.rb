@@ -16,7 +16,7 @@ describe 'collections' do
     @collection = create(:private_collection, name: 'Collection 1', mnemonic: 'collection_1')
     @collection_id = mock_ldap_for_collection(collection)
 
-    @index_path = URI(url_for(controller: :collection, action: :index, group: collection_id)).path
+    @index_path = url_for(controller: :collection, action: :index, group: collection_id, only_path: true)
   end
 
   after(:each) do
