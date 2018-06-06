@@ -3,6 +3,7 @@ class CollectionConstraint
     if request.params[:group].blank? then
       return false
     elsif !request.params[:group].match(/^ark/) then
+      # TODO: what if some collection is NAMED 'ark'-something?
       # collection mneumonic
       return true
     else
