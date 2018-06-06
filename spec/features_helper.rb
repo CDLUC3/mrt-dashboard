@@ -35,3 +35,11 @@ def log_in_with(user_id, password)
   click_button "Login"
 end
 
+def log_out!
+  # faster than unless page.has_content?, see https://blog.codeship.com/faster-rails-tests/
+  # return if page.has_no_content?('Logout')
+  return unless page.text.include?('Logout')
+
+  logout_link = find_link('Logout')
+  logout_link.click if logout_link
+end

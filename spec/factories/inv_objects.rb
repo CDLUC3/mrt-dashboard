@@ -19,7 +19,25 @@ FactoryBot.define do
 
     # noinspection RubyArgCount
     after(:create) do |obj|
-      create(:inv_version, inv_object: obj)
+      version = create(:inv_version, inv_object: obj)
+      [
+        [1, 'who', nil, :erc_who],
+        [2, 'what', nil, :erc_what],
+        [3, 'when', nil, :erc_when],
+        [4, 'where', 'primary', :ark],
+        [5, 'where', 'local', :erc_where]
+      ].each do |seq_num, element, qualifier, accessor|
+        value = obj.send(accessor)
+        create(
+          :inv_dublinkernel,
+          inv_object: obj,
+          inv_version: version,
+          seq_num: seq_num,
+          element: element,
+          qualifier: qualifier,
+          value: value
+        )
+      end
     end
   end
 end
