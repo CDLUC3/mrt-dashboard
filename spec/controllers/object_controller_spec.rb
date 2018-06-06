@@ -203,8 +203,6 @@ describe ObjectController do
       expect(response.content_type).to eq(mint_response.headers[:content_type])
       expect(response.body).to eq(mint_response.body)
     end
-
-    it 'forwards the response from the minting service'
   end
 
   describe ':index' do
