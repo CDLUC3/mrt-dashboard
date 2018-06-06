@@ -64,6 +64,19 @@ describe 'versions' do
     expect(page.title).to include(obj.ark)
   end
 
+  describe 'without specified version' do
+    it 'redirects to the latest' do
+      create(:inv_version, inv_object: obj, number: 2)
+      obj.version_number = 2
+      obj.save!
+
+      index_path = url_for(controller: :version, action: :index, object: obj.ark, only_path: true)
+      visit(index_path)
+      expect(page.title).to include("Version 2")
+      expect(page.title).to include(obj.ark)
+    end
+  end
+
   it 'should display a download button' do
     download_button = find_button('Download version')
     download_form = download_button.find(:xpath, 'ancestor::form')
