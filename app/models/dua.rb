@@ -1,4 +1,5 @@
 class Dua
+  #:nocov:
   def self.parse_file(dua_file)
     # regex to capture match of name:value and put them into a hash
     rx = /(\w+)\s*:\s*(.+)/
@@ -12,5 +13,6 @@ class Dua
       Hash[a]
     end
   end
+  #:nocov:
 end
 

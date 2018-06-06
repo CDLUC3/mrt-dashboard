@@ -1,6 +1,7 @@
 class DuaController < ApplicationController
   before_filter :require_user
-  
+
+  #:nocov:
   def index 
     object = InvObject.where("inv_objects.ark = ?", params_u(:object)).first
     dua_hash = with_fetched_tempfile(object.dua_uri) { |f| Dua.parse_file(f) }
@@ -32,4 +33,5 @@ class DuaController < ApplicationController
       @title, @terms = dua_hash['Title'], dua_hash['Terms']
     end
   end
+  #:nocov:
 end

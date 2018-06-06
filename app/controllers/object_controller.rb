@@ -18,7 +18,9 @@ class ObjectController < ApplicationController
   end
 
   before_filter(:only => [:download, :downloadUser]) do
+    #:nocov:
     check_dua(@object, {:object => @object})
+    #:nocov:
   end
 
   before_filter(:only => [:download]) do

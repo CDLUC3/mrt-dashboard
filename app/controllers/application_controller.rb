@@ -253,13 +253,15 @@ class ApplicationController < ActionController::Base
       end
     end  
   end
-  
+
+  #:nocov:
   # returns the response of the HTTP request for the DUA URI
   def process_dua_request(uri)
     http = Net::HTTP.new(uri.host, uri.port)
     uri_response = http.request(Net::HTTP::Get.new(uri.request_uri))
     return (uri_response.class == Net::HTTPOK)
-  end 
+  end
+  #:nocov:
 
   def params_u(param)
     urlunencode(params[param])
@@ -280,7 +282,8 @@ class ApplicationController < ActionController::Base
     response.headers['Last-Modified'] = Time.now.httpdate
     self.response_body = Streamer.new(url)
   end
-  
+
+  #:nocov:
   def check_dua(object, redirect_args)
     if params[:blue] then
       # bypass DUA processing for python scripts - indicated by special param
@@ -304,7 +307,8 @@ class ApplicationController < ActionController::Base
       end
     end
   end
-  
+  #:nocov:
+
   def is_ark?(str)
     # return !str.match(/ark:\/[0-9]{5}\/[a-z0-9+]/).nil?
     return !str.match(/ark:\/[0-9a-zA-Z]{1}[0-9]{4}\/[a-z0-9+]/).nil?
