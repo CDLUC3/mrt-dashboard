@@ -20,6 +20,10 @@ describe 'profile' do
     log_in_with(user_id, password)
   end
 
+  after(:each) do
+    log_out!
+  end
+
   it 'should have a profile link' do
     expect(page).to have_content('Profile')
   end

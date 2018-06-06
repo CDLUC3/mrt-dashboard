@@ -12,6 +12,10 @@ describe 'login' do
     mock_permissions(user_id, {col_id => PERMISSIONS_ALL})
   end
 
+  after(:each) do
+    log_out!
+  end
+
   it 'accepts valid credentials' do
     log_in_with(user_id, password)
     expect(page).not_to have_content('Login unsuccessful')

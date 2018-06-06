@@ -30,6 +30,10 @@ describe 'home' do
       @col_ids = [col1, col2].map {|c| mock_ldap_for_collection(c)}
     end
 
+    after(:each) do
+      log_out!
+    end
+
     it 'allows user to click on a collection' do
       mock_permissions_all(user_id, col_ids)
       log_in_with(user_id, password)

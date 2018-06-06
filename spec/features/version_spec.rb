@@ -55,6 +55,10 @@ describe 'versions' do
     click_link(version_str)
   end
 
+  after(:each) do
+    log_out!
+  end
+
   it 'should be the version page' do
     expect(page.title).to include(version_str)
     expect(page.title).to include(obj.ark)

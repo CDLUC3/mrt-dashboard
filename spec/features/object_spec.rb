@@ -52,6 +52,10 @@ describe 'objects' do
     click_link(obj.ark)
   end
 
+  after(:each) do
+    log_out!
+  end
+
   it 'should be the object page' do
     expect(page.title).to include('Object')
     expect(page.title).to include(obj.ark)
