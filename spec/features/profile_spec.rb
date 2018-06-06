@@ -15,7 +15,7 @@ describe 'profile' do
       tzregion: @tzregion,
       telephonenumber: @telephonenumber
     )
-    col_id = mock_collection(name: "Collection 1")
+    col_id = mock_collection(name: 'Collection 1')
     mock_permissions(user_id, {col_id => PERMISSIONS_ALL})
     log_in_with(user_id, password)
   end
@@ -40,25 +40,52 @@ describe 'profile' do
     end
 
     it 'should allow the user to change their telephone number' do
-      new_number = "+1 999-958-5555"
+      new_number = '+1 999-958-5555'
 
       click_link('Profile')
-      fill_in "telephonenumber", :with => new_number
+      fill_in('telephonenumber', with: new_number)
 
       allow(User::LDAP).to receive(:replace_attribute).with(user_id, any_args).and_return(true)
       expect(User::LDAP).to receive(:replace_attribute).with(user_id, 'telephonenumber', new_number)
-      click_button "Save changes"
+      click_button 'Save changes'
       expect(page).to have_content('Your profile has been updated.')
     end
 
     it 'should allow the user to change their time zone' do
       click_link('Profile')
-      select 'Europe/Helsinki', :from => "tzregion"
+      select('Europe/Helsinki', from: 'tzregion')
 
       allow(User::LDAP).to receive(:replace_attribute).with(user_id, any_args).and_return(true)
       expect(User::LDAP).to receive(:replace_attribute).with(user_id, 'tzregion', 'Europe/Helsinki')
-      click_button "Save changes"
+      click_button 'Save changes'
       expect(page).to have_content('Your profile has been updated.')
+    end
+
+    it 'should not allow the user to clear required fields' do
+      UserController::REQUIRED.keys.each {|field| fill_in(field, with: '')}
+      expect(User::LDAP).not_to receive(:replace_attribute)
+      click_button 'Save changes'
+      UserController::REQUIRED.values.each {|label| expect(page).to have_content(label)}
+    end
+
+    it 'should allow the user to change their password' do
+      click_link('Profile')
+      new_password = 'elvis'
+      fill_in('userpassword', with: new_password)
+      fill_in('repeatuserpassword', with: new_password)
+      allow(User::LDAP).to receive(:replace_attribute).with(user_id, any_args).and_return(true)
+      expect(User::LDAP).to receive(:replace_attribute).with(user_id, 'userpassword', new_password)
+      click_button 'Save changes'
+    end
+
+    it 'should require passwords to match' do
+      click_link('Profile')
+      fill_in('userpassword', with: 'elvis')
+      fill_in('repeatuserpassword', with: 'not elvis')
+      allow(User::LDAP).to receive(:replace_attribute).with(user_id, any_args).and_return(true)
+      expect(User::LDAP).not_to receive(:replace_attribute).with(user_id, 'userpassword', anything)
+      click_button 'Save changes'
+      expect(page).to have_content('do not match')
     end
   end
 
