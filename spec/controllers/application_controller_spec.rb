@@ -147,4 +147,24 @@ describe ApplicationController do
       end
     end
   end
+
+  describe 'Rack::Response.close' do
+    it "doesn't close a non-closeable body" do
+      response = Rack::Response.new
+      body = response.instance_variable_get(:@body)
+      # if we're not explicit about this, the not_to expectation will actually make it return true
+      allow(body).to receive(:respond_to?).with(:close).and_return(false)
+      expect(body).not_to receive(:close)
+      response.close
+    end
+
+    it 'closes a closeable body' do
+      response = Rack::Response.new
+      body = response.instance_variable_get(:@body)
+      # probably not needed because the expectation would take care of it, but let's be explicit
+      allow(body).to receive(:respond_to?).with(:close).and_return(true)
+      expect(body).to receive(:close)
+      response.close
+    end
+  end
 end
