@@ -226,14 +226,16 @@ describe ObjectController do
 
     it 'prevents download when download size exceeded' do
       mock_permissions_all(user_id, collection_id)
-      allow_any_instance_of(InvObject).to receive(:total_actual_size).and_return(1 + APP_CONFIG['max_download_size'])
+      size_too_large = 1 + APP_CONFIG['max_download_size']
+      allow_any_instance_of(InvObject).to receive(:total_actual_size).and_return(size_too_large)
       get(:download, {object: object_ark}, {uid: user_id})
       expect(response.status).to eq(403)
     end
 
     it "redirects to #{LostorageController} when sync download size exceeded" do
       mock_permissions_all(user_id, collection_id)
-      allow_any_instance_of(InvObject).to receive(:total_actual_size).and_return(1 + APP_CONFIG['max_archive_size'])
+      size_too_large = 1 + APP_CONFIG['max_archive_size']
+      allow_any_instance_of(InvObject).to receive(:total_actual_size).and_return(size_too_large)
       get(:download, {object: object_ark}, {uid: user_id})
       expect(response.status).to eq(302)
       expect(response.headers['Location']).to include('lostorage')
