@@ -80,6 +80,26 @@ describe ApplicationController do
         expect(actual).to eq(expected)
       end
     end
+
+    it 'returns nil for nil' do
+      actual = controller.send(:number_to_storage_size, nil)
+      expect(actual).to be_nil
+    end
+
+    it 'returns nil for bad arguments' do
+      actual = controller.send(:number_to_storage_size, 'I am definitely not a number')
+      expect(actual).to be_nil
+    end
+
+  end
+
+  describe ':max_download_size_pretty' do
+    it 'formats the max download size' do
+      size = APP_CONFIG['max_download_size']
+      expected = controller.send(:number_to_storage_size, size)
+      actual = controller.send(:max_download_size_pretty)
+      expect(actual).to eq(expected)
+    end
   end
 
   describe ':with_fetched_tempfile' do
