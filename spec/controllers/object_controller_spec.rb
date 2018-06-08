@@ -15,14 +15,13 @@ describe ObjectController do
   attr_reader :client
 
   def mock_httpclient
-    params = {
+    client = instance_double(HTTPClient)
+    {
       receive_timeout: 7200,
       send_timeout: 3600,
       connect_timeout: 7200,
       keep_alive_timeout: 3600
-    }
-    client = instance_double(HTTPClient)
-    params.each do |param, value|
+    }.each do |param, value|
       writer = "#{param}=".to_sym
       allow(client).to receive(writer).with(value)
     end
