@@ -1,6 +1,7 @@
 FactoryBot.define do
   factory :inv_file do
 
+    full_size 0
     billable_size 0
     created { Time.now }
 
