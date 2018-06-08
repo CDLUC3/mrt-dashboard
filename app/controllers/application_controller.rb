@@ -232,14 +232,12 @@ class ApplicationController < ActionController::Base
     session[:return_to] = nil
   end
 
+  # TODO: is this only used for DUAs? if so, let's remove it
   def with_fetched_tempfile(*args)
     require 'open-uri'
     require 'fileutils'
     open(*args) do |data|
       tmp_file = Tempfile.new('mrt_http')
-      if data.instance_of? File then
-        File.copy(data.path, tmp_file.path)
-      else
         begin
           while (!(buff = data.read(4096)).nil?)do 
             tmp_file << buff
@@ -250,8 +248,7 @@ class ApplicationController < ActionController::Base
           tmp_file.close
           tmp_file.delete
         end
-      end
-    end  
+    end
   end
 
   #:nocov:
