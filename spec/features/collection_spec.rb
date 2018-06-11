@@ -34,9 +34,10 @@ describe 'collections' do
 
     before(:each) do
       @inv_objects = Array.new(6) do |i|
+        init = (65 + i).chr
         create(
           :inv_object,
-          erc_who: 'Doe, Jane',
+          erc_who: "Doe, Jane #{init}.",
           erc_what: "Object #{i}",
           erc_when: "2018-01-0#{i}"
         )
@@ -78,7 +79,7 @@ describe 'collections' do
           click_button 'Go'
           inv_objects.each do |obj|
             expect(page).to have_content(obj.ark)
-            # who is the same for all test objects so don't bother
+            expect(page).to have_content(obj.erc_who)
             expect(page).to have_content(obj.erc_what)
             expect(page).to have_content(obj.erc_when)
           end
@@ -89,10 +90,22 @@ describe 'collections' do
           click_button 'Go'
           inv_objects.each do |obj|
             expect(page).to have_content(obj.ark)
-            # who is the same for all test objects so don't bother
+            expect(page).to have_content(obj.erc_who)
             expect(page).to have_content(obj.erc_what)
             expect(page).to have_content(obj.erc_when)
           end
+        end
+
+        it 'finds by ark' do
+          obj = inv_objects[0]
+          ark = obj.ark
+          fill_in('terms', with: ark)
+          click_button 'Go'
+
+          expect(page).to have_content(obj.ark)
+          expect(page).to have_content(obj.erc_who)
+          expect(page).to have_content(obj.erc_what)
+          expect(page).to have_content(obj.erc_when)
         end
 
         it 'finds by arks' do
@@ -103,14 +116,14 @@ describe 'collections' do
 
           expected_objects.each do |obj|
             expect(page).to have_content(obj.ark)
-            # who is the same for all test objects so don't bother
+            expect(page).to have_content(obj.erc_who)
             expect(page).to have_content(obj.erc_what)
             expect(page).to have_content(obj.erc_when)
           end
 
           (inv_objects - expected_objects).each do |obj|
             expect(page).not_to have_content(obj.ark)
-            # who is the same for all test objects so don't bother
+            expect(page).not_to have_content(obj.erc_who)
             expect(page).not_to have_content(obj.erc_what)
             expect(page).not_to have_content(obj.erc_when)
           end
