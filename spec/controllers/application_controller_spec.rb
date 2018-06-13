@@ -41,6 +41,17 @@ describe ApplicationController do
     end
   end
 
+  describe ':redirect_to_latest_version' do
+    # TODO: why is this a good thing?
+    it 'sets latest version to blank if no object found' do
+      params = controller.params
+      params[:object] = 'I am definitely not an object'
+      allow(InvObject).to receive(:find_by_ark).with(any_args).and_return(nil)
+      controller.send(:redirect_to_latest_version)
+      expect(params[:version]).to eq(nil.to_s)
+    end
+  end
+
   describe ':render_unavailable' do
     it 'returns a 500 error' do
       get(:render_unavailable)
