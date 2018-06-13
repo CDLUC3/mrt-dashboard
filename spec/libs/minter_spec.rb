@@ -46,5 +46,17 @@ module Noid
         expect(actual).to eq(expected)
       end
     end
+
+    it 'wraps SocketErrors' do
+      minter = Minter.new(noid_url)
+      stub_request(:get, "#{noid_url}?mint+1").to_raise(SocketError)
+      expect { minter.mint }.to raise_error(Noid::MintException, 'Could not connect to server.')
+    end
+
+    it 'wraps other errors' do
+      minter = Minter.new(noid_url)
+      stub_request(:get, "#{noid_url}?mint+1").to_raise(StandardError)
+      expect { minter.mint }.to raise_error(Noid::MintException, "Can't get ID; not a NOID server?")
+    end
   end
 end
