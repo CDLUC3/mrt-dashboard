@@ -42,4 +42,5 @@ group :test do
   gem 'simplecov', '~> 0.14'
   gem 'simplecov-console', '~> 0.4'
   gem 'sqlite3'
+  gem 'webmock', '~> 3.0'
 end

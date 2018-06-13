@@ -25,4 +25,3 @@ if (env = ENV['RAILS_ENV'])
 else
   ENV['RAILS_ENV'] = 'test'
 end
-

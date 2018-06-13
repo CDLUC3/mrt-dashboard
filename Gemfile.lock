@@ -74,6 +74,8 @@ GEM
       nokogiri (~> 1.8)
     colorize (0.8.1)
     concurrent-ruby (1.0.5)
+    crack (0.4.3)
+      safe_yaml (~> 1.0.0)
     crass (1.0.4)
     daemons (1.2.4)
     database_cleaner (1.7.0)
@@ -92,6 +94,7 @@ GEM
     ffi (1.9.23)
     globalid (0.4.1)
       activesupport (>= 4.2.0)
+    hashdiff (0.3.7)
     hirb (0.7.3)
     http-cookie (1.0.3)
       domain_name (~> 0.5)
@@ -186,6 +189,7 @@ GEM
       rspec-support (~> 3.5.0)
     rspec-support (3.5.0)
     rubyzip (1.2.1)
+    safe_yaml (1.0.4)
     selenium-webdriver (3.12.0)
       childprocess (~> 0.5)
       rubyzip (~> 1.2)
@@ -227,6 +231,10 @@ GEM
       binding_of_caller (>= 0.7.2)
       railties (>= 4.0)
       sprockets-rails (>= 2.0, < 4.0)
+    webmock (3.4.2)
+      addressable (>= 2.3.6)
+      crack (>= 0.3.2)
+      hashdiff
     will_paginate (3.1.5)
     xpath (3.0.0)
       nokogiri (~> 1.8)
@@ -266,6 +274,7 @@ DEPENDENCIES
   unicode
   uuidtools
   web-console (~> 2.0)
+  webmock (~> 3.0)
   will_paginate
 
 BUNDLED WITH
