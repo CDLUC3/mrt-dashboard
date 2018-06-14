@@ -6,6 +6,8 @@ module UserLdap
     attr_reader :user_ldap
 
     before(:each) do
+      unmock_ldap!
+
       ldap_params = {
         :host => LDAP_CONFIG["host"],
         :port => LDAP_CONFIG["port"],
@@ -26,7 +28,7 @@ module UserLdap
       @admin_ldap = double(Net::LDAP)
       allow(Net::LDAP).to receive(:new).with(ldap_params).and_return(admin_ldap)
       @user_ldap = User::LDAP
-      @user_ldap.instance_variable_set(:@admin_ldap, nil) # make sure we get a fresh mock every time
+      @user_ldap.instance_variable_set(:@admin_ldap, admin_ldap) # make sure we get a fresh mock every time
     end
 
     describe ':find_all' do
@@ -42,16 +44,16 @@ module UserLdap
           scope: Net::LDAP::SearchScope_SingleLevel
         ).and_return(
           [
-            {'cn' => ['foo']},
-            {'cn' => ['bar']},
-            {'cn' => ['baz']},
+            { 'cn' => ['foo'] },
+            { 'cn' => ['bar'] },
+            { 'cn' => ['baz'] },
           ]
         )
 
         expected = [
-          {'cn' => ['bar']},
-          {'cn' => ['baz']},
-          {'cn' => ['foo']},
+          { 'cn' => ['bar'] },
+          { 'cn' => ['baz'] },
+          { 'cn' => ['foo'] },
         ]
         actual = user_ldap.find_all
         expect(actual).to eq(expected)
@@ -108,5 +110,19 @@ module UserLdap
       end
     end
 
+    describe ':authenticate' do
+      attr_reader :user_id
+      attr_reader :password
+
+      before(:each) do
+        @user_id = 'jdoe'
+        @password = 'correcthorsebatterystaple'
+      end
+
+      it 'raises LdapException if ID does not exist' do
+        allow(admin_ldap).to receive(:search).with(any_args).and_return([])
+        expect { user_ldap.authenticate(user_id, password) }.to raise_error(LdapMixin::LdapException, 'user does not exist')
+      end
+    end
   end
 end

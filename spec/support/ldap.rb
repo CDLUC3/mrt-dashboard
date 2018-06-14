@@ -118,6 +118,12 @@ def mock_ldap!
   end
 end
 
+def unmock_ldap!
+  [User::LDAP, Group::LDAP].each do |ldap|
+    RSpec::Mocks.space.proxy_for(ldap).reset
+  end
+end
+
 # ------------------------------------------------------------
 # RSpec
 

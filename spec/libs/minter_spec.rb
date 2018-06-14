@@ -62,7 +62,7 @@ module Noid
     it 'raises an exception for error responses' do
       minter = Minter.new(noid_url)
       stub_request(:get, "#{noid_url}?mint+1").to_return(body: 'nope', status: '403')
-      expect { minter.mint }.to raise_error(Noid::MintException, "Got error response from server.")
+      expect { minter.mint }.to raise_error(Noid::MintException, 'Got error response from server.')
     end
   end
 end
