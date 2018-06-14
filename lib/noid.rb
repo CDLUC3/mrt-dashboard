@@ -34,10 +34,12 @@ module Noid
                         else
                           md[2]
                         end
-                      end)
+        end)
+      rescue MintException
+        raise # don't eat our own exceptions
       rescue SocketError
         raise MintException.new("Could not connect to server.")
-      rescue Exception
+      rescue Exception # TODO: should this be StandardError (or just 'rescue')?
         raise MintException.new("Can't get ID; not a NOID server?")
       end
     end
