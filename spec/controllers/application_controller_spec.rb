@@ -52,6 +52,35 @@ describe ApplicationController do
     end
   end
 
+  describe ':current_user' do
+    attr_reader :user_id
+    attr_reader :password
+    attr_reader :user
+    before(:each) do
+      @user_id = 'jdoe'
+      @password = 'correcthorsebatterystaple'
+      @user = double(User)
+      allow(User).to receive(:find_by_id).with(user_id).and_return(user)
+    end
+
+    it 'reads the user ID from the session' do
+      controller.session[:uid] = user_id
+      expect(controller.send(:current_user)).to eq(user)
+    end
+
+    it 'reads the user ID from basic auth' do
+      controller.request.headers['HTTP_AUTHORIZATION'] = "Basic #{Base64.encode64("#{user_id}:#{password}")}".strip
+      expect(User).to receive(:valid_ldap_credentials?).with(user_id, password).and_return(true)
+      expect(controller.send(:current_user)).to eq(user)
+    end
+
+    it 'returns nil for bad auth' do
+      controller.request.headers['HTTP_AUTHORIZATION'] = 'Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ==' # from RFC7617
+      expect(User).to receive(:valid_ldap_credentials?).with('Aladdin', 'open sesame').and_return(false)
+      expect(controller.send(:current_user)).to be_nil
+    end
+  end
+
   describe ':render_unavailable' do
     it 'returns a 500 error' do
       get(:render_unavailable)
