@@ -3,9 +3,12 @@ require 'rails_helper'
 describe User do
   attr_reader :user
   attr_reader :user_ldap
+  attr_reader :user_id
+  attr_reader :password
 
   before(:each) do
-    user_id = mock_user(name: 'Jane Doe', password: 'correcthorsebatterystaple')
+    @password = 'correcthorsebatterystaple'
+    @user_id = mock_user(name: 'Jane Doe', password: password)
     @user_ldap = User::LDAP.fetch(user_id)
     @user = User.new(user_ldap)
   end
@@ -40,6 +43,12 @@ describe User do
         user_ldap[multivalue_key] = multivalue_result
         expect(user.send(multivalue_key)).to eq(multivalue_result)
       end
+    end
+  end
+
+  describe ':valid_ldap_credentials' do
+    it 'validates LDAP credentials' do
+      expect(User.valid_ldap_credentials?(user_id, password)).to eq(true)
     end
   end
 end

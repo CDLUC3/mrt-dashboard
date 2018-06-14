@@ -123,6 +123,34 @@ module UserLdap
         allow(admin_ldap).to receive(:search).with(any_args).and_return([])
         expect { user_ldap.authenticate(user_id, password) }.to raise_error(LdapMixin::LdapException, 'user does not exist')
       end
+
+      it 'succeeds if ID exists' do
+        user_properties = {}
+        allow(admin_ldap).to receive(:search).with(base: LDAP_CONFIG["user_base"], filter: user_ldap.obj_filter(user_id)).and_return([user_properties])
+        allow(admin_ldap).to receive(:auth).with(/#{user_id}/, password)
+        allow(admin_ldap).to receive(:bind).and_return(true)
+        expect(user_ldap.authenticate(user_id, password)).to eq(true)
+      end
+    end
+
+    describe ':change_password' do
+      it 'allows the user to change the password' do
+        user_id = 'jdoe'
+        new_password = 'correcthorsebatterystaple'
+        expect(admin_ldap).to receive(:replace_attribute).with(/#{user_id}/, :userPassword, new_password).and_return(true)
+        expect(user_ldap.change_password(user_id, new_password)).to eq(true)
+      end
+
+      it 'raises an exception if the change operation fails' do
+        user_id = 'jdoe'
+        new_password = 'correcthorsebatterystaple'
+        expect(admin_ldap).to receive(:replace_attribute).with(/#{user_id}/, :userPassword, new_password).and_return(false)
+
+        result = OpenStruct.new
+        result.message = "Unwilling to perform"
+        expect(admin_ldap).to receive(:get_operation_result).and_return(result)
+        expect { user_ldap.change_password(user_id, new_password) }.to raise_error(LdapMixin::LdapException, result.message)
+      end
     end
   end
 end

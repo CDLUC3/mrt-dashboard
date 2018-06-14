@@ -153,11 +153,14 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  # :nocov:
+  # TODO: this doesn't seem to be used anywhere; can we delete it?
   def require_user_or_401
     unless current_user 
       render :status=>401, :text=>"" and return
     end
   end
+  # :nocov:
 
   def current_group
     @_current_group ||= Group.find(session[:group_id])
