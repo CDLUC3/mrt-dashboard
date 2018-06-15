@@ -204,7 +204,15 @@ describe LdapMixin do
 
   describe ':fetch_attribute' do
     it 'fetches an attribute value' do
-
+      id = 'foo'
+      attribute = :bar
+      value = 'baz'
+      results = [{attribute => value}]
+      expect(admin_ldap).to receive(:search).with(
+        base: base,
+        filter: ldap.obj_filter(id)
+      ).and_return(results)
+      expect(ldap.fetch_attribute(id, attribute)).to eq(value)
     end
   end
 end
