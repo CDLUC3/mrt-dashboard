@@ -72,7 +72,7 @@ module LdapMixin
     attr = fetch(id)[attribute]
     #true_or_exception(@admin_ldap.delete_attribute(id, attribute)) #this causes an error
     attr.delete_if { |item| item == value  }
-    replace_attribute(id, attribute, attr)
+    replace_attribute(id, attribute, attr) # TODO: should we bother if no change?
   end
 
   # returns in unspecified order
