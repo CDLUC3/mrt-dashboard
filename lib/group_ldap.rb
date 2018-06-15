@@ -98,6 +98,7 @@ module GroupLdap
 
       #go through and delete this user and replace the list of users once deleted
       sub_grps.each do |grp|
+        # TODO: is the user always present? if not, we're replacing when we don't need to
         members = grp[:uniquemember]
         members.delete_if{|member| member.eql?(long_user)}
         admin_ldap.replace_attribute(grp[:dn], :uniquemember, members)
