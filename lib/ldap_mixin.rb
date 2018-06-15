@@ -92,7 +92,7 @@ module LdapMixin
   def fetch(id)
     results = admin_ldap.search(:base => @base, :filter => obj_filter(id))
     raise LdapException.new('id does not exist') if results.length < 1
-    raise LdapException.new('ambigulous results, duplicate ids') if results.length > 1
+    raise LdapException.new('ambiguous results, duplicate ids') if results.length > 1
     results[0]
   end
 
@@ -101,7 +101,7 @@ module LdapMixin
                                 :filter => Net::LDAP::Filter.eq('arkid', ark_id),
                                 :scope => Net::LDAP::SearchScope_SingleLevel)
     raise LdapException.new('id does not exist') if results.length < 1
-    raise LdapException.new('ambigulous results, duplicate ids') if results.length > 1
+    raise LdapException.new('ambiguous results, duplicate ids') if results.length > 1
     results[0]
   end
 
