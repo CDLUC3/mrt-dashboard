@@ -111,7 +111,7 @@ describe ApplicationController do
         1 => '1 Byte',
         123 => '123 B',
         1234 => '1.23 KB',
-        12345 => '12.35 KB', # 12.345 rounds up to 12.35
+        12345 => '12.34 KB', # as of Ruby 2.4, 12.345 rounds down to 12.34
         1234567 => '1.23 MB',
         1234567890 => '1.23 GB',
         1234567890123 => '1.23 TB'
