@@ -9,7 +9,7 @@ gem "httpclient", "~> 2.7.0"
 gem "eco_exception_notification", # TODO: find a released version we can use
     :git => "git://github.com/chrisfinne/eco_exception_notification.git"
 gem "net-ldap", "~> 0.16"
-gem "nokogiri"
+gem "nokogiri", "~> 1.8", ">= 1.8.2"
 gem "puma"
 gem "will_paginate"
 gem "rack-cache"

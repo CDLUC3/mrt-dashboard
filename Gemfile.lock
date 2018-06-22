@@ -260,7 +260,7 @@ DEPENDENCIES
   multi_json
   mysql2 (~> 0.4.0)
   net-ldap (~> 0.16)
-  nokogiri
+  nokogiri (~> 1.8, >= 1.8.2)
   orchard
   puma
   rack-cache
@@ -278,4 +278,4 @@ DEPENDENCIES
   will_paginate
 
 BUNDLED WITH
-   1.16.1
+   1.16.2
