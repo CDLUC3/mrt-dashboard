@@ -22,3 +22,14 @@ MrtDashboard::Application.configure do
 
   config.log_tags = [:uuid, :remote_ip]
 end
+
+# TODO: remove this once we trust the switch to exception_notification works
+require 'exception_notification'
+Rails.application.config.middleware.use(ExceptionNotification::Rack, email: {
+  :email_prefix => "[Merritt UI] ",
+  :sender_address => "\"notifier\" <no-reply@#{Socket.gethostname}>",
+  :exception_recipients => ["marisa.strong@ucop.edu",
+                            "mark.reyes@ucop.edu",
+                            "david.moles@ucop.edu",
+                            "perry.willett@ucop.edu"]
+})

@@ -1,10 +1,3 @@
-GIT
-  remote: git://github.com/chrisfinne/eco_exception_notification.git
-  revision: 7fea2a178bc4b784130aa6debce67a5800a03c51
-  specs:
-    eco_exception_notification (3.0.0.rc1)
-      actionmailer (>= 3.0.4)
-
 GEM
   remote: http://rubygems.org/
   specs:
@@ -86,6 +79,9 @@ GEM
       unf (>= 0.0.5, < 1.0.0)
     erubis (2.7.0)
     eventmachine (1.2.3)
+    exception_notification (4.2.2)
+      actionmailer (>= 4.0, < 6)
+      activesupport (>= 4.0, < 6)
     factory_bot (4.8.2)
       activesupport (>= 3.0.0)
     factory_bot_rails (4.8.2)
@@ -251,7 +247,7 @@ DEPENDENCIES
   chromedriver-helper (~> 1.1)
   colorize (~> 0.8)
   database_cleaner (~> 1.5)
-  eco_exception_notification!
+  exception_notification (~> 4.2)
   factory_bot_rails
   httpclient (~> 2.7.0)
   jquery-rails
