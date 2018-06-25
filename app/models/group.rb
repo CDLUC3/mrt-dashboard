@@ -1,13 +1,13 @@
 # this all probably needs to be refactored eventually
 class Group
   LDAP = GroupLdap::Server.
-    new({ :host            => LDAP_CONFIG['host'],
-          :port            => LDAP_CONFIG['port'],
-          :base            => LDAP_CONFIG['group_base'],
-          :admin_user      => LDAP_CONFIG['admin_user'],
-          :admin_password  => LDAP_CONFIG['admin_password'],
-          :connect_timeout => LDAP_CONFIG['connect_timeout'],
-          :minter          => LDAP_CONFIG['ark_minter_url']})
+    new({ host: LDAP_CONFIG['host'],
+          port: LDAP_CONFIG['port'],
+          base: LDAP_CONFIG['group_base'],
+          admin_user: LDAP_CONFIG['admin_user'],
+          admin_password: LDAP_CONFIG['admin_password'],
+          connect_timeout: LDAP_CONFIG['connect_timeout'],
+          minter: LDAP_CONFIG['ark_minter_url']})
 
   attr_accessor :id, :submission_profile, :ark_id, :owner, :description
 
@@ -42,7 +42,7 @@ class Group
   
   # permissions are returned as an array like ['read','write'], maybe more in the future
   def permission(userid)
-    return Rails.cache.fetch("permissions_#{userid}_#{self.id}", :expires_in =>10.minutes) do
+    return Rails.cache.fetch("permissions_#{userid}_#{self.id}", expires_in: 10.minutes) do
       Group::LDAP.get_user_permissions(userid, self.id, User::LDAP)
     end
   end

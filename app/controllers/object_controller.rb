@@ -2,54 +2,54 @@ require 'tempfile'
 
 class ObjectController < ApplicationController
 
-  before_filter :require_user,       :except => [:jupload_add, :recent, :ingest, :mint, :update]
-  before_filter :load_object, :only=> [:index, :download, :downloadUser, :downloadManifest, :async]
-  before_filter(:only=>[:download, :downloadUser, :downloadManifest, :async]) do
+  before_filter :require_user,       except: [:jupload_add, :recent, :ingest, :mint, :update]
+  before_filter :load_object, only: [:index, :download, :downloadUser, :downloadManifest, :async]
+  before_filter(only: [:download, :downloadUser, :downloadManifest, :async]) do
     if (!has_object_permission?(@object, 'download')) then
       flash[:error] = 'You do not have download permissions.'
-      render :file => "#{Rails.root}/public/401.html", :status => 401, :layout => false
+      render file: "#{Rails.root}/public/401.html", status: 401, layout: false
     end
   end
 
-  before_filter(:only=>[:index]) do
+  before_filter(only: [:index]) do
     if (!has_object_permission_no_embargo?(@object, 'read')) then
-      render :file => "#{Rails.root}/public/401.html", :status => 401, :layout => false
+      render file: "#{Rails.root}/public/401.html", status: 401, layout: false
     end
   end
 
-  before_filter(:only => [:download, :downloadUser]) do
+  before_filter(only: [:download, :downloadUser]) do
     #:nocov:
-    check_dua(@object, {:object => @object})
+    check_dua(@object, {object: @object})
     #:nocov:
   end
 
-  before_filter(:only => [:download]) do
+  before_filter(only: [:download]) do
     # Interactive large object download does not support userFriendly
     # Call controller directly
 
     if exceeds_download_size(@object) then
-      render :file => "#{Rails.root}/public/403.html", :status => 403, :layout => false
+      render file: "#{Rails.root}/public/403.html", status: 403, layout: false
     elsif exceeds_sync_size(@object) then
       # if size is > max_archive_size, redirect to have user enter email for asynch compression (skipping streaming)
-      redirect_to(:controller => 'lostorage', :action => 'index', :object => @object)
+      redirect_to(controller: 'lostorage', action: 'index', object: @object)
     end
   end
 
-  protect_from_forgery :except => [:ingest, :mint, :update]
+  protect_from_forgery except: [:ingest, :mint, :update]
 
   def load_object
-    @object = InvObject.where('ark = ?', params_u(:object)).includes(:inv_collections, :inv_versions=>[:inv_files]).first 
+    @object = InvObject.where('ark = ?', params_u(:object)).includes(:inv_collections, inv_versions: [:inv_files]).first 
     raise ActiveRecord::RecordNotFound if @object.nil?
   end
 
   def ingest
     if !current_user then
-      render :status=>401, :text=>'' and return
+      render status: 401, text: '' and return
     else
       if (!params[:file].respond_to? :tempfile) then
-        render(:status=>400, :text=>"Bad file parameter.\n") and return
+        render(status: 400, text: "Bad file parameter.\n") and return
       elsif !current_user.groups('write').any? {|g| g.submission_profile == params[:profile]} then
-        render(:status=>404, :text=>'') and return
+        render(status: 404, text: '') and return
       else
         ingest_args = {
           'creator'           => params[:creator],
@@ -88,19 +88,19 @@ class ObjectController < ApplicationController
           'type'              => params[:type]
         }.reject{|k, v| v.blank? }
         resp = mk_httpclient.post(APP_CONFIG['ingest_service'], ingest_args, {'Content-Type' => 'multipart/form-data'})
-        render :status=>resp.status, :content_type=>resp.headers[:content_type], :text=>resp.body
+        render status: resp.status, content_type: resp.headers[:content_type], text: resp.body
       end
     end
   end
 
   def update
     if !current_user then
-      render :status=>401, :text=>'' and return
+      render status: 401, text: '' and return
     else
       if (!params[:file].respond_to? :tempfile) then
-        render(:status=>400, :text=>"Bad file parameter.\n") and return
+        render(status: 400, text: "Bad file parameter.\n") and return
       elsif !current_user.groups('write').any? {|g| g.submission_profile == params[:profile]} then
-        render(:status=>404, :text=>'') and return
+        render(status: 404, text: '') and return
       else
         ingest_args = {
           'creator'           => params[:creator],
@@ -139,17 +139,17 @@ class ObjectController < ApplicationController
           'type'              => params[:type]
         }.reject{|k, v| v.blank? }
         resp = mk_httpclient.post(APP_CONFIG['ingest_service_update'], ingest_args, {'Content-Type' => 'multipart/form-data'})
-        render :status=>resp.status, :content_type=>resp.headers[:content_type], :text=>resp.body
+        render status: resp.status, content_type: resp.headers[:content_type], text: resp.body
       end
     end  
   end
   
   def mint
     if !current_user then
-      render :status=>401, :text=>'' and return
+      render status: 401, text: '' and return
     else
       if !current_user.groups('write').any? {|g| g.submission_profile == params[:profile]} then
-        render(:status=>404, :text=>'') and return
+        render(status: 404, text: '') and return
       else
         mint_args = {
           'profile'           => params[:profile],
@@ -158,7 +158,7 @@ class ObjectController < ApplicationController
           'responseForm'     => params[:responseForm]
         }.reject{|k, v| v.blank? }
         resp = mk_httpclient.post(APP_CONFIG['mint_service'], mint_args, {'Content-Type' => 'multipart/form-data'})
-        render :status=>resp.status, :content_type=>resp.headers[:content_type], :text=>resp.body
+        render status: resp.status, content_type: resp.headers[:content_type], text: resp.body
       end
     end
   end
@@ -189,20 +189,20 @@ class ObjectController < ApplicationController
 
   def async # TODO: rename to requestAsyncDownload or something
     if exceeds_download_size(@object) then
-      render :nothing => true, :status => 403
+      render nothing: true, status: 403
     elsif exceeds_sync_size(@object) then
       # Async Supported
-      render :nothing => true, :status => 200
+      render nothing: true, status: 200
     else
       # Async Not Acceptable
-      render :nothing => true, :status => 406
+      render nothing: true, status: 406
     end
   end
 
   def upload
     if params[:file].nil? then
       flash[:error] = 'You must choose a filename to submit.'
-      redirect_to :controller => 'object', :action => 'add', :group => current_group and return false
+      redirect_to controller: 'object', action: 'add', group: current_group and return false
     end
     begin
       ingest_params = {
@@ -232,7 +232,7 @@ class ObjectController < ApplicationController
       end
       @description = "ingest: #{@doc.xpath("//exc:statusDescription")[0].child.text}"
       @error = "ingest: #{@doc.xpath("//exc:error")[0].child.text}"
-      render :action => 'upload_error'
+      render action: 'upload_error'
     end
   end
 
@@ -240,9 +240,9 @@ class ObjectController < ApplicationController
     @collection_ark = params[:collection]
 
     # prevent stack trace when collection does not exist
-    c = InvCollection.where(:ark=>@collection_ark).first
+    c = InvCollection.where(ark: @collection_ark).first
     if c.nil? || c.to_s == '' then
-       render(:status=>404, :text=>'404 Not Found') and return
+       render(status: 404, text: '404 Not Found') and return
     end
     @objects = c.inv_objects.
       quickloadhack.

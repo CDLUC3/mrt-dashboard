@@ -44,9 +44,9 @@ xml.tag!('feed', :xmlns => 'http://www.w3.org/2005/Atom',
       xml.tag!('link', 
                'rel'  => 'alternate',
                'type' => 'application/zip',
-               'href' => url_for(:controller => 'object', 
-                                 :action     => 'download',
-                                 :object     => obj))
+               'href' => url_for(controller: 'object', 
+                                 action: 'download',
+                                 object: obj))
       xml.tag!('dct:extent', "#{obj.size}")
       if (!obj.current_version.local_id.blank?) then
         local_id = obj.current_version.local_id[0]
@@ -69,11 +69,11 @@ xml.tag!('feed', :xmlns => 'http://www.w3.org/2005/Atom',
       current_version = obj.current_version
       current_version.inv_files.each do |file|
         xml.tag!('link', 
-                 'href' => url_for(:controller => 'file', 
-                                   :action     => :download,
-                                   :object     => obj,
-                                   :version    => current_version,
-                                   :file       => file),
+                 'href' => url_for(controller: 'file', 
+                                   action: :download,
+                                   object: obj,
+                                   version: current_version,
+                                   file: file),
                  'rel'  => 'http://purl.org/dc/terms/hasPart',
                  'title' => file.pathname,
                  'length' => file.full_size,

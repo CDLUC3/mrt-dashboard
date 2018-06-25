@@ -32,14 +32,14 @@ class LostorageController < ApplicationController
 
     # Check for mandatory email
     if params[:user_agent_email].blank? then
-       render :nothing => true, :status => 406
+       render nothing: true, status: 406
     elsif !params[:user_agent_email].match(/^.+@.+$/) then
-       render :nothing => true, :status => 400
+       render nothing: true, status: 400
     else
       if post_los_email(params[:user_agent_email]) then
-         render :nothing => true, :status => 200
+         render nothing: true, status: 200
       else
-         render :nothing => true, :status => 503
+         render nothing: true, status: 503
       end
     end
   end
@@ -64,9 +64,9 @@ class LostorageController < ApplicationController
 
     # Custom body?
     if (@losBody.blank?) then
-       @losBody = render_to_string(:formats => [:text], :partial => 'lostorage/los_email_body')
+       @losBody = render_to_string(formats: [:text], partial: 'lostorage/los_email_body')
     else
-       @losBody = render_to_string(:formats => [:text], :inline => @losBody)
+       @losBody = render_to_string(formats: [:text], inline: @losBody)
 
     end
 
@@ -92,7 +92,7 @@ class LostorageController < ApplicationController
 
   def build_email_xml(from_addr, to_addr, subject, body)
     tempfile = Tempfile.new('mail.xml')
-    xml = Builder::XmlMarkup.new :target => tempfile
+    xml = Builder::XmlMarkup.new target: tempfile
     xml.instruct!
     xml.email do
       # Custom from?

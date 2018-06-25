@@ -26,16 +26,16 @@ class ApplicationController < ActionController::Base
   protect_from_forgery
 
   def render_unavailable
-    render :file => "#{Rails.root}/public/unavailable.html", :status => 500
+    render file: "#{Rails.root}/public/unavailable.html", status: 500
   end
 
   # there are supposed to be handled by Rails, but 401 is not.
   rescue_from ActiveResource::UnauthorizedAccess do |ex|
-    render :file => "#{Rails.root}/public/401.html", :status => 401, :layout=>nil
+    render file: "#{Rails.root}/public/401.html", status: 401, layout: nil
   end
 
   rescue_from ActiveRecord::RecordNotFound do |ex|
-    render :file => "#{Rails.root}/public/404.html", :status => 404, :layout=>nil
+    render file: "#{Rails.root}/public/404.html", status: 404, layout: nil
   end
 
   helper :all
@@ -102,9 +102,9 @@ class ApplicationController < ActionController::Base
   def available_groups
     groups = current_user.groups.sort_by{|g| g.description.downcase } || []
     groups.map do |group|
-      { :id => group.id, 
-        :description => group.description,
-        :permissions => group.permission(current_user.login) }
+      { id: group.id, 
+        description: group.description,
+        permissions: group.permission(current_user.login) }
     end
   end
 
@@ -149,7 +149,7 @@ class ApplicationController < ActionController::Base
     unless current_uid
       store_location
       flash[:notice] = 'You must be logged in to access the page you requested'
-      redirect_to :controller=>'user_sessions', :action=>'guest_login' and return
+      redirect_to controller: 'user_sessions', action: 'guest_login' and return
     end
   end
 
@@ -157,7 +157,7 @@ class ApplicationController < ActionController::Base
   # TODO: this doesn't seem to be used anywhere; can we delete it?
   def require_user_or_401
     unless current_user 
-      render :status=>401, :text=>'' and return
+      render status: 401, text: '' and return
     end
   end
   # :nocov:
@@ -269,8 +269,8 @@ class ApplicationController < ActionController::Base
 
   def paginate_args
     return { 
-      :page => (params[:page] || 1), 
-      :per_page => 10 }
+      page: (params[:page] || 1), 
+      per_page: 10 }
   end
   
   def stream_response(url, disposition, filename, mediatype, length=nil)
@@ -301,7 +301,7 @@ class ApplicationController < ActionController::Base
         if object.dua_exists? then
           if process_dua_request(object.dua_uri) then
             # if the DUA for this collection exists, display DUA to user for acceptance before displaying file
-            redirect_to({:controller => 'dua', :action => 'index'}.merge(redirect_args)) and return
+            redirect_to({controller: 'dua', action: 'index'}.merge(redirect_args)) and return
           end
         end
       end

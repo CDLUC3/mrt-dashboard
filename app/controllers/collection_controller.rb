@@ -18,19 +18,19 @@ class CollectionController < ApplicationController
   end
 
   def object_count
-    render :partial=>'object_count'
+    render partial: 'object_count'
   end
 
   def version_count
-    render :partial=>'version_count'
+    render partial: 'version_count'
   end
 
   def file_count
-    render :partial=>'file_count'
+    render partial: 'file_count'
   end
 
   def total_size
-    render :partial=>'total_size'
+    render partial: 'total_size'
   end
 
   def index
@@ -76,7 +76,7 @@ class CollectionController < ApplicationController
 
       ark_id = @request_group.ark_id
       @results = InvObject.
-        joins(:inv_collections, :inv_dublinkernels => :sha_dublinkernel).
+        joins(:inv_collections, inv_dublinkernels: :sha_dublinkernel).
         where('inv_collections.ark = ?', ark_id).
         where(where_clause, *terms).
         includes(:inv_versions, :inv_dublinkernels).

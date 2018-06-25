@@ -33,7 +33,7 @@ module ApplicationHelper
   def help_tip(the_text)
     str = <<-eos
 <a href="#" onmouseover="Tip('#{h(the_text).gsub("'", "\\'")}')">
-  #{image_tag("tip_icon.gif", :size => '15x15')}
+  #{image_tag("tip_icon.gif", size: '15x15')}
 </a>
 eos
     str.html_safe

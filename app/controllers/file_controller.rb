@@ -6,22 +6,22 @@ class FileController < ApplicationController
   before_filter do
     if (!has_object_permission?(@file.inv_version.inv_object, 'download')) then
       flash[:error] = 'You do not have download permissions.'
-      render :file => "#{Rails.root}/public/401.html", :status => 401, :layout => false
+      render file: "#{Rails.root}/public/401.html", status: 401, layout: false
     end
   end
 
-  before_filter(:only => [:download]) do
+  before_filter(only: [:download]) do
     #:nocov:
     check_dua(@file.inv_version.inv_object,
-              { :object  => @file.inv_version.inv_object,
-                :version => @file.inv_version,
-                :file    => @file})
+              { object: @file.inv_version.inv_object,
+                version: @file.inv_version,
+                file: @file})
     #:nocov:
   end
   
   def download
     if exceeds_download_size_file(@file)
-      render :file => "#{Rails.root}/public/403.html", :status => 403, :layout => false
+      render file: "#{Rails.root}/public/403.html", status: 403, layout: false
     else
       stream_response(@file.bytestream_uri,
                       'inline',

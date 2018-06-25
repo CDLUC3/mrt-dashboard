@@ -9,17 +9,17 @@ module GroupLdap
     include LdapMixin
 
     def find_all
-      return admin_ldap.search(:base   => @base,
-                                :filter => (Net::LDAP::Filter.eq('objectclass', 'organizationalUnit') &
+      return admin_ldap.search(base: @base,
+                                filter: (Net::LDAP::Filter.eq('objectclass', 'organizationalUnit') &
                                             Net::LDAP::Filter.eq('objectclass', 'merrittClass')),
-                                :scope  => Net::LDAP::SearchScope_SingleLevel).
+                                scope: Net::LDAP::SearchScope_SingleLevel).
         sort_by {|g| g['ou'][0].downcase}
     end
 
     def find_users(grp_id)
-      return admin_ldap.search(:base   => "ou=#{grp_id},#{@base}",
-                                :filter => Net::LDAP::Filter.eq('objectclass', 'groupOfUniqueNames'),
-                                :scope  => Net::LDAP::SearchScope_WholeSubtree).
+      return admin_ldap.search(base: "ou=#{grp_id},#{@base}",
+                                filter: Net::LDAP::Filter.eq('objectclass', 'groupOfUniqueNames'),
+                                scope: Net::LDAP::SearchScope_WholeSubtree).
         map {|g| g[:uniquemember]}.
         flatten.uniq.compact.
         map {|i| i[/^uid=[^,]+/][4..-1]}
@@ -27,21 +27,21 @@ module GroupLdap
 
     def add(groupid, description, permissions = ['read', 'write'], extra_classes = ['merrittClass'])
       attr = {
-        :objectclass           => ['organizationalUnit'] + extra_classes,
+        objectclass: ['organizationalUnit'] + extra_classes,
         #:name                  => groupid
-        :description           => description,
-        :arkId                 => "ark:/13030/#{@minter.mint}"
+        description: description,
+        arkId: "ark:/13030/#{@minter.mint}"
         }
 
-      true_or_exception(admin_ldap.add(:dn => ns_dn(groupid), :attributes => attr))
+      true_or_exception(admin_ldap.add(dn: ns_dn(groupid), attributes: attr))
 
       permissions.each do |perm|
         attr_temp = {
-          :objectclass          => ['groupOfUniqueNames'],
-          :cn                   => perm
+          objectclass: ['groupOfUniqueNames'],
+          cn: perm
           }
 
-        true_or_exception(admin_ldap.add(:dn => sub_ns_dn(groupid, perm), :attributes => attr_temp))
+        true_or_exception(admin_ldap.add(dn: sub_ns_dn(groupid, perm), attributes: attr_temp))
       end
 
     end
@@ -63,7 +63,7 @@ module GroupLdap
     end
 
     def get_user_permissions(userid, groupid, user_object)
-      sub_grps = admin_ldap.search(:base => ns_dn(groupid), :filter => Net::LDAP::Filter.eq('cn','*') )
+      sub_grps = admin_ldap.search(base: ns_dn(groupid), filter: Net::LDAP::Filter.eq('cn','*') )
       long_user = user_object.ns_dn(userid)
 
       #go through subgroups for group and see if user is in each
@@ -83,7 +83,7 @@ module GroupLdap
                  Net::LDAP::Filter.eq('uniquemember', user_object.ns_dn(userid)) &
                    Net::LDAP::Filter.eq('cn', permission)
                end
-      grps = admin_ldap.search(:base => @base, :filter => filter)
+      grps = admin_ldap.search(base: @base, filter: filter)
       re = Regexp.new("^cn=(read|write|download),ou=([^, ]+),#{@base}$", Regexp::IGNORECASE)
       grps.map do |grp|
         m = re.match(grp[:dn].first)
@@ -93,7 +93,7 @@ module GroupLdap
 
     def remove_user(userid, groupid, user_object)
       #get all cn under this ou
-      sub_grps = admin_ldap.search(:base => ns_dn(groupid), :filter => Net::LDAP::Filter.eq('cn','*') )
+      sub_grps = admin_ldap.search(base: ns_dn(groupid), filter: Net::LDAP::Filter.eq('cn','*') )
       long_user = user_object.ns_dn(userid)
 
       #go through and delete this user and replace the list of users once deleted
@@ -108,8 +108,7 @@ module GroupLdap
 
     #fetches a cn sub object of the group organizational unit (ou)
     def sub_fetch(group_id, sub_id )
-      results = admin_ldap.search(:base => ns_dn(group_id), :filter =>
-                                              Net::LDAP::Filter.eq('cn', sub_id))
+      results = admin_ldap.search(base: ns_dn(group_id), filter:                                               Net::LDAP::Filter.eq('cn', sub_id))
       raise LdapException.new('id does not exist') if results.length < 1
       raise LdapException.new('ambiguous results, duplicate ids') if results.length > 1
       results[0]

@@ -10,10 +10,10 @@ module UserLdap
 
 
     def find_all
-      return admin_ldap.search(:base => @base,
-                                :filter => (Net::LDAP::Filter.eq('objectclass', 'inetOrgPerson') &
+      return admin_ldap.search(base: @base,
+                                filter: (Net::LDAP::Filter.eq('objectclass', 'inetOrgPerson') &
                                             Net::LDAP::Filter.eq('objectclass', 'merrittUser')),
-                                :scope => Net::LDAP::SearchScope_SingleLevel).
+                                scope: Net::LDAP::SearchScope_SingleLevel).
         sort_by{ |user| user['cn'][0].downcase }
     end
 
@@ -22,17 +22,17 @@ module UserLdap
       #givenName (first name), sn (surname, last name), name = cn, displayName, uid,
       #userPassword, mail, title, postalAddress, initials
       attr = {
-        :objectclass           => ['inetOrgPerson', 'merrittUser'],
-        :uid                   => userid,
-        :sn                    => lastname,
-        :givenName             => firstname,
-        :cn                    => "#{firstname} #{lastname}",
-        :displayName           => "#{firstname} #{lastname}",
-        :userPassword          => password,
-        :arkId                 => "ark:/13030/#{@minter.mint}",
-        :mail                  => email
+        objectclass: ['inetOrgPerson', 'merrittUser'],
+        uid: userid,
+        sn: lastname,
+        givenName: firstname,
+        cn: "#{firstname} #{lastname}",
+        displayName: "#{firstname} #{lastname}",
+        userPassword: password,
+        arkId: "ark:/13030/#{@minter.mint}",
+        mail: email
         }
-      true_or_exception(admin_ldap.add(:dn => ns_dn(userid), :attributes => attr))
+      true_or_exception(admin_ldap.add(dn: ns_dn(userid), attributes: attr))
     end
 
     def authenticate(userid, password)

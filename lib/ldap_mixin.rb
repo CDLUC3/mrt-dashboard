@@ -30,13 +30,13 @@ module LdapMixin
 
     @minter = Noid::Minter.new(minter)
     @base = base
-    @ldap_connect = {:host => host, :port => port,
-      :auth => {:method => :simple, :username => admin_user, :password => admin_password},
-      :encryption => {
-          :method  => :simple_tls,
-          :tls_options => { :ssl_version => 'TLSv1_1' }
+    @ldap_connect = {host: host, port: port,
+      auth: {method: :simple, username: admin_user, password: admin_password},
+      encryption: {
+          method: :simple_tls,
+          tls_options: { ssl_version: 'TLSv1_1' }
       },
-      :connect_timeout => connect_timeout
+      connect_timeout: connect_timeout
     }
 
     unless ENV['RAILS_ENV'] == 'test' || admin_ldap.bind
@@ -52,7 +52,7 @@ module LdapMixin
 
   def delete_record(id)
     raise LdapException.new('id does not exist') if !record_exists?(id)
-    true_or_exception(admin_ldap.delete(:dn => ns_dn(id)))
+    true_or_exception(admin_ldap.delete(dn: ns_dn(id)))
   end
 
   def add_attribute(id, attribute, value)
@@ -86,20 +86,20 @@ module LdapMixin
         filter = filter | obj_filter(id)
       end
     end
-    admin_ldap.search(:base=>@base, :filter=>filter)
+    admin_ldap.search(base: @base, filter: filter)
   end
 
   def fetch(id)
-    results = admin_ldap.search(:base => @base, :filter => obj_filter(id))
+    results = admin_ldap.search(base: @base, filter: obj_filter(id))
     raise LdapException.new('id does not exist') if results.length < 1
     raise LdapException.new('ambiguous results, duplicate ids') if results.length > 1
     results[0]
   end
 
   def fetch_by_ark_id(ark_id)
-    results = admin_ldap.search(:base => @base,
-                                :filter => Net::LDAP::Filter.eq('arkid', ark_id),
-                                :scope => Net::LDAP::SearchScope_SingleLevel)
+    results = admin_ldap.search(base: @base,
+                                filter: Net::LDAP::Filter.eq('arkid', ark_id),
+                                scope: Net::LDAP::SearchScope_SingleLevel)
     raise LdapException.new('id does not exist') if results.length < 1
     raise LdapException.new('ambiguous results, duplicate ids') if results.length > 1
     results[0]

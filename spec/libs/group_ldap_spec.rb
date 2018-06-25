@@ -10,20 +10,20 @@ module GroupLdap
       unmock_ldap!
 
       ldap_params = {
-        :host => LDAP_CONFIG['host'],
-        :port => LDAP_CONFIG['port'],
-        :auth => {
-          :method => :simple,
-          :username => LDAP_CONFIG['admin_user'],
-          :password => LDAP_CONFIG['admin_password']
+        host: LDAP_CONFIG['host'],
+        port: LDAP_CONFIG['port'],
+        auth: {
+          method: :simple,
+          username: LDAP_CONFIG['admin_user'],
+          password: LDAP_CONFIG['admin_password']
         },
-        :encryption => {
-          :method => :simple_tls,
-          :tls_options => {
-            :ssl_version => 'TLSv1_1'
+        encryption: {
+          method: :simple_tls,
+          tls_options: {
+            ssl_version: 'TLSv1_1'
           }
         },
-        :connect_timeout => LDAP_CONFIG['connect_timeout']
+        connect_timeout: LDAP_CONFIG['connect_timeout']
       }
 
       @admin_ldap = double(Net::LDAP)

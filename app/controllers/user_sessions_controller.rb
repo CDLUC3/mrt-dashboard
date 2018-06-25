@@ -1,5 +1,5 @@
 class UserSessionsController < ApplicationController
-  before_filter :require_user,    :only => [:logout]
+  before_filter :require_user,    only: [:logout]
   
   def login
     reset_session
@@ -29,7 +29,7 @@ class UserSessionsController < ApplicationController
       redirect_back_or_default '/home/choose_collection'
     else
       flash[:notice] = 'Login unsuccessful'
-      render :action => :login
+      render action: :login
     end
   end
 end

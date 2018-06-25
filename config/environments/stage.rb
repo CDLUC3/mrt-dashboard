@@ -11,9 +11,9 @@ end
 
 require 'exception_notification'
 Rails.application.config.middleware.use(ExceptionNotification::Rack, email: {
-  :email_prefix => '[Merritt UI] ',
-  :sender_address => "\"notifier\" <no-reply@#{Socket.gethostname}>",
-  :exception_recipients => ['marisa.strong@ucop.edu',
+  email_prefix: '[Merritt UI] ',
+  sender_address: "\"notifier\" <no-reply@#{Socket.gethostname}>",
+  exception_recipients: ['marisa.strong@ucop.edu',
                             'mark.reyes@ucop.edu',
                             'perry.willett@ucop.edu']
 })

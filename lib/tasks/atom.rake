@@ -42,7 +42,7 @@ def up_to_date?(local_id, collection_id, updated, feeddate)
     end
   end
 
-  obj = InvObject.joins(:inv_collections).where(['erc_where LIKE ?', "%#{local_id}%"]).where(:inv_collections => { :ark => collection_id})
+  obj = InvObject.joins(:inv_collections).where(['erc_where LIKE ?', "%#{local_id}%"]).where(inv_collections: { ark: collection_id})
 
   if obj.empty? then
     return false
@@ -176,10 +176,10 @@ def process_atom_feed(submitter, profile, collection, feeddatefile, starting_poi
 
         # pull out the urls
         urls = entry.xpath('atom:link', NS).map do |link| 
-          { :rel  => link['rel'], 
-            :url  => link['href'],
-            :checksum  => link.xpath('.//opensearch:checksum'),
-            :name => link['href'].sub(/^https?:\/\//, '') }
+          { rel: link['rel'], 
+            url: link['href'],
+            checksum: link.xpath('.//opensearch:checksum'),
+            name: link['href'].sub(/^https?:\/\//, '') }
         end
 
         # extract the archival id, if it exists
@@ -197,10 +197,10 @@ def process_atom_feed(submitter, profile, collection, feeddatefile, starting_poi
           'where' => archival_id,
           'when/created' => published,
           'when/modified' => updated }
-        iobject = Mrt::Ingest::IObject.new(:erc              => erc,
-                                           :server           => server,
-                                           :local_identifier => local_id,
-                                           :archival_id      => archival_id)
+        iobject = Mrt::Ingest::IObject.new(erc: erc,
+                                           server: server,
+                                           local_identifier: local_id,
+                                           archival_id: archival_id)
 
         # add componenets
         urls.each do |url|
@@ -223,11 +223,11 @@ def process_atom_feed(submitter, profile, collection, feeddatefile, starting_poi
 	  end
 
           iobject.add_component(obj,
-		  :name=>url[:name], 
-                  :prefetch=>true,
-		  :digest=>checksum,
+		  name: url[:name], 
+                  prefetch: true,
+		  digest: checksum,
                   # workaround for funky site
-                  :prefetch_options=>{'Accept'=>'text/html, */*'})
+                  prefetch_options: {'Accept'=>'text/html, */*'})
         end
         resp = iobject.start_ingest(client, profile, submitter)
 	# puts "User Agent: #{resp.user_agent}"

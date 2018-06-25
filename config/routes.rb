@@ -1,17 +1,17 @@
 MrtDashboard::Application.routes.draw do
-  resource 'users', :as => 'account'
+  resource 'users', as: 'account'
 
   get('object/recent(.:format)'  => 'object#recent')
   get('feeds/recent'  => 'feeds#recent')
   get('show/view/*id' => 'show#view')
   get('show/*id'      => 'show#show')
-  root(:to => 'home#index')
+  root(to: 'home#index')
   get('login'         => 'user_sessions#login',
         :as             => :login,
-        :constraints    => {:method => 'GET'})
+        :constraints    => {method: 'GET'})
   post('login'         => 'user_sessions#login_post',
         :as             => :login_post,
-        :constraints    => {:method => 'POST'})
+        :constraints    => {method: 'POST'})
   get('logout'        => 'user_sessions#logout',
         :as             => :logout)
   match('guest_login'   => 'user_sessions#guest_login',
