@@ -29,7 +29,7 @@ module GroupLdap
         .map { |i| i[/^uid=[^,]+/][4..-1] }
     end
 
-    def add(groupid, description, permissions = ['read', 'write'], extra_classes = ['merrittClass'])
+    def add(groupid, description, permissions = %w[read write], extra_classes = ['merrittClass'])
       attr = {
         objectclass: ['organizationalUnit'] + extra_classes,
         #:name                  => groupid

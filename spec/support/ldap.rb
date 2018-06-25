@@ -5,8 +5,8 @@ require 'support/ark'
 # LDAP
 
 GUEST_USER_ID = 'anonymous'
-PERMISSIONS_ALL = ['read', 'write', 'download', 'admin'].freeze
-PERMISSIONS_READ_ONLY = ['read', 'download'].freeze
+PERMISSIONS_ALL = %w[read write download admin].freeze
+PERMISSIONS_READ_ONLY = %w[read download].freeze
 
 def to_id(name)
   name.gsub(/[^A-Za-z0-9_]+/, '_').underscore
@@ -51,7 +51,7 @@ def mock_user(name: nil, id: nil, password:, tzregion: nil, telephonenumber: nil
 
   user_ldap = {
     'dn' => ["uid=#{id},ou=People,ou=uc3,dc=cdlib,dc=org"],
-    'objectclass' => ['person', 'inetOrgPerson', 'merrittUser', 'organizationalPerson', 'top'],
+    'objectclass' => %w[person inetOrgPerson merrittUser organizationalPerson top],
     'givenname' => [given_name],
     'displayname' => [name],
     'uid' => [id],

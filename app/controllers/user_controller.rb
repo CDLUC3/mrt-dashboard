@@ -32,10 +32,10 @@ class UserController < ApplicationController
 
         # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-        ['givenname', 'sn', 'mail', 'tzregion', 'telephonenumber'].each do |i|
+        %w[givenname sn mail tzregion telephonenumber].each do |i|
           User::LDAP.replace_attribute(current_user.login, i, params[i])
         end
-        ['cn', 'displayname'].each do |i|
+        %w[cn displayname].each do |i|
           User::LDAP.replace_attribute(current_user.login, i, "#{params['givenname']} #{params['sn']}")
         end
         User::LDAP.replace_attribute(current_user.login, 'userpassword', params['userpassword']) if params['userpassword'] != '!unchanged'

@@ -171,7 +171,7 @@ describe ApplicationController do
     end
 
     it 'copies a file to a tempfile' do
-      bytes_file = Tempfile.new(['foo', 'bin'])
+      bytes_file = Tempfile.new(%w[foo bin])
       bytes_file.write(data)
       bytes_file.close
       bytes_file_path = File.expand_path(bytes_file.path)

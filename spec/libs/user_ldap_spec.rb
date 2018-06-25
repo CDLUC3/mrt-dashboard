@@ -46,14 +46,14 @@ module UserLdap
           [
             { 'cn' => ['foo'] },
             { 'cn' => ['bar'] },
-            { 'cn' => ['baz'] },
+            { 'cn' => ['baz'] }
           ]
         )
 
         expected = [
           { 'cn' => ['bar'] },
           { 'cn' => ['baz'] },
-          { 'cn' => ['foo'] },
+          { 'cn' => ['foo'] }
         ]
         actual = user_ldap.find_all
         expect(actual).to eq(expected)
@@ -72,7 +72,7 @@ module UserLdap
         email = 'elvis@graceland.faith'
 
         expected_attribs = {
-          objectclass: ['inetOrgPerson', 'merrittUser'],
+          objectclass: %w[inetOrgPerson merrittUser],
           uid: userid,
           sn: lastname,
           givenName: firstname,

@@ -20,7 +20,7 @@ module Noid
     end
 
     it 'respects the cache size parameter' do
-      noids = ['ABC', 'DEF', 'GHI', 'JKL', 'MNO']
+      noids = %w[ABC DEF GHI JKL MNO]
       count = noids.length
 
       body = noids.map { |noid| "id: 12345/#{noid}" }.join("\n")

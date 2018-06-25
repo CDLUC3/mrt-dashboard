@@ -300,7 +300,7 @@ end
 # e.g. rake "atom:update[http://opencontext.org/all/.atom, mreyes/Mark Reyes, ucb_open_context_content, ark:/99999/abcdefhi, <DATE>]"
 namespace :atom do
   desc 'Generic ATOM to Merritt processor'
-  task :update, [:root, :user, :profile, :collection, :feeddatefile] => :environment do |cmd, args|
+  task :update, %i[root user profile collection feeddatefile] => :environment do |cmd, args|
     process_atom_feed(args[:user], args[:profile], args[:collection], args[:feeddatefile], args[:root])
   end
 end

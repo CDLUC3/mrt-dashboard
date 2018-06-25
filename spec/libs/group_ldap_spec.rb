@@ -51,14 +51,14 @@ module GroupLdap
           [
             { 'ou' => ['foo'] },
             { 'ou' => ['bar'] },
-            { 'ou' => ['baz'] },
+            { 'ou' => ['baz'] }
           ]
         )
 
         expected = [
           { 'ou' => ['bar'] },
           { 'ou' => ['baz'] },
-          { 'ou' => ['foo'] },
+          { 'ou' => ['foo'] }
         ]
         actual = group_ldap.find_all
         expect(actual).to eq(expected)
@@ -78,11 +78,11 @@ module GroupLdap
         ).and_return(
           [
             { uniquemember: ['uid=foo', 'uid=bar'] },
-            { uniquemember: ['uid=foo', 'uid=baz'] },
+            { uniquemember: ['uid=foo', 'uid=baz'] }
           ]
         )
 
-        expect(group_ldap.find_users(group_id)).to eq(['foo', 'bar', 'baz'])
+        expect(group_ldap.find_users(group_id)).to eq(%w[foo bar baz])
       end
     end
 
@@ -94,7 +94,7 @@ module GroupLdap
         group_id = 'foo'
         description = 'bar'
         expected_attribs = {
-          objectclass: ['organizationalUnit', 'merrittClass'],
+          objectclass: %w[organizationalUnit merrittClass],
           description: description,
           arkId: "ark:/13030/#{ark_suffix}"
         }
@@ -104,7 +104,7 @@ module GroupLdap
           attributes: expected_attribs
         ).and_return(true)
 
-        ['read', 'write'].each do |perm|
+        %w[read write].each do |perm|
           expect(admin_ldap).to receive(:add).with(
             dn: group_ldap.sub_ns_dn(group_id, perm),
             attributes: { objectclass: ['groupOfUniqueNames'], cn: perm }
@@ -123,7 +123,7 @@ module GroupLdap
         results = [
           {
             dn: 'wibble',
-            uniquemember: ['baz', 'qux'].map { |uid| user_ldap.ns_dn(uid) },
+            uniquemember: %w[baz qux].map { |uid| user_ldap.ns_dn(uid) },
             cn: ['quux']
           }
         ]
@@ -146,7 +146,7 @@ module GroupLdap
         results = [
           {
             dn: 'wibble',
-            uniquemember: ['baz', 'qux'].map { |uid| user_ldap.ns_dn(uid) },
+            uniquemember: %w[baz qux].map { |uid| user_ldap.ns_dn(uid) },
             cn: ['quux']
           }
         ]
@@ -194,7 +194,7 @@ module GroupLdap
         results = [
           {
             dn: 'wibble',
-            uniquemember: ['baz', 'qux'].map { |uid| user_ldap.ns_dn(uid) },
+            uniquemember: %w[baz qux].map { |uid| user_ldap.ns_dn(uid) },
             cn: ['quux']
           }
         ]
@@ -221,7 +221,7 @@ module GroupLdap
         results = [
           {
             dn: 'wibble',
-            uniquemember: ['baz', 'qux'].map { |uid| user_ldap.ns_dn(uid) },
+            uniquemember: %w[baz qux].map { |uid| user_ldap.ns_dn(uid) },
             cn: ['quux']
           }
         ]
@@ -300,7 +300,7 @@ module GroupLdap
           },
           {
             dn: 'flob',
-            uniquemember: ['corge', 'grault'].map { |uid| user_ldap.ns_dn(uid) },
+            uniquemember: %w[corge grault].map { |uid| user_ldap.ns_dn(uid) },
             cn: ['garply']
           }
         ]
@@ -327,7 +327,7 @@ module GroupLdap
           },
           {
             dn: 'flob',
-            uniquemember: ['corge', 'grault'].map { |uid| user_ldap.ns_dn(uid) },
+            uniquemember: %w[corge grault].map { |uid| user_ldap.ns_dn(uid) },
             cn: ['garply']
           }
         ]
@@ -342,7 +342,7 @@ module GroupLdap
         )
 
         expect(admin_ldap).to receive(:replace_attribute).with(
-          'flob', :uniquemember, ['corge', 'grault'].map { |uid| user_ldap.ns_dn(uid) }
+          'flob', :uniquemember, %w[corge grault].map { |uid| user_ldap.ns_dn(uid) }
         )
 
         group_ldap.remove_user(user_id, group_id, user_ldap)
@@ -365,10 +365,10 @@ module GroupLdap
                        { dn: [group_ldap.sub_ns_dn('bar', 'read')] },
                        { dn: [group_ldap.sub_ns_dn('baz', 'write')] },
                        { dn: [group_ldap.sub_ns_dn('qux', 'download')] },
-                       { dn: [group_ldap.sub_ns_dn('quux', 'corge')] },
+                       { dn: [group_ldap.sub_ns_dn('quux', 'corge')] }
                      ])
 
-        expect(group_ldap.find_groups_for_user(user_id, user_ldap)).to eq(['bar', 'baz', 'qux'])
+        expect(group_ldap.find_groups_for_user(user_id, user_ldap)).to eq(%w[bar baz qux])
       end
 
       it 'finds users with specified permissions' do
@@ -387,10 +387,10 @@ module GroupLdap
                        { dn: [group_ldap.sub_ns_dn('bar', 'read')] },
                        { dn: [group_ldap.sub_ns_dn('baz', 'write')] },
                        { dn: [group_ldap.sub_ns_dn('qux', 'download')] },
-                       { dn: [group_ldap.sub_ns_dn('quux', 'corge')] },
+                       { dn: [group_ldap.sub_ns_dn('quux', 'corge')] }
                      ])
 
-        expect(group_ldap.find_groups_for_user(user_id, user_ldap, perm)).to eq(['bar', 'baz', 'qux'])
+        expect(group_ldap.find_groups_for_user(user_id, user_ldap, perm)).to eq(%w[bar baz qux])
       end
     end
 

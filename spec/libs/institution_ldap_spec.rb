@@ -55,13 +55,13 @@ module InstitutionLdap
           { 'o' => ['institutions'] },
           { 'o' => ['foo'] },
           { 'o' => ['bar'] },
-          { 'o' => ['institutions'] },
+          { 'o' => ['institutions'] }
         ]
         expect(admin_ldap).to receive(:search).with(base: LDAP_CONFIG['inst_base']).and_return(result)
 
         expected = [
           { 'o' => ['bar'] },
-          { 'o' => ['foo'] },
+          { 'o' => ['foo'] }
         ]
         expect(inst_ldap.find_all).to eq(expected)
       end

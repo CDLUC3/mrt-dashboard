@@ -3,14 +3,14 @@ class VersionController < ApplicationController
   before_filter :redirect_to_latest_version
   before_filter :load_version
 
-  before_filter(only: [:download, :downloadUser, :async]) do
+  before_filter(only: %i[download downloadUser async]) do
     unless has_object_permission?(@version.inv_object, 'download')
       flash[:error] = 'You do not have download permissions.'
       render file: "#{Rails.root}/public/401.html", status: 401, layout: false
     end
   end
 
-  before_filter(only: [:download, :downloadUser]) do
+  before_filter(only: %i[download downloadUser]) do
     #:nocov:
     check_dua(
       @version.inv_object,
@@ -22,7 +22,7 @@ class VersionController < ApplicationController
     #:nocov:
   end
 
-  before_filter(only: [:download, :downloadUser]) do
+  before_filter(only: %i[download downloadUser]) do
     if exceeds_download_size_version(@version)
       render file: "#{Rails.root}/public/403.html", status: 403, layout: false
     elsif exceeds_sync_size_version(@version)

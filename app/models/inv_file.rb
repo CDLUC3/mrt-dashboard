@@ -3,7 +3,7 @@ class InvFile < ActiveRecord::Base
   belongs_to :inv_object
   scope :system_files, lambda { where("pathname LIKE 'system/%'") }
   scope :producer_files, lambda { where("pathname LIKE 'producer/%'") }
-  scope :quickload_files, lambda { select(['mime_type', 'pathname', 'full_size', 'inv_version_id']) }
+  scope :quickload_files, lambda { select(%w[mime_type pathname full_size inv_version_id]) }
 
   include Encoder
 

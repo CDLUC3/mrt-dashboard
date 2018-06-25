@@ -111,7 +111,7 @@ describe LdapMixin do
       attribute = :bar
       value = 'baz'
       expect(admin_ldap).to receive(:search).with(base: base, filter: ldap.obj_filter(id)).and_return([{ bar: ['qux', value, 'corge'] }])
-      expect(admin_ldap).to receive(:replace_attribute).with(ldap.ns_dn(id), attribute, ['qux', 'corge'])
+      expect(admin_ldap).to receive(:replace_attribute).with(ldap.ns_dn(id), attribute, %w[qux corge])
       ldap.delete_attribute_value(id, attribute, value)
     end
 
@@ -119,8 +119,8 @@ describe LdapMixin do
       id = 'foo'
       attribute = :bar
       value = 'baz'
-      expect(admin_ldap).to receive(:search).with(base: base, filter: ldap.obj_filter(id)).and_return([{ bar: ['qux', 'grault', 'corge'] }])
-      expect(admin_ldap).to receive(:replace_attribute).with(ldap.ns_dn(id), attribute, ['qux', 'grault', 'corge'])
+      expect(admin_ldap).to receive(:search).with(base: base, filter: ldap.obj_filter(id)).and_return([{ bar: %w[qux grault corge] }])
+      expect(admin_ldap).to receive(:replace_attribute).with(ldap.ns_dn(id), attribute, %w[qux grault corge])
       ldap.delete_attribute_value(id, attribute, value)
     end
   end
@@ -159,7 +159,7 @@ describe LdapMixin do
 
   describe ':fetch_batch' do
     it 'merges IDs into an OR filter' do
-      ids = ['foo', 'bar']
+      ids = %w[foo bar]
       expected_filter = ldap.obj_filter('foo') | ldap.obj_filter('bar')
       result = [1, 2, 3]
       expect(admin_ldap).to receive(:search).with(base: base, filter: expected_filter).and_return(result)

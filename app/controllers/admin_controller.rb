@@ -20,7 +20,7 @@ class AdminController < ApplicationController
       else
         User::LDAP.add(params[:uid], params[:userpassword], params[:givenname],
                        params[:sn], params[:mail])
-        ['tzregion', 'telephonenumber', 'institution'].each do |i|
+        %w[tzregion telephonenumber institution].each do |i|
           User::LDAP.replace_attribute(params[:uid], i, params[i])
         end
         @display_text = 'This user profile has been created.'
@@ -45,7 +45,7 @@ class AdminController < ApplicationController
       if @error_fields.length > 0
         @display_text += "The following items must be filled in: #{@error_fields.map { |i| @required[i] }.join(', ')}."
       else
-        Group::LDAP.add(params[:ou], params[:description], ['read', 'write'], ['merrittClass'])
+        Group::LDAP.add(params[:ou], params[:description], %w[read write], ['merrittClass'])
         Group::LDAP.replace_attribute(params[:ou], 'submissionprofile', params['submissionprofile'])
         @display_text = 'This collection has been created.'
         @ldap_group = Group::LDAP.fetch(params[:ou])
@@ -65,7 +65,7 @@ class AdminController < ApplicationController
       @ldap[:uid] = params[:uid]
       @ldap[:ou] = params[:ou]
 
-      ['read', 'write'].each do |perm|
+      %w[read write].each do |perm|
         if params[:permissions].nil? or !params[:permissions].include?(perm)
           Group::LDAP.unset_user_permission(params[:uid], params[:ou], User::LDAP, perm)
         else

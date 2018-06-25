@@ -2,9 +2,9 @@ require 'tempfile'
 
 class ObjectController < ApplicationController
 
-  before_filter :require_user, except: [:jupload_add, :recent, :ingest, :mint, :update]
-  before_filter :load_object, only: [:index, :download, :downloadUser, :downloadManifest, :async]
-  before_filter(only: [:download, :downloadUser, :downloadManifest, :async]) do
+  before_filter :require_user, except: %i[jupload_add recent ingest mint update]
+  before_filter :load_object, only: %i[index download downloadUser downloadManifest async]
+  before_filter(only: %i[download downloadUser downloadManifest async]) do
     unless has_object_permission?(@object, 'download')
       flash[:error] = 'You do not have download permissions.'
       render file: "#{Rails.root}/public/401.html", status: 401, layout: false
@@ -15,7 +15,7 @@ class ObjectController < ApplicationController
     render file: "#{Rails.root}/public/401.html", status: 401, layout: false unless has_object_permission_no_embargo?(@object, 'read')
   end
 
-  before_filter(only: [:download, :downloadUser]) do
+  before_filter(only: %i[download downloadUser]) do
     #:nocov:
     check_dua(@object, { object: @object })
     #:nocov:
@@ -33,7 +33,7 @@ class ObjectController < ApplicationController
     end
   end
 
-  protect_from_forgery except: [:ingest, :mint, :update]
+  protect_from_forgery except: %i[ingest mint update]
 
   def load_object
     @object = InvObject.where('ark = ?', params_u(:object)).includes(:inv_collections, inv_versions: [:inv_files]).first
