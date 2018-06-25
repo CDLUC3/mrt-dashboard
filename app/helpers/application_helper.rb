@@ -1,15 +1,15 @@
 module ApplicationHelper
   # from http://codesnippets.joyent.com/posts/show/1812
   def formatted_int(i)
-    if i.nil? then '0'
-    elsif i.abs < 1000 then i.to_s
-    else i.to_s.gsub!(/(\d)(?=(\d\d\d)+(?!\d))/, '\\1,') end
+    return '0' if i.nil?
+    return i.to_s if i.abs < 1000
+    i.to_s.gsub!(/(\d)(?=(\d\d\d)+(?!\d))/, '\\1,')
   end
 
   def permissions(array)
-    if array.length == 0 then 'none'
-    elsif array.length == 1 then "#{array[0]} only"
-    else array.join('/') end
+    return 'none' if array.empty?
+    return "#{array[0]} only" if array.length == 1
+    array.join('/')
   end
 
   def merritt_time(t)
@@ -24,30 +24,30 @@ module ApplicationHelper
 
   # Format kernel metadata lists
   def dc_nice(vals)
-    if vals.nil? || vals.empty? then ''
-    else vals.join('; ') end
+    return '' if (vals.nil? || vals.empty?)
+    vals.join('; ')
   end
 
   # makes a tip over a question mark item, just pass in the text
   # requires javascript_include_tag 'wztip/wz_tooltip.js' on the page
   def help_tip(the_text)
-    str = <<-eos
-<a href="#" onmouseover="Tip('#{h(the_text).gsub("'", "\\'")}')">
-  #{image_tag("tip_icon.gif", size: '15x15')}
-</a>
-eos
+    str = <<~eos
+      <a href="#" onmouseover="Tip('#{h(the_text).gsub("'", "\\'")}')">
+        #{image_tag("tip_icon.gif", size: '15x15')}
+      </a>
+    eos
     str.html_safe
   end
 
   # outputs a formatted string for the current environment, except production
   def show_environment
-    if !Rails.env.include?('production') then Rails.env
-    else '' end
+    return '' if Rails.env.include?('production')
+    Rails.env
   end
 
   # Return true if a user is logged in
   def user_logged_in?
-    return !session[:uid].blank?
+    !session[:uid].blank?
   end
 
   # Return true if logged in as guest
@@ -57,6 +57,6 @@ eos
 
   # Return true if user has choosen a group
   def group_choosen?
-    return !session[:group_id].nil?
+    !session[:group_id].nil?
   end
 end

@@ -22,61 +22,61 @@ class InvObject < ActiveRecord::Base
   include Encoder
 
   def to_param
-    urlencode(self.ark)
+    urlencode(ark)
   end
 
   # content
   def bytestream_uri
-    URI.parse("#{APP_CONFIG['uri_1']}#{self.node_number}/#{self.to_param}")
+    URI.parse("#{APP_CONFIG['uri_1']}#{node_number}/#{to_param}")
   end
 
   # producer
   def bytestream_uri2
-    URI.parse("#{APP_CONFIG['uri_2']}#{self.node_number}/#{self.to_param}")
+    URI.parse("#{APP_CONFIG['uri_2']}#{node_number}/#{to_param}")
   end
 
   # manifest
   def bytestream_uri3
-    URI.parse("#{APP_CONFIG['uri_3']}#{self.node_number}/#{self.to_param}")
+    URI.parse("#{APP_CONFIG['uri_3']}#{node_number}/#{to_param}")
   end
 
   # :nocov:
   def dua_exists?
-    not self.inv_duas.blank?
+    not inv_duas.blank?
   end
   # :nocov:
 
   # :nocov:
   def dua_uri
-    URI.parse("#{APP_CONFIG['uri_1']}#{self.node_number}/#{self.inv_collection.to_param}/0/#{urlencode(APP_CONFIG['mrt_dua_file'])}")
+    URI.parse("#{APP_CONFIG['uri_1']}#{node_number}/#{inv_collection.to_param}/0/#{urlencode(APP_CONFIG['mrt_dua_file'])}")
   end
   # :nocov:
 
   def node_number
-    self.inv_nodes.where('inv_nodes_inv_objects.role' => 'primary').select('inv_nodes.number').map(&:number).first
+    inv_nodes.where('inv_nodes_inv_objects.role' => 'primary').select('inv_nodes.number').map(&:number).first
   end
 
   def size
-    self.inv_files.sum('billable_size')
+    inv_files.sum('billable_size')
   end
 
   def total_actual_size
-    self.inv_files.sum('full_size')
+    inv_files.sum('full_size')
   end
 
   def current_version
-    @current_version ||= self.inv_versions.order('number desc').first
+    @current_version ||= inv_versions.order('number desc').first
   end
 
   def inv_collection
-    @inv_collection ||= self.inv_collections.first
+    @inv_collection ||= inv_collections.first
   end
 
   def group
-    self.inv_collection.group
+    inv_collection.group
   end
 
   def permalink
-    "#{APP_CONFIG['n2t_uri']}#{self.ark.to_s}"
+    "#{APP_CONFIG['n2t_uri']}#{ark.to_s}"
   end
 end

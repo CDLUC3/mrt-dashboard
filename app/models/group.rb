@@ -2,12 +2,12 @@
 class Group
   LDAP = GroupLdap::Server
     .new({ host: LDAP_CONFIG['host'],
-          port: LDAP_CONFIG['port'],
-          base: LDAP_CONFIG['group_base'],
-          admin_user: LDAP_CONFIG['admin_user'],
-          admin_password: LDAP_CONFIG['admin_password'],
-          connect_timeout: LDAP_CONFIG['connect_timeout'],
-          minter: LDAP_CONFIG['ark_minter_url'] })
+           port: LDAP_CONFIG['port'],
+           base: LDAP_CONFIG['group_base'],
+           admin_user: LDAP_CONFIG['admin_user'],
+           admin_password: LDAP_CONFIG['admin_password'],
+           connect_timeout: LDAP_CONFIG['connect_timeout'],
+           minter: LDAP_CONFIG['ark_minter_url'] })
 
   attr_accessor :id, :submission_profile, :ark_id, :owner, :description
 
@@ -15,7 +15,7 @@ class Group
   end
 
   def to_param
-    self.id
+    id
   end
 
   def self.find_all
@@ -27,7 +27,7 @@ class Group
   end
 
   def self.find_batch(ids)
-    Group::LDAP.fetch_batch(ids).map { |l| self.make_from_ldap(l) }
+    Group::LDAP.fetch_batch(ids).map { |l| make_from_ldap(l) }
   end
 
   def self.find(id)
@@ -37,58 +37,58 @@ class Group
                  rescue LdapMixin::LdapException => ex
                    Group::LDAP.fetch_by_ark_id(id)
                  end
-    return self.make_from_ldap(ldap_group)
+    make_from_ldap(ldap_group)
   end
 
   # permissions are returned as an array like ['read','write'], maybe more in the future
   def permission(userid)
-    return Rails.cache.fetch("permissions_#{userid}_#{self.id}", expires_in: 10.minutes) do
-      Group::LDAP.get_user_permissions(userid, self.id, User::LDAP)
+    Rails.cache.fetch("permissions_#{userid}_#{id}", expires_in: 10.minutes) do
+      Group::LDAP.get_user_permissions(userid, id, User::LDAP)
     end
   end
 
   def sparql_id
-    return "http://ark.cdlib.org/#{self.ark_id}"
+    "http://ark.cdlib.org/#{ark_id}"
   end
 
   def inv_collection
-    @inv_collection ||= InvCollection.find_by_ark(self.ark_id)
+    @inv_collection ||= InvCollection.find_by_ark(ark_id)
   end
 
   def inv_collection_id
-    @inv_collection_id ||= self.inv_collection ? self.inv_collection.id : nil
+    @inv_collection_id ||= inv_collection ? inv_collection.id : nil
   end
 
   def object_count
-    if self.inv_collection_id.nil?
+    if inv_collection_id.nil?
       0
     else
-      InvObject.connection.select_all("SELECT COUNT(DISTINCT(`inv_objects`.id)) as `count` FROM `inv_objects` INNER JOIN `inv_collections_inv_objects` ON `inv_objects`.id = `inv_collections_inv_objects`.inv_object_id WHERE ((`inv_collections_inv_objects`.inv_collection_id = #{self.inv_collection_id}))")[0]['count'].to_i
+      InvObject.connection.select_all("SELECT COUNT(DISTINCT(`inv_objects`.id)) as `count` FROM `inv_objects` INNER JOIN `inv_collections_inv_objects` ON `inv_objects`.id = `inv_collections_inv_objects`.inv_object_id WHERE ((`inv_collections_inv_objects`.inv_collection_id = #{inv_collection_id}))")[0]['count'].to_i
     end
   end
 
   def version_count
-    if self.inv_collection_id.nil?
+    if inv_collection_id.nil?
       0
     else
-      InvObject.connection.select_all("SELECT COUNT(DISTINCT(`inv_versions`.id)) AS `count` FROM `inv_versions` INNER JOIN `inv_objects` ON `inv_objects`.`id` = `inv_versions`.`inv_object_id` INNER JOIN `inv_collections_inv_objects` ON `inv_objects`.`id` = `inv_collections_inv_objects`.`inv_object_id` WHERE ((`inv_collections_inv_objects`.inv_collection_id = #{self.inv_collection_id}))")[0]['count'].to_i
+      InvObject.connection.select_all("SELECT COUNT(DISTINCT(`inv_versions`.id)) AS `count` FROM `inv_versions` INNER JOIN `inv_objects` ON `inv_objects`.`id` = `inv_versions`.`inv_object_id` INNER JOIN `inv_collections_inv_objects` ON `inv_objects`.`id` = `inv_collections_inv_objects`.`inv_object_id` WHERE ((`inv_collections_inv_objects`.inv_collection_id = #{inv_collection_id}))")[0]['count'].to_i
     end
   end
 
   def file_count
-    if self.inv_collection_id.nil?
+    if inv_collection_id.nil?
       0
     else
-      InvFile.connection.select_all("SELECT COUNT(DISTINCT(`inv_files`.`id`)) AS `count` FROM `inv_files` INNER JOIN `inv_versions` ON `inv_versions`.`id` = `inv_files`.`inv_version_id` INNER JOIN `inv_objects` ON `inv_objects`.`id` = `inv_versions`.`inv_object_id` INNER JOIN `inv_collections_inv_objects` ON `inv_objects`.`id` = `inv_collections_inv_objects`.`inv_object_id` WHERE ((`inv_collections_inv_objects`.inv_collection_id = #{self.inv_collection_id}))")[0]['count'].to_i
+      InvFile.connection.select_all("SELECT COUNT(DISTINCT(`inv_files`.`id`)) AS `count` FROM `inv_files` INNER JOIN `inv_versions` ON `inv_versions`.`id` = `inv_files`.`inv_version_id` INNER JOIN `inv_objects` ON `inv_objects`.`id` = `inv_versions`.`inv_object_id` INNER JOIN `inv_collections_inv_objects` ON `inv_objects`.`id` = `inv_collections_inv_objects`.`inv_object_id` WHERE ((`inv_collections_inv_objects`.inv_collection_id = #{inv_collection_id}))")[0]['count'].to_i
     end
   end
 
   def total_size
     Rails.logger.info('Im in the total_size method of group model')
-    if self.inv_collection.nil?
+    if inv_collection.nil?
       0
     else
-      InvFile.connection.select_all("SELECT SUM(full_size) AS `total_size` FROM `inv_files` INNER JOIN `inv_collections_inv_objects` ON `inv_collections_inv_objects`.`inv_object_id` = `inv_files`.`inv_object_id` WHERE (`inv_collections_inv_objects`.inv_collection_id = #{self.inv_collection_id})")[0]['total_size'].to_i
+      InvFile.connection.select_all("SELECT SUM(full_size) AS `total_size` FROM `inv_files` INNER JOIN `inv_collections_inv_objects` ON `inv_collections_inv_objects`.`inv_object_id` = `inv_files`.`inv_object_id` WHERE (`inv_collections_inv_objects`.inv_collection_id = #{inv_collection_id})")[0]['total_size'].to_i
     end
   end
 
@@ -112,26 +112,26 @@ class Group
   private
 
   def self.make_from_ldap(ldap_group)
-    g = self.new
+    g = new
     g.id                 = simplify_single_value(ldap_group, 'ou')
     g.submission_profile = simplify_single_value(ldap_group, 'submissionprofile')
     g.ark_id             = simplify_single_value(ldap_group, 'arkid')
     g.owner              = simplify_single_value(ldap_group, 'owner')
     g.description        = simplify_single_value(ldap_group, 'description')
-    return g
+    g
   end
 
   # this may belong to some ldap base class at some point
   def self.simplify_single_value(record, field)
     return nil if record[field].nil? or record[field][0].nil? or record[field][0].length < 1
-    return record[field][0]
+    record[field][0]
   end
 
   # TODO: figure out whether we still need this & get rid of it if not
   # :nocov:
   def self.simplify_multiple_value(record, field)
     return [] if record[field].nil? or record[field][0].nil? or record[field][0].length < 1
-    return record[field]
+    record[field]
   end
   # :nocov:
 

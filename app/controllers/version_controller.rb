@@ -51,13 +51,13 @@ class VersionController < ApplicationController
     if exceeds_download_size_version(@version)
       render nothing: true, status: 403
     elsif exceeds_sync_size_version(@version)
-       # Async Supported
+      # Async Supported
       render nothing: true, status: 200
     else
-       # Async Not Acceptable
+      # Async Not Acceptable
       render nothing: true, status: 406
-     end
-   end
+    end
+  end
 
   def download
     stream_response("#{@version.bytestream_uri}?t=zip",

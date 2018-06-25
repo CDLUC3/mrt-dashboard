@@ -11,7 +11,6 @@ MrtDashboard::Application.configure do
   # config.action_view.debug_rjs               = true
   # config.whiny_nils                          = true
 
-
   config.assets.enabled = false
   config.assets.debug = false
 

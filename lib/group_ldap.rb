@@ -9,7 +9,7 @@ module GroupLdap
     include LdapMixin
 
     def find_all
-      return admin_ldap.search(
+      admin_ldap.search(
         base: @base,
         filter: (Net::LDAP::Filter.eq('objectclass', 'organizationalUnit') &
           Net::LDAP::Filter.eq('objectclass', 'merrittClass')),
@@ -19,7 +19,7 @@ module GroupLdap
     end
 
     def find_users(grp_id)
-      return admin_ldap.search(
+      admin_ldap.search(
         base: "ou=#{grp_id},#{@base}",
         filter: Net::LDAP::Filter.eq('objectclass', 'groupOfUniqueNames'),
         scope: Net::LDAP::SearchScope_WholeSubtree
@@ -47,7 +47,6 @@ module GroupLdap
 
         true_or_exception(admin_ldap.add(dn: sub_ns_dn(groupid, perm), attributes: attr_temp))
       end
-
     end
 
     def set_user_permission(userid, groupid, user_object, permission = 'read')
@@ -86,9 +85,9 @@ module GroupLdap
                else
                  Net::LDAP::Filter.eq('uniquemember', user_object.ns_dn(userid)) &
                    Net::LDAP::Filter.eq('cn', permission)
-      end
-      grps = admin_ldap.search(base: @base, filter: filter)
-      re = Regexp.new("^cn=(read|write|download),ou=([^, ]+),#{@base}$", Regexp::IGNORECASE)
+               end
+      grps   = admin_ldap.search(base: @base, filter: filter)
+      re     = Regexp.new("^cn=(read|write|download),ou=([^, ]+),#{@base}$", Regexp::IGNORECASE)
       grps.map do |grp|
         m = re.match(grp[:dn].first)
         (!m.nil? ? m[2].to_s : nil)

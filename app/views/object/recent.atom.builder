@@ -16,9 +16,9 @@ xml.tag!('feed', :xmlns => 'http://www.w3.org/2005/Atom',
            'type' => 'application/atom+xml')
   if @objects.next_page
     xml.tag!('link',
-           'href' => "/object/recent.atom?collection=#{@collection_ark}&page=#{@objects.next_page}",
-           'rel'  => 'next',
-           'type' => 'application/atom+xml')
+             'href' => "/object/recent.atom?collection=#{@collection_ark}&page=#{@objects.next_page}",
+             'rel'  => 'next',
+             'type' => 'application/atom+xml')
   end
   if @objects.previous_page
     xml.tag!('link',

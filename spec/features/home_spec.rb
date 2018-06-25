@@ -52,4 +52,3 @@ describe 'home' do
 
   end
 end
-

@@ -119,7 +119,7 @@ class ApplicationController < ActionController::Base
         end
       end
     end
-    return @current_user
+    @current_user
   end
 
   # either return the uid from the session OR get the user id from
@@ -156,33 +156,32 @@ class ApplicationController < ActionController::Base
 
   # @return true if the object is too large for synchronous download, false otherwise
   def exceeds_sync_size(object)
-    return (object.total_actual_size > APP_CONFIG['max_archive_size'])
+    (object.total_actual_size > APP_CONFIG['max_archive_size'])
   end
 
   # @return true if the version is too large for synchronous download, false otherwise
   def exceeds_sync_size_version(version)
-    return (version.total_actual_size > APP_CONFIG['max_archive_size'])
+    (version.total_actual_size > APP_CONFIG['max_archive_size'])
   end
 
   # @return true if the object is too large even for async download, false otherwise
   def exceeds_download_size(object)
-    return (object.total_actual_size > APP_CONFIG['max_download_size'])
+    (object.total_actual_size > APP_CONFIG['max_download_size'])
   end
 
   # @return true if the version is too large even for async download, false otherwise
   def exceeds_download_size_version(version)
-    return (version.total_actual_size > APP_CONFIG['max_download_size'])
+    (version.total_actual_size > APP_CONFIG['max_download_size'])
   end
 
   # @return true if the file is too large for download, false otherwise
   def exceeds_download_size_file(file)
-    return (file.full_size > APP_CONFIG['max_download_size'])
+    (file.full_size > APP_CONFIG['max_download_size'])
   end
 
   def max_download_size_pretty
     @max_download_size_pretty ||= number_to_storage_size(APP_CONFIG['max_download_size'])
   end
-
 
   # Modeled after the rails helper that does all sizes in binary representations
   # but gives sizes in decimal instead with 1kB = 1,000 Bytes, 1 MB = 1,000,000 bytes
@@ -247,7 +246,7 @@ class ApplicationController < ActionController::Base
   def process_dua_request(uri)
     http = Net::HTTP.new(uri.host, uri.port)
     uri_response = http.request(Net::HTTP::Get.new(uri.request_uri))
-    return (uri_response.class == Net::HTTPOK)
+    (uri_response.class == Net::HTTPOK)
   end
   #:nocov:
 
@@ -256,7 +255,7 @@ class ApplicationController < ActionController::Base
   end
 
   def paginate_args
-    return {
+    {
       page: (params[:page] || 1),
       per_page: 10
     }
@@ -290,6 +289,6 @@ class ApplicationController < ActionController::Base
 
   def is_ark?(str)
     # return !str.match(/ark:\/[0-9]{5}\/[a-z0-9+]/).nil?
-    return !str.match(/ark:\/[0-9a-zA-Z]{1}[0-9]{4}\/[a-z0-9+]/).nil?
+    !str.match(/ark:\/[0-9a-zA-Z]{1}[0-9]{4}\/[a-z0-9+]/).nil?
   end
 end

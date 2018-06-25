@@ -7,9 +7,8 @@ module UserLdap
 
     include LdapMixin
 
-
     def find_all
-      return admin_ldap.search(
+      admin_ldap.search(
         base: @base,
         filter: (Net::LDAP::Filter.eq('objectclass', 'inetOrgPerson') &
           Net::LDAP::Filter.eq('objectclass', 'merrittUser')),

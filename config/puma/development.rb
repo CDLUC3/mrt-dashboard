@@ -1,7 +1,6 @@
-
 # Note: Define most command line vaiables here. This is a switch
 #       from the old style incorporated in Unicorn.
-#	- mreyes -
+#  - mreyes -
 
 # Variables
 application_path = ENV['RAILS_ROOT'] || '/dpr2/apps/ui'
@@ -70,7 +69,6 @@ workers Integer(ENV['WEB_CONCURRENCY'] || 1)
 # Preload the application before starting the workers; this conflicts with
 # phased restart feature. (off by default)
 preload_app!
-
 
 # Verifies that all workers have checked in to the master process within
 # the given timeout. If not the worker process will be restarted. This is

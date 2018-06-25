@@ -36,7 +36,7 @@ module UserLdap
         expected_filter = (
         Net::LDAP::Filter.eq('objectclass', 'inetOrgPerson') &
           Net::LDAP::Filter.eq('objectclass', 'merrittUser')
-        )
+      )
 
         expect(admin_ldap).to receive(:search).with(
           base: LDAP_CONFIG['user_base'],

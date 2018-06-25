@@ -15,7 +15,6 @@ set :default_env, { path: '/dpr2/local/bin:$PATH' }
 set :linked_files, %w{config/database.yml config/ldap.yml config/atom.yml}
 set :linked_dirs, %w{log pid}
 
-
 # Default value for :format is :pretty
 # set :format, :pretty
 
@@ -53,7 +52,7 @@ namespace :deploy do
   task :status do
     on roles(:app) do
       if test("[ -f #{fetch(:puma_pid)} ]")
-         # check pid
+        # check pid
         execute "cd #{deploy_to}/current; cat #{fetch(:puma_pid)} | xargs ps -lp"
       end
     end
@@ -62,7 +61,7 @@ namespace :deploy do
   desc 'Restart Puma'
   task :restart do
     on roles(:app), wait: 5 do
-       # do not implement, use stop/start instead
+      # do not implement, use stop/start instead
     end
   end
 

@@ -41,7 +41,7 @@ module GroupLdap
         expected_filter = (
         Net::LDAP::Filter.eq('objectclass', 'organizationalUnit') &
           Net::LDAP::Filter.eq('objectclass', 'merrittClass')
-        )
+      )
 
         expect(admin_ldap).to receive(:search).with(
           base: LDAP_CONFIG['group_base'],
@@ -361,12 +361,12 @@ module GroupLdap
         expect(admin_ldap).to receive(:search).with(
           base: LDAP_CONFIG['group_base'], filter: expected_filter
         ).and_return([
-          { dn: [group_ldap.sub_ns_dn('foo', 'bar')] },
-          { dn: [group_ldap.sub_ns_dn('bar', 'read')] },
-          { dn: [group_ldap.sub_ns_dn('baz', 'write')] },
-          { dn: [group_ldap.sub_ns_dn('qux', 'download')] },
-          { dn: [group_ldap.sub_ns_dn('quux', 'corge')] },
-        ])
+                       { dn: [group_ldap.sub_ns_dn('foo', 'bar')] },
+                       { dn: [group_ldap.sub_ns_dn('bar', 'read')] },
+                       { dn: [group_ldap.sub_ns_dn('baz', 'write')] },
+                       { dn: [group_ldap.sub_ns_dn('qux', 'download')] },
+                       { dn: [group_ldap.sub_ns_dn('quux', 'corge')] },
+                     ])
 
         expect(group_ldap.find_groups_for_user(user_id, user_ldap)).to eq(['bar', 'baz', 'qux'])
       end
@@ -376,19 +376,19 @@ module GroupLdap
         expected_filter = (
         Net::LDAP::Filter.eq('uniquemember', user_ldap.ns_dn(user_id)) &
           Net::LDAP::Filter.eq('cn', perm)
-        )
+      )
 
         expect(admin_ldap).to receive(:search).with(
           base: LDAP_CONFIG['group_base'], filter: expected_filter
         ).and_return([
-          # note that the LDAP filter uses the passed permission, but the find method
-          # itself only checks the LDAP results for cn=(read|write|download)
-          { dn: [group_ldap.sub_ns_dn('foo', 'bar')] },
-          { dn: [group_ldap.sub_ns_dn('bar', 'read')] },
-          { dn: [group_ldap.sub_ns_dn('baz', 'write')] },
-          { dn: [group_ldap.sub_ns_dn('qux', 'download')] },
-          { dn: [group_ldap.sub_ns_dn('quux', 'corge')] },
-        ])
+                       # note that the LDAP filter uses the passed permission, but the find method
+                       # itself only checks the LDAP results for cn=(read|write|download)
+                       { dn: [group_ldap.sub_ns_dn('foo', 'bar')] },
+                       { dn: [group_ldap.sub_ns_dn('bar', 'read')] },
+                       { dn: [group_ldap.sub_ns_dn('baz', 'write')] },
+                       { dn: [group_ldap.sub_ns_dn('qux', 'download')] },
+                       { dn: [group_ldap.sub_ns_dn('quux', 'corge')] },
+                     ])
 
         expect(group_ldap.find_groups_for_user(user_id, user_ldap, perm)).to eq(['bar', 'baz', 'qux'])
       end

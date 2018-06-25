@@ -5,10 +5,10 @@ class InvCollection < ActiveRecord::Base
   include Encoder
 
   def to_param
-    urlencode(self.ark)
+    urlencode(ark)
   end
 
   def group
-    @_group ||= Group.find(self.ark)
+    @_group ||= Group.find(ark)
   end
 end

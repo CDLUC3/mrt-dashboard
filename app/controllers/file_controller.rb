@@ -32,6 +32,7 @@ class FileController < ApplicationController
   end
 
   private
+
   def load_file
     filename = params_u(:file)
 

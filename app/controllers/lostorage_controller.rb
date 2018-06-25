@@ -42,7 +42,6 @@ class LostorageController < ApplicationController
   end
 
   def post_los_email(to_addr)
-
     # Customize return email information
     @losFrom    = params[:losFrom]
     @losSubject = params[:losSubject]
@@ -62,7 +61,7 @@ class LostorageController < ApplicationController
                  render_to_string(formats: [:text], partial: 'lostorage/los_email_body')
                else
                  render_to_string(formats: [:text], inline: @losBody)
-    end
+               end
 
     # construct the async storage URL using the object's state storage URL-  Sub async for state in URL.
     email_xml_file = build_email_xml(@losFrom, to_addr, @losSubject, @losBody)
@@ -81,7 +80,7 @@ class LostorageController < ApplicationController
                                  'name'          => unique_name })
     email_xml_file.close
     email_xml_file.unlink
-    return (resp.status == 200)
+    (resp.status == 200)
   end
 
   def build_email_xml(from_addr, to_addr, subject, body)
@@ -91,9 +90,9 @@ class LostorageController < ApplicationController
     xml.email do
       # Custom from?
       if from_addr.blank?
-	       xml.from(APP_CONFIG['lostorage_email_from'])
+        xml.from(APP_CONFIG['lostorage_email_from'])
       else
-	       xml.from(from_addr)
+        xml.from(from_addr)
       end
       xml.to(to_addr)
       APP_CONFIG['lostorage_email_to'].each do |addr|
@@ -102,7 +101,7 @@ class LostorageController < ApplicationController
       xml.subject(subject)
       xml.msg(body)
     end
-    tempfile.rewind  # POST request needs this done to process the file properly as an argument
-    return tempfile
+    tempfile.rewind # POST request needs this done to process the file properly as an argument
+    tempfile
   end
 end

@@ -2,7 +2,7 @@ require 'tempfile'
 
 class ObjectController < ApplicationController
 
-  before_filter :require_user,       except: [:jupload_add, :recent, :ingest, :mint, :update]
+  before_filter :require_user, except: [:jupload_add, :recent, :ingest, :mint, :update]
   before_filter :load_object, only: [:index, :download, :downloadUser, :downloadManifest, :async]
   before_filter(only: [:download, :downloadUser, :downloadManifest, :async]) do
     unless has_object_permission?(@object, 'download')
@@ -140,7 +140,7 @@ class ObjectController < ApplicationController
       'file'         => Tempfile.new('restclientbug'),
       'responseForm' => params[:responseForm]
     }.reject { |k, v| v.blank? }
-    resp      = mk_httpclient.post(APP_CONFIG['mint_service'], mint_args, { 'Content-Type' => 'multipart/form-data' })
+    resp = mk_httpclient.post(APP_CONFIG['mint_service'], mint_args, { 'Content-Type' => 'multipart/form-data' })
     render status: resp.status, content_type: resp.headers[:content_type], text: resp.body
   end
 

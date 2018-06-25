@@ -132,4 +132,3 @@ RSpec.configure do |config|
     mock_ldap!
   end
 end
-

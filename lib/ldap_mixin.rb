@@ -11,9 +11,7 @@ module LdapMixin
   attr_reader :ldap_connect, :minter
   attr_accessor :base
 
-
   def initialize(init_hash)
-
     # sample hash
     # host => "badger.cdlib.org",
     # port => 1636,

@@ -12,10 +12,11 @@ module Noid
 
     def mint
       fill_cache if @cache.empty?
-      return @cache.shift
+      @cache.shift
     end
 
     private
+
     def fill_cache
       begin
         req = Net::HTTP::Get.new(@url.path + '?mint+' + @n_at_once.to_s)

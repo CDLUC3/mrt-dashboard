@@ -36,7 +36,6 @@ module MrtDashboard
     config.active_record.default_timezone = :local
     config.active_record.time_zone_aware_attributes = false
 
-
     # The default locale is :en and all translations from config/locales/*.rb,yml are auto loaded.
     # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
     # config.i18n.default_locale = :de
@@ -44,14 +43,14 @@ module MrtDashboard
     # Configure generators values. Many other options are available, be sure to check the documentation.
     config.generators do |g|
       g.test_framework :rspec,
-      fixtures: true,
-      view_specs: false,
-      helper_specs: false,
-      routing_specs: false,
-      controller_specs: false,
-      request_specs: true
+                       fixtures: true,
+                       view_specs: false,
+                       helper_specs: false,
+                       routing_specs: false,
+                       controller_specs: false,
+                       request_specs: true
       g.fixture_replacement :factory_girl,
-      dir: 'spec/factories'
+                            dir: 'spec/factories'
     end
 
     # Configure the default encoding used in templates for Ruby 1.9.

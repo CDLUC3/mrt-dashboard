@@ -19,7 +19,7 @@ class AdminController < ApplicationController
         @display_text += ' Your password and repeated password do not match.' unless params[:userpassword].eql?(params[:repeatuserpassword])
       else
         User::LDAP.add(params[:uid], params[:userpassword], params[:givenname],
-                params[:sn], params[:mail])
+                       params[:sn], params[:mail])
         ['tzregion', 'telephonenumber', 'institution'].each do |i|
           User::LDAP.replace_attribute(params[:uid], i, params[i])
         end
