@@ -55,7 +55,7 @@ class ApplicationController < ActionController::Base
       else
           latest_version = nil
       end
-      letter = request.path.match(/^\/(.)\//)[1]
+      # letter = request.path.match(/^\/(.)\//)[1]
       # redirect_to mk_merritt_url(letter, params[:object], latest_version, params[:file])
       # Do not redirect, but just set version to latest
       params[:version] = latest_version.to_s
@@ -153,11 +153,14 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  # :nocov:
+  # TODO: this doesn't seem to be used anywhere; can we delete it?
   def require_user_or_401
     unless current_user 
       render :status=>401, :text=>"" and return
     end
   end
+  # :nocov:
 
   def current_group
     @_current_group ||= Group.find(session[:group_id])
@@ -232,14 +235,12 @@ class ApplicationController < ActionController::Base
     session[:return_to] = nil
   end
 
+  # TODO: is this only used for DUAs? if so, let's remove it
   def with_fetched_tempfile(*args)
     require 'open-uri'
     require 'fileutils'
     open(*args) do |data|
       tmp_file = Tempfile.new('mrt_http')
-      if data.instance_of? File then
-        File.copy(data.path, tmp_file.path)
-      else
         begin
           while (!(buff = data.read(4096)).nil?)do 
             tmp_file << buff
@@ -250,16 +251,17 @@ class ApplicationController < ActionController::Base
           tmp_file.close
           tmp_file.delete
         end
-      end
-    end  
+    end
   end
-  
+
+  #:nocov:
   # returns the response of the HTTP request for the DUA URI
   def process_dua_request(uri)
     http = Net::HTTP.new(uri.host, uri.port)
     uri_response = http.request(Net::HTTP::Get.new(uri.request_uri))
     return (uri_response.class == Net::HTTPOK)
-  end 
+  end
+  #:nocov:
 
   def params_u(param)
     urlunencode(params[param])
@@ -280,7 +282,8 @@ class ApplicationController < ActionController::Base
     response.headers['Last-Modified'] = Time.now.httpdate
     self.response_body = Streamer.new(url)
   end
-  
+
+  #:nocov:
   def check_dua(object, redirect_args)
     if params[:blue] then
       # bypass DUA processing for python scripts - indicated by special param
@@ -304,7 +307,8 @@ class ApplicationController < ActionController::Base
       end
     end
   end
-  
+  #:nocov:
+
   def is_ark?(str)
     # return !str.match(/ark:\/[0-9]{5}\/[a-z0-9+]/).nil?
     return !str.match(/ark:\/[0-9a-zA-Z]{1}[0-9]{4}\/[a-z0-9+]/).nil?

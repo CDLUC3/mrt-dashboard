@@ -2,6 +2,13 @@
 # for example lib/tasks/capistrano.rake, and they will automatically be available to Rake.
 
 require File.expand_path('../config/application', __FILE__)
-require 'rake'
-
 MrtDashboard::Application.load_tasks
+
+# ------------------------------------------------------------
+# Coverage
+
+desc 'Run all tests with coverage'
+task :coverage do
+  ENV['COVERAGE'] = 'true'
+  Rake::Task[:spec].invoke
+end

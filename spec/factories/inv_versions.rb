@@ -1,9 +1,30 @@
-FactoryGirl.define do 
-  factory :inv_version do |f|
-    f.id "6420"
-    f.inv_object_id "6228"
-    f.ark "ark:/99999/fk4qv5n4z"
-    f.number "1"
-    f.created "2013-08-09 14:41:25"
+FactoryBot.define do
+  factory :inv_version do
+    ark {ArkHelper.next_ark('version')}
+
+    number 1
+
+    created {Time.now}
+
+    # noinspection RubyArgCount
+    after(:create) do |version|
+      obj = version.inv_object
+      {
+        'who' => obj.erc_who,
+        'what' => obj.erc_what,
+        'when' => obj.erc_when,
+        'where' => obj.erc_where
+      }.each_with_index do |(element, value), seq_num|
+        create(
+          :inv_dublinkernel,
+          inv_object: obj,
+          inv_version: version,
+          element: element,
+          value: value,
+          seq_num: seq_num
+        )
+      end
+
+    end
   end
 end

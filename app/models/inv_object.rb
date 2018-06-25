@@ -1,4 +1,6 @@
 class InvObject < ActiveRecord::Base
+  belongs_to :inv_owner
+
   has_many :inv_versions, :inverse_of => :inv_object
   has_many :inv_files, :through => :inv_versions
   
@@ -38,13 +40,17 @@ class InvObject < ActiveRecord::Base
     URI.parse("#{APP_CONFIG['uri_3']}#{self.node_number}/#{self.to_param}")
   end
 
+  # :nocov:
   def dua_exists?
     not self.inv_duas.blank?
   end
+  # :nocov:
 
+  # :nocov:
   def dua_uri
     URI.parse("#{APP_CONFIG['uri_1']}#{self.node_number}/#{self.inv_collection.to_param}/0/#{urlencode(APP_CONFIG['mrt_dua_file'])}")
   end
+  # :nocov:
 
   def node_number
     self.inv_nodes.where("inv_nodes_inv_objects.role" => "primary").select("inv_nodes.number").map(&:number).first

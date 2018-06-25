@@ -18,7 +18,9 @@ class ObjectController < ApplicationController
   end
 
   before_filter(:only => [:download, :downloadUser]) do
+    #:nocov:
     check_dua(@object, {:object => @object})
+    #:nocov:
   end
 
   before_filter(:only => [:download]) do
@@ -171,7 +173,7 @@ class ObjectController < ApplicationController
                     "application/zip")
   end
 
-  def downloadUser
+  def downloadUser # TODO: rename to downloadProducerFiles or similar
     stream_response("#{@object.bytestream_uri2}?t=zip", 
                     "attachment",
                     "#{Orchard::Pairtree.encode(@object.ark.to_s)}_object.zip",
@@ -185,7 +187,7 @@ class ObjectController < ApplicationController
                     "text/xml")
   end
 
-  def async
+  def async # TODO: rename to requestAsyncDownload or something
     if exceeds_download_size(@object) then
       render :nothing => true, :status => 403
     elsif exceeds_sync_size(@object) then
@@ -224,6 +226,7 @@ class ObjectController < ApplicationController
       @obj_count = @doc.xpath("//bat:batchState/bat:jobStates").length
     rescue Exception => ex
       # see if we can parse the error from ingest, if not then unknown error
+      raise unless ex.respond_to?(:response)
       @doc = Nokogiri::XML(ex.response) do |config|
         config.strict.noent.noblanks
       end

@@ -1,40 +1,96 @@
-require 'spec_helper'
+require 'features_helper'
 
-feature 'profile' do
+describe 'profile' do
+  attr_reader :user_id
+  attr_reader :tzregion
+  attr_reader :telephonenumber
 
-  background do
-    logs_in_with_my_credentials
-    find(:xpath, "//table/tbody/tr[1]/td[1]/a[1]").click #collection landing page
+  before(:each) do
+    password = 'correcthorsebatterystaple'
+    @tzregion = 'Atlantic/Madeira'
+    @telephonenumber = '+44 06 496 1632'
+    @user_id = mock_user(
+      name: 'Jane Doe',
+      password: password,
+      tzregion: @tzregion,
+      telephonenumber: @telephonenumber
+    )
+    col_id = mock_collection(name: 'Collection 1')
+    mock_permissions(user_id, {col_id => PERMISSIONS_ALL})
+    log_in_with(user_id, password)
   end
 
-  scenario "link should be visible" do #, :js => true do
+  after(:each) do
+    log_out!
+  end
+
+  it 'should have a profile link' do
     expect(page).to have_content('Profile')
   end
 
-  scenario "profile page should be available" do # , :js => true do
-    click_link('Profile')
-    expect(page).to have_title('Update Profile')
-  end
+  describe 'profile link' do
+    before(:each) do
+      click_link('Profile')
+    end
 
-  scenario "updating telephone number" do #, :js => true do
-    click_link('Profile')
-    fill_in "telephonenumber", :with => "000000000"
-    click_button "Save changes"
-    expect(page).to have_content('Your profile has been updated.')
-    find_field('telephonenumber').value.should eq '000000000'
-  end
+    it 'should display the profile' do
+      expect(page).to have_title('Update Profile')
 
-  scenario "updating timezone" do #, :js => true do
-    click_link('Profile')
-    select 'Europe/Helsinki', :from => "tzregion"
-    click_button "Save changes"
-    expect(page).to have_content('Your profile has been updated.')
-    find("#tzregion option[value='Europe/Helsinki']").should be_selected
-    select 'Europe/Malta', :from => "tzregion"
-    click_button "Save changes"
-    expect(page).to have_content('Your profile has been updated.')
-    find("#tzregion option[value='Europe/Malta']").should be_selected
+      expect(find_field('givenname').value).to eq('Jane')
+      expect(find_field('sn').value).to eq('Doe')
+      expect(find_field('mail').value).to eq("#{user_id}@example.edu")
+      expect(find_field('tzregion').value).to eq(tzregion)
+      expect(find_field('telephonenumber').value).to eq(telephonenumber)
+    end
+
+    it 'should allow the user to change their telephone number' do
+      new_number = '+1 999-958-5555'
+
+      click_link('Profile')
+      fill_in('telephonenumber', with: new_number)
+
+      allow(User::LDAP).to receive(:replace_attribute).with(user_id, any_args).and_return(true)
+      expect(User::LDAP).to receive(:replace_attribute).with(user_id, 'telephonenumber', new_number)
+      click_button 'Save changes'
+      expect(page).to have_content('Your profile has been updated.')
+    end
+
+    it 'should allow the user to change their time zone' do
+      click_link('Profile')
+      select('Europe/Helsinki', from: 'tzregion')
+
+      allow(User::LDAP).to receive(:replace_attribute).with(user_id, any_args).and_return(true)
+      expect(User::LDAP).to receive(:replace_attribute).with(user_id, 'tzregion', 'Europe/Helsinki')
+      click_button 'Save changes'
+      expect(page).to have_content('Your profile has been updated.')
+    end
+
+    it 'should not allow the user to clear required fields' do
+      UserController::REQUIRED.keys.each {|field| fill_in(field, with: '')}
+      expect(User::LDAP).not_to receive(:replace_attribute)
+      click_button 'Save changes'
+      UserController::REQUIRED.values.each {|label| expect(page).to have_content(label)}
+    end
+
+    it 'should allow the user to change their password' do
+      click_link('Profile')
+      new_password = 'elvis'
+      fill_in('userpassword', with: new_password)
+      fill_in('repeatuserpassword', with: new_password)
+      allow(User::LDAP).to receive(:replace_attribute).with(user_id, any_args).and_return(true)
+      expect(User::LDAP).to receive(:replace_attribute).with(user_id, 'userpassword', new_password)
+      click_button 'Save changes'
+    end
+
+    it 'should require passwords to match' do
+      click_link('Profile')
+      fill_in('userpassword', with: 'elvis')
+      fill_in('repeatuserpassword', with: 'not elvis')
+      allow(User::LDAP).to receive(:replace_attribute).with(user_id, any_args).and_return(true)
+      expect(User::LDAP).not_to receive(:replace_attribute).with(user_id, 'userpassword', anything)
+      click_button 'Save changes'
+      expect(page).to have_content('do not match')
+    end
   end
 
 end
-

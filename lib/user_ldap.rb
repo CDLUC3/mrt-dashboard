@@ -10,7 +10,7 @@ module UserLdap
 
 
     def find_all
-      return @admin_ldap.search(:base => @base,
+      return admin_ldap.search(:base => @base,
                                 :filter => (Net::LDAP::Filter.eq('objectclass', 'inetOrgPerson') &
                                             Net::LDAP::Filter.eq('objectclass', 'merrittUser')),
                                 :scope => Net::LDAP::SearchScope_SingleLevel).
@@ -32,7 +32,7 @@ module UserLdap
         :arkId                 => "ark:/13030/#{@minter.mint}",
         :mail                  => email
         }
-      true_or_exception(@admin_ldap.add(:dn => ns_dn(userid), :attributes => attr))
+      true_or_exception(admin_ldap.add(:dn => ns_dn(userid), :attributes => attr))
     end
 
     def authenticate(userid, password)
@@ -43,7 +43,7 @@ module UserLdap
     end
 
     def change_password(userid, password)
-      result = @admin_ldap.replace_attribute(ns_dn(userid), :userPassword, password)
+      result = admin_ldap.replace_attribute(ns_dn(userid), :userPassword, password)
       true_or_exception(result)
     end
 

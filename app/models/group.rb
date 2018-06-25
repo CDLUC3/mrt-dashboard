@@ -92,6 +92,8 @@ class Group
     end
   end
 
+  # TODO: figure out whether we still need this & get rid of it if not
+  # :nocov:
   #get all groups and email addresses of members, this is a stopgap for our own use
   def self.show_emails
     out_str = ''
@@ -105,7 +107,8 @@ class Group
     end
     out_str
   end
-  
+  # :nocov:
+
   private
 
   def self.make_from_ldap(ldap_group)
@@ -124,11 +127,12 @@ class Group
     return record[field][0]
   end
 
+  # TODO: figure out whether we still need this & get rid of it if not
+  # :nocov:
   def self.simplify_multiple_value(record, field)
     return [] if record[field].nil? or record[field][0].nil? or record[field][0].length < 1
     return record[field]
   end
-  
+  # :nocov:
 
-  
 end

@@ -1,6 +1,7 @@
 class AdminController < ApplicationController
   before_filter :require_user
 
+  # :nocov:
   def create_user
     @ldap_user = {'tzregion' => 'America/Los_Angeles'}
     @error_fields = []
@@ -33,7 +34,9 @@ class AdminController < ApplicationController
       end
     end
   end
+  # :nocov:
 
+  # :nocov:
   def create_group
     @ldap_group = {}
     @error_fields = []
@@ -57,7 +60,9 @@ class AdminController < ApplicationController
       end
     end
   end
+  # :nocov:
 
+  # :nocov:
   def add_user_to_group
     @ldap = {}
     @m_grps = Group.find_all.map{|i| [ i['description'][0], i['ou'][0] ]}
@@ -86,4 +91,5 @@ class AdminController < ApplicationController
       #nothing checked
     end
   end
+  # :nocov:
 end
