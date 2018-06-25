@@ -1,6 +1,6 @@
 class User
-  LDAP = UserLdap::Server.
-    new({ host: LDAP_CONFIG['host'],
+  LDAP = UserLdap::Server
+    .new({ host: LDAP_CONFIG['host'],
           port: LDAP_CONFIG['port'],
           base: LDAP_CONFIG['user_base'],
           admin_user: LDAP_CONFIG['admin_user'],

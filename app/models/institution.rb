@@ -3,8 +3,8 @@
 
 class Institution
 
-  LDAP = InstitutionLdap::Server.
-    new({ host: LDAP_CONFIG['host'],
+  LDAP = InstitutionLdap::Server
+    .new({ host: LDAP_CONFIG['host'],
           port: LDAP_CONFIG['port'],
           base: LDAP_CONFIG['inst_base'],
           admin_user: LDAP_CONFIG['admin_user'],

@@ -40,11 +40,11 @@ class FileController < ApplicationController
     # the filename
     filename = "producer/#{filename}" unless filename.match(/^(producer|system)/)
 
-    @file = InvFile.joins(:inv_version, :inv_object).
-      where('inv_objects.ark = ?', params_u(:object)).
-      where('inv_versions.number = ?', params[:version]).
-      where('inv_files.pathname = ?', filename).
-      first
+    @file = InvFile.joins(:inv_version, :inv_object)
+      .where('inv_objects.ark = ?', params_u(:object))
+      .where('inv_versions.number = ?', params[:version])
+      .where('inv_files.pathname = ?', filename)
+      .first
     raise ActiveRecord::RecordNotFound if @file.nil?
   end
 end

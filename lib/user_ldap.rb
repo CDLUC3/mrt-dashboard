@@ -14,8 +14,8 @@ module UserLdap
         filter: (Net::LDAP::Filter.eq('objectclass', 'inetOrgPerson') &
           Net::LDAP::Filter.eq('objectclass', 'merrittUser')),
         scope: Net::LDAP::SearchScope_SingleLevel
-      ).
-        sort_by { |user| user['cn'][0].downcase }
+      )
+        .sort_by { |user| user['cn'][0].downcase }
     end
 
     def add(userid, password, firstname, lastname, email)

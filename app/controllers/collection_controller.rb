@@ -38,18 +38,18 @@ class CollectionController < ApplicationController
       session[:group_ark] = @request_group.ark_id
       session[:group_description] = @request_group.description
     end
-    @recent_objects = InvObject.joins(:inv_collections).
-      where('inv_collections.ark = ?', @request_group.ark_id).
-      order('inv_objects.modified desc').
-      includes(:inv_versions, :inv_dublinkernels).
-      quickloadhack.
-      paginate(paginate_args)
+    @recent_objects = InvObject.joins(:inv_collections)
+      .where('inv_collections.ark = ?', @request_group.ark_id)
+      .order('inv_objects.modified desc')
+      .includes(:inv_versions, :inv_dublinkernels)
+      .quickloadhack
+      .paginate(paginate_args)
   end
 
   def search_results
-    terms = Unicode.downcase(params[:terms]).
-      split(/\s+/).
-      map do |t| # special ark handling
+    terms = Unicode.downcase(params[:terms])
+      .split(/\s+/)
+      .map do |t| # special ark handling
         is_ark?(t) ? t[11..-1] : t
       end.delete_if do |t|
       (t.blank? || t.size < 4) # sql search doesn't work with terms less than 4 characters long
@@ -58,12 +58,12 @@ class CollectionController < ApplicationController
 
     if terms.size == 0
       # no real search, just display
-      @results = InvObject.joins(:inv_collections).
-        where('inv_collections.ark = ?', @request_group.ark_id).
-        order('inv_objects.modified desc').
-        includes(:inv_versions, :inv_dublinkernels).
-        quickloadhack.
-        paginate(paginate_args)
+      @results = InvObject.joins(:inv_collections)
+        .where('inv_collections.ark = ?', @request_group.ark_id)
+        .order('inv_objects.modified desc')
+        .includes(:inv_versions, :inv_dublinkernels)
+        .quickloadhack
+        .paginate(paginate_args)
     else
       # new, more efficient full text query (thanks Debra)
       tb_count = 0
@@ -72,14 +72,14 @@ class CollectionController < ApplicationController
 
       ark_id = @request_group.ark_id
       @results = InvObject
-        .joins(:inv_collections, inv_dublinkernels: :sha_dublinkernel).
-        where('inv_collections.ark = ?', ark_id).
-        where(where_clause, *terms).
-        includes(:inv_versions, :inv_dublinkernels).
-        quickloadhack.
-        limit(10).
-        uniq.
-        paginate(paginate_args)
+        .joins(:inv_collections, inv_dublinkernels: :sha_dublinkernel)
+        .where('inv_collections.ark = ?', ark_id)
+        .where(where_clause, *terms)
+        .includes(:inv_versions, :inv_dublinkernels)
+        .quickloadhack
+        .limit(10)
+        .uniq
+        .paginate(paginate_args)
     end
   end
 end

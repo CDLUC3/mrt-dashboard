@@ -223,11 +223,11 @@ class ObjectController < ApplicationController
     # prevent stack trace when collection does not exist
     c = InvCollection.where(ark: @collection_ark).first
     render(status: 404, text: '404 Not Found') and return if c.nil? || c.to_s == ''
-    @objects = c.inv_objects.
-      quickloadhack.
-      order('inv_objects.modified desc').
-      includes(:inv_versions, :inv_dublinkernels).
-      paginate(paginate_args)
+    @objects = c.inv_objects
+      .quickloadhack
+      .order('inv_objects.modified desc')
+      .includes(:inv_versions, :inv_dublinkernels)
+      .paginate(paginate_args)
     respond_to do |format|
       format.html
       format.atom

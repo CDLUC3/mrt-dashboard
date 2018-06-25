@@ -1,7 +1,7 @@
 # this all probably needs to be refactored eventually
 class Group
-  LDAP = GroupLdap::Server.
-    new({ host: LDAP_CONFIG['host'],
+  LDAP = GroupLdap::Server
+    .new({ host: LDAP_CONFIG['host'],
           port: LDAP_CONFIG['port'],
           base: LDAP_CONFIG['group_base'],
           admin_user: LDAP_CONFIG['admin_user'],

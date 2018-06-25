@@ -11,9 +11,9 @@ module InstitutionLdap
     end
 
     def find_all
-      return admin_ldap.search(base: @base).
-        reject { |i| i['o'][0] == 'institutions' }.
-        sort_by { |i| i['o'][0].downcase }
+      return admin_ldap.search(base: @base)
+        .reject { |i| i['o'][0] == 'institutions' }
+        .sort_by { |i| i['o'][0].downcase }
     end
   end
 end
