@@ -7,11 +7,11 @@ module Noid
 
     before(:each) do
       WebMock.disable_net_connect!
-      @noid_url = "http://example.org/"
+      @noid_url = 'http://example.org/'
     end
 
     it 'fetches an ID' do
-      body = "id: 12345/ABCDE"
+      body = 'id: 12345/ABCDE'
       stub_request(:get, "#{noid_url}?mint+1").to_return(body: body)
 
       minter = Minter.new(noid_url)

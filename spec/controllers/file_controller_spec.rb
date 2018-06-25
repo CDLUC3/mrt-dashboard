@@ -19,7 +19,7 @@ describe FileController do
     @collection = create(:private_collection, name: 'Collection 1', mnemonic: 'collection_1')
     @collection_id = mock_ldap_for_collection(collection)
 
-    @object = create(:inv_object, erc_who: 'Doe, Jane', erc_what: "Object 1", erc_when: "2018-01-01")
+    @object = create(:inv_object, erc_who: 'Doe, Jane', erc_what: 'Object 1', erc_when: '2018-01-01')
     collection.inv_objects << object
     @object_ark = object.ark
 

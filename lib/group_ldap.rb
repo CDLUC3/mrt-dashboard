@@ -27,7 +27,7 @@ module GroupLdap
 
     def add(groupid, description, permissions = ['read', 'write'], extra_classes = ['merrittClass'])
       attr = {
-        :objectclass           => ["organizationalUnit"] + extra_classes,
+        :objectclass           => ['organizationalUnit'] + extra_classes,
         #:name                  => groupid
         :description           => description,
         :arkId                 => "ark:/13030/#{@minter.mint}"
@@ -37,7 +37,7 @@ module GroupLdap
 
       permissions.each do |perm|
         attr_temp = {
-          :objectclass          => ["groupOfUniqueNames"],
+          :objectclass          => ['groupOfUniqueNames'],
           :cn                   => perm
           }
 
@@ -78,10 +78,10 @@ module GroupLdap
     def find_groups_for_user(userid, user_object, permission=nil)
       #these are the permission subgroups so they need to be parsed back up a level
       filter = if permission.nil? then
-                 Net::LDAP::Filter.eq("uniquemember", user_object.ns_dn(userid))
+                 Net::LDAP::Filter.eq('uniquemember', user_object.ns_dn(userid))
                else
-                 Net::LDAP::Filter.eq("uniquemember", user_object.ns_dn(userid)) &
-                   Net::LDAP::Filter.eq("cn", permission)
+                 Net::LDAP::Filter.eq('uniquemember', user_object.ns_dn(userid)) &
+                   Net::LDAP::Filter.eq('cn', permission)
                end
       grps = admin_ldap.search(:base => @base, :filter => filter)
       re = Regexp.new("^cn=(read|write|download),ou=([^, ]+),#{@base}$", Regexp::IGNORECASE)
@@ -124,7 +124,7 @@ module GroupLdap
     end
 
     def obj_filter(id)
-      Net::LDAP::Filter.eq("ou", id )
+      Net::LDAP::Filter.eq('ou', id )
     end
 
   end

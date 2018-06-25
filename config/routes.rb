@@ -5,7 +5,7 @@ MrtDashboard::Application.routes.draw do
   get('feeds/recent'  => 'feeds#recent')
   get('show/view/*id' => 'show#view')
   get('show/*id'      => 'show#show')
-  root(:to => "home#index")
+  root(:to => 'home#index')
   get('login'         => 'user_sessions#login',
         :as             => :login,
         :constraints    => {:method => 'GET'})

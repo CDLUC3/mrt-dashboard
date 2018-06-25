@@ -1,21 +1,21 @@
 module ApplicationHelper
   # from http://codesnippets.joyent.com/posts/show/1812
   def formatted_int(i)
-    if i.nil? then "0"
+    if i.nil? then '0'
     elsif (i.abs < 1000) then i.to_s
-    else i.to_s.gsub!(/(\d)(?=(\d\d\d)+(?!\d))/, "\\1,") end
+    else i.to_s.gsub!(/(\d)(?=(\d\d\d)+(?!\d))/, '\\1,') end
   end
 
   def permissions(array)
-    if (array.length == 0) then "none"
+    if (array.length == 0) then 'none'
     elsif (array.length == 1) then "#{array[0]} only"
-    else array.join("/") end
+    else array.join('/') end
   end
 
   def merritt_time(t)
     t = DateTime.parse(t.to_s) if (t.class != DateTime)
     t = t.utc if (! t.utc?)
-    t.strftime("%Y-%m-%d %I:%M %p UTC")
+    t.strftime('%Y-%m-%d %I:%M %p UTC')
   end
 
   def clean_mime_type(mt)
@@ -24,8 +24,8 @@ module ApplicationHelper
 
   # Format kernel metadata lists
   def dc_nice(vals)
-    if (vals.nil? || vals.empty?) then ""
-    else vals.join("; ") end
+    if (vals.nil? || vals.empty?) then ''
+    else vals.join('; ') end
   end
 
   #makes a tip over a question mark item, just pass in the text
@@ -42,7 +42,7 @@ eos
   # outputs a formatted string for the current environment, except production
   def show_environment
     if !Rails.env.include?('production') then Rails.env
-    else "" end
+    else '' end
   end
 
   # Return true if a user is logged in
@@ -52,7 +52,7 @@ eos
   
   # Return true if logged in as guest
   def guest_logged_in?
-    user_logged_in? && (session[:uid] == (LDAP_CONFIG["guest_user"]))
+    user_logged_in? && (session[:uid] == (LDAP_CONFIG['guest_user']))
   end
   
   # Return true if user has choosen a group

@@ -21,7 +21,7 @@ class AdminController < ApplicationController
           @display_text += "The following items must be filled in: #{@error_fields.map{|i| @required[i]}.join(', ' )}."
         end
         if !params[:userpassword].eql?(params[:repeatuserpassword]) then
-          @display_text += " Your password and repeated password do not match."
+          @display_text += ' Your password and repeated password do not match.'
         end
       else
         User::LDAP.add(params[:uid], params[:userpassword], params[:givenname],
@@ -29,7 +29,7 @@ class AdminController < ApplicationController
         ['tzregion', 'telephonenumber', 'institution'].each do |i|
           User::LDAP.replace_attribute(params[:uid], i, params[i])
         end
-        @display_text = "This user profile has been created."
+        @display_text = 'This user profile has been created.'
         @ldap_user = User::LDAP.fetch(params[:uid])
       end
     end
@@ -55,7 +55,7 @@ class AdminController < ApplicationController
       else
         Group::LDAP.add(params[:ou], params[:description], ['read', 'write'], ['merrittClass'])
         Group::LDAP.replace_attribute(params[:ou], 'submissionprofile', params['submissionprofile'])
-        @display_text = "This collection has been created."
+        @display_text = 'This collection has been created.'
         @ldap_group = Group::LDAP.fetch(params[:ou])
       end
     end
@@ -84,9 +84,9 @@ class AdminController < ApplicationController
       usr = User::LDAP.fetch(params[:uid])
       grp = Group.find(params[:ou])
       @perms = grp.permission(params[:uid])
-      @display_text = "The user permissions were set as shown below.  The user is likely to need " +
+      @display_text = 'The user permissions were set as shown below.  The user is likely to need ' +
        "their email address (#{usr[:mail][0]}) added or removed from the ingest profile (#{grp.submission_profile}) in the ingest service." +
-       " If it is not modified they may not receive appropriate emails from the ingest service."
+       ' If it is not modified they may not receive appropriate emails from the ingest service.'
     else
       #nothing checked
     end

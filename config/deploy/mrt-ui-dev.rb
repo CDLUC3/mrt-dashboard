@@ -15,9 +15,9 @@
 # server list. The second argument is a, or duck-types, Hash and is
 # used to set extended properties on the server.
 
-set :rails_env, "development"
+set :rails_env, 'development'
 
-puts "DEVELOPMENT branch"
+puts 'DEVELOPMENT branch'
 set :branch, 'master'
 
 # Default deploy_to directory is /var/www/my_app
@@ -29,7 +29,7 @@ server 'ui-aws-dev.cdlib.org', user: 'dpr2', roles: %w{web app}
 
 set :puma_pid, "#{deploy_to}/shared/pid/puma.pid"
 set :puma_log, "#{deploy_to}/shared/log/puma.log"
-set :puma_port, "26181"
+set :puma_port, '26181'
 
 # Custom SSH Options
 # ==================

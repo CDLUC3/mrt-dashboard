@@ -6,7 +6,7 @@ class ObjectController < ApplicationController
   before_filter :load_object, :only=> [:index, :download, :downloadUser, :downloadManifest, :async]
   before_filter(:only=>[:download, :downloadUser, :downloadManifest, :async]) do
     if (!has_object_permission?(@object, 'download')) then
-      flash[:error] = "You do not have download permissions."
+      flash[:error] = 'You do not have download permissions.'
       render :file => "#{Rails.root}/public/401.html", :status => 401, :layout => false
     end
   end
@@ -31,25 +31,25 @@ class ObjectController < ApplicationController
       render :file => "#{Rails.root}/public/403.html", :status => 403, :layout => false
     elsif exceeds_sync_size(@object) then
       # if size is > max_archive_size, redirect to have user enter email for asynch compression (skipping streaming)
-      redirect_to(:controller => "lostorage", :action => "index", :object => @object)
+      redirect_to(:controller => 'lostorage', :action => 'index', :object => @object)
     end
   end
 
   protect_from_forgery :except => [:ingest, :mint, :update]
 
   def load_object
-    @object = InvObject.where("ark = ?", params_u(:object)).includes(:inv_collections, :inv_versions=>[:inv_files]).first 
+    @object = InvObject.where('ark = ?', params_u(:object)).includes(:inv_collections, :inv_versions=>[:inv_files]).first 
     raise ActiveRecord::RecordNotFound if @object.nil?
   end
 
   def ingest
     if !current_user then
-      render :status=>401, :text=>"" and return
+      render :status=>401, :text=>'' and return
     else
       if (!params[:file].respond_to? :tempfile) then
         render(:status=>400, :text=>"Bad file parameter.\n") and return
       elsif !current_user.groups('write').any? {|g| g.submission_profile == params[:profile]} then
-        render(:status=>404, :text=>"") and return
+        render(:status=>404, :text=>'') and return
       else
         ingest_args = {
           'creator'           => params[:creator],
@@ -65,29 +65,29 @@ class ObjectController < ApplicationController
           'profile'           => params[:profile],
           'note'              => params[:note],
           'responseForm'      => params[:responseForm],
-          'DataCite.resourceType'      => params["DataCite.resourceType"],
-          'DC.contributor'    => params["DC.contributor"],
-          'DC.coverage'       => params["DC.coverage"],
-          'DC.creator'        => params["DC.creator"],
-          'DC.date'           => params["DC.date"],
-          'DC.description'    => params["DC.description"],
-          'DC.format'         => params["DC.format"],
-          'DC.identifier'     => params["DC.identifier"],
-          'DC.language'       => params["DC.language"],
-          'DC.publisher'      => params["DC.publisher"],
-          'DC.relation'       => params["DC.relation"],
-          'DC.rights'         => params["DC.rights"],
-          'DC.source'         => params["DC.source"],
-          'DC.subject'        => params["DC.subject"],
-          'DC.title'          => params["DC.title"],
-          'DC.type'           => params["DC.type"],
-          'submitter'         => (params["submitter"] || "#{current_user.login}/#{current_user.displayname}"),
+          'DataCite.resourceType'      => params['DataCite.resourceType'],
+          'DC.contributor'    => params['DC.contributor'],
+          'DC.coverage'       => params['DC.coverage'],
+          'DC.creator'        => params['DC.creator'],
+          'DC.date'           => params['DC.date'],
+          'DC.description'    => params['DC.description'],
+          'DC.format'         => params['DC.format'],
+          'DC.identifier'     => params['DC.identifier'],
+          'DC.language'       => params['DC.language'],
+          'DC.publisher'      => params['DC.publisher'],
+          'DC.relation'       => params['DC.relation'],
+          'DC.rights'         => params['DC.rights'],
+          'DC.source'         => params['DC.source'],
+          'DC.subject'        => params['DC.subject'],
+          'DC.title'          => params['DC.title'],
+          'DC.type'           => params['DC.type'],
+          'submitter'         => (params['submitter'] || "#{current_user.login}/#{current_user.displayname}"),
           'title'             => params[:title],
           'synchronousMode'   => params[:synchronousMode],
           'retainTargetURL'   => params[:retainTargetURL],
           'type'              => params[:type]
         }.reject{|k, v| v.blank? }
-        resp = mk_httpclient.post(APP_CONFIG['ingest_service'], ingest_args, {"Content-Type" => "multipart/form-data"})
+        resp = mk_httpclient.post(APP_CONFIG['ingest_service'], ingest_args, {'Content-Type' => 'multipart/form-data'})
         render :status=>resp.status, :content_type=>resp.headers[:content_type], :text=>resp.body
       end
     end
@@ -95,12 +95,12 @@ class ObjectController < ApplicationController
 
   def update
     if !current_user then
-      render :status=>401, :text=>"" and return
+      render :status=>401, :text=>'' and return
     else
       if (!params[:file].respond_to? :tempfile) then
         render(:status=>400, :text=>"Bad file parameter.\n") and return
       elsif !current_user.groups('write').any? {|g| g.submission_profile == params[:profile]} then
-        render(:status=>404, :text=>"") and return
+        render(:status=>404, :text=>'') and return
       else
         ingest_args = {
           'creator'           => params[:creator],
@@ -116,29 +116,29 @@ class ObjectController < ApplicationController
           'profile'           => params[:profile],
           'note'              => params[:note],
           'responseForm'      => params[:responseForm],
-          'DataCite.resourceType'      => params["DataCite.resourceType"],
-          'DC.contributor'    => params["DC.contributor"],
-          'DC.coverage'       => params["DC.coverage"],
-          'DC.creator'        => params["DC.creator"],
-          'DC.date'           => params["DC.date"],
-          'DC.description'    => params["DC.description"],
-          'DC.format'         => params["DC.format"],
-          'DC.identifier'     => params["DC.identifier"],
-          'DC.language'       => params["DC.language"],
-          'DC.publisher'      => params["DC.publisher"],
-          'DC.relation'       => params["DC.relation"],
-          'DC.rights'         => params["DC.rights"],
-          'DC.source'         => params["DC.source"],
-          'DC.subject'        => params["DC.subject"],
-          'DC.title'          => params["DC.title"],
-          'DC.type'           => params["DC.type"],
+          'DataCite.resourceType'      => params['DataCite.resourceType'],
+          'DC.contributor'    => params['DC.contributor'],
+          'DC.coverage'       => params['DC.coverage'],
+          'DC.creator'        => params['DC.creator'],
+          'DC.date'           => params['DC.date'],
+          'DC.description'    => params['DC.description'],
+          'DC.format'         => params['DC.format'],
+          'DC.identifier'     => params['DC.identifier'],
+          'DC.language'       => params['DC.language'],
+          'DC.publisher'      => params['DC.publisher'],
+          'DC.relation'       => params['DC.relation'],
+          'DC.rights'         => params['DC.rights'],
+          'DC.source'         => params['DC.source'],
+          'DC.subject'        => params['DC.subject'],
+          'DC.title'          => params['DC.title'],
+          'DC.type'           => params['DC.type'],
           'submitter'         => "#{current_user.login}/#{current_user.displayname}",
           'title'             => params[:title],
           'synchronousMode'   => params[:synchronousMode],
           'retainTargetURL'   => params[:retainTargetURL],
           'type'              => params[:type]
         }.reject{|k, v| v.blank? }
-        resp = mk_httpclient.post(APP_CONFIG['ingest_service_update'], ingest_args, {"Content-Type" => "multipart/form-data"})
+        resp = mk_httpclient.post(APP_CONFIG['ingest_service_update'], ingest_args, {'Content-Type' => 'multipart/form-data'})
         render :status=>resp.status, :content_type=>resp.headers[:content_type], :text=>resp.body
       end
     end  
@@ -146,10 +146,10 @@ class ObjectController < ApplicationController
   
   def mint
     if !current_user then
-      render :status=>401, :text=>"" and return
+      render :status=>401, :text=>'' and return
     else
       if !current_user.groups('write').any? {|g| g.submission_profile == params[:profile]} then
-        render(:status=>404, :text=>"") and return
+        render(:status=>404, :text=>'') and return
       else
         mint_args = {
           'profile'           => params[:profile],
@@ -157,7 +157,7 @@ class ObjectController < ApplicationController
           'file'             =>  Tempfile.new('restclientbug'), 
           'responseForm'     => params[:responseForm]
         }.reject{|k, v| v.blank? }
-        resp = mk_httpclient.post(APP_CONFIG['mint_service'], mint_args, {"Content-Type" => "multipart/form-data"})
+        resp = mk_httpclient.post(APP_CONFIG['mint_service'], mint_args, {'Content-Type' => 'multipart/form-data'})
         render :status=>resp.status, :content_type=>resp.headers[:content_type], :text=>resp.body
       end
     end
@@ -168,23 +168,23 @@ class ObjectController < ApplicationController
 
   def download
     stream_response("#{@object.bytestream_uri}?t=zip", 
-                    "attachment",
+                    'attachment',
                     "#{Orchard::Pairtree.encode(@object.ark.to_s)}_object.zip",
-                    "application/zip")
+                    'application/zip')
   end
 
   def downloadUser # TODO: rename to downloadProducerFiles or similar
     stream_response("#{@object.bytestream_uri2}?t=zip", 
-                    "attachment",
+                    'attachment',
                     "#{Orchard::Pairtree.encode(@object.ark.to_s)}_object.zip",
-                    "application/zip")
+                    'application/zip')
   end
 
   def downloadManifest
     stream_response("#{@object.bytestream_uri3}", 
-                    "attachment",
+                    'attachment',
                     "#{Orchard::Pairtree.encode(@object.ark.to_s)}",
-                    "text/xml")
+                    'text/xml')
   end
 
   def async # TODO: rename to requestAsyncDownload or something
@@ -222,8 +222,8 @@ class ObjectController < ApplicationController
       @doc = Nokogiri::XML(resp.content) do |config|
         config.strict.noent.noblanks
       end
-      @batch_id = @doc.xpath("//bat:batchState/bat:batchID")[0].child.text
-      @obj_count = @doc.xpath("//bat:batchState/bat:jobStates").length
+      @batch_id = @doc.xpath('//bat:batchState/bat:batchID')[0].child.text
+      @obj_count = @doc.xpath('//bat:batchState/bat:jobStates').length
     rescue Exception => ex
       # see if we can parse the error from ingest, if not then unknown error
       raise unless ex.respond_to?(:response)
@@ -232,7 +232,7 @@ class ObjectController < ApplicationController
       end
       @description = "ingest: #{@doc.xpath("//exc:statusDescription")[0].child.text}"
       @error = "ingest: #{@doc.xpath("//exc:error")[0].child.text}"
-      render :action => "upload_error"
+      render :action => 'upload_error'
     end
   end
 
@@ -241,8 +241,8 @@ class ObjectController < ApplicationController
 
     # prevent stack trace when collection does not exist
     c = InvCollection.where(:ark=>@collection_ark).first
-    if c.nil? || c.to_s == "" then
-       render(:status=>404, :text=>"404 Not Found") and return
+    if c.nil? || c.to_s == '' then
+       render(:status=>404, :text=>'404 Not Found') and return
     end
     @objects = c.inv_objects.
       quickloadhack.

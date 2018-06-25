@@ -7,7 +7,7 @@ module InstitutionLdap
     end
 
     def obj_filter(id)
-      Net::LDAP::Filter.eq("o", id )
+      Net::LDAP::Filter.eq('o', id )
     end
 
     def find_all

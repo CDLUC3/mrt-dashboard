@@ -21,7 +21,7 @@ describe LostorageController do
     allow(post_email_response).to receive(:status).and_return(200)
     allow(client).to receive(:post).and_return(post_email_response)
 
-    @object = create(:inv_object, erc_who: 'Doe, Jane', erc_what: "Object 1", erc_when: "2018-01-01")
+    @object = create(:inv_object, erc_who: 'Doe, Jane', erc_what: 'Object 1', erc_when: '2018-01-01')
     @object_ark = object.ark
     @version_number = object.current_version.number
 

@@ -16,7 +16,7 @@ class InvObject < ActiveRecord::Base
 
   # hack to fix erc_ tables taking forever to load
   scope :quickloadhack, lambda { 
-    select(["inv_objects.id", "inv_objects.version_number", "inv_objects.inv_owner_id", "inv_objects.object_type", "inv_objects.role", "inv_objects.aggregate_role", "inv_objects.ark", "inv_objects.created", "inv_objects.modified", "inv_objects.id", "inv_objects.ark", "inv_objects.created", "inv_objects.modified"])
+    select(['inv_objects.id', 'inv_objects.version_number', 'inv_objects.inv_owner_id', 'inv_objects.object_type', 'inv_objects.role', 'inv_objects.aggregate_role', 'inv_objects.ark', 'inv_objects.created', 'inv_objects.modified', 'inv_objects.id', 'inv_objects.ark', 'inv_objects.created', 'inv_objects.modified'])
   }
 
   include Encoder
@@ -53,19 +53,19 @@ class InvObject < ActiveRecord::Base
   # :nocov:
 
   def node_number
-    self.inv_nodes.where("inv_nodes_inv_objects.role" => "primary").select("inv_nodes.number").map(&:number).first
+    self.inv_nodes.where('inv_nodes_inv_objects.role' => 'primary').select('inv_nodes.number').map(&:number).first
   end
 
   def size
-    self.inv_files.sum("billable_size")
+    self.inv_files.sum('billable_size')
   end
  
   def total_actual_size
-    self.inv_files.sum("full_size")
+    self.inv_files.sum('full_size')
   end
 
   def current_version
-    @current_version ||= self.inv_versions.order("number desc").first
+    @current_version ||= self.inv_versions.order('number desc').first
   end
   
   def inv_collection

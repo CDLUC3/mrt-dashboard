@@ -9,10 +9,10 @@ worker_processes 2
 # for super-fast worker spawn times
 preload_app true
 
-pid File.join(Dir.pwd, "pid", "unicorn.pid")
+pid File.join(Dir.pwd, 'pid', 'unicorn.pid')
 
 # timeout is long because we upload files
 # switch to nginx to fix
 timeout 7200
 
-logger Logger.new(File.join(Dir.pwd, "log", "unicorn.log"))
+logger Logger.new(File.join(Dir.pwd, 'log', 'unicorn.log'))

@@ -5,7 +5,7 @@ class FileController < ApplicationController
 
   before_filter do
     if (!has_object_permission?(@file.inv_version.inv_object, 'download')) then
-      flash[:error] = "You do not have download permissions."
+      flash[:error] = 'You do not have download permissions.'
       render :file => "#{Rails.root}/public/401.html", :status => 401, :layout => false
     end
   end
@@ -24,7 +24,7 @@ class FileController < ApplicationController
       render :file => "#{Rails.root}/public/403.html", :status => 403, :layout => false
     else
       stream_response(@file.bytestream_uri,
-                      "inline",
+                      'inline',
                       File.basename(@file.pathname),
                       @file.mime_type,
                       @file.full_size)
@@ -41,9 +41,9 @@ class FileController < ApplicationController
     filename = "producer/#{filename}" if !filename.match(/^(producer|system)/)
 
     @file = InvFile.joins(:inv_version, :inv_object).
-      where("inv_objects.ark = ?", params_u(:object)).
-      where("inv_versions.number = ?", params[:version]).
-      where("inv_files.pathname = ?", filename).
+      where('inv_objects.ark = ?', params_u(:object)).
+      where('inv_versions.number = ?', params[:version]).
+      where('inv_files.pathname = ?', filename).
       first
     raise ActiveRecord::RecordNotFound if @file.nil?
   end

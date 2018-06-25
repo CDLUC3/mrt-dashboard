@@ -7,9 +7,9 @@ set :repo_url, 'https://github.com/CDLUC3/mrt-dashboard'
 set :deploy_to, '/dpr2/apps/ui'
 set :scm, :git
 
-set :stages, ["local", "mrt-ui-dev", "stage", "production"]
+set :stages, ['local', 'mrt-ui-dev', 'stage', 'production']
 
-set :default_env, { path: "/dpr2/local/bin:$PATH" }
+set :default_env, { path: '/dpr2/local/bin:$PATH' }
 
 # persistent dirs
 set :linked_files, %w{config/database.yml config/ldap.yml config/atom.yml}
@@ -49,7 +49,7 @@ namespace :deploy do
       end
     end
   end
-  before "deploy:start", "bundle:install"
+  before 'deploy:start', 'bundle:install'
 
   desc 'Status Puma'
   task :status do
@@ -72,7 +72,7 @@ end
 
 namespace :bundle do
 
-  desc "run bundle install and ensure all gem requirements are met"
+  desc 'run bundle install and ensure all gem requirements are met'
   task :install do
     on roles(:app) do
       execute "cd #{current_path} && bundle install --without=test"

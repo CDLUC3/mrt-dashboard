@@ -9,20 +9,20 @@ module InstitutionLdap
       unmock_ldap!
 
       ldap_params = {
-        :host => LDAP_CONFIG["host"],
-        :port => LDAP_CONFIG["port"],
+        :host => LDAP_CONFIG['host'],
+        :port => LDAP_CONFIG['port'],
         :auth => {
           :method => :simple,
-          :username => LDAP_CONFIG["admin_user"],
-          :password => LDAP_CONFIG["admin_password"]
+          :username => LDAP_CONFIG['admin_user'],
+          :password => LDAP_CONFIG['admin_password']
         },
         :encryption => {
           :method => :simple_tls,
           :tls_options => {
-            :ssl_version => "TLSv1_1"
+            :ssl_version => 'TLSv1_1'
           }
         },
-        :connect_timeout => LDAP_CONFIG["connect_timeout"]
+        :connect_timeout => LDAP_CONFIG['connect_timeout']
       }
 
       @admin_ldap = double(Net::LDAP)
@@ -43,7 +43,7 @@ module InstitutionLdap
     describe ':obj_filter' do
       it 'creates a filter on the "o" field' do
         id = 'foo'
-        expected = Net::LDAP::Filter.eq("o", id)
+        expected = Net::LDAP::Filter.eq('o', id)
         filter = inst_ldap.obj_filter(id)
         expect(filter).to eq(expected)
       end
@@ -57,7 +57,7 @@ module InstitutionLdap
           { 'o' => ['bar'] },
           { 'o' => ['institutions'] },
         ]
-        expect(admin_ldap).to receive(:search).with(base: LDAP_CONFIG["inst_base"]).and_return(result)
+        expect(admin_ldap).to receive(:search).with(base: LDAP_CONFIG['inst_base']).and_return(result)
 
         expected = [
           { 'o' => ['bar'] },

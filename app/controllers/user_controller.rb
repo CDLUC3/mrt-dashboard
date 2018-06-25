@@ -18,16 +18,16 @@ class UserController < ApplicationController
       params.each_pair{|k,v| @ldap_user[k] = v }
       error_fields = REQUIRED.keys.select {|key| params[key].blank? }
       if error_fields.length > 0 then
-        @display_text += "The following items must be filled in: "
+        @display_text += 'The following items must be filled in: '
         @display_text += error_fields.map{|i| REQUIRED[i]}.join(', ' )
-        @display_text += "."
+        @display_text += '.'
       elsif params[:userpassword] != params[:repeatuserpassword] then
-        @display_text += "Your password and repeated password do not match."
+        @display_text += 'Your password and repeated password do not match.'
       else
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         
-        params[:telephonenumber] = nil if (params[:telephonenumber] == "")
+        params[:telephonenumber] = nil if (params[:telephonenumber] == '')
         
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -40,7 +40,7 @@ class UserController < ApplicationController
         if params['userpassword'] != '!unchanged' then
           User::LDAP.replace_attribute(current_user.login, 'userpassword', params['userpassword'])
         end
-        @display_text = "Your profile has been updated."
+        @display_text = 'Your profile has been updated.'
       end
     end      
   end

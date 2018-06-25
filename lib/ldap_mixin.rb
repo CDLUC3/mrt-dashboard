@@ -39,8 +39,8 @@ module LdapMixin
       :connect_timeout => connect_timeout
     }
 
-    unless ENV["RAILS_ENV"] == 'test' || admin_ldap.bind
-      raise LdapException.new("Unable to bind to LDAP server.")
+    unless ENV['RAILS_ENV'] == 'test' || admin_ldap.bind
+      raise LdapException.new('Unable to bind to LDAP server.')
     end
   end
 

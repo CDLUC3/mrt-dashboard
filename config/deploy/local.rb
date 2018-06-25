@@ -15,9 +15,9 @@
 # server list. The second argument is a, or duck-types, Hash and is
 # used to set extended properties on the server.
 
-set :rails_env, "local"
+set :rails_env, 'local'
 
-puts "LOCAL branch"
+puts 'LOCAL branch'
 set :branch, 'default'
 
 # Default deploy_to directory is /var/www/my_app
@@ -27,7 +27,7 @@ server 'linux-mjr.ad.ucop.edu', user: 'mreyes', roles: %w{web app}
 
 set :unicorn_pid, "#{deploy_to}/shared/pid/unicorn.pid"
 set :unicorn_log, "#{deploy_to}/shared/log/unicorn.log"
-set :unicorn_port, "26181"
+set :unicorn_port, '26181'
 
 # Custom SSH Options
 # ==================

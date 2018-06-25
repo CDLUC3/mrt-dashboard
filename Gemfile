@@ -5,17 +5,17 @@ gem 'activeresource'
 gem 'mysql2', '~> 0.4.0' # TODO: update to 0.5 once we're on a Rails that supports it
 gem 'multi_json'
 
-gem "httpclient", "~> 2.7.0"
+gem 'httpclient', '~> 2.7.0'
 gem 'exception_notification', '~> 4.2'
-gem "net-ldap", "~> 0.16"
-gem "nokogiri", "~> 1.8", ">= 1.8.2"
-gem "puma"
-gem "will_paginate"
-gem "rack-cache"
-gem "unicode"
-gem "orchard"
-gem "mrt-ingest", "0.0.2"
-gem "builder"
+gem 'net-ldap', '~> 0.16'
+gem 'nokogiri', '~> 1.8', '>= 1.8.2'
+gem 'puma'
+gem 'will_paginate'
+gem 'rack-cache'
+gem 'unicode'
+gem 'orchard'
+gem 'mrt-ingest', '0.0.2'
+gem 'builder'
 gem 'uuidtools'
 gem 'thin'
 gem 'jquery-rails'

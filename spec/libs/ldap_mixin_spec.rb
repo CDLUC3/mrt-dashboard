@@ -55,7 +55,7 @@ describe LdapMixin do
     begin
       ENV['RAILS_ENV'] = 'production'
       expect(admin_ldap).to receive(:bind).and_return(false)
-      expect { LdapStub.new(init_hash) }.to raise_error(LdapMixin::LdapException, "Unable to bind to LDAP server.")
+      expect { LdapStub.new(init_hash) }.to raise_error(LdapMixin::LdapException, 'Unable to bind to LDAP server.')
     ensure
       ENV['RAILS_ENV'] = old_env
     end

@@ -44,7 +44,7 @@ class ApplicationController < ActionController::Base
   def mk_merritt_url(letter, object, version=nil, file=nil)
     object = urlencode(urlunencode(object))
     file = if file.blank? then nil else urlencode(urlunencode(file)) end
-    "/#{letter}/" + [object, version, file].reject{|x| x.blank?}.join("/")
+    "/#{letter}/" + [object, version, file].reject{|x| x.blank?}.join('/')
   end
   
   def redirect_to_latest_version
@@ -148,7 +148,7 @@ class ApplicationController < ActionController::Base
   def require_user
     unless current_uid
       store_location
-      flash[:notice] = "You must be logged in to access the page you requested"
+      flash[:notice] = 'You must be logged in to access the page you requested'
       redirect_to :controller=>'user_sessions', :action=>'guest_login' and return
     end
   end
@@ -157,7 +157,7 @@ class ApplicationController < ActionController::Base
   # TODO: this doesn't seem to be used anywhere; can we delete it?
   def require_user_or_401
     unless current_user 
-      render :status=>401, :text=>"" and return
+      render :status=>401, :text=>'' and return
     end
   end
   # :nocov:
@@ -215,8 +215,8 @@ class ApplicationController < ActionController::Base
   def number_to_storage_size(size, precision=1)
     size = Kernel.Float(size)
     case
-    when size == 1 then "1 Byte"
-    when size < 10**3 then "%d B" % size
+    when size == 1 then '1 Byte'
+    when size < 10**3 then '%d B' % size
     when size < 10**6 then "%.#{precision}f KB"  % (size / 10.0**3)
     when size < 10**9 then "%.#{precision}f MB"  % (size / 10.0**6)
     when size < 10**12 then "%.#{precision}f GB"  % (size / 10.0**9)
@@ -274,10 +274,10 @@ class ApplicationController < ActionController::Base
   end
   
   def stream_response(url, disposition, filename, mediatype, length=nil)
-    response.headers["Content-Type"] = mediatype
-    response.headers["Content-Disposition"] = "#{disposition}; filename=\"#{filename}\""
+    response.headers['Content-Type'] = mediatype
+    response.headers['Content-Disposition'] = "#{disposition}; filename=\"#{filename}\""
     if !length.nil? then 
-      response.headers["Content-Length"] = length.to_s
+      response.headers['Content-Length'] = length.to_s
     end
     response.headers['Last-Modified'] = Time.now.httpdate
     self.response_body = Streamer.new(url)
@@ -293,7 +293,7 @@ class ApplicationController < ActionController::Base
       # check if user already saw DUA and accepted: if so, return
       if session[:collection_acceptance][object.group.id] then
         # clear out acceptance if it does not have session persistence
-        if (session[:collection_acceptance][object.group.id] != "session")
+        if (session[:collection_acceptance][object.group.id] != 'session')
           session[:collection_acceptance].delete(object.group.id)
         end
         return
@@ -301,7 +301,7 @@ class ApplicationController < ActionController::Base
         if object.dua_exists? then
           if process_dua_request(object.dua_uri) then
             # if the DUA for this collection exists, display DUA to user for acceptance before displaying file
-            redirect_to({:controller => "dua", :action => "index"}.merge(redirect_args)) and return
+            redirect_to({:controller => 'dua', :action => 'index'}.merge(redirect_args)) and return
           end
         end
       end

@@ -4,7 +4,7 @@ class CollectionController < ApplicationController
 
   before_filter do
     if (!has_group_permission?(@request_group, 'read')) then
-      raise ActiveResource::UnauthorizedAccess.new("You do not have access to that collection")
+      raise ActiveResource::UnauthorizedAccess.new('You do not have access to that collection')
     end
   end
 
@@ -18,19 +18,19 @@ class CollectionController < ApplicationController
   end
 
   def object_count
-    render :partial=>"object_count"
+    render :partial=>'object_count'
   end
 
   def version_count
-    render :partial=>"version_count"
+    render :partial=>'version_count'
   end
 
   def file_count
-    render :partial=>"file_count"
+    render :partial=>'file_count'
   end
 
   def total_size
-    render :partial=>"total_size"
+    render :partial=>'total_size'
   end
 
   def index
@@ -41,7 +41,7 @@ class CollectionController < ApplicationController
       session[:group_description] = @request_group.description
     end
     @recent_objects = InvObject.joins(:inv_collections).
-      where("inv_collections.ark = ?", @request_group.ark_id).
+      where('inv_collections.ark = ?', @request_group.ark_id).
       order('inv_objects.modified desc').
       includes(:inv_versions, :inv_dublinkernels).
       quickloadhack.
@@ -61,7 +61,7 @@ class CollectionController < ApplicationController
     if terms.size == 0 then
       # no real search, just display 
       @results = InvObject.joins(:inv_collections).
-        where("inv_collections.ark = ?", @request_group.ark_id).
+        where('inv_collections.ark = ?', @request_group.ark_id).
         order('inv_objects.modified desc').
         includes(:inv_versions, :inv_dublinkernels).
         quickloadhack.
@@ -70,14 +70,14 @@ class CollectionController < ApplicationController
       # new, more efficient full text query (thanks Debra)
       tb_count = 0
       where_clauses = terms.map {|t|
-	"? "
+	'? '
       }
-      where_clause = "(MATCH (sha_dublinkernels.value) AGAINST (\"" + where_clauses.join("") + "\"))"
+      where_clause = '(MATCH (sha_dublinkernels.value) AGAINST ("' + where_clauses.join('') + '"))'
 
       ark_id = @request_group.ark_id
       @results = InvObject.
         joins(:inv_collections, :inv_dublinkernels => :sha_dublinkernel).
-        where("inv_collections.ark = ?", ark_id).
+        where('inv_collections.ark = ?', ark_id).
         where(where_clause, *terms).
         includes(:inv_versions, :inv_dublinkernels).
         quickloadhack.

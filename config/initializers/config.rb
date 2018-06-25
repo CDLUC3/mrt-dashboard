@@ -1,5 +1,5 @@
 def load_config(name)
-  path = File.join(Rails.root, "config", name)
+  path = File.join(Rails.root, 'config', name)
   if !File.exists?(path) then
     raise Exception.new("Config file #{name} not found!")
   elsif File.size(path) == 0 then
@@ -15,6 +15,6 @@ def load_config(name)
   end
 end
 
-LDAP_CONFIG = load_config("ldap.yml")
-ATOM_CONFIG = load_config("atom.yml")
-APP_CONFIG = load_config("app_config.yml")
+LDAP_CONFIG = load_config('ldap.yml')
+ATOM_CONFIG = load_config('atom.yml')
+APP_CONFIG = load_config('app_config.yml')

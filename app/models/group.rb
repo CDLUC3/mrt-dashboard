@@ -1,13 +1,13 @@
 # this all probably needs to be refactored eventually
 class Group
   LDAP = GroupLdap::Server.
-    new({ :host            => LDAP_CONFIG["host"],
-          :port            => LDAP_CONFIG["port"],
-          :base            => LDAP_CONFIG["group_base"],
-          :admin_user      => LDAP_CONFIG["admin_user"],
-          :admin_password  => LDAP_CONFIG["admin_password"],
-          :connect_timeout => LDAP_CONFIG["connect_timeout"],
-          :minter          => LDAP_CONFIG["ark_minter_url"]})
+    new({ :host            => LDAP_CONFIG['host'],
+          :port            => LDAP_CONFIG['port'],
+          :base            => LDAP_CONFIG['group_base'],
+          :admin_user      => LDAP_CONFIG['admin_user'],
+          :admin_password  => LDAP_CONFIG['admin_password'],
+          :connect_timeout => LDAP_CONFIG['connect_timeout'],
+          :minter          => LDAP_CONFIG['ark_minter_url']})
 
   attr_accessor :id, :submission_profile, :ark_id, :owner, :description
 
@@ -63,7 +63,7 @@ class Group
     if self.inv_collection_id.nil? then
       0
     else
-      InvObject.connection.select_all("SELECT COUNT(DISTINCT(`inv_objects`.id)) as `count` FROM `inv_objects` INNER JOIN `inv_collections_inv_objects` ON `inv_objects`.id = `inv_collections_inv_objects`.inv_object_id WHERE ((`inv_collections_inv_objects`.inv_collection_id = #{self.inv_collection_id}))")[0]["count"].to_i
+      InvObject.connection.select_all("SELECT COUNT(DISTINCT(`inv_objects`.id)) as `count` FROM `inv_objects` INNER JOIN `inv_collections_inv_objects` ON `inv_objects`.id = `inv_collections_inv_objects`.inv_object_id WHERE ((`inv_collections_inv_objects`.inv_collection_id = #{self.inv_collection_id}))")[0]['count'].to_i
     end
   end
   
@@ -71,7 +71,7 @@ class Group
     if self.inv_collection_id.nil? then
       0
     else
-      InvObject.connection.select_all("SELECT COUNT(DISTINCT(`inv_versions`.id)) AS `count` FROM `inv_versions` INNER JOIN `inv_objects` ON `inv_objects`.`id` = `inv_versions`.`inv_object_id` INNER JOIN `inv_collections_inv_objects` ON `inv_objects`.`id` = `inv_collections_inv_objects`.`inv_object_id` WHERE ((`inv_collections_inv_objects`.inv_collection_id = #{self.inv_collection_id}))")[0]["count"].to_i
+      InvObject.connection.select_all("SELECT COUNT(DISTINCT(`inv_versions`.id)) AS `count` FROM `inv_versions` INNER JOIN `inv_objects` ON `inv_objects`.`id` = `inv_versions`.`inv_object_id` INNER JOIN `inv_collections_inv_objects` ON `inv_objects`.`id` = `inv_collections_inv_objects`.`inv_object_id` WHERE ((`inv_collections_inv_objects`.inv_collection_id = #{self.inv_collection_id}))")[0]['count'].to_i
     end
   end
 
@@ -79,16 +79,16 @@ class Group
     if self.inv_collection_id.nil? then
       0
     else
-      InvFile.connection.select_all("SELECT COUNT(DISTINCT(`inv_files`.`id`)) AS `count` FROM `inv_files` INNER JOIN `inv_versions` ON `inv_versions`.`id` = `inv_files`.`inv_version_id` INNER JOIN `inv_objects` ON `inv_objects`.`id` = `inv_versions`.`inv_object_id` INNER JOIN `inv_collections_inv_objects` ON `inv_objects`.`id` = `inv_collections_inv_objects`.`inv_object_id` WHERE ((`inv_collections_inv_objects`.inv_collection_id = #{self.inv_collection_id}))")[0]["count"].to_i
+      InvFile.connection.select_all("SELECT COUNT(DISTINCT(`inv_files`.`id`)) AS `count` FROM `inv_files` INNER JOIN `inv_versions` ON `inv_versions`.`id` = `inv_files`.`inv_version_id` INNER JOIN `inv_objects` ON `inv_objects`.`id` = `inv_versions`.`inv_object_id` INNER JOIN `inv_collections_inv_objects` ON `inv_objects`.`id` = `inv_collections_inv_objects`.`inv_object_id` WHERE ((`inv_collections_inv_objects`.inv_collection_id = #{self.inv_collection_id}))")[0]['count'].to_i
     end
   end
 
   def total_size
-    Rails.logger.info("Im in the total_size method of group model")
+    Rails.logger.info('Im in the total_size method of group model')
     if self.inv_collection.nil? then
       0
     else    
-      InvFile.connection.select_all("SELECT SUM(full_size) AS `total_size` FROM `inv_files` INNER JOIN `inv_collections_inv_objects` ON `inv_collections_inv_objects`.`inv_object_id` = `inv_files`.`inv_object_id` WHERE (`inv_collections_inv_objects`.inv_collection_id = #{self.inv_collection_id})")[0]["total_size"].to_i
+      InvFile.connection.select_all("SELECT SUM(full_size) AS `total_size` FROM `inv_files` INNER JOIN `inv_collections_inv_objects` ON `inv_collections_inv_objects`.`inv_object_id` = `inv_files`.`inv_object_id` WHERE (`inv_collections_inv_objects`.inv_collection_id = #{self.inv_collection_id})")[0]['total_size'].to_i
     end
   end
 

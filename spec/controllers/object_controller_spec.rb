@@ -92,15 +92,15 @@ describe ObjectController do
         before(:each) do
           mock_permissions_all(user_id, collection_id)
           @expected_params = {
-            "file" => file.tempfile,
-            "filename" => file.original_filename,
-            "submitter" => "#{user_id}/Jane Doe",
-            "profile" => params[:profile]
+            'file' => file.tempfile,
+            'filename' => file.original_filename,
+            'submitter' => "#{user_id}/Jane Doe",
+            'profile' => params[:profile]
           }
 
           ingest_status = 200
           ingest_headers = {content_type: 'text/plain'}
-          ingest_body = "this is the body of the response"
+          ingest_body = 'this is the body of the response'
           @ingest_response = instance_double(HTTP::Message)
           allow(ingest_response).to receive(:status).and_return(ingest_status)
           allow(ingest_response).to receive(:headers).and_return(ingest_headers)
@@ -179,7 +179,7 @@ describe ObjectController do
 
       mint_status = 200
       mint_headers = {content_type: 'text/xml'}
-      mint_body = "<xml>12345</xml>"
+      mint_body = '<xml>12345</xml>'
       mint_response = instance_double(HTTP::Message)
       allow(mint_response).to receive(:status).and_return(mint_status)
       allow(mint_response).to receive(:headers).and_return(mint_headers)
@@ -193,7 +193,7 @@ describe ObjectController do
       expect(client).to receive(:post).with(
         APP_CONFIG['mint_service'],
         hash_including(expected_params),
-        {"Content-Type" => "multipart/form-data"}
+        {'Content-Type' => 'multipart/form-data'}
       ).and_return(mint_response)
 
       post(:mint, params, {uid: user_id})

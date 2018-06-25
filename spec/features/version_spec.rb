@@ -72,7 +72,7 @@ describe 'versions' do
 
       index_path = url_for(controller: :version, action: :index, object: obj.ark, only_path: true)
       visit(index_path)
-      expect(page.title).to include("Version 2")
+      expect(page.title).to include('Version 2')
       expect(page.title).to include(obj.ark)
     end
   end

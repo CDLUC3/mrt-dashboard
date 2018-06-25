@@ -20,7 +20,7 @@ class InvVersion < ActiveRecord::Base
   end
 
   def total_size
-    self.inv_files.sum("full_size")
+    self.inv_files.sum('full_size')
   end
 
   def system_files 
@@ -32,7 +32,7 @@ class InvVersion < ActiveRecord::Base
   end
 
   def metadata(element)
-    self.inv_dublinkernels.select {|md| md.element == element && md.value != "(:unas)"}.map {|md| md.value }
+    self.inv_dublinkernels.select {|md| md.element == element && md.value != '(:unas)'}.map {|md| md.value }
   end
 
   def dk_who
@@ -56,6 +56,6 @@ class InvVersion < ActiveRecord::Base
   end
 
   def total_actual_size
-    self.inv_files.sum("full_size")
+    self.inv_files.sum('full_size')
   end
 end

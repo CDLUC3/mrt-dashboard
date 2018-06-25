@@ -20,12 +20,12 @@ module Noid
     private
     def fill_cache
       begin
-        req = Net::HTTP::Get.new(@url.path + "?mint+" + @n_at_once.to_s)
+        req = Net::HTTP::Get.new(@url.path + '?mint+' + @n_at_once.to_s)
         resp = Net::HTTP.start(@url.host, @url.port) do |http|
           http.request(req)
         end
         if !(resp.instance_of? Net::HTTPOK) then
-          raise MintException.new("Got error response from server.")
+          raise MintException.new('Got error response from server.')
         end
         @cache.concat(resp.body.split(/\n/).map do |s|
                         md = s.match(/id:\s+([0-9]+\/)?([^\s]+)/)
@@ -38,7 +38,7 @@ module Noid
       rescue MintException
         raise # don't eat our own exceptions
       rescue SocketError
-        raise MintException.new("Could not connect to server.")
+        raise MintException.new('Could not connect to server.')
       rescue Exception # TODO: should this be StandardError (or just 'rescue')?
         raise MintException.new("Can't get ID; not a NOID server?")
       end

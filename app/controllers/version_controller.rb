@@ -5,7 +5,7 @@ class VersionController < ApplicationController
 
   before_filter(:only => [:download, :downloadUser, :async]) do
     if (!has_object_permission?(@version.inv_object, 'download')) then
-      flash[:error] = "You do not have download permissions."
+      flash[:error] = 'You do not have download permissions.'
       render :file => "#{Rails.root}/public/401.html", :status => 401, :layout => false
     end
   end
@@ -24,8 +24,8 @@ class VersionController < ApplicationController
     elsif exceeds_sync_size_version(@version) then
       # if size is > max_archive_size, redirect to have user enter email for asynch
       # compression (skipping streaming)
-      redirect_to(:controller => "lostorage",
-                  :action     => "index", 
+      redirect_to(:controller => 'lostorage',
+                  :action     => 'index', 
                   :object     => @version.inv_object, 
                   :version    => @version)
     end
@@ -33,8 +33,8 @@ class VersionController < ApplicationController
 
   def load_version
     @version = InvVersion.joins(:inv_object).
-      where("inv_objects.ark = ?", params_u(:object)).
-      where("inv_versions.number = ?", params_u(:version).to_i).
+      where('inv_objects.ark = ?', params_u(:object)).
+      where('inv_versions.number = ?', params_u(:version).to_i).
       includes(:inv_dublinkernels, :inv_object => [:inv_versions]).
       first
     raise ActiveRecord::RecordNotFound if @version.nil?
@@ -57,15 +57,15 @@ class VersionController < ApplicationController
 
   def download
     stream_response("#{@version.bytestream_uri}?t=zip",
-                    "attachment",
+                    'attachment',
                     "#{Orchard::Pairtree.encode(@version.inv_object.ark.to_s)}_version_#{@version.number}.zip",
-                    "application/zip")
+                    'application/zip')
   end
 
   def downloadUser
     stream_response("#{@version.bytestream_uri2}?t=zip",
-                    "attachment",
+                    'attachment',
                     "#{Orchard::Pairtree.encode(@version.inv_object.ark.to_s)}_version_#{@version.number}.zip",
-                    "application/zip")
+                    'application/zip')
   end
 end

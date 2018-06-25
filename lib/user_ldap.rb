@@ -22,7 +22,7 @@ module UserLdap
       #givenName (first name), sn (surname, last name), name = cn, displayName, uid,
       #userPassword, mail, title, postalAddress, initials
       attr = {
-        :objectclass           => ["inetOrgPerson", 'merrittUser'],
+        :objectclass           => ['inetOrgPerson', 'merrittUser'],
         :uid                   => userid,
         :sn                    => lastname,
         :givenName             => firstname,
@@ -52,7 +52,7 @@ module UserLdap
     end
 
     def obj_filter(id)
-      Net::LDAP::Filter.eq("uid", id)
+      Net::LDAP::Filter.eq('uid', id)
     end
   end
 end
