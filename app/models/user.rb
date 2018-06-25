@@ -36,7 +36,6 @@ class User
     true
   end
 
-
   def groups(permission = nil)
     grp_ids = Group::LDAP.find_groups_for_user(login, User::LDAP, permission)
     Group.find_batch(grp_ids)

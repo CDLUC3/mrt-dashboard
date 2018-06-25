@@ -113,12 +113,10 @@ module LdapMixin
   end
 
   def record_exists?(id)
-    
-      fetch(id)
-      true
-    rescue LdapMixin::LdapException => ex
-      return false
-    
+    fetch(id)
+    true
+  rescue LdapMixin::LdapException => ex
+    return false
   end
 
   def true_or_exception(result)

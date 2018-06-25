@@ -8,11 +8,9 @@ class CollectionController < ApplicationController
 
   # Load the group specified in the params[:group]
   def require_request_group
-    
-      @request_group = Group.find(params[:group])
-    rescue LdapMixin::LdapException
-      raise ActiveRecord::RecordNotFound
-    
+    @request_group = Group.find(params[:group])
+  rescue LdapMixin::LdapException
+    raise ActiveRecord::RecordNotFound
   end
 
   def object_count
@@ -48,9 +46,9 @@ class CollectionController < ApplicationController
 
   def search_results
     terms = Unicode.downcase(params[:terms])
-              .split(/\s+/)
-              .map { |t| is_ark?(t) ? t[11..-1] : t } # special ark handling
-              .delete_if { |t| (t.blank? || t.size < 4) }
+      .split(/\s+/)
+      .map { |t| is_ark?(t) ? t[11..-1] : t } # special ark handling
+      .delete_if { |t| (t.blank? || t.size < 4) }
     terms = terms[0..50] # we can't have more than 60 terms, so just drop > 50
 
     if terms.empty?
