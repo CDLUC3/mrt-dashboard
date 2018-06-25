@@ -16,7 +16,7 @@ require 'database_cleaner'
 # Stop Rails enthusiastically blowing away test database
 # https://github.com/rails/rails/issues/18982
 if ENV['RAILS_ENV'] == 'test'
-  module ActiveRecord::Migrator
+  class ActiveRecord::Migrator
     class << self
       def any_migrations?
         true
