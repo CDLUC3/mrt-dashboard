@@ -8,13 +8,14 @@ module UserLdap
     include LdapMixin
 
 
-
     def find_all
-      return admin_ldap.search(base: @base,
-                                filter: (Net::LDAP::Filter.eq('objectclass', 'inetOrgPerson') &
-                                            Net::LDAP::Filter.eq('objectclass', 'merrittUser')),
-                                scope: Net::LDAP::SearchScope_SingleLevel).
-        sort_by{ |user| user['cn'][0].downcase }
+      return admin_ldap.search(
+        base: @base,
+        filter: (Net::LDAP::Filter.eq('objectclass', 'inetOrgPerson') &
+          Net::LDAP::Filter.eq('objectclass', 'merrittUser')),
+        scope: Net::LDAP::SearchScope_SingleLevel
+      ).
+        sort_by {|user| user['cn'][0].downcase}
     end
 
     def add(userid, password, firstname, lastname, email)
@@ -31,7 +32,7 @@ module UserLdap
         userPassword: password,
         arkId: "ark:/13030/#{@minter.mint}",
         mail: email
-        }
+      }
       true_or_exception(admin_ldap.add(dn: ns_dn(userid), attributes: attr))
     end
 

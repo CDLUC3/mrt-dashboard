@@ -30,11 +30,13 @@ module LdapMixin
 
     @minter = Noid::Minter.new(minter)
     @base = base
-    @ldap_connect = {host: host, port: port,
-      auth: {method: :simple, username: admin_user, password: admin_password},
+    @ldap_connect = {
+      host: host,
+      port: port,
+      auth: { method: :simple, username: admin_user, password: admin_password },
       encryption: {
-          method: :simple_tls,
-          tls_options: { ssl_version: 'TLSv1_1' }
+        method: :simple_tls,
+        tls_options: { ssl_version: 'TLSv1_1' }
       },
       connect_timeout: connect_timeout
     }

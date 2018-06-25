@@ -68,19 +68,19 @@ describe ObjectController do
       describe 'restrictions' do
         it 'returns 401 when user not logged in' do
           @request.headers['HTTP_AUTHORIZATION'] = nil
-          post(method, params, {uid: nil})
+          post(method, params, { uid: nil })
           expect(response.status).to eq(401)
         end
 
         it "returns 400 if file is not an #{ActionDispatch::Http::UploadedFile} or similar" do
           params[:file] = 'example.tmp'
-          post(method, params, {uid: user_id})
+          post(method, params, { uid: user_id })
           expect(response.status).to eq(400)
         end
 
         it 'returns 404 when user doesn\'t have write permission' do
           mock_permissions_read_only(user_id, collection_id)
-          post(method, params, {uid: user_id})
+          post(method, params, { uid: user_id })
           expect(response.status).to eq(404)
         end
       end
@@ -99,7 +99,7 @@ describe ObjectController do
           }
 
           ingest_status = 200
-          ingest_headers = {content_type: 'text/plain'}
+          ingest_headers = { content_type: 'text/plain' }
           ingest_body = 'this is the body of the response'
           @ingest_response = instance_double(HTTP::Message)
           allow(ingest_response).to receive(:status).and_return(ingest_status)
@@ -109,18 +109,18 @@ describe ObjectController do
 
         it 'posts the argument to the ingest service as a multipart form' do
           expect(client).to receive(:post).with(
-            APP_CONFIG[url_config_key], expected_params, {'Content-Type' => 'multipart/form-data'}
+            APP_CONFIG[url_config_key], expected_params, { 'Content-Type' => 'multipart/form-data' }
           ).and_return(ingest_response)
 
-          post(method, params, {uid: user_id})
+          post(method, params, { uid: user_id })
         end
 
         it 'forwards the status, content-type, and body from the ingest response' do
           allow(client).to receive(:post).with(
-            APP_CONFIG[url_config_key], expected_params, {'Content-Type' => 'multipart/form-data'}
+            APP_CONFIG[url_config_key], expected_params, { 'Content-Type' => 'multipart/form-data' }
           ).and_return(ingest_response)
 
-          post(method, params, {uid: user_id})
+          post(method, params, { uid: user_id })
 
           expect(response.status).to eq(ingest_response.status)
           expect(response.content_type).to eq(ingest_response.headers[:content_type])
@@ -131,10 +131,10 @@ describe ObjectController do
           params[:filename] = 'not-the-original-filename.bin'
           expected_params['filename'] = params[:filename]
           expect(client).to receive(:post).with(
-            APP_CONFIG[url_config_key], expected_params, {'Content-Type' => 'multipart/form-data'}
+            APP_CONFIG[url_config_key], expected_params, { 'Content-Type' => 'multipart/form-data' }
           ).and_return(ingest_response)
 
-          post(method, params, {uid: user_id})
+          post(method, params, { uid: user_id })
         end
 
         if method == :ingest
@@ -142,10 +142,10 @@ describe ObjectController do
             params['submitter'] = 'Rachel Roe'
             expected_params['submitter'] = params['submitter']
             expect(client).to receive(:post).with(
-              APP_CONFIG[url_config_key], expected_params, {'Content-Type' => 'multipart/form-data'}
+              APP_CONFIG[url_config_key], expected_params, { 'Content-Type' => 'multipart/form-data' }
             ).and_return(ingest_response)
 
-            post(method, params, {uid: user_id})
+            post(method, params, { uid: user_id })
           end
         end
       end
@@ -164,13 +164,13 @@ describe ObjectController do
 
     it 'requires a user' do
       @request.headers['HTTP_AUTHORIZATION'] = nil
-      post(:mint, params, {uid: nil})
+      post(:mint, params, { uid: nil })
       expect(response.status).to eq(401)
     end
 
     it 'requires the user to have write permissions on the current submission profile' do
       mock_permissions_read_only(user_id, collection_id)
-      post(:mint, params, {uid: user_id})
+      post(:mint, params, { uid: user_id })
       expect(response.status).to eq(404)
     end
 
@@ -178,7 +178,7 @@ describe ObjectController do
       mock_permissions_all(user_id, collection_id)
 
       mint_status = 200
-      mint_headers = {content_type: 'text/xml'}
+      mint_headers = { content_type: 'text/xml' }
       mint_body = '<xml>12345</xml>'
       mint_response = instance_double(HTTP::Message)
       allow(mint_response).to receive(:status).and_return(mint_status)
@@ -193,10 +193,10 @@ describe ObjectController do
       expect(client).to receive(:post).with(
         APP_CONFIG['mint_service'],
         hash_including(expected_params),
-        {'Content-Type' => 'multipart/form-data'}
+        { 'Content-Type' => 'multipart/form-data' }
       ).and_return(mint_response)
 
-      post(:mint, params, {uid: user_id})
+      post(:mint, params, { uid: user_id })
 
       expect(response.status).to eq(mint_response.status)
       expect(response.content_type).to eq(mint_response.headers[:content_type])
@@ -206,20 +206,20 @@ describe ObjectController do
 
   describe ':index' do
     it 'prevents index view without read permission' do
-      get(:index, {object: object_ark}, {uid: user_id})
+      get(:index, { object: object_ark }, { uid: user_id })
       expect(response.status).to eq(401)
     end
   end
 
   describe ':download' do
     it 'requires a login' do
-      get(:download, {object: object_ark}, {uid: nil})
+      get(:download, { object: object_ark }, { uid: nil })
       expect(response.status).to eq(302)
       expect(response.headers['Location']).to include('guest_login')
     end
 
     it 'prevents download without permissions' do
-      get(:download, {object: object_ark}, {uid: user_id})
+      get(:download, { object: object_ark }, { uid: user_id })
       expect(response.status).to eq(401)
     end
 
@@ -227,7 +227,7 @@ describe ObjectController do
       mock_permissions_all(user_id, collection_id)
       size_too_large = 1 + APP_CONFIG['max_download_size']
       allow_any_instance_of(InvObject).to receive(:total_actual_size).and_return(size_too_large)
-      get(:download, {object: object_ark}, {uid: user_id})
+      get(:download, { object: object_ark }, { uid: user_id })
       expect(response.status).to eq(403)
     end
 
@@ -235,7 +235,7 @@ describe ObjectController do
       mock_permissions_all(user_id, collection_id)
       size_too_large = 1 + APP_CONFIG['max_archive_size']
       allow_any_instance_of(InvObject).to receive(:total_actual_size).and_return(size_too_large)
-      get(:download, {object: object_ark}, {uid: user_id})
+      get(:download, { object: object_ark }, { uid: user_id })
       expect(response.status).to eq(302)
       expect(response.headers['Location']).to include('lostorage')
     end
@@ -247,7 +247,7 @@ describe ObjectController do
       expected_url = "#{object.bytestream_uri}?t=zip"
       allow(Streamer).to receive(:new).with(expected_url).and_return(streamer)
 
-      get(:download, {object: object_ark}, {uid: user_id})
+      get(:download, { object: object_ark }, { uid: user_id })
 
       expect(response.status).to eq(200)
 
@@ -265,13 +265,13 @@ describe ObjectController do
 
   describe ':downloadUser' do
     it 'requires a login' do
-      get(:downloadUser, {object: object_ark}, {uid: nil})
+      get(:downloadUser, { object: object_ark }, { uid: nil })
       expect(response.status).to eq(302)
       expect(response.headers['Location']).to include('guest_login')
     end
 
     it 'prevents download without permissions' do
-      get(:downloadUser, {object: object_ark}, {uid: user_id})
+      get(:downloadUser, { object: object_ark }, { uid: user_id })
       expect(response.status).to eq(401)
     end
 
@@ -282,7 +282,7 @@ describe ObjectController do
       expected_url = "#{object.bytestream_uri2}?t=zip"
       allow(Streamer).to receive(:new).with(expected_url).and_return(streamer)
 
-      get(:downloadUser, {object: object_ark}, {uid: user_id})
+      get(:downloadUser, { object: object_ark }, { uid: user_id })
 
       expect(response.status).to eq(200)
 
@@ -300,13 +300,13 @@ describe ObjectController do
 
   describe ':downloadManifest' do
     it 'requires a login' do
-      get(:downloadUser, {object: object_ark}, {uid: nil})
+      get(:downloadUser, { object: object_ark }, { uid: nil })
       expect(response.status).to eq(302)
       expect(response.headers['Location']).to include('guest_login')
     end
 
     it 'prevents download without permissions' do
-      get(:downloadUser, {object: object_ark}, {uid: user_id})
+      get(:downloadUser, { object: object_ark }, { uid: user_id })
       expect(response.status).to eq(401)
     end
 
@@ -317,7 +317,7 @@ describe ObjectController do
       expected_url = "#{object.bytestream_uri3}"
       allow(Streamer).to receive(:new).with(expected_url).and_return(streamer)
 
-      get(:downloadManifest, {object: object_ark}, {uid: user_id})
+      get(:downloadManifest, { object: object_ark }, { uid: user_id })
 
       expect(response.status).to eq(200)
 
@@ -335,7 +335,7 @@ describe ObjectController do
 
   describe ':async' do
     it 'requires a login' do
-      get(:async, {object: object_ark}, {uid: nil})
+      get(:async, { object: object_ark }, { uid: nil })
       expect(response.status).to eq(302)
       expect(response.headers['Location']).to include('guest_login')
     end
@@ -343,21 +343,21 @@ describe ObjectController do
     it 'fails when object is too big for any download' do
       mock_permissions_all(user_id, collection_id)
       allow_any_instance_of(InvObject).to receive(:total_actual_size).and_return(1 + APP_CONFIG['max_download_size'])
-      get(:async, {object: object_ark}, {uid: user_id})
+      get(:async, { object: object_ark }, { uid: user_id })
       expect(response.status).to eq(403)
     end
 
     it 'fails when object is too small for asynchronous download' do
       mock_permissions_all(user_id, collection_id)
       allow_any_instance_of(InvObject).to receive(:total_actual_size).and_return(APP_CONFIG['max_archive_size'] - 1)
-      get(:async, {object: object_ark}, {uid: user_id})
+      get(:async, { object: object_ark }, { uid: user_id })
       expect(response.status).to eq(406)
     end
 
     it 'succeeds when object is the right size for synchronous download' do
       mock_permissions_all(user_id, collection_id)
       allow_any_instance_of(InvObject).to receive(:total_actual_size).and_return(1 + APP_CONFIG['max_archive_size'])
-      get(:async, {object: object_ark}, {uid: user_id})
+      get(:async, { object: object_ark }, { uid: user_id })
       expect(response.status).to eq(200)
     end
   end
@@ -377,11 +377,11 @@ describe ObjectController do
         date: Time.now.to_param,
         local_id: 'doi:10.1098/rstl.1665.0007'
       }
-      @session = {uid: user_id, group_id: collection_id}
+      @session = { uid: user_id, group_id: collection_id }
     end
 
     it 'requires a login' do
-      post(:upload, params, {uid: nil})
+      post(:upload, params, { uid: nil })
       expect(response.status).to eq(302)
       expect(response.headers['Location']).to include('guest_login')
     end
@@ -467,13 +467,13 @@ describe ObjectController do
 
     it '404s cleanly when collection does not exist' do
       bad_ark = ArkHelper.next_ark
-      get(:recent, {collection: bad_ark})
+      get(:recent, { collection: bad_ark })
       expect(response.status).to eq(404)
     end
 
     it 'gets the list of objects' do
       request.accept = 'application/atom+xml'
-      get(:recent, {collection: collection.ark})
+      get(:recent, { collection: collection.ark })
       expect(response.status).to eq(200)
       expect(response.content_type).to eq('application/atom+xml')
 

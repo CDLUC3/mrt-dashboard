@@ -12,9 +12,13 @@ class VersionController < ApplicationController
 
   before_filter(only: [:download, :downloadUser]) do
     #:nocov:
-    check_dua(@version.inv_object,
-              { object: @version.inv_object,
-                version: @version})
+    check_dua(
+      @version.inv_object,
+      {
+        object:  @version.inv_object,
+        version: @version
+      }
+    )
     #:nocov:
   end
 

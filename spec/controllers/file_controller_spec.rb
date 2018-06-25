@@ -39,17 +39,17 @@ describe FileController do
     attr_reader :params
 
     before(:each) do
-      @params = {object: object_ark, file: pathname, version: object.current_version.number}
+      @params = { object: object_ark, file: pathname, version: object.current_version.number }
     end
 
     it 'requires a login' do
-      get(:download, params, {uid: nil})
+      get(:download, params, { uid: nil })
       expect(response.status).to eq(302)
       expect(response.headers['Location']).to include('guest_login')
     end
 
     it 'prevents download without permissions' do
-      get(:download, params, {uid: user_id})
+      get(:download, params, { uid: user_id })
       expect(response.status).to eq(401)
     end
 
@@ -60,7 +60,7 @@ describe FileController do
       inv_file.full_size = size_too_large
       inv_file.save!
 
-      get(:download, params, {uid: user_id})
+      get(:download, params, { uid: user_id })
       expect(response.status).to eq(403)
     end
 
@@ -75,14 +75,14 @@ describe FileController do
       expected_url = inv_file.bytestream_uri
       allow(Streamer).to receive(:new).with(expected_url).and_return(streamer)
 
-      get(:download, params, {uid: user_id})
+      get(:download, params, { uid: user_id })
 
       expect(response.status).to eq(200)
 
       expected_headers = {
         'Content-Type' => inv_file.mime_type,
         'Content-Disposition' => "inline; filename=\"#{basename}\"",
-        'Content-Length' => inv_file.full_size.to_s,
+        'Content-Length' => inv_file.full_size.to_s
       }
       response_headers = response.headers
       expected_headers.each do |header, value|

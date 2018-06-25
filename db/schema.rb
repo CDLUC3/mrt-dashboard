@@ -197,7 +197,7 @@ ActiveRecord::Schema.define(version: 0) do
 
   add_index 'inv_metadatas', ['inv_object_id'], name: 'id_idx', using: :btree
   add_index 'inv_metadatas', ['inv_version_id'], name: 'id_idx1', using: :btree
-  add_index 'inv_metadatas', ['version'], name: 'id_metax', length: {'version'=>191}, using: :btree
+  add_index 'inv_metadatas', ['version'], name: 'id_metax', length: { 'version'=>191 }, using: :btree
 
   create_table 'inv_nodes', force: :cascade do |t|
     t.integer  'number',             limit: 4,                        null: false
@@ -248,7 +248,7 @@ ActiveRecord::Schema.define(version: 0) do
     t.datetime 'modified'
   end
 
-  add_index 'inv_objects', ['ark'], name: 'ark_UNIQUE', unique: true, length: {'ark'=>190}, using: :btree
+  add_index 'inv_objects', ['ark'], name: 'ark_UNIQUE', unique: true, length: { 'ark'=>190 }, using: :btree
   add_index 'inv_objects', ['created'], name: 'created', using: :btree
   add_index 'inv_objects', ['inv_owner_id'], name: 'id_idx', using: :btree
   add_index 'inv_objects', ['modified'], name: 'modified', using: :btree

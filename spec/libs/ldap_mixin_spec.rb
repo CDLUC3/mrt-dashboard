@@ -207,7 +207,7 @@ describe LdapMixin do
       id = 'foo'
       attribute = :bar
       value = 'baz'
-      results = [{attribute => value}]
+      results = [{ attribute => value }]
       expect(admin_ldap).to receive(:search).with(
         base: base,
         filter: ldap.obj_filter(id)

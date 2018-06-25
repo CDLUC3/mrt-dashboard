@@ -10,7 +10,7 @@ class Institution
           admin_user: LDAP_CONFIG['admin_user'],
           admin_password: LDAP_CONFIG['admin_password'],
           connect_timeout: LDAP_CONFIG['connect_timeout'],
-          minter: LDAP_CONFIG['ark_minter_url']})
+          minter: LDAP_CONFIG['ark_minter_url'] })
 
   def self.find_all
     LDAP.find_all

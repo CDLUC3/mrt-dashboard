@@ -19,7 +19,7 @@ class ObjectController < ApplicationController
 
   before_filter(only: [:download, :downloadUser]) do
     #:nocov:
-    check_dua(@object, {object: @object})
+    check_dua(@object, { object: @object })
     #:nocov:
   end
 
@@ -87,7 +87,7 @@ class ObjectController < ApplicationController
           'retainTargetURL'   => params[:retainTargetURL],
           'type'              => params[:type]
         }.reject{|k, v| v.blank? }
-        resp = mk_httpclient.post(APP_CONFIG['ingest_service'], ingest_args, {'Content-Type' => 'multipart/form-data'})
+        resp = mk_httpclient.post(APP_CONFIG['ingest_service'], ingest_args, { 'Content-Type' => 'multipart/form-data' })
         render status: resp.status, content_type: resp.headers[:content_type], text: resp.body
       end
     end
@@ -138,7 +138,7 @@ class ObjectController < ApplicationController
           'retainTargetURL'   => params[:retainTargetURL],
           'type'              => params[:type]
         }.reject{|k, v| v.blank? }
-        resp = mk_httpclient.post(APP_CONFIG['ingest_service_update'], ingest_args, {'Content-Type' => 'multipart/form-data'})
+        resp = mk_httpclient.post(APP_CONFIG['ingest_service_update'], ingest_args, { 'Content-Type' => 'multipart/form-data' })
         render status: resp.status, content_type: resp.headers[:content_type], text: resp.body
       end
     end  
@@ -157,7 +157,7 @@ class ObjectController < ApplicationController
           'file'             =>  Tempfile.new('restclientbug'), 
           'responseForm'     => params[:responseForm]
         }.reject{|k, v| v.blank? }
-        resp = mk_httpclient.post(APP_CONFIG['mint_service'], mint_args, {'Content-Type' => 'multipart/form-data'})
+        resp = mk_httpclient.post(APP_CONFIG['mint_service'], mint_args, { 'Content-Type' => 'multipart/form-data' })
         render status: resp.status, content_type: resp.headers[:content_type], text: resp.body
       end
     end

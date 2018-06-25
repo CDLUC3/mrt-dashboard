@@ -3,14 +3,14 @@ class AdminController < ApplicationController
 
   # :nocov:
   def create_user
-    @ldap_user = {'tzregion' => 'America/Los_Angeles'}
+    @ldap_user = { 'tzregion' => 'America/Los_Angeles' }
     @error_fields = []
     @display_text = ''
     if !params[:givenname].nil? then
       params.each_pair{|k,v| @ldap_user[k] = v } #stuck updated info in this hash so they don't have to retype
-      @required = {'givenname' => 'First name', 'sn' => 'Last name', 'uid' => 'User Id',
-                  'userpassword' => 'Password', 'repeatuserpassword' => 'Repeat Password',
-                  'mail' => 'Email'}
+      @required = { 'givenname' => 'First name', 'sn' => 'Last name', 'uid' => 'User Id',
+                    'userpassword' => 'Password', 'repeatuserpassword' => 'Repeat Password',
+                    'mail' => 'Email' }
       @required.each_key do |key|
         if params[key].blank? then
           @error_fields.push(key)
@@ -43,8 +43,8 @@ class AdminController < ApplicationController
     @display_text = ''
     if !params[:ou].nil? then
       params.each_pair{|k,v| @ldap_group[k] = v } #stuck updated info in this hash so they don't have to retype
-      @required = {'ou' => 'collection ID', 'description' => 'description',
-            'submissionprofile' => 'Ingest Profile ID'}
+      @required = { 'ou' => 'collection ID', 'description' => 'description',
+                    'submissionprofile' => 'Ingest Profile ID' }
       @required.each_key do |key|
         if params[key].blank? then
           @error_fields.push(key)

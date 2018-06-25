@@ -268,9 +268,10 @@ class ApplicationController < ActionController::Base
   end
 
   def paginate_args
-    return { 
-      page: (params[:page] || 1), 
-      per_page: 10 }
+    return {
+      page: (params[:page] || 1),
+      per_page: 10
+    }
   end
   
   def stream_response(url, disposition, filename, mediatype, length=nil)
@@ -301,7 +302,7 @@ class ApplicationController < ActionController::Base
         if object.dua_exists? then
           if process_dua_request(object.dua_uri) then
             # if the DUA for this collection exists, display DUA to user for acceptance before displaying file
-            redirect_to({controller: 'dua', action: 'index'}.merge(redirect_args)) and return
+            redirect_to({ controller: 'dua', action: 'index' }.merge(redirect_args)) and return
           end
         end
       end

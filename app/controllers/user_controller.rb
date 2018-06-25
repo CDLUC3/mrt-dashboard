@@ -2,11 +2,12 @@ class UserController < ApplicationController
   before_filter :require_user
 
   REQUIRED = {
-    'givenname'          => 'First name', 
+    'givenname'          => 'First name',
     'sn'                 => 'Last name',
-    'userpassword'       => 'Password',  
+    'userpassword'       => 'Password',
     'repeatuserpassword' => 'Repeat Password',
-    'mail'               => 'Email' }
+    'mail'               => 'Email'
+  }
 
   def update
     #uncached from LDAP, so always current

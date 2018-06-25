@@ -15,7 +15,7 @@ class FileController < ApplicationController
     check_dua(@file.inv_version.inv_object,
               { object: @file.inv_version.inv_object,
                 version: @file.inv_version,
-                file: @file})
+                file: @file })
     #:nocov:
   end
   

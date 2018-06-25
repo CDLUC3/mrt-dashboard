@@ -9,7 +9,7 @@ require 'fileutils'
 require 'open-uri'
 require 'mrt/ingest'
 
-OPEN_URI_ARGS = {'User-Agent' => "Ruby/#{RUBY_VERSION}"}
+OPEN_URI_ARGS = { 'User-Agent' => "Ruby/#{RUBY_VERSION}" }
 
 # Namespaces
 NS = { 'atom'  => 'http://www.w3.org/2005/Atom',
@@ -42,7 +42,7 @@ def up_to_date?(local_id, collection_id, updated, feeddate)
     end
   end
 
-  obj = InvObject.joins(:inv_collections).where(['erc_where LIKE ?', "%#{local_id}%"]).where(inv_collections: { ark: collection_id})
+  obj = InvObject.joins(:inv_collections).where(['erc_where LIKE ?', "%#{local_id}%"]).where(inv_collections: { ark: collection_id })
 
   if obj.empty? then
     return false
@@ -191,12 +191,13 @@ def process_atom_feed(submitter, profile, collection, feeddatefile, starting_poi
         urls = urls.delete_if {|u| u[:rel] == 'archival'}
 
         erc = {
-          'who' => (dc_creator || creator),
-          'what' => (dc_title || title),
-          'when' => (dc_date || published),
-          'where' => archival_id,
-          'when/created' => published,
-          'when/modified' => updated }
+          'who'           => (dc_creator || creator),
+          'what'          => (dc_title || title),
+          'when'          => (dc_date || published),
+          'where'         => archival_id,
+          'when/created'  => published,
+          'when/modified' => updated
+        }
         iobject = Mrt::Ingest::IObject.new(erc: erc,
                                            server: server,
                                            local_identifier: local_id,
@@ -224,10 +225,10 @@ def process_atom_feed(submitter, profile, collection, feeddatefile, starting_poi
 
           iobject.add_component(obj,
 		  name: url[:name], 
-                  prefetch: true,
+    prefetch: true,
 		  digest: checksum,
                   # workaround for funky site
-                  prefetch_options: {'Accept'=>'text/html, */*'})
+    prefetch_options: { 'Accept'=>'text/html, */*' })
         end
         resp = iobject.start_ingest(client, profile, submitter)
 	# puts "User Agent: #{resp.user_agent}"

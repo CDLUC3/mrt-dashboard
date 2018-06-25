@@ -7,16 +7,16 @@ MrtDashboard::Application.routes.draw do
   get('show/*id'      => 'show#show')
   root(to: 'home#index')
   get('login'         => 'user_sessions#login',
-        :as             => :login,
-        :constraints    => {method: 'GET'})
+      :as             => :login,
+      :constraints    => { method: 'GET' })
   post('login'         => 'user_sessions#login_post',
-        :as             => :login_post,
-        :constraints    => {method: 'POST'})
+       :as             => :login_post,
+       :constraints    => { method: 'POST' })
   get('logout'        => 'user_sessions#logout',
-        :as             => :logout)
+      :as             => :logout)
   match('guest_login'   => 'user_sessions#guest_login',
-         :as            => :guest_login,
-         via: [:get, :post])
+        :as            => :guest_login,
+        via: [:get, :post])
 
   # pattern of URL is http://merritt.cdlib.org/mode/collectionid|objectid[/versionid[/fileid]]
   # where mode is an underlying action:
@@ -29,7 +29,7 @@ MrtDashboard::Application.routes.draw do
    
   # m/ark... can route to either collection or object depending on the constraint
   get('m/:group' => 'collection#index',
-        :constraints => CollectionConstraint.new)
+      :constraints => CollectionConstraint.new)
   get('s/:group' => 'collection#search_results')
   get('async/:object' => 'object#async')
   get('async/:object/:version' => 'version#async')

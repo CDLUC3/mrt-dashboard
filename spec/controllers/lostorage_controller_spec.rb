@@ -27,7 +27,7 @@ describe LostorageController do
 
     @user_id = mock_user(name: 'Jane Doe', password: 'correcthorsebatterystaple')
 
-    @params = {object: @object_ark, version: @version_number, userFriendly: 'false', user_agent_email: 'jdoe@example.edu'}
+    @params = { object: @object_ark, version: @version_number, userFriendly: 'false', user_agent_email: 'jdoe@example.edu' }
     @object_page_url = controller.mk_merritt_url('m', object_ark, version_number)
   end
 
@@ -38,7 +38,7 @@ describe LostorageController do
 
     it 'requires a user' do
       @request.headers['HTTP_AUTHORIZATION'] = nil
-      post(:index, params, {uid: nil})
+      post(:index, params, { uid: nil })
       expect(response.code.to_i).to eq(302)
       expect(response.headers['Location']).to include('guest_login')
     end
@@ -46,27 +46,27 @@ describe LostorageController do
     it 'requires an email address' do
       expect(client).not_to receive(:post)
       params.delete(:user_agent_email)
-      post(:index, params, {uid: user_id})
+      post(:index, params, { uid: user_id })
       expect(flash[:message]).to be_present
     end
 
     it 'requires a valid-ish address' do
       expect(client).not_to receive(:post)
       params[:user_agent_email] = params[:user_agent_email].gsub('@', '%')
-      post(:index, params, {uid: user_id})
+      post(:index, params, { uid: user_id })
       expect(flash[:message]).to be_present
     end
 
     it 'requires a successful email post' do
       expect(post_email_response).to receive(:status).and_return(500)
-      post(:index, params, {uid: user_id})
+      post(:index, params, { uid: user_id })
       expect(flash[:error]).to include('uc3@ucop.edu')
     end
 
     it 'can be canceled' do
       params[:commit] = 'Cancel'
       expect(client).not_to receive(:post)
-      post(:index, params, {uid: user_id})
+      post(:index, params, { uid: user_id })
       expect(flash[:message]).not_to be_present
     end
 
@@ -78,7 +78,7 @@ describe LostorageController do
           email_xml = post_params['email']
           expect(email_xml).not_to be_nil # TODO: rewrite post_los_email so we don't pass live file pointers around & can actually test
         end.and_return(post_email_response)
-        post(:index, params, {uid: user_id})
+        post(:index, params, { uid: user_id })
       end
 
       it 'allows a custom from address' do
@@ -89,7 +89,7 @@ describe LostorageController do
           email_xml = post_params['email']
           expect(email_xml).not_to be_nil # TODO: rewrite post_los_email so we don't pass live file pointers around & can actually test
         end.and_return(post_email_response)
-        post(:index, params, {uid: user_id})
+        post(:index, params, { uid: user_id })
       end
 
       it 'allows a custom message body' do
@@ -100,11 +100,11 @@ describe LostorageController do
           email_xml = post_params['email']
           expect(email_xml).not_to be_nil # TODO: rewrite post_los_email so we don't pass live file pointers around & can actually test
         end.and_return(post_email_response)
-        post(:index, params, {uid: user_id})
+        post(:index, params, { uid: user_id })
       end
 
       it 'redirects back to the object' do
-        post(:index, params, {uid: user_id})
+        post(:index, params, { uid: user_id })
         expect(response.code.to_i).to eq(302)
         expect(response.headers['Location']).to end_with(object_page_url)
       end
@@ -117,7 +117,7 @@ describe LostorageController do
           email_xml = post_params['email']
           expect(email_xml).not_to be_nil # TODO: rewrite post_los_email so we don't pass live file pointers around & can actually test
         end.and_return(post_email_response)
-        post(:index, params, {uid: user_id})
+        post(:index, params, { uid: user_id })
       end
     end
 
@@ -127,20 +127,20 @@ describe LostorageController do
     it 'requires an email address' do
       expect(client).not_to receive(:post)
       params.delete(:user_agent_email)
-      post(:direct, params, {uid: user_id})
+      post(:direct, params, { uid: user_id })
       expect(response.status).to eq(406)
     end
 
     it 'requires a valid-ish address' do
       expect(client).not_to receive(:post)
       params[:user_agent_email] = params[:user_agent_email].gsub('@', '%')
-      post(:direct, params, {uid: user_id})
+      post(:direct, params, { uid: user_id })
       expect(response.status).to eq(400)
     end
 
     it 'requires a successful email post' do
       expect(post_email_response).to receive(:status).and_return(500)
-      post(:direct, params, {uid: user_id})
+      post(:direct, params, { uid: user_id })
       expect(response.status).to eq(503)
     end
 
@@ -151,7 +151,7 @@ describe LostorageController do
         email_xml = post_params['email']
         expect(email_xml).not_to be_nil # TODO: rewrite post_los_email so we don't pass live file pointers around & can actually test
       end.and_return(post_email_response)
-      post(:direct, params, {uid: user_id})
+      post(:direct, params, { uid: user_id })
       expect(response.status).to eq(200)
     end
 
@@ -163,7 +163,7 @@ describe LostorageController do
         email_xml = post_params['email']
         expect(email_xml).not_to be_nil # TODO: rewrite post_los_email so we don't pass live file pointers around & can actually test
       end.and_return(post_email_response)
-      post(:direct, params, {uid: user_id})
+      post(:direct, params, { uid: user_id })
       expect(response.status).to eq(200)
     end
 
@@ -175,7 +175,7 @@ describe LostorageController do
         email_xml = post_params['email']
         expect(email_xml).not_to be_nil # TODO: rewrite post_los_email so we don't pass live file pointers around & can actually test
       end.and_return(post_email_response)
-      post(:direct, params, {uid: user_id})
+      post(:direct, params, { uid: user_id })
       expect(response.status).to eq(200)
     end
   end

@@ -6,14 +6,14 @@ class User
           admin_user: LDAP_CONFIG['admin_user'],
           admin_password: LDAP_CONFIG['admin_password'],
           connect_timeout: LDAP_CONFIG['connect_timeout'],
-          minter: LDAP_CONFIG['ark_minter_url']})
+          minter: LDAP_CONFIG['ark_minter_url'] })
 
   AUTHLOGIC_MAP =
     { 'login'         => 'uid',
       'lastname'      => 'sn',
       'firstname'     => 'givenname',
       'email'         => 'mail',
-      'tz_region'     => 'tzregion'}
+      'tz_region'     => 'tzregion' }
 
   def initialize(user)
     @user = user
