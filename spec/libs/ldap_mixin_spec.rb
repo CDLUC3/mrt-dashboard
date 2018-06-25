@@ -81,7 +81,7 @@ describe LdapMixin do
       id = 'foo'
       attribute = :bar
       value = 'baz'
-      expect(admin_ldap).to receive(:add_attribute).with(ldap.ns_dn(id), attribute, value)
+      expect(admin_ldap).to receive(:add_attribute).with(ldap.ns_dn(id), attribute, value).and_return(true)
       ldap.add_attribute(id, attribute, value)
     end
   end
@@ -91,7 +91,7 @@ describe LdapMixin do
       id = 'foo'
       attribute = :bar
       value = 'baz'
-      expect(admin_ldap).to receive(:replace_attribute).with(ldap.ns_dn(id), attribute, value)
+      expect(admin_ldap).to receive(:replace_attribute).with(ldap.ns_dn(id), attribute, value).and_return(true)
       ldap.replace_attribute(id, attribute, value)
     end
   end
@@ -100,7 +100,7 @@ describe LdapMixin do
     it 'deletes an attribute' do
       id = 'foo'
       attribute = :bar
-      expect(admin_ldap).to receive(:delete_attribute).with(ldap.ns_dn(id), attribute)
+      expect(admin_ldap).to receive(:delete_attribute).with(ldap.ns_dn(id), attribute).and_return(true)
       ldap.delete_attribute(id, attribute)
     end
   end
@@ -111,7 +111,7 @@ describe LdapMixin do
       attribute = :bar
       value = 'baz'
       expect(admin_ldap).to receive(:search).with(base: base, filter: ldap.obj_filter(id)).and_return([{ bar: ['qux', value, 'corge'] }])
-      expect(admin_ldap).to receive(:replace_attribute).with(ldap.ns_dn(id), attribute, %w[qux corge])
+      expect(admin_ldap).to receive(:replace_attribute).with(ldap.ns_dn(id), attribute, %w[qux corge]).and_return(true)
       ldap.delete_attribute_value(id, attribute, value)
     end
 
@@ -120,7 +120,7 @@ describe LdapMixin do
       attribute = :bar
       value = 'baz'
       expect(admin_ldap).to receive(:search).with(base: base, filter: ldap.obj_filter(id)).and_return([{ bar: %w[qux grault corge] }])
-      expect(admin_ldap).to receive(:replace_attribute).with(ldap.ns_dn(id), attribute, %w[qux grault corge])
+      expect(admin_ldap).to receive(:replace_attribute).with(ldap.ns_dn(id), attribute, %w[qux grault corge]).and_return(true)
       ldap.delete_attribute_value(id, attribute, value)
     end
   end
