@@ -28,7 +28,7 @@ xml.tag!('feed', :xmlns => 'http://www.w3.org/2005/Atom',
   end
   xml.tag!('id', 'urn:uuid:8dd71209-616a-4723-bfc1-b46572499932')
   xml.tag!('title', 'Recent objects')
-  if @objects[0] then
+  if @objects[0]
     xml.tag!('updated', @objects[0].modified.to_formatted_s(:w3cdtf))
   else
     xml.tag!('updated', Time.now.to_formatted_s(:w3cdtf))
@@ -48,9 +48,9 @@ xml.tag!('feed', :xmlns => 'http://www.w3.org/2005/Atom',
                                  action: 'download',
                                  object: obj))
       xml.tag!('dct:extent', "#{obj.size}")
-      if (!obj.current_version.local_id.blank?) then
+      unless obj.current_version.local_id.blank?
         local_id = obj.current_version.local_id[0]
-        if (!local_id.blank? && local_id.match(/^http/)) then
+        if !local_id.blank? && local_id.match(/^http/)
           xml.tag!('link',
                    'rel'  => 'alternate',
                    'href' => local_id)
@@ -63,9 +63,7 @@ xml.tag!('feed', :xmlns => 'http://www.w3.org/2005/Atom',
         end
       end
       xml.tag!('updated', obj.modified.to_formatted_s(:w3cdtf))
-      if (!obj.created.blank?) then
-        xml.tag!('published', obj.created.to_formatted_s(:w3cdtf))
-      end
+      xml.tag!('published', obj.created.to_formatted_s(:w3cdtf)) unless obj.created.blank?
       current_version = obj.current_version
       current_version.inv_files.each do |file|
         xml.tag!('link',

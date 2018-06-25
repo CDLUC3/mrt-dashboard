@@ -40,7 +40,7 @@ def mock_ldap_for_collection(inv_collection)
 end
 
 def mock_user(name: nil, id: nil, password:, tzregion: nil, telephonenumber: nil)
-  raise "Can't mock without either a name or an ID" unless (name || id)
+  raise "Can't mock without either a name or an ID" unless name || id
 
   id ||= to_id(name)
   name ||= to_name(id)

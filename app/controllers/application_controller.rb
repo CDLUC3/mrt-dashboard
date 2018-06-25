@@ -43,18 +43,14 @@ class ApplicationController < ActionController::Base
   # Makes a url of the form /m/ark.../1/file with optionally blank versions and files
   def mk_merritt_url(letter, object, version = nil, file = nil)
     object = urlencode(urlunencode(object))
-    file = if file.blank? then nil else urlencode(urlunencode(file)) end
+    file = file.blank? ? nil : urlencode(urlunencode(file))
     "/#{letter}/" + [object, version, file].reject { |x| x.blank? }.join('/')
   end
 
   def redirect_to_latest_version
-    if (params[:version].to_i == 0) then
+    if params[:version].to_i == 0
       ark = InvObject.find_by_ark(params_u(:object))
-      if !ark.nil? then
-          latest_version = ark.current_version.number
-      else
-          latest_version = nil
-      end
+      latest_version = ark && ark.current_version.number
       # letter = request.path.match(/^\/(.)\//)[1]
       # redirect_to mk_merritt_url(letter, params[:object], latest_version, params[:file])
       # Do not redirect, but just set version to latest
@@ -85,15 +81,11 @@ class ApplicationController < ActionController::Base
   # Is object in Embargo?
   def in_embargo?(object)
     @in_embargo = true
-    if (object.inv_embargo.nil?) then
-       return false
-    end
-    if (object.inv_embargo.in_embargo?) then
-       if (has_group_permission?(object.inv_collection.group, 'admin')) then
-          @in_embargo = false
-       end
+    return false if object.inv_embargo.nil?
+    if object.inv_embargo.in_embargo?
+      @in_embargo = false if has_group_permission?(object.inv_collection.group, 'admin')
     else
-       @in_embargo = false
+      @in_embargo = false
     end
     @in_embargo
   end
@@ -114,18 +106,16 @@ class ApplicationController < ActionController::Base
   # user supplied HTTP basic auth info, uses that. Returns nil if
   # there is no session user and HTTP basic auth did not succeed
   def current_user
-    if !defined?(@current_user) then
-      if !session[:uid].nil? then
+    unless defined?(@current_user)
+      if !session[:uid].nil?
         # normal form login
         @current_user = User.find_by_id(session[:uid])
       else
         # http basic auth
         auth = request.headers['HTTP_AUTHORIZATION']
-        if (!auth.blank? && auth.match(/Basic /)) then
+        if !auth.blank? && auth.match(/Basic /)
           (login, password) = Base64.decode64(auth.gsub(/Basic /, '')).split(/:/)
-          if User.valid_ldap_credentials?(login, password)
-            @current_user = User.find_by_id(login)
-          end
+          @current_user = User.find_by_id(login) if User.valid_ldap_credentials?(login, password)
         end
       end
     end
@@ -156,9 +146,7 @@ class ApplicationController < ActionController::Base
   # :nocov:
   # TODO: this doesn't seem to be used anywhere; can we delete it?
   def require_user_or_401
-    unless current_user
-      render status: 401, text: '' and return
-    end
+    render status: 401, text: '' and return unless current_user
   end
   # :nocov:
 
@@ -241,16 +229,16 @@ class ApplicationController < ActionController::Base
     require 'fileutils'
     open(*args) do |data|
       tmp_file = Tempfile.new('mrt_http')
-        begin
-          while (!(buff = data.read(4096)).nil?) do
-            tmp_file << buff
-          end
-          tmp_file.rewind
-          yield(tmp_file)
-        ensure
-          tmp_file.close
-          tmp_file.delete
+      begin
+        while !(buff = data.read(4096)).nil? do
+          tmp_file << buff
         end
+        tmp_file.rewind
+        yield(tmp_file)
+      ensure
+        tmp_file.close
+        tmp_file.delete
+      end
     end
   end
 
@@ -277,35 +265,25 @@ class ApplicationController < ActionController::Base
   def stream_response(url, disposition, filename, mediatype, length = nil)
     response.headers['Content-Type'] = mediatype
     response.headers['Content-Disposition'] = "#{disposition}; filename=\"#{filename}\""
-    if !length.nil? then
-      response.headers['Content-Length'] = length.to_s
-    end
+    response.headers['Content-Length'] = length.to_s unless length.nil?
     response.headers['Last-Modified'] = Time.now.httpdate
     self.response_body = Streamer.new(url)
   end
 
   #:nocov:
   def check_dua(object, redirect_args)
-    if params[:blue] then
-      # bypass DUA processing for python scripts - indicated by special param
+    # bypass DUA processing for python scripts - indicated by special param
+    return if params[:blue]
+
+    session[:collection_acceptance] ||= Hash.new(false)
+    # check if user already saw DUA and accepted: if so, return
+    if session[:collection_acceptance][object.group.id]
+      # clear out acceptance if it does not have session persistence
+      session[:collection_acceptance].delete(object.group.id) if session[:collection_acceptance][object.group.id] != 'session'
       return
-    else
-      session[:collection_acceptance] ||= Hash.new(false)
-      # check if user already saw DUA and accepted: if so, return
-      if session[:collection_acceptance][object.group.id] then
-        # clear out acceptance if it does not have session persistence
-        if (session[:collection_acceptance][object.group.id] != 'session')
-          session[:collection_acceptance].delete(object.group.id)
-        end
-        return
-      else
-        if object.dua_exists? then
-          if process_dua_request(object.dua_uri) then
-            # if the DUA for this collection exists, display DUA to user for acceptance before displaying file
-            redirect_to({ controller: 'dua', action: 'index' }.merge(redirect_args)) and return
-          end
-        end
-      end
+    elsif object.dua_exists? && process_dua_request(object.dua_uri)
+      # if the DUA for this collection exists, display DUA to user for acceptance before displaying file
+      redirect_to({ controller: 'dua', action: 'index' }.merge(redirect_args)) and return
     end
   end
   #:nocov:

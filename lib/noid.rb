@@ -11,9 +11,7 @@ module Noid
     end
 
     def mint
-      if @cache.empty? then
-        fill_cache
-      end
+      fill_cache if @cache.empty?
       return @cache.shift
     end
 
@@ -24,16 +22,14 @@ module Noid
         resp = Net::HTTP.start(@url.host, @url.port) do |http|
           http.request(req)
         end
-        if !(resp.instance_of? Net::HTTPOK) then
-          raise MintException.new('Got error response from server.')
-        end
+        raise MintException.new('Got error response from server.') unless resp.instance_of? Net::HTTPOK
         @cache.concat(resp.body.split(/\n/).map do |s|
-                        md = s.match(/id:\s+([0-9]+\/)?([^\s]+)/)
-                        if @preserve_naan then
-                          "#{md[1]}#{md[2]}"
-                        else
-                          md[2]
-                        end
+          md = s.match(/id:\s+([0-9]+\/)?([^\s]+)/)
+          if @preserve_naan
+            "#{md[1]}#{md[2]}"
+          else
+            md[2]
+          end
         end)
       rescue MintException
         raise # don't eat our own exceptions

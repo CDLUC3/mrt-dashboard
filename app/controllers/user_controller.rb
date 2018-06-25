@@ -14,21 +14,21 @@ class UserController < ApplicationController
     @ldap_user = User::LDAP.fetch(current_user.login)
 
     @display_text = ''
-    if !params[:givenname].nil? then
+    unless params[:givenname].nil?
       # put updated info in this hash so they don't have to retype
       params.each_pair { |k, v| @ldap_user[k] = v }
       error_fields = REQUIRED.keys.select { |key| params[key].blank? }
-      if error_fields.length > 0 then
+      if error_fields.length > 0
         @display_text += 'The following items must be filled in: '
         @display_text += error_fields.map { |i| REQUIRED[i] }.join(', ')
         @display_text += '.'
-      elsif params[:userpassword] != params[:repeatuserpassword] then
+      elsif params[:userpassword] != params[:repeatuserpassword]
         @display_text += 'Your password and repeated password do not match.'
       else
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-        params[:telephonenumber] = nil if (params[:telephonenumber] == '')
+        params[:telephonenumber] = nil if params[:telephonenumber] == ''
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -38,9 +38,7 @@ class UserController < ApplicationController
         ['cn', 'displayname'].each do |i|
           User::LDAP.replace_attribute(current_user.login, i, "#{params['givenname']} #{params['sn']}")
         end
-        if params['userpassword'] != '!unchanged' then
-          User::LDAP.replace_attribute(current_user.login, 'userpassword', params['userpassword'])
-        end
+        User::LDAP.replace_attribute(current_user.login, 'userpassword', params['userpassword']) if params['userpassword'] != '!unchanged'
         @display_text = 'Your profile has been updated.'
       end
     end

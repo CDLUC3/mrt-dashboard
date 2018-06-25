@@ -6,23 +6,17 @@ class AdminController < ApplicationController
     @ldap_user = { 'tzregion' => 'America/Los_Angeles' }
     @error_fields = []
     @display_text = ''
-    if !params[:givenname].nil? then
+    unless params[:givenname].nil?
       params.each_pair { |k, v| @ldap_user[k] = v } # stuck updated info in this hash so they don't have to retype
       @required = { 'givenname' => 'First name', 'sn' => 'Last name', 'uid' => 'User Id',
                     'userpassword' => 'Password', 'repeatuserpassword' => 'Repeat Password',
                     'mail' => 'Email' }
       @required.each_key do |key|
-        if params[key].blank? then
-          @error_fields.push(key)
-        end
+        @error_fields.push(key) if params[key].blank?
       end
-      if @error_fields.length > 0 or !params[:userpassword].eql?(params[:repeatuserpassword]) then
-        if @error_fields.length > 0 then
-          @display_text += "The following items must be filled in: #{@error_fields.map { |i| @required[i] }.join(', ')}."
-        end
-        if !params[:userpassword].eql?(params[:repeatuserpassword]) then
-          @display_text += ' Your password and repeated password do not match.'
-        end
+      if @error_fields.length > 0 or !params[:userpassword].eql?(params[:repeatuserpassword])
+        @display_text += "The following items must be filled in: #{@error_fields.map { |i| @required[i] }.join(', ')}." if @error_fields.length > 0
+        @display_text += ' Your password and repeated password do not match.' unless params[:userpassword].eql?(params[:repeatuserpassword])
       else
         User::LDAP.add(params[:uid], params[:userpassword], params[:givenname],
                 params[:sn], params[:mail])
@@ -41,16 +35,14 @@ class AdminController < ApplicationController
     @ldap_group = {}
     @error_fields = []
     @display_text = ''
-    if !params[:ou].nil? then
+    unless params[:ou].nil?
       params.each_pair { |k, v| @ldap_group[k] = v } # stuck updated info in this hash so they don't have to retype
       @required = { 'ou' => 'collection ID', 'description' => 'description',
                     'submissionprofile' => 'Ingest Profile ID' }
       @required.each_key do |key|
-        if params[key].blank? then
-          @error_fields.push(key)
-        end
+        @error_fields.push(key) if params[key].blank?
       end
-      if @error_fields.length > 0 then
+      if @error_fields.length > 0
         @display_text += "The following items must be filled in: #{@error_fields.map { |i| @required[i] }.join(', ')}."
       else
         Group::LDAP.add(params[:ou], params[:description], ['read', 'write'], ['merrittClass'])
@@ -69,12 +61,12 @@ class AdminController < ApplicationController
     @m_usrs = User.find_all.map { |i| [i['cn'][0], i['uid'][0]] }
     @perms = []
 
-    if params[:submitted].eql?('true') then
+    if params[:submitted].eql?('true')
       @ldap[:uid] = params[:uid]
       @ldap[:ou] = params[:ou]
 
       ['read', 'write'].each do |perm|
-        if params[:permissions].nil? or !params[:permissions].include?(perm) then
+        if params[:permissions].nil? or !params[:permissions].include?(perm)
           Group::LDAP.unset_user_permission(params[:uid], params[:ou], User::LDAP, perm)
         else
           Group::LDAP.set_user_permission(params[:uid], params[:ou], User::LDAP, perm)

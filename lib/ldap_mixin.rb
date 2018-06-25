@@ -41,9 +41,7 @@ module LdapMixin
       connect_timeout: connect_timeout
     }
 
-    unless ENV['RAILS_ENV'] == 'test' || admin_ldap.bind
-      raise LdapException.new('Unable to bind to LDAP server.')
-    end
+    raise LdapException.new('Unable to bind to LDAP server.') unless ENV['RAILS_ENV'] == 'test' || admin_ldap.bind
   end
 
   def admin_ldap
@@ -53,7 +51,7 @@ module LdapMixin
   end
 
   def delete_record(id)
-    raise LdapException.new('id does not exist') if !record_exists?(id)
+    raise LdapException.new('id does not exist') unless record_exists?(id)
     true_or_exception(admin_ldap.delete(dn: ns_dn(id)))
   end
 
@@ -82,11 +80,11 @@ module LdapMixin
     # ids must be complete CNs
     filter = nil
     ids.each do |id|
-      if filter.nil? then
-        filter = obj_filter(id)
-      else
-        filter = filter | obj_filter(id)
-      end
+      filter = if filter.nil?
+                 obj_filter(id)
+               else
+                 filter | obj_filter(id)
+               end
     end
     admin_ldap.search(base: @base, filter: filter)
   end
@@ -123,7 +121,7 @@ module LdapMixin
   end
 
   def true_or_exception(result)
-    if result == false then
+    if result == false
       raise LdapException.new(admin_ldap.get_operation_result.message)
     else
       true

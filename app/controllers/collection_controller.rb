@@ -3,9 +3,7 @@ class CollectionController < ApplicationController
   before_filter :require_request_group
 
   before_filter do
-    if (!has_group_permission?(@request_group, 'read')) then
-      raise ActiveResource::UnauthorizedAccess.new('You do not have access to that collection')
-    end
+    raise ActiveResource::UnauthorizedAccess.new('You do not have access to that collection') unless has_group_permission?(@request_group, 'read')
   end
 
   # Load the group specified in the params[:group]
@@ -35,7 +33,7 @@ class CollectionController < ApplicationController
 
   def index
     # load the requested group into the session
-    if (session[:group_id] != params[:group]) then
+    if session[:group_id] != params[:group]
       session[:group_id] = @request_group.id
       session[:group_ark] = @request_group.ark_id
       session[:group_description] = @request_group.description
@@ -51,14 +49,14 @@ class CollectionController < ApplicationController
   def search_results
     terms = Unicode.downcase(params[:terms]).
       split(/\s+/).
-      map { |t| # special ark handling
-        if is_ark?(t) then t[11..-1] else t end
-      }.delete_if { |t|
-        (t.blank? || t.size < 4) # sql search doesn't work with terms less than 4 characters long
-      }
+      map do |t| # special ark handling
+        is_ark?(t) ? t[11..-1] : t
+      end.delete_if do |t|
+      (t.blank? || t.size < 4) # sql search doesn't work with terms less than 4 characters long
+    end
     terms = terms[0..50] # we can't have more than 60 terms, so just drop > 50
 
-    if terms.size == 0 then
+    if terms.size == 0
       # no real search, just display
       @results = InvObject.joins(:inv_collections).
         where('inv_collections.ark = ?', @request_group.ark_id).
@@ -69,14 +67,12 @@ class CollectionController < ApplicationController
     else
       # new, more efficient full text query (thanks Debra)
       tb_count = 0
-      where_clauses = terms.map { |t|
-	'? '
-      }
+      where_clauses = terms.map { |t| '? ' }
       where_clause = '(MATCH (sha_dublinkernels.value) AGAINST ("' + where_clauses.join('') + '"))'
 
       ark_id = @request_group.ark_id
-      @results = InvObject.
-        joins(:inv_collections, inv_dublinkernels: :sha_dublinkernel).
+      @results = InvObject
+        .joins(:inv_collections, inv_dublinkernels: :sha_dublinkernel).
         where('inv_collections.ark = ?', ark_id).
         where(where_clause, *terms).
         includes(:inv_versions, :inv_dublinkernels).

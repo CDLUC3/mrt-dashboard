@@ -2,19 +2,19 @@ module ApplicationHelper
   # from http://codesnippets.joyent.com/posts/show/1812
   def formatted_int(i)
     if i.nil? then '0'
-    elsif (i.abs < 1000) then i.to_s
+    elsif i.abs < 1000 then i.to_s
     else i.to_s.gsub!(/(\d)(?=(\d\d\d)+(?!\d))/, '\\1,') end
   end
 
   def permissions(array)
-    if (array.length == 0) then 'none'
-    elsif (array.length == 1) then "#{array[0]} only"
+    if array.length == 0 then 'none'
+    elsif array.length == 1 then "#{array[0]} only"
     else array.join('/') end
   end
 
   def merritt_time(t)
-    t = DateTime.parse(t.to_s) if (t.class != DateTime)
-    t = t.utc if (!t.utc?)
+    t = DateTime.parse(t.to_s) if t.class != DateTime
+    t = t.utc unless t.utc?
     t.strftime('%Y-%m-%d %I:%M %p UTC')
   end
 
@@ -24,7 +24,7 @@ module ApplicationHelper
 
   # Format kernel metadata lists
   def dc_nice(vals)
-    if (vals.nil? || vals.empty?) then ''
+    if vals.nil? || vals.empty? then ''
     else vals.join('; ') end
   end
 

@@ -4,7 +4,7 @@ class FileController < ApplicationController
   before_filter :load_file
 
   before_filter do
-    if (!has_object_permission?(@file.inv_version.inv_object, 'download')) then
+    unless has_object_permission?(@file.inv_version.inv_object, 'download')
       flash[:error] = 'You do not have download permissions.'
       render file: "#{Rails.root}/public/401.html", status: 401, layout: false
     end
@@ -38,7 +38,7 @@ class FileController < ApplicationController
     # determine if user is retrieving a system file; otherwise assume
     # they are obtaining a producer file which needs to prepended to
     # the filename
-    filename = "producer/#{filename}" if !filename.match(/^(producer|system)/)
+    filename = "producer/#{filename}" unless filename.match(/^(producer|system)/)
 
     @file = InvFile.joins(:inv_version, :inv_object).
       where('inv_objects.ark = ?', params_u(:object)).

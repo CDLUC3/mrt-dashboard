@@ -33,9 +33,7 @@ namespace :deploy do
   desc 'Stop Puma'
   task :stop do
     on roles(:app) do
-      if test("[ -f #{fetch(:puma_pid)} ]")
-        execute "cd #{deploy_to}/current; kill -15 `cat #{fetch(:puma_pid)}`"
-      end
+      execute "cd #{deploy_to}/current; kill -15 `cat #{fetch(:puma_pid)}`" if test("[ -f #{fetch(:puma_pid)} ]")
     end
   end
 
@@ -56,7 +54,7 @@ namespace :deploy do
     on roles(:app) do
       if test("[ -f #{fetch(:puma_pid)} ]")
          # check pid
-         execute "cd #{deploy_to}/current; cat #{fetch(:puma_pid)} | xargs ps -lp"
+        execute "cd #{deploy_to}/current; cat #{fetch(:puma_pid)} | xargs ps -lp"
       end
     end
   end

@@ -25,9 +25,7 @@ class User
 
   def method_missing(meth, *args, &block)
     # simple code to read user information with methods that resemble activerecord slightly
-    if !AUTHLOGIC_MAP[meth.to_s].nil? then
-      return array_to_value(@user[AUTHLOGIC_MAP[meth.to_s]])
-    end
+    return array_to_value(@user[AUTHLOGIC_MAP[meth.to_s]]) unless AUTHLOGIC_MAP[meth.to_s].nil?
     array_to_value(@user[meth.to_s])
   end
 
@@ -61,7 +59,7 @@ class User
   # TODO: figure out whether we still need this & get rid of it if not
   # :nocov:
   def single_value(record, field)
-    if record[field].nil? or record[field][0].nil? or record[field][0].length < 1 then
+    if record[field].nil? or record[field][0].nil? or record[field][0].length < 1
       return nil
     else
       return record[field][0]
@@ -70,7 +68,7 @@ class User
   # :nocov:
 
   def array_to_value(arr)
-    return arr if !arr.is_a?(Array)
+    return arr unless arr.is_a?(Array)
     return arr[0] if arr.length == 1
     arr
   end

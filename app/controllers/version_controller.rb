@@ -4,7 +4,7 @@ class VersionController < ApplicationController
   before_filter :load_version
 
   before_filter(only: [:download, :downloadUser, :async]) do
-    if (!has_object_permission?(@version.inv_object, 'download')) then
+    unless has_object_permission?(@version.inv_object, 'download')
       flash[:error] = 'You do not have download permissions.'
       render file: "#{Rails.root}/public/401.html", status: 401, layout: false
     end
@@ -23,9 +23,9 @@ class VersionController < ApplicationController
   end
 
   before_filter(only: [:download, :downloadUser]) do
-    if exceeds_download_size_version(@version) then
+    if exceeds_download_size_version(@version)
       render file: "#{Rails.root}/public/403.html", status: 403, layout: false
-    elsif exceeds_sync_size_version(@version) then
+    elsif exceeds_sync_size_version(@version)
       # if size is > max_archive_size, redirect to have user enter email for asynch
       # compression (skipping streaming)
       redirect_to(controller: 'lostorage',
@@ -47,17 +47,17 @@ class VersionController < ApplicationController
   def index
   end
 
- def async
-   if exceeds_download_size_version(@version) then
-     render nothing: true, status: 403
-   elsif exceeds_sync_size_version(@version) then
-      # Async Supported
+  def async
+    if exceeds_download_size_version(@version)
+      render nothing: true, status: 403
+    elsif exceeds_sync_size_version(@version)
+       # Async Supported
       render nothing: true, status: 200
     else
-      # Async Not Acceptable
+       # Async Not Acceptable
       render nothing: true, status: 406
-    end
-  end
+     end
+   end
 
   def download
     stream_response("#{@version.bytestream_uri}?t=zip",

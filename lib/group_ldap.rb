@@ -59,7 +59,7 @@ module GroupLdap
 
     def unset_user_permission(userid, groupid, user_object, permission = 'read')
       check = sub_fetch(groupid, permission)
-      return true if !check[:uniquemember].include?(user_object.ns_dn(userid))
+      return true unless check[:uniquemember].include?(user_object.ns_dn(userid))
       members = check[:uniquemember]
       members.delete(user_object.ns_dn(userid))
       admin_ldap.replace_attribute(sub_ns_dn(groupid, permission), :uniquemember, members)
@@ -81,11 +81,11 @@ module GroupLdap
 
     def find_groups_for_user(userid, user_object, permission = nil)
       # these are the permission subgroups so they need to be parsed back up a level
-      filter = if permission.nil? then
-        Net::LDAP::Filter.eq('uniquemember', user_object.ns_dn(userid))
-      else
-        Net::LDAP::Filter.eq('uniquemember', user_object.ns_dn(userid)) &
-          Net::LDAP::Filter.eq('cn', permission)
+      filter = if permission.nil?
+                 Net::LDAP::Filter.eq('uniquemember', user_object.ns_dn(userid))
+               else
+                 Net::LDAP::Filter.eq('uniquemember', user_object.ns_dn(userid)) &
+                   Net::LDAP::Filter.eq('cn', permission)
       end
       grps = admin_ldap.search(base: @base, filter: filter)
       re = Regexp.new("^cn=(read|write|download),ou=([^, ]+),#{@base}$", Regexp::IGNORECASE)

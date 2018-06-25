@@ -1,8 +1,8 @@
 class CollectionConstraint
   def matches?(request)
-    if request.params[:group].blank? then
+    if request.params[:group].blank?
       return false
-    elsif !request.params[:group].match(/^ark/) then
+    elsif !request.params[:group].match(/^ark/)
       # TODO: what if some collection is NAMED 'ark'-something?
       # collection mneumonic
       return true

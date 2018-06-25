@@ -56,11 +56,11 @@ class Group
   end
 
   def inv_collection_id
-    @inv_collection_id ||= if self.inv_collection then self.inv_collection.id else nil end
+    @inv_collection_id ||= self.inv_collection ? self.inv_collection.id : nil
   end
 
   def object_count
-    if self.inv_collection_id.nil? then
+    if self.inv_collection_id.nil?
       0
     else
       InvObject.connection.select_all("SELECT COUNT(DISTINCT(`inv_objects`.id)) as `count` FROM `inv_objects` INNER JOIN `inv_collections_inv_objects` ON `inv_objects`.id = `inv_collections_inv_objects`.inv_object_id WHERE ((`inv_collections_inv_objects`.inv_collection_id = #{self.inv_collection_id}))")[0]['count'].to_i
@@ -68,7 +68,7 @@ class Group
   end
 
   def version_count
-    if self.inv_collection_id.nil? then
+    if self.inv_collection_id.nil?
       0
     else
       InvObject.connection.select_all("SELECT COUNT(DISTINCT(`inv_versions`.id)) AS `count` FROM `inv_versions` INNER JOIN `inv_objects` ON `inv_objects`.`id` = `inv_versions`.`inv_object_id` INNER JOIN `inv_collections_inv_objects` ON `inv_objects`.`id` = `inv_collections_inv_objects`.`inv_object_id` WHERE ((`inv_collections_inv_objects`.inv_collection_id = #{self.inv_collection_id}))")[0]['count'].to_i
@@ -76,7 +76,7 @@ class Group
   end
 
   def file_count
-    if self.inv_collection_id.nil? then
+    if self.inv_collection_id.nil?
       0
     else
       InvFile.connection.select_all("SELECT COUNT(DISTINCT(`inv_files`.`id`)) AS `count` FROM `inv_files` INNER JOIN `inv_versions` ON `inv_versions`.`id` = `inv_files`.`inv_version_id` INNER JOIN `inv_objects` ON `inv_objects`.`id` = `inv_versions`.`inv_object_id` INNER JOIN `inv_collections_inv_objects` ON `inv_objects`.`id` = `inv_collections_inv_objects`.`inv_object_id` WHERE ((`inv_collections_inv_objects`.inv_collection_id = #{self.inv_collection_id}))")[0]['count'].to_i
@@ -85,7 +85,7 @@ class Group
 
   def total_size
     Rails.logger.info('Im in the total_size method of group model')
-    if self.inv_collection.nil? then
+    if self.inv_collection.nil?
       0
     else
       InvFile.connection.select_all("SELECT SUM(full_size) AS `total_size` FROM `inv_files` INNER JOIN `inv_collections_inv_objects` ON `inv_collections_inv_objects`.`inv_object_id` = `inv_files`.`inv_object_id` WHERE (`inv_collections_inv_objects`.inv_collection_id = #{self.inv_collection_id})")[0]['total_size'].to_i
