@@ -59,7 +59,7 @@ class User
   # TODO: figure out whether we still need this & get rid of it if not
   # :nocov:
   def single_value(record, field)
-    if record[field].nil? or record[field][0].nil? or record[field][0].length < 1
+    if record[field].nil? || record[field][0].nil? || (record[field][0].length < 1)
       nil
     else
       record[field][0]

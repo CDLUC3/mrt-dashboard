@@ -6,11 +6,11 @@ class DuaController < ApplicationController
     object = InvObject.where('inv_objects.ark = ?', params_u(:object)).first
     dua_hash = with_fetched_tempfile(object.dua_uri) { |f| Dua.parse_file(f) }
     if params['commit'] == 'Accept'
-      flash[:message] = 'You must check that you accept the terms.' and return if params[:accept].blank?
+      (flash[:message] = 'You must check that you accept the terms.') && return if params[:accept].blank?
       if params[:name].blank? || params[:affiliation].blank? || params[:user_agent_email].blank?
-        flash[:message] = 'Please enter the required fields' and return
+        (flash[:message] = 'Please enter the required fields') && return
       end
-      flash[:message] = 'You must fill in a valid return email address.' and return unless params[:user_agent_email].match(/^.+@.+$/)
+      (flash[:message] = 'You must fill in a valid return email address.') && return unless params[:user_agent_email].match(/^.+@.+$/)
 
       group = object.group
       DuaMailer.dua_email(to: params[:user_agent_email],

@@ -139,14 +139,14 @@ class ApplicationController < ActionController::Base
     unless current_uid
       store_location
       flash[:notice] = 'You must be logged in to access the page you requested'
-      redirect_to controller: 'user_sessions', action: 'guest_login' and return
+      redirect_to(controller: 'user_sessions', action: 'guest_login') && return
     end
   end
 
   # :nocov:
   # TODO: this doesn't seem to be used anywhere; can we delete it?
   def require_user_or_401
-    render status: 401, text: '' and return unless current_user
+    render(status: 401, text: '') && return unless current_user
   end
   # :nocov:
 
@@ -282,7 +282,7 @@ class ApplicationController < ActionController::Base
       return
     elsif object.dua_exists? && process_dua_request(object.dua_uri)
       # if the DUA for this collection exists, display DUA to user for acceptance before displaying file
-      redirect_to({ controller: 'dua', action: 'index' }.merge(redirect_args)) and return
+      redirect_to({ controller: 'dua', action: 'index' }.merge(redirect_args)) && return
     end
   end
   #:nocov:

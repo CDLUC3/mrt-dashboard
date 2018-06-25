@@ -5,7 +5,7 @@ class HomeController < ApplicationController
     if available_groups.length == 1
       redirect_to(controller: :collection,
                   action: :index,
-                  group: available_groups[0][:id]) and return
+                  group: available_groups[0][:id]) && return
     end
   end
 end

@@ -123,14 +123,14 @@ class Group
 
   # this may belong to some ldap base class at some point
   def self.simplify_single_value(record, field)
-    return nil if record[field].nil? or record[field][0].nil? or record[field][0].length < 1
+    return nil if record[field].nil? || record[field][0].nil? || (record[field][0].length < 1)
     record[field][0]
   end
 
   # TODO: figure out whether we still need this & get rid of it if not
   # :nocov:
   def self.simplify_multiple_value(record, field)
-    return [] if record[field].nil? or record[field][0].nil? or record[field][0].length < 1
+    return [] if record[field].nil? || record[field][0].nil? || (record[field][0].length < 1)
     record[field]
   end
   # :nocov:

@@ -24,7 +24,7 @@ module ApplicationHelper
 
   # Format kernel metadata lists
   def dc_nice(vals)
-    return '' if (vals.nil? || vals.empty?)
+    return '' if vals.nil? || vals.empty?
     vals.join('; ')
   end
 

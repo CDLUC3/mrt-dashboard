@@ -105,7 +105,7 @@ module LdapMixin
 
   def fetch_attribute(id, attribute)
     r = fetch(id)
-    raise LdapException.new('attribute does not exist for that id') if r[attribute].nil? or r[attribute].length < 1
+    raise LdapException.new('attribute does not exist for that id') if r[attribute].nil? || (r[attribute].length < 1)
     r[attribute]
   end
 

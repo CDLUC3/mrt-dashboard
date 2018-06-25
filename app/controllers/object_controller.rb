@@ -41,9 +41,9 @@ class ObjectController < ApplicationController
   end
 
   def ingest
-    render status: 401, text: '' and return unless current_user
-    render(status: 400, text: "Bad file parameter.\n") and return unless params[:file].respond_to? :tempfile
-    render(status: 404, text: '') and return unless current_user_can_write_to_profile?
+    render(status: 401, text: '') && return unless current_user
+    render(status: 400, text: "Bad file parameter.\n") && return unless params[:file].respond_to? :tempfile
+    render(status: 404, text: '') && return unless current_user_can_write_to_profile?
 
     ingest_args = {
       'creator'               => params[:creator],
@@ -86,9 +86,9 @@ class ObjectController < ApplicationController
   end
 
   def update
-    render status: 401, text: '' and return unless current_user
-    render(status: 400, text: "Bad file parameter.\n") and return unless params[:file].respond_to? :tempfile
-    render(status: 404, text: '') and return unless current_user_can_write_to_profile?
+    render(status: 401, text: '') && return unless current_user
+    render(status: 400, text: "Bad file parameter.\n") && return unless params[:file].respond_to? :tempfile
+    render(status: 404, text: '') && return unless current_user_can_write_to_profile?
 
     ingest_args = {
       'creator'               => params[:creator],
@@ -131,8 +131,8 @@ class ObjectController < ApplicationController
   end
 
   def mint
-    render status: 401, text: '' and return unless current_user
-    render(status: 404, text: '') and return unless current_user_can_write_to_profile?
+    render(status: 401, text: '') && return unless current_user
+    render(status: 404, text: '') && return unless current_user_can_write_to_profile?
 
     mint_args = {
       'profile'      => params[:profile],
@@ -183,7 +183,7 @@ class ObjectController < ApplicationController
   def upload
     if params[:file].nil?
       flash[:error] = 'You must choose a filename to submit.'
-      redirect_to controller: 'object', action: 'add', group: current_group and return false
+      redirect_to(controller: 'object', action: 'add', group: current_group) && (return false)
     end
     begin
       ingest_params = {
@@ -222,7 +222,7 @@ class ObjectController < ApplicationController
 
     # prevent stack trace when collection does not exist
     c = InvCollection.where(ark: @collection_ark).first
-    render(status: 404, text: '404 Not Found') and return if c.nil? || c.to_s == ''
+    render(status: 404, text: '404 Not Found') && return if c.nil? || c.to_s == ''
     @objects = c.inv_objects
       .quickloadhack
       .order('inv_objects.modified desc')

@@ -14,7 +14,7 @@ class AdminController < ApplicationController
       @required.each_key do |key|
         @error_fields.push(key) if params[key].blank?
       end
-      if @error_fields.length > 0 or !params[:userpassword].eql?(params[:repeatuserpassword])
+      if (@error_fields.length > 0) || !params[:userpassword].eql?(params[:repeatuserpassword])
         @display_text += "The following items must be filled in: #{@error_fields.map { |i| @required[i] }.join(', ')}." if @error_fields.length > 0
         @display_text += ' Your password and repeated password do not match.' unless params[:userpassword].eql?(params[:repeatuserpassword])
       else
@@ -66,7 +66,7 @@ class AdminController < ApplicationController
       @ldap[:ou] = params[:ou]
 
       %w[read write].each do |perm|
-        if params[:permissions].nil? or !params[:permissions].include?(perm)
+        if params[:permissions].nil? || !params[:permissions].include?(perm)
           Group::LDAP.unset_user_permission(params[:uid], params[:ou], User::LDAP, perm)
         else
           Group::LDAP.set_user_permission(params[:uid], params[:ou], User::LDAP, perm)

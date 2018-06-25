@@ -7,9 +7,9 @@ class LostorageController < ApplicationController
   def index
     if params[:commit] == 'Submit'
       if params[:user_agent_email].blank?
-        flash[:message] = 'Please enter the required fields' and return
+        (flash[:message] = 'Please enter the required fields') && return
       elsif !params[:user_agent_email].match(/^.+@.+$/)
-        flash[:message] = 'You must fill in a valid return email address.' and return
+        (flash[:message] = 'You must fill in a valid return email address.') && return
       else
         if post_los_email(params[:user_agent_email])
           flash[:message] = 'Processing of large object compression has begun.  Please look for an email in your inbox'
