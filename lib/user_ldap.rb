@@ -36,7 +36,7 @@ module UserLdap
     end
 
     def authenticate(userid, password)
-      raise LdapException.new('user does not exist') unless record_exists?(userid)
+      raise LdapException, 'user does not exist' unless record_exists?(userid)
       ldap = Net::LDAP.new(@ldap_connect)
       ldap.auth(ns_dn(userid), password)
       ldap.bind

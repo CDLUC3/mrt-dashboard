@@ -35,7 +35,7 @@ module InstitutionLdap
     describe ':ns_dn' do
       it 'wraps the ID and appends the base' do
         id = 'foo'
-        expected = "o=#{id},#{LDAP_CONFIG["inst_base"]}"
+        expected = "o=#{id},#{LDAP_CONFIG['inst_base']}"
         expect(inst_ldap.ns_dn(id)).to eq(expected)
       end
     end

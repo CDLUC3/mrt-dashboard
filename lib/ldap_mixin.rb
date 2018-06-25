@@ -21,10 +21,13 @@ module LdapMixin
     # minter => 'http://noid.cdlib.org/nd/noidu_g9'
     # connect_timeout => 60
 
-    host, port, base, admin_user, admin_password, minter, connect_timeout =
-      init_hash[:host], init_hash[:port], init_hash[:base],
-      init_hash[:admin_user], init_hash[:admin_password],
-      init_hash[:minter], init_hash[:connect_timeout]
+    host = init_hash[:host]
+    port = init_hash[:port]
+    base = init_hash[:base]
+    admin_user = init_hash[:admin_user]
+    admin_password = init_hash[:admin_password]
+    minter = init_hash[:minter]
+    connect_timeout = init_hash[:connect_timeout]
 
     @minter = Noid::Minter.new(minter)
     @base = base
@@ -39,7 +42,7 @@ module LdapMixin
       connect_timeout: connect_timeout
     }
 
-    raise LdapException.new('Unable to bind to LDAP server.') unless ENV['RAILS_ENV'] == 'test' || admin_ldap.bind
+    raise LdapException, 'Unable to bind to LDAP server.' unless ENV['RAILS_ENV'] == 'test' || admin_ldap.bind
   end
 
   def admin_ldap
@@ -49,7 +52,7 @@ module LdapMixin
   end
 
   def delete_record(id)
-    raise LdapException.new('id does not exist') unless record_exists?(id)
+    raise LdapException, 'id does not exist' unless record_exists?(id)
     true_or_exception(admin_ldap.delete(dn: ns_dn(id)))
   end
 
@@ -89,8 +92,8 @@ module LdapMixin
 
   def fetch(id)
     results = admin_ldap.search(base: @base, filter: obj_filter(id))
-    raise LdapException.new('id does not exist') if results.length < 1
-    raise LdapException.new('ambiguous results, duplicate ids') if results.length > 1
+    raise LdapException, 'id does not exist' if results.empty?
+    raise LdapException, 'ambiguous results, duplicate ids' if results.length > 1
     results[0]
   end
 
@@ -98,31 +101,28 @@ module LdapMixin
     results = admin_ldap.search(base: @base,
                                 filter: Net::LDAP::Filter.eq('arkid', ark_id),
                                 scope: Net::LDAP::SearchScope_SingleLevel)
-    raise LdapException.new('id does not exist') if results.length < 1
-    raise LdapException.new('ambiguous results, duplicate ids') if results.length > 1
+    raise LdapException, 'id does not exist' if results.empty?
+    raise LdapException, 'ambiguous results, duplicate ids' if results.length > 1
     results[0]
   end
 
   def fetch_attribute(id, attribute)
     r = fetch(id)
-    raise LdapException.new('attribute does not exist for that id') if r[attribute].nil? || (r[attribute].length < 1)
+    raise LdapException, 'attribute does not exist for that id' if r[attribute].nil? || r[attribute].empty?
     r[attribute]
   end
 
   def record_exists?(id)
-    begin
+    
       fetch(id)
+      true
     rescue LdapMixin::LdapException => ex
       return false
-    end
-    true
+    
   end
 
   def true_or_exception(result)
-    if result == false
-      raise LdapException.new(admin_ldap.get_operation_result.message)
-    else
-      true
-    end
+    return true if result
+    raise LdapException, admin_ldap.get_operation_result.message
   end
 end

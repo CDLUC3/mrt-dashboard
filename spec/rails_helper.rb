@@ -9,14 +9,14 @@ else
   ENV['RAILS_ENV'] = 'test'
 end
 
-require File.expand_path('../../config/environment', __FILE__)
+require File.expand_path('../config/environment', __dir__)
 require 'rspec/rails'
 require 'database_cleaner'
 
 # Stop Rails enthusiastically blowing away test database
 # https://github.com/rails/rails/issues/18982
 if ENV['RAILS_ENV'] == 'test'
-  class ActiveRecord::Migrator
+  module ActiveRecord::Migrator
     class << self
       def any_migrations?
         true

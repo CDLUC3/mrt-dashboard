@@ -1,5 +1,5 @@
 # Load the rails application
-require File.expand_path('../application', __FILE__)
+require File.expand_path('application', __dir__)
 
 Dir[File.dirname(__FILE__) + '/../vendor/*'].each do |path|
   gem_name = File.basename(path.gsub(/-\d+.\d+.\d+$/, ''))

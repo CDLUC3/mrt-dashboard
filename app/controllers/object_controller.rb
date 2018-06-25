@@ -144,8 +144,7 @@ class ObjectController < ApplicationController
     render status: resp.status, content_type: resp.headers[:content_type], text: resp.body
   end
 
-  def index
-  end
+  def index; end
 
   def download
     stream_response("#{@object.bytestream_uri}?t=zip",
@@ -162,9 +161,9 @@ class ObjectController < ApplicationController
   end
 
   def downloadManifest
-    stream_response("#{@object.bytestream_uri3}",
+    stream_response(@object.bytestream_uri3.to_s,
                     'attachment',
-                    "#{Orchard::Pairtree.encode(@object.ark.to_s)}",
+                    Orchard::Pairtree.encode(@object.ark.to_s).to_s,
                     'text/xml')
   end
 
@@ -211,8 +210,8 @@ class ObjectController < ApplicationController
       @doc = Nokogiri::XML(ex.response) do |config|
         config.strict.noent.noblanks
       end
-      @description = "ingest: #{@doc.xpath("//exc:statusDescription")[0].child.text}"
-      @error = "ingest: #{@doc.xpath("//exc:error")[0].child.text}"
+      @description = "ingest: #{@doc.xpath('//exc:statusDescription')[0].child.text}"
+      @error = "ingest: #{@doc.xpath('//exc:error')[0].child.text}"
       render action: 'upload_error'
     end
   end

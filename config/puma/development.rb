@@ -8,7 +8,7 @@ application_path = ENV['RAILS_ROOT'] || '/dpr2/apps/ui'
 # The directory to operate out of.
 #
 # The default is the current directory.
-directory "#{application_path}"
+directory application_path.to_s
 
 # Load "path" as a rackup file.
 #
@@ -56,7 +56,7 @@ threads 0, threads_count
 #
 # The default is "tcp://0.0.0.0:9292".
 #
-port ENV['PORT'] || 26181
+port ENV['PORT'] || 26_181
 # bind tcp://0.0.0.0:26181
 
 # How many worker processes to run.  Typically this is set to

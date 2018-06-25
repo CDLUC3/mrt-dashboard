@@ -12,11 +12,14 @@ module ApplicationHelper
     array.join('/')
   end
 
+# rubocop:disable Style/DateTime
   def merritt_time(t)
+    # TODO: Figure out where we use this and whether DateTime is really best here
     t = DateTime.parse(t.to_s) if t.class != DateTime
     t = t.utc unless t.utc?
     t.strftime('%Y-%m-%d %I:%M %p UTC')
   end
+# rubocop:enable Style/DateTime
 
   def clean_mime_type(mt)
     mt.gsub(/;.*$/, '')
@@ -33,7 +36,7 @@ module ApplicationHelper
   def help_tip(the_text)
     str = <<~eos
       <a href="#" onmouseover="Tip('#{h(the_text).gsub("'", "\\'")}')">
-        #{image_tag("tip_icon.gif", size: '15x15')}
+        #{image_tag('tip_icon.gif', size: '15x15')}
       </a>
     eos
     str.html_safe

@@ -84,7 +84,7 @@ module UserLdap
         }
 
         expect(admin_ldap).to receive(:add).with(
-          dn: "uid=#{userid},#{LDAP_CONFIG["user_base"]}",
+          dn: "uid=#{userid},#{LDAP_CONFIG['user_base']}",
           attributes: expected_attribs
         ).and_return(true)
 
@@ -96,7 +96,7 @@ module UserLdap
     describe ':ns_dn' do
       it 'wraps the ID and appends the base' do
         id = 'foo'
-        expected = "uid=#{id},#{LDAP_CONFIG["user_base"]}"
+        expected = "uid=#{id},#{LDAP_CONFIG['user_base']}"
         expect(user_ldap.ns_dn(id)).to eq(expected)
       end
     end

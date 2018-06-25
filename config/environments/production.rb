@@ -1,7 +1,7 @@
 require 'active_record/errors'
 MrtDashboard::Application.configure do
   config.action_controller.perform_caching = true
-  config.autoload_paths += %W(#{config.root}/lib)
+  config.autoload_paths += %W[#{config.root}/lib]
   config.cache_classes = true
   config.consider_all_requests_local = false
   config.i18n.fallbacks = true

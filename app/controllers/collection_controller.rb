@@ -3,16 +3,16 @@ class CollectionController < ApplicationController
   before_filter :require_request_group
 
   before_filter do
-    raise ActiveResource::UnauthorizedAccess.new('You do not have access to that collection') unless has_group_permission?(@request_group, 'read')
+    raise ActiveResource::UnauthorizedAccess, 'You do not have access to that collection' unless has_group_permission?(@request_group, 'read')
   end
 
   # Load the group specified in the params[:group]
   def require_request_group
-    begin
+    
       @request_group = Group.find(params[:group])
     rescue LdapMixin::LdapException
       raise ActiveRecord::RecordNotFound
-    end
+    
   end
 
   def object_count
@@ -48,15 +48,12 @@ class CollectionController < ApplicationController
 
   def search_results
     terms = Unicode.downcase(params[:terms])
-      .split(/\s+/)
-      .map do |t| # special ark handling
-        is_ark?(t) ? t[11..-1] : t
-      end.delete_if do |t|
-      (t.blank? || t.size < 4) # sql search doesn't work with terms less than 4 characters long
-    end
+              .split(/\s+/)
+              .map { |t| is_ark?(t) ? t[11..-1] : t } # special ark handling
+              .delete_if { |t| (t.blank? || t.size < 4) }
     terms = terms[0..50] # we can't have more than 60 terms, so just drop > 50
 
-    if terms.size == 0
+    if terms.empty?
       # no real search, just display
       @results = InvObject.joins(:inv_collections)
         .where('inv_collections.ark = ?', @request_group.ark_id)

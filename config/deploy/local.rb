@@ -22,7 +22,7 @@ set :branch, 'default'
 # Default deploy_to directory is /var/www/my_app
 set :deploy_to, '/dpr2/apps/ui'
 
-server 'linux-mjr.ad.ucop.edu', user: 'mreyes', roles: %w{web app}
+server 'linux-mjr.ad.ucop.edu', user: 'mreyes', roles: %w[web app]
 
 set :unicorn_pid, "#{deploy_to}/shared/pid/unicorn.pid"
 set :unicorn_log, "#{deploy_to}/shared/log/unicorn.log"

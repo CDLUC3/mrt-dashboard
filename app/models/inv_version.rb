@@ -32,7 +32,7 @@ class InvVersion < ActiveRecord::Base
   end
 
   def metadata(element)
-    inv_dublinkernels.select { |md| md.element == element && md.value != '(:unas)' }.map { |md| md.value }
+    inv_dublinkernels.select { |md| md.element == element && md.value != '(:unas)' }.map(&:value)
   end
 
   def dk_who

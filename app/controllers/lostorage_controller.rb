@@ -47,7 +47,7 @@ class LostorageController < ApplicationController
     @losSubject = params[:losSubject]
     @losBody    = params[:losBody]
 
-    unique_name     = "#{UUIDTools::UUID.random_create().hash.to_s}.tar.gz"
+    unique_name     = "#{UUIDTools::UUID.random_create.hash.to_s}.tar.gz"
     @object         = InvObject.find_by_ark(params_u(:object))
     @container_type = (params[:version] && 'version') || 'object'
     @dl_url         = "#{APP_CONFIG['container_url']}#{unique_name}"

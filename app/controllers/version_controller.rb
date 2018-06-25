@@ -44,8 +44,7 @@ class VersionController < ApplicationController
     raise ActiveRecord::RecordNotFound if @version.nil?
   end
 
-  def index
-  end
+  def index; end
 
   def async
     if exceeds_download_size_version(@version)

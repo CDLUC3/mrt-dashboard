@@ -28,7 +28,8 @@ class DuaController < ApplicationController
     elsif params[:commit] == 'Do Not Accept'
       redirect_to mk_merritt_url('m', params[:object], params[:version])
     else
-      @title, @terms = dua_hash['Title'], dua_hash['Terms']
+      @title = dua_hash['Title']
+      @terms = dua_hash['Terms']
     end
   end
   #:nocov:

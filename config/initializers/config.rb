@@ -1,18 +1,11 @@
 def load_config(name)
   path = File.join(Rails.root, 'config', name)
-  if !File.exists?(path)
-    raise Exception.new("Config file #{name} not found!")
-  elsif File.size(path) == 0
-    raise Exception.new("Config file #{name} is empty!")
-  else
-    conf = YAML.load_file(path)
-    conf_env = conf[Rails.env]
-    if conf_env.class == String
-      return conf[conf_env]
-    else
-      return conf_env
-    end
-  end
+  raise Exception, "Config file #{name} not found!" unless File.exists?(path)
+  raise Exception, "Config file #{name} is empty!" if File.size(path) == 0
+
+  conf     = YAML.load_file(path)
+  conf_env = conf[Rails.env]
+  conf_env.class == String ? conf[conf_env] : conf_env
 end
 
 LDAP_CONFIG = load_config('ldap.yml')

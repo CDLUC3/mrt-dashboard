@@ -45,7 +45,7 @@ describe ObjectController do
     allow(file).to receive(:tempfile).and_return('tempfile.foo')
     allow(file).to receive(:original_filename).and_return('original_filename.foo')
 
-    # hack to trick ActionController::TestCase.paramify_values into accepting the double
+    # trick ActionController::TestCase.paramify_values into accepting the double
     allow(file).to receive(:to_param).and_return(file)
 
     @client = mock_httpclient
@@ -314,14 +314,14 @@ describe ObjectController do
       mock_permissions_all(user_id, collection_id)
 
       streamer = double(Streamer)
-      expected_url = "#{object.bytestream_uri3}"
+      expected_url = object.bytestream_uri3.to_s
       allow(Streamer).to receive(:new).with(expected_url).and_return(streamer)
 
       get(:downloadManifest, { object: object_ark }, { uid: user_id })
 
       expect(response.status).to eq(200)
 
-      expected_filename = "#{Orchard::Pairtree.encode(object_ark)}"
+      expected_filename = Orchard::Pairtree.encode(object_ark).to_s
       expected_headers = {
         'Content-Type' => 'text/xml',
         'Content-Disposition' => "attachment; filename=\"#{expected_filename}\""

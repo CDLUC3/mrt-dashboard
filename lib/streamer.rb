@@ -10,8 +10,8 @@ class Streamer
     client.connect_timeout = 7200
     client.keep_alive_timeout = 3600
 
-    client.get_content(@url) { |chunk|
+    client.get_content(@url) do |chunk|
       yield chunk
-    }
+    end
   end
 end

@@ -13,7 +13,7 @@ class User
       'lastname'      => 'sn',
       'firstname'     => 'givenname',
       'email'         => 'mail',
-      'tz_region'     => 'tzregion' }
+      'tz_region'     => 'tzregion' }.freeze
 
   def initialize(user)
     @user = user
@@ -23,11 +23,19 @@ class User
     LDAP.find_all
   end
 
+  # rubocop:disable Style/MethodMissingSuper
   def method_missing(meth, *args, &block)
     # simple code to read user information with methods that resemble activerecord slightly
-    return array_to_value(@user[AUTHLOGIC_MAP[meth.to_s]]) unless AUTHLOGIC_MAP[meth.to_s].nil?
+    authlogic_key = AUTHLOGIC_MAP[meth.to_s]
+    return array_to_value(@user[authlogic_key]) if authlogic_key
     array_to_value(@user[meth.to_s])
   end
+  # rubocop:enable Style/MethodMissingSuper
+
+  def respond_to_missing?(*args)
+    true
+  end
+
 
   def groups(permission = nil)
     grp_ids = Group::LDAP.find_groups_for_user(login, User::LDAP, permission)
@@ -59,7 +67,7 @@ class User
   # TODO: figure out whether we still need this & get rid of it if not
   # :nocov:
   def single_value(record, field)
-    if record[field].nil? || record[field][0].nil? || (record[field][0].length < 1)
+    if record[field].nil? || record[field][0].nil? || record[field][0].empty?
       nil
     else
       record[field][0]

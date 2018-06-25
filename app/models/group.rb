@@ -11,8 +11,7 @@ class Group
 
   attr_accessor :id, :submission_profile, :ark_id, :owner, :description
 
-  def initialize
-  end
+  def initialize; end
 
   def to_param
     id
@@ -123,14 +122,14 @@ class Group
 
   # this may belong to some ldap base class at some point
   def self.simplify_single_value(record, field)
-    return nil if record[field].nil? || record[field][0].nil? || (record[field][0].length < 1)
+    return nil if record[field].nil? || record[field][0].nil? || record[field][0].empty?
     record[field][0]
   end
 
   # TODO: figure out whether we still need this & get rid of it if not
   # :nocov:
   def self.simplify_multiple_value(record, field)
-    return [] if record[field].nil? || record[field][0].nil? || (record[field][0].length < 1)
+    return [] if record[field].nil? || record[field][0].nil? || record[field][0].empty?
     record[field]
   end
   # :nocov:

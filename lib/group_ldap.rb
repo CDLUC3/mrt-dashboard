@@ -112,8 +112,8 @@ module GroupLdap
     # fetches a cn sub object of the group organizational unit (ou)
     def sub_fetch(group_id, sub_id)
       results = admin_ldap.search(base: ns_dn(group_id), filter: Net::LDAP::Filter.eq('cn', sub_id))
-      raise LdapException.new('id does not exist') if results.length < 1
-      raise LdapException.new('ambiguous results, duplicate ids') if results.length > 1
+      raise LdapException, 'id does not exist' if results.empty?
+      raise LdapException, 'ambiguous results, duplicate ids' if results.length > 1
       results[0]
     end
 

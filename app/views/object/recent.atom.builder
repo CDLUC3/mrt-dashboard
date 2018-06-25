@@ -47,7 +47,7 @@ xml.tag!('feed', :xmlns => 'http://www.w3.org/2005/Atom',
                'href' => url_for(controller: 'object',
                                  action: 'download',
                                  object: obj))
-      xml.tag!('dct:extent', "#{obj.size}")
+      xml.tag!('dct:extent', obj.size.to_s)
       unless obj.current_version.local_id.blank?
         local_id = obj.current_version.local_id[0]
         if !local_id.blank? && local_id.match(/^http/)

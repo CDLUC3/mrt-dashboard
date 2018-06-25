@@ -1,7 +1,9 @@
 # monkeypatch, see http://stackoverflow.com/questions/3507594/ruby-on-rails-3-streaming-data-through-rails-to-client
-class Rack::Response
-  def close
-    @body.close if @body.respond_to?(:close)
+module Rack
+  class Response
+    def close
+      @body.close if @body.respond_to?(:close)
+    end
   end
 end
 
@@ -44,18 +46,17 @@ class ApplicationController < ActionController::Base
   def mk_merritt_url(letter, object, version = nil, file = nil)
     object = urlencode(urlunencode(object))
     file = file.blank? ? nil : urlencode(urlunencode(file))
-    "/#{letter}/" + [object, version, file].reject { |x| x.blank? }.join('/')
+    "/#{letter}/" + [object, version, file].reject(&:blank?).join('/')
   end
 
   def redirect_to_latest_version
-    if params[:version].to_i == 0
-      ark = InvObject.find_by_ark(params_u(:object))
-      latest_version = ark && ark.current_version.number
-      # letter = request.path.match(/^\/(.)\//)[1]
-      # redirect_to mk_merritt_url(letter, params[:object], latest_version, params[:file])
-      # Do not redirect, but just set version to latest
-      params[:version] = latest_version.to_s
-    end
+    return unless params[:version].to_i == 0
+    ark = InvObject.find_by_ark(params_u(:object))
+    latest_version = ark && ark.current_version.number
+    # letter = request.path.match(/^\/(.)\//)[1]
+    # redirect_to mk_merritt_url(letter, params[:object], latest_version, params[:file])
+    # Do not redirect, but just set version to latest
+    params[:version] = latest_version.to_s
   end
 
   # Returns true if the current user has which permissions on the object.
@@ -136,11 +137,10 @@ class ApplicationController < ActionController::Base
   # if the object is not public then the user will need to navigate to the login page and
   # login with their own credentials - mstrong 4/12/12
   def require_user
-    unless current_uid
-      store_location
-      flash[:notice] = 'You must be logged in to access the page you requested'
-      redirect_to(controller: 'user_sessions', action: 'guest_login') && return
-    end
+    return if current_uid
+    store_location
+    flash[:notice] = 'You must be logged in to access the page you requested'
+    redirect_to(controller: 'user_sessions', action: 'guest_login') && return
   end
 
   # :nocov:
@@ -201,15 +201,14 @@ class ApplicationController < ActionController::Base
   #  number_to_storage_size(1234567, 2)    => 1.23 MB
   def number_to_storage_size(size, precision = 1)
     size = Kernel.Float(size)
-    case
-    when size == 1 then '1 Byte'
-    when size < 10**3 then '%d B' % size
-    when size < 10**6 then "%.#{precision}f KB"  % (size / 10.0**3)
-    when size < 10**9 then "%.#{precision}f MB"  % (size / 10.0**6)
-    when size < 10**12 then "%.#{precision}f GB"  % (size / 10.0**9)
-    else                    "%.#{precision}f TB"  % (size / 10.0**12)
+    if size == 1 then '1 Byte'
+    elsif size < 10**3 then format('%d B', size)
+    elsif size < 10**6 then format("%.#{precision}f KB", (size / 10.0**3))
+    elsif size < 10**9 then format("%.#{precision}f MB", (size / 10.0**6))
+    elsif size < 10**12 then format("%.#{precision}f GB", (size / 10.0**9))
+    else                    format("%.#{precision}f TB", (size / 10.0**12))
     end.sub('.0', '')
-  rescue
+  rescue StandardError
     nil
   end
 
@@ -229,7 +228,7 @@ class ApplicationController < ActionController::Base
     open(*args) do |data|
       tmp_file = Tempfile.new('mrt_http')
       begin
-        while !(buff = data.read(4096)).nil? do
+        until (buff = data.read(4096)).nil?
           tmp_file << buff
         end
         tmp_file.rewind

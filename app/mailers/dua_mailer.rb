@@ -3,8 +3,13 @@ class DuaMailer < ActionMailer::Base
 
   #:nocov:
   def dua_email(args)
-    @to, @title, @name, @affiliation, @collection, @object, @terms =
-      args[:to], args[:title], args[:name], args[:affiliation], args[:collection], args[:object], args[:terms]
+    @to = args[:to]
+    @title = args[:title]
+    @name = args[:name]
+    @affiliation = args[:affiliation]
+    @collection = args[:collection]
+    @object = args[:object]
+    @terms = args[:terms]
     mail(to: args[:to],
          cc: args[:cc],
          subject: "Merritt DUA acceptance: #{args[:title]}",
