@@ -20,6 +20,7 @@ gem 'uuidtools'
 gem 'thin'
 gem 'jquery-rails'
 gem 'capistrano', '~> 3.4.1'
+gem 'sprockets', '~> 3.7.2'
 
 group :development do
   gem 'web-console', '~> 2.0'
