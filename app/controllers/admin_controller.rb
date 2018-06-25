@@ -7,7 +7,7 @@ class AdminController < ApplicationController
     @error_fields = []
     @display_text = ''
     if !params[:givenname].nil? then
-      params.each_pair{|k,v| @ldap_user[k] = v } #stuck updated info in this hash so they don't have to retype
+      params.each_pair { |k, v| @ldap_user[k] = v } # stuck updated info in this hash so they don't have to retype
       @required = { 'givenname' => 'First name', 'sn' => 'Last name', 'uid' => 'User Id',
                     'userpassword' => 'Password', 'repeatuserpassword' => 'Repeat Password',
                     'mail' => 'Email' }
@@ -18,7 +18,7 @@ class AdminController < ApplicationController
       end
       if @error_fields.length > 0 or !params[:userpassword].eql?(params[:repeatuserpassword]) then
         if @error_fields.length > 0 then
-          @display_text += "The following items must be filled in: #{@error_fields.map{|i| @required[i]}.join(', ' )}."
+          @display_text += "The following items must be filled in: #{@error_fields.map { |i| @required[i] }.join(', ')}."
         end
         if !params[:userpassword].eql?(params[:repeatuserpassword]) then
           @display_text += ' Your password and repeated password do not match.'
@@ -42,7 +42,7 @@ class AdminController < ApplicationController
     @error_fields = []
     @display_text = ''
     if !params[:ou].nil? then
-      params.each_pair{|k,v| @ldap_group[k] = v } #stuck updated info in this hash so they don't have to retype
+      params.each_pair { |k, v| @ldap_group[k] = v } # stuck updated info in this hash so they don't have to retype
       @required = { 'ou' => 'collection ID', 'description' => 'description',
                     'submissionprofile' => 'Ingest Profile ID' }
       @required.each_key do |key|
@@ -51,7 +51,7 @@ class AdminController < ApplicationController
         end
       end
       if @error_fields.length > 0 then
-        @display_text += "The following items must be filled in: #{@error_fields.map{|i| @required[i]}.join(', ' )}."
+        @display_text += "The following items must be filled in: #{@error_fields.map { |i| @required[i] }.join(', ')}."
       else
         Group::LDAP.add(params[:ou], params[:description], ['read', 'write'], ['merrittClass'])
         Group::LDAP.replace_attribute(params[:ou], 'submissionprofile', params['submissionprofile'])
@@ -65,8 +65,8 @@ class AdminController < ApplicationController
   # :nocov:
   def add_user_to_group
     @ldap = {}
-    @m_grps = Group.find_all.map{|i| [ i['description'][0], i['ou'][0] ]}
-    @m_usrs = User.find_all.map{|i| [ i['cn'][0], i['uid'][0] ]}
+    @m_grps = Group.find_all.map { |i| [i['description'][0], i['ou'][0]] }
+    @m_usrs = User.find_all.map { |i| [i['cn'][0], i['uid'][0]] }
     @perms = []
 
     if params[:submitted].eql?('true') then
@@ -80,7 +80,7 @@ class AdminController < ApplicationController
           Group::LDAP.set_user_permission(params[:uid], params[:ou], User::LDAP, perm)
         end
       end
-      #get permissions from LDAP
+      # get permissions from LDAP
       usr = User::LDAP.fetch(params[:uid])
       grp = Group.find(params[:ou])
       @perms = grp.permission(params[:uid])
@@ -88,7 +88,7 @@ class AdminController < ApplicationController
        "their email address (#{usr[:mail][0]}) added or removed from the ingest profile (#{grp.submission_profile}) in the ingest service." +
        ' If it is not modified they may not receive appropriate emails from the ingest service.'
     else
-      #nothing checked
+      # nothing checked
     end
   end
   # :nocov:

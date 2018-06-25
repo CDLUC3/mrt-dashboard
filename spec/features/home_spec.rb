@@ -27,7 +27,7 @@ describe 'home' do
       col1 = create(:inv_collection, name: 'Collection 1', mnemonic: 'collection_1')
       col2 = create(:inv_collection, name: 'Collection 2', mnemonic: 'collection_2')
 
-      @col_ids = [col1, col2].map {|c| mock_ldap_for_collection(c)}
+      @col_ids = [col1, col2].map { |c| mock_ldap_for_collection(c) }
     end
 
     after(:each) do

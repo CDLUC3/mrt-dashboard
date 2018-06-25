@@ -306,7 +306,7 @@ module GroupLdap
         ]
 
         expect(admin_ldap).to receive(:search).with(
-          base: group_ldap.ns_dn(group_id), filter: Net::LDAP::Filter.eq('cn','*')
+          base: group_ldap.ns_dn(group_id), filter: Net::LDAP::Filter.eq('cn', '*')
         ).and_return(results)
 
         expect(group_ldap.get_user_permissions(user_id, group_id, user_ldap)).to eq(['quux'])

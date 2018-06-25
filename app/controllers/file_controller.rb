@@ -18,7 +18,7 @@ class FileController < ApplicationController
                 file: @file })
     #:nocov:
   end
-  
+
   def download
     if exceeds_download_size_file(@file)
       render file: "#{Rails.root}/public/403.html", status: 403, layout: false
@@ -30,7 +30,7 @@ class FileController < ApplicationController
                       @file.full_size)
     end
   end
-  
+
   private
   def load_file
     filename = params_u(:file)

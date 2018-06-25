@@ -16,7 +16,7 @@ Bundler.require(*Rails.groups)
 module MrtDashboard
   class Application < Rails::Application
     # Settings in config/environments/* take precedence over those specified here.
-    
+
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.
 
@@ -42,17 +42,17 @@ module MrtDashboard
     # config.i18n.default_locale = :de
 
     # Configure generators values. Many other options are available, be sure to check the documentation.
-    config.generators do |g| 
-      g.test_framework :rspec, 
+    config.generators do |g|
+      g.test_framework :rspec,
       fixtures: true,
-      view_specs: false, 
-      helper_specs: false, 
-      routing_specs: false, 
-      controller_specs: false, 
-      request_specs: true 
-      g.fixture_replacement   :factory_girl, 
-      dir: 'spec/factories' 
-    end 
+      view_specs: false,
+      helper_specs: false,
+      routing_specs: false,
+      controller_specs: false,
+      request_specs: true
+      g.fixture_replacement :factory_girl,
+      dir: 'spec/factories'
+    end
 
     # Configure the default encoding used in templates for Ruby 1.9.
     config.encoding = 'utf-8'
@@ -63,6 +63,6 @@ module MrtDashboard
     config.autoload_paths += %W(#{config.root}/lib)
 
     config.assets.enabled = false
-    
+
   end
 end

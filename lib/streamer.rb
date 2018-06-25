@@ -2,8 +2,8 @@ class Streamer
   def initialize(url)
     @url = url
   end
-  
-  def each 
+
+  def each
     client = HTTPClient.new
     client.receive_timeout = 7200
     client.send_timeout = 3600

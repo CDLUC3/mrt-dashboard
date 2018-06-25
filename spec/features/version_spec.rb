@@ -25,7 +25,7 @@ describe 'versions' do
     @version = obj.current_version
 
     @producer_files = Array.new(3) do |i|
-      size = 1024 * (2 ** i)
+      size = 1024 * (2**i)
       create(
         :inv_file,
         inv_object: obj,
@@ -38,7 +38,7 @@ describe 'versions' do
     end
 
     @system_files = Array.new(3) do |i|
-      size = 1024 * (2 ** i)
+      size = 1024 * (2**i)
       create(
         :inv_file,
         inv_object: obj,

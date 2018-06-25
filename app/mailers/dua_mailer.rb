@@ -3,7 +3,7 @@ class DuaMailer < ActionMailer::Base
 
   #:nocov:
   def dua_email(args)
-    @to, @title, @name, @affiliation, @collection, @object, @terms = 
+    @to, @title, @name, @affiliation, @collection, @object, @terms =
       args[:to], args[:title], args[:name], args[:affiliation], args[:collection], args[:object], args[:terms]
     mail(to: args[:to],
          cc: args[:cc],

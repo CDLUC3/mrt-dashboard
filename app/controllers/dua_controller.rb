@@ -2,7 +2,7 @@ class DuaController < ApplicationController
   before_filter :require_user
 
   #:nocov:
-  def index 
+  def index
     object = InvObject.where('inv_objects.ark = ?', params_u(:object)).first
     dua_hash = with_fetched_tempfile(object.dua_uri) { |f| Dua.parse_file(f) }
     if params['commit'] == 'Accept' then
@@ -12,8 +12,8 @@ class DuaController < ApplicationController
       end
       if !params[:user_agent_email].match(/^.+@.+$/)
         flash[:message] = 'You must fill in a valid return email address.' and return
-      end   
-      
+      end
+
       group = object.group
       DuaMailer.dua_email(to: params[:user_agent_email],
                           cc: APP_CONFIG['dua_email_to'] + [dua_hash['Notification'] || ''],
@@ -24,7 +24,7 @@ class DuaController < ApplicationController
                           object: params_u(:object),
                           collection: group.description,
                           terms: dua_hash['Terms']).deliver
-      #user accepted DUA, go ahead and process file/object/version download
+      # user accepted DUA, go ahead and process file/object/version download
       session[:collection_acceptance][group.id] = (dua_hash['Persistence'] || 'single')
       redirect_to mk_merritt_url('d', params[:object], params[:version], params[:file])
     elsif (params[:commit] == 'Do Not Accept') then

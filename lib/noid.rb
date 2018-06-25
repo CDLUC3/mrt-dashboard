@@ -2,14 +2,14 @@ require 'net/http'
 require 'uri'
 
 module Noid
-  class MintException < Exception ; end
-  
+  class MintException < Exception; end
+
   class Minter
-    def initialize(url_string, n_at_once=1, preserve_naan=false)
+    def initialize(url_string, n_at_once = 1, preserve_naan = false)
       @url, @n_at_once, @preserve_naan = URI.parse(url_string), n_at_once, preserve_naan
       @cache = []
     end
-    
+
     def mint
       if @cache.empty? then
         fill_cache

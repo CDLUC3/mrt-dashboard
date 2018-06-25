@@ -12,7 +12,7 @@ class CollectionController < ApplicationController
   def require_request_group
     begin
       @request_group = Group.find(params[:group])
-    rescue LdapMixin::LdapException 
+    rescue LdapMixin::LdapException
       raise ActiveRecord::RecordNotFound
     end
   end
@@ -53,13 +53,13 @@ class CollectionController < ApplicationController
       split(/\s+/).
       map { |t| # special ark handling
         if is_ark?(t) then t[11..-1] else t end
-      }.delete_if { |t| 
+      }.delete_if { |t|
         (t.blank? || t.size < 4) # sql search doesn't work with terms less than 4 characters long
       }
     terms = terms[0..50] # we can't have more than 60 terms, so just drop > 50
 
     if terms.size == 0 then
-      # no real search, just display 
+      # no real search, just display
       @results = InvObject.joins(:inv_collections).
         where('inv_collections.ark = ?', @request_group.ark_id).
         order('inv_objects.modified desc').
@@ -69,7 +69,7 @@ class CollectionController < ApplicationController
     else
       # new, more efficient full text query (thanks Debra)
       tb_count = 0
-      where_clauses = terms.map {|t|
+      where_clauses = terms.map { |t|
 	'? '
       }
       where_clause = '(MATCH (sha_dublinkernels.value) AGAINST ("' + where_clauses.join('') + '"))'

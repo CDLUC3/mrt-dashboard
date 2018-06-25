@@ -14,7 +14,7 @@ module ApplicationHelper
 
   def merritt_time(t)
     t = DateTime.parse(t.to_s) if (t.class != DateTime)
-    t = t.utc if (! t.utc?)
+    t = t.utc if (!t.utc?)
     t.strftime('%Y-%m-%d %I:%M %p UTC')
   end
 
@@ -28,7 +28,7 @@ module ApplicationHelper
     else vals.join('; ') end
   end
 
-  #makes a tip over a question mark item, just pass in the text
+  # makes a tip over a question mark item, just pass in the text
   # requires javascript_include_tag 'wztip/wz_tooltip.js' on the page
   def help_tip(the_text)
     str = <<-eos
@@ -49,12 +49,12 @@ eos
   def user_logged_in?
     return !session[:uid].blank?
   end
-  
+
   # Return true if logged in as guest
   def guest_logged_in?
     user_logged_in? && (session[:uid] == (LDAP_CONFIG['guest_user']))
   end
-  
+
   # Return true if user has choosen a group
   def group_choosen?
     return !session[:group_id].nil?

@@ -1,29 +1,29 @@
 # -*- mode: ruby -*-
 
 xml.tag!('feed', :xmlns => 'http://www.w3.org/2005/Atom',
-                 'xmlns:dct' => 'http://purl.org/dc/terms/') do 
-  xml.tag!('link', 
+                 'xmlns:dct' => 'http://purl.org/dc/terms/') do
+  xml.tag!('link',
            'href' => "/object/recent.atom?collection=#{@collection_ark}&page=#{@objects.current_page}",
-           'rel'  => 'self', 
+           'rel'  => 'self',
            'type' => 'application/atom+xml')
-  xml.tag!('link', 
+  xml.tag!('link',
            'href' => "/object/recent.atom?collection=#{@collection_ark}&page=1",
-           'rel'  => 'first', 
+           'rel'  => 'first',
            'type' => 'application/atom+xml')
-  xml.tag!('link', 
+  xml.tag!('link',
            'href' => "/object/recent.atom?collection=#{@collection_ark}&page=#{@objects.total_pages}",
            'rel'  => 'last',
            'type' => 'application/atom+xml')
   if @objects.next_page
-    xml.tag!('link', 
+    xml.tag!('link',
            'href' => "/object/recent.atom?collection=#{@collection_ark}&page=#{@objects.next_page}",
-           'rel'  => 'next', 
+           'rel'  => 'next',
            'type' => 'application/atom+xml')
   end
   if @objects.previous_page
-    xml.tag!('link', 
+    xml.tag!('link',
              'href' => "/object/recent.atom?collection=#{@collection_ark}&page=#{@objects.previous_page}",
-             'rel'  => 'previous', 
+             'rel'  => 'previous',
              'type' => 'application/atom+xml')
   end
   xml.tag!('id', 'urn:uuid:8dd71209-616a-4723-bfc1-b46572499932')
@@ -41,10 +41,10 @@ xml.tag!('feed', :xmlns => 'http://www.w3.org/2005/Atom',
   @objects.each do |obj|
     xml.tag!('entry') do
       xml.tag!('id', obj.permalink)
-      xml.tag!('link', 
+      xml.tag!('link',
                'rel'  => 'alternate',
                'type' => 'application/zip',
-               'href' => url_for(controller: 'object', 
+               'href' => url_for(controller: 'object',
                                  action: 'download',
                                  object: obj))
       xml.tag!('dct:extent', "#{obj.size}")
@@ -68,8 +68,8 @@ xml.tag!('feed', :xmlns => 'http://www.w3.org/2005/Atom',
       end
       current_version = obj.current_version
       current_version.inv_files.each do |file|
-        xml.tag!('link', 
-                 'href' => url_for(controller: 'file', 
+        xml.tag!('link',
+                 'href' => url_for(controller: 'file',
                                    action: :download,
                                    object: obj,
                                    version: current_version,
@@ -77,7 +77,7 @@ xml.tag!('feed', :xmlns => 'http://www.w3.org/2005/Atom',
                  'rel'  => 'http://purl.org/dc/terms/hasPart',
                  'title' => file.pathname,
                  'length' => file.full_size,
-                 'type'  => file.mime_type)
+                 'type' => file.mime_type)
       end
     end
   end

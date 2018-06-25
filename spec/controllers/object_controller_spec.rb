@@ -34,7 +34,7 @@ describe ObjectController do
 
     @collection = create(:private_collection, name: 'Collection 1', mnemonic: 'collection_1')
     @collection_id = mock_ldap_for_collection(collection)
-    @objects = Array.new(3) {|i| create(:inv_object, erc_who: 'Doe, Jane', erc_what: "Object #{i}", erc_when: "2018-01-0#{i}")}
+    @objects = Array.new(3) { |i| create(:inv_object, erc_who: 'Doe, Jane', erc_what: "Object #{i}", erc_when: "2018-01-0#{i}") }
     collection.inv_objects << objects
 
     @object_ark = objects[0].ark

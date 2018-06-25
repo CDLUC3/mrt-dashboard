@@ -1,7 +1,7 @@
 MrtDashboard::Application.routes.draw do
   resource 'users', as: 'account'
 
-  get('object/recent(.:format)'  => 'object#recent')
+  get('object/recent(.:format)' => 'object#recent')
   get('feeds/recent'  => 'feeds#recent')
   get('show/view/*id' => 'show#view')
   get('show/*id'      => 'show#show')
@@ -14,8 +14,8 @@ MrtDashboard::Application.routes.draw do
        :constraints    => { method: 'POST' })
   get('logout'        => 'user_sessions#logout',
       :as             => :logout)
-  match('guest_login'   => 'user_sessions#guest_login',
-        :as            => :guest_login,
+  match('guest_login' => 'user_sessions#guest_login',
+        :as => :guest_login,
         via: [:get, :post])
 
   # pattern of URL is http://merritt.cdlib.org/mode/collectionid|objectid[/versionid[/fileid]]
@@ -25,8 +25,8 @@ MrtDashboard::Application.routes.draw do
   # d: download
   # u: download (user friendly)
   # m: metadata (landing page)
-  # s: search 
-   
+  # s: search
+
   # m/ark... can route to either collection or object depending on the constraint
   get('m/:group' => 'collection#index',
       :constraints => CollectionConstraint.new)

@@ -15,7 +15,7 @@ module GroupLdap
           Net::LDAP::Filter.eq('objectclass', 'merrittClass')),
         scope: Net::LDAP::SearchScope_SingleLevel
       ).
-        sort_by {|g| g['ou'][0].downcase}
+        sort_by { |g| g['ou'][0].downcase }
     end
 
     def find_users(grp_id)
@@ -24,9 +24,9 @@ module GroupLdap
         filter: Net::LDAP::Filter.eq('objectclass', 'groupOfUniqueNames'),
         scope: Net::LDAP::SearchScope_WholeSubtree
       ).
-        map {|g| g[:uniquemember]}.
+        map { |g| g[:uniquemember] }.
         flatten.uniq.compact.
-        map {|i| i[/^uid=[^,]+/][4..-1]}
+        map { |i| i[/^uid=[^,]+/][4..-1] }
     end
 
     def add(groupid, description, permissions = ['read', 'write'], extra_classes = ['merrittClass'])
@@ -70,7 +70,7 @@ module GroupLdap
       sub_grps = admin_ldap.search(base: ns_dn(groupid), filter: Net::LDAP::Filter.eq('cn', '*'))
       long_user = user_object.ns_dn(userid)
 
-      #go through subgroups for group and see if user is in each
+      # go through subgroups for group and see if user is in each
       perms = []
       sub_grps.each do |grp|
         members = grp[:uniquemember]
@@ -80,7 +80,7 @@ module GroupLdap
     end
 
     def find_groups_for_user(userid, user_object, permission = nil)
-      #these are the permission subgroups so they need to be parsed back up a level
+      # these are the permission subgroups so they need to be parsed back up a level
       filter = if permission.nil? then
         Net::LDAP::Filter.eq('uniquemember', user_object.ns_dn(userid))
       else
@@ -96,21 +96,21 @@ module GroupLdap
     end
 
     def remove_user(userid, groupid, user_object)
-      #get all cn under this ou
+      # get all cn under this ou
       sub_grps = admin_ldap.search(base: ns_dn(groupid), filter: Net::LDAP::Filter.eq('cn', '*'))
       long_user = user_object.ns_dn(userid)
 
-      #go through and delete this user and replace the list of users once deleted
+      # go through and delete this user and replace the list of users once deleted
       sub_grps.each do |grp|
         # TODO: is the user always present? if not, we're replacing when we don't need to
         members = grp[:uniquemember]
-        members.delete_if {|member| member.eql?(long_user)}
+        members.delete_if { |member| member.eql?(long_user) }
         admin_ldap.replace_attribute(grp[:dn], :uniquemember, members)
       end
       true
     end
 
-    #fetches a cn sub object of the group organizational unit (ou)
+    # fetches a cn sub object of the group organizational unit (ou)
     def sub_fetch(group_id, sub_id)
       results = admin_ldap.search(base: ns_dn(group_id), filter: Net::LDAP::Filter.eq('cn', sub_id))
       raise LdapException.new('id does not exist') if results.length < 1

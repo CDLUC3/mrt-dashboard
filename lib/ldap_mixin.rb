@@ -1,12 +1,12 @@
-#mix this in to the user and group ldap modules for common functionality
-#mixed in modules must define ns_dn(id) and obj_filter(id) methods which differ
-#for each (like a Java abstract class) as well as any specific methods for each
+# mix this in to the user and group ldap modules for common functionality
+# mixed in modules must define ns_dn(id) and obj_filter(id) methods which differ
+# for each (like a Java abstract class) as well as any specific methods for each
 
-#require 'lib/noid'
+# require 'lib/noid'
 
 module LdapMixin
 
-  class LdapException < Exception ; end
+  class LdapException < Exception; end
 
   attr_reader :ldap_connect, :minter
   attr_accessor :base
@@ -14,14 +14,14 @@ module LdapMixin
 
   def initialize(init_hash)
 
-    #sample hash
-    #host => "badger.cdlib.org",
-    #port => 1636,
-    #base => 'ou=People,ou=uc3,dc=cdlib,dc=org',
-    #admin_user => 'Directory Manager',
-    #admin_password => 'XXXXXXX',
-    #minter => 'http://noid.cdlib.org/nd/noidu_g9'
-    #connect_timeout => 60
+    # sample hash
+    # host => "badger.cdlib.org",
+    # port => 1636,
+    # base => 'ou=People,ou=uc3,dc=cdlib,dc=org',
+    # admin_user => 'Directory Manager',
+    # admin_password => 'XXXXXXX',
+    # minter => 'http://noid.cdlib.org/nd/noidu_g9'
+    # connect_timeout => 60
 
     host, port, base, admin_user, admin_password, minter, connect_timeout =
       init_hash[:host], init_hash[:port], init_hash[:base],
@@ -58,7 +58,7 @@ module LdapMixin
   end
 
   def add_attribute(id, attribute, value)
-    #@admin_ldap.add_attribute(ns_dn(id), attribute, value)
+    # @admin_ldap.add_attribute(ns_dn(id), attribute, value)
     true_or_exception(admin_ldap.add_attribute(ns_dn(id), attribute, value))
   end
 
@@ -72,7 +72,7 @@ module LdapMixin
 
   def delete_attribute_value(id, attribute, value)
     attr = fetch(id)[attribute]
-    #true_or_exception(@admin_ldap.delete_attribute(id, attribute)) #this causes an error
+    # true_or_exception(@admin_ldap.delete_attribute(id, attribute)) #this causes an error
     attr.delete_if { |item| item == value  }
     replace_attribute(id, attribute, attr) # TODO: should we bother if no change?
   end

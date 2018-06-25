@@ -41,16 +41,16 @@ class ApplicationController < ActionController::Base
   helper :all
 
   # Makes a url of the form /m/ark.../1/file with optionally blank versions and files
-  def mk_merritt_url(letter, object, version=nil, file=nil)
+  def mk_merritt_url(letter, object, version = nil, file = nil)
     object = urlencode(urlunencode(object))
     file = if file.blank? then nil else urlencode(urlunencode(file)) end
-    "/#{letter}/" + [object, version, file].reject{|x| x.blank?}.join('/')
+    "/#{letter}/" + [object, version, file].reject { |x| x.blank? }.join('/')
   end
-  
+
   def redirect_to_latest_version
     if (params[:version].to_i == 0) then
       ark = InvObject.find_by_ark(params_u(:object))
-      if ! ark.nil? then
+      if !ark.nil? then
           latest_version = ark.current_version.number
       else
           latest_version = nil
@@ -66,22 +66,22 @@ class ApplicationController < ActionController::Base
   def has_group_permission?(group, which)
     group.permission(current_uid).member?(which)
   end
-  
-  # Returns true if the current user has which permissions on the object 
+
+  # Returns true if the current user has which permissions on the object
   def has_object_permission_no_embargo?(object, which)
     has_group_permission?(object.inv_collection.group, which)
   end
 
   # Returns true if the current user has which permissions on the object with embargo checking
   def has_object_permission?(object, which)
-    has_group_permission?(object.inv_collection.group, which) && ! in_embargo?(object)
+    has_group_permission?(object.inv_collection.group, which) && !in_embargo?(object)
   end
 
   # Returns true if the user can upload to the session group
   def has_session_group_write_permission?
     has_group_permission?(current_group, 'write')
   end
-    
+
   # Is object in Embargo?
   def in_embargo?(object)
     @in_embargo = true
@@ -100,9 +100,9 @@ class ApplicationController < ActionController::Base
 
   # Return the groups which the user may be a member of
   def available_groups
-    groups = current_user.groups.sort_by{|g| g.description.downcase } || []
+    groups = current_user.groups.sort_by { |g| g.description.downcase } || []
     groups.map do |group|
-      { id: group.id, 
+      { id: group.id,
         description: group.description,
         permissions: group.permission(current_user.login) }
     end
@@ -122,7 +122,7 @@ class ApplicationController < ActionController::Base
         # http basic auth
         auth = request.headers['HTTP_AUTHORIZATION']
         if (!auth.blank? && auth.match(/Basic /)) then
-          (login, password) = Base64.decode64(auth.gsub(/Basic /,'')).split(/:/)
+          (login, password) = Base64.decode64(auth.gsub(/Basic /, '')).split(/:/)
           if User.valid_ldap_credentials?(login, password)
             @current_user = User.find_by_id(login)
           end
@@ -134,7 +134,7 @@ class ApplicationController < ActionController::Base
 
   # either return the uid from the session OR get the user id from
   # basic auth. Will not hit LDAP unless using basic auth
-  def current_uid    
+  def current_uid
     session[:uid] || (!current_user.nil? && current_user.uid)
   end
 
@@ -156,7 +156,7 @@ class ApplicationController < ActionController::Base
   # :nocov:
   # TODO: this doesn't seem to be used anywhere; can we delete it?
   def require_user_or_401
-    unless current_user 
+    unless current_user
       render status: 401, text: '' and return
     end
   end
@@ -212,7 +212,7 @@ class ApplicationController < ActionController::Base
   #  number_to_storage_size(1234567890)    => 1.2 GB
   #  number_to_storage_size(1234567890123) => 1.2 TB
   #  number_to_storage_size(1234567, 2)    => 1.23 MB
-  def number_to_storage_size(size, precision=1)
+  def number_to_storage_size(size, precision = 1)
     size = Kernel.Float(size)
     case
     when size == 1 then '1 Byte'
@@ -242,7 +242,7 @@ class ApplicationController < ActionController::Base
     open(*args) do |data|
       tmp_file = Tempfile.new('mrt_http')
         begin
-          while (!(buff = data.read(4096)).nil?)do 
+          while (!(buff = data.read(4096)).nil?) do
             tmp_file << buff
           end
           tmp_file.rewind
@@ -273,11 +273,11 @@ class ApplicationController < ActionController::Base
       per_page: 10
     }
   end
-  
-  def stream_response(url, disposition, filename, mediatype, length=nil)
+
+  def stream_response(url, disposition, filename, mediatype, length = nil)
     response.headers['Content-Type'] = mediatype
     response.headers['Content-Disposition'] = "#{disposition}; filename=\"#{filename}\""
-    if !length.nil? then 
+    if !length.nil? then
       response.headers['Content-Length'] = length.to_s
     end
     response.headers['Last-Modified'] = Time.now.httpdate

@@ -17,7 +17,7 @@ class Group
   def to_param
     self.id
   end
-  
+
   def self.find_all
     LDAP.find_all
   end
@@ -27,11 +27,11 @@ class Group
   end
 
   def self.find_batch(ids)
-    Group::LDAP.fetch_batch(ids).map{|l| self.make_from_ldap(l)}
+    Group::LDAP.fetch_batch(ids).map { |l| self.make_from_ldap(l) }
   end
 
   def self.find(id)
-    #fetch by groupid, but otherwise, fall back to arkid
+    # fetch by groupid, but otherwise, fall back to arkid
     ldap_group = begin
                    Group::LDAP.fetch(id)
                  rescue LdapMixin::LdapException => ex
@@ -39,7 +39,7 @@ class Group
                  end
     return self.make_from_ldap(ldap_group)
   end
-  
+
   # permissions are returned as an array like ['read','write'], maybe more in the future
   def permission(userid)
     return Rails.cache.fetch("permissions_#{userid}_#{self.id}", expires_in: 10.minutes) do
@@ -66,7 +66,7 @@ class Group
       InvObject.connection.select_all("SELECT COUNT(DISTINCT(`inv_objects`.id)) as `count` FROM `inv_objects` INNER JOIN `inv_collections_inv_objects` ON `inv_objects`.id = `inv_collections_inv_objects`.inv_object_id WHERE ((`inv_collections_inv_objects`.inv_collection_id = #{self.inv_collection_id}))")[0]['count'].to_i
     end
   end
-  
+
   def version_count
     if self.inv_collection_id.nil? then
       0
@@ -87,14 +87,14 @@ class Group
     Rails.logger.info('Im in the total_size method of group model')
     if self.inv_collection.nil? then
       0
-    else    
+    else
       InvFile.connection.select_all("SELECT SUM(full_size) AS `total_size` FROM `inv_files` INNER JOIN `inv_collections_inv_objects` ON `inv_collections_inv_objects`.`inv_object_id` = `inv_files`.`inv_object_id` WHERE (`inv_collections_inv_objects`.inv_collection_id = #{self.inv_collection_id})")[0]['total_size'].to_i
     end
   end
 
   # TODO: figure out whether we still need this & get rid of it if not
   # :nocov:
-  #get all groups and email addresses of members, this is a stopgap for our own use
+  # get all groups and email addresses of members, this is a stopgap for our own use
   def self.show_emails
     out_str = ''
     Group.find_all.each do |grp|

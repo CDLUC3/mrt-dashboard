@@ -3,7 +3,7 @@ def load_config(name)
   if !File.exists?(path) then
     raise Exception.new("Config file #{name} not found!")
   elsif File.size(path) == 0 then
-    raise Exception.new("Config file #{name} is empty!")    
+    raise Exception.new("Config file #{name} is empty!")
   else
     conf = YAML.load_file(path)
     conf_env = conf[Rails.env]

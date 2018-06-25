@@ -1,4 +1,4 @@
-class User 
+class User
   LDAP = UserLdap::Server.
     new({ host: LDAP_CONFIG['host'],
           port: LDAP_CONFIG['port'],
@@ -24,14 +24,14 @@ class User
   end
 
   def method_missing(meth, *args, &block)
-    #simple code to read user information with methods that resemble activerecord slightly
+    # simple code to read user information with methods that resemble activerecord slightly
     if !AUTHLOGIC_MAP[meth.to_s].nil? then
       return array_to_value(@user[AUTHLOGIC_MAP[meth.to_s]])
     end
     array_to_value(@user[meth.to_s])
   end
- 
-  def groups(permission=nil)
+
+  def groups(permission = nil)
     grp_ids = Group::LDAP.find_groups_for_user(self.login, User::LDAP, permission)
     Group.find_batch(grp_ids)
   end
@@ -42,8 +42,8 @@ class User
 
   # TODO: figure out whether we still need this & get rid of it if not
   # :nocov:
-  #these would be LDAP attributes, not database ones.  maybe they should sync up more to
-  #be more active-record-like, but it seems a lot of work to make it completely match AR
+  # these would be LDAP attributes, not database ones.  maybe they should sync up more to
+  # be more active-record-like, but it seems a lot of work to make it completely match AR
   def set_attrib(attribute, value)
     LDAP_USER.replace_attribute(self.login, attribute, value)
   end
@@ -62,7 +62,7 @@ class User
   # :nocov:
   def single_value(record, field)
     if record[field].nil? or record[field][0].nil? or record[field][0].length < 1 then
-      return nil 
+      return nil
     else
       return record[field][0]
     end

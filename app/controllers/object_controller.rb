@@ -38,7 +38,7 @@ class ObjectController < ApplicationController
   protect_from_forgery except: [:ingest, :mint, :update]
 
   def load_object
-    @object = InvObject.where('ark = ?', params_u(:object)).includes(:inv_collections, inv_versions: [:inv_files]).first 
+    @object = InvObject.where('ark = ?', params_u(:object)).includes(:inv_collections, inv_versions: [:inv_files]).first
     raise ActiveRecord::RecordNotFound if @object.nil?
   end
 
@@ -48,7 +48,7 @@ class ObjectController < ApplicationController
     else
       if (!params[:file].respond_to? :tempfile) then
         render(status: 400, text: "Bad file parameter.\n") and return
-      elsif !current_user.groups('write').any? {|g| g.submission_profile == params[:profile]} then
+      elsif !current_user.groups('write').any? { |g| g.submission_profile == params[:profile] } then
         render(status: 404, text: '') and return
       else
         ingest_args = {
@@ -60,12 +60,12 @@ class ObjectController < ApplicationController
           'filename'          => (params[:filename] || params[:file].original_filename),
           'localIdentifier'   => params[:localIdentifier],
           'notification'      => params[:notification],
-          'notificationFormat'      => params[:notificationFormat],
+          'notificationFormat' => params[:notificationFormat],
           'primaryIdentifier' => params[:primaryIdentifier],
           'profile'           => params[:profile],
           'note'              => params[:note],
           'responseForm'      => params[:responseForm],
-          'DataCite.resourceType'      => params['DataCite.resourceType'],
+          'DataCite.resourceType' => params['DataCite.resourceType'],
           'DC.contributor'    => params['DC.contributor'],
           'DC.coverage'       => params['DC.coverage'],
           'DC.creator'        => params['DC.creator'],
@@ -86,7 +86,7 @@ class ObjectController < ApplicationController
           'synchronousMode'   => params[:synchronousMode],
           'retainTargetURL'   => params[:retainTargetURL],
           'type'              => params[:type]
-        }.reject{|k, v| v.blank? }
+        }.reject { |k, v| v.blank? }
         resp = mk_httpclient.post(APP_CONFIG['ingest_service'], ingest_args, { 'Content-Type' => 'multipart/form-data' })
         render status: resp.status, content_type: resp.headers[:content_type], text: resp.body
       end
@@ -99,7 +99,7 @@ class ObjectController < ApplicationController
     else
       if (!params[:file].respond_to? :tempfile) then
         render(status: 400, text: "Bad file parameter.\n") and return
-      elsif !current_user.groups('write').any? {|g| g.submission_profile == params[:profile]} then
+      elsif !current_user.groups('write').any? { |g| g.submission_profile == params[:profile] } then
         render(status: 404, text: '') and return
       else
         ingest_args = {
@@ -111,12 +111,12 @@ class ObjectController < ApplicationController
           'filename'          => (params[:filename] || params[:file].original_filename),
           'localIdentifier'   => params[:localIdentifier],
           'notification'      => params[:notification],
-          'notificationFormat'      => params[:notificationFormat],
+          'notificationFormat' => params[:notificationFormat],
           'primaryIdentifier' => params[:primaryIdentifier],
           'profile'           => params[:profile],
           'note'              => params[:note],
           'responseForm'      => params[:responseForm],
-          'DataCite.resourceType'      => params['DataCite.resourceType'],
+          'DataCite.resourceType' => params['DataCite.resourceType'],
           'DC.contributor'    => params['DC.contributor'],
           'DC.coverage'       => params['DC.coverage'],
           'DC.creator'        => params['DC.creator'],
@@ -137,26 +137,26 @@ class ObjectController < ApplicationController
           'synchronousMode'   => params[:synchronousMode],
           'retainTargetURL'   => params[:retainTargetURL],
           'type'              => params[:type]
-        }.reject{|k, v| v.blank? }
+        }.reject { |k, v| v.blank? }
         resp = mk_httpclient.post(APP_CONFIG['ingest_service_update'], ingest_args, { 'Content-Type' => 'multipart/form-data' })
         render status: resp.status, content_type: resp.headers[:content_type], text: resp.body
       end
-    end  
+    end
   end
-  
+
   def mint
     if !current_user then
       render status: 401, text: '' and return
     else
-      if !current_user.groups('write').any? {|g| g.submission_profile == params[:profile]} then
+      if !current_user.groups('write').any? { |g| g.submission_profile == params[:profile] } then
         render(status: 404, text: '') and return
       else
         mint_args = {
           'profile'           => params[:profile],
-          'erc'              =>  params[:erc] ,
-          'file'             =>  Tempfile.new('restclientbug'), 
+          'erc'              =>  params[:erc],
+          'file'             =>  Tempfile.new('restclientbug'),
           'responseForm'     => params[:responseForm]
-        }.reject{|k, v| v.blank? }
+        }.reject { |k, v| v.blank? }
         resp = mk_httpclient.post(APP_CONFIG['mint_service'], mint_args, { 'Content-Type' => 'multipart/form-data' })
         render status: resp.status, content_type: resp.headers[:content_type], text: resp.body
       end
@@ -167,21 +167,21 @@ class ObjectController < ApplicationController
   end
 
   def download
-    stream_response("#{@object.bytestream_uri}?t=zip", 
+    stream_response("#{@object.bytestream_uri}?t=zip",
                     'attachment',
                     "#{Orchard::Pairtree.encode(@object.ark.to_s)}_object.zip",
                     'application/zip')
   end
 
   def downloadUser # TODO: rename to downloadProducerFiles or similar
-    stream_response("#{@object.bytestream_uri2}?t=zip", 
+    stream_response("#{@object.bytestream_uri2}?t=zip",
                     'attachment',
                     "#{Orchard::Pairtree.encode(@object.ark.to_s)}_object.zip",
                     'application/zip')
   end
 
   def downloadManifest
-    stream_response("#{@object.bytestream_uri3}", 
+    stream_response("#{@object.bytestream_uri3}",
                     'attachment',
                     "#{Orchard::Pairtree.encode(@object.ark.to_s)}",
                     'text/xml')
@@ -217,7 +217,7 @@ class ObjectController < ApplicationController
         'date'              => params[:date],
         'localIdentifier'   => params[:local_id], # local identifier necessary, nulls?
         'responseForm'      => 'xml'
-      }.reject{|key, value| value.blank? }
+      }.reject { |key, value| value.blank? }
       resp = mk_httpclient.post(APP_CONFIG['ingest_service_update'], ingest_params)
       @doc = Nokogiri::XML(resp.content) do |config|
         config.strict.noent.noblanks
@@ -254,7 +254,7 @@ class ObjectController < ApplicationController
       format.atom
     end
   end
-  
+
   private
   def mk_httpclient
     client = HTTPClient.new

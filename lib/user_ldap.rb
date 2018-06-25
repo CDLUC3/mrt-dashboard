@@ -1,6 +1,6 @@
 require 'rubygems'
 require 'net/ldap'
-#require 'lib/ldap_mixin'
+# require 'lib/ldap_mixin'
 
 module UserLdap
   class Server
@@ -15,13 +15,13 @@ module UserLdap
           Net::LDAP::Filter.eq('objectclass', 'merrittUser')),
         scope: Net::LDAP::SearchScope_SingleLevel
       ).
-        sort_by {|user| user['cn'][0].downcase}
+        sort_by { |user| user['cn'][0].downcase }
     end
 
     def add(userid, password, firstname, lastname, email)
-      #probably required attributes cn (common name, first + last), displayName,  dn (distinguished name),
-      #givenName (first name), sn (surname, last name), name = cn, displayName, uid,
-      #userPassword, mail, title, postalAddress, initials
+      # probably required attributes cn (common name, first + last), displayName,  dn (distinguished name),
+      # givenName (first name), sn (surname, last name), name = cn, displayName, uid,
+      # userPassword, mail, title, postalAddress, initials
       attr = {
         objectclass: ['inetOrgPerson', 'merrittUser'],
         uid: userid,

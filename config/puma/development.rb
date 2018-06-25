@@ -57,7 +57,7 @@ threads 0, threads_count
 #
 # The default is "tcp://0.0.0.0:9292".
 #
-port        ENV['PORT']     || 26181
+port ENV['PORT'] || 26181
 # bind tcp://0.0.0.0:26181
 
 # How many worker processes to run.  Typically this is set to

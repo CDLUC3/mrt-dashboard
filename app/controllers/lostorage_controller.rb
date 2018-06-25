@@ -4,17 +4,17 @@ require 'tempfile'
 class LostorageController < ApplicationController
   before_filter :require_user
 
-  def index 
+  def index
     if params[:commit] == 'Submit' then
       if params[:user_agent_email].blank? then
         flash[:message] = 'Please enter the required fields' and return
       elsif !params[:user_agent_email].match(/^.+@.+$/) then
         flash[:message] = 'You must fill in a valid return email address.' and return
-      else 
+      else
         if post_los_email(params[:user_agent_email]) then
           flash[:message] = 'Processing of large object compression has begun.  Please look for an email in your inbox'
         else
-          #TODO: flash error messages are not displaying properly
+          # TODO: flash error messages are not displaying properly
           flash[:error] = 'Error processing large object in storage service.  Please contact uc3@ucop.edu'
         end
         redirect_to mk_merritt_url('m', params[:object], params[:version])
@@ -23,7 +23,7 @@ class LostorageController < ApplicationController
       redirect_to mk_merritt_url('m', params[:object], params[:version])
     end
   end
-  
+
   def direct
     # Check if a user friendly download request (default: yes)
     if params[:userFriendly].blank? then
@@ -58,8 +58,8 @@ class LostorageController < ApplicationController
     @version_number = params[:version]
 
     # Custom subject?
-    if (@losSubject.blank?) 
-       @losSubject = "Merritt #{@container_type.capitalize} Download Processing Completed " 
+    if (@losSubject.blank?)
+       @losSubject = "Merritt #{@container_type.capitalize} Download Processing Completed "
     end
 
     # Custom body?
@@ -70,14 +70,14 @@ class LostorageController < ApplicationController
 
     end
 
-    #construct the async storage URL using the object's state storage URL-  Sub async for state in URL.
+    # construct the async storage URL using the object's state storage URL-  Sub async for state in URL.
     email_xml_file = build_email_xml(@losFrom, to_addr, @losSubject, @losBody)
 
     userFriendly = params[:userFriendly].downcase
-    postURL = @object.bytestream_uri.to_s.gsub(/content/,'async')
+    postURL = @object.bytestream_uri.to_s.gsub(/content/, 'async')
     if (userFriendly.match('true')) then
 	# user friendly download
-	postURL = @object.bytestream_uri2.to_s.gsub(/producer/,'producerasync')
+	postURL = @object.bytestream_uri2.to_s.gsub(/producer/, 'producerasync')
     end
 
     resp = HTTPClient.new.post(postURL,
@@ -98,7 +98,7 @@ class LostorageController < ApplicationController
       # Custom from?
       if (from_addr.blank?) then
 	xml.from(APP_CONFIG['lostorage_email_from'])
-      else 
+      else
 	xml.from(from_addr)
       end
       xml.to(to_addr)
@@ -108,7 +108,7 @@ class LostorageController < ApplicationController
       xml.subject(subject)
       xml.msg(body)
     end
-    tempfile.rewind  #POST request needs this done to process the file properly as an argument
+    tempfile.rewind  # POST request needs this done to process the file properly as an argument
     return tempfile
   end
 end

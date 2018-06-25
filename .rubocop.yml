@@ -1,6 +1,12 @@
 AllCops:
   # Suppress complaints about post-2.0 syntax
   TargetRubyVersion: 2.4
+  # Exclude generated files
+  Exclude:
+    - 'bin/**/*'
+    - 'db/**/*'
+    - 'script/**/*'
+    - 'vendor/**/*'
 
 # Allow one line around block body (Layout/EmptyLines will still disallow two or more)
 Layout/EmptyLinesAroundBlockBody:

@@ -29,8 +29,8 @@ class VersionController < ApplicationController
       # if size is > max_archive_size, redirect to have user enter email for asynch
       # compression (skipping streaming)
       redirect_to(controller: 'lostorage',
-                  action: 'index', 
-                  object: @version.inv_object, 
+                  action: 'index',
+                  object: @version.inv_object,
                   version: @version)
     end
   end

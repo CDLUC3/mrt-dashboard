@@ -66,10 +66,10 @@ describe 'profile' do
     end
 
     it 'should not allow the user to clear required fields' do
-      UserController::REQUIRED.keys.each {|field| fill_in(field, with: '')}
+      UserController::REQUIRED.keys.each { |field| fill_in(field, with: '') }
       expect(User::LDAP).not_to receive(:replace_attribute)
       click_button 'Save changes'
-      UserController::REQUIRED.values.each {|label| expect(page).to have_content(label)}
+      UserController::REQUIRED.values.each { |label| expect(page).to have_content(label) }
     end
 
     it 'should allow the user to change their password' do

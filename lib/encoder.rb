@@ -6,4 +6,4 @@ module Encoder
   def urlunencode(item)
     URI.unescape(item)
   end
-end 
+end
