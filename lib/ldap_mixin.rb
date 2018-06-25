@@ -6,7 +6,7 @@
 
 module LdapMixin
 
-  class LdapException < Exception; end
+  class LdapException < RuntimeError; end
 
   attr_reader :ldap_connect, :minter
   attr_accessor :base
@@ -115,7 +115,7 @@ module LdapMixin
   def record_exists?(id)
     fetch(id)
     true
-  rescue LdapMixin::LdapException => ex
+  rescue LdapMixin::LdapException
     return false
   end
 

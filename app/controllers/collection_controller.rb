@@ -61,8 +61,7 @@ class CollectionController < ApplicationController
         .paginate(paginate_args)
     else
       # new, more efficient full text query (thanks Debra)
-      tb_count = 0
-      where_clauses = terms.map { |t| '? ' }
+      where_clauses = terms.map { |_t| '? ' }
       where_clause = '(MATCH (sha_dublinkernels.value) AGAINST ("' + where_clauses.join('') + '"))'
 
       ark_id = @request_group.ark_id

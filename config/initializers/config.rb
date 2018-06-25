@@ -1,6 +1,6 @@
 def load_config(name)
   path = File.join(Rails.root, 'config', name)
-  raise Exception, "Config file #{name} not found!" unless File.exists?(path)
+  raise Exception, "Config file #{name} not found!" unless File.exist?(path)
   raise Exception, "Config file #{name} is empty!" if File.size(path) == 0
 
   conf     = YAML.load_file(path)

@@ -1,7 +1,5 @@
 require 'socket'
 
-rails_env = ENV['RAILS_ENV'] || 'production'
-
 # 5 workers and 1 master
 worker_processes 2
 

@@ -24,7 +24,7 @@ class User
   end
 
   # rubocop:disable Style/MethodMissingSuper
-  def method_missing(meth, *args, &block)
+  def method_missing(meth, *_args)
     # simple code to read user information with methods that resemble activerecord slightly
     authlogic_key = AUTHLOGIC_MAP[meth.to_s]
     return array_to_value(@user[authlogic_key]) if authlogic_key
@@ -32,7 +32,7 @@ class User
   end
   # rubocop:enable Style/MethodMissingSuper
 
-  def respond_to_missing?(*args)
+  def respond_to_missing?(*_args)
     true
   end
 
@@ -57,7 +57,7 @@ class User
   def self.valid_ldap_credentials?(uid, password)
     begin
       res = User::LDAP.authenticate(uid, password)
-    rescue LdapMixin::LdapException => ex
+    rescue LdapMixin::LdapException
       return false
     end
     res && true

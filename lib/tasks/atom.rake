@@ -75,12 +75,14 @@ def process_atom_feed(submitter, profile, collection, feeddatefile, starting_poi
       sleep(DELAY)
     end
 
+    doc = nil
+
     (0..2).each do |_| # TODO: why three times?
       begin
         p = open(next_page, OPEN_URI_ARGS)
         if p.status.first == '404'
           puts "Page not found, exiting... #{next_page}"
-          return
+          return nil
         end
         doc = Nokogiri::XML(p)
         break
@@ -93,7 +95,7 @@ def process_atom_feed(submitter, profile, collection, feeddatefile, starting_poi
 
     # Has feed been updated?
     feedUpdated = doc.at_xpath('//xmlns:updated').text
-    if File.exists?(feeddatefile)
+    if File.exist?(feeddatefile)
       feeddate = `cat #{feeddatefile}`
     else
       puts "Feed date file does not exist: #{feeddatefile}"
@@ -115,7 +117,8 @@ def process_atom_feed(submitter, profile, collection, feeddatefile, starting_poi
       if merrittCollectionLocalidElement.empty
         merrittCollectionLocalidElement.empty = 'atom:id' # default
       end
-    rescue Exception => ex
+    rescue Exception
+      # TODO: why don't we care?
     end
     puts "Processing merritt collection #{merrittCollection}" unless merrittCollection.nil?
     puts 'Found merritt collection credentials' unless merrittCollectionCredentials.nil?
@@ -132,22 +135,22 @@ def process_atom_feed(submitter, profile, collection, feeddatefile, starting_poi
         # DC metadata
         begin
           local_id = entry.at_xpath(merrittCollectionLocalidElement.to_s).text
-        rescue Exception => ex
-          # ex.backtrace
+        rescue Exception
+          # TODO: why don't we care?
         end
         begin
           dc_title = entry.at_xpath('dc:title').text
-        rescue Exception => ex
+        rescue Exception
           dc_title = nil
         end
         begin
           dc_date = entry.at_xpath('dc:date').text
-        rescue Exception => ex
+        rescue Exception
           dc_date = nil
         end
         begin
           dc_creator = entry.at_xpath('dc:creator').text
-        rescue Exception => ex
+        rescue Exception
           dc_creator = nil
         end
         creator = entry.xpath('atom:author', NS).map do |au|
@@ -161,10 +164,10 @@ def process_atom_feed(submitter, profile, collection, feeddatefile, starting_poi
         puts "Processing Updated:	#{updated}"
         p = up_to_date?(local_id, collection, updated, feeddate)
 
-        return if p.nil?
+        return nil if p.nil?
 
         # advance to next
-        next if p
+        next if p # TODO: is code below this ever going to get called?
 
         wait = true
 
@@ -222,7 +225,7 @@ def process_atom_feed(submitter, profile, collection, feeddatefile, starting_poi
                                 # workaround for funky site
                                 prefetch_options: { 'Accept' => 'text/html, */*' })
         end
-        resp = iobject.start_ingest(client, profile, submitter)
+        iobject.start_ingest(client, profile, submitter)
       # puts "User Agent: #{resp.user_agent}"
       # puts "Batch ID: #{resp.batch_id}"
       # puts "Submission Date: #{resp.submission_date}"
@@ -279,7 +282,8 @@ ensure
     begin
       file = File.open(merrittCollectionLastFeedUpdatedFile.to_s, 'w')
       file.write(feedUpdated.to_s)
-    rescue IOError => e
+    rescue IOError
+      # TODO: why don't we care?
     ensure
       file.close unless file.nil?
     end
@@ -288,6 +292,7 @@ ensure
   begin
     server.join_server
   rescue StandardError
+    # TODO: why don't we care?
   end
 end
 
@@ -295,7 +300,7 @@ end
 # e.g. rake "atom:update[http://opencontext.org/all/.atom, mreyes/Mark Reyes, ucb_open_context_content, ark:/99999/abcdefhi, <DATE>]"
 namespace :atom do
   desc 'Generic ATOM to Merritt processor'
-  task :update, %i[root user profile collection feeddatefile] => :environment do |cmd, args|
+  task :update, %i[root user profile collection feeddatefile] => :environment do |_cmd, args|
     process_atom_feed(args[:user], args[:profile], args[:collection], args[:feeddatefile], args[:root])
   end
 end

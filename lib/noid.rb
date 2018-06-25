@@ -2,7 +2,7 @@ require 'net/http'
 require 'uri'
 
 module Noid
-  class MintException < Exception; end
+  class MintException < RuntimeError; end
 
   class Minter
     def initialize(url_string, n_at_once = 1, preserve_naan = false)

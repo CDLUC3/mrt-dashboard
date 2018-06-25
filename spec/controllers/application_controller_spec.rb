@@ -156,7 +156,7 @@ describe ApplicationController do
           @data = data
         end
 
-        def open(*rest, &block)
+        def open(*_rest)
           io = StringIO.new(@data, 'r')
           return io unless block_given?
           yield io

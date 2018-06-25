@@ -33,7 +33,7 @@ class Group
     # fetch by groupid, but otherwise, fall back to arkid
     ldap_group = begin
                    Group::LDAP.fetch(id)
-                 rescue LdapMixin::LdapException => ex
+                 rescue LdapMixin::LdapException
                    Group::LDAP.fetch_by_ark_id(id)
                  end
     make_from_ldap(ldap_group)
@@ -107,8 +107,6 @@ class Group
     out_str
   end
   # :nocov:
-
-  private
 
   def self.make_from_ldap(ldap_group)
     g = new

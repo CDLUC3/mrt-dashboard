@@ -5,7 +5,7 @@ class Dua
     rx = /(\w+)\s*:\s*(.+)/
     a = []
     File.open(dua_file.path) do |f|
-      while line = f.gets
+      while (line = f.gets)
         unless rx.match(line).nil?
           a << $LAST_MATCH_INFO.captures.map(&:strip) # clean up the entries
         end

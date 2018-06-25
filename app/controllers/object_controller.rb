@@ -139,7 +139,7 @@ class ObjectController < ApplicationController
       'erc'          => params[:erc],
       'file'         => Tempfile.new('restclientbug'),
       'responseForm' => params[:responseForm]
-    }.reject { |k, v| v.blank? }
+    }.reject { |_k, v| v.blank? }
     resp = mk_httpclient.post(APP_CONFIG['mint_service'], mint_args, { 'Content-Type' => 'multipart/form-data' })
     render status: resp.status, content_type: resp.headers[:content_type], text: resp.body
   end
@@ -197,7 +197,7 @@ class ObjectController < ApplicationController
         'date'              => params[:date],
         'localIdentifier'   => params[:local_id], # local identifier necessary, nulls?
         'responseForm'      => 'xml'
-      }.reject { |key, value| value.blank? }
+      }.reject { |_key, value| value.blank? }
       resp = mk_httpclient.post(APP_CONFIG['ingest_service_update'], ingest_params)
       @doc = Nokogiri::XML(resp.content) do |config|
         config.strict.noent.noblanks
