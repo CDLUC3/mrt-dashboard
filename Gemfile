@@ -6,10 +6,9 @@ gem 'mysql2', '~> 0.4.0' # TODO: update to 0.5 once we're on a Rails that suppor
 gem 'multi_json'
 
 gem "httpclient", "~> 2.7.0"
-gem "eco_exception_notification", # TODO: find a released version we can use
-    :git => "git://github.com/chrisfinne/eco_exception_notification.git"
+gem 'exception_notification', '~> 4.2'
 gem "net-ldap", "~> 0.16"
-gem "nokogiri"
+gem "nokogiri", "~> 1.8", ">= 1.8.2"
 gem "puma"
 gem "will_paginate"
 gem "rack-cache"
@@ -21,6 +20,7 @@ gem 'uuidtools'
 gem 'thin'
 gem 'jquery-rails'
 gem 'capistrano', '~> 3.4.1'
+gem 'sprockets', '~> 3.7.2'
 
 group :development do
   gem 'web-console', '~> 2.0'
