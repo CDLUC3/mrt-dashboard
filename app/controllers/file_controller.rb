@@ -11,12 +11,9 @@ class FileController < ApplicationController
   end
 
   before_filter(only: [:download]) do
-    #:nocov:
-    check_dua(@file.inv_version.inv_object,
-              { object: @file.inv_version.inv_object,
-                version: @file.inv_version,
-                file: @file })
-    #:nocov:
+    version = @file.inv_version
+    obj = version.inv_object
+    check_dua(obj, { object: obj, version: version, file: @file })
   end
 
   def download

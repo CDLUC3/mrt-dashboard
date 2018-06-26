@@ -8,7 +8,9 @@ module Rack
 end
 
 class ApplicationController < ActionController::Base
+  include DuaMixin
   include Encoder
+  include NumberMixin
 
   helper_method(
     :available_groups,
@@ -107,20 +109,19 @@ class ApplicationController < ActionController::Base
   # user supplied HTTP basic auth info, uses that. Returns nil if
   # there is no session user and HTTP basic auth did not succeed
   def current_user
-    unless defined?(@current_user)
-      if !session[:uid].nil?
-        # normal form login
-        @current_user = User.find_by_id(session[:uid])
-      else
-        # http basic auth
-        auth = request.headers['HTTP_AUTHORIZATION']
-        if !auth.blank? && auth.match(/Basic /)
-          (login, password) = Base64.decode64(auth.gsub(/Basic /, '')).split(/:/)
-          @current_user = User.find_by_id(login) if User.valid_ldap_credentials?(login, password)
-        end
-      end
-    end
-    @current_user
+    @current_user ||= if session[:uid]
+                        User.find_by_id(session[:uid])
+                      else
+                        user_from_auth_header(request.headers['HTTP_AUTHORIZATION'])
+                      end
+  end
+
+  def user_from_auth_header(auth_header)
+    return unless auth_header
+    return unless auth_header.match?(/Basic /)
+    (login, password) = Base64.decode64(auth_header.gsub(/Basic /, '')).split(/:/)
+    return unless User.valid_ldap_credentials?(login, password)
+    User.find_by_id(login)
   end
 
   # either return the uid from the session OR get the user id from
@@ -183,35 +184,6 @@ class ApplicationController < ActionController::Base
     @max_download_size_pretty ||= number_to_storage_size(APP_CONFIG['max_download_size'])
   end
 
-  # Modeled after the rails helper that does all sizes in binary representations
-  # but gives sizes in decimal instead with 1kB = 1,000 Bytes, 1 MB = 1,000,000 bytes
-  # etc.
-  #
-  # Formats the bytes in +size+ into a more understandable representation.
-  # Useful for reporting file sizes to users. This method returns nil if
-  # +size+ cannot be converted into a number. You can change the default
-  # precision of 1 in +precision+.
-  #
-  #  number_to_storage_size(123)           => 123 Bytes
-  #  number_to_storage_size(1234)          => 1.2 kB
-  #  number_to_storage_size(12345)         => 12.3 kB
-  #  number_to_storage_size(1234567)       => 1.2 MB
-  #  number_to_storage_size(1234567890)    => 1.2 GB
-  #  number_to_storage_size(1234567890123) => 1.2 TB
-  #  number_to_storage_size(1234567, 2)    => 1.23 MB
-  def number_to_storage_size(size, precision = 1)
-    size = Kernel.Float(size)
-    if size == 1 then '1 Byte'
-    elsif size < 10**3 then format('%d B', size)
-    elsif size < 10**6 then format("%.#{precision}f KB", (size / 10.0**3))
-    elsif size < 10**9 then format("%.#{precision}f MB", (size / 10.0**6))
-    elsif size < 10**12 then format("%.#{precision}f GB", (size / 10.0**9))
-    else format("%.#{precision}f TB", (size / 10.0**12))
-    end.sub('.0', '')
-  rescue StandardError
-    nil
-  end
-
   def store_location
     session[:return_to] = request.fullpath
   end
@@ -243,15 +215,6 @@ class ApplicationController < ActionController::Base
   end
   # rubocop:enable Security/Open
 
-  #:nocov:
-  # returns the response of the HTTP request for the DUA URI
-  def process_dua_request(uri)
-    http = Net::HTTP.new(uri.host, uri.port)
-    uri_response = http.request(Net::HTTP::Get.new(uri.request_uri))
-    (uri_response.class == Net::HTTPOK)
-  end
-  #:nocov:
-
   def params_u(param)
     urlunencode(params[param])
   end
@@ -267,24 +230,6 @@ class ApplicationController < ActionController::Base
     response.headers['Last-Modified'] = Time.now.httpdate
     self.response_body = Streamer.new(url)
   end
-
-  #:nocov:
-  def check_dua(object, redirect_args)
-    # bypass DUA processing for python scripts - indicated by special param
-    return if params[:blue]
-
-    session[:collection_acceptance] ||= Hash.new(false)
-    # check if user already saw DUA and accepted: if so, return
-    if session[:collection_acceptance][object.group.id]
-      # clear out acceptance if it does not have session persistence
-      session[:collection_acceptance].delete(object.group.id) if session[:collection_acceptance][object.group.id] != 'session'
-      return
-    elsif object.dua_exists? && process_dua_request(object.dua_uri)
-      # if the DUA for this collection exists, display DUA to user for acceptance before displaying file
-      redirect_to({ controller: 'dua', action: 'index' }.merge(redirect_args)) && return
-    end
-  end
-  #:nocov:
 
   def is_ark?(str)
     str.match?(%r{ark:/[0-9a-zA-Z]{1}[0-9]{4}/[a-z0-9+]})
