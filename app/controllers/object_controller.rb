@@ -179,6 +179,7 @@ class ObjectController < ApplicationController
     end
   end
 
+  # rubocop:disable Lint/RescueException
   def upload
     if params[:file].nil?
       flash[:error] = 'You must choose a filename to submit.'
@@ -204,7 +205,7 @@ class ObjectController < ApplicationController
       end
       @batch_id = @doc.xpath('//bat:batchState/bat:batchID')[0].child.text
       @obj_count = @doc.xpath('//bat:batchState/bat:jobStates').length
-    rescue Exception => ex
+    rescue Exception => ex # TODO: should this be StandardError?
       # see if we can parse the error from ingest, if not then unknown error
       raise unless ex.respond_to?(:response)
       @doc = Nokogiri::XML(ex.response) do |config|
@@ -215,6 +216,7 @@ class ObjectController < ApplicationController
       render action: 'upload_error'
     end
   end
+  # rubocop:enable Lint/RescueException
 
   def recent
     @collection_ark = params[:collection]

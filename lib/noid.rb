@@ -19,6 +19,7 @@ module Noid
 
     private
 
+    # rubocop:disable Lint/RescueException
     def fill_cache
       req = Net::HTTP::Get.new(@url.path + '?mint+' + @n_at_once.to_s)
       resp = Net::HTTP.start(@url.host, @url.port) do |http|
@@ -40,5 +41,7 @@ module Noid
     rescue Exception # TODO: should this be StandardError (or just 'rescue')?
       raise MintException, "Can't get ID; not a NOID server?"
     end
+    # rubocop:enable Lint/RescueException
+
   end
 end
