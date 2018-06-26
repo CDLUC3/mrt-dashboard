@@ -99,4 +99,23 @@ module IngestMixin
   end
   # rubocop:enable Metrics/MethodLength, Metrics/AbcSize
 
+  # rubocop:disable Metrics/AbcSize
+  def post_upload
+    ingest_params = upload_params_from(params, current_user, current_group)
+    resp          = mk_httpclient.post(APP_CONFIG['ingest_service_update'], ingest_params)
+    @doc          = Nokogiri::XML(resp.content) { |config| config.strict.noent.noblanks }
+    @batch_id     = @doc.xpath('//bat:batchState/bat:batchID')[0].child.text
+    @obj_count    = @doc.xpath('//bat:batchState/bat:jobStates').length
+  end
+  # rubocop:enable Metrics/AbcSize
+
+  # rubocop:disable Metrics/AbcSize
+  def render_upload_error(ex)
+    raise unless ex.respond_to?(:response)
+    @doc = Nokogiri::XML(ex.response) { |config| config.strict.noent.noblanks }
+    @description = "ingest: #{@doc.xpath('//exc:statusDescription')[0].child.text}"
+    @error       = "ingest: #{@doc.xpath('//exc:error')[0].child.text}"
+    render action: 'upload_error'
+  end
+  # rubocop:enable Metrics/AbcSize
 end

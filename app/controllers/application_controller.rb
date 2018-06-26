@@ -257,10 +257,7 @@ class ApplicationController < ActionController::Base
   end
 
   def paginate_args
-    {
-      page: (params[:page] || 1),
-      per_page: 10
-    }
+    { page: (params[:page] || 1), per_page: 10 }
   end
 
   def stream_response(url, disposition, filename, mediatype, length = nil)
