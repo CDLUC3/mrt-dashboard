@@ -222,9 +222,11 @@ class ApplicationController < ActionController::Base
   end
 
   # TODO: is this only used for DUAs? if so, let's remove it
+  # rubocop:disable Security/Open
   def with_fetched_tempfile(*args)
     require 'open-uri'
     require 'fileutils'
+    # TODO: figure out what we really mean to be opening here, & use more specific methods
     open(*args) do |data|
       tmp_file = Tempfile.new('mrt_http')
       begin
@@ -239,6 +241,7 @@ class ApplicationController < ActionController::Base
       end
     end
   end
+  # rubocop:enable Security/Open
 
   #:nocov:
   # returns the response of the HTTP request for the DUA URI
