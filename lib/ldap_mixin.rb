@@ -116,7 +116,7 @@ module LdapMixin
     fetch(id)
     true
   rescue LdapMixin::LdapException
-    return false
+    false
   end
 
   def true_or_exception(result)

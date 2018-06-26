@@ -215,7 +215,7 @@ describe ApplicationController do
         'ark:/Az0303/m54f6mfn',
         'ark:/AZ0303/m54f6mfn',
         'ark:/0303/m54f6mfn',
-        'ark:/a303/m54f6mfn',
+        'ark:/a303/m54f6mfn'
       ]
 
       bad_arks.each do |bad_ark|
