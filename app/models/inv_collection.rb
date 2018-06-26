@@ -11,4 +11,11 @@ class InvCollection < ActiveRecord::Base
   def group
     @_group ||= Group.find(ark)
   end
+
+  def recent_objects
+    inv_objects
+      .quickloadhack
+      .order('inv_objects.modified desc')
+      .includes(:inv_versions, :inv_dublinkernels)
+  end
 end

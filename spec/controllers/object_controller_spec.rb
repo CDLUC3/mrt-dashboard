@@ -73,6 +73,7 @@ describe ObjectController do
         end
 
         it "returns 400 if file is not an #{ActionDispatch::Http::UploadedFile} or similar" do
+          mock_permissions_all(user_id, collection_id)
           params[:file] = 'example.tmp'
           post(method, params, { uid: user_id })
           expect(response.status).to eq(400)

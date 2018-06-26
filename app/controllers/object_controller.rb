@@ -1,6 +1,7 @@
 require 'tempfile'
 
 class ObjectController < ApplicationController
+  include IngestMixin
 
   before_filter :require_user, except: %i[jupload_add recent ingest mint update]
   before_filter :load_object, only: %i[index download download_user download_manifest async]
@@ -42,105 +43,39 @@ class ObjectController < ApplicationController
 
   def ingest
     render(status: 401, text: '') && return unless current_user
+    render(status: 404, text: '') && return unless user_can_write_to_profile?
     render(status: 400, text: "Bad file parameter.\n") && return unless params[:file].respond_to? :tempfile
-    render(status: 404, text: '') && return unless current_user_can_write_to_profile?
 
-    ingest_args = {
-      'creator'               => params[:creator],
-      'date'                  => params[:date],
-      'digestType'            => params[:digestType],
-      'digestValue'           => params[:digestValue],
-      'file'                  => params[:file].tempfile,
-      'filename'              => (params[:filename] || params[:file].original_filename),
-      'localIdentifier'       => params[:localIdentifier],
-      'notification'          => params[:notification],
-      'notificationFormat'    => params[:notificationFormat],
-      'primaryIdentifier'     => params[:primaryIdentifier],
-      'profile'               => params[:profile],
-      'note'                  => params[:note],
-      'responseForm'          => params[:responseForm],
-      'DataCite.resourceType' => params['DataCite.resourceType'],
-      'DC.contributor'        => params['DC.contributor'],
-      'DC.coverage'           => params['DC.coverage'],
-      'DC.creator'            => params['DC.creator'],
-      'DC.date'               => params['DC.date'],
-      'DC.description'        => params['DC.description'],
-      'DC.format'             => params['DC.format'],
-      'DC.identifier'         => params['DC.identifier'],
-      'DC.language'           => params['DC.language'],
-      'DC.publisher'          => params['DC.publisher'],
-      'DC.relation'           => params['DC.relation'],
-      'DC.rights'             => params['DC.rights'],
-      'DC.source'             => params['DC.source'],
-      'DC.subject'            => params['DC.subject'],
-      'DC.title'              => params['DC.title'],
-      'DC.type'               => params['DC.type'],
-      'submitter'             => (params['submitter'] || "#{current_user.login}/#{current_user.displayname}"),
-      'title'                 => params[:title],
-      'synchronousMode'       => params[:synchronousMode],
-      'retainTargetURL'       => params[:retainTargetURL],
-      'type'                  => params[:type]
-    }.reject { |_k, v| v.blank? }
-    resp = mk_httpclient.post(APP_CONFIG['ingest_service'], ingest_args, { 'Content-Type' => 'multipart/form-data' })
+    resp = mk_httpclient.post(
+      APP_CONFIG['ingest_service'],
+      ingest_params_from(params, current_user),
+      { 'Content-Type' => 'multipart/form-data' }
+    )
     render status: resp.status, content_type: resp.headers[:content_type], text: resp.body
   end
 
   def update
     render(status: 401, text: '') && return unless current_user
+    render(status: 404, text: '') && return unless user_can_write_to_profile?
     render(status: 400, text: "Bad file parameter.\n") && return unless params[:file].respond_to? :tempfile
-    render(status: 404, text: '') && return unless current_user_can_write_to_profile?
 
-    ingest_args = {
-      'creator'               => params[:creator],
-      'date'                  => params[:date],
-      'digestType'            => params[:digestType],
-      'digestValue'           => params[:digestValue],
-      'file'                  => params[:file].tempfile,
-      'filename'              => (params[:filename] || params[:file].original_filename),
-      'localIdentifier'       => params[:localIdentifier],
-      'notification'          => params[:notification],
-      'notificationFormat'    => params[:notificationFormat],
-      'primaryIdentifier'     => params[:primaryIdentifier],
-      'profile'               => params[:profile],
-      'note'                  => params[:note],
-      'responseForm'          => params[:responseForm],
-      'DataCite.resourceType' => params['DataCite.resourceType'],
-      'DC.contributor'        => params['DC.contributor'],
-      'DC.coverage'           => params['DC.coverage'],
-      'DC.creator'            => params['DC.creator'],
-      'DC.date'               => params['DC.date'],
-      'DC.description'        => params['DC.description'],
-      'DC.format'             => params['DC.format'],
-      'DC.identifier'         => params['DC.identifier'],
-      'DC.language'           => params['DC.language'],
-      'DC.publisher'          => params['DC.publisher'],
-      'DC.relation'           => params['DC.relation'],
-      'DC.rights'             => params['DC.rights'],
-      'DC.source'             => params['DC.source'],
-      'DC.subject'            => params['DC.subject'],
-      'DC.title'              => params['DC.title'],
-      'DC.type'               => params['DC.type'],
-      'submitter'             => "#{current_user.login}/#{current_user.displayname}",
-      'title'                 => params[:title],
-      'synchronousMode'       => params[:synchronousMode],
-      'retainTargetURL'       => params[:retainTargetURL],
-      'type'                  => params[:type]
-    }.reject { |_k, v| v.blank? }
-    resp = mk_httpclient.post(APP_CONFIG['ingest_service_update'], ingest_args, { 'Content-Type' => 'multipart/form-data' })
+    resp = mk_httpclient.post(
+      APP_CONFIG['ingest_service_update'],
+      update_params_from(params, current_user),
+      { 'Content-Type' => 'multipart/form-data' }
+    )
     render status: resp.status, content_type: resp.headers[:content_type], text: resp.body
   end
 
   def mint
     render(status: 401, text: '') && return unless current_user
-    render(status: 404, text: '') && return unless current_user_can_write_to_profile?
+    render(status: 404, text: '') && return unless user_can_write_to_profile?
 
-    mint_args = {
-      'profile'      => params[:profile],
-      'erc'          => params[:erc],
-      'file'         => Tempfile.new('restclientbug'),
-      'responseForm' => params[:responseForm]
-    }.reject { |_k, v| v.blank? }
-    resp = mk_httpclient.post(APP_CONFIG['mint_service'], mint_args, { 'Content-Type' => 'multipart/form-data' })
+    resp = mk_httpclient.post(
+      APP_CONFIG['mint_service'],
+      mint_params_from(params),
+      { 'Content-Type' => 'multipart/form-data' }
+    )
     render status: resp.status, content_type: resp.headers[:content_type], text: resp.body
   end
 
@@ -186,34 +121,10 @@ class ObjectController < ApplicationController
       redirect_to(controller: 'object', action: 'add', group: current_group) && (return false)
     end
     begin
-      ingest_params = {
-        'file'              => params[:file].tempfile,
-        'type'              => params[:object_type],
-        'submitter'         => "#{current_user.login}/#{current_user.displayname}",
-        'filename'          => params[:file].original_filename,
-        'profile'           => current_group.submission_profile,
-        'creator'           => params[:author],
-        'title'             => params[:title],
-        'primaryIdentifier' => params[:primary_id],
-        'date'              => params[:date],
-        'localIdentifier'   => params[:local_id], # local identifier necessary, nulls?
-        'responseForm'      => 'xml'
-      }.reject { |_key, value| value.blank? }
-      resp = mk_httpclient.post(APP_CONFIG['ingest_service_update'], ingest_params)
-      @doc = Nokogiri::XML(resp.content) do |config|
-        config.strict.noent.noblanks
-      end
-      @batch_id = @doc.xpath('//bat:batchState/bat:batchID')[0].child.text
-      @obj_count = @doc.xpath('//bat:batchState/bat:jobStates').length
+      post_upload
     rescue Exception => ex # TODO: should this be StandardError?
       # see if we can parse the error from ingest, if not then unknown error
-      raise unless ex.respond_to?(:response)
-      @doc = Nokogiri::XML(ex.response) do |config|
-        config.strict.noent.noblanks
-      end
-      @description = "ingest: #{@doc.xpath('//exc:statusDescription')[0].child.text}"
-      @error = "ingest: #{@doc.xpath('//exc:error')[0].child.text}"
-      render action: 'upload_error'
+      render_upload_error(ex)
     end
   end
   # rubocop:enable Lint/RescueException
@@ -224,11 +135,7 @@ class ObjectController < ApplicationController
     # prevent stack trace when collection does not exist
     c = InvCollection.where(ark: @collection_ark).first
     render(status: 404, text: '404 Not Found') && return if c.nil? || c.to_s == ''
-    @objects = c.inv_objects
-      .quickloadhack
-      .order('inv_objects.modified desc')
-      .includes(:inv_versions, :inv_dublinkernels)
-      .paginate(paginate_args)
+    @objects = c.recent_objects.paginate(paginate_args)
     respond_to do |format|
       format.html
       format.atom
@@ -237,7 +144,36 @@ class ObjectController < ApplicationController
 
   private
 
-  def current_user_can_write_to_profile?
+  def mint_params_from(params)
+    {
+      'profile'      => params[:profile],
+      'erc'          => params[:erc],
+      'file'         => Tempfile.new('restclientbug'),
+      'responseForm' => params[:responseForm]
+    }.reject { |_k, v| v.blank? }
+  end
+
+  # rubocop:disable Metrics/AbcSize
+  def render_upload_error(ex)
+    raise unless ex.respond_to?(:response)
+    @doc = Nokogiri::XML(ex.response) { |config| config.strict.noent.noblanks }
+    @description = "ingest: #{@doc.xpath('//exc:statusDescription')[0].child.text}"
+    @error       = "ingest: #{@doc.xpath('//exc:error')[0].child.text}"
+    render action: 'upload_error'
+  end
+  # rubocop:enable Metrics/AbcSize
+
+  # rubocop:disable Metrics/AbcSize
+  def post_upload
+    ingest_params = upload_params_from(params, current_user, current_group)
+    resp          = mk_httpclient.post(APP_CONFIG['ingest_service_update'], ingest_params)
+    @doc          = Nokogiri::XML(resp.content) { |config| config.strict.noent.noblanks }
+    @batch_id     = @doc.xpath('//bat:batchState/bat:batchID')[0].child.text
+    @obj_count    = @doc.xpath('//bat:batchState/bat:jobStates').length
+  end
+  # rubocop:enable Metrics/AbcSize
+
+  def user_can_write_to_profile?
     current_user && current_user.groups('write').any? { |g| g.submission_profile == params[:profile] }
   end
 
