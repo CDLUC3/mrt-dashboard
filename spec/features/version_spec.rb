@@ -101,7 +101,7 @@ describe 'versions' do
     it 'should let the user download both system and producer files' do
       all_files = producer_files + system_files
       all_files.each do |f|
-        basename = f.pathname.sub(/^(producer|system)\//, '')
+        basename = f.pathname.sub(%r{^(producer|system)/}, '')
 
         expected_uri = url_for(
           controller: :file,

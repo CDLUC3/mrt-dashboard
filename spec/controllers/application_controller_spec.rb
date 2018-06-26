@@ -188,6 +188,42 @@ describe ApplicationController do
     end
   end
 
+  describe ':is_ark?' do
+    it 'matches an ARK' do
+      good_arks = [
+        'ark:/13030/m54f6mfn',
+        'ark:/a3030/m54f6mfn',
+        'ark:/Z3030/m54f6mfn',
+        'http://n2t.net/ark:/13030/m54f6mfn'
+      ]
+
+      good_arks.each do |ark|
+        expect(controller.send(:is_ark?, ark)).to eq(true), "#{ark} should be an ARK"
+      end
+    end
+
+    it "doesn't match something that looks like an ARK but isn't" do
+      bad_arks = [
+        'doi:/13030/m54f6mfn',
+        'ark:/13030',
+        'ark:/13030/',
+        'ark:13030/m54f6mfn',
+        'ark:13030m54f6mfn',
+        'ark:/13030m54f6mfn',
+        'ark:/az0303/m54f6mfn',
+        'ark:/aZ0303/m54f6mfn',
+        'ark:/Az0303/m54f6mfn',
+        'ark:/AZ0303/m54f6mfn',
+        'ark:/0303/m54f6mfn',
+        'ark:/a303/m54f6mfn',
+      ]
+
+      bad_arks.each do |bad_ark|
+        expect(controller.send(:is_ark?, bad_ark)).to eq(false), "#{bad_ark} should not be an ARK"
+      end
+    end
+  end
+
   describe 'Rack::Response.close' do
     it "doesn't close a non-closeable body" do
       response = Rack::Response.new

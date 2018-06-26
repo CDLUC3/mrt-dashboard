@@ -287,7 +287,6 @@ class ApplicationController < ActionController::Base
   #:nocov:
 
   def is_ark?(str)
-    # return !str.match(/ark:\/[0-9]{5}\/[a-z0-9+]/).nil?
-    !str.match(/ark:\/[0-9a-zA-Z]{1}[0-9]{4}\/[a-z0-9+]/).nil?
+    str.match?(%r{ark:/[0-9a-zA-Z]{1}[0-9]{4}/[a-z0-9+]})
   end
 end

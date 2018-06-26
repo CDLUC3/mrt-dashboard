@@ -95,7 +95,7 @@ describe 'objects' do
   describe 'file info' do
     it 'should let the user download a file' do
       producer_files.each do |f|
-        basename = f.pathname.sub(/^producer\//, '')
+        basename = f.pathname.sub(%r{^producer/}, '')
 
         expected_uri = url_for(
           controller: :file,

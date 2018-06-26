@@ -26,7 +26,7 @@ module Noid
       end
       raise MintException, 'Got error response from server.' unless resp.instance_of? Net::HTTPOK
       @cache.concat(resp.body.split(/\n/).map do |s|
-        md = s.match(/id:\s+([0-9]+\/)?([^\s]+)/)
+        md = s.match(%r{id:\s+([0-9]+/)?([^\s]+)})
         if @preserve_naan
           "#{md[1]}#{md[2]}"
         else
