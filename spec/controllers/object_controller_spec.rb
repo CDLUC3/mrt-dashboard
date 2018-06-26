@@ -263,15 +263,15 @@ describe ObjectController do
     end
   end
 
-  describe ':downloadUser' do
+  describe ':download_user' do
     it 'requires a login' do
-      get(:downloadUser, { object: object_ark }, { uid: nil })
+      get(:download_user, { object: object_ark }, { uid: nil })
       expect(response.status).to eq(302)
       expect(response.headers['Location']).to include('guest_login')
     end
 
     it 'prevents download without permissions' do
-      get(:downloadUser, { object: object_ark }, { uid: user_id })
+      get(:download_user, { object: object_ark }, { uid: user_id })
       expect(response.status).to eq(401)
     end
 
@@ -282,7 +282,7 @@ describe ObjectController do
       expected_url = "#{object.bytestream_uri2}?t=zip"
       allow(Streamer).to receive(:new).with(expected_url).and_return(streamer)
 
-      get(:downloadUser, { object: object_ark }, { uid: user_id })
+      get(:download_user, { object: object_ark }, { uid: user_id })
 
       expect(response.status).to eq(200)
 
@@ -298,15 +298,15 @@ describe ObjectController do
     end
   end
 
-  describe ':downloadManifest' do
+  describe ':download_manifest' do
     it 'requires a login' do
-      get(:downloadUser, { object: object_ark }, { uid: nil })
+      get(:download_user, { object: object_ark }, { uid: nil })
       expect(response.status).to eq(302)
       expect(response.headers['Location']).to include('guest_login')
     end
 
     it 'prevents download without permissions' do
-      get(:downloadUser, { object: object_ark }, { uid: user_id })
+      get(:download_user, { object: object_ark }, { uid: user_id })
       expect(response.status).to eq(401)
     end
 
@@ -317,7 +317,7 @@ describe ObjectController do
       expected_url = object.bytestream_uri3.to_s
       allow(Streamer).to receive(:new).with(expected_url).and_return(streamer)
 
-      get(:downloadManifest, { object: object_ark }, { uid: user_id })
+      get(:download_manifest, { object: object_ark }, { uid: user_id })
 
       expect(response.status).to eq(200)
 

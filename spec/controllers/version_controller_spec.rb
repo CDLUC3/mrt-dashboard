@@ -85,7 +85,7 @@ describe VersionController do
     end
   end
 
-  describe ':downloadUser' do
+  describe ':download_user' do
     attr_reader :params
 
     before(:each) do
@@ -93,13 +93,13 @@ describe VersionController do
     end
 
     it 'requires a login' do
-      get(:downloadUser, params, { uid: nil })
+      get(:download_user, params, { uid: nil })
       expect(response.status).to eq(302)
       expect(response.headers['Location']).to include('guest_login')
     end
 
     it 'prevents download without permissions' do
-      get(:downloadUser, params, { uid: user_id })
+      get(:download_user, params, { uid: user_id })
       expect(response.status).to eq(401)
     end
 
@@ -108,7 +108,7 @@ describe VersionController do
 
       size_too_large = 1 + APP_CONFIG['max_download_size']
       allow_any_instance_of(InvVersion).to receive(:total_actual_size).and_return(size_too_large)
-      get(:downloadUser, params, { uid: user_id })
+      get(:download_user, params, { uid: user_id })
       expect(response.status).to eq(403)
     end
 
@@ -116,7 +116,7 @@ describe VersionController do
       mock_permissions_all(user_id, collection_id)
       size_too_large = 1 + APP_CONFIG['max_archive_size']
       allow_any_instance_of(InvVersion).to receive(:total_actual_size).and_return(size_too_large)
-      get(:downloadUser, params, { uid: user_id })
+      get(:download_user, params, { uid: user_id })
       expect(response.status).to eq(302)
       expect(response.headers['Location']).to include('lostorage')
     end
@@ -131,7 +131,7 @@ describe VersionController do
       expected_url = "#{version.bytestream_uri2}?t=zip"
       allow(Streamer).to receive(:new).with(expected_url).and_return(streamer)
 
-      get(:downloadUser, params, { uid: user_id })
+      get(:download_user, params, { uid: user_id })
 
       expect(response.status).to eq(200)
 

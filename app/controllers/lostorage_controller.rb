@@ -43,9 +43,9 @@ class LostorageController < ApplicationController
 
   def post_los_email(to_addr)
     # Customize return email information
-    @losFrom    = params[:losFrom]
-    @losSubject = params[:losSubject]
-    @losBody    = params[:losBody]
+    @los_from    = params[:losFrom]
+    @los_subject = params[:losSubject]
+    @los_body    = params[:losBody]
 
     unique_name     = "#{UUIDTools::UUID.random_create.hash}.tar.gz"
     @object         = InvObject.find_by_ark(params_u(:object))
@@ -54,26 +54,26 @@ class LostorageController < ApplicationController
     @version_number = params[:version]
 
     # Custom subject?
-    @losSubject     = "Merritt #{@container_type.capitalize} Download Processing Completed " if @losSubject.blank?
+    @los_subject     = "Merritt #{@container_type.capitalize} Download Processing Completed " if @los_subject.blank?
 
     # Custom body?
-    @losBody = if @losBody.blank?
+    @los_body = if @los_body.blank?
                  render_to_string(formats: [:text], partial: 'lostorage/los_email_body')
                else
-                 render_to_string(formats: [:text], inline: @losBody)
+                 render_to_string(formats: [:text], inline: @los_body)
                end
 
     # construct the async storage URL using the object's state storage URL-  Sub async for state in URL.
-    email_xml_file = build_email_xml(@losFrom, to_addr, @losSubject, @losBody)
+    email_xml_file = build_email_xml(@los_from, to_addr, @los_subject, @los_body)
 
-    userFriendly = params[:userFriendly].downcase
-    postURL      = @object.bytestream_uri.to_s.gsub(/content/, 'async')
-    if userFriendly.match('true')
+    user_friendly = params[:userFriendly].downcase
+    post_url      = @object.bytestream_uri.to_s.gsub(/content/, 'async')
+    if user_friendly.match('true')
       # user friendly download
-      postURL = @object.bytestream_uri2.to_s.gsub(/producer/, 'producerasync')
+      post_url = @object.bytestream_uri2.to_s.gsub(/producer/, 'producerasync')
     end
 
-    resp = HTTPClient.new.post(postURL,
+    resp = HTTPClient.new.post(post_url,
                                { 'email'         => email_xml_file,
                                  'responseForm'  => 'xml',
                                  'containerForm' => 'targz',

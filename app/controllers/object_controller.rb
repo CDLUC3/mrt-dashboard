@@ -3,8 +3,8 @@ require 'tempfile'
 class ObjectController < ApplicationController
 
   before_filter :require_user, except: %i[jupload_add recent ingest mint update]
-  before_filter :load_object, only: %i[index download downloadUser downloadManifest async]
-  before_filter(only: %i[download downloadUser downloadManifest async]) do
+  before_filter :load_object, only: %i[index download download_user download_manifest async]
+  before_filter(only: %i[download download_user download_manifest async]) do
     unless has_object_permission?(@object, 'download')
       flash[:error] = 'You do not have download permissions.'
       render file: "#{Rails.root}/public/401.html", status: 401, layout: false
@@ -15,7 +15,7 @@ class ObjectController < ApplicationController
     render file: "#{Rails.root}/public/401.html", status: 401, layout: false unless has_object_permission_no_embargo?(@object, 'read')
   end
 
-  before_filter(only: %i[download downloadUser]) do
+  before_filter(only: %i[download download_user]) do
     #:nocov:
     check_dua(@object, { object: @object })
     #:nocov:
@@ -153,14 +153,14 @@ class ObjectController < ApplicationController
                     'application/zip')
   end
 
-  def downloadUser # TODO: rename to downloadProducerFiles or similar
+  def download_user # TODO: rename to downloadProducerFiles or similar
     stream_response("#{@object.bytestream_uri2}?t=zip",
                     'attachment',
                     "#{Orchard::Pairtree.encode(@object.ark.to_s)}_object.zip",
                     'application/zip')
   end
 
-  def downloadManifest
+  def download_manifest
     stream_response(@object.bytestream_uri3.to_s,
                     'attachment',
                     Orchard::Pairtree.encode(@object.ark.to_s).to_s,

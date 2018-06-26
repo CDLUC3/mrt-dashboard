@@ -40,9 +40,9 @@ MrtDashboard::Application.routes.draw do
   get('d/:object' => 'object#download')
   get('d/:object/:version' => 'version#download')
   get('d/:object/:version/*file' => 'file#download', :format => false)
-  get('u/:object' => 'object#downloadUser')
-  get('u/:object/:version' => 'version#downloadUser')
-  get('dm/:object' => 'object#downloadManifest')
+  get('u/:object' => 'object#download_user')
+  get('u/:object/:version' => 'version#download_user')
+  get('dm/:object' => 'object#download_manifest')
   get('s/:group' => 'collection#search_results')
   get('a/:group' => 'object#add')
 
