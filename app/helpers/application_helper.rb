@@ -34,12 +34,13 @@ module ApplicationHelper
   # makes a tip over a question mark item, just pass in the text
   # requires javascript_include_tag 'wztip/wz_tooltip.js' on the page
   def help_tip(the_text)
-    str = <<~eos
-      <a href="#" onmouseover="Tip('#{h(the_text).gsub("'", "\\'")}')">
+    escaped_tooltip = html_escape(the_text).gsub("'", "\\'")
+    tooltip_tag = <<~HTML
+      <a href="#" onmouseover="Tip('#{escaped_tooltip}')">
         #{image_tag('tip_icon.gif', size: '15x15')}
       </a>
-    eos
-    str.html_safe
+    HTML
+    tooltip_tag.html_safe
   end
 
   # outputs a formatted string for the current environment, except production
