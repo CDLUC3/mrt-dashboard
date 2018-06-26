@@ -33,6 +33,11 @@ Layout/MultilineOperationIndentation:
 Metrics/LineLength:
   Max: 150
 
+# Just because something looks like an accessor doesn't mean it is one
+Naming/PredicateName:
+  Exclude:
+    - 'app/controllers/application_controller.rb'
+
 # Confusing and weird
 Naming/VariableNumber:
   Enabled: False
