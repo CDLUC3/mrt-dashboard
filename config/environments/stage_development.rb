@@ -6,4 +6,5 @@ MrtDashboard::Application.configure do
   config.cache_classes                     = true
   config.consider_all_requests_local       = false
   config.whiny_nils                        = true
+  config.eager_load = false # cf. development
 end

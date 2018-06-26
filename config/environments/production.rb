@@ -10,6 +10,8 @@ MrtDashboard::Application.configure do
   # Compress both stylesheets and JavaScripts
   config.assets.js_compressor = :uglifier
   config.assets.css_compressor = :scss
+
+  config.eager_load = true
 end
 
 require 'exception_notification'
