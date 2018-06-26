@@ -68,7 +68,7 @@ class LostorageController < ApplicationController
 
     user_friendly = params[:userFriendly].downcase
     post_url      = @object.bytestream_uri.to_s.gsub(/content/, 'async')
-    if user_friendly.match('true')
+    if user_friendly.match?('true')
       # user friendly download
       post_url = @object.bytestream_uri2.to_s.gsub(/producer/, 'producerasync')
     end

@@ -10,7 +10,7 @@ class DuaController < ApplicationController
       if params[:name].blank? || params[:affiliation].blank? || params[:user_agent_email].blank?
         (flash[:message] = 'Please enter the required fields') && return
       end
-      (flash[:message] = 'You must fill in a valid return email address.') && return unless params[:user_agent_email].match(/^.+@.+$/)
+      (flash[:message] = 'You must fill in a valid return email address.') && return unless params[:user_agent_email] =~ /^.+@.+$/
 
       group = object.group
       DuaMailer.dua_email(to: params[:user_agent_email],

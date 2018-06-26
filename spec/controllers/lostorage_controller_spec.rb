@@ -52,7 +52,7 @@ describe LostorageController do
 
     it 'requires a valid-ish address' do
       expect(client).not_to receive(:post)
-      params[:user_agent_email] = params[:user_agent_email].gsub('@', '%')
+      params[:user_agent_email] = params[:user_agent_email].tr('@', '%')
       post(:index, params, { uid: user_id })
       expect(flash[:message]).to be_present
     end
@@ -133,7 +133,7 @@ describe LostorageController do
 
     it 'requires a valid-ish address' do
       expect(client).not_to receive(:post)
-      params[:user_agent_email] = params[:user_agent_email].gsub('@', '%')
+      params[:user_agent_email] = params[:user_agent_email].tr('@', '%')
       post(:direct, params, { uid: user_id })
       expect(response.status).to eq(400)
     end

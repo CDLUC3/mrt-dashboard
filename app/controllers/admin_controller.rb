@@ -84,7 +84,7 @@ class AdminController < ApplicationController
       the ingest service.  If it is not modified they may not receive
       appropriate emails from the ingest service.
     TEXT
-    @display_text = text.gsub("\n", ' ').strip
+    @display_text = text.tr("\n", ' ').strip
   end
   # :nocov:
 end
