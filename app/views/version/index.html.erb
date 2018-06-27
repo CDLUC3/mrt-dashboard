@@ -42,7 +42,7 @@
     <% if @version.exceeds_download_size? %>
       Versions larger than <%= max_download_size_pretty %> cannot be downloaded as a .zip file.
       Versions and individual files below that size can still be downloaded.
-    <% elsif has_object_permission?(@version.inv_object, 'download') then %>
+    <% elsif current_user_can_download?(@version.inv_object) then %>
       <form action="<%= url_for(:action=>:download, :object=> @version.inv_object, :version => @version) %>">
         <input type="submit" value="Download version">
       </form>
@@ -55,6 +55,6 @@
   <h3>All Versions</h3>
   <%= render :partial => 'line_sidebar', 
              :collection => @version.inv_object.inv_versions.reverse,
-             :locals => {:can_download => has_object_permission?(@version.inv_object, 'download') } %>
+             :locals => {:can_download => current_user_can_download?(@version.inv_object) } %>
   <br/>
 </div>

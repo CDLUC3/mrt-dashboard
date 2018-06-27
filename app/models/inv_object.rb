@@ -113,4 +113,23 @@ class InvObject < ActiveRecord::Base
     total_actual_size > APP_CONFIG['max_archive_size']
   end
 
+  def in_embargo?
+    return false unless inv_embargo
+    inv_embargo.in_embargo?
+  end
+
+  def user_has_read_permission?(uid)
+    group.user_has_permission?(uid, 'read')
+  end
+
+  def user_can_download?(uid)
+    permissions = group.user_permissions(uid)
+    if permissions.member?('admin')
+      true
+    elsif in_embargo?
+      false
+    else
+      permissions.member?('download')
+    end
+  end
 end

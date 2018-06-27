@@ -3,7 +3,7 @@
 <% version = current_sidebar %>
 <% files = version.producer_files.quickload_files %>
 <% show_only = 4 %>
-<% can_download = has_object_permission?(version.inv_object, 'download') %>
+<% can_download = current_user_can_download?(version.inv_object) %>
 <%= render :partial => '/version/line_sidebar', :collection => [version],
            :locals => {:can_download => can_download} %>
 <ul>

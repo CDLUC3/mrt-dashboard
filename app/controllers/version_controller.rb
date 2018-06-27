@@ -4,7 +4,7 @@ class VersionController < ApplicationController
   before_filter :load_version
 
   before_filter(only: %i[download download_user async]) do
-    unless has_object_permission?(@version.inv_object, 'download')
+    unless current_user_can_download?(@version.inv_object)
       flash[:error] = 'You do not have download permissions.'
       render file: "#{Rails.root}/public/401.html", status: 401, layout: false
     end

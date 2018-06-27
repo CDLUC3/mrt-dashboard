@@ -3,7 +3,7 @@ class CollectionController < ApplicationController
   before_filter :require_request_group
 
   before_filter do
-    raise ActiveResource::UnauthorizedAccess, 'You do not have access to that collection' unless has_group_permission?(@request_group, 'read')
+    raise ActiveResource::UnauthorizedAccess, 'You do not have access to that collection' unless @request_group.user_has_permission?(current_uid, 'read')
   end
 
   # Load the group specified in the params[:group]

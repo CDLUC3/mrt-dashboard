@@ -18,9 +18,8 @@ class ApplicationController < ActionController::Base
     :current_uid,
     :current_user,
     :current_user_displayname,
-    :has_group_permission?,
-    :has_object_permission?,
-    :has_session_group_write_permission?,
+    :current_user_can_download?,
+    :current_user_can_write_to_collection?,
     :max_download_size_pretty,
     :number_to_storage_size
   )
@@ -58,45 +57,22 @@ class ApplicationController < ActionController::Base
     params[:version] = latest_version.to_s
   end
 
-  # Returns true if the current user has which permissions on the object.
-  def has_group_permission?(group, which)
-    group.permission(current_uid).member?(which)
-  end
-
-  # Returns true if the current user has which permissions on the object
-  def has_object_permission_no_embargo?(object, which)
-    has_group_permission?(object.inv_collection.group, which)
-  end
-
-  # Returns true if the current user has which permissions on the object with embargo checking
-  def has_object_permission?(object, which)
-    has_group_permission?(object.inv_collection.group, which) && !in_embargo?(object)
+  def current_user_can_download?(object)
+    object.user_can_download?(current_uid)
   end
 
   # Returns true if the user can upload to the session group
-  def has_session_group_write_permission?
-    has_group_permission?(current_group, 'write')
-  end
-
-  # Is object in Embargo?
-  def in_embargo?(object)
-    @in_embargo = true
-    return false if object.inv_embargo.nil?
-    if object.inv_embargo.in_embargo?
-      @in_embargo = false if has_group_permission?(object.inv_collection.group, 'admin')
-    else
-      @in_embargo = false
-    end
-    @in_embargo
+  def current_user_can_write_to_collection?
+    current_group.user_has_permission?(current_uid, 'write')
   end
 
   # Return the groups which the user may be a member of
   def available_groups
     groups = current_user.groups.sort_by { |g| g.description.downcase } || []
     groups.map do |group|
-      { id: group.id,
-        description: group.description,
-        permissions: group.permission(current_user.login) }
+      { id:               group.id,
+        description:      group.description,
+        user_permissions: group.user_permissions(current_user.login) }
     end
   end
 

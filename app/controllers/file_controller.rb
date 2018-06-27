@@ -4,7 +4,7 @@ class FileController < ApplicationController
   before_filter :load_file
 
   before_filter do
-    unless has_object_permission?(@file.inv_version.inv_object, 'download')
+    unless current_user_can_download?(@file.inv_version.inv_object)
       flash[:error] = 'You do not have download permissions.'
       render file: "#{Rails.root}/public/401.html", status: 401, layout: false
     end

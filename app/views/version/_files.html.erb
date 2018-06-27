@@ -8,7 +8,7 @@
     <% object_id = object.to_param %>
     <%# would be cleaner code if we had this check inside the
         file.each but it is slower for pages with many files %>
-    <% can_download_object = has_object_permission?(object, 'download') %>
+    <% can_download_object = current_user_can_download?(object) %>
     <% any_file_too_large = false %>
     <% files.each do |file| %>
       <%

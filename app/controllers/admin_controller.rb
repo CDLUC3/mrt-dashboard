@@ -68,7 +68,7 @@ class AdminController < ApplicationController
     @ldap[:ou]  = params[:ou]
 
     %w[read write].each do |perm|
-      if params[:permissions].nil? || !params[:permissions].include?(perm)
+      if params[:user_permissions].nil? || !params[:user_permissions].include?(perm)
         Group::LDAP.unset_user_permission(params[:uid], params[:ou], User::LDAP, perm)
       else
         Group::LDAP.set_user_permission(params[:uid], params[:ou], User::LDAP, perm)
@@ -77,7 +77,7 @@ class AdminController < ApplicationController
     # get permissions from LDAP
     usr           = User::LDAP.fetch(params[:uid])
     grp           = Group.find(params[:ou])
-    @perms        = grp.permission(params[:uid])
+    @perms        = grp.user_permissions(params[:uid])
     text = <<~TEXT
       The user permissions were set as shown below.  The user is
       likely to need their email address (#{usr[:mail][0]}) added or

@@ -24,7 +24,7 @@
     <% if @object.exceeds_download_size? %>
       Objects larger than <%= max_download_size_pretty %> cannot be downloaded as a .zip file.
       Versions and individual files below that size can still be downloaded.
-    <% elsif has_object_permission?(@object, 'download') then %>
+    <% elsif current_user_can_download?(@object) then %>
       <form action="<%= url_for(:action=>:download, :object => @object) %>">
         <input type="submit" value="Download object">
       </form>
@@ -41,7 +41,7 @@
     <h3>Prior Versions</h3>
     <%= render :partial => '/version/line_sidebar', 
                :collection => @object.inv_versions.reverse[1..-1],
-               :locals => {:can_download => has_object_permission?(@object, 'download') } %>
+               :locals => {:can_download => current_user_can_download?(@object) } %>
     <br/>
   <% end %>
 </div>
