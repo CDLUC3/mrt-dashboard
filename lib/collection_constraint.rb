@@ -6,10 +6,9 @@ class CollectionConstraint
 
     begin
       Group.find(group_param)
+      true
     rescue LdapMixin::LdapException
       false
     end
-
-    true
   end
 end
