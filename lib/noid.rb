@@ -21,19 +21,10 @@ module Noid
 
     # rubocop:disable Lint/RescueException
     def fill_cache
-      req = Net::HTTP::Get.new(@url.path + '?mint+' + @n_at_once.to_s)
-      resp = Net::HTTP.start(@url.host, @url.port) do |http|
-        http.request(req)
-      end
-      raise MintException, 'Got error response from server.' unless resp.instance_of? Net::HTTPOK
-      @cache.concat(resp.body.split(/\n/).map do |s|
-        md = s.match(%r{id:\s+([0-9]+/)?([^\s]+)})
-        if @preserve_naan
-          "#{md[1]}#{md[2]}"
-        else
-          md[2]
-        end
-      end)
+      request = Net::HTTP::Get.new(@url.path + '?mint+' + @n_at_once.to_s)
+      response = Net::HTTP.start(@url.host, @url.port) { |http| http.request(request) }
+      ids = extract_ids(response)
+      @cache.concat(ids)
     rescue MintException
       raise # don't eat our own exceptions
     rescue SocketError
@@ -42,6 +33,19 @@ module Noid
       raise MintException, "Can't get ID; not a NOID server?"
     end
     # rubocop:enable Lint/RescueException
+
+    def extract_ids(response)
+      raise MintException, 'Got error response from server.' unless HTTP::Status.successful?(response.status)
+      body = response.body
+      extract(body)
+    end
+
+    def extract(body)
+      body.split(/\n/).map do |s|
+        md = s.match(%r{id:\s+([0-9]+/)?([^\s]+)})
+        @preserve_naan ? "#{md[1]}#{md[2]}" : md[2]
+      end
+    end
 
   end
 end
