@@ -29,13 +29,15 @@ module Noid
       raise # don't eat our own exceptions
     rescue SocketError
       raise MintException, 'Could not connect to server.'
-    rescue Exception # TODO: should this be StandardError (or just 'rescue')?
+    rescue Exception => e # TODO: should this be StandardError (or just 'rescue')?
+      STDERR.puts(e)
+      STDERR.puts(e.backtrace)
       raise MintException, "Can't get ID; not a NOID server?"
     end
     # rubocop:enable Lint/RescueException
 
     def extract_ids(response)
-      raise MintException, 'Got error response from server.' unless HTTP::Status.successful?(response.status)
+      raise MintException, 'Got error response from server.' unless response.code == "200"
       body = response.body
       extract(body)
     end
