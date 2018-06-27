@@ -10,10 +10,7 @@ class DuaMailer < ActionMailer::Base
     @collection = args[:collection]
     @object = args[:object]
     @terms = args[:terms]
-    mail(to: args[:to],
-         cc: args[:cc],
-         subject: "Merritt DUA acceptance: #{args[:title]}",
-         reply_to: args[:reply_to])
+    mail(to: @to, cc: args[:cc], subject: "Merritt DUA acceptance: #{@title}", reply_to: args[:reply_to])
   end
   #:nocov:
 end

@@ -5,8 +5,8 @@ class InvObject < ActiveRecord::Base
   has_many :inv_files, through: :inv_versions
 
   has_many :inv_dublinkernels
-  has_one  :inv_duas
-  has_one  :inv_embargo
+  has_one :inv_duas
+  has_one :inv_embargo
 
   has_many :inv_collections_inv_objects
   has_many :inv_collections, through: :inv_collections_inv_objects
@@ -16,7 +16,22 @@ class InvObject < ActiveRecord::Base
 
   # work around erc_ tables taking forever to load
   scope :quickloadhack, -> {
-    select(['inv_objects.id', 'inv_objects.version_number', 'inv_objects.inv_owner_id', 'inv_objects.object_type', 'inv_objects.role', 'inv_objects.aggregate_role', 'inv_objects.ark', 'inv_objects.created', 'inv_objects.modified', 'inv_objects.id', 'inv_objects.ark', 'inv_objects.created', 'inv_objects.modified'])
+    columns = %w[
+      inv_objects.id
+      inv_objects.version_number
+      inv_objects.inv_owner_id
+      inv_objects.object_type
+      inv_objects.role
+      inv_objects.aggregate_role
+      inv_objects.ark
+      inv_objects.created
+      inv_objects.modified
+      inv_objects.id
+      inv_objects.ark
+      inv_objects.created
+      inv_objects.modified
+    ]
+    select(columns)
   }
 
   include Encoder
@@ -52,12 +67,14 @@ class InvObject < ActiveRecord::Base
   def dua_exists?
     !inv_duas.blank?
   end
+
   # :nocov:
 
   # :nocov:
   def dua_uri
     URI.parse("#{APP_CONFIG['uri_1']}#{node_number}/#{inv_collection.to_param}/0/#{urlencode(APP_CONFIG['mrt_dua_file'])}")
   end
+
   # :nocov:
 
   def node_number
