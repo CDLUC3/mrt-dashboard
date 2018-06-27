@@ -11,23 +11,16 @@ module LdapMixin
   attr_reader :ldap_connect, :minter
   attr_accessor :base
 
-  def initialize(init_hash)
-    # sample hash
-    # host => "badger.cdlib.org",
-    # port => 1636,
-    # base => 'ou=People,ou=uc3,dc=cdlib,dc=org',
-    # admin_user => 'Directory Manager',
-    # admin_password => 'XXXXXXX',
-    # minter => 'http://noid.cdlib.org/nd/noidu_g9'
-    # connect_timeout => 60
-
-    host = init_hash[:host]
-    port = init_hash[:port]
-    base = init_hash[:base]
-    admin_user = init_hash[:admin_user]
-    admin_password = init_hash[:admin_password]
-    minter = init_hash[:minter]
-    connect_timeout = init_hash[:connect_timeout]
+  # rubocop:disable Metrics/ParameterLists
+  def initialize(host:, port:, base:, admin_user:, admin_password:, minter:, connect_timeout:)
+    # sample arguments
+    # host: "badger.cdlib.org",
+    # port: 1636,
+    # base: 'ou=People,ou=uc3,dc=cdlib,dc=org',
+    # admin_user: 'Directory Manager',
+    # admin_password: 'XXXXXXX',
+    # minter: 'http://noid.cdlib.org/nd/noidu_g9'
+    # connect_timeout: 60
 
     @minter = Noid::Minter.new(minter)
     @base = base
@@ -35,15 +28,13 @@ module LdapMixin
       host: host,
       port: port,
       auth: { method: :simple, username: admin_user, password: admin_password },
-      encryption: {
-        method: :simple_tls,
-        tls_options: { ssl_version: 'TLSv1_1' }
-      },
+      encryption: { method: :simple_tls, tls_options: { ssl_version: 'TLSv1_1' } },
       connect_timeout: connect_timeout
     }
 
     raise LdapException, 'Unable to bind to LDAP server.' unless ENV['RAILS_ENV'] == 'test' || admin_ldap.bind
   end
+  # rubocop:enable Metrics/ParameterLists
 
   def admin_ldap
     @admin_ldap ||= begin
