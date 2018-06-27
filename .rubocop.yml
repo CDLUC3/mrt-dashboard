@@ -7,6 +7,7 @@ AllCops:
     - 'db/**/*'
     - 'script/**/*'
     - 'vendor/**/*'
+    - 'app/controllers/admin_controller.rb'
     - 'lib/tasks/atom.rake'
 
 # Allow one line around block body (Layout/EmptyLines will still disallow two or more)

@@ -1,3 +1,4 @@
+# TODO: remove this, then remove it from exclude list in top-level .rubocop.yml
 class AdminController < ApplicationController
   before_filter :require_user
 
