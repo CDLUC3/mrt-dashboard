@@ -17,7 +17,7 @@ class FileController < ApplicationController
   end
 
   def download
-    if exceeds_download_size_file(@file)
+    if @file.exceeds_download_size?
       render file: "#{Rails.root}/public/403.html", status: 403, layout: false
     else
       stream_response(@file.bytestream_uri,

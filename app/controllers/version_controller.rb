@@ -16,9 +16,9 @@ class VersionController < ApplicationController
   end
 
   before_filter(only: %i[download download_user]) do
-    if exceeds_download_size_version(@version)
+    if @version.exceeds_download_size?
       render file: "#{Rails.root}/public/403.html", status: 403, layout: false
-    elsif exceeds_sync_size_version(@version)
+    elsif @version.exceeds_sync_size?
       # if size is > max_archive_size, redirect to have user enter email for asynch
       # compression (skipping streaming)
       redirect_to(controller: 'lostorage',
@@ -40,9 +40,9 @@ class VersionController < ApplicationController
   def index; end
 
   def async
-    if exceeds_download_size_version(@version)
+    if @version.exceeds_download_size?
       render nothing: true, status: 403
-    elsif exceeds_sync_size_version(@version)
+    elsif @version.exceeds_sync_size?
       # Async Supported
       render nothing: true, status: 200
     else
@@ -64,4 +64,5 @@ class VersionController < ApplicationController
                     "#{Orchard::Pairtree.encode(@version.inv_object.ark.to_s)}_version_#{@version.number}.zip",
                     'application/zip')
   end
+
 end

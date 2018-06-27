@@ -58,4 +58,12 @@ class InvVersion < ActiveRecord::Base
   def total_actual_size
     inv_files.sum('full_size')
   end
+
+  def exceeds_sync_size?
+    total_actual_size > APP_CONFIG['max_archive_size']
+  end
+
+  def exceeds_download_size?
+    total_actual_size > APP_CONFIG['max_download_size']
+  end
 end

@@ -18,9 +18,6 @@ class ApplicationController < ActionController::Base
     :current_uid,
     :current_user,
     :current_user_displayname,
-    :exceeds_download_size,
-    :exceeds_download_size_version,
-    :exceeds_download_size_file,
     :has_group_permission?,
     :has_object_permission?,
     :has_session_group_write_permission?,
@@ -155,30 +152,6 @@ class ApplicationController < ActionController::Base
     @_current_group ||= Group.find(session[:group_id])
   end
 
-  # @return true if the object is too large for synchronous download, false otherwise
-  def exceeds_sync_size(object)
-    (object.total_actual_size > APP_CONFIG['max_archive_size'])
-  end
-
-  # @return true if the version is too large for synchronous download, false otherwise
-  def exceeds_sync_size_version(version)
-    (version.total_actual_size > APP_CONFIG['max_archive_size'])
-  end
-
-  # @return true if the object is too large even for async download, false otherwise
-  def exceeds_download_size(object)
-    (object.total_actual_size > APP_CONFIG['max_download_size'])
-  end
-
-  # @return true if the version is too large even for async download, false otherwise
-  def exceeds_download_size_version(version)
-    (version.total_actual_size > APP_CONFIG['max_download_size'])
-  end
-
-  # @return true if the file is too large for download, false otherwise
-  def exceeds_download_size_file(file)
-    (file.full_size > APP_CONFIG['max_download_size'])
-  end
 
   def max_download_size_pretty
     @max_download_size_pretty ||= number_to_storage_size(APP_CONFIG['max_download_size'])

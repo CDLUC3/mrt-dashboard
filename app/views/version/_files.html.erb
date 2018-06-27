@@ -13,7 +13,7 @@
     <% files.each do |file| %>
       <%
         file_basename = File.basename(file.pathname)
-        file_too_large = exceeds_download_size_file(file)
+        file_too_large = file.exceeds_download_size?
         if file_too_large
           any_file_too_large = true
         end
