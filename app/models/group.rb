@@ -59,36 +59,52 @@ class Group
   end
 
   def object_count
-    if inv_collection_id.nil?
-      0
-    else
-      InvObject.connection.select_all("SELECT COUNT(DISTINCT(`inv_objects`.id)) as `count` FROM `inv_objects` INNER JOIN `inv_collections_inv_objects` ON `inv_objects`.id = `inv_collections_inv_objects`.inv_object_id WHERE ((`inv_collections_inv_objects`.inv_collection_id = #{inv_collection_id}))")[0]['count'].to_i
-    end
+    return 0 unless inv_collection_id
+    query = <<~SQL
+      SELECT COUNT (DISTINCT(inv_objects.id)) AS count
+        FROM inv_objects
+             INNER JOIN inv_collections_inv_objects
+                     ON inv_objects.id = inv_collections_inv_objects.inv_object_id
+       WHERE ((inv_collections_inv_objects.inv_collection_id = #{inv_collection_id}))
+    SQL
+    InvObject.connection.select_all(query)[0]['count'].to_i
   end
 
   def version_count
-    if inv_collection_id.nil?
-      0
-    else
-      InvObject.connection.select_all("SELECT COUNT(DISTINCT(`inv_versions`.id)) AS `count` FROM `inv_versions` INNER JOIN `inv_objects` ON `inv_objects`.`id` = `inv_versions`.`inv_object_id` INNER JOIN `inv_collections_inv_objects` ON `inv_objects`.`id` = `inv_collections_inv_objects`.`inv_object_id` WHERE ((`inv_collections_inv_objects`.inv_collection_id = #{inv_collection_id}))")[0]['count'].to_i
-    end
+    return 0 unless inv_collection_id
+    query = <<~SQL
+      SELECT COUNT(DISTINCT(inv_versions.id)) AS count
+        FROM inv_versions
+             INNER JOIN inv_objects ON inv_objects.id = inv_versions.inv_object_id
+             INNER JOIN inv_collections_inv_objects ON inv_objects.id = inv_collections_inv_objects.inv_object_id
+       WHERE ((inv_collections_inv_objects.inv_collection_id = #{inv_collection_id}))
+    SQL
+    InvObject.connection.select_all(query)[0]['count'].to_i
   end
 
   def file_count
-    if inv_collection_id.nil?
-      0
-    else
-      InvFile.connection.select_all("SELECT COUNT(DISTINCT(`inv_files`.`id`)) AS `count` FROM `inv_files` INNER JOIN `inv_versions` ON `inv_versions`.`id` = `inv_files`.`inv_version_id` INNER JOIN `inv_objects` ON `inv_objects`.`id` = `inv_versions`.`inv_object_id` INNER JOIN `inv_collections_inv_objects` ON `inv_objects`.`id` = `inv_collections_inv_objects`.`inv_object_id` WHERE ((`inv_collections_inv_objects`.inv_collection_id = #{inv_collection_id}))")[0]['count'].to_i
-    end
+    return 0 unless inv_collection_id
+    query = <<~SQL
+      SELECT COUNT(DISTINCT(inv_files.id)) AS count
+        FROM inv_files
+             INNER JOIN inv_versions ON inv_versions.id = inv_files.inv_version_id
+             INNER JOIN inv_objects ON inv_objects.id = inv_versions.inv_object_id
+             INNER JOIN inv_collections_inv_objects ON inv_objects.id = inv_collections_inv_objects.inv_object_id
+       WHERE ((inv_collections_inv_objects.inv_collection_id = #{inv_collection_id}))
+    SQL
+    InvFile.connection.select_all(query)[0]['count'].to_i
   end
 
   def total_size
-    Rails.logger.info('Im in the total_size method of group model')
-    if inv_collection.nil?
-      0
-    else
-      InvFile.connection.select_all("SELECT SUM(full_size) AS `total_size` FROM `inv_files` INNER JOIN `inv_collections_inv_objects` ON `inv_collections_inv_objects`.`inv_object_id` = `inv_files`.`inv_object_id` WHERE (`inv_collections_inv_objects`.inv_collection_id = #{inv_collection_id})")[0]['total_size'].to_i
-    end
+    return 0 unless inv_collection_id
+    query = <<~SQL
+      SELECT SUM(full_size) AS total_size
+        FROM inv_files
+             INNER JOIN inv_collections_inv_objects
+                     ON inv_collections_inv_objects.inv_object_id = inv_files.inv_object_id
+       WHERE (inv_collections_inv_objects.inv_collection_id = #{inv_collection_id})
+    SQL
+    InvFile.connection.select_all(query)[0]['total_size'].to_i
   end
 
   # TODO: figure out whether we still need this & get rid of it if not
