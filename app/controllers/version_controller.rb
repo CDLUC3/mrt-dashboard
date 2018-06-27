@@ -12,7 +12,7 @@ class VersionController < ApplicationController
 
   before_filter(only: %i[download download_user]) do
     obj = @version.inv_object
-    check_dua( obj, { object: obj, version: @version } )
+    check_dua(obj, { object: obj, version: @version })
   end
 
   before_filter(only: %i[download download_user]) do

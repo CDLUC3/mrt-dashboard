@@ -81,7 +81,7 @@ module IngestMixin
   end
   # rubocop:enable Metrics/MethodLength, Metrics/AbcSize
 
-  # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
+  # rubocop:disable Metrics/MethodLength
   def upload_params_from(params, current_user, current_group)
     {
       'file'              => params[:file].tempfile,
@@ -97,7 +97,7 @@ module IngestMixin
       'responseForm' => 'xml'
     }.reject { |_key, value| value.blank? }
   end
-  # rubocop:enable Metrics/MethodLength, Metrics/AbcSize
+  # rubocop:enable Metrics/MethodLength
 
   # rubocop:disable Metrics/AbcSize
   def post_upload
