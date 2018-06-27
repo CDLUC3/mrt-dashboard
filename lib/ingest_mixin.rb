@@ -1,5 +1,4 @@
 module IngestMixin
-  # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
   def ingest_params_from(params, current_user)
     {
       'creator'               => params[:creator],
@@ -38,9 +37,7 @@ module IngestMixin
       'type'                  => params[:type]
     }.reject { |_k, v| v.blank? }
   end
-  # rubocop:enable Metrics/MethodLength, Metrics/AbcSize
 
-  # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
   def update_params_from(params, current_user)
     {
       'creator'               => params[:creator],
@@ -79,9 +76,7 @@ module IngestMixin
       'type'                  => params[:type]
     }.reject { |_k, v| v.blank? }
   end
-  # rubocop:enable Metrics/MethodLength, Metrics/AbcSize
 
-  # rubocop:disable Metrics/MethodLength
   def upload_params_from(params, current_user, current_group)
     {
       'file'              => params[:file].tempfile,
@@ -97,9 +92,7 @@ module IngestMixin
       'responseForm' => 'xml'
     }.reject { |_key, value| value.blank? }
   end
-  # rubocop:enable Metrics/MethodLength
 
-  # rubocop:disable Metrics/AbcSize
   def post_upload
     ingest_params = upload_params_from(params, current_user, current_group)
     resp          = mk_httpclient.post(APP_CONFIG['ingest_service_update'], ingest_params)
@@ -107,9 +100,7 @@ module IngestMixin
     @batch_id     = @doc.xpath('//bat:batchState/bat:batchID')[0].child.text
     @obj_count    = @doc.xpath('//bat:batchState/bat:jobStates').length
   end
-  # rubocop:enable Metrics/AbcSize
 
-  # rubocop:disable Metrics/AbcSize
   def render_upload_error(ex)
     raise unless ex.respond_to?(:response)
     @doc = Nokogiri::XML(ex.response) { |config| config.strict.noent.noblanks }
@@ -117,5 +108,4 @@ module IngestMixin
     @error       = "ingest: #{@doc.xpath('//exc:error')[0].child.text}"
     render action: 'upload_error'
   end
-  # rubocop:enable Metrics/AbcSize
 end

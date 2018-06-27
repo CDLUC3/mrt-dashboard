@@ -17,6 +17,7 @@ module UserLdap
         .sort_by { |user| user['cn'][0].downcase }
     end
 
+    # rubocop:disable Metrics/MethodLength
     def add(userid, password, firstname, lastname, email)
       # probably required attributes cn (common name, first + last), displayName,  dn (distinguished name),
       # givenName (first name), sn (surname, last name), name = cn, displayName, uid,
@@ -34,6 +35,7 @@ module UserLdap
       }
       true_or_exception(admin_ldap.add(dn: ns_dn(userid), attributes: attr))
     end
+    # rubocop:enable Metrics/MethodLength
 
     def authenticate(userid, password)
       raise LdapException, 'user does not exist' unless record_exists?(userid)
