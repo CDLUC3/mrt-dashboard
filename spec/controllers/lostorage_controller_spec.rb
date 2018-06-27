@@ -145,6 +145,56 @@ describe LostorageController do
         post(:index, params, { uid: user_id })
       end
 
+      it 'sets the subject differently for full objects' do
+        expected_xml = <<~XML
+          <?xml version="1.0" encoding="UTF-8"?>
+          <email>
+            <from>marisa.strong@ucop.edu</from>
+            <to>jdoe@example.edu</to>
+            <to>marisa.strong@ucop.edu</to>
+            <subject>Merritt Object Download Processing Completed</subject>
+            <msg/>
+          </email>
+        XML
+
+        params.delete(:version)
+        expect(client).to receive(:post) do |url, post_params|
+          async_url = object.bytestream_uri.to_s.gsub(/content/, 'async') # TODO: maybe just put this on the object?
+          expect(url).to eq(async_url)
+
+          email_xml_file = post_params['email']
+          expect(email_xml_file).not_to be_nil
+          email_xml = email_xml_file.read
+          expect(email_xml).to be_xml(expected_xml)
+        end.and_return(post_email_response)
+        post(:index, params, { uid: user_id })
+      end
+
+      it 'allows a custom subject' do
+        expected_xml = <<~XML
+          <?xml version="1.0" encoding="UTF-8"?>
+          <email>
+            <from>marisa.strong@ucop.edu</from>
+            <to>jdoe@example.edu</to>
+            <to>marisa.strong@ucop.edu</to>
+            <subject>Help I am trapped in a digital repository</subject>
+            <msg/>
+          </email>
+        XML
+
+        params[:losSubject] = 'Help I am trapped in a digital repository'
+        expect(client).to receive(:post) do |url, post_params|
+          async_url = object.bytestream_uri.to_s.gsub(/content/, 'async') # TODO: maybe just put this on the object?
+          expect(url).to eq(async_url)
+
+          email_xml_file = post_params['email']
+          expect(email_xml_file).not_to be_nil
+          email_xml = email_xml_file.read
+          expect(email_xml).to be_xml(expected_xml)
+        end.and_return(post_email_response)
+        post(:index, params, { uid: user_id })
+      end
+
       it 'redirects back to the object' do
         post(:index, params, { uid: user_id })
         expect(response.code.to_i).to eq(302)
@@ -152,12 +202,26 @@ describe LostorageController do
       end
 
       it 'uses the producer URL for "user friendly" download' do
+        expected_xml = <<~XML
+          <?xml version="1.0" encoding="UTF-8"?>
+          <email>
+            <from>marisa.strong@ucop.edu</from>
+            <to>jdoe@example.edu</to>
+            <to>marisa.strong@ucop.edu</to>
+            <subject>Merritt Version Download Processing Completed</subject>
+            <msg/>
+          </email>
+        XML
+
         params[:userFriendly] = 'true'
         expect(client).to receive(:post) do |url, post_params|
           async_url = object.bytestream_uri2.to_s.gsub(/producer/, 'producerasync') # TODO: maybe just put this on the object?
           expect(url).to eq(async_url)
-          email_xml = post_params['email']
-          expect(email_xml).not_to be_nil # TODO: rewrite post_los_email so we don't pass live file pointers around & can actually test
+
+          email_xml_file = post_params['email']
+          expect(email_xml_file).not_to be_nil
+          email_xml = email_xml_file.read
+          expect(email_xml).to be_xml(expected_xml)
         end.and_return(post_email_response)
         post(:index, params, { uid: user_id })
       end

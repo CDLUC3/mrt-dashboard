@@ -30,9 +30,17 @@ class InvObject < ActiveRecord::Base
     URI.parse("#{APP_CONFIG['uri_1']}#{node_number}/#{to_param}")
   end
 
+  def bytestream_uri_async
+    bytestream_uri.to_s.gsub(/content/, 'async')
+  end
+
   # producer
   def bytestream_uri2
     URI.parse("#{APP_CONFIG['uri_2']}#{node_number}/#{to_param}")
+  end
+
+  def bytestream_uri2_async
+    bytestream_uri2.to_s.gsub(/producer/, 'producerasync')
   end
 
   # manifest
