@@ -95,17 +95,3 @@ Style/Lambda:
 Style/SingleLineBlockParams:
   Enabled: false
 
-# ############################################################
-# Special cases for specs
-
-Metrics/BlockLength:
-  Exclude:
-    - '**/spec/**/*.rb'
-
-Metrics/ModuleLength:
-  Exclude:
-    - '**/spec/**/*.rb'
-
-Metrics/MethodLength:
-  Exclude:
-    - '**/spec/**/*.rb'

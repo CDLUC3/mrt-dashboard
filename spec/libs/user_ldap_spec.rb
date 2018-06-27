@@ -126,7 +126,8 @@ module UserLdap
 
       it 'succeeds if ID exists' do
         user_properties = {}
-        allow(admin_ldap).to receive(:search).with(base: LDAP_CONFIG['user_base'], filter: user_ldap.obj_filter(user_id)).and_return([user_properties])
+        expected_filter = user_ldap.obj_filter(user_id)
+        allow(admin_ldap).to receive(:search).with(base: LDAP_CONFIG['user_base'], filter: expected_filter).and_return([user_properties])
         allow(admin_ldap).to receive(:auth).with(/#{user_id}/, password)
         allow(admin_ldap).to receive(:bind).and_return(true)
         expect(user_ldap.authenticate(user_id, password)).to eq(true)

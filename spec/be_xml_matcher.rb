@@ -6,14 +6,14 @@ module BeXmlMatcher
   def self.to_nokogiri(xml)
     return nil unless xml
     case xml
-      when Nokogiri::XML::Element
-        xml
-      when Nokogiri::XML::Document
-        xml.root
-      when String
-        to_nokogiri(Nokogiri::XML(xml, &:noblanks))
-      else
-        raise "be_xml() expected XML, got #{xml.class}"
+    when Nokogiri::XML::Element
+      xml
+    when Nokogiri::XML::Document
+      xml.root
+    when String
+      to_nokogiri(Nokogiri::XML(xml, &:noblanks))
+    else
+      raise "be_xml() expected XML, got #{xml.class}"
     end
   end
 
