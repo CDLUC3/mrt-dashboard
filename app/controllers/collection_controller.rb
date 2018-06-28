@@ -1,9 +1,11 @@
 class CollectionController < ApplicationController
+  NO_ACCESS = 'You do not have access to that collection'.freeze
+
   before_filter :require_user
   before_filter :require_request_group
 
   before_filter do
-    raise ActiveResource::UnauthorizedAccess, 'You do not have access to that collection' unless @request_group.user_has_permission?(current_uid, 'read')
+    raise(ActiveResource::UnauthorizedAccess, NO_ACCESS) unless @request_group.user_has_read_permission?(current_uid)
   end
 
   # Load the group specified in the params[:group]
@@ -30,50 +32,54 @@ class CollectionController < ApplicationController
   end
 
   def index
-    # load the requested group into the session
-    if session[:group_id] != params[:group]
-      session[:group_id] = @request_group.id
-      session[:group_ark] = @request_group.ark_id
-      session[:group_description] = @request_group.description
-    end
-    @recent_objects = InvObject.joins(:inv_collections)
-      .where('inv_collections.ark = ?', @request_group.ark_id)
+    set_session_group(@request_group) unless params[:group] == session[:group_id]
+    @recent_objects = find_all(@request_group.ark_id)
+  end
+
+  def search_results
+    terms = parse_terms(params[:terms])
+    collection_ark = @request_group.ark_id
+    @results = terms.empty? ? find_all(collection_ark) : find_by_full_text(collection_ark, terms)
+  end
+
+  private
+
+  def find_all(collection_ark)
+    InvObject.joins(:inv_collections)
+      .where('inv_collections.ark = ?', collection_ark)
       .order('inv_objects.modified desc')
       .includes(:inv_versions, :inv_dublinkernels)
       .quickloadhack
       .paginate(paginate_args)
   end
 
-  def search_results
-    terms = Unicode.downcase(params[:terms])
+  def parse_terms(terms_param)
+    terms = Unicode.downcase(terms_param)
       .split(/\s+/)
       .map { |t| is_ark?(t) ? t[11..-1] : t } # special ark handling
       .delete_if { |t| (t.blank? || t.size < 4) }
-    terms = terms[0..50] # we can't have more than 60 terms, so just drop > 50
-
-    if terms.empty?
-      # no real search, just display
-      @results = InvObject.joins(:inv_collections)
-        .where('inv_collections.ark = ?', @request_group.ark_id)
-        .order('inv_objects.modified desc')
-        .includes(:inv_versions, :inv_dublinkernels)
-        .quickloadhack
-        .paginate(paginate_args)
-    else
-      # new, more efficient full text query (thanks Debra)
-      where_clauses = terms.map { |_t| '? ' }
-      where_clause = '(MATCH (sha_dublinkernels.value) AGAINST ("' + where_clauses.join('') + '"))'
-
-      ark_id = @request_group.ark_id
-      @results = InvObject
-        .joins(:inv_collections, inv_dublinkernels: :sha_dublinkernel)
-        .where('inv_collections.ark = ?', ark_id)
-        .where(where_clause, *terms)
-        .includes(:inv_versions, :inv_dublinkernels)
-        .quickloadhack
-        .limit(10)
-        .uniq
-        .paginate(paginate_args)
-    end
+    terms[0..50] # we can't have more than 60 terms, so just drop > 50
   end
+
+  def find_by_full_text(collection_ark, terms)
+    # new, more efficient full text query (thanks Debra)
+    where_clause = "(MATCH (sha_dublinkernels.value) AGAINST (\"#{terms.map { |_t| '? ' }.join('')}\"))"
+    InvObject
+      .joins(:inv_collections, inv_dublinkernels: :sha_dublinkernel)
+      .where('inv_collections.ark = ?', collection_ark)
+      .where(where_clause, *terms)
+      .includes(:inv_versions, :inv_dublinkernels)
+      .quickloadhack
+      .limit(10)
+      .uniq
+      .paginate(paginate_args)
+  end
+
+  # rubocop:disable Naming/AccessorMethodName
+  def set_session_group(group)
+    session[:group_id]          = group.id
+    session[:group_ark]         = group.ark_id
+    session[:group_description] = group.description
+  end
+  # rubocop:enable Naming/AccessorMethodName
 end
