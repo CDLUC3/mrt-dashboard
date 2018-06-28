@@ -66,35 +66,22 @@ class ApplicationController < ActionController::Base
     current_group.user_has_permission?(current_uid, 'write')
   end
 
-  # Return the groups which the user may be a member of
-  def available_groups
-    groups = current_user.groups.sort_by { |g| g.description.downcase } || []
-    groups.map do |group|
-      { id:               group.id,
-        description:      group.description,
-        user_permissions: group.user_permissions(current_user.login) }
-    end
-  end
-
   private
 
   # Return the current user. Uses either the session user OR if the
   # user supplied HTTP basic auth info, uses that. Returns nil if
   # there is no session user and HTTP basic auth did not succeed
   def current_user
-    @current_user ||= if session[:uid]
-                        User.find_by_id(session[:uid])
-                      else
-                        user_from_auth_header(request.headers['HTTP_AUTHORIZATION'])
-                      end
+    @current_user ||= begin
+      user_id = session[:uid] || user_id_from_auth_header_if_valid(request.headers['HTTP_AUTHORIZATION'])
+      User.find_by_id(user_id) if user_id
+    end
   end
 
-  def user_from_auth_header(auth_header)
-    return unless auth_header
-    return unless auth_header.match?(/Basic /)
-    (login, password) = Base64.decode64(auth_header.gsub(/Basic /, '')).split(/:/)
-    return unless User.valid_ldap_credentials?(login, password)
-    User.find_by_id(login)
+  def user_id_from_auth_header_if_valid(auth_header)
+    return unless (match_data = auth_header && auth_header.match(/Basic (.*)/))
+    (user_id, password) = Base64.decode64(match_data[1]).split(':')
+    user_id if User.valid_ldap_credentials?(user_id, password)
   end
 
   # either return the uid from the session OR get the user id from

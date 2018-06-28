@@ -119,7 +119,7 @@ class InvObject < ActiveRecord::Base
   end
 
   def user_has_read_permission?(uid)
-    group.user_has_permission?(uid, 'read')
+    group.user_has_read_permission?(uid)
   end
 
   def user_can_download?(uid)

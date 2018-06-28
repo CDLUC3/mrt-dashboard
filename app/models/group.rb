@@ -51,6 +51,10 @@ class Group
     user_permissions(uid).member?(permission)
   end
 
+  def user_has_read_permission?(uid)
+    user_has_permission?(uid, 'read')
+  end
+
   def sparql_id
     "http://ark.cdlib.org/#{ark_id}"
   end

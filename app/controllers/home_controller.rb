@@ -7,4 +7,16 @@ class HomeController < ApplicationController
                 action: :index,
                 group: available_groups[0][:id])
   end
+
+  private
+
+  # Return the groups which the user may be a member of
+  def available_groups
+    groups = current_user.groups.sort_by { |g| g.description.downcase } || []
+    groups.map do |group|
+      { id:               group.id,
+        description:      group.description,
+        user_permissions: group.user_permissions(current_user.login) }
+    end
+  end
 end
