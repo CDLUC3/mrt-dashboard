@@ -9,6 +9,7 @@ AllCops:
     - 'vendor/**/*'
     - 'app/controllers/admin_controller.rb'
     - 'lib/tasks/atom.rake'
+    - 'lib/dua_mixin.rb'
 
 # Allow one line around block body (Layout/EmptyLines will still disallow two or more)
 Layout/EmptyLinesAroundBlockBody:
