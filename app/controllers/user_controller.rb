@@ -9,33 +9,68 @@ class UserController < ApplicationController
     'mail'               => 'Email'
   }.freeze
 
+  PASSWORD_MISMATCH_MSG = 'Your password and repeated password do not match.'.freeze
+  PROFILE_UPDATED_MSG = 'Your profile has been updated.'.freeze
+
   def update
-    # uncached from LDAP, so always current
-    @ldap_user = User::LDAP.fetch(current_user.login)
-
-    @display_text = ''
-    return if params[:givenname].nil?
-
-    # put updated info in this hash so they don't have to retype
-    params.each_pair { |k, v| @ldap_user[k] = v }
-    error_fields = REQUIRED.keys.select { |key| params[key].blank? }
-    if !error_fields.empty?
-      @display_text += 'The following items must be filled in: '
-      @display_text += error_fields.map { |i| REQUIRED[i] }.join(', ')
-      @display_text += '.'
-    elsif params[:userpassword] != params[:repeatuserpassword]
-      @display_text += 'Your password and repeated password do not match.'
+    @ldap_user = User::LDAP.fetch(current_user.login) # uncached from LDAP, so always current
+    if params[:givenname]
+      @missing_params = find_missing(params)
+      cache_field_values(params)
+      do_update!
     else
-      params[:telephonenumber] = nil if params[:telephonenumber] == ''
-
-      %w[givenname sn mail tzregion telephonenumber].each do |i|
-        User::LDAP.replace_attribute(current_user.login, i, params[i])
-      end
-      %w[cn displayname].each do |i|
-        User::LDAP.replace_attribute(current_user.login, i, "#{params['givenname']} #{params['sn']}")
-      end
-      User::LDAP.replace_attribute(current_user.login, 'userpassword', params['userpassword']) if params['userpassword'] != '!unchanged'
-      @display_text = 'Your profile has been updated.'
+      @display_text = '' # TODO: why?
     end
+  end
+
+  private
+
+  def do_update!
+    if @missing_params.any?
+      missing_param_list = @missing_params.map { |i| REQUIRED[i] }.join(', ')
+      @display_text = "The following items must be filled in: #{missing_param_list}."
+    elsif password_mismatch?(params)
+      @display_text = PASSWORD_MISMATCH_MSG
+    else
+      replace_attributes!(params)
+      @display_text = PROFILE_UPDATED_MSG
+    end
+  end
+
+  def replace_attributes!(params)
+    attributes_from(params).each do |attrib, value|
+      User::LDAP.replace_attribute(current_user.login, attrib, value)
+    end
+  end
+
+  def cache_field_values(params)
+    params.each_pair { |k, v| @ldap_user[k] = v }
+  end
+
+  def find_missing(params)
+    REQUIRED.keys.select { |key| params[key].blank? }
+  end
+
+  def password_mismatch?(params)
+    params[:userpassword] != params[:repeatuserpassword]
+  end
+
+  def attributes_from(params)
+    # Basic attributes
+    attributes = %w[givenname sn mail tzregion telephonenumber].map { |k| [k, params[k]] }.to_h
+
+    # Password
+    userpassword = params['userpassword']
+    attributes['userpassword'] = userpassword unless userpassword == '!unchanged'
+
+    # Telephone number
+    telephonenumber = params['telephonenumber']
+    attributes['telephonenumber'] = telephonenumber unless telephonenumber.blank?
+
+    # Full name
+    %w[cn displayname].each { |attrib| attributes[attrib] = "#{params['givenname']} #{params['sn']}" }
+
+    # Return value
+    attributes
   end
 end
