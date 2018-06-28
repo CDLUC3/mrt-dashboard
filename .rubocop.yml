@@ -8,6 +8,7 @@ AllCops:
     - 'script/**/*'
     - 'vendor/**/*'
     - 'app/controllers/admin_controller.rb'
+    - 'app/controllers/dua_controller.rb'
     - 'lib/tasks/atom.rake'
     - 'lib/dua_mixin.rb'
 
