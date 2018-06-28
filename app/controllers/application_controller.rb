@@ -128,7 +128,6 @@ class ApplicationController < ActionController::Base
     @_current_group ||= Group.find(session[:group_id])
   end
 
-
   def max_download_size_pretty
     @max_download_size_pretty ||= number_to_storage_size(APP_CONFIG['max_download_size'])
   end
@@ -141,28 +140,6 @@ class ApplicationController < ActionController::Base
     redirect_to(session[:return_to] || default)
     session[:return_to] = nil
   end
-
-  # TODO: is this only used for DUAs? if so, let's remove it
-  # rubocop:disable Security/Open
-  def with_fetched_tempfile(*args)
-    require 'open-uri'
-    require 'fileutils'
-    # TODO: figure out what we really mean to be opening here, & use more specific methods
-    open(*args) do |data|
-      tmp_file = Tempfile.new('mrt_http')
-      begin
-        until (buff = data.read(4096)).nil?
-          tmp_file << buff
-        end
-        tmp_file.rewind
-        yield(tmp_file)
-      ensure
-        tmp_file.close
-        tmp_file.delete
-      end
-    end
-  end
-  # rubocop:enable Security/Open
 
   def params_u(param)
     urlunencode(params[param])

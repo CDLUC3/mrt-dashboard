@@ -34,4 +34,27 @@ class DuaController < ApplicationController
     end
   end
   #:nocov:
+
+  # TODO: is this only used for DUAs? if so, let's remove it
+  # rubocop:disable Security/Open
+  def with_fetched_tempfile(*args)
+    require 'open-uri'
+    require 'fileutils'
+    # TODO: figure out what we really mean to be opening here, & use more specific methods
+    open(*args) do |data|
+      tmp_file = Tempfile.new('mrt_http')
+      begin
+        until (buff = data.read(4096)).nil?
+          tmp_file << buff
+        end
+        tmp_file.rewind
+        yield(tmp_file)
+      ensure
+        tmp_file.close
+        tmp_file.delete
+      end
+    end
+  end
+  # rubocop:enable Security/Open
+
 end
