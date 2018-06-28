@@ -6,43 +6,35 @@ module Noid
 
   class Minter
     def initialize(url_string, n_at_once = 1, preserve_naan = false)
-      @url = URI.parse(url_string)
-      @n_at_once = n_at_once
+      @url           = URI.parse(url_string)
+      @n_at_once     = n_at_once
       @preserve_naan = preserve_naan
-      @cache = []
+      @cache         = []
     end
-
-    def mint
-      fill_cache if @cache.empty?
-      @cache.shift
-    end
-
-    private
 
     # rubocop:disable Lint/RescueException
-    def fill_cache
-      request = Net::HTTP::Get.new(@url.path + '?mint+' + @n_at_once.to_s)
-      response = Net::HTTP.start(@url.host, @url.port) { |http| http.request(request) }
-      ids = extract_ids(response)
-      @cache.concat(ids)
+    def mint
+      (@cache = request_more_ids) if @cache.empty?
+      @cache.shift
     rescue MintException
       raise # don't eat our own exceptions
     rescue SocketError
       raise MintException, 'Could not connect to server.'
-    rescue Exception => e # TODO: should this be StandardError (or just 'rescue')?
-      STDERR.puts(e)
-      STDERR.puts(e.backtrace)
+    rescue Exception # TODO: should this be StandardError (or just 'rescue')?
       raise MintException, "Can't get ID; not a NOID server?"
     end
     # rubocop:enable Lint/RescueException
 
-    def extract_ids(response)
-      raise MintException, 'Got error response from server.' unless response.code == "200"
-      body = response.body
-      extract(body)
+    private
+
+    def request_more_ids
+      request  = Net::HTTP::Get.new(@url.path + '?mint+' + @n_at_once.to_s)
+      response = Net::HTTP.start(@url.host, @url.port) { |http| http.request(request) }
+      raise MintException, 'Got error response from server.' unless response.code == '200'
+      extract_ids(response.body)
     end
 
-    def extract(body)
+    def extract_ids(body)
       body.split(/\n/).map do |s|
         md = s.match(%r{id:\s+([0-9]+/)?([^\s]+)})
         @preserve_naan ? "#{md[1]}#{md[2]}" : md[2]
