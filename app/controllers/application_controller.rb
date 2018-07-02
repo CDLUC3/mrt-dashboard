@@ -66,6 +66,16 @@ class ApplicationController < ActionController::Base
     current_group.user_has_permission?(current_uid, 'write')
   end
 
+  # Return the groups which the user may be a member of
+  def available_groups
+    groups = current_user.groups.sort_by { |g| g.description.downcase } || []
+    groups.map do |group|
+      { id:               group.id,
+        description:      group.description,
+        user_permissions: group.user_permissions(current_user.login) }
+    end
+  end
+
   private
 
   # Return the current user. Uses either the session user OR if the
