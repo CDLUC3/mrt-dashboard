@@ -44,6 +44,13 @@ describe User do
         expect(user.send(multivalue_key)).to eq(multivalue_result)
       end
     end
+
+    it 'responds to anything' do
+      not_a_real_method = :not_a_real_method
+      some_args = { some_args: 'whatever' }
+      expect(user.respond_to?(not_a_real_method)).to eq(true)
+      expect(user.send(not_a_real_method, some_args)).to be_nil
+    end
   end
 
   describe ':valid_ldap_credentials' do
