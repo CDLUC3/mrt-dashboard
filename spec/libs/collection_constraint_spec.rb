@@ -24,9 +24,10 @@ describe CollectionConstraint do
     end
 
     it 'returns true for an ARK if we find a matching group' do
-      group_id = 'ark:/whatever'
-      params[:group] = group_id
-      allow(Group).to receive(:find).with(group_id)
+      group_ark = 'ark:/whatever'
+      mock_collection(name: 'whatever', id: 'whatever_id', ark: group_ark)
+
+      params[:group] = group_ark
       expect(constraint.matches?(request)).to eq(true)
     end
 

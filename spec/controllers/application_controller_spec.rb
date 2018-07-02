@@ -21,6 +21,7 @@ describe ApplicationController do
       @user_id = 'jdoe'
       @password = 'correcthorsebatterystaple'
       @user = double(User)
+      allow(User).to receive(:find_by_id).with(nil).and_return(nil)
       allow(User).to receive(:find_by_id).with(user_id).and_return(user)
     end
 
