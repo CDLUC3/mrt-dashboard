@@ -83,21 +83,14 @@ class ApplicationController < ActionController::Base
   # there is no session user and HTTP basic auth did not succeed
   def current_user
     @current_user ||= begin
-      user_id = session[:uid] || user_id_from_auth_header_if_valid(request.headers['HTTP_AUTHORIZATION'])
-      User.find_by_id(user_id) if user_id
+      User.find_by_id(session[:uid]) || User.from_auth_header(request.headers['HTTP_AUTHORIZATION'])
     end
-  end
-
-  def user_id_from_auth_header_if_valid(auth_header)
-    return unless (match_data = auth_header && auth_header.match(/Basic (.*)/))
-    (user_id, password) = Base64.decode64(match_data[1]).split(':')
-    user_id if User.valid_ldap_credentials?(user_id, password)
   end
 
   # either return the uid from the session OR get the user id from
   # basic auth. Will not hit LDAP unless using basic auth
   def current_uid
-    session[:uid] || (!current_user.nil? && current_user.uid)
+    session[:uid] || (current_user && current_user.uid)
   end
 
   def current_user_displayname

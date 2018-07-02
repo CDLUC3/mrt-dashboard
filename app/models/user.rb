@@ -1,4 +1,7 @@
 class User
+  # ############################################################
+  # Constants
+
   LDAP = UserLdap::Server.new(
     host: LDAP_CONFIG['host'],
     port: LDAP_CONFIG['port'],
@@ -16,13 +19,15 @@ class User
       'email'         => 'mail',
       'tz_region'     => 'tzregion' }.freeze
 
+  # ############################################################
+  # Initializer
+
   def initialize(user)
     @user = user
   end
 
-  def self.find_all
-    LDAP.find_all
-  end
+  # ############################################################
+  # Instance methods
 
   # rubocop:disable Style/MethodMissingSuper
   def method_missing(meth, *_args)
@@ -42,7 +47,15 @@ class User
     Group.find_batch(grp_ids)
   end
 
+  # ############################################################
+  # Class methods
+
+  def self.find_all
+    LDAP.find_all
+  end
+
   def self.find_by_id(user_id)
+    return unless user_id
     User.new(LDAP.fetch(user_id))
   end
 
@@ -63,6 +76,18 @@ class User
     end
     res && true
   end
+
+  def self.from_auth_header(auth_header)
+    return unless (match_data = auth_header && auth_header.match(/Basic (.*)/))
+    (user_id, password) = Base64.decode64(match_data[1]).split(':')
+    return unless User.valid_ldap_credentials?(user_id, password)
+    find_by_id(user_id)
+  end
+
+  # ############################################################
+  # Private methods
+
+  private
 
   # TODO: figure out whether we still need this & get rid of it if not
   # :nocov:

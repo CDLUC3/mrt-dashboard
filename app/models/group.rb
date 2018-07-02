@@ -31,6 +31,7 @@ class Group
   end
 
   def self.find(id)
+    return unless id
     # fetch by groupid, but otherwise, fall back to arkid
     ldap_group = begin
                    Group::LDAP.fetch(id)
