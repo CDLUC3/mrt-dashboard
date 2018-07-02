@@ -12,3 +12,15 @@ task :coverage do
   ENV['COVERAGE'] = 'true'
   Rake::Task[:spec].invoke
 end
+
+# ------------------------------------------------------------
+# RuboCop
+
+require 'rubocop/rake_task'
+RuboCop::RakeTask.new
+
+# ------------------------------------------------------------
+# Defaults
+
+desc 'Run unit & database tests, check test coverage, check code style'
+task default: %i[coverage rubocop]
