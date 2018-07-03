@@ -14,9 +14,4 @@ class Streamer
       yield chunk
     end
   end
-
-  def whatever
-    # TODO: remove me once we're sure coverage check fails in default rake task
-    puts 'I am a method with no test coverage'
-  end
 end
