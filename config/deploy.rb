@@ -28,7 +28,7 @@ set :linked_dirs, %w[log pid]
 set :keep_releases, 5
 
 # Prompt for TAG before deployment only
-before "deploy", "deploy:prompt_for_tag"
+before 'deploy', 'deploy:prompt_for_tag'
 
 namespace :deploy do
 
@@ -71,10 +71,10 @@ namespace :deploy do
   desc 'Prompt for branch'
   task :prompt_for_tag do
     on roles(:app) do
-       puts "Usage: TAG=test cap mrt-ui-dev deploy"
-       ask :branch, default='master' unless ENV['TAG']
-       set :branch, ENV['TAG'] if ENV['TAG']
-       puts "Setting branch to: #{fetch(:branch)}"
+      puts 'Usage: TAG=test cap mrt-ui-dev deploy'
+      ask :branch, 'master' unless ENV['TAG']
+      set :branch, ENV['TAG'] if ENV['TAG']
+      puts "Setting branch to: #{fetch(:branch)}"
     end
   end
 
