@@ -28,6 +28,9 @@ set :linked_dirs, %w{log pid}
 # Default value for keep_releases is 5
 set :keep_releases, 5
 
+# Prompt for TAG before deployment only
+before "deploy", "deploy:prompt_for_tag"
+
 namespace :deploy do
 
   desc 'Stop Puma'
@@ -65,6 +68,16 @@ namespace :deploy do
   task :restart do
     on roles(:app), wait: 5 do
        # do not implement, use stop/start instead
+    end
+  end
+
+  desc 'Prompt for branch'
+  task :prompt_for_tag do
+    on roles(:app) do
+       puts "Usage: TAG=test cap mrt-ui-dev deploy"
+       ask :branch, default='master' unless ENV['TAG']
+       set :branch, ENV['TAG'] if ENV['TAG']
+       puts "Setting branch to: #{fetch(:branch)}"
     end
   end
 

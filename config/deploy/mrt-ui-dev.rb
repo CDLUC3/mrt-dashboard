@@ -17,8 +17,8 @@
 
 set :rails_env, "development"
 
-puts "DEVELOPMENT branch"
-set :branch, 'master'
+# This is now set under task "prompt_for_tag" 
+# set :branch, 'master'
 
 # Default deploy_to directory is /var/www/my_app
 set :deploy_to, '/dpr2/apps/ui'
