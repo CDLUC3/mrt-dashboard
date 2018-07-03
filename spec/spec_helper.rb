@@ -5,6 +5,7 @@ require 'colorize'
 
 if ENV['COVERAGE']
   require 'simplecov'
+  SimpleCov.minimum_coverage 100
   SimpleCov.start 'rails'
 end
 
