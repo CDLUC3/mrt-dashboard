@@ -120,7 +120,7 @@ bundle exec rubocop --auto-correct <FILE>
 ```
 
 (Use caution, though, pay attention to the output, and make sure to run the
-tests afterwords. Most RuboCop auto-fixes are smart enough not to change any
+tests afterwards. Most RuboCop auto-fixes are smart enough not to change any
 semantics, but occasionally it does make a mistake.)
 
 **⚠️ All style checks must pass for the continuous integration build to succeed.**
