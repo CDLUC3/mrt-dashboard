@@ -19,7 +19,7 @@ documentation on Merritt's other components, please see the
   - [Running the tests](#running-the-tests)
   - [Running the tests with coverage](#running-the-tests-with-coverage)
 - [Style checks](#style-checks)
-- [Rake tasks](#rake-tasks)
+- [Rake tasks and other commands](#rake-tasks-and-other-commands)
 - [Continuous integration](#continuous-integration)
 
 ## Requirements
@@ -70,8 +70,8 @@ $ ln -s ../.config-secret/ldap.yml ldap.yml
    to some database that's preloaded with the application schema and that it's safe for the
    tests to erase; this should not be a shared database. The `database.yml.example` file assumes
    a local database as described under [Tests](#tests), below.
-2. Or you can just copy `config/database.yml.example`/`config/ldap.yml.example`
-   to `config/database.yml`/`config/ldap.yml` and edit those files directly. However, you'll 
+2. Or, you can just copy `config/database.yml.example` / `config/ldap.yml.example`
+   to `config/database.yml` / `config/ldap.yml` and edit those files directly. However, you'll 
    need to be careful not to run the `travis-prep.sh` script (and will have to configure your
    test database by hand). While the `travis-prep.sh` script will skip symlinks in `config`,
    it will copy over plain files. 
@@ -84,7 +84,7 @@ To start the application in development mode, run
 bundle exec rails s
 ``` 
 
-By default this (currently) uses the
+By default development mode (currently) uses the
 [Thin](https://github.com/macournoyer/thin) web server, but you can also
 run [Puma](https://github.com/puma/puma) in development mode with `bundle
 exec puma`.
@@ -105,7 +105,7 @@ If your configuration files are symlinked as described above under
 create and populate this database with the `travis-prep.sh` script used for
 continuous integration. 
 
-> **⚠️ Note:** If your configuration files are plain files rather than symlinks, the 
+> **⚠️** If your configuration files are plain files rather than symlinks, the 
 > `travis-prep.sh` script will overwrite them with the default files from `.config-travis`.) 
 
 Alternatively, you can run the same commands manually:
@@ -176,13 +176,13 @@ semantics, but occasionally it does make a mistake.)
 
 > **⚠️ All style checks must pass for the continuous integration build to succeed.**
 
-## Rake tasks
+## Rake tasks and other commands
 
 Note that all commands are preceded with `bundle exec` to make sure they use
 the gems configured by Bundler.
 
 - `bundle exec rake`
-  - default Rake task; runs tests (with coverage), and if the tests succeed,
+  - default Rake task: runs tests (with coverage), and if the tests succeed,
     runs RuboCop style checks.
 - `bundle exec rake spec`
   - runs the tests without coverage.
