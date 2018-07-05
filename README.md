@@ -9,9 +9,15 @@ documentation on Merritt's other components, please see the
 
 ## Table of contents
 
+- [Requirements](#requirements)
 - [Installation](#installation)
 - [Running the application](#running-the-application)
+  - [Configuring LDAP and the database](#configuring-ldap-and-the-database)
+  - [Starting the application](#starting-the-application)
 - [Tests](#tests)
+  - [Configuring the test database](#configuring-the-test-database)
+  - [Running the tests](#running-the-tests)
+  - [Running the tests with coverage](#running-the-tests-with-coverage)
 - [Style checks](#style-checks)
 - [Rake tasks](#rake-tasks)
 - [Continuous integration](#continuous-integration)
@@ -30,15 +36,47 @@ Run `bundle install` to install the required gems.
 
 ## Running the application
 
-Configure the application to talk to the database:
+### Configuring LDAP and the database
 
-- Copy `config/database.yml.example` to `config/database.yml` and set the
-  `password` field as needed.
+Create a `.config-secret` directory at the root of the application. (This directory will
+be ignored by git.) From the `config` directory, copy `database.yml.example` and `ldap.yml.example`
+to `.config-secret`, removing the `.example` extension:
 
-Configure the application to talk to LDAP:
+```
+$ mkdir .config-secret
+$ cp config/database.yml.example .config-secret/database.yml
+$ cp config/ldap.yml.example .config-secret/ldap.yml
+```
 
-- Copy `config/ldap.yml.example` to `config/ldap.yml` and set the
-  `admin_password` field as needed.
+Next, edit `.config-secret/database.yml` to set the `password` field for the environments you're
+interested in, and `.config-secret/ldap.yml` likewise to set the `admin_password` field.
+(If you're not working with the UC3 MySQL and LDAP servers, you may also need to change
+hostnames, ports, etc.)
+
+Finally, symlink the `database.yml` and `ldap.yml` files from `.config-secret` back into the
+`config` directory:
+
+```
+$ cd config
+$ ln -s ../.config-secret/database.yml database.yml
+$ ln -s ../.config-secret/ldap.yml ldap.yml
+``` 
+
+#### Alternative configuration methods
+
+1. Instead of using `database.yml.example` and `ldap.yml.example`, you can copy files from
+   any shared production, stage, or development environment. However, to run feature and
+   controller tests, you'll need to edit the `test` configuration in `database.yml` to point
+   to some database that's preloaded with the application schema and that it's safe for the
+   tests to erase; this should not be a shared database. The `database.yml.example` file assumes
+   a local database as described under [Tests](#tests), below.
+2. Or you can just copy `config/database.yml.example`/`config/ldap.yml.example`
+   to `config/database.yml`/`config/ldap.yml` and edit those files directly. However, you'll 
+   need to be careful not to run the `travis-prep.sh` script (and will have to configure your
+   test database by hand). While the `travis-prep.sh` script will skip symlinks in `config`,
+   it will copy over plain files. 
+
+### Starting the application
 
 To start the application in development mode, run 
 
@@ -55,9 +93,22 @@ exec puma`.
 
 ## Tests
 
-The unit tests require a local MySQL database `mrt_dashboard_test`,
+### Configuring the test database
+
+The unit tests require a database, and one that can be safely cleared before each
+test run. The `database.yml.example` file assumes a local MySQL database `mrt_dashboard_test`,
 prepopulated with the database schema, with a user `travis` having all
-privileges. You can create these with the following commands:
+privileges.
+
+If your configuration files are symlinked as described above under 
+[Configuring LDAP and the database](#configuring-ldap-and-the-database), you can
+create and populate this database with the `travis-prep.sh` script used for
+continuous integration. 
+
+> **⚠️ Note:** If your configuration files are plain files rather than symlinks, the 
+> `travis-prep.sh` script will overwrite them with the default files from `.config-travis`.) 
+
+Alternatively, you can run the same commands manually:
 
 ```
 mysql -u root -e 'CREATE DATABASE IF NOT EXISTS mrt_dashboard_test CHARACTER SET utf8'
@@ -65,8 +116,7 @@ mysql -u root -e 'GRANT ALL ON mrt_dashboard_test.* TO travis@localhost'
 RAILS_ENV=test bundle exec rake db:schema:load
 ```
 
-(These commands are also run by the `travis-prep.sh` script in the application
-root directory.
+### Running the tests
 
 To execute the tests, run:
 
@@ -83,7 +133,7 @@ to latest
 Chromedriver](https://github.com/flavorjones/chromedriver-helper#updating-to-latest-chromedriver)”
 documentation.
 
-### Test coverage
+### Running the tests with coverage
 
 To execute the tests with coverage checking, run:
 
@@ -94,7 +144,7 @@ bundle exec rake coverage
 This will output the test coverage percentage, and will generate a coverage
 report in `coverage/index.html`. 
 
-**⚠️ Coverage must be 100% for the continuous integration build to succeed.**
+> **⚠️ Coverage must be 100% for the continuous integration build to succeed.**
 
 ## Style checks
 
@@ -124,7 +174,7 @@ bundle exec rubocop --auto-correct <FILE>
 tests afterwards. Most RuboCop auto-fixes are smart enough not to change any
 semantics, but occasionally it does make a mistake.)
 
-**⚠️ All style checks must pass for the continuous integration build to succeed.**
+> **⚠️ All style checks must pass for the continuous integration build to succeed.**
 
 ## Rake tasks
 
