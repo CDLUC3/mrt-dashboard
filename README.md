@@ -50,8 +50,7 @@ By default this (currently) uses the
 run [Puma](https://github.com/puma/puma) in development mode with `bundle
 exec puma`.
 
-> #### TODO
-> Is `atom.yml` needed? Should we provide an `atom.yml.example`?)
+> **TODO:** Is `atom.yml` needed? Should we provide an `atom.yml.example`?)
 
 ## Tests
 
@@ -94,7 +93,7 @@ bundle exec rake coverage
 This will output the test coverage percentage, and will generate a coverage
 report in `coverage/index.html`. 
 
-**Coverage must be 100% for the continuous integration build to succeed.**
+**⚠️ Coverage must be 100% for the continuous integration build to succeed.**
 
 ## Style checks
 
@@ -124,7 +123,7 @@ bundle exec rubocop --auto-correct <FILE>
 tests afterwords. Most RuboCop auto-fixes are smart enough not to change any
 semantics, but occasionally it does make a mistake.)
 
-**All style checks must pass for the continuous integration build to succeed.**
+**⚠️ All style checks must pass for the continuous integration build to succeed.**
 
 ## Rake tasks
 
