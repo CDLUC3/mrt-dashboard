@@ -79,7 +79,7 @@ Note that some of the tests run interactively in Chrome using
 gem should install ChromeDriver automatically. If not, or if you have an
 old version of ChromeDriver installed, see chromedriver-helper’s “[Updating
 to latest
-Chromedriver](https://github.com/flavorjones/chromedriver-helper#updating-to-latest-chromedriver)
+Chromedriver](https://github.com/flavorjones/chromedriver-helper#updating-to-latest-chromedriver)”
 documentation.
 
 ### Test coverage
