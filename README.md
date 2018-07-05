@@ -18,7 +18,8 @@ documentation on Merritt's other components, please see the
 
 ## Requirements
 
-- Ruby 2.4+ (specifically 2.4.4, if using rvm or rbenv)
+- Ruby 2.4+ (specifically 2.4.4, per [`.ruby-version`](.ruby-version), if using [RVM](https://rvm.io/) 
+  or [rbenv](https://github.com/rbenv/rbenv))
 - Bundler 1.16+
 - MySQL 5.6+
 
