@@ -12,7 +12,7 @@ describe InvFile do
       :inv_file,
       inv_object: obj,
       inv_version: version,
-      pathname: "producer/file-1.bin",
+      pathname: 'producer/file-1.bin',
       full_size: 1024,
       billable_size: 1024,
       mime_type: 'application/octet-stream'

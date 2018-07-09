@@ -9,7 +9,7 @@ describe 'login' do
     @user_id = mock_user(name: 'Jane Doe', password: password)
 
     col_id = mock_collection(name: 'Collection 1')
-    mock_permissions(user_id, {col_id => PERMISSIONS_ALL})
+    mock_permissions(user_id, { col_id => PERMISSIONS_ALL })
   end
 
   after(:each) do

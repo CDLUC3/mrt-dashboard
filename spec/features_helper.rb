@@ -37,9 +37,9 @@ Capybara.server = :puma
 
 def log_in_with(user_id, password)
   visit login_path
-  fill_in "login", :with => user_id
-  fill_in "password", :with => password
-  click_button "Login"
+  fill_in 'login', with: user_id
+  fill_in 'password', with: password
+  click_button 'Login'
 end
 
 def log_out!

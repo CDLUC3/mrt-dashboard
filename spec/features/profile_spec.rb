@@ -16,7 +16,7 @@ describe 'profile' do
       telephonenumber: @telephonenumber
     )
     col_id = mock_collection(name: 'Collection 1')
-    mock_permissions(user_id, {col_id => PERMISSIONS_ALL})
+    mock_permissions(user_id, { col_id => PERMISSIONS_ALL })
     log_in_with(user_id, password)
   end
 
@@ -52,7 +52,7 @@ describe 'profile' do
       allow(User::LDAP).to receive(:replace_attribute).with(user_id, any_args).and_return(true)
       expect(User::LDAP).to receive(:replace_attribute).with(user_id, 'telephonenumber', new_number)
       click_button 'Save changes'
-      expect(page).to have_content('Your profile has been updated.')
+      expect(page).to have_content(UserController::PROFILE_UPDATED_MSG)
     end
 
     it 'should allow the user to change their time zone' do
@@ -62,14 +62,15 @@ describe 'profile' do
       allow(User::LDAP).to receive(:replace_attribute).with(user_id, any_args).and_return(true)
       expect(User::LDAP).to receive(:replace_attribute).with(user_id, 'tzregion', 'Europe/Helsinki')
       click_button 'Save changes'
-      expect(page).to have_content('Your profile has been updated.')
+      expect(page).to have_content(UserController::PROFILE_UPDATED_MSG)
     end
 
     it 'should not allow the user to clear required fields' do
-      UserController::REQUIRED.keys.each {|field| fill_in(field, with: '')}
+      UserController::REQUIRED.keys.each { |field| fill_in(field, with: '') }
       expect(User::LDAP).not_to receive(:replace_attribute)
       click_button 'Save changes'
-      UserController::REQUIRED.values.each {|label| expect(page).to have_content(label)}
+      expect(page).to have_content(UserController::REQUIRED.values.join(', '))
+      expect(page).not_to have_content(UserController::PROFILE_UPDATED_MSG)
     end
 
     it 'should allow the user to change their password' do
@@ -80,6 +81,7 @@ describe 'profile' do
       allow(User::LDAP).to receive(:replace_attribute).with(user_id, any_args).and_return(true)
       expect(User::LDAP).to receive(:replace_attribute).with(user_id, 'userpassword', new_password)
       click_button 'Save changes'
+      expect(page).to have_content(UserController::PROFILE_UPDATED_MSG)
     end
 
     it 'should require passwords to match' do
@@ -89,7 +91,8 @@ describe 'profile' do
       allow(User::LDAP).to receive(:replace_attribute).with(user_id, any_args).and_return(true)
       expect(User::LDAP).not_to receive(:replace_attribute).with(user_id, 'userpassword', anything)
       click_button 'Save changes'
-      expect(page).to have_content('do not match')
+      expect(page).to have_content(UserController::PASSWORD_MISMATCH_MSG)
+      expect(page).not_to have_content(UserController::PROFILE_UPDATED_MSG)
     end
   end
 

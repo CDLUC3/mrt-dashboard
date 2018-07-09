@@ -5,6 +5,7 @@ require 'colorize'
 
 if ENV['COVERAGE']
   require 'simplecov'
+  SimpleCov.minimum_coverage 100
   SimpleCov.start 'rails'
 end
 
@@ -18,6 +19,8 @@ RSpec.configure do |config|
   # config.raise_errors_for_deprecations! # TODO: enable this
   config.mock_with :rspec
 end
+
+require 'rspec_custom_matchers'
 
 # ------------------------------------------------------------
 # Rails

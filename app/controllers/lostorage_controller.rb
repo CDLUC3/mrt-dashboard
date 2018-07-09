@@ -4,111 +4,108 @@ require 'tempfile'
 class LostorageController < ApplicationController
   before_filter :require_user
 
-  def index 
-    if params[:commit] == "Submit" then
-      if params[:user_agent_email].blank? then
-        flash[:message] = 'Please enter the required fields' and return
-      elsif !params[:user_agent_email].match(/^.+@.+$/) then
-        flash[:message] = 'You must fill in a valid return email address.' and return
-      else 
-        if post_los_email(params[:user_agent_email]) then
-          flash[:message] = "Processing of large object compression has begun.  Please look for an email in your inbox"
-        else
-          #TODO: flash error messages are not displaying properly
-          flash[:error] = "Error processing large object in storage service.  Please contact uc3@ucop.edu"
-        end
-        redirect_to mk_merritt_url("m", params[:object], params[:version])
-      end
-    elsif params[:commit] == "Cancel" then
-      redirect_to mk_merritt_url("m", params[:object], params[:version])
-    end
+  SUCCESS_MSG = 'Processing of large object compression has begun.  Please look for an email in your inbox'.freeze
+  STORAGE_ERROR_MSG = 'Error processing large object in storage service.  Please contact uc3@ucop.edu'.freeze
+
+  def index
+    do_submit(params) if params[:commit] == 'Submit'
+    redirect_to mk_merritt_url('m', params[:object], params[:version])
   end
-  
+
   def direct
-    # Check if a user friendly download request (default: yes)
-    if params[:userFriendly].blank? then
-       params[:userFriendly] = "true"
-    end
+    user_agent_email = params[:user_agent_email]
+    render(nothing: true, status: 406) && return if user_agent_email.blank?
+    render(nothing: true, status: 400) && return unless user_agent_email.match?(/^.+@.+$/)
 
-    # Check for mandatory email
-    if params[:user_agent_email].blank? then
-       render :nothing => true, :status => 406
-    elsif !params[:user_agent_email].match(/^.+@.+$/) then
-       render :nothing => true, :status => 400
+    if post_los_request(user_agent_email, user_friendly?(params))
+      # success
+      render nothing: true, status: 200
     else
-      if post_los_email(params[:user_agent_email]) then
-         render :nothing => true, :status => 200
-      else
-         render :nothing => true, :status => 503
-      end
+      render nothing: true, status: 503
     end
   end
 
-  def post_los_email(to_addr)
+  private
+
+  def do_submit(params)
+    user_agent_email = params[:user_agent_email]
+    if (error_msg = validation_error(user_agent_email))
+      flash[:message] = error_msg
+    elsif post_los_request(user_agent_email, user_friendly?(params))
+      flash[:message] = SUCCESS_MSG
+    else
+      flash[:error] = STORAGE_ERROR_MSG # TODO: flash error messages are not displaying properly
+    end
+  end
+
+  def validation_error(user_agent_email)
+    return 'Please enter the required fields' if user_agent_email.blank?
+    return 'You must fill in a valid return email address.' unless user_agent_email.match?(/^.+@.+$/)
+    nil
+  end
+
+  def user_friendly?(params)
+    user_friendly_param = params[:userFriendly]
+    user_friendly_param.blank? || user_friendly_param.downcase.match?('true')
+  end
+
+  # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+  def post_los_request(to_addr, user_friendly)
+    @object         = InvObject.find_by_ark(params_u(:object))
+    @version_number = params[:version]
+    @container_type = @version_number ? 'version' : 'object'
+
+    unique_name     = "#{UUIDTools::UUID.random_create.hash}.tar.gz"
+    @dl_url         = "#{APP_CONFIG['container_url']}#{unique_name}"
 
     # Customize return email information
-    @losFrom    = params[:losFrom]
-    @losSubject = params[:losSubject]
-    @losBody    = params[:losBody]
+    @los_from    = params[:losFrom]
+    @los_subject = subject_or_default(params[:losSubject])
+    @los_body = render_body(params[:losBody])
 
-    unique_name = "#{UUIDTools::UUID.random_create().hash.to_s}.tar.gz"
-    @object = InvObject.find_by_ark(params_u(:object))
-    @container_type = (params[:version] && "version") || "object"
-    @dl_url = "#{APP_CONFIG['container_url']}#{unique_name}"
-    @version_number = params[:version]
-
-    # Custom subject?
-    if (@losSubject.blank?) 
-       @losSubject = "Merritt #{@container_type.capitalize} Download Processing Completed " 
+    Tempfile.create('mail.xml') do |email_xml_file|
+      resp = do_storage_post(email_xml_file, to_addr, unique_name, user_friendly)
+      return HTTP::Status.successful?(resp.status)
     end
+  end
+  # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
 
-    # Custom body?
-    if (@losBody.blank?) then
-       @losBody = render_to_string(:formats => [:text], :partial => "lostorage/los_email_body")
-    else
-       @losBody = render_to_string(:formats => [:text], :inline => @losBody)
-
-    end
-
-    #construct the async storage URL using the object's state storage URL-  Sub async for state in URL.
-    email_xml_file = build_email_xml(@losFrom, to_addr, @losSubject, @losBody)
-
-    userFriendly = params[:userFriendly].downcase
-    postURL = @object.bytestream_uri.to_s.gsub(/content/,'async')
-    if (userFriendly.match("true")) then
-	# user friendly download
-	postURL = @object.bytestream_uri2.to_s.gsub(/producer/,'producerasync')
-    end
-
-    resp = HTTPClient.new.post(postURL,
-                               { 'email'             => email_xml_file,
-                                 'responseForm'      => 'xml',
-                                 'containerForm'     => "targz",
-                                 'name'              => unique_name })
-    email_xml_file.close
-    email_xml_file.unlink
-    return (resp.status == 200)
+  def subject_or_default(subject_param)
+    subject_param.blank? ? "Merritt #{@container_type.capitalize} Download Processing Completed" : subject_param
   end
 
-  def build_email_xml(from_addr, to_addr, subject, body)
-    tempfile = Tempfile.new("mail.xml")
-    xml = Builder::XmlMarkup.new :target => tempfile
+  def render_body(body_param)
+    if body_param.blank?
+      render_to_string(formats: [:text], partial: 'lostorage/los_email_body')
+    else
+      render_to_string(formats: [:text], inline: body_param)
+    end
+  end
+
+  def do_storage_post(email_xml_file, to_addr, unique_name, user_friendly)
+    build_email_xml(email_xml_file, @los_from, to_addr, @los_subject, @los_body)
+    email_xml_file.rewind
+    params = { 'email' => email_xml_file, 'responseForm' => 'xml', 'containerForm' => 'targz', 'name' => unique_name }
+    HTTPClient.new.post(storage_url_for(@object, user_friendly), params)
+  end
+
+  def build_email_xml(tempfile, from_addr, to_addr, subject, body)
+    xml = Builder::XmlMarkup.new(target: tempfile)
     xml.instruct!
     xml.email do
-      # Custom from?
-      if (from_addr.blank?) then
-	xml.from(APP_CONFIG['lostorage_email_from'])
-      else 
-	xml.from(from_addr)
-      end
+      xml.from(from_addr.blank? ? APP_CONFIG['lostorage_email_from'] : from_addr)
       xml.to(to_addr)
-      APP_CONFIG['lostorage_email_to'].each do |addr|
-        xml.to(addr)
-      end
+      APP_CONFIG['lostorage_email_to'].each { |addr| xml.to(addr) }
       xml.subject(subject)
       xml.msg(body)
     end
-    tempfile.rewind  #POST request needs this done to process the file properly as an argument
-    return tempfile
+  end
+
+  def storage_url_for(object, user_friendly)
+    if user_friendly
+      object.bytestream_uri2_async
+    else
+      object.bytestream_uri_async
+    end
   end
 end

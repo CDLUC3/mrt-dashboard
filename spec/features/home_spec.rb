@@ -11,7 +11,7 @@ describe 'home' do
   end
 
   it 'has a login link' do
-    click_link "Login"
+    click_link 'Login'
     expect(page).to have_content('Merritt')
   end
 
@@ -27,7 +27,7 @@ describe 'home' do
       col1 = create(:inv_collection, name: 'Collection 1', mnemonic: 'collection_1')
       col2 = create(:inv_collection, name: 'Collection 2', mnemonic: 'collection_2')
 
-      @col_ids = [col1, col2].map {|c| mock_ldap_for_collection(c)}
+      @col_ids = [col1, col2].map { |c| mock_ldap_for_collection(c) }
     end
 
     after(:each) do
@@ -38,8 +38,8 @@ describe 'home' do
       mock_permissions_all(user_id, col_ids)
       log_in_with(user_id, password)
 
-      find(:xpath, "//table/tbody/tr[1]/td[1]/a[1]").click
-      within("#menu-1") do
+      find(:xpath, '//table/tbody/tr[1]/td[1]/a[1]').click
+      within('#menu-1') do
         expect(page).to have_content('Collection home')
       end
     end
@@ -52,4 +52,3 @@ describe 'home' do
 
   end
 end
-

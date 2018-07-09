@@ -4,6 +4,8 @@
 # Author::    Erik Hetzner (mailto:erik.hetzner@ucop.edu)
 # Copyright:: Copyright (c) 2011 Regents of the University of California
 
+# TODO: write tests for this, then remove it from exclude list in top-level .rubocop.yml
+
 require 'tmpdir'
 require 'fileutils'
 require 'open-uri'
@@ -48,15 +50,15 @@ def up_to_date?(local_id, collection_id, updated, feeddate)
     return false
   else
     if updated.nil? then
-      return false 
+      return false
     else
       submit = updated_date <= obj.first.modified
       if (! submit) then
-	puts "Updating #{local_id}"
-	puts "         #{updated_date} > #{obj.first.modified}"
+        puts "Updating #{local_id}"
+        puts "         #{updated_date} > #{obj.first.modified}"
       else
-	puts "NO need to update: #{local_id}"
-	puts "                   #{updated_date} <= #{obj.first.modified}"
+        puts "NO need to update: #{local_id}"
+        puts "                   #{updated_date} <= #{obj.first.modified}"
       end
       return submit
     end
@@ -76,7 +78,7 @@ def process_atom_feed(submitter, profile, collection, feeddatefile, starting_poi
     wait = false
 
     while (File.exist?(pause)) do
-      # pause 
+      # pause
       puts "Processed paused: #{pause}"
       sleep(DELAY)
     end
@@ -85,42 +87,42 @@ def process_atom_feed(submitter, profile, collection, feeddatefile, starting_poi
       begin
         p = open(next_page, OPEN_URI_ARGS)
         if (p.status.first == "404")
-           puts "Page not found, exiting... #{next_page}"
-           return
+          puts "Page not found, exiting... #{next_page}"
+          return
         end
         doc = Nokogiri::XML(p)
-	break
+        break
       rescue Exception=>ex
         puts ex.message
         puts ex.backtrace
-	puts "Error processing page #{next_page}"
+        puts "Error processing page #{next_page}"
       end
     end
 
     # Has feed been updated?
     feedUpdated = doc.at_xpath("//xmlns:updated").text
     if File.exists?(feeddatefile)
-       feeddate = `cat #{feeddatefile}` 
+      feeddate = `cat #{feeddatefile}`
     else
-       puts "Feed date file does not exist: #{feeddatefile}"
-       return nil
+      puts "Feed date file does not exist: #{feeddatefile}"
+      return nil
     end
     lastFeedUpdate = up_to_date?(nil, nil, feedUpdated, feeddate)
     if lastFeedUpdate then
-       puts "Feed has not been modified since last run.  Exiting..."
-       return
+      puts "Feed has not been modified since last run.  Exiting..."
+      return
     end
 
     # Merritt Collection (optional)
     begin
-       merrittCollection = doc.at_xpath("//xmlns:merritt_collection_id").text
-       merrittCollectionCredentials = ATOM_CONFIG["#{merrittCollection}_credentials"]
-       merrittCollectionLocalidElement = ATOM_CONFIG["#{merrittCollection}_localidElement"]
-       # merrittCollectionLastFeedUpdatedFile = ATOM_CONFIG["#{merrittCollection}_lastFeedUpdate"]
-       merrittCollectionLastFeedUpdatedFile = feeddatefile
-       if (merrittCollectionLocalidElement.empty) then
-          merrittCollectionLocalidElement.empty = "atom:id"     # default
-       end
+      merrittCollection = doc.at_xpath("//xmlns:merritt_collection_id").text
+      merrittCollectionCredentials = ATOM_CONFIG["#{merrittCollection}_credentials"]
+      merrittCollectionLocalidElement = ATOM_CONFIG["#{merrittCollection}_localidElement"]
+      # merrittCollectionLastFeedUpdatedFile = ATOM_CONFIG["#{merrittCollection}_lastFeedUpdate"]
+      merrittCollectionLastFeedUpdatedFile = feeddatefile
+      if (merrittCollectionLocalidElement.empty) then
+        merrittCollectionLocalidElement.empty = "atom:id"     # default
+      end
     rescue Exception => ex
     end
     puts "Processing merritt collection #{merrittCollection}" if ! merrittCollection.nil?
@@ -135,48 +137,48 @@ def process_atom_feed(submitter, profile, collection, feeddatefile, starting_poi
         updated = xpath_content(entry, "atom:updated")
         title = xpath_content(entry, "atom:title")
 
-	# DC metadata
+        # DC metadata
         begin
-           local_id = entry.at_xpath("#{merrittCollectionLocalidElement}").text 
+          local_id = entry.at_xpath("#{merrittCollectionLocalidElement}").text
         rescue Exception => ex
-           # ex.backtrace
+          # ex.backtrace
         end
         begin
-           dc_title = entry.at_xpath("dc:title").text
+          dc_title = entry.at_xpath("dc:title").text
         rescue Exception => ex
-           dc_title = nil
+          dc_title = nil
         end
         begin
-           dc_date = entry.at_xpath("dc:date").text
+          dc_date = entry.at_xpath("dc:date").text
         rescue Exception => ex
-           dc_date = nil
+          dc_date = nil
         end
         begin
-           dc_creator = entry.at_xpath("dc:creator").text
+          dc_creator = entry.at_xpath("dc:creator").text
         rescue Exception => ex
-           dc_creator = nil
+          dc_creator = nil
         end
         creator = entry.xpath("atom:author", NS).map { |au|
           xpath_content(au, "atom:name")
         }.join("; ")
 
-	puts "Processing local_id:	#{local_id}"
-	puts "Processing Title:		" + (dc_title || title)
-	puts "Processing Date:		" + (dc_date || published)
-	puts "Processing Creator:	" + (dc_creator || creator)
-	puts "Processing Updated:	#{updated}"
+        puts "Processing local_id:	#{local_id}"
+        puts "Processing Title:		" + (dc_title || title)
+        puts "Processing Date:		" + (dc_date || published)
+        puts "Processing Creator:	" + (dc_creator || creator)
+        puts "Processing Updated:	#{updated}"
         p =  up_to_date?(local_id, collection, updated, feeddate)
 
-        return if p.nil? 
+        return if p.nil?
 
-	# advance to next
+        # advance to next
         next if p
 
-	wait = true
+        wait = true
 
         # pull out the urls
-        urls = entry.xpath("atom:link", NS).map do |link| 
-          { :rel  => link['rel'], 
+        urls = entry.xpath("atom:link", NS).map do |link|
+          { :rel  => link['rel'],
             :url  => link['href'],
             :checksum  => link.xpath('.//opensearch:checksum'),
             :name => link['href'].sub(/^https?:\/\//, '') }
@@ -185,7 +187,7 @@ def process_atom_feed(submitter, profile, collection, feeddatefile, starting_poi
         # extract the archival id, if it exists
         archival_id = urls.select {|u|
           (u[:rel] == 'archival')
-        }.first 
+        }.first
 
         # do not submit archival link
         urls = urls.delete_if {|u| u[:rel] == 'archival'}
@@ -206,96 +208,96 @@ def process_atom_feed(submitter, profile, collection, feeddatefile, starting_poi
         urls.each do |url|
           obj = URI.parse(URI.encode(url[:url]).gsub("[","%5B").gsub("]","%5D"))
 
-	  # Basic auth 
+          # Basic auth
           if (obj.host.include? "nuxeo.cdlib.org") then
-	    puts "Using basic authentication: #{url[:url]}"
+            puts "Using basic authentication: #{url[:url]}"
             obj.user = merrittCollectionCredentials.split(':')[0]
             obj.password = merrittCollectionCredentials.split(':')[1]
-	  end 
+          end
 
-	  # extract checksum if available
-	  if not url[:checksum].empty? then
-	     # alg = url[:checksum].last['algorithm']
-	     # checksum = url[:checksum].last.text
-	     checksum = Mrt::Ingest::MessageDigest::MD5.new(url[:checksum].last.text)
-	  else
-	     checksum = nil
-	  end
+          # extract checksum if available
+          if not url[:checksum].empty? then
+            # alg = url[:checksum].last['algorithm']
+            # checksum = url[:checksum].last.text
+            checksum = Mrt::Ingest::MessageDigest::MD5.new(url[:checksum].last.text)
+          else
+            checksum = nil
+          end
 
           iobject.add_component(obj,
-		  :name=>url[:name], 
-                  :prefetch=>true,
-		  :digest=>checksum,
-                  # workaround for funky site
-                  :prefetch_options=>{"Accept"=>"text/html, */*"})
+                                :name=>url[:name],
+                                :prefetch=>true,
+                                :digest=>checksum,
+                                # workaround for funky site
+                                :prefetch_options=>{"Accept"=>"text/html, */*"})
         end
         resp = iobject.start_ingest(client, profile, submitter)
-	# puts "User Agent: #{resp.user_agent}"
-	# puts "Batch ID: #{resp.batch_id}"
-	# puts "Submission Date: #{resp.submission_date}"
+          # puts "User Agent: #{resp.user_agent}"
+          # puts "Batch ID: #{resp.batch_id}"
+          # puts "Submission Date: #{resp.submission_date}"
       rescue Exception=>ex
-	puts ex.message
-	puts ex.backtrace
+        puts ex.message
+        puts ex.backtrace
         local_id = xpath_content(entry, "atom:id")
         puts "Exception processing #{local_id} from #{next_page}."
       end
       onum = onum + 1
 
       if (onum % BATCH_SIZE == 0) then
-	puts "Total entries processed: #{onum}"
-	sleep(DELAY)
+        puts "Total entries processed: #{onum}"
+        sleep(DELAY)
       end
     end
     #i = i + 1
     # break if (i > 20)
     #if ( i % RESTART_SERVER == 0 ) then
-       #begin
-          #puts "Restarting server after iteration: #{i}"
-          #server.join_server
-       #rescue
-       #end
-       #server.stop_server
-       #server = Mrt::Ingest::OneTimeServer.new
-       #server.start_server
+    #begin
+    #puts "Restarting server after iteration: #{i}"
+    #server.join_server
+    #rescue
+    #end
+    #server.stop_server
+    #server = Mrt::Ingest::OneTimeServer.new
+    #server.start_server
     #end
 
     current_page = next_page
     next_page = xpath_content(doc, "/atom:feed/atom:link[@rel=\"next\"]/@href")
 
     if (! next_page.nil?) then
-       if (current_page == next_page || next_page.empty) 
-          puts "No page processing or no new page."
-          next_page = nil
-       else
-          puts "Next page: #{next_page}"
-       end
+      if (current_page == next_page || next_page.empty)
+        puts "No page processing or no new page."
+        next_page = nil
+      else
+        puts "Next page: #{next_page}"
+      end
     else
-       puts "No paging element found."
+      puts "No paging element found."
     end
 
     if (wait) then
       # sleep(DELAY)
-    else 
+    else
       sleep(5)	    # process quickly
     end
   end
-  ensure
-    if ! lastFeedUpdate then
-       puts "Updating file: #{merrittCollectionLastFeedUpdatedFile}"
-       puts "Updating feed date to: #{feedUpdated}"
-       begin
-         file = File.open("#{merrittCollectionLastFeedUpdatedFile}", "w")
-         file.write("#{feedUpdated}") 
-       rescue IOError => e
-       ensure
-         file.close unless file.nil?
-       end
-    end
-    puts "Waiting for processing to finish"
+ensure
+  if ! lastFeedUpdate then
+    puts "Updating file: #{merrittCollectionLastFeedUpdatedFile}"
+    puts "Updating feed date to: #{feedUpdated}"
     begin
-      server.join_server
-    rescue
+      file = File.open("#{merrittCollectionLastFeedUpdatedFile}", "w")
+      file.write("#{feedUpdated}")
+    rescue IOError => e
+    ensure
+      file.close unless file.nil?
     end
+  end
+  puts "Waiting for processing to finish"
+  begin
+    server.join_server
+  rescue
+  end
 end
 
 # call as rake "atom:update[atom URL, User Agent, Ingest Profile, Collection ID, Feed last update]"

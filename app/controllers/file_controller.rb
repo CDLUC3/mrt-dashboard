@@ -4,47 +4,45 @@ class FileController < ApplicationController
   before_filter :load_file
 
   before_filter do
-    if (!has_object_permission?(@file.inv_version.inv_object, 'download')) then
-      flash[:error] = "You do not have download permissions."
-      render :file => "#{Rails.root}/public/401.html", :status => 401, :layout => false
+    unless current_user_can_download?(@file.inv_version.inv_object)
+      flash[:error] = 'You do not have download permissions.'
+      render file: "#{Rails.root}/public/401.html", status: 401, layout: false
     end
   end
 
-  before_filter(:only => [:download]) do
-    #:nocov:
-    check_dua(@file.inv_version.inv_object,
-              { :object  => @file.inv_version.inv_object,
-                :version => @file.inv_version,
-                :file    => @file})
-    #:nocov:
+  before_filter(only: [:download]) do
+    version = @file.inv_version
+    obj = version.inv_object
+    check_dua(obj, { object: obj, version: version, file: @file })
   end
-  
+
   def download
-    if exceeds_download_size_file(@file)
-      render :file => "#{Rails.root}/public/403.html", :status => 403, :layout => false
+    if @file.exceeds_download_size?
+      render file: "#{Rails.root}/public/403.html", status: 403, layout: false
     else
       stream_response(@file.bytestream_uri,
-                      "inline",
+                      'inline',
                       File.basename(@file.pathname),
                       @file.mime_type,
                       @file.full_size)
     end
   end
-  
+
   private
+
   def load_file
     filename = params_u(:file)
 
     # determine if user is retrieving a system file; otherwise assume
     # they are obtaining a producer file which needs to prepended to
     # the filename
-    filename = "producer/#{filename}" if !filename.match(/^(producer|system)/)
+    filename = "producer/#{filename}" unless filename =~ /^(producer|system)/
 
-    @file = InvFile.joins(:inv_version, :inv_object).
-      where("inv_objects.ark = ?", params_u(:object)).
-      where("inv_versions.number = ?", params[:version]).
-      where("inv_files.pathname = ?", filename).
-      first
+    @file = InvFile.joins(:inv_version, :inv_object)
+      .where('inv_objects.ark = ?', params_u(:object))
+      .where('inv_versions.number = ?', params[:version])
+      .where('inv_files.pathname = ?', filename)
+      .first
     raise ActiveRecord::RecordNotFound if @file.nil?
   end
 end

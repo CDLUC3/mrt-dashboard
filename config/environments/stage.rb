@@ -42,3 +42,4 @@ MrtDashboard::Application.config.middleware.use ExceptionNotification::Rack,
                             "david.moles@ucop.edu",
                             "perry.willett@ucop.edu"]
   }
+

@@ -6,6 +6,8 @@
 .idea
 mrt-dashboard.iml
 
+*.md.html
+
 .bundle
 db/*.sqlite3
 log/

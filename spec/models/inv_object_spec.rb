@@ -34,4 +34,40 @@ describe InvObject do
     end
   end
 
+  describe :user_can_download? do
+    attr_reader :embargo
+    attr_reader :user_id
+    attr_reader :collection_id
+
+    before(:each) do
+      @embargo = create(:inv_embargo, inv_object: obj)
+      @user_id = mock_user(name: 'Jane Doe', password: 'correcthorsebatterystaple')
+      @collection_id = mock_ldap_for_collection(collection)
+    end
+
+    it 'is false when user has no permissions' do
+      expect(obj.user_can_download?(user_id)).to eq(false)
+    end
+
+    it 'is false when embargo date is in the future' do
+      mock_permissions_read_only(user_id, collection_id)
+      embargo.embargo_end_date = Time.now.utc + 1.hours
+      expect(obj.user_can_download?(user_id)).to eq(false)
+    end
+
+    it 'is true when embargo date is in the past' do
+      mock_permissions_read_only(user_id, collection_id)
+      embargo.embargo_end_date = Time.now.utc - 1.hours
+      expect(obj.user_can_download?(user_id)).to eq(true)
+    end
+
+    it 'is true when user has admin permission' do
+      mock_permissions_all(user_id, collection_id)
+
+      embargo.embargo_end_date = Time.now.utc + 1.hours
+      expect(obj.user_can_download?(user_id)).to eq(true)
+    end
+
+  end
+
 end

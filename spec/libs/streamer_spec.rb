@@ -16,13 +16,13 @@ describe Streamer do
       end
       allow(HTTPClient).to receive(:new).and_return(client)
       allow(client).to receive(:get_content).with(url)
-                         .and_yield('chunk 1')
-                         .and_yield('chunk 2')
-                         .and_yield('chunk 3')
+        .and_yield('chunk 1')
+        .and_yield('chunk 2')
+        .and_yield('chunk 3')
 
       streamer = Streamer.new(url)
       yielded = []
-      streamer.each {|chunk| yielded << chunk}
+      streamer.each { |chunk| yielded << chunk }
       expect(yielded).to eq(['chunk 1', 'chunk 2', 'chunk 3'])
     end
   end

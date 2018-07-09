@@ -23,7 +23,7 @@ describe 'objects' do
     @version_str = "Version #{obj.version_number}"
 
     @producer_files = Array.new(3) do |i|
-      size = 1024 * (2 ** i)
+      size = 1024 * (2**i)
       create(
         :inv_file,
         inv_object: obj,
@@ -36,7 +36,7 @@ describe 'objects' do
     end
 
     @system_files = Array.new(3) do |i|
-      size = 1024 * (2 ** i)
+      size = 1024 * (2**i)
       create(
         :inv_file,
         inv_object: obj,
@@ -95,7 +95,7 @@ describe 'objects' do
   describe 'file info' do
     it 'should let the user download a file' do
       producer_files.each do |f|
-        basename = f.pathname.sub(/^producer\//, '')
+        basename = f.pathname.sub(%r{^producer/}, '')
 
         expected_uri = url_for(
           controller: :file,

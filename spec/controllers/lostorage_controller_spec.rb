@@ -21,13 +21,13 @@ describe LostorageController do
     allow(post_email_response).to receive(:status).and_return(200)
     allow(client).to receive(:post).and_return(post_email_response)
 
-    @object = create(:inv_object, erc_who: 'Doe, Jane', erc_what: "Object 1", erc_when: "2018-01-01")
+    @object = create(:inv_object, erc_who: 'Doe, Jane', erc_what: 'Object 1', erc_when: '2018-01-01')
     @object_ark = object.ark
     @version_number = object.current_version.number
 
     @user_id = mock_user(name: 'Jane Doe', password: 'correcthorsebatterystaple')
 
-    @params = {object: @object_ark, version: @version_number, userFriendly: 'false', user_agent_email: 'jdoe@example.edu'}
+    @params = { object: @object_ark, version: @version_number, userFriendly: 'false', user_agent_email: 'jdoe@example.edu' }
     @object_page_url = controller.mk_merritt_url('m', object_ark, version_number)
   end
 
@@ -38,7 +38,7 @@ describe LostorageController do
 
     it 'requires a user' do
       @request.headers['HTTP_AUTHORIZATION'] = nil
-      post(:index, params, {uid: nil})
+      post(:index, params, { uid: nil })
       expect(response.code.to_i).to eq(302)
       expect(response.headers['Location']).to include('guest_login')
     end
@@ -46,78 +46,184 @@ describe LostorageController do
     it 'requires an email address' do
       expect(client).not_to receive(:post)
       params.delete(:user_agent_email)
-      post(:index, params, {uid: user_id})
+      post(:index, params, { uid: user_id })
       expect(flash[:message]).to be_present
     end
 
     it 'requires a valid-ish address' do
       expect(client).not_to receive(:post)
-      params[:user_agent_email] = params[:user_agent_email].gsub('@', '%')
-      post(:index, params, {uid: user_id})
+      params[:user_agent_email] = params[:user_agent_email].tr('@', '%')
+      post(:index, params, { uid: user_id })
       expect(flash[:message]).to be_present
     end
 
     it 'requires a successful email post' do
       expect(post_email_response).to receive(:status).and_return(500)
-      post(:index, params, {uid: user_id})
+      post(:index, params, { uid: user_id })
       expect(flash[:error]).to include('uc3@ucop.edu')
     end
 
     it 'can be canceled' do
       params[:commit] = 'Cancel'
       expect(client).not_to receive(:post)
-      post(:index, params, {uid: user_id})
+      post(:index, params, { uid: user_id })
       expect(flash[:message]).not_to be_present
     end
 
     describe 'success' do
       it 'emails the user' do
+        expected_xml = <<~XML
+          <?xml version="1.0" encoding="UTF-8"?>
+          <email>
+            <from>marisa.strong@ucop.edu</from>
+            <to>jdoe@example.edu</to>
+            <to>marisa.strong@ucop.edu</to>
+            <subject>Merritt Version Download Processing Completed</subject>
+            <msg/>
+          </email>
+        XML
+
         expect(client).to receive(:post) do |url, post_params|
           async_url = object.bytestream_uri.to_s.gsub(/content/, 'async') # TODO: maybe just put this on the object?
           expect(url).to eq(async_url)
-          email_xml = post_params['email']
-          expect(email_xml).not_to be_nil # TODO: rewrite post_los_email so we don't pass live file pointers around & can actually test
+
+          email_xml_file = post_params['email']
+          expect(email_xml_file).not_to be_nil
+          email_xml = email_xml_file.read
+          expect(email_xml).to be_xml(expected_xml)
         end.and_return(post_email_response)
-        post(:index, params, {uid: user_id})
+        post(:index, params, { uid: user_id })
       end
 
       it 'allows a custom from address' do
+        expected_xml = <<~XML
+          <?xml version="1.0" encoding="UTF-8"?>
+          <email>
+            <from>merritt@example.edu</from>
+            <to>jdoe@example.edu</to>
+            <to>marisa.strong@ucop.edu</to>
+            <subject>Merritt Version Download Processing Completed</subject>
+            <msg/>
+          </email>
+        XML
+
         params[:losFrom] = 'merritt@example.edu'
         expect(client).to receive(:post) do |url, post_params|
           async_url = object.bytestream_uri.to_s.gsub(/content/, 'async') # TODO: maybe just put this on the object?
           expect(url).to eq(async_url)
-          email_xml = post_params['email']
-          expect(email_xml).not_to be_nil # TODO: rewrite post_los_email so we don't pass live file pointers around & can actually test
+
+          email_xml_file = post_params['email']
+          expect(email_xml_file).not_to be_nil
+          email_xml = email_xml_file.read
+          expect(email_xml).to be_xml(expected_xml)
         end.and_return(post_email_response)
-        post(:index, params, {uid: user_id})
+        post(:index, params, { uid: user_id })
       end
 
       it 'allows a custom message body' do
+        expected_xml = <<~XML
+          <?xml version="1.0" encoding="UTF-8"?>
+          <email>
+            <from>marisa.strong@ucop.edu</from>
+            <to>jdoe@example.edu</to>
+            <to>marisa.strong@ucop.edu</to>
+            <subject>Merritt Version Download Processing Completed</subject>
+            <msg>Help I am trapped in a digital repository</msg>
+          </email>
+        XML
+
         params[:losBody] = 'Help I am trapped in a digital repository'
         expect(client).to receive(:post) do |url, post_params|
           async_url = object.bytestream_uri.to_s.gsub(/content/, 'async') # TODO: maybe just put this on the object?
           expect(url).to eq(async_url)
-          email_xml = post_params['email']
-          expect(email_xml).not_to be_nil # TODO: rewrite post_los_email so we don't pass live file pointers around & can actually test
+
+          email_xml_file = post_params['email']
+          expect(email_xml_file).not_to be_nil
+          email_xml = email_xml_file.read
+          expect(email_xml).to be_xml(expected_xml)
         end.and_return(post_email_response)
-        post(:index, params, {uid: user_id})
+        post(:index, params, { uid: user_id })
+      end
+
+      it 'sets the subject differently for full objects' do
+        expected_xml = <<~XML
+          <?xml version="1.0" encoding="UTF-8"?>
+          <email>
+            <from>marisa.strong@ucop.edu</from>
+            <to>jdoe@example.edu</to>
+            <to>marisa.strong@ucop.edu</to>
+            <subject>Merritt Object Download Processing Completed</subject>
+            <msg/>
+          </email>
+        XML
+
+        params.delete(:version)
+        expect(client).to receive(:post) do |url, post_params|
+          async_url = object.bytestream_uri.to_s.gsub(/content/, 'async') # TODO: maybe just put this on the object?
+          expect(url).to eq(async_url)
+
+          email_xml_file = post_params['email']
+          expect(email_xml_file).not_to be_nil
+          email_xml = email_xml_file.read
+          expect(email_xml).to be_xml(expected_xml)
+        end.and_return(post_email_response)
+        post(:index, params, { uid: user_id })
+      end
+
+      it 'allows a custom subject' do
+        expected_xml = <<~XML
+          <?xml version="1.0" encoding="UTF-8"?>
+          <email>
+            <from>marisa.strong@ucop.edu</from>
+            <to>jdoe@example.edu</to>
+            <to>marisa.strong@ucop.edu</to>
+            <subject>Help I am trapped in a digital repository</subject>
+            <msg/>
+          </email>
+        XML
+
+        params[:losSubject] = 'Help I am trapped in a digital repository'
+        expect(client).to receive(:post) do |url, post_params|
+          async_url = object.bytestream_uri.to_s.gsub(/content/, 'async') # TODO: maybe just put this on the object?
+          expect(url).to eq(async_url)
+
+          email_xml_file = post_params['email']
+          expect(email_xml_file).not_to be_nil
+          email_xml = email_xml_file.read
+          expect(email_xml).to be_xml(expected_xml)
+        end.and_return(post_email_response)
+        post(:index, params, { uid: user_id })
       end
 
       it 'redirects back to the object' do
-        post(:index, params, {uid: user_id})
+        post(:index, params, { uid: user_id })
         expect(response.code.to_i).to eq(302)
         expect(response.headers['Location']).to end_with(object_page_url)
       end
 
       it 'uses the producer URL for "user friendly" download' do
+        expected_xml = <<~XML
+          <?xml version="1.0" encoding="UTF-8"?>
+          <email>
+            <from>marisa.strong@ucop.edu</from>
+            <to>jdoe@example.edu</to>
+            <to>marisa.strong@ucop.edu</to>
+            <subject>Merritt Version Download Processing Completed</subject>
+            <msg/>
+          </email>
+        XML
+
         params[:userFriendly] = 'true'
         expect(client).to receive(:post) do |url, post_params|
           async_url = object.bytestream_uri2.to_s.gsub(/producer/, 'producerasync') # TODO: maybe just put this on the object?
           expect(url).to eq(async_url)
-          email_xml = post_params['email']
-          expect(email_xml).not_to be_nil # TODO: rewrite post_los_email so we don't pass live file pointers around & can actually test
+
+          email_xml_file = post_params['email']
+          expect(email_xml_file).not_to be_nil
+          email_xml = email_xml_file.read
+          expect(email_xml).to be_xml(expected_xml)
         end.and_return(post_email_response)
-        post(:index, params, {uid: user_id})
+        post(:index, params, { uid: user_id })
       end
     end
 
@@ -127,20 +233,20 @@ describe LostorageController do
     it 'requires an email address' do
       expect(client).not_to receive(:post)
       params.delete(:user_agent_email)
-      post(:direct, params, {uid: user_id})
+      post(:direct, params, { uid: user_id })
       expect(response.status).to eq(406)
     end
 
     it 'requires a valid-ish address' do
       expect(client).not_to receive(:post)
-      params[:user_agent_email] = params[:user_agent_email].gsub('@', '%')
-      post(:direct, params, {uid: user_id})
+      params[:user_agent_email] = params[:user_agent_email].tr('@', '%')
+      post(:direct, params, { uid: user_id })
       expect(response.status).to eq(400)
     end
 
     it 'requires a successful email post' do
       expect(post_email_response).to receive(:status).and_return(500)
-      post(:direct, params, {uid: user_id})
+      post(:direct, params, { uid: user_id })
       expect(response.status).to eq(503)
     end
 
@@ -151,7 +257,7 @@ describe LostorageController do
         email_xml = post_params['email']
         expect(email_xml).not_to be_nil # TODO: rewrite post_los_email so we don't pass live file pointers around & can actually test
       end.and_return(post_email_response)
-      post(:direct, params, {uid: user_id})
+      post(:direct, params, { uid: user_id })
       expect(response.status).to eq(200)
     end
 
@@ -163,7 +269,7 @@ describe LostorageController do
         email_xml = post_params['email']
         expect(email_xml).not_to be_nil # TODO: rewrite post_los_email so we don't pass live file pointers around & can actually test
       end.and_return(post_email_response)
-      post(:direct, params, {uid: user_id})
+      post(:direct, params, { uid: user_id })
       expect(response.status).to eq(200)
     end
 
@@ -175,7 +281,7 @@ describe LostorageController do
         email_xml = post_params['email']
         expect(email_xml).not_to be_nil # TODO: rewrite post_los_email so we don't pass live file pointers around & can actually test
       end.and_return(post_email_response)
-      post(:direct, params, {uid: user_id})
+      post(:direct, params, { uid: user_id })
       expect(response.status).to eq(200)
     end
   end

@@ -4,9 +4,9 @@ require 'support/ark'
 # ------------------------------------------------------------
 # LDAP
 
-GUEST_USER_ID = 'anonymous'
-PERMISSIONS_ALL = ['read', 'write', 'download', 'admin'].freeze
-PERMISSIONS_READ_ONLY = ['read', 'download'].freeze
+GUEST_USER_ID = 'anonymous'.freeze
+PERMISSIONS_ALL = %w[read write download admin].freeze
+PERMISSIONS_READ_ONLY = %w[read download].freeze
 
 def to_id(name)
   name.gsub(/[^A-Za-z0-9_]+/, '_').underscore
@@ -40,7 +40,7 @@ def mock_ldap_for_collection(inv_collection)
 end
 
 def mock_user(name: nil, id: nil, password:, tzregion: nil, telephonenumber: nil)
-  raise "Can't mock without either a name or an ID" unless (name || id)
+  raise "Can't mock without either a name or an ID" unless name || id
 
   id ||= to_id(name)
   name ||= to_name(id)
@@ -51,7 +51,7 @@ def mock_user(name: nil, id: nil, password:, tzregion: nil, telephonenumber: nil
 
   user_ldap = {
     'dn' => ["uid=#{id},ou=People,ou=uc3,dc=cdlib,dc=org"],
-    'objectclass' => ['person', 'inetOrgPerson', 'merrittUser', 'organizationalPerson', 'top'],
+    'objectclass' => %w[person inetOrgPerson merrittUser organizationalPerson top],
     'givenname' => [given_name],
     'displayname' => [name],
     'uid' => [id],
@@ -132,4 +132,3 @@ RSpec.configure do |config|
     mock_ldap!
   end
 end
-

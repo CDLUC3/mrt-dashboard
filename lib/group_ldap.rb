@@ -9,109 +9,96 @@ module GroupLdap
     include LdapMixin
 
     def find_all
-      return admin_ldap.search(:base   => @base,
-                                :filter => (Net::LDAP::Filter.eq('objectclass', 'organizationalUnit') &
-                                            Net::LDAP::Filter.eq('objectclass', 'merrittClass')),
-                                :scope  => Net::LDAP::SearchScope_SingleLevel).
-        sort_by {|g| g['ou'][0].downcase}
+      results = admin_ldap.search(
+        base:   @base,
+        filter: (Net::LDAP::Filter.eq('objectclass', 'organizationalUnit') &
+          Net::LDAP::Filter.eq('objectclass', 'merrittClass')),
+        scope:  Net::LDAP::SearchScope_SingleLevel
+      )
+      results.sort_by { |g| g['ou'][0].downcase }
     end
 
     def find_users(grp_id)
-      return admin_ldap.search(:base   => "ou=#{grp_id},#{@base}",
-                                :filter => Net::LDAP::Filter.eq('objectclass', 'groupOfUniqueNames'),
-                                :scope  => Net::LDAP::SearchScope_WholeSubtree).
-        map {|g| g[:uniquemember]}.
-        flatten.uniq.compact.
-        map {|i| i[/^uid=[^,]+/][4..-1]}
+      results = admin_ldap.search(
+        base:   "ou=#{grp_id},#{@base}",
+        filter: Net::LDAP::Filter.eq('objectclass', 'groupOfUniqueNames'),
+        scope:  Net::LDAP::SearchScope_WholeSubtree
+      )
+      results
+        .map { |g| g[:uniquemember] }
+        .flatten.uniq.compact
+        .map { |i| i[/^uid=[^,]+/][4..-1] }
     end
 
-    def add(groupid, description, permissions = ['read', 'write'], extra_classes = ['merrittClass'])
-      attr = {
-        :objectclass           => ["organizationalUnit"] + extra_classes,
-        #:name                  => groupid
-        :description           => description,
-        :arkId                 => "ark:/13030/#{@minter.mint}"
-        }
-
-      true_or_exception(admin_ldap.add(:dn => ns_dn(groupid), :attributes => attr))
+    def add(groupid, description, permissions = %w[read write], extra_classes = ['merrittClass'])
+      group_attributes = {
+        objectclass: ['organizationalUnit'] + extra_classes,
+        description: description,
+        arkId: "ark:/13030/#{@minter.mint}"
+      }
+      true_or_exception(admin_ldap.add(dn: ns_dn(groupid), attributes: group_attributes))
 
       permissions.each do |perm|
-        attr_temp = {
-          :objectclass          => ["groupOfUniqueNames"],
-          :cn                   => perm
-          }
-
-        true_or_exception(admin_ldap.add(:dn => sub_ns_dn(groupid, perm), :attributes => attr_temp))
+        perm_attributes = { objectclass: ['groupOfUniqueNames'], cn: perm }
+        true_or_exception(admin_ldap.add(dn: sub_ns_dn(groupid, perm), attributes: perm_attributes))
       end
-
     end
 
-    def set_user_permission(userid, groupid, user_object, permission = 'read')
+    def set_user_permission(userid, groupid, user_ldap, permission = 'read')
+      user_ns_dn = user_ldap.ns_dn(userid)
       check = sub_fetch(groupid, permission)
-      return true if check[:uniquemember].include?(user_object.ns_dn(userid))
-      true_or_exception(admin_ldap.add_attribute(sub_ns_dn(groupid, permission), 'uniqueMember',
-            user_object.ns_dn(userid) ))
+      return true if check[:uniquemember].include?(user_ns_dn)
+      true_or_exception(admin_ldap.add_attribute(sub_ns_dn(groupid, permission), 'uniqueMember', user_ns_dn))
     end
 
-    def unset_user_permission(userid, groupid, user_object, permission = 'read')
+    def unset_user_permission(userid, groupid, user_ldap, permission = 'read')
+      user_ns_dn = user_ldap.ns_dn(userid)
       check = sub_fetch(groupid, permission)
-      return true if !check[:uniquemember].include?(user_object.ns_dn(userid))
+      return true unless check[:uniquemember].include?(user_ns_dn)
       members = check[:uniquemember]
-      members.delete(user_object.ns_dn(userid))
+      members.delete(user_ns_dn)
       admin_ldap.replace_attribute(sub_ns_dn(groupid, permission), :uniquemember, members)
       true
     end
 
-    def get_user_permissions(userid, groupid, user_object)
-      sub_grps = admin_ldap.search(:base => ns_dn(groupid), :filter => Net::LDAP::Filter.eq('cn','*') )
-      long_user = user_object.ns_dn(userid)
-
-      #go through subgroups for group and see if user is in each
+    def get_user_permissions(userid, groupid, user_ldap)
+      sub_grps = admin_ldap.search(base: ns_dn(groupid), filter: Net::LDAP::Filter.eq('cn', '*'))
+      user_ns_dn = user_ldap.ns_dn(userid)
       perms = []
-      sub_grps.each do |grp|
-        members = grp[:uniquemember]
-        perms.push(grp[:cn][0]) if members.include?(long_user)
-      end
+      sub_grps.each { |grp| perms.push(grp[:cn][0]) if grp[:uniquemember].include?(user_ns_dn) }
       perms
     end
-    
-    def find_groups_for_user(userid, user_object, permission=nil)
-      #these are the permission subgroups so they need to be parsed back up a level
-      filter = if permission.nil? then
-                 Net::LDAP::Filter.eq("uniquemember", user_object.ns_dn(userid))
-               else
-                 Net::LDAP::Filter.eq("uniquemember", user_object.ns_dn(userid)) &
-                   Net::LDAP::Filter.eq("cn", permission)
-               end
-      grps = admin_ldap.search(:base => @base, :filter => filter)
-      re = Regexp.new("^cn=(read|write|download),ou=([^, ]+),#{@base}$", Regexp::IGNORECASE)
-      grps.map do |grp|
-        m = re.match(grp[:dn].first)
-        (!m.nil? ? m[2].to_s : nil )
+
+    def find_groups_for_user(userid, user_ldap, permission = nil)
+      user_ns_dn = user_ldap.ns_dn(userid)
+      groups = admin_ldap.search(base: @base, filter: unique_member_filter(user_ns_dn, permission))
+      pattern = Regexp.new("^cn=(read|write|download),ou=([^, ]+),#{@base}$", Regexp::IGNORECASE)
+      groups.map do |grp|
+        m = pattern.match(grp[:dn].first)
+        m[2].to_s if m
       end.compact.uniq
     end
 
-    def remove_user(userid, groupid, user_object)
-      #get all cn under this ou
-      sub_grps = admin_ldap.search(:base => ns_dn(groupid), :filter => Net::LDAP::Filter.eq('cn','*') )
-      long_user = user_object.ns_dn(userid)
+    def remove_user(userid, groupid, user_ldap)
+      sub_grps = admin_ldap.search(base: ns_dn(groupid), filter: Net::LDAP::Filter.eq('cn', '*'))
+      user_ns_dn = user_ldap.ns_dn(userid)
 
-      #go through and delete this user and replace the list of users once deleted
+      # go through and delete this user and replace the list of users once deleted
       sub_grps.each do |grp|
         # TODO: is the user always present? if not, we're replacing when we don't need to
         members = grp[:uniquemember]
-        members.delete_if{|member| member.eql?(long_user)}
+        members.delete_if { |member| member.eql?(user_ns_dn) }
         admin_ldap.replace_attribute(grp[:dn], :uniquemember, members)
       end
+
       true
     end
 
-    #fetches a cn sub object of the group organizational unit (ou)
-    def sub_fetch(group_id, sub_id )
-      results = admin_ldap.search(:base => ns_dn(group_id), :filter =>
-                                              Net::LDAP::Filter.eq('cn', sub_id))
-      raise LdapException.new('id does not exist') if results.length < 1
-      raise LdapException.new('ambiguous results, duplicate ids') if results.length > 1
+    # fetches a cn sub object of the group organizational unit (ou)
+    def sub_fetch(group_id, sub_id)
+      results = admin_ldap.search(base: ns_dn(group_id), filter: Net::LDAP::Filter.eq('cn', sub_id))
+      raise LdapException, 'id does not exist' if results.empty?
+      raise LdapException, 'ambiguous results, duplicate ids' if results.length > 1
       results[0]
     end
 
@@ -124,7 +111,15 @@ module GroupLdap
     end
 
     def obj_filter(id)
-      Net::LDAP::Filter.eq("ou", id )
+      Net::LDAP::Filter.eq('ou', id)
+    end
+
+    private
+
+    def unique_member_filter(user_ns_dn, permission)
+      filter = Net::LDAP::Filter.eq('uniquemember', user_ns_dn)
+      filter &= Net::LDAP::Filter.eq('cn', permission) if permission
+      filter
     end
 
   end

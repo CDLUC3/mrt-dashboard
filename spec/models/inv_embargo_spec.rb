@@ -11,11 +11,11 @@ describe InvEmbargo do
 
   describe ':in_embargo?' do
     it 'is true when embargo date is in the future' do
-      embargo.embargo_end_date = DateTime.now.utc + 1.hours
+      embargo.embargo_end_date = Time.now.utc + 1.hours
       expect(embargo.in_embargo?).to eq(true)
     end
     it 'is false when embargo date is in the past' do
-      embargo.embargo_end_date = DateTime.now.utc - 1.hours
+      embargo.embargo_end_date = Time.now.utc - 1.hours
       expect(embargo.in_embargo?).to eq(false)
     end
   end

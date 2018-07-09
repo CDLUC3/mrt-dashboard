@@ -25,7 +25,7 @@ describe 'versions' do
     @version = obj.current_version
 
     @producer_files = Array.new(3) do |i|
-      size = 1024 * (2 ** i)
+      size = 1024 * (2**i)
       create(
         :inv_file,
         inv_object: obj,
@@ -38,7 +38,7 @@ describe 'versions' do
     end
 
     @system_files = Array.new(3) do |i|
-      size = 1024 * (2 ** i)
+      size = 1024 * (2**i)
       create(
         :inv_file,
         inv_object: obj,
@@ -72,7 +72,7 @@ describe 'versions' do
 
       index_path = url_for(controller: :version, action: :index, object: obj.ark, only_path: true)
       visit(index_path)
-      expect(page.title).to include("Version 2")
+      expect(page.title).to include('Version 2')
       expect(page.title).to include(obj.ark)
     end
   end
@@ -101,7 +101,7 @@ describe 'versions' do
     it 'should let the user download both system and producer files' do
       all_files = producer_files + system_files
       all_files.each do |f|
-        basename = f.pathname.sub(/^(producer|system)\//, '')
+        basename = f.pathname.sub(%r{^(producer|system)/}, '')
 
         expected_uri = url_for(
           controller: :file,

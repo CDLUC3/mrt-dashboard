@@ -1,3 +1,4 @@
+# rubocop:disable Lint/UriEscapeUnescape
 module Encoder
   def urlencode(item)
     URI.escape(item, Regexp.new("[^#{URI::PATTERN::UNRESERVED}]"))
@@ -6,4 +7,5 @@ module Encoder
   def urlunencode(item)
     URI.unescape(item)
   end
-end 
+end
+# rubocop:enable Lint/UriEscapeUnescape

@@ -7,14 +7,13 @@ set :repo_url, 'https://github.com/CDLUC3/mrt-dashboard'
 set :deploy_to, '/dpr2/apps/ui'
 set :scm, :git
 
-set :stages, ["local", "mrt-ui-dev", "stage", "production"]
+set :stages, ['local', 'mrt-ui-dev', 'stage', 'production']
 
-set :default_env, { path: "/dpr2/local/bin:$PATH" }
+set :default_env, { path: '/dpr2/local/bin:$PATH' }
 
 # persistent dirs
-set :linked_files, %w{config/database.yml config/ldap.yml config/atom.yml}
-set :linked_dirs, %w{log pid}
-
+set :linked_files, %w[config/database.yml config/ldap.yml config/atom.yml]
+set :linked_dirs, %w[log pid]
 
 # Default value for :format is :pretty
 # set :format, :pretty
@@ -29,16 +28,14 @@ set :linked_dirs, %w{log pid}
 set :keep_releases, 5
 
 # Prompt for TAG before deployment only
-before "deploy", "deploy:prompt_for_tag"
+before 'deploy', 'deploy:prompt_for_tag'
 
 namespace :deploy do
 
   desc 'Stop Puma'
   task :stop do
     on roles(:app) do
-      if test("[ -f #{fetch(:puma_pid)} ]")
-        execute "cd #{deploy_to}/current; kill -15 `cat #{fetch(:puma_pid)}`"
-      end
+      execute "cd #{deploy_to}/current; kill -15 `cat #{fetch(:puma_pid)}`" if test("[ -f #{fetch(:puma_pid)} ]")
     end
   end
 
@@ -52,14 +49,14 @@ namespace :deploy do
       end
     end
   end
-  before "deploy:start", "bundle:install"
+  before 'deploy:start', 'bundle:install'
 
   desc 'Status Puma'
   task :status do
     on roles(:app) do
       if test("[ -f #{fetch(:puma_pid)} ]")
-         # check pid
-         execute "cd #{deploy_to}/current; cat #{fetch(:puma_pid)} | xargs ps -lp"
+        # check pid
+        execute "cd #{deploy_to}/current; cat #{fetch(:puma_pid)} | xargs ps -lp"
       end
     end
   end
@@ -67,17 +64,17 @@ namespace :deploy do
   desc 'Restart Puma'
   task :restart do
     on roles(:app), wait: 5 do
-       # do not implement, use stop/start instead
+      # do not implement, use stop/start instead
     end
   end
 
   desc 'Prompt for branch'
   task :prompt_for_tag do
     on roles(:app) do
-       puts "Usage: TAG=test cap mrt-ui-dev deploy"
-       ask :branch, default='master' unless ENV['TAG']
-       set :branch, ENV['TAG'] if ENV['TAG']
-       puts "Setting branch to: #{fetch(:branch)}"
+      puts 'Usage: TAG=test cap mrt-ui-dev deploy'
+      ask :branch, 'master' unless ENV['TAG']
+      set :branch, ENV['TAG'] if ENV['TAG']
+      puts "Setting branch to: #{fetch(:branch)}"
     end
   end
 
@@ -85,7 +82,7 @@ end
 
 namespace :bundle do
 
-  desc "run bundle install and ensure all gem requirements are met"
+  desc 'run bundle install and ensure all gem requirements are met'
   task :install do
     on roles(:app) do
       execute "cd #{current_path} && bundle install --without=test"
