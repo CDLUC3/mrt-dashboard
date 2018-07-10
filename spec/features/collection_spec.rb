@@ -20,6 +20,7 @@ describe 'collections' do
   end
 
   after(:each) do
+    expect(page).not_to have_content('calculating') # indicates ajax count failure
     log_out!
   end
 
