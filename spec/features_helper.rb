@@ -37,7 +37,7 @@ Capybara.server = :puma
 
 def wait_for_ajax!
   Timeout.timeout(Capybara.default_max_wait_time) do
-    loop until page.evaluate_script('Ajax.activeRequestCount').zero?
+    loop until page.evaluate_script("(typeof Ajax === 'undefined') ? 0 : Ajax.activeRequestCount").zero?
   end
 end
 
