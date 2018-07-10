@@ -14,17 +14,15 @@
 # server list. The second argument is a, or duck-types, Hash and is
 # used to set extended properties on the server.
 
-set :rails_env, 'stage'
+set :rails_env, 'production'
 
-# puts "Stage branch"
-# set :branch, 'stage'
+puts 'Production branch'
+set :branch, 'prod'
 
 # Default deploy_to directory is /var/www/my_app
 set :deploy_to, '/dpr2/apps/ui'
 
-# server 'linux-mjr.ad.ucop.edu', user: 'mreyes', roles: %w{web app}
-# server 'uc3-mrt-wrk1-dev.cdlib.org', user: 'dpr2', roles: %w{web app}
-server 'ui01-aws-stg.cdlib.org', user: 'dpr2', roles: %w[web app]
+server 'ui01-aws.cdlib.org', user: 'dpr2', roles: %w[web app]
 
 set :puma_pid, "#{deploy_to}/shared/pid/puma.pid"
 set :puma_log, "#{deploy_to}/shared/log/puma.log"

@@ -31,7 +31,7 @@ group :development, :test do
   gem 'colorize', '~> 0.8'
   gem 'launchy'
   gem 'rspec-rails', '~> 3.0'
-  gem 'rubocop', '0.57.2'
+  gem 'rubocop', '0.58.1'
 end
 
 group :test do

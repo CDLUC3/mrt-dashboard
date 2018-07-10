@@ -1,15 +1,15 @@
 require 'active_record/errors'
 MrtDashboard::Application.configure do
   config.action_controller.perform_caching = true
-  config.autoload_paths                   += %W(#{config.root}/lib)
+  config.autoload_paths                   += %W[#{config.root}/lib]
   config.cache_classes                     = true
   config.consider_all_requests_local       = false
   config.i18n.fallbacks                    = true
-  config.serve_static_files		   = true
+  config.serve_static_files = true
 
   # To turn off pipeline, set to false
-  config.assets.enabled  = true
-  
+  config.assets.enabled = true
+
   # Compress JavaScripts and CSS.
   config.assets.js_compressor = :uglifier
   config.assets.css_compressor = :yui
@@ -25,21 +25,21 @@ MrtDashboard::Application.configure do
   # your application in memory, allowing both threaded web servers
   # and those relying on copy on write to perform better.
   # Rake tasks automatically ignore this option for performance.
-  config.eager_load                         = true
+  config.eager_load = true
 
-  config.active_support.deprecation        = :log
+  config.active_support.deprecation = :log
 
 end
 
-require 'exception_notifier'
-MrtDashboard::Application.config.middleware.use ExceptionNotification::Rack,
-:email => {
-    :deliver_with => :deliver, # Rails >= 4.2.1 do not need this option since it defaults to :deliver_now
-    :email_prefix => "[Merritt UI] ",
-    :sender_address => "\"notifier\" <no-reply@#{Socket.gethostname}>",
-    :exception_recipients => ["marisa.strong@ucop.edu",
-                            "mark.reyes@ucop.edu",
-                            "david.moles@ucop.edu",
-                            "perry.willett@ucop.edu"]
+require 'exception_notification'
+Rails.application.config.middleware.use(
+  ExceptionNotification::Rack,
+  email: {
+    email_prefix: '[Merritt UI] ',
+    sender_address: "\"notifier\" <no-reply@#{Socket.gethostname}>",
+    exception_recipients: ['marisa.strong@ucop.edu',
+                           'mark.reyes@ucop.edu',
+                           'david.moles@ucop.edu',
+                           'perry.willett@ucop.edu']
   }
-
+)

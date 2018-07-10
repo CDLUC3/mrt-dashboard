@@ -71,7 +71,7 @@ class Group
   def object_count
     return 0 unless inv_collection_id
     query = <<~SQL
-      SELECT COUNT (DISTINCT(inv_objects.id)) AS count
+      SELECT COUNT(DISTINCT(inv_objects.id)) AS count
         FROM inv_objects
              INNER JOIN inv_collections_inv_objects
                      ON inv_objects.id = inv_collections_inv_objects.inv_object_id

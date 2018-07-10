@@ -35,11 +35,18 @@ Capybara.server = :puma
 # ------------------------------------------------------------
 # Capybara helpers
 
+def wait_for_ajax!
+  Timeout.timeout(Capybara.default_max_wait_time) do
+    loop until page.evaluate_script("(typeof Ajax === 'undefined') ? 0 : Ajax.activeRequestCount").zero?
+  end
+end
+
 def log_in_with(user_id, password)
   visit login_path
   fill_in 'login', with: user_id
   fill_in 'password', with: password
   click_button 'Login'
+  wait_for_ajax!
 end
 
 def log_out!
