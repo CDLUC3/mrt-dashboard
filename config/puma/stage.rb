@@ -1,7 +1,6 @@
-
 # Note: Define most command line vaiables here. This is a switch
 #       from the old style incorporated in Unicorn.
-#	- mreyes -
+#  - mreyes -
 
 # Variables
 application_path = ENV['RAILS_ROOT'] || '/dpr2/apps/ui'
@@ -9,7 +8,7 @@ application_path = ENV['RAILS_ROOT'] || '/dpr2/apps/ui'
 # The directory to operate out of.
 #
 # The default is the current directory.
-directory "#{application_path}"
+directory application_path.to_s
 
 # Load "path" as a rackup file.
 #
@@ -57,7 +56,7 @@ threads 0, threads_count
 #
 # The default is "tcp://0.0.0.0:9292".
 #
-port        ENV['PORT']     || 26181
+port ENV['PORT'] || 26_181
 # bind tcp://0.0.0.0:26181
 
 # How many worker processes to run.  Typically this is set to
@@ -70,7 +69,6 @@ workers Integer(ENV['WEB_CONCURRENCY'] || 1)
 # Preload the application before starting the workers; this conflicts with
 # phased restart feature. (off by default)
 preload_app!
-
 
 # Verifies that all workers have checked in to the master process within
 # the given timeout. If not the worker process will be restarted. This is
