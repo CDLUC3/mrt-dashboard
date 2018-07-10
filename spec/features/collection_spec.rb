@@ -20,14 +20,7 @@ describe 'collections' do
   end
 
   after(:each) do
-    expect(page).not_to have_content('calculating') # indicates ajax count failure
     log_out!
-  end
-
-  it 'should display the collection name' do
-    mock_permissions_all(user_id, collection_id)
-    log_in_with(user_id, password)
-    expect(page).to have_content("Collection: #{collection.name}")
   end
 
   describe 'index' do
@@ -46,10 +39,18 @@ describe 'collections' do
       collection.inv_objects << inv_objects
     end
 
+    after(:each) do
+      expect(page).not_to have_content('calculating') # indicates ajax count failure
+    end
+
     describe 'happy path' do
       before(:each) do
         mock_permissions_all(user_id, collection_id)
         log_in_with(user_id, password)
+      end
+
+      it 'should display the collection name' do
+        expect(page).to have_content("Collection: #{collection.name}")
       end
 
       it 'should list the objects' do
