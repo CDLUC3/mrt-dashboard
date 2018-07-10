@@ -1,6 +1,12 @@
 sudo: false
 dist: trusty
 
+notifications:
+  email:
+    recipients:
+      - david.moles@ucop.edu
+      - mark.reyes@ucop.edu
+
 addons:
   chrome: stable
   apt:
