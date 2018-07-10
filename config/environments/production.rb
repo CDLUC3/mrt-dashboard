@@ -23,6 +23,7 @@ Rails.application.config.middleware.use(
       sender_address: "\"notifier\" <no-reply@#{Socket.gethostname}>",
       exception_recipients: ['marisa.strong@ucop.edu',
                              'mark.reyes@ucop.edu',
+                             'david.moles@ucop.edu',
                              'perry.willett@ucop.edu']
     }
 )
