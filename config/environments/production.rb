@@ -29,6 +29,8 @@ MrtDashboard::Application.configure do
 
   config.active_support.deprecation = :log
 
+  config.log_level = :info
+
 end
 
 require 'exception_notification'
