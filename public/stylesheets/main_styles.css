@@ -146,11 +146,6 @@ dd {
 }
 
 
-.help li {
-  margin-bottom: 6px;
-}
-
-
 .breadcrumbs {
   font-size: 85%;
 }
@@ -361,7 +356,7 @@ table{
 	font-size: 11px;
 }
 
-table, th, {
+table, th {
     /*border: 1px solid #cccccc;*/
 	border:0;
 }
