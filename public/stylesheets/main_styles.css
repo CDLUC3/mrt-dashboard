@@ -361,7 +361,7 @@ table{
 	font-size: 11px;
 }
 
-table, th, {
+table, th {
     /*border: 1px solid #cccccc;*/
 	border:0;
 }
