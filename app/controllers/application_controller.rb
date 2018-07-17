@@ -10,7 +10,9 @@ end
 class ApplicationController < ActionController::Base
   include DuaMixin
   include Encoder
+  include ErrorMixin
   include NumberMixin
+  include PaginationMixin
 
   helper_method(
     :available_groups,
@@ -30,11 +32,11 @@ class ApplicationController < ActionController::Base
   end
 
   # there are supposed to be handled by Rails, but 401 is not.
-  rescue_from ActiveResource::UnauthorizedAccess do |_ex|
+  rescue_from ActiveResource::UnauthorizedAccess do |ex|
     render file: "#{Rails.root}/public/401.html", status: 401, layout: nil
   end
 
-  rescue_from ActiveRecord::RecordNotFound do |_ex|
+  rescue_from ActiveRecord::RecordNotFound do |ex|
     render file: "#{Rails.root}/public/404.html", status: 404, layout: nil
   end
 
@@ -133,10 +135,6 @@ class ApplicationController < ActionController::Base
 
   def params_u(param)
     urlunencode(params[param])
-  end
-
-  def paginate_args
-    { page: (params[:page] || 1), per_page: 10 }
   end
 
   def stream_response(url, disposition, filename, mediatype, length = nil)
