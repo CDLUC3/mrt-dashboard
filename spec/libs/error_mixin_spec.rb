@@ -46,7 +46,6 @@ describe ErrorMixin do
     expect(full_msg).to include(outer_class.to_s)
     expect(full_msg).to include(outer_msg)
     expect(full_msg).to include(__FILE__)
-    puts(full_msg)
   end
 
 end
