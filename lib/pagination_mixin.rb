@@ -2,12 +2,15 @@ module PaginationMixin
   include ErrorMixin
 
   def page_param
-    param = params[:page]
-    return unless param
-    page = Integer(param)
-    page >= 1 ? page : 1
-  rescue StandardError => e
-    logger.error(to_msg(e))
+    begin
+      param = params[:page]
+      return unless param
+      page = Integer(param)
+      return page unless page <= 1
+      logger.warn("Can't show page #{page}; showing page 1")
+    rescue StandardError => e
+      logger.error(to_msg(e))
+    end
     1
   end
 
