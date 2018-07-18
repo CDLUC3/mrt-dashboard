@@ -10,7 +10,9 @@ end
 class ApplicationController < ActionController::Base
   include DuaMixin
   include Encoder
+  include ErrorMixin
   include NumberMixin
+  include PaginationMixin
 
   helper_method(
     :available_groups,
@@ -133,10 +135,6 @@ class ApplicationController < ActionController::Base
 
   def params_u(param)
     urlunencode(params[param])
-  end
-
-  def paginate_args
-    { page: (params[:page] || 1), per_page: 10 }
   end
 
   def stream_response(url, disposition, filename, mediatype, length = nil)
