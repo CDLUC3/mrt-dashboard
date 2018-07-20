@@ -1,16 +1,48 @@
-$border: none; // 1px solid red;
+//$border: 1px solid red;
+$border: none;
 $logo-width: 256px;
-$margin: 10px;
+$margin: 1em;
+$padding: 1em;
 
 @font-face {
   font-family: 'KievitWeb';
   src: url('../fonts/KievitWeb.woff') format('woff');
 }
 
+img.merritt-logo {
+  width: $logo-width;
+}
+
+img.service-logo {
+  width: $logo-width;
+}
+
+img.cts-logo {
+  width: $logo-width / 2;
+}
+
 body {
   font-family: 'KievitWeb', sans-serif;
+  line-height: 1.2;
   display: flex;
   flex-direction: column;
+  text-align: center;
+}
+
+header {
+  ul {
+    border: $border;
+    display: block;
+    text-align: left;
+    width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 0;
+
+    li {
+      white-space: nowrap;
+    }
+  }
 }
 
 main {
@@ -21,10 +53,41 @@ main {
   section {
     border: $border;
     margin: $margin;
+    text-align: center;
+    padding: $padding;
+
+    p {
+      display: block;
+      width: fit-content;
+      text-align: left;
+      margin-left: auto;
+      margin-right: auto;
+      border: $border;
+    }
+
+    ul {
+      border: $border;
+      display: block;
+      text-align: left;
+      width: fit-content;
+      margin-left: auto;
+      margin-right: auto;
+      padding: 0;
+
+      li {
+        white-space: nowrap;
+      }
+    }
+
+    img {
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+    }
   }
 }
 
-ul#cdl-services {
+ul.cdl-services {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   padding: 0;
@@ -37,10 +100,21 @@ ul#cdl-services {
   }
 }
 
-img.merritt-logo {
-  width: $logo-width;
-}
+ul.footer-nav {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  padding: 0;
 
-img.service-logo {
-  width: $logo-width;
+  li {
+    display: block;
+    flex-grow: 0;
+    flex-shrink: 1;
+    flex-basis: auto;
+    padding: $margin;
+  }
+
+  li:not(:last-of-type) {
+    border-right: 1px solid black;
+  }
 }
