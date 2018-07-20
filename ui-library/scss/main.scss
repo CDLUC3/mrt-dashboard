@@ -13,19 +13,6 @@ body {
   flex-direction: column;
 }
 
-//main {
-//  display: flex;
-//
-//  section {
-//    border: $border;
-//    flex-grow: 1;
-//    flex-shrink: 1;
-//    flex-basis: 33%;
-//    width: min-content;
-//    margin: $margin;
-//  }
-//}
-
 main {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
