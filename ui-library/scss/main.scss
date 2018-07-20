@@ -1,0 +1,59 @@
+$border: none; // 1px solid red;
+$logo-width: 256px;
+$margin: 10px;
+
+@font-face {
+  font-family: 'KievitWeb';
+  src: url('../fonts/KievitWeb.woff') format('woff');
+}
+
+body {
+  font-family: 'KievitWeb', sans-serif;
+  display: flex;
+  flex-direction: column;
+}
+
+//main {
+//  display: flex;
+//
+//  section {
+//    border: $border;
+//    flex-grow: 1;
+//    flex-shrink: 1;
+//    flex-basis: 33%;
+//    width: min-content;
+//    margin: $margin;
+//  }
+//}
+
+main {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  align-items: start;
+
+  section {
+    border: $border;
+    margin: $margin;
+  }
+}
+
+ul#cdl-services {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  padding: 0;
+  align-items: center;
+
+  li {
+    border: $border;
+    display: block;
+    margin: $margin;
+  }
+}
+
+img.merritt-logo {
+  width: $logo-width;
+}
+
+img.service-logo {
+  width: $logo-width;
+}
