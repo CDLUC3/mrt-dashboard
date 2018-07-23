@@ -9,6 +9,14 @@ $padding: 1em;
   src: url('../fonts/KievitWeb.woff') format('woff');
 }
 
+body {
+  font-family: 'KievitWeb', sans-serif;
+  line-height: 1.2;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+}
+
 img.merritt-logo {
   width: $logo-width;
 }
@@ -19,14 +27,6 @@ img.service-logo {
 
 img.cts-logo {
   width: $logo-width / 2;
-}
-
-body {
-  font-family: 'KievitWeb', sans-serif;
-  line-height: 1.2;
-  display: flex;
-  flex-direction: column;
-  text-align: center;
 }
 
 header {
