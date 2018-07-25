@@ -7,14 +7,12 @@ body {
   flex-direction: column;
 }
 
-img {
-  .logo {
-    width: $logo-width;
-  }
+img.logo {
+  width: $logo-width;
+}
 
-  .logo-sm {
-    width: $logo-width / 2;
-  }
+img.logo-sm {
+  width: $logo-width / 2;
 }
 
 header {
@@ -77,20 +75,18 @@ main {
   }
 }
 
-aside {
-  .related-services {
-    text-align: center;
+aside.related-services {
+  text-align: center;
 
-    ul {
-      display: grid;
-      align-items: center;
-      padding: 0;
-      grid-template-columns: repeat(3, 1fr);
+  ul {
+    display: grid;
+    align-items: center;
+    padding: 0;
+    grid-template-columns: repeat(3, 1fr);
 
-      li {
-        display: block;
-        margin: $margin;
-      }
+    li {
+      display: block;
+      margin: $margin;
     }
   }
 }

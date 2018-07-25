@@ -26,10 +26,10 @@ footer {
         flex-grow: 0;
         flex-shrink: 1;
         padding: $padding;
+      }
 
-        :not(:last-of-type) {
-          border-right: 1px solid;
-        }
+      li:not(:last-of-type) {
+        border-right: 1px solid;
       }
     }
   }
