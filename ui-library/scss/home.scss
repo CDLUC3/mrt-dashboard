@@ -20,11 +20,11 @@ header {
 
   ul {
     display: block;
-    text-align: left;
-    width: fit-content;
-    margin-left: auto;
     margin-right: auto;
+    margin-left: auto;
     padding: 0;
+    width: fit-content;
+    text-align: left;
 
     li {
       white-space: nowrap;
@@ -34,13 +34,13 @@ header {
 
 main {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
   align-items: start;
+  grid-template-columns: repeat(3, 1fr);
 
   section {
     margin: $margin;
-    text-align: center;
     padding: $padding;
+    text-align: center;
 
     h2 {
       text-align: center;
@@ -48,19 +48,19 @@ main {
 
     p {
       display: block;
+      margin-right: auto;
+      margin-left: auto;
       width: fit-content;
       text-align: left;
-      margin-left: auto;
-      margin-right: auto;
     }
 
     ul {
       display: block;
-      text-align: left;
-      width: fit-content;
-      margin-left: auto;
       margin-right: auto;
+      margin-left: auto;
       padding: 0;
+      width: fit-content;
+      text-align: left;
 
       li {
         white-space: nowrap;
@@ -69,8 +69,8 @@ main {
 
     img {
       display: block;
-      margin-left: auto;
       margin-right: auto;
+      margin-left: auto;
     }
   }
 }
@@ -79,10 +79,10 @@ aside#related-services {
   text-align: center;
   ul {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    padding: 0;
     align-items: center;
-
+    padding: 0;
+    grid-template-columns: repeat(3, 1fr);
+ 
     li {
       display: block;
       margin: $margin;
