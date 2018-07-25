@@ -17,7 +17,6 @@ class UIDemo
     sass_lint
     clear_demo_dir!
     process_source_files!
-    puts "\nSuccess!"
   end
 
   private
@@ -85,7 +84,7 @@ class UIDemo
   end
 
   def process_source_files!
-    puts "Processing files"
+    puts 'Processing files'
     Dir.glob("#{ui_library_path}/**/*").each do |infile|
       process_file(infile) unless skip?(infile)
     end
@@ -98,28 +97,26 @@ class UIDemo
   end
 
   def process_file(infile)
-    infile.end_with?('.scss') ? compile_scss(infile) : copy_to_demo(infile)
+    if infile.end_with?('.scss')
+      return if File.basename(infile).start_with?('_')
+      return compile_scss(infile)
+    end
+    copy_to_demo(infile)
   end
 
   def compile_scss(infile)
     outfile = infile.sub(ui_library_path_str, demo_path_str).gsub('scss', 'css')
-    return if File.basename(outfile).start_with?('_')
-    ensure_parent(outfile)
+    FileUtils.mkdir_p(File.expand_path('..', outfile))
     puts "  Compiling #{relative_path(infile)} to #{relative_path(outfile)}"
-    sass_cmd_line = "#{sass_cmd} '#{infile}' > '#{outfile}'"
-    output, status = run_ext(sass_cmd_line)
+    output, status = run_ext("#{sass_cmd} '#{infile}' > '#{outfile}'")
     (warn(output); raise) unless status == 0
   end
 
   def copy_to_demo(infile)
     outfile = infile.sub(ui_library_path_str, demo_path_str)
-    ensure_parent(outfile)
+    FileUtils.mkdir_p(File.expand_path('..', outfile))
     puts "  Copying #{relative_path(infile)} to #{relative_path(outfile)}"
     FileUtils.cp(infile, outfile)
-  end
-
-  def ensure_parent(outfile)
-    FileUtils.mkdir_p(File.expand_path('..', outfile))
   end
 
   def relative_path(path)
