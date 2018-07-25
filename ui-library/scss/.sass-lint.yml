@@ -6,5 +6,5 @@ rules:
   nesting-depth:
     - 2
     -
-      max-depth: 3
+      max-depth: 4
 
