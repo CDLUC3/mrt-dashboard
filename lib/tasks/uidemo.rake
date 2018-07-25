@@ -55,7 +55,7 @@ class UIDemo
     if system('which sass-lint > /dev/null 2>&1')
       puts 'Checking SCSS style:'
       puts sass_lint_cmd
-      output, status = Open3.capture2e(sass_lint_cmd)
+      output, status = run_ext(sass_lint_cmd)
       (warn(output); raise) unless status == 0
     else
       puts 'sass-lint not found in $PATH; skipping style checks'
@@ -71,6 +71,10 @@ class UIDemo
       LINT
       cmd.gsub(/\s +/, ' ').strip
     end
+  end
+
+  def run_ext(cmd)
+    Open3.capture2e(cmd)
   end
 
   def clear_demo_dir!
@@ -99,7 +103,8 @@ class UIDemo
     outfile = infile.sub(ui_library_path_str, demo_path_str).gsub('scss', 'css')
     ensure_parent(outfile)
     puts "Compiling #{infile} to #{outfile}"
-    output, status = Open3.capture2e("#{sass_cmd} '#{infile}' > '#{outfile}'")
+    sass_cmd_line = "#{sass_cmd} '#{infile}' > '#{outfile}'"
+    output, status = run_ext(sass_cmd_line)
     (warn(output); raise) unless status == 0
   end
 
