@@ -38,6 +38,20 @@ The demo can then be viewed at `/demo/` when the application is running (e.g.
 > **⚠️** The `public/demo` directory is **erased** each time this task runs, so don’t
 > put anything in it that you care about. (It’s also excluded in `.gitignore`.) 
 
+## `sass-lint` usage
+
+[`sass-lint`](https://github.com/sasstools/sass-lint/) is an [NPM package](https://www.npmjs.com/package/sass-lint)
+that provides style checks for SASS files, analogous to [RuboCop](https://github.com/rubocop-hq/rubocop) for Ruby.
+
+If `sass-lint` is available on the `$PATH`, the `:uidemo` Rake task will run it against the UI library SASS files,
+using the configuration in [scss/.sass-lint.yml](scss/.sass-lint.yml)
+
+To manually check the UI library SASS files with `sass-lint`, run the following command from the project root:
+
+```
+sass-lint --config ui-library/scss/.sass-lint.yml 'ui-library/scss/*.scss' -v
+```
+
 ## Troubleshooting
 
 ### Demo images are not visible

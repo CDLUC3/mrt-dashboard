@@ -22,9 +22,9 @@ footer {
 
       li {
         display: block;
+        flex-basis: auto;
         flex-grow: 0;
         flex-shrink: 1;
-        flex-basis: auto;
         padding: $padding;
       }
 

@@ -12,6 +12,7 @@ class UIDemo
   def compile_demo!
     raise 'Can’t process SCSS without sass or sassc' unless sass_cmd
     raise "Can’t locate UI library #{ui_library_path}" unless ui_library_path.exist?
+    sass_lint
     clear_demo_dir!
     process_source_files!
   end
@@ -34,6 +35,10 @@ class UIDemo
     ui_library_path.to_s
   end
 
+  def ui_library_path_relative
+    @ui_library_path_relative ||= ui_library_path.relative_path_from(project_root_path)
+  end
+
   def demo_path
     @demo_path ||= project_root_path + 'public/demo'
   end
@@ -42,17 +47,37 @@ class UIDemo
     @demo_path_str ||= demo_path.to_s
   end
 
+  def demo_path_relative
+    @demo_path_relative ||= demo_path.relative_path_from(project_root_path)
+  end
+
+  def sass_lint
+    if system('which sass-lint > /dev/null 2>&1')
+      sass_lint_cmd = "sass-lint --config #{ui_library_path_relative}/scss/.sass-lint.yml '#{ui_library_path_relative}/scss/*.scss' -v -q --max-warnings=0"
+      puts "Checking SCSS style:\n#{sass_lint_cmd}"
+      output, status = Open3.capture2e(sass_lint_cmd)
+      ($stderr.puts(output); fail) unless status == 0
+    else
+      puts "sass-lint not found in $PATH; skipping style checks"
+    end
+  end
+
   def clear_demo_dir!
-    puts "Clearing #{demo_path.relative_path_from(project_root_path)}"
+    puts "Clearing #{demo_path_relative}"
     FileUtils.remove_dir(demo_path_str) if File.directory?(demo_path_str)
   end
 
   def process_source_files!
-    puts "Processing source files from #{ui_library_path.relative_path_from(project_root_path)}"
+    puts "Processing source files from #{ui_library_path_relative}"
     Dir.glob("#{ui_library_path}/**/*").each do |infile|
-      next if File.directory?(infile)
-      process_file(infile)
+      process_file(infile) unless skip?(infile)
     end
+  end
+
+  def skip?(infile)
+    return true if File.directory?(infile)
+    return true if File.basename(infile) == '.sass-config.yml'
+    false
   end
 
   def process_file(infile)
@@ -63,8 +88,8 @@ class UIDemo
     outfile = infile.sub(ui_library_path_str, demo_path_str).gsub('scss', 'css')
     ensure_parent(outfile)
     puts "Compiling #{infile} to #{outfile}"
-    _, stderr, status = Open3.capture3("#{sass_cmd} '#{infile}' > '#{outfile}'")
-    raise IOError, stderr unless status == 0
+    output, status = Open3.capture2e("#{sass_cmd} '#{infile}' > '#{outfile}'")
+    ($stderr.puts(output); fail) unless status == 0
   end
 
   def copy_to_demo(infile)
