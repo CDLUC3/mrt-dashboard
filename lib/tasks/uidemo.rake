@@ -78,12 +78,12 @@ class UIDemo
   end
 
   def clear_demo_dir!
-    puts "Clearing #{demo_path_relative}"
+    puts "Clearing #{demo_path}"
     FileUtils.remove_dir(demo_path_str) if File.directory?(demo_path_str)
   end
 
   def process_source_files!
-    puts "Processing source files from #{ui_library_path_relative}"
+    puts "Processing source files from #{ui_library_path}"
     Dir.glob("#{ui_library_path}/**/*").each do |infile|
       process_file(infile) unless skip?(infile)
     end
@@ -102,7 +102,7 @@ class UIDemo
   def compile_scss(infile)
     outfile = infile.sub(ui_library_path_str, demo_path_str).gsub('scss', 'css')
     ensure_parent(outfile)
-    puts "Compiling #{infile} to #{outfile}"
+    puts "Compiling #{relative_path(infile)} to #{relative_path(outfile)}"
     sass_cmd_line = "#{sass_cmd} '#{infile}' > '#{outfile}'"
     output, status = run_ext(sass_cmd_line)
     (warn(output); raise) unless status == 0
@@ -111,12 +111,17 @@ class UIDemo
   def copy_to_demo(infile)
     outfile = infile.sub(ui_library_path_str, demo_path_str)
     ensure_parent(outfile)
-    puts "Copying #{infile} to #{outfile}"
+    puts "Copying #{relative_path(infile)} to #{relative_path(outfile)}"
     FileUtils.cp(infile, outfile)
   end
 
   def ensure_parent(outfile)
     FileUtils.mkdir_p(File.expand_path('..', outfile))
+  end
+
+  def relative_path(path)
+    pathname = path.respond_to?(:relative_path_from) ? path : Pathname.new(path)
+    pathname.relative_path_from(project_root_path)
   end
 end
 
