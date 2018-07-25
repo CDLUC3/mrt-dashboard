@@ -1,0 +1,24 @@
+$margin: 1em;
+$padding: 1em;
+
+// TODO: remove borders when fully debugged
+//$border: 1px solid red;
+$border: none;
+
+section {
+  border: $border;
+}
+
+p {
+  border: $border;
+}
+
+ul {
+  border: $border;
+}
+
+li {
+  border: $border;
+}
+
+

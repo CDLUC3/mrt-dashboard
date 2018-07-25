@@ -1,0 +1,92 @@
+@import 'globals';
+
+$logo-width: 256px;
+
+body {
+  display: flex;
+  flex-direction: column;
+}
+
+img.logo {
+  width: $logo-width;
+}
+
+img.logo-sm {
+  width: $logo-width / 2;
+}
+
+header {
+  text-align: center;
+
+  ul {
+    display: block;
+    text-align: left;
+    width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 0;
+
+    li {
+      white-space: nowrap;
+    }
+  }
+}
+
+main {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  align-items: start;
+
+  section {
+    margin: $margin;
+    text-align: center;
+    padding: $padding;
+
+    h2 {
+      text-align: center;
+    }
+
+    p {
+      display: block;
+      width: fit-content;
+      text-align: left;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    ul {
+      display: block;
+      text-align: left;
+      width: fit-content;
+      margin-left: auto;
+      margin-right: auto;
+      padding: 0;
+
+      li {
+        white-space: nowrap;
+      }
+    }
+
+    img {
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+    }
+  }
+}
+
+aside#related-services {
+  text-align: center;
+  ul {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    padding: 0;
+    align-items: center;
+
+    li {
+      display: block;
+      margin: $margin;
+    }
+  }
+}
+
