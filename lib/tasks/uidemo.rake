@@ -12,9 +12,12 @@ class UIDemo
   def compile_demo!
     raise 'Can’t process SCSS without sass or sassc' unless sass_cmd
     raise "Can’t locate UI library #{ui_library_path}" unless ui_library_path.exist?
+    puts "Processing source files from #{ui_library_path}"
+    puts "                   to target #{demo_path}\n\n"
     sass_lint
     clear_demo_dir!
     process_source_files!
+    puts "\nSuccess!"
   end
 
   private
@@ -53,8 +56,7 @@ class UIDemo
 
   def sass_lint
     if system('which sass-lint > /dev/null 2>&1')
-      puts 'Checking SCSS style:'
-      puts sass_lint_cmd
+      puts "Checking SCSS style:\n  #{sass_lint_cmd}\n\n"
       output, status = run_ext(sass_lint_cmd)
       (warn(output); raise) unless status == 0
     else
@@ -78,12 +80,12 @@ class UIDemo
   end
 
   def clear_demo_dir!
-    puts "Clearing #{demo_path}"
+    puts "Clearing target directory\n\n"
     FileUtils.remove_dir(demo_path_str) if File.directory?(demo_path_str)
   end
 
   def process_source_files!
-    puts "Processing source files from #{ui_library_path}"
+    puts "Processing files"
     Dir.glob("#{ui_library_path}/**/*").each do |infile|
       process_file(infile) unless skip?(infile)
     end
@@ -101,8 +103,9 @@ class UIDemo
 
   def compile_scss(infile)
     outfile = infile.sub(ui_library_path_str, demo_path_str).gsub('scss', 'css')
+    return if File.basename(outfile).start_with?('_')
     ensure_parent(outfile)
-    puts "Compiling #{relative_path(infile)} to #{relative_path(outfile)}"
+    puts "  Compiling #{relative_path(infile)} to #{relative_path(outfile)}"
     sass_cmd_line = "#{sass_cmd} '#{infile}' > '#{outfile}'"
     output, status = run_ext(sass_cmd_line)
     (warn(output); raise) unless status == 0
@@ -111,7 +114,7 @@ class UIDemo
   def copy_to_demo(infile)
     outfile = infile.sub(ui_library_path_str, demo_path_str)
     ensure_parent(outfile)
-    puts "Copying #{relative_path(infile)} to #{relative_path(outfile)}"
+    puts "  Copying #{relative_path(infile)} to #{relative_path(outfile)}"
     FileUtils.cp(infile, outfile)
   end
 
