@@ -53,12 +53,23 @@ class UIDemo
 
   def sass_lint
     if system('which sass-lint > /dev/null 2>&1')
-      sass_lint_cmd = "sass-lint --config #{ui_library_path_relative}/scss/.sass-lint.yml '#{ui_library_path_relative}/scss/*.scss' -v -q --max-warnings=0"
-      puts "Checking SCSS style:\n#{sass_lint_cmd}"
+      puts 'Checking SCSS style:'
+      puts sass_lint_cmd
       output, status = Open3.capture2e(sass_lint_cmd)
-      ($stderr.puts(output); fail) unless status == 0
+      (warn(output); raise) unless status == 0
     else
-      puts "sass-lint not found in $PATH; skipping style checks"
+      puts 'sass-lint not found in $PATH; skipping style checks'
+    end
+  end
+
+  def sass_lint_cmd
+    @sass_lint_cmd ||= begin
+      cmd = <<~LINT
+        sass-lint --config #{ui_library_path_relative}/scss/.sass-lint.yml
+                  '#{ui_library_path_relative}/scss/*.scss'
+                  -v -q --max-warnings=0
+      LINT
+      cmd.gsub(/\s +/, ' ').strip
     end
   end
 
@@ -89,7 +100,7 @@ class UIDemo
     ensure_parent(outfile)
     puts "Compiling #{infile} to #{outfile}"
     output, status = Open3.capture2e("#{sass_cmd} '#{infile}' > '#{outfile}'")
-    ($stderr.puts(output); fail) unless status == 0
+    (warn(output); raise) unless status == 0
   end
 
   def copy_to_demo(infile)
