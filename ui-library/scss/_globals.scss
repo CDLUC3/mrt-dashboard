@@ -1,7 +1,23 @@
+// ////////////////////////////////////////////////////////////
+// Global variables
+
 $margin: 1em;
 $padding: 1em;
 
+$font-family:
+        'Neue Haas Grotesk',
+        'Helvetica Neue',
+        'Helvetica',
+        'Nimbus Sans',
+        'Nimbus Sans L',
+        'Arial',
+        sans-serif
+;
+
+// ////////////////////////////////////////////////////////////
+// Borders (for debugging)
 // TODO: remove borders when fully debugged
+
 //$border: 1px solid red;
 $border: 0;
 

@@ -1,13 +1,8 @@
 @import 'globals';
 
-@font-face {
-  font-family: 'KievitWeb';
-  src: url('../fonts/KievitWeb.woff') format('woff');
-}
-
 body {
   line-height: 1.2;
-  font-family: 'KievitWeb', sans-serif;
+  font-family: $font-family;
 }
 
 footer {
