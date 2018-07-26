@@ -16,11 +16,17 @@ img.logo-sm {
 }
 
 header {
+  border-top: $nav-height solid $darkgray;
   text-align: center;
+
+  h1 {
+    margin-top: $margin;
+  }
 
   ul {
     display: block;
     margin-right: auto;
+    margin-bottom: $margin;
     margin-left: auto;
     padding: 0;
     width: fit-content;
@@ -30,6 +36,10 @@ header {
       white-space: nowrap;
     }
   }
+
+  nav {
+    background-color: $darkgray;
+  }
 }
 
 main {
@@ -38,7 +48,11 @@ main {
   grid-template-columns: repeat(3, 1fr);
 
   section {
+    // TODO: don't double margins between columns
+    // TODO: don't double margins between main and aside
+    // TODO: size all three sections to height of tallest section
     margin: $margin;
+    background-color: $lightgray;
     padding: $padding;
     text-align: center;
 
@@ -76,6 +90,8 @@ main {
 }
 
 aside.related-services {
+  margin: $margin;
+  background-color: $lightgray;
   text-align: center;
 
   ul {

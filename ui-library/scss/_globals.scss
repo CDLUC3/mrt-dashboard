@@ -1,9 +1,14 @@
 // ////////////////////////////////////////////////////////////
-// Global variables
+// Layout
 
-$margin: 1em;
-$padding: 1em;
+$margin: 1.2em;
+$padding: 1.2em;
+$nav-height: 3.6em;
 
+// ////////////////////////////////////////////////////////////
+// Typography
+
+// sass-lint:disable indentation
 $font-family:
         'Neue Haas Grotesk',
         'Helvetica Neue',
@@ -15,11 +20,21 @@ $font-family:
 ;
 
 // ////////////////////////////////////////////////////////////
+// Colors
+
+$darkgray: #d7d7d7;
+$lightgray: #f2f2f2;
+
+// ////////////////////////////////////////////////////////////
 // Borders (for debugging)
 // TODO: remove borders when fully debugged
 
-//$border: 1px solid red;
+//$border: 1px solid #ff00ff;
 $border: 0;
+
+nav {
+  border: $border;
+}
 
 section {
   border: $border;
@@ -36,5 +51,4 @@ ul {
 li {
   border: $border;
 }
-
 

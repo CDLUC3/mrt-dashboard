@@ -1,32 +1,45 @@
 @import 'globals';
 
 body {
+  margin: 0;
   line-height: 1.2;
   font-family: $font-family;
 }
 
-footer {
-  text-align: center;
+ul {
+  margin: 0;
+}
 
-  nav {
-    ul {
-      display: flex;
-      flex-direction: row;
-      justify-content: center;
-      padding: 0;
+nav {
+  margin: auto;
+  background-color: $darkgray;
+  height: $nav-height;
 
-      li {
-        display: block;
-        flex-basis: auto;
-        flex-grow: 0;
-        flex-shrink: 1;
-        padding: $padding;
-      }
+  ul {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin: 0;
+    padding: 0;
 
-      li:not(:last-of-type) {
-        border-right: 1px solid;
-      }
+    li {
+      display: block;
+      flex-basis: auto;
+      flex-grow: 0;
+      flex-shrink: 1;
+      padding: $padding;
+    }
+
+    li:not(:last-of-type) {
+      border-right: 1px solid;
     }
   }
+}
+
+footer {
+  margin: 0;
+  background-color: $darkgray;
+  text-align: center;
+
 }
 
