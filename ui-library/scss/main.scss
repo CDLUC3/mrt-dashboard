@@ -1,9 +1,9 @@
 @import 'globals';
 
 body {
-  margin: 0;
-  line-height: 1.2;
   font-family: $font-family;
+  line-height: 1.2;
+  margin: 0;
 }
 
 ul {
@@ -11,9 +11,9 @@ ul {
 }
 
 nav {
-  margin: auto;
   background-color: $darkgray;
   height: $nav-height;
+  margin: auto;
 
   ul {
     display: flex;
@@ -37,9 +37,8 @@ nav {
 }
 
 footer {
-  margin: 0;
   background-color: $darkgray;
+  margin: 0;
   text-align: center;
-
 }
 

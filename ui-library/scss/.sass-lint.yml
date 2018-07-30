@@ -3,10 +3,6 @@ rules:
   - 1
   - style: 'long'
 
-  property-sort-order:
-  - 1
-  - order: 'concentric'
-
   nesting-depth:
   - 1
   - max-depth: 4

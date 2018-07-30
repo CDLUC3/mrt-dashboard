@@ -25,12 +25,12 @@ header {
 
   ul {
     display: block;
-    margin-right: auto;
     margin-bottom: $margin;
     margin-left: auto;
+    margin-right: auto;
     padding: 0;
-    width: fit-content;
     text-align: left;
+    width: fit-content;
 
     li {
       white-space: nowrap;
@@ -43,11 +43,11 @@ header {
 }
 
 main {
-  display: grid;
   align-items: start;
-  padding: $margin;
+  display: grid;
   grid-gap: $margin;
   grid-template-columns: repeat(3, 1fr);
+  padding: $margin;
 
   section {
     // TODO: size all three sections to height of tallest section
@@ -61,19 +61,19 @@ main {
 
     p {
       display: block;
-      margin-right: auto;
       margin-left: auto;
-      width: fit-content;
+      margin-right: auto;
       text-align: left;
+      width: fit-content;
     }
 
     ul {
       display: block;
-      margin-right: auto;
       margin-left: auto;
+      margin-right: auto;
       padding: 0;
-      width: fit-content;
       text-align: left;
+      width: fit-content;
 
       li {
         white-space: nowrap;
@@ -82,22 +82,22 @@ main {
 
     img {
       display: block;
-      margin-right: auto;
       margin-left: auto;
+      margin-right: auto;
     }
   }
 }
 
 aside.related-services {
-  margin: $margin;
   background-color: $lightgray;
+  margin: $margin;
   text-align: center;
 
   ul {
-    display: grid;
     align-items: center;
-    padding: 0;
+    display: grid;
     grid-template-columns: repeat(3, 1fr);
+    padding: 0;
 
     li {
       display: block;
