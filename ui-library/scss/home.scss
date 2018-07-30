@@ -43,14 +43,13 @@ header {
 }
 
 main {
-  align-items: start;
   display: grid;
+  grid-auto-rows: minmax(min-content, auto);
   grid-gap: $margin;
   grid-template-columns: repeat(3, 1fr);
   padding: $margin;
 
   section {
-    // TODO: size all three sections to height of tallest section
     background-color: $lightgray;
     padding: $padding;
     text-align: center;
@@ -82,8 +81,10 @@ main {
 
     img {
       display: block;
-      margin-left: auto;
-      margin-right: auto;
+      margin: $margin auto;
+    }
+
+    nav {
     }
   }
 }
