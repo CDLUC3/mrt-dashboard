@@ -11,15 +11,17 @@ ul {
 }
 
 nav {
+  align-items: center;
   background-color: $darkgray;
+  display: flex;
   height: $nav-height;
-  margin: auto;
 
   ul {
     display: flex;
     flex-direction: row;
     justify-content: center;
-    margin: 0;
+    list-style-type: none;
+    margin: auto;
     padding: 0;
 
     li {
@@ -27,7 +29,8 @@ nav {
       flex-basis: auto;
       flex-grow: 0;
       flex-shrink: 1;
-      padding: $padding;
+      padding-left: $padding;
+      padding-right: $padding;
     }
 
     li:not(:last-of-type) {

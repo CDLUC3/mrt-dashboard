@@ -1,6 +1,6 @@
 @import 'globals';
 
-$logo-width: 256px;
+$logo-width: 224px;
 
 body {
   display: flex;
@@ -16,7 +16,6 @@ img.logo-sm {
 }
 
 header {
-  border-top: $nav-height solid $darkgray;
   text-align: center;
 
   h1 {
@@ -35,10 +34,6 @@ header {
     li {
       white-space: nowrap;
     }
-  }
-
-  nav {
-    background-color: $darkgray;
   }
 }
 
@@ -96,7 +91,7 @@ main {
 
 aside.related-services {
   background-color: $lightgray;
-  margin: $margin;
+  margin: 0 $margin $margin;
   text-align: center;
 
   ul {
