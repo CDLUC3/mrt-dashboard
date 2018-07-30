@@ -45,13 +45,12 @@ header {
 main {
   display: grid;
   align-items: start;
+  padding: $margin;
+  grid-gap: $margin;
   grid-template-columns: repeat(3, 1fr);
 
   section {
-    // TODO: don't double margins between columns
-    // TODO: don't double margins between main and aside
     // TODO: size all three sections to height of tallest section
-    margin: $margin;
     background-color: $lightgray;
     padding: $padding;
     text-align: center;
