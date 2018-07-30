@@ -51,6 +51,8 @@ main {
 
   section {
     background-color: $lightgray;
+    display: flex;
+    flex-direction: column;
     padding: $padding;
     text-align: center;
 
@@ -85,6 +87,9 @@ main {
     }
 
     nav {
+      margin-bottom: 0;
+      margin-top: auto;
+      width: 100%;
     }
   }
 }
