@@ -1,3 +1,7 @@
+files:
+  ignore:
+    - '**/_open-sans.scss'
+
 rules:
   hex-length:
   - 1
