@@ -42,28 +42,29 @@ section.intro {
   grid-column-end: 4;
   grid-column-start: 1;
   grid-gap: $margin;
+  grid-template-columns: repeat(3, 1fr);
 
-  header {
+  div {
+    font-size: medium;
     grid-column-end: 3;
     grid-column-start: 1;
+    grid-row-end: 3;
+    grid-row-start: 1;
+    margin-right: -($margin / 3);
 
     h2 {
       margin-bottom: 0;
     }
   }
 
-  div {
-    font-size: medium;
-    grid-column-end: 3;
-    grid-column-start: 1;
-  }
-
-  // TODO: figure out why column 3 is narrower
   aside {
     background-color: $orange;
     border-radius: $corner-radius;
     grid-column-end: 4;
     grid-column-start: 3;
+    grid-row-end: 3;
+    grid-row-start: 2;
+    margin-left: $margin / 3;
     padding: $padding;
 
     h3 {
