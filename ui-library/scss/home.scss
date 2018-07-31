@@ -1,55 +1,41 @@
 @import 'globals';
 
-$logo-width: 224px;
+$logo-width: 192px;
 
 body {
   display: flex;
   flex-direction: column;
 }
 
-img.logo {
-  width: $logo-width;
-}
-
 img.logo-sm {
   width: $logo-width / 2;
 }
 
-header {
-  text-align: center;
-
-  h1 {
-    margin-top: $margin;
-  }
-
-  ul {
-    display: block;
-    margin-bottom: $margin;
-    margin-left: auto;
-    margin-right: auto;
-    padding: 0;
-    text-align: left;
-    width: fit-content;
-
-    li {
-      white-space: nowrap;
-    }
-  }
+img.logo-med {
+  width: 2 * $logo-width / 3;
 }
 
-main {
+img.logo {
+  width: $logo-width;
+}
+
+img.logo-lg {
+  width: $logo-width * 2;
+}
+
+section.links {
+  background-color: $darkgray;
   display: grid;
   grid-auto-rows: minmax(min-content, auto);
   grid-gap: $margin;
   grid-template-columns: repeat(3, 1fr);
-  padding: $margin;
+  padding: $margin 0;
 
   section {
     background-color: $lightgray;
     display: flex;
     flex-direction: column;
     padding: $padding;
-    text-align: center;
 
     h2 {
       text-align: center;
@@ -59,21 +45,13 @@ main {
       display: block;
       margin-left: auto;
       margin-right: auto;
-      text-align: left;
       width: fit-content;
     }
 
     ul {
       display: block;
-      margin-left: auto;
-      margin-right: auto;
-      padding: 0;
-      text-align: left;
+      list-style-type: none;
       width: fit-content;
-
-      li {
-        white-space: nowrap;
-      }
     }
 
     img {
@@ -89,16 +67,14 @@ main {
   }
 }
 
-aside.related-services {
+section.related-services {
   background-color: $lightgray;
-  margin: 0 $margin $margin;
   text-align: center;
 
   ul {
     align-items: center;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    padding: 0;
 
     li {
       display: block;

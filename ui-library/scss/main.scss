@@ -2,28 +2,29 @@
 @import 'globals';
 
 body {
+  color: $black;
   font-family: $font-family;
+  font-size: smaller;
   line-height: 1.2;
   margin: 0;
 }
 
 ul {
-  margin: 0;
+  padding: 0;
 }
 
 nav {
   align-items: center;
   background-color: $darkgray;
   display: flex;
-  height: $nav-height;
+  justify-content: center;
 
   ul {
     display: flex;
     flex-direction: row;
     justify-content: center;
     list-style-type: none;
-    margin: auto;
-    padding: 0;
+    margin: $margin / 2;
 
     li {
       display: block;
@@ -40,9 +41,50 @@ nav {
   }
 }
 
-footer {
-  background-color: $darkgray;
-  margin: 0;
-  text-align: center;
+header {
+  nav {
+    background: linear-gradient($midgray1, $midgray2);
+    justify-content: flex-start;
+    // TODO: fix image sizes
+    // TODO: vertical line between images, w/white space
+    // TODO: format and align login button
+  }
 }
+
+main {
+  background-color: $darkgray;
+  padding: $margin;
+
+  section {
+    background-color: $lightgray;
+    padding: $margin;
+  }
+}
+
+// TODO: lay out aside as column, align to lower right
+aside {
+  background-color: $orange;
+  padding: $margin;
+
+  h3 {
+    margin-top: 0;
+  }
+
+  ul {
+    padding-left: $padding;
+
+    li {
+      margin-top: $margin;
+    }
+  }
+}
+
+footer {
+  text-align: center;
+
+  nav {
+    background-color: $midgray1;
+  }
+}
+
 
