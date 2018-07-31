@@ -17,6 +17,11 @@ img.merritt-logo {
   height: $logo-height / 2;
 }
 
+// TODO: check SVG vs. PNG (PNG is square, SVG isn't)
+img.cts-logo {
+  width: $service-logo-width / 2;
+}
+
 img.service-logo {
   width: $service-logo-width;
 }
