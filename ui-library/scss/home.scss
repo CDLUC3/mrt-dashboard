@@ -69,7 +69,10 @@ section.links {
 
 section.related-services {
   background-color: $lightgray;
-  text-align: center;
+
+  h2 {
+    text-align: center;
+  }
 
   ul {
     align-items: center;
