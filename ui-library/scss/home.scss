@@ -23,52 +23,93 @@ img.logo-lg {
   width: $logo-width * 2;
 }
 
-section.links {
+main {
   background-color: $darkgray;
   display: grid;
-  grid-auto-rows: minmax(min-content, auto);
   grid-gap: $margin;
   grid-template-columns: repeat(3, 1fr);
-  padding: $margin 0;
+  padding: $padding;
 
   section {
     background-color: $lightgray;
-    display: flex;
-    flex-direction: column;
+    border-radius: $corner-radius;
     padding: $padding;
+  }
+}
+
+section.intro {
+  display: grid;
+  grid-column-end: 4;
+  grid-column-start: 1;
+  grid-gap: $margin;
+
+  header {
+    grid-column-end: 3;
+    grid-column-start: 1;
 
     h2 {
-      text-align: center;
+      margin-bottom: 0;
     }
+  }
 
-    p {
-      display: block;
-      margin-left: auto;
-      margin-right: auto;
-      width: fit-content;
+  div {
+    font-size: medium;
+    grid-column-end: 3;
+    grid-column-start: 1;
+  }
+
+  // TODO: figure out why column 3 is narrower
+  aside {
+    background-color: $orange;
+    border-radius: $corner-radius;
+    grid-column-end: 4;
+    grid-column-start: 3;
+    padding: $padding;
+
+    h3 {
+      margin-top: 0;
     }
 
     ul {
-      display: block;
-      list-style-type: none;
-      width: fit-content;
-    }
+      list-style-position: inside;
+      padding-left: 0;
 
-    img {
-      display: block;
-      margin: $margin auto;
+      li {
+        margin-top: $margin;
+      }
     }
+  }
+}
 
-    nav {
-      margin-bottom: 0;
-      margin-top: auto;
-      width: 100%;
-    }
+section.feature {
+  h2 {
+    margin-top: 0;
+    text-align: center;
+  }
+
+  p {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: fit-content;
+  }
+
+  ul {
+    display: block;
+    list-style-type: none;
+    width: fit-content;
+  }
+
+  img {
+    display: block;
+    margin: $margin auto;
   }
 }
 
 section.related-services {
   background-color: $lightgray;
+  grid-column-end: 4;
+  grid-column-start: 1;
 
   h2 {
     text-align: center;

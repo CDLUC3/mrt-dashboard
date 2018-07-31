@@ -51,33 +51,6 @@ header {
   }
 }
 
-main {
-  background-color: $darkgray;
-  padding: $margin;
-
-  section {
-    background-color: $lightgray;
-    padding: $margin;
-  }
-}
-
-// TODO: lay out aside as column, align to lower right
-aside {
-  background-color: $orange;
-  padding: $margin;
-
-  h3 {
-    margin-top: 0;
-  }
-
-  ul {
-    padding-left: $padding;
-
-    li {
-      margin-top: $margin;
-    }
-  }
-}
 
 footer {
   text-align: center;
