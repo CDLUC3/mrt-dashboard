@@ -1,26 +1,30 @@
 @import 'globals';
 
-$logo-width: 192px;
+$logo-height: 56px;
+$service-logo-width: 192px;
 
 body {
   display: flex;
   flex-direction: column;
 }
 
-img.logo-sm {
-  width: $logo-width / 2;
+img.ucop-logo {
+  // UCOP logo includes its own padding per brand guidelines
+  height: $logo-height;
 }
 
-img.logo-med {
-  width: 2 * $logo-width / 3;
+img.merritt-logo {
+  height: $logo-height / 2;
 }
 
-img.logo {
-  width: $logo-width;
+img.service-logo {
+  width: $service-logo-width;
 }
 
-img.logo-lg {
-  width: $logo-width * 2;
+h1 {
+  img.merritt-logo {
+    height: $logo-height;
+  }
 }
 
 main {
@@ -50,6 +54,7 @@ section.intro {
     grid-column-start: 1;
     grid-row-end: 3;
     grid-row-start: 1;
+    // align with section.feature below
     margin-right: -($margin / 3);
 
     h2 {
@@ -64,6 +69,7 @@ section.intro {
     grid-column-start: 3;
     grid-row-end: 3;
     grid-row-start: 2;
+    // align with section.feature below
     margin-left: $margin / 3;
     padding: $padding;
 
@@ -72,11 +78,17 @@ section.intro {
     }
 
     ul {
-      list-style-position: inside;
+      list-style: none;
       padding-left: 0;
 
       li {
-        margin-top: $margin;
+        // optical slop to prevent excessive wrapping
+        margin-right: -$margin / 3;
+        margin-top: 1.2em;
+      }
+
+      li::before {
+        content: '•';
       }
     }
   }

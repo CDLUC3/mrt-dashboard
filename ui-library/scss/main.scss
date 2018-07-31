@@ -42,12 +42,11 @@ nav {
 }
 
 header {
+  // TODO: vertical line between images, w/white space
+  // TODO: format and align login button
   nav {
     background: linear-gradient($midgray1, $midgray2);
     justify-content: flex-start;
-    // TODO: fix image sizes
-    // TODO: vertical line between images, w/white space
-    // TODO: format and align login button
   }
 }
 
