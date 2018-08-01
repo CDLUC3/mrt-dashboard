@@ -87,20 +87,63 @@ describe LdapMixin do
   end
 
   describe ':replace_attribute' do
+    attr_reader :id
+    attr_reader :attribute
+
+    before(:each) do
+      @id = 'foo'
+      @attribute = :bar
+    end
+
     it 'replaces an attribute' do
-      id = 'foo'
-      attribute = :bar
       value = 'baz'
       expect(admin_ldap).to receive(:replace_attribute).with(ldap.ns_dn(id), attribute, value).and_return(true)
       ldap.replace_attribute(id, attribute, value)
     end
+
+    it 'uses delete for empty values' do
+      allow(admin_ldap).to receive(:search).with(base: base, filter: ldap.obj_filter(id)).and_return([{ @attribute => 'a value' }])
+      expect(admin_ldap).to receive(:delete_attribute).with(ldap.ns_dn(id), attribute).and_return(true)
+      ldap.replace_attribute(id, attribute, '')
+    end
+
+    it 'uses delete for blank values' do
+      allow(admin_ldap).to receive(:search).with(base: base, filter: ldap.obj_filter(id)).and_return([{ @attribute => 'a value' }])
+      expect(admin_ldap).to receive(:delete_attribute).with(ldap.ns_dn(id), attribute).and_return(true)
+      ldap.replace_attribute(id, attribute, '    ')
+    end
+
+    it 'skips empty values for attributes that already don\'t exist' do
+      allow(admin_ldap).to receive(:search).with(base: base, filter: ldap.obj_filter(id)).and_return([{ qux: 'a value' }])
+      expect(admin_ldap).not_to receive(:delete_attribute)
+      ldap.replace_attribute(id, attribute, '')
+    end
+
+    it 'skips blank values for attributes that already don\'t exist' do
+      allow(admin_ldap).to receive(:search).with(base: base, filter: ldap.obj_filter(id)).and_return([{ qux: 'a value' }])
+      expect(admin_ldap).not_to receive(:delete_attribute)
+      ldap.replace_attribute(id, attribute, '    ')
+    end
   end
 
   describe ':delete_attribute' do
+    attr_reader :id
+    attr_reader :attribute
+
+    before(:each) do
+      @id = 'foo'
+      @attribute = :bar
+    end
+
     it 'deletes an attribute' do
-      id = 'foo'
-      attribute = :bar
+      allow(admin_ldap).to receive(:search).with(base: base, filter: ldap.obj_filter(id)).and_return([{ @attribute => 'a value' }])
       expect(admin_ldap).to receive(:delete_attribute).with(ldap.ns_dn(id), attribute).and_return(true)
+      ldap.delete_attribute(id, attribute)
+    end
+
+    it 'skips attributes that already don\'t exist' do
+      allow(admin_ldap).to receive(:search).with(base: base, filter: ldap.obj_filter(id)).and_return([{ qux: 'a value' }])
+      expect(admin_ldap).not_to receive(:delete_attribute)
       ldap.delete_attribute(id, attribute)
     end
   end
