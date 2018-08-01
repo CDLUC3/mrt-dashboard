@@ -53,10 +53,15 @@ module LdapMixin
   end
 
   def replace_attribute(id, attribute, value)
-    true_or_exception(admin_ldap.replace_attribute(ns_dn(id), attribute, value))
+    if value.blank?
+      delete_attribute(id, attribute)
+    else
+      true_or_exception(admin_ldap.replace_attribute(ns_dn(id), attribute, value))
+    end
   end
 
   def delete_attribute(id, attribute)
+    return if fetch(id)[attribute].blank? # LDAP doesn't like deleting things that don't exist
     true_or_exception(admin_ldap.delete_attribute(ns_dn(id), attribute))
   end
 
