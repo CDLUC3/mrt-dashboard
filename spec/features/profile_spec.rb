@@ -55,6 +55,18 @@ describe 'profile' do
       expect(page).to have_content(UserController::PROFILE_UPDATED_MSG)
     end
 
+    it 'should allow the user to delete their telephone number' do
+      new_number = ''
+
+      click_link('Profile')
+      fill_in('telephonenumber', with: new_number)
+
+      allow(User::LDAP).to receive(:replace_attribute).with(user_id, any_args).and_return(true)
+      expect(User::LDAP).to receive(:replace_attribute).with(user_id, 'telephonenumber', new_number)
+      click_button 'Save changes'
+      expect(page).to have_content(UserController::PROFILE_UPDATED_MSG)
+    end
+
     it 'should allow the user to change their time zone' do
       click_link('Profile')
       select('Europe/Helsinki', from: 'tzregion')
