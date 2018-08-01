@@ -102,25 +102,25 @@ describe LdapMixin do
     end
 
     it 'uses delete for empty values' do
-      allow(admin_ldap).to receive(:search).with(base: base, filter: ldap.obj_filter(id)).and_return([{@attribute => 'a value'}])
+      allow(admin_ldap).to receive(:search).with(base: base, filter: ldap.obj_filter(id)).and_return([{ @attribute => 'a value' }])
       expect(admin_ldap).to receive(:delete_attribute).with(ldap.ns_dn(id), attribute).and_return(true)
       ldap.replace_attribute(id, attribute, '')
     end
 
     it 'uses delete for blank values' do
-      allow(admin_ldap).to receive(:search).with(base: base, filter: ldap.obj_filter(id)).and_return([{@attribute => 'a value'}])
+      allow(admin_ldap).to receive(:search).with(base: base, filter: ldap.obj_filter(id)).and_return([{ @attribute => 'a value' }])
       expect(admin_ldap).to receive(:delete_attribute).with(ldap.ns_dn(id), attribute).and_return(true)
       ldap.replace_attribute(id, attribute, '    ')
     end
 
     it 'skips empty values for attributes that already don\'t exist' do
-      allow(admin_ldap).to receive(:search).with(base: base, filter: ldap.obj_filter(id)).and_return([{:qux => 'a value'}])
+      allow(admin_ldap).to receive(:search).with(base: base, filter: ldap.obj_filter(id)).and_return([{ qux: 'a value' }])
       expect(admin_ldap).not_to receive(:delete_attribute)
       ldap.replace_attribute(id, attribute, '')
     end
 
     it 'skips blank values for attributes that already don\'t exist' do
-      allow(admin_ldap).to receive(:search).with(base: base, filter: ldap.obj_filter(id)).and_return([{:qux => 'a value'}])
+      allow(admin_ldap).to receive(:search).with(base: base, filter: ldap.obj_filter(id)).and_return([{ qux: 'a value' }])
       expect(admin_ldap).not_to receive(:delete_attribute)
       ldap.replace_attribute(id, attribute, '    ')
     end
@@ -136,13 +136,13 @@ describe LdapMixin do
     end
 
     it 'deletes an attribute' do
-      allow(admin_ldap).to receive(:search).with(base: base, filter: ldap.obj_filter(id)).and_return([{@attribute => 'a value'}])
+      allow(admin_ldap).to receive(:search).with(base: base, filter: ldap.obj_filter(id)).and_return([{ @attribute => 'a value' }])
       expect(admin_ldap).to receive(:delete_attribute).with(ldap.ns_dn(id), attribute).and_return(true)
       ldap.delete_attribute(id, attribute)
     end
 
     it 'skips attributes that already don\'t exist' do
-      allow(admin_ldap).to receive(:search).with(base: base, filter: ldap.obj_filter(id)).and_return([{:qux => 'a value'}])
+      allow(admin_ldap).to receive(:search).with(base: base, filter: ldap.obj_filter(id)).and_return([{ qux: 'a value' }])
       expect(admin_ldap).not_to receive(:delete_attribute)
       ldap.delete_attribute(id, attribute)
     end
