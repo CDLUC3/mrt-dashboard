@@ -1,7 +1,8 @@
 @import 'globals';
 
-$logo-height: 56px;
-$service-logo-width: 192px;
+$logo-height: 54px;
+$logo-height-lg: 72px;
+$service-logo-width: 8 * $logo-height-lg / 3;
 
 body {
   display: flex;
@@ -19,10 +20,11 @@ img.merritt-logo {
 
 // TODO: check SVG vs. PNG (PNG is square, SVG isn't)
 img.cts-logo {
-  width: $service-logo-width / 2;
+  height: $logo-height-lg;
 }
 
 img.service-logo {
+  max-height: $logo-height-lg;
   width: $service-logo-width;
 }
 
