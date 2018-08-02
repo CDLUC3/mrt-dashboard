@@ -16,10 +16,34 @@ class UIDemo
     puts "                   to target #{demo_path}\n\n"
     sass_lint
     clear_demo_dir!
-    process_source_files!
+    process_demo_source!
+  end
+
+  def compile_to_production!
+    raise 'Can’t process SCSS without sass or sassc' unless sass_cmd
+    raise "Can’t locate UI library #{ui_library_path}" unless ui_library_path.exist?
+    puts "Processing source files from #{ui_library_path}"
+    puts "                   to target #{production_path}\n\n"
+    sass_lint
+    process_production_source!
   end
 
   private
+
+  def process_demo_source!
+    puts 'Processing files'
+    Dir.glob("#{ui_library_path}/**/*").each do |infile|
+      process_file(infile, demo_path_str) unless skip?(infile)
+    end
+  end
+  
+  def process_production_source!
+    puts 'Processing files'
+    Dir.glob("#{ui_library_path}/**/*").each do |infile|
+      next if File.basename(infile).ends_with('.html')
+      process_file(infile, production_path_str) unless skip?(infile)
+    end
+  end
 
   def sass_cmd
     @sass_cmd ||= if system('which sassc > /dev/null 2>&1')
@@ -45,8 +69,16 @@ class UIDemo
     @demo_path ||= project_root_path + 'public/demo'
   end
 
+  def production_path
+    @production_path ||= project_root_path + 'public'
+  end
+
   def demo_path_str
     @demo_path_str ||= demo_path.to_s
+  end
+
+  def production_path_str
+    @production_path_str ||= production_path.to_s
   end
 
   def demo_path_relative
@@ -83,37 +115,30 @@ class UIDemo
     FileUtils.remove_dir(demo_path_str) if File.directory?(demo_path_str)
   end
 
-  def process_source_files!
-    puts 'Processing files'
-    Dir.glob("#{ui_library_path}/**/*").each do |infile|
-      process_file(infile) unless skip?(infile)
-    end
-  end
-
   def skip?(infile)
     return true if File.directory?(infile)
     return true if File.basename(infile) == '.sass-config.yml'
     false
   end
 
-  def process_file(infile)
+  def process_file(infile, target_path_str)
     if infile.end_with?('.scss')
       return if File.basename(infile).start_with?('_')
-      return compile_scss(infile)
+      return compile_scss(infile, target_path_str)
     end
-    copy_to_demo(infile)
+    copy(infile, target_path_str)
   end
 
-  def compile_scss(infile)
-    outfile = infile.sub(ui_library_path_str, demo_path_str).gsub('scss', 'css')
+  def compile_scss(infile, target_path_str)
+    outfile = infile.sub(ui_library_path_str, target_path_str).gsub('scss', 'css')
     FileUtils.mkdir_p(File.expand_path('..', outfile))
     puts "  Compiling #{relative_path(infile)} to #{relative_path(outfile)}"
     output, status = run_ext("#{sass_cmd} '#{infile}' > '#{outfile}'")
     (warn(output); raise) unless status == 0
   end
 
-  def copy_to_demo(infile)
-    outfile = infile.sub(ui_library_path_str, demo_path_str)
+  def copy(infile, target_path_str)
+    outfile = infile.sub(ui_library_path_str, target_path_str)
     FileUtils.mkdir_p(File.expand_path('..', outfile))
     puts "  Copying #{relative_path(infile)} to #{relative_path(outfile)}"
     FileUtils.cp(infile, outfile)
