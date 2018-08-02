@@ -5,8 +5,10 @@ $margin: 20px;
 $padding: $margin;
 $corner-radius: $margin / 2;
 
-$logo-height: 54px;
-$logo-height-lg: 72px;
+// UCOP logo includes its own padding per brand guidelines
+$ucop-logo-height: 60px;
+$merritt-logo-height: $ucop-logo-height / 2;
+$service-logo-height: 72px;
 
 // ////////////////////////////////////////////////////////////
 // Typography

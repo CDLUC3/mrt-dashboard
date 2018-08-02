@@ -14,12 +14,11 @@ body {
 }
 
 img.ucop-logo {
-  // UCOP logo includes its own padding per brand guidelines
-  height: $logo-height;
+  height: $ucop-logo-height;
 }
 
 img.merritt-logo {
-  height: $logo-height / 2;
+  height: $merritt-logo-height;
 }
 
 ul {
@@ -69,7 +68,7 @@ header {
   nav.login {
     background-color: $orange;
     border-radius: $corner-radius / 2;
-    height: $logo-height / 2;
+    height: $ucop-logo-height / 2;
     margin-right: $margin;
 
     li {

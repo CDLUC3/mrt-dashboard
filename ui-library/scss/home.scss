@@ -1,23 +1,23 @@
 @import 'globals';
 
-$service-logo-width: 8 * $logo-height-lg / 3;
+$logo-width: 8 * $service-logo-height / 3;
 
 // |<- 2 * margin | logo | 2 * margin | logo | 2 * margin | logo | 2 * margin ->|
-$main-width: (3 * $service-logo-width) + (8 * $margin);
+$main-width: (3 * $logo-width) + (8 * $margin);
 
 // TODO: check SVG vs. PNG (PNG is square, SVG isn't)
 img.cts-logo {
-  height: $logo-height-lg;
+  height: $service-logo-height;
 }
 
 img.service-logo {
-  max-height: $logo-height-lg;
-  width: $service-logo-width;
+  max-height: $service-logo-height;
+  width: $logo-width;
 }
 
 h1 {
   img.merritt-logo {
-    height: $logo-height;
+    height: 2 * $merritt-logo-height;
   }
 }
 
