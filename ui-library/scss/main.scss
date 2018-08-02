@@ -94,6 +94,10 @@ footer {
   background: $midgray1;
   text-align: center;
   width: 100%;
+
+  div.publication-info p {
+    margin: 0;
+  }
 }
 
 
