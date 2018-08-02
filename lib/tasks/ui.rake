@@ -33,15 +33,15 @@ class UIDemo
   def process_demo_source!
     puts 'Processing files'
     Dir.glob("#{ui_library_path}/**/*").each do |infile|
-      process_file(infile, demo_path_str) unless skip?(infile)
+      process_file(infile, demo_path_str, 'css') unless skip?(infile)
     end
   end
-  
+
   def process_production_source!
     puts 'Processing files'
     Dir.glob("#{ui_library_path}/**/*").each do |infile|
       next if File.basename(infile).ends_with?('.html')
-      process_file(infile, production_path_str) unless skip?(infile)
+      process_file(infile, production_path_str, 'stylesheets') unless skip?(infile)
     end
   end
 
@@ -122,18 +122,17 @@ class UIDemo
     false
   end
 
-  def process_file(infile, target_path_str)
+  def process_file(infile, target_path_str, stylesheets_dir)
     if infile.end_with?('.scss')
       return if File.basename(infile).start_with?('_')
-      return compile_scss(infile, target_path_str)
+      return compile_scss(infile, target_path_str, stylesheets_dir)
     end
     copy(infile, target_path_str)
   end
 
-  def compile_scss(infile, target_path_str)
-    outfile = infile.sub(ui_library_path_str, target_path_str).gsub('scss', 'css')
-    # TODO: something cleaner
-    outfile = outfile.sub('/css/', '/stylesheets/') if target_path_str == production_path_str
+  def compile_scss(infile, target_path_str, stylesheets_dir)
+    outfile = infile.sub(ui_library_path_str, target_path_str).sub('.scss', '.css')
+    outfile = outfile.sub('/scss/', "/#{stylesheets_dir}/")
 
     FileUtils.mkdir_p(File.expand_path('..', outfile))
     puts "  Compiling #{relative_path(infile)} to #{relative_path(outfile)}"

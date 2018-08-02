@@ -3,7 +3,7 @@ class HomeController < ApplicationController
 
   def index_new
     respond_to do |format|
-      format.html { render :layout => false }
+      format.html { render layout: false }
     end
   end
 
