@@ -101,13 +101,20 @@ header {
   }
 
   nav.menu {
-    align-items: start;
     background-color: $midgray1;
     grid-column-end: 3;
     grid-column-start: 1;
+    justify-content: left;
 
     ul {
       margin: 0;
+
+      li {
+        border: 0;
+        font-weight: bold;
+        margin: ($margin / 4) ($margin / 2);
+        padding: 0;
+      }
     }
   }
 }
