@@ -40,7 +40,7 @@ class UIDemo
   def process_production_source!
     puts 'Processing files'
     Dir.glob("#{ui_library_path}/**/*").each do |infile|
-      next if File.basename(infile).ends_with('.html')
+      next if File.basename(infile).ends_with?('.html')
       process_file(infile, production_path_str) unless skip?(infile)
     end
   end
@@ -118,6 +118,7 @@ class UIDemo
   def skip?(infile)
     return true if File.directory?(infile)
     return true if File.basename(infile) == '.sass-config.yml'
+    return true if File.basename(infile) == 'README.md'
     false
   end
 
@@ -131,6 +132,9 @@ class UIDemo
 
   def compile_scss(infile, target_path_str)
     outfile = infile.sub(ui_library_path_str, target_path_str).gsub('scss', 'css')
+    # TODO: something cleaner
+    outfile = outfile.sub('/css/', '/stylesheets/') if target_path_str == production_path_str
+
     FileUtils.mkdir_p(File.expand_path('..', outfile))
     puts "  Compiling #{relative_path(infile)} to #{relative_path(outfile)}"
     output, status = run_ext("#{sass_cmd} '#{infile}' > '#{outfile}'")
@@ -153,4 +157,9 @@ end
 task :uidemo do
   project_root = File.expand_path('../..', __dir__)
   UIDemo.new(project_root).compile_demo!
+end
+
+task :uiprod do
+  project_root = File.expand_path('../..', __dir__)
+  UIDemo.new(project_root).compile_to_production!
 end
