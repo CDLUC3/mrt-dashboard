@@ -13,13 +13,13 @@ describe ApplicationHelper do
   describe ':show_environment' do
     it 'returns the environment' do
       include ApplicationHelper
-      expect(show_environment).to eq(Rails.env)
+      expect(env_str).to eq(Rails.env)
     end
 
     it 'returns empty for production' do
       include ApplicationHelper
       allow(Rails).to receive(:env).and_return('production')
-      expect(show_environment).to eq('')
+      expect(env_str).to eq('')
     end
   end
 end

@@ -44,9 +44,11 @@ module ApplicationHelper
   end
 
   # outputs a formatted string for the current environment, except production
-  def show_environment
-    return '' if Rails.env.include?('production')
-    Rails.env
+  def env_str
+    @env_str ||= begin
+      env = Rails.env
+      env.include?('production') ? '' : env
+    end
   end
 
   # Return true if a user is logged in
