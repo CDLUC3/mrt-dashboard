@@ -43,12 +43,12 @@ nav {
       flex-basis: auto;
       flex-grow: 0;
       flex-shrink: 1;
-      padding-left: $padding;
-      padding-right: $padding;
+      padding-left: $padding / 4;
+      padding-right: $padding / 4;
     }
 
     li:not(:last-of-type) {
-      border-right: 1px solid;
+      border-right: 1px solid $darkgray;
     }
   }
 }

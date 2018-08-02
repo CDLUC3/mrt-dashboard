@@ -51,6 +51,10 @@ section.intro {
     // align with section.feature below
     margin-right: -($margin / 3);
 
+    h1 {
+      margin-top: 0;
+    }
+
     h2 {
       margin-bottom: 0;
     }
