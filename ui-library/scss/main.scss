@@ -2,11 +2,24 @@
 @import 'globals';
 
 body {
+  align-items: center;
+  background-color: $darkgray;
   color: $black;
+  display: flex;
+  flex-direction: column;
   font-family: $font-family;
   font-size: smaller;
   line-height: 1.2;
   margin: 0;
+}
+
+img.ucop-logo {
+  // UCOP logo includes its own padding per brand guidelines
+  height: $logo-height;
+}
+
+img.merritt-logo {
+  height: $logo-height / 2;
 }
 
 ul {
@@ -15,7 +28,6 @@ ul {
 
 nav {
   align-items: center;
-  background-color: $darkgray;
   display: flex;
   justify-content: center;
 
@@ -42,21 +54,43 @@ nav {
 }
 
 header {
-  // TODO: vertical line between images, w/white space
-  // TODO: format and align login button
-  nav {
-    background: linear-gradient($midgray1, $midgray2);
+  align-items: center;
+  background: linear-gradient($midgray1, $midgray2);
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+
+  div.masthead {
+    align-items: center;
+    display: flex;
     justify-content: flex-start;
+  }
+
+  nav.login {
+    background-color: $orange;
+    border-radius: $corner-radius / 2;
+    height: $logo-height / 2;
+    margin-right: $margin;
+
+    li {
+      padding: 0;
+    }
+
+    a {
+      color: inherit;
+      font-weight: bold;
+      padding-left: $padding;
+      padding-right: $padding;
+      text-decoration: none;
+    }
   }
 }
 
 
 footer {
+  background: $midgray1;
   text-align: center;
-
-  nav {
-    background-color: $midgray1;
-  }
+  width: 100%;
 }
 
 

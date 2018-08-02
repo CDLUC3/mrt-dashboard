@@ -1,22 +1,9 @@
 @import 'globals';
 
-$logo-height: 54px;
-$logo-height-lg: 72px;
 $service-logo-width: 8 * $logo-height-lg / 3;
 
-body {
-  display: flex;
-  flex-direction: column;
-}
-
-img.ucop-logo {
-  // UCOP logo includes its own padding per brand guidelines
-  height: $logo-height;
-}
-
-img.merritt-logo {
-  height: $logo-height / 2;
-}
+// |<- 2 * margin | logo | 2 * margin | logo | 2 * margin | logo | 2 * margin ->|
+$main-width: (3 * $service-logo-width) + (8 * $margin);
 
 // TODO: check SVG vs. PNG (PNG is square, SVG isn't)
 img.cts-logo {
@@ -40,6 +27,7 @@ main {
   grid-gap: $margin;
   grid-template-columns: repeat(3, 1fr);
   padding: $padding;
+  width: $main-width;
 
   section {
     background-color: $lightgray;
@@ -132,6 +120,7 @@ section.related-services {
   grid-column-start: 1;
 
   h2 {
+    margin-top: 0;
     text-align: center;
   }
 
@@ -139,6 +128,7 @@ section.related-services {
     align-items: center;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
+    margin-bottom: 0;
 
     li {
       display: block;
