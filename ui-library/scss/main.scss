@@ -55,17 +55,27 @@ nav {
 header {
   align-items: center;
   background: linear-gradient($midgray1, $midgray2);
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: minmax(min-content, auto) max-content;
   width: 100%;
 
   div.masthead {
     align-items: center;
     display: flex;
-    justify-content: flex-start;
+    grid-column-end: 2;
+    grid-column-start: 1;
+
+    h2 {
+      margin: ($margin / 2) 0 0 $margin;
+    }
   }
 
   nav.login {
+    background: none;
+    grid-column-end: 3;
+    grid-column-start: 2;
+    justify-items: end;
+
     ul {
       background-color: $orange;
       border-radius: $corner-radius / 2;
@@ -87,6 +97,17 @@ header {
         padding-right: $padding;
         text-decoration: none;
       }
+    }
+  }
+
+  nav.menu {
+    align-items: start;
+    background-color: $midgray1;
+    grid-column-end: 3;
+    grid-column-start: 1;
+
+    ul {
+      margin: 0;
     }
   }
 }
