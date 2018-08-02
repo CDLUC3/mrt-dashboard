@@ -34,31 +34,3 @@ $lightgray: #f2f2f2;
 $midgray1: #d8d8d9;
 $midgray2: #e4e4e4;
 $orange: #f28d1e;
-
-// ////////////////////////////////////////////////////////////
-// Borders (for debugging)
-// TODO: remove borders when fully debugged
-
-//$border: 1px solid #ff00ff;
-$border: 0;
-
-nav {
-  border: $border;
-}
-
-section {
-  border: $border;
-}
-
-p {
-  border: $border;
-}
-
-ul {
-  border: $border;
-}
-
-li {
-  border: $border;
-}
-
