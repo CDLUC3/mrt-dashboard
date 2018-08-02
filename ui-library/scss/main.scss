@@ -70,6 +70,18 @@ header {
     }
   }
 
+  nav {
+    a {
+      color: inherit;
+      font-weight: bold;
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+  }
+
   nav.login {
     background: none;
     grid-column-end: 3;
@@ -90,12 +102,9 @@ header {
       }
 
       a {
-        color: inherit;
         display: block;
-        font-weight: bold;
         padding-left: $padding;
         padding-right: $padding;
-        text-decoration: none;
       }
     }
   }

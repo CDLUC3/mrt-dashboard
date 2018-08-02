@@ -320,6 +320,16 @@ header div.masthead h2 {
   margin: 10px 0 0 20px;
 }
 
+header nav a {
+  color: inherit;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+header nav a:hover {
+  text-decoration: underline;
+}
+
 header nav.login {
   background: none;
   grid-column-end: 3;
@@ -342,12 +352,9 @@ header nav.login ul li {
 }
 
 header nav.login ul a {
-  color: inherit;
   display: block;
-  font-weight: bold;
   padding-left: 20px;
   padding-right: 20px;
-  text-decoration: none;
 }
 
 header nav.menu {
