@@ -65,7 +65,7 @@ class ApplicationController < ActionController::Base
 
   # Returns true if the user can upload to the session group
   def current_user_can_write_to_collection?
-    current_group.user_has_permission?(current_uid, 'write')
+    session[:group_id] && current_group.user_has_permission?(current_uid, 'write')
   end
 
   # Return the groups which the user may be a member of
