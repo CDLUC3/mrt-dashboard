@@ -124,6 +124,26 @@ header {
         margin: ($margin / 4) ($margin / 2);
         padding: 0;
       }
+
+      li:hover {
+        background-color: $lightgray;
+      }
+
+      li.dropdown {
+        ul {
+          background-color: $lightgray;
+          display: none;
+          position: absolute;
+        }
+      }
+
+      li.dropdown:hover {
+        ul {
+          display: block;
+          margin-left: 0;
+          margin-right: 0;
+        }
+      }
     }
   }
 }
