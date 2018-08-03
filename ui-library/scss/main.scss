@@ -123,11 +123,14 @@ header {
         font-weight: bold;
         //padding: 0;
         padding: ($padding / 4) ($padding / 2);
+
+        a:hover {
+          text-decoration: none;
+        }
       }
 
       li:hover {
         background-color: $lightgray;
-        text-decoration: none;
       }
 
       li.dropdown {
