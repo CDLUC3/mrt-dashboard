@@ -153,12 +153,16 @@ class UIDemo
   end
 end
 
-task :uidemo do
-  project_root = File.expand_path('../..', __dir__)
-  UIDemo.new(project_root).compile_demo!
-end
+namespace :ui do
+  desc "Build UI library demo in /public/demo"
+  task :demo do
+    project_root = File.expand_path('../..', __dir__)
+    UIDemo.new(project_root).compile_demo!
+  end
 
-task :uiprod do
-  project_root = File.expand_path('../..', __dir__)
-  UIDemo.new(project_root).compile_to_production!
+  desc "Compile UI library CSS and images to /public"
+  task :prod do
+    project_root = File.expand_path('../..', __dir__)
+    UIDemo.new(project_root).compile_to_production!
+  end
 end
