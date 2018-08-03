@@ -23,7 +23,7 @@ class UIDemo
     raise 'Can’t process SCSS without sass or sassc' unless sass_cmd
     raise "Can’t locate UI library #{ui_library_path}" unless ui_library_path.exist?
     puts "Processing source files from #{ui_library_path}"
-    puts "                   to target #{production_path}\n\n"
+    puts "                   to target #{project_root_path + 'public'}\n\n"
     sass_lint
     process_production_source!
   end
@@ -32,6 +32,7 @@ class UIDemo
 
   def process_demo_source!
     puts 'Processing files'
+    demo_path_str = demo_path.to_s
     Dir.glob("#{ui_library_path}/**/*").each do |infile|
       process_file(infile, demo_path_str, 'css') unless skip?(infile)
     end
@@ -39,6 +40,7 @@ class UIDemo
 
   def process_production_source!
     puts 'Processing files'
+    production_path_str = (project_root_path + 'public').to_s
     Dir.glob("#{ui_library_path}/**/*").each do |infile|
       next if File.basename(infile).ends_with?('.html')
       process_file(infile, production_path_str, 'stylesheets') unless skip?(infile)
@@ -57,32 +59,8 @@ class UIDemo
     @ui_library_path ||= project_root_path + 'ui-library'
   end
 
-  def ui_library_path_str
-    ui_library_path.to_s
-  end
-
-  def ui_library_path_relative
-    @ui_library_path_relative ||= ui_library_path.relative_path_from(project_root_path)
-  end
-
   def demo_path
     @demo_path ||= project_root_path + 'public/demo'
-  end
-
-  def production_path
-    @production_path ||= project_root_path + 'public'
-  end
-
-  def demo_path_str
-    @demo_path_str ||= demo_path.to_s
-  end
-
-  def production_path_str
-    @production_path_str ||= production_path.to_s
-  end
-
-  def demo_path_relative
-    @demo_path_relative ||= demo_path.relative_path_from(project_root_path)
   end
 
   def sass_lint
@@ -96,6 +74,7 @@ class UIDemo
   end
 
   def sass_lint_cmd
+    ui_library_path_relative = ui_library_path.relative_path_from(project_root_path)
     @sass_lint_cmd ||= begin
       cmd = <<~LINT
         sass-lint --config #{ui_library_path_relative}/scss/.sass-lint.yml
@@ -112,6 +91,7 @@ class UIDemo
 
   def clear_demo_dir!
     puts "Clearing target directory\n\n"
+    demo_path_str = demo_path.to_s
     FileUtils.remove_dir(demo_path_str) if File.directory?(demo_path_str)
   end
 
@@ -130,8 +110,9 @@ class UIDemo
     copy(infile, target_path_str)
   end
 
+  # rubocop:disable Metrics/AbcSize
   def compile_scss(infile, target_path_str, stylesheets_dir)
-    outfile = infile.sub(ui_library_path_str, target_path_str).sub('.scss', '.css')
+    outfile = infile.sub(ui_library_path.to_s, target_path_str).sub('.scss', '.css')
     outfile = outfile.sub('/scss/', "/#{stylesheets_dir}/")
 
     FileUtils.mkdir_p(File.expand_path('..', outfile))
@@ -139,9 +120,10 @@ class UIDemo
     output, status = run_ext("#{sass_cmd} '#{infile}' > '#{outfile}'")
     (warn(output); raise) unless status == 0
   end
+  # rubocop:enable Metrics/AbcSize
 
   def copy(infile, target_path_str)
-    outfile = infile.sub(ui_library_path_str, target_path_str)
+    outfile = infile.sub(ui_library_path.to_s, target_path_str)
     FileUtils.mkdir_p(File.expand_path('..', outfile))
     puts "  Copying #{relative_path(infile)} to #{relative_path(outfile)}"
     FileUtils.cp(infile, outfile)

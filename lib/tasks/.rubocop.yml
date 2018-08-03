@@ -3,5 +3,9 @@ inherit_from: ../.rubocop.yml
 Lint/HandleExceptions:
   Enabled: false
 
+Metrics/ClassLength:
+  Exclude:
+  - 'ui.rake'
+
 Style/Semicolon:
   Enabled: false
