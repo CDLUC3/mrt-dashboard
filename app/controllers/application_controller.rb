@@ -70,11 +70,13 @@ class ApplicationController < ActionController::Base
 
   # Return the groups which the user may be a member of
   def available_groups
-    groups = current_user.groups.sort_by { |g| g.description.downcase } || []
-    groups.map do |group|
-      { id:               group.id,
-        description:      group.description,
-        user_permissions: group.user_permissions(current_user.login) }
+    @available_groups ||= begin
+      groups = current_user.groups.sort_by { |g| g.description.downcase } || []
+      groups.map do |group|
+        { id:               group.id,
+          description:      group.description,
+          user_permissions: group.user_permissions(current_user.login) }
+      end
     end
   end
 

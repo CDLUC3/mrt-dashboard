@@ -7,7 +7,7 @@
   <%= stylesheet_link_tag('main') %>
   <%= stylesheet_link_tag('home') %>
 
-  <title>UC3 Merritt Home<% ": #{env_str}" unless env_str.blank? %></title>
+  <title>UC3 Merritt Home<%= ": #{env_str}" unless env_str.blank? %></title>
 </head>
 <body>
 <!-- Merritt monitoring test code. Please do not remove this comment since
@@ -24,14 +24,18 @@ it will cause the monitoring scripts to fail.
          title="University of California"/>
     <img class="ucop-logo" src="images/logos/ucop-logo-divider.svg" alt="|"/>
     <img class="merritt-logo" src="images/logos/merritt-logo.svg" alt="Merritt" title="Merritt"/>
-    <% "<h2>#{env_str}</h2>" unless env_str.blank? %>
+    <%= "<h2>#{env_str}</h2>".html_safe unless env_str.blank? %>
   </div>
   <nav class="login">
     <% if user_logged_in? %>
       Logged in as <%= current_user_displayname %>
-      <ul><li><%= link_to("Logout", controller: 'user_sessions', action: 'logout') %></li></ul>
+      <ul>
+        <li><%= link_to("Logout", controller: 'user_sessions', action: 'logout') %></li>
+      </ul>
     <% else %>
-      <ul><li><%= link_to("Login", controller: 'user_sessions', action: 'login') %></li></ul>
+      <ul>
+        <li><%= link_to("Login", controller: 'user_sessions', action: 'login') %></li>
+      </ul>
     <% end %>
   </nav>
   <% if user_logged_in? %> <%# make this a partial %>
@@ -45,7 +49,15 @@ it will cause the monitoring scripts to fail.
         <% if current_user_can_write_to_collection? %>
           <li><%= link_to('Add object', controller: 'object', action: 'add', group: session[:group_id]) %></li>
         <% end %>
-        <li>Change collection</li> <%# TODO: implement this (as mockup first) %>
+        <% unless available_groups.empty? %>
+          <li class="dropdown">
+          <%= link_to("Change collection \u25BC", controller: 'home', action: 'choose_collection', group: session[:group_id]) %>
+          <ul>
+            <% available_groups.each do |grp| %>
+              <li><%= link_to(grp[:description], controller: 'collection', action: 'index', group: grp[:id]) %></li>
+            <% end %>
+          </ul>
+        <% end %>
       </ul>
     </nav>
   <% end %>

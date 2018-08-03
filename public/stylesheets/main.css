@@ -371,8 +371,32 @@ header nav.menu ul {
 header nav.menu ul li {
   border: 0;
   font-weight: bold;
-  margin: 5px 10px;
-  padding: 0;
+  padding: 5px 10px;
+}
+
+header nav.menu ul li a:hover {
+  text-decoration: none;
+}
+
+header nav.menu ul li:hover {
+  background-color: #f2f2f2;
+}
+
+header nav.menu ul li.dropdown ul {
+  background-color: #d8d8d9;
+  display: none;
+  position: absolute;
+}
+
+header nav.menu ul li.dropdown:hover ul {
+  border: 1px solid #f2f2f2;
+  display: block;
+  margin-left: -10px;
+  margin-top: 5px;
+}
+
+header nav.menu ul li.dropdown:hover ul li:hover {
+  background-color: #f2f2f2;
 }
 
 section {
