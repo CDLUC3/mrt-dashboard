@@ -160,7 +160,7 @@ namespace :ui do
     UIDemo.new(project_root).compile_demo!
   end
 
-  desc "Compile UI library CSS and images to /public"
+  desc "Compile UI library CSS, images, and fonts to /public"
   task :prod do
     project_root = File.expand_path('../..', __dir__)
     UIDemo.new(project_root).compile_to_production!

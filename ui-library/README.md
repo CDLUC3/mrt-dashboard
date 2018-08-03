@@ -8,28 +8,32 @@ and [SASS](https://sass-lang.com/) stylesheets in SCSS syntax.
 ## Toolkit
 
 Compiling SCSS to CSS requires [sassc](https://github.com/sass/sassc) or
-[dart-sass](https://github.com/sass/dart-sass). (It may or may not work with (deprecated)
-[Ruby Sass](https://sass-lang.com/ruby-sass).)
+[dart-sass](https://github.com/sass/dart-sass). It may or may not work with (deprecated)
+[Ruby Sass](https://sass-lang.com/ruby-sass).
 
 ## Demo
 
-To build a demo of the UI library in `public/demo`, use the `:uidemo` Rake task:
+To build a demo of the UI library in `public/demo`, use the `:ui:demo` Rake task:
 
 ```
-$ bundle exec rake uidemo
-Clearing demo directory public/demo
-Copying ui-library/home.html to public/demo/index.html
-Copying ui-library/images/logos/cts-logo.svg to public/demo/images/logos/cts-logo.svg
-Copying ui-library/images/logos/uc3-logo.svg to public/demo/images/logos/uc3-logo.svg
-Copying ui-library/images/logos/escholarship-logo.svg to public/demo/images/logos/escholarship-logo.svg
-Copying ui-library/images/logos/merritt-logo.svg to public/demo/images/logos/merritt-logo.svg
-Copying ui-library/images/logos/calisphere-logo.svg to public/demo/images/logos/calisphere-logo.svg
-Copying ui-library/images/logos/dash-logo.svg to public/demo/images/logos/dash-logo.svg
-Copying ui-library/images/logos/ezid-logo.svg to public/demo/images/logos/ezid-logo.svg
-Copying ui-library/images/logos/cdl-logo.svg to public/demo/images/logos/cdl-logo.svg
-Compiling ui-library/scss/main.scss to public/demo/css/main.css
-Copying ui-library/README.md to public/demo/README.md
-Copying ui-library/fonts/KievitWeb.woff to public/demo/fonts/KievitWeb.woff
+$ bundle exec rake ui:demo
+Processing source files from /Users/david/Work/mrt-dashboard/ui-library
+                   to target /Users/david/Work/mrt-dashboard/public/demo
+
+Checking SCSS style:
+  sass-lint --config ui-library/scss/.sass-lint.yml 'ui-library/scss/*.scss' -v -q --max-warnings=0
+
+Clearing target directory
+
+Processing files
+  Copying ui-library/index.html to public/demo/index.html
+  (...)
+  Copying ui-library/images/logos/cts-logo.svg to public/demo/images/logos/cts-logo.svg
+  (...)
+  Compiling ui-library/scss/home.scss to public/demo/css/home.css
+  (...)
+  Copying ui-library/fonts/OpenSans-Regular-Cyrillic-Ext.woff2 to public/demo/fonts/OpenSans-Regular-Cyrillic-Ext.woff2
+  (...)
 ```
 
 The demo can then be viewed at `/demo/` when the application is running (e.g. 
@@ -37,6 +41,28 @@ The demo can then be viewed at `/demo/` when the application is running (e.g.
 
 > **⚠️** The `public/demo` directory is **erased** each time this task runs, so don’t
 > put anything in it that you care about. (It’s also excluded in `.gitignore`.) 
+
+## Production
+
+To compile SCSS files to `public/stylesheets` and copy images and fonts to `public/images` and
+`public/fonts`, use the `:ui:prod` Rake task:
+
+```
+$ bundle exec rake ui:prod
+Processing source files from /Users/david/Work/mrt-dashboard/ui-library
+                   to target /Users/david/Work/mrt-dashboard/public
+
+Checking SCSS style:
+  sass-lint --config ui-library/scss/.sass-lint.yml 'ui-library/scss/*.scss' -v -q --max-warnings=0
+
+Processing files
+  Copying ui-library/images/logos/cts-logo.svg to public/images/logos/cts-logo.svg
+  (...)
+  Compiling ui-library/scss/home.scss to public/stylesheets/home.css
+  (...)
+  Copying ui-library/fonts/OpenSans-Regular-Cyrillic-Ext.woff2 to public/fonts/OpenSans-Regular-Cyrillic-Ext.woff2
+  (...)
+```
 
 ## `sass-lint` usage
 
