@@ -11,7 +11,7 @@ describe 'home' do
   end
 
   it 'has a login link' do
-    click_link 'Login'
+    first(:link, 'Login').click
     expect(page).to have_content('Merritt')
   end
 
