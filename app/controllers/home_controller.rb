@@ -1,13 +1,12 @@
 class HomeController < ApplicationController
   before_filter :require_user, only: :choose_collection
 
-  # :nocov:
-  def index_new
+  def index
     respond_to do |format|
+      # TODO: remove this once we've converted the new index page into a global layout
       format.html { render layout: false }
     end
   end
-  # :nocov:
 
   def choose_collection
     return unless available_groups.length == 1

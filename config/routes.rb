@@ -1,9 +1,6 @@
 MrtDashboard::Application.routes.draw do
   resource 'users', as: 'account'
 
-  # TODO: delete this once new index page is in place
-  get('home' => 'home#index_new')
-
   get('object/recent(.:format)' => 'object#recent')
   get('feeds/recent'  => 'feeds#recent')
   get('show/view/*id' => 'show#view')
