@@ -121,17 +121,18 @@ header {
       li {
         border: 0;
         font-weight: bold;
-        margin: ($margin / 4) ($margin / 2);
-        padding: 0;
+        //padding: 0;
+        padding: ($padding / 4) ($padding / 2);
       }
 
       li:hover {
         background-color: $lightgray;
+        text-decoration: none;
       }
 
       li.dropdown {
         ul {
-          background-color: $lightgray;
+          background-color: $midgray1;
           display: none;
           position: absolute;
         }
@@ -139,9 +140,14 @@ header {
 
       li.dropdown:hover {
         ul {
+          border: 1px solid $lightgray;
           display: block;
-          margin-left: 0;
-          margin-right: 0;
+          margin-left: -($margin / 2);
+          margin-top: ($margin / 4);
+
+          li:hover {
+            background-color: $lightgray;
+          }
         }
       }
     }
