@@ -1,14 +1,34 @@
 // ////////////////////////////////////////////////////////////
 // Layout
 
-$margin: 20px;
+$margin: 24px;
 $padding: $margin;
 $corner-radius: $margin / 2;
 
-// UCOP logo includes its own padding per brand guidelines
-$ucop-logo-height: 60px;
+// |<- margin ->|<- column ->|<- margin ->|<- column ->|<- margin ->|<- column ->|<- margin ->|
+$design-width-desktop: 756px;
+$column-width: ($design-width-desktop - (4 * $margin)) / 3;
+
+// |<- margin ->|<- column ->|<- margin ->|<- column ->|<- margin ->|
+$design-width-2column: (2 * $column-width) + (3 * $margin);
+
+// |<- margin ->|<- column ->|<- margin ->|
+$design-width-1column: $column-width + (2 * $margin);
+
+// subtract outer margins
+$main-width-desktop: $design-width-desktop - (2 * $margin);
+$main-width-2column: $design-width-2column - (2 * $margin);
+$main-width-1column: $design-width-1column - (2 * $margin);
+
+// ////////////////////////////////////////////////////////////
+// Image sizes
+
+$ucop-logo-height: 60px; // UCOP logo includes its own padding per brand guidelines
 $merritt-logo-height: $ucop-logo-height / 2;
-$service-logo-height: 72px;
+
+// |<- margin ->|<- image ->|<- margin ->|
+$service-logo-width: $column-width - (2 * $margin);
+$service-logo-height: 3 * $service-logo-width / 8;
 
 // ////////////////////////////////////////////////////////////
 // Typography

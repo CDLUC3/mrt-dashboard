@@ -1,18 +1,13 @@
 @import 'globals';
 
-$logo-width: 8 * $service-logo-height / 3;
 
-// |<- 2 * margin | logo | 2 * margin | logo | 2 * margin | logo | 2 * margin ->|
-$main-width: (3 * $logo-width) + (8 * $margin);
-
-// TODO: check SVG vs. PNG (PNG is square, SVG isn't)
 img.cts-logo {
   height: $service-logo-height;
 }
 
 img.service-logo {
   max-height: $service-logo-height;
-  max-width: $logo-width;
+  max-width: $service-logo-width;
 }
 
 h1 {
@@ -27,7 +22,7 @@ main {
   grid-gap: $margin;
   grid-template-columns: repeat(3, 1fr);
   padding: $padding;
-  width: $main-width;
+  width: $main-width-desktop;
 
   section {
     border-radius: $corner-radius;
