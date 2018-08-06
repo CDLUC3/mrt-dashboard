@@ -30,22 +30,10 @@ ul {
 }
 
 nav {
-  align-items: center;
-  display: flex;
-
   ul {
     display: grid;
-    grid-column-gap: $padding / 4;
     justify-content: center;
     list-style-type: none;
-    margin: $margin / 2;
-
-    li {
-      display: block;
-      flex-basis: auto;
-      flex-grow: 0;
-      flex-shrink: 1;
-    }
   }
 }
 
@@ -89,7 +77,9 @@ header {
   }
 
   nav.menu {
+    align-items: center;
     background-color: $midgray1;
+    display: flex;
     justify-content: left;
 
     ul {
@@ -128,6 +118,24 @@ section {
 footer {
   background: $midgray1;
   width: 100%;
+
+  nav {
+    align-items: center;
+    display: flex;
+
+    ul {
+      grid-column-gap: $padding / 4;
+      margin: $margin / 2;
+
+      li {
+        display: block;
+        flex-basis: auto;
+        flex-grow: 0;
+        flex-shrink: 1;
+      }
+    }
+  }
+
 }
 
 // ////////////////////////////////////////////////////////////
@@ -148,29 +156,10 @@ footer {
       p {
         margin-bottom: 0;
         margin-left: auto;
-        margin-right: 0;
+        margin-right: ($margin / 2);
         margin-top: ($margin / 2);
       }
 
-    }
-  }
-
-  // TODO: should this only be in footer?
-  nav {
-    justify-content: center;
-
-    ul {
-      grid-auto-flow: column;
-      grid-column-gap: 0;
-
-      li {
-        padding-left: $padding / 4;
-        padding-right: $padding / 4;
-      }
-
-      li:not(:last-of-type) {
-        border-right: 1px solid $darkgray;
-      }
     }
   }
 
@@ -205,6 +194,10 @@ footer {
     grid-column-end: 3;
     grid-column-start: 1;
 
+    ul {
+      grid-auto-flow: column;
+    }
+
     li.login {
       display: none;
     }
@@ -237,6 +230,24 @@ footer {
 
   footer {
     text-align: center;
+
+    nav {
+      justify-content: center;
+
+      ul {
+        grid-auto-flow: column;
+        grid-column-gap: 0;
+
+        li {
+          padding-left: $padding / 4;
+          padding-right: $padding / 4;
+        }
+
+        li:not(:last-of-type) {
+          border-right: 1px solid $darkgray;
+        }
+      }
+    }
   }
 }
 
