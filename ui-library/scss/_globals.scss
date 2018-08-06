@@ -27,7 +27,7 @@ $ucop-logo-height: 60px; // UCOP logo includes its own padding per brand guideli
 $merritt-logo-height: $ucop-logo-height / 2;
 
 // |<- margin ->|<- image ->|<- margin ->|
-$service-logo-width: $column-width - (2 * $margin);
+$service-logo-width: ($main-width-desktop - (4 * $margin)) / 3;
 $service-logo-height: 3 * $service-logo-width / 8;
 
 // ////////////////////////////////////////////////////////////

@@ -125,12 +125,13 @@ section.related-services {
   ul {
     align-items: center;
     display: grid;
+    grid-gap: $margin;
     grid-template-columns: repeat(3, 1fr);
     margin-bottom: 0;
+    margin-top: $margin;
 
     li {
       display: block;
-      margin: $margin;
     }
   }
 }
