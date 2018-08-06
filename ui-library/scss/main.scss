@@ -53,14 +53,11 @@ header {
   align-items: center;
   background: linear-gradient($midgray1, $midgray2);
   display: grid;
-  grid-template-columns: minmax(min-content, auto) max-content;
   width: 100%;
 
   div.masthead {
     align-items: center;
     display: flex;
-    grid-column-end: 2;
-    grid-column-start: 1;
 
     h2 {
       margin: ($margin / 2) 0 0 $margin;
@@ -70,7 +67,6 @@ header {
   nav {
     a {
       color: inherit;
-      font-weight: bold;
       text-decoration: none;
     }
 
@@ -80,36 +76,15 @@ header {
   }
 
   nav.login {
-    background: none;
-    grid-column-end: 3;
-    grid-column-start: 2;
-    justify-items: end;
-
     ul {
-      background-color: $orange;
-      border-radius: $corner-radius / 2;
-      height: $ucop-logo-height / 2;
-      margin-right: $margin;
-
       li {
-        align-items: center;
-        display: flex;
-        justify-content: center;
-        padding: 0;
-      }
-
-      a {
-        display: block;
-        padding-left: $padding;
-        padding-right: $padding;
+        font-weight: bold;
       }
     }
   }
 
   nav.menu {
     background-color: $midgray1;
-    grid-column-end: 3;
-    grid-column-start: 1;
     justify-content: left;
 
     ul {
@@ -132,21 +107,8 @@ header {
 
       li.dropdown {
         ul {
-          background-color: $midgray1;
-          display: none;
-          position: absolute;
-        }
-      }
-
-      li.dropdown:hover {
-        ul {
-          border: 1px solid $lightgray;
-          display: block;
-          margin-left: -($margin / 2);
-          margin-top: ($margin / 4);
-
-          li:hover {
-            background-color: $lightgray;
+          li {
+            font-weight: normal;
           }
         }
       }
@@ -164,6 +126,16 @@ footer {
 }
 
 @media (min-width: $main-width-2column) {
+
+  header {
+    grid-template-columns: minmax(min-content, auto) max-content;
+
+    div.masthead {
+      grid-column-end: 2;
+      grid-column-start: 1;
+    }
+  }
+
   nav {
     justify-content: center;
 
@@ -176,17 +148,115 @@ footer {
     }
   }
 
+  nav.login {
+    background: none;
+    grid-column-end: 3;
+    grid-column-start: 2;
+    justify-items: end;
+
+    ul {
+      background-color: $orange;
+      border-radius: $corner-radius / 2;
+      height: $ucop-logo-height / 2;
+      margin-right: $margin;
+
+      li {
+        align-items: center;
+        display: flex;
+        justify-content: center;
+        padding: 0;
+
+        a {
+          display: block;
+          padding-left: $padding;
+          padding-right: $padding;
+        }
+      }
+    }
+  }
+
+  nav.menu {
+    grid-column-end: 3;
+    grid-column-start: 1;
+
+    li.dropdown {
+      ul {
+        background-color: $midgray1;
+        display: none;
+        position: absolute;
+      }
+
+      &::after {
+        content: '\25bc'; // ▼
+      }
+
+      &:hover {
+        ul {
+          border: 1px solid $lightgray;
+          display: block;
+          margin-left: -($margin / 2);
+          margin-top: ($margin / 4);
+
+          li:hover {
+            background-color: $lightgray;
+          }
+        }
+      }
+    }
+  }
+
   footer {
     text-align: center;
   }
 }
 
 @media (max-width: $main-width-2column) {
+
+  header {
+    grid-auto-flow: row;
+  }
+
   nav {
     justify-content: start;
 
     ul {
       grid-auto-flow: row;
+    }
+  }
+
+  // TODO: merge w/nav.menu & make it a burger menu
+  nav.login {
+    display: block;
+
+    p {
+      margin: 0;
+      padding: $padding / 2;
+    }
+
+    ul {
+      background-color: $midgray1;
+      display: block;
+      margin: 0;
+      padding: ($padding / 2) ($padding / 2) 0;
+    }
+  }
+
+  nav.menu {
+    li.dropdown {
+      ul {
+        li {
+          padding-left: 0;
+        }
+      }
+
+      &:hover {
+        background-color: $midgray1;
+      }
+    }
+
+    ul {
+      padding-left: 0;
+      padding-top: $margin / 4;
     }
   }
 
