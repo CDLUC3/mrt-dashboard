@@ -130,6 +130,9 @@ footer {
   width: 100%;
 }
 
+// ////////////////////////////////////////////////////////////
+// 2- and 3-column layout
+
 @media (min-width: $main-width-2column) {
 
   header {
@@ -152,11 +155,18 @@ footer {
     }
   }
 
+  // TODO: should this only be in footer?
   nav {
     justify-content: center;
 
     ul {
       grid-auto-flow: column;
+      grid-column-gap: 0;
+
+      li {
+        padding-left: $padding / 4;
+        padding-right: $padding / 4;
+      }
 
       li:not(:last-of-type) {
         border-right: 1px solid $darkgray;
@@ -229,6 +239,9 @@ footer {
     text-align: center;
   }
 }
+
+// ////////////////////////////////////////////////////////////
+// Single-column layout
 
 @media (max-width: $main-width-2column) {
 
