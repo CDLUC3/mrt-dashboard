@@ -13,20 +13,23 @@
 
 <header>
   <div class="masthead">
-    <img class="ucop-logo" src="images/logos/ucop-logo.svg" alt="University of California"
-         title="University of California"/>
-    <img class="ucop-logo" src="images/logos/ucop-logo-divider.svg" alt="|"/>
-    <img class="merritt-logo" src="images/logos/merritt-logo.svg" alt="Merritt" title="Merritt"/>
-    <h2>Stage</h2>
+    <div class="logos">
+      <img class="ucop-logo" src="images/logos/ucop-logo.svg" alt="University of California"
+           title="University of California"/>
+      <img class="ucop-logo" src="images/logos/ucop-logo-divider.svg" alt="|"/>
+      <img class="merritt-logo" src="images/logos/merritt-logo.svg" alt="Merritt" title="Merritt"/>
+      <h2>Stage</h2>
+    </div>
+    <p>Logged in as Jane Doe</p>
   </div>
   <nav class="login">
-    <p>Logged in as Jane Doe</p>
     <ul>
       <li><a href="/logout">Logout</a></li>
     </ul>
   </nav>
   <nav class="menu">
     <ul>
+      <li class="login"><a href="/logout">Logout</a></li>
       <li><a href="/m/example_collection">Collection home</a></li>
       <li><a href="/a/example_collection">Add object</a></li>
       <li class="dropdown">
