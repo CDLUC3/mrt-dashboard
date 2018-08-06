@@ -1,28 +1,14 @@
 @import 'globals';
 
-
 img.cts-logo {
   height: $service-logo-height;
-}
-
-img.service-logo {
-  max-height: $service-logo-height;
-  max-width: $service-logo-width;
-}
-
-h1 {
-  img.merritt-logo {
-    height: 2 * $merritt-logo-height;
-  }
 }
 
 main {
   background-color: $darkgray;
   display: grid;
   grid-gap: $margin;
-  grid-template-columns: repeat(3, 1fr);
   padding: $padding;
-  width: $main-width-desktop;
 
   section {
     border-radius: $corner-radius;
@@ -32,19 +18,9 @@ main {
 
 section.intro {
   display: grid;
-  grid-column-end: 4;
-  grid-column-start: 1;
   grid-gap: $margin;
-  grid-template-columns: repeat(3, 1fr);
 
   div {
-    font-size: medium;
-    grid-column-end: 3;
-    grid-column-start: 1;
-    grid-row-end: 3;
-    grid-row-start: 1;
-    // align with section.feature below
-    margin-right: -($margin / 3);
 
     h1 {
       margin-top: 0;
@@ -58,12 +34,6 @@ section.intro {
   aside {
     background-color: $orange;
     border-radius: $corner-radius;
-    grid-column-end: 4;
-    grid-column-start: 3;
-    grid-row-end: 3;
-    grid-row-start: 2;
-    // align with section.feature below
-    margin-left: $margin / 3;
     padding: $padding;
 
     h3 {
@@ -114,8 +84,6 @@ section.feature {
 
 section.related-services {
   background-color: $lightgray;
-  grid-column-end: 4;
-  grid-column-start: 1;
 
   h2 {
     margin-top: 0;
@@ -126,12 +94,96 @@ section.related-services {
     align-items: center;
     display: grid;
     grid-gap: $margin;
-    grid-template-columns: repeat(3, 1fr);
     margin-bottom: 0;
     margin-top: $margin;
 
     li {
       display: block;
+    }
+  }
+}
+
+// ////////////////////////////////////////////////////////////
+// 3-column layout
+
+@media (min-width: $main-width-2column) { // TODO: introduce 2-column layout
+
+  img.service-logo {
+    max-height: $service-logo-height;
+    max-width: $service-logo-width;
+  }
+
+  main {
+    grid-template-columns: repeat(3, 1fr);
+    width: $main-width-desktop;
+
+    h1 {
+      img.merritt-logo {
+        height: 2 * $merritt-logo-height;
+      }
+    }
+  }
+
+  section.intro {
+    grid-column-end: 4;
+    grid-column-start: 1;
+    grid-template-columns: repeat(3, 1fr);
+
+    div {
+      font-size: medium;
+      grid-column-end: 3;
+      grid-column-start: 1;
+      grid-row-end: 3;
+      grid-row-start: 1;
+      // align with section.feature below
+      margin-right: -($margin / 3);
+    }
+
+    aside {
+      grid-column-end: 4;
+      grid-column-start: 3;
+      grid-row-end: 3;
+      grid-row-start: 2;
+      // align with section.feature below
+      margin-left: $margin / 3;
+    }
+  }
+
+  section.related-services {
+    grid-column-end: 4;
+    grid-column-start: 1;
+
+    ul {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+}
+
+// ////////////////////////////////////////////////////////////
+// Single-column layout
+
+@media (max-width: $main-width-2column) { // TODO: introduce 2-column layout
+  img.service-logo {
+    max-height: $service-logo-height;
+    max-width: $service-logo-width;
+  }
+
+  h1 {
+    img.merritt-logo {
+      height: auto;
+      width: $service-logo-width;
+    }
+  }
+
+  main {
+    width: $main-width-1column;
+  }
+
+  section.related-services {
+    ul {
+      margin-left: auto;
+      margin-right: auto;
+      width: $service-logo-width;
     }
   }
 }

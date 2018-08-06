@@ -13,7 +13,7 @@ $column-width: ($design-width-desktop - (4 * $margin)) / 3;
 $design-width-2column: (2 * $column-width) + (3 * $margin);
 
 // |<- margin ->|<- column ->|<- margin ->|
-$design-width-1column: $column-width + (2 * $margin);
+$design-width-1column: ($column-width * 1.5) + (2 * $margin);
 
 // subtract outer margins
 $main-width-desktop: $design-width-desktop - (2 * $margin);

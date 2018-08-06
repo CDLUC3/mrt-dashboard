@@ -139,9 +139,9 @@ footer {
 }
 
 // ////////////////////////////////////////////////////////////
-// 2- and 3-column layout
+// 3-column layout
 
-@media (min-width: $main-width-2column) {
+@media (min-width: $main-width-2column) { // TODO: introduce 2-column layout
 
   header {
     grid-template-columns: minmax(min-content, auto) max-content;
@@ -254,7 +254,7 @@ footer {
 // ////////////////////////////////////////////////////////////
 // Single-column layout
 
-@media (max-width: $main-width-2column) {
+@media (max-width: $main-width-2column) { // TODO: introduce 2-column layout
 
   header {
     grid-auto-flow: row;
