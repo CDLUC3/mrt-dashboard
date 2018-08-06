@@ -32,11 +32,10 @@ ul {
 nav {
   align-items: center;
   display: flex;
-  justify-content: center;
 
   ul {
-    display: flex;
-    flex-direction: row;
+    display: grid;
+    grid-column-gap: $padding / 4;
     justify-content: center;
     list-style-type: none;
     margin: $margin / 2;
@@ -46,12 +45,6 @@ nav {
       flex-basis: auto;
       flex-grow: 0;
       flex-shrink: 1;
-      padding-left: $padding / 4;
-      padding-right: $padding / 4;
-    }
-
-    li:not(:last-of-type) {
-      border-right: 1px solid $darkgray;
     }
   }
 }
@@ -167,12 +160,42 @@ section {
 
 footer {
   background: $midgray1;
-  text-align: center;
   width: 100%;
+}
 
-  div.publication-info p {
-    margin: 0;
+@media (min-width: $main-width-2column) {
+  nav {
+    justify-content: center;
+
+    ul {
+      grid-auto-flow: column;
+
+      li:not(:last-of-type) {
+        border-right: 1px solid $darkgray;
+      }
+    }
+  }
+
+  footer {
+    text-align: center;
   }
 }
 
+@media (max-width: $main-width-2column) {
+  nav {
+    justify-content: start;
+
+    ul {
+      grid-auto-flow: row;
+    }
+  }
+
+  footer {
+    text-align: left;
+  }
+
+  div.publication-info {
+    margin: $padding / 2;
+  }
+}
 
