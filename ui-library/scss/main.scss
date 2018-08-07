@@ -49,7 +49,6 @@ header {
     li {
       border: 0;
       font-weight: bold;
-      //padding: 0;
       padding: ($padding / 4) ($padding / 2);
 
       a:hover {
@@ -57,9 +56,16 @@ header {
       }
     }
 
+
     li.dropdown {
+      // allows nested UL to calculate width
+      position: relative;
+
       ul {
         background-color: $midgray1;
+        margin-left: -($margin / 2);
+        margin-top: ($margin / 4);
+        width: 100%;
 
         li {
           font-weight: normal;
@@ -69,6 +75,11 @@ header {
           background-color: $lightgray;
         }
       }
+    }
+
+    &:hover {
+      // align with right edge of dropdown items
+      border-right: 2px solid $lightgray;
     }
   }
 
@@ -105,16 +116,27 @@ header {
     }
   }
 
+  nav.user {
+    padding-right: $padding / 2;
+
+    li.dropdown:not(:hover) {
+      // avoid jitter when highlighted
+      border-right: 2px solid transparent;
+    }
+
+    li:hover {
+      background-color: $lightgray;
+    }
+  }
+
   nav.menu {
     align-items: center;
     background-color: $midgray1;
     display: flex;
     justify-content: left;
 
-    ul {
-      li:hover {
-        background-color: $lightgray;
-      }
+    li:hover {
+      background-color: $lightgray;
     }
   }
 }
@@ -182,7 +204,6 @@ footer {
       grid-column-end: 2;
       grid-column-start: 1;
 
-
       p {
         margin-bottom: 0;
         margin-left: auto;
@@ -238,10 +259,6 @@ footer {
         ul {
           margin-left: -($margin / 2);
           margin-top: ($margin / 4);
-
-          li:hover {
-            background-color: $lightgray;
-          }
         }
       }
     }
