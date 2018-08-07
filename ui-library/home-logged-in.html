@@ -21,9 +21,29 @@
       <h2>Stage</h2>
     </div>
   </div>
-  <nav class="login">
+  <nav class="user">
     <ul>
-      <li><a href="/login">Login</a></li>
+      <li class="dropdown">
+        Logged in as Jane Doe
+        <ul>
+          <li><a href="/logout">Logout</a></li>
+          <li><a href="/user/update">Profile</a></li>
+        </ul>
+      </li>
+    </ul>
+  </nav>
+  <nav class="menu">
+    <ul>
+      <li><a href="/m/example_collection">Collection home</a></li>
+      <li><a href="/a/example_collection">Add object</a></li>
+      <li class="dropdown">
+        <a href="/home/choose_collection">Change collection</a>
+        <ul>
+          <li><a href="/m/some_collection">Some collection</a></li>
+          <li><a href="/m/another_collection">Another collection</a></li>
+          <li><a href="/m/yet_another_collection">Yet another collection</a></li>
+        </ul>
+      </li>
     </ul>
   </nav>
 </header>

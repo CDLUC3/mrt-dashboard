@@ -43,6 +43,35 @@ header {
   display: grid;
   width: 100%;
 
+  ul {
+    margin: 0;
+
+    li {
+      border: 0;
+      font-weight: bold;
+      //padding: 0;
+      padding: ($padding / 4) ($padding / 2);
+
+      a:hover {
+        text-decoration: none;
+      }
+    }
+
+    li.dropdown {
+      ul {
+        background-color: $midgray1;
+
+        li {
+          font-weight: normal;
+        }
+
+        li:hover {
+          background-color: $lightgray;
+        }
+      }
+    }
+  }
+
   div.masthead {
     div.logos {
       align-items: center;
@@ -83,29 +112,8 @@ header {
     justify-content: left;
 
     ul {
-      margin: 0;
-
-      li {
-        border: 0;
-        font-weight: bold;
-        //padding: 0;
-        padding: ($padding / 4) ($padding / 2);
-
-        a:hover {
-          text-decoration: none;
-        }
-      }
-
       li:hover {
         background-color: $lightgray;
-      }
-
-      li.dropdown {
-        ul {
-          li {
-            font-weight: normal;
-          }
-        }
       }
     }
   }
@@ -142,6 +150,28 @@ footer {
 // 3-column layout
 
 @media (min-width: $main-width-desktop) { // TODO: introduce 2-column layout
+
+  li.dropdown {
+    ul {
+      display: none;
+      position: absolute;
+    }
+
+    &::after {
+      content: '\25bc'; // ▼
+    }
+
+    &:hover {
+      ul {
+        border: 1px solid $lightgray;
+        display: block;
+
+        li:hover {
+          background-color: $lightgray;
+        }
+      }
+    }
+  }
 
   header {
     grid-template-columns: minmax(min-content, auto) max-content;
@@ -198,25 +228,14 @@ footer {
       grid-auto-flow: column;
     }
 
-    li.login {
-      display: none;
-    }
-
     li.dropdown {
       ul {
         background-color: $midgray1;
-        display: none;
         position: absolute;
-      }
-
-      &::after {
-        content: '\25bc'; // ▼
       }
 
       &:hover {
         ul {
-          border: 1px solid $lightgray;
-          display: block;
           margin-left: -($margin / 2);
           margin-top: ($margin / 4);
 
@@ -274,10 +293,6 @@ footer {
     ul {
       grid-auto-flow: row;
     }
-  }
-
-  nav.login {
-    display: none;
   }
 
   nav.menu {
