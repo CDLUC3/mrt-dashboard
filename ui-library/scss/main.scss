@@ -20,9 +20,11 @@ p.environment {
   font-weight: bold;
   margin: 0;
   padding: 0;
+  pointer-events: none;
   position: fixed;
   right: $margin / 4;
   top: $margin / 4;
+  touch-action: none;
 }
 
 h3 {
