@@ -16,14 +16,15 @@ body {
 }
 
 p.environment {
-  color: $translucent-black;
+  color: $darkgray;
   font-weight: bold;
   margin: 0;
+  opacity: .75;
   padding: 0;
   pointer-events: none;
   position: fixed;
-  right: $margin / 4;
-  top: $margin / 4;
+  right: $margin / 8;
+  top: $margin / 8;
   touch-action: none;
   z-index: 999;
 }
