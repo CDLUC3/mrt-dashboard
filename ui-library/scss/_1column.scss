@@ -28,22 +28,37 @@
     }
 
     nav.login {
+      height: $ucop-logo-height;
       position: absolute;
-      right: $margin / 2;
-      top: $margin;
+      right: 0;
+      top: 0;
 
       ul {
+        margin-right: $margin / 2;
+        margin-top: $margin / 2;
+
         li {
-          font-size: large;
-          margin: $margin / 4;
+          font-size: medium;
+          padding-left: $margin / 2;
+          padding-right: $margin / 2;
+
+          a {
+            margin-top: $margin / 4;
+          }
         }
       }
     }
 
     nav.user {
+      height: $ucop-logo-height;
       position: absolute;
-      right: $margin / 2;
-      top: $margin;
+      right: 0;
+      top: 0;
+    }
+
+    nav.user > ul {
+      margin-right: $margin / 2;
+      margin-top: $margin;
 
       li.dropdown {
 
