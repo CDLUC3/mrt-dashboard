@@ -19,6 +19,12 @@
     }
 
     nav {
+      ul {
+        li {
+          padding: ($padding / 4) ($padding / 2);
+        }
+      }
+
       li.dropdown {
         // allows nested UL to calculate width
         position: relative;
