@@ -23,17 +23,34 @@
   }
 
   header {
-    grid-auto-flow: row;
+    grid-template-columns: min-content 1fr;
+    justify-items: end;
 
     div.masthead {
       display: grid;
+      grid-column-end: 2;
+      grid-column-start: 1;
 
       p {
         padding-left: $padding / 2;
       }
     }
 
+    nav.login {
+      grid-column-end: 3;
+      grid-column-start: 2;
+    }
+
+    nav.user {
+      grid-column-end: 3;
+      grid-column-start: 2;
+    }
+
     nav.menu {
+      grid-column-end: 3;
+      grid-column-start: 1;
+      width: 100%;
+
       li.dropdown {
         ul {
           li {
