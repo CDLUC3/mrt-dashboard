@@ -1,3 +1,5 @@
+@import 'globals';
+
 @media (min-width: $main-width-desktop) { // TODO: introduce 2-column layout
 
   header {
@@ -22,6 +24,10 @@
       ul {
         li {
           padding: ($padding / 4) ($padding / 2);
+
+          &:hover {
+            background: $lightgray;
+          }
         }
       }
 
@@ -36,10 +42,6 @@
           margin-top: ($margin / 4);
           position: absolute;
           width: 100%;
-
-          li:hover {
-            background-color: $lightgray;
-          }
         }
 
         &::after {
@@ -53,10 +55,6 @@
           ul {
             border: 1px solid $lightgray;
             display: block;
-
-            li:hover {
-              background-color: $lightgray;
-            }
           }
         }
       }
@@ -95,10 +93,6 @@
       li.dropdown:not(:hover) {
         // avoid jitter when highlighted
         border-right: 2px solid transparent;
-      }
-
-      li:hover {
-        background-color: $lightgray;
       }
     }
 
