@@ -49,86 +49,61 @@
       }
     }
 
-    nav.user {
+    nav.menu {
       height: $ucop-logo-height;
       position: absolute;
       right: 0;
       top: 0;
-    }
 
-    nav.user > ul {
-      margin-right: $margin / 2;
-      margin-top: $margin;
+      // sass-lint:disable no-ids, no-qualifying-elements
+      input#nav-menu {
+        display: none;
+        margin: 0;
+
+        &:checked ~ ul {
+          display: block;
+          margin-top: $ucop-logo-height;
+        }
+      }
+
+      label.nav-menu-label {
+        display: block;
+        position: absolute;
+        right: $margin / 2;
+        top: $margin / 2;
+
+        img {
+          max-height: $ucop-logo-height - $margin;
+          max-width: $ucop-logo-height - $margin;
+        }
+      }
+
+      li {
+        background-color: $midgray1;
+        border-top: 1px solid $lightgray;
+        padding: $padding / 2;
+      }
 
       li.dropdown {
-
-        span.login-message {
-          display: none;
-        }
+        padding-bottom: 0;
 
         ul {
-          display: none;
-        }
-
-        // sass-lint:disable no-ids, no-qualifying-elements
-        input#user-dropdown {
-          display: none;
-
-          &:checked ~ ul {
-            display: block;
-            margin-top: $margin / 2;
-
-            li {
-              background-color: $midgray1;
-              border-left: 1px solid $lightgray;
-              border-right: 1px solid $lightgray;
-              border-top: 1px solid $lightgray;
-              font-size: large;
-              padding: $padding / 2;
-
-              &:last-of-type {
-                border-bottom: 1px solid $lightgray;
-              }
-            }
-          }
-        }
-
-        // sass-lint:disable no-ids, no-qualifying-elements
-        input#user-dropdown:checked + label {
-          background-color: $lightgray;
-        }
-
-        label.dropdown-label {
-          font-size: large;
-          padding: $padding / 2;
-
-          &::after {
-            content: ' \25bc'; // ▼
-            //content: ' \2630'; //☰
-          }
+          margin-top: $margin / 2;
         }
       }
     }
 
-    nav.menu {
-      grid-column-end: 3;
-      grid-column-start: 1;
-      width: 100%;
+    nav.menu > ul {
+      display: none;
+    }
 
-      li.dropdown {
-        ul {
-          li {
-            padding-left: 0;
-          }
-        }
+    nav.menu > ul > li {
+      border-left: 1px solid $lightgray;
+      border-right: 1px solid $lightgray;
+      //font-size: medium;
 
-        &:hover {
-          background-color: $midgray1;
-        }
-      }
-
-      ul {
-        padding-left: 0;
+      &:last-of-type {
+        border-bottom: 1px solid $lightgray;
       }
     }
   }

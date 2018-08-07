@@ -13,15 +13,6 @@
       grid-column-start: 1;
     }
 
-    label.dropdown-label {
-      display: none;
-    }
-
-    // sass-lint:disable no-ids, no-qualifying-elements
-    input#user-dropdown {
-      display: none;
-    }
-
     nav {
       ul {
         li {
@@ -33,37 +24,6 @@
         }
       }
 
-      li.dropdown {
-        // allows nested UL to calculate width
-        position: relative;
-
-        ul {
-          background-color: $midgray1;
-          display: none;
-          margin-left: -($margin / 2);
-          margin-top: ($margin / 4);
-          position: absolute;
-          width: 100%;
-        }
-
-        &:hover {
-          // align with right edge of dropdown items
-          border-right: 2px solid $lightgray;
-
-          ul {
-            border: 1px solid $lightgray;
-            display: block;
-          }
-        }
-      }
-
-      li.dropdown > a::after {
-        content: ' \25bc'; // ▼
-      }
-
-      span.login-message::after {
-        content: ' \25bc'; // ▼
-      }
     }
 
     nav.login {
@@ -95,34 +55,68 @@
       }
     }
 
-    nav.user {
-      padding-right: $padding / 2;
-
-      li.dropdown:not(:hover) {
-        // avoid jitter when highlighted
-        border-right: 2px solid transparent;
-      }
-    }
-
     nav.menu {
       grid-column-end: 3;
       grid-column-start: 1;
 
+      // sass-lint:disable no-ids, no-qualifying-elements
+      input#nav-menu {
+        display: none;
+      }
+
+      label.nav-menu-label {
+        display: none;
+      }
+
       ul {
-        grid-auto-flow: column;
+        background-color: $midgray1;
+        display: flex;
+        width: 100%;
       }
 
       li.dropdown {
+        // allows nested UL to calculate width
+        position: relative;
+
         ul {
           background-color: $midgray1;
+          display: none;
+          margin-left: -($margin / 2);
+          margin-top: ($margin / 4);
+          position: absolute;
+          width: 100%;
         }
 
         &:hover {
+          // align with right edge of dropdown items
+          border-right: 2px solid $lightgray;
+
           ul {
+            border: 1px solid $lightgray;
+            display: block;
+
             margin-left: -($margin / 2);
             margin-top: ($margin / 4);
           }
         }
+      }
+
+      li.dropdown > a::after {
+        content: ' \25bc'; // ▼
+      }
+
+      li#user-dropdown {
+        position: absolute;
+        right: 0;
+      }
+
+      li#user-dropdown:not(:hover) {
+        // avoid jitter when highlighted
+        border-right: 2px solid transparent;
+      }
+
+      span.login-message::after {
+        content: ' \25bc'; // ▼
       }
     }
   }
