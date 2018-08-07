@@ -37,6 +37,11 @@
           width: 100%;
         }
 
+        a.username {
+          pointer-events: none;
+          touch-action: none;
+        }
+
         &::after {
           content: '\25bc'; // ▼
         }
@@ -88,6 +93,11 @@
         // avoid jitter when highlighted
         border-right: 2px solid transparent;
       }
+
+      // sass-lint:disable no-ids, no-qualifying-elements
+      input#user-dropdown {
+        display: none;
+      }
     }
 
     nav.menu {
@@ -101,7 +111,6 @@
       li.dropdown {
         ul {
           background-color: $midgray1;
-          position: absolute;
         }
 
         &:hover {

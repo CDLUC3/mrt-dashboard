@@ -23,13 +23,8 @@
   }
 
   header {
-    grid-template-columns: min-content 1fr;
-    justify-items: end;
-
     div.masthead {
       display: grid;
-      grid-column-end: 2;
-      grid-column-start: 1;
 
       p {
         padding-left: $padding / 2;
@@ -37,9 +32,9 @@
     }
 
     nav.login {
-      grid-column-end: 3;
-      grid-column-start: 2;
-      margin-right: $margin / 2;
+      position: absolute;
+      right: $margin / 2;
+      top: $margin / 2;
 
       ul {
         li {
@@ -50,8 +45,42 @@
     }
 
     nav.user {
-      grid-column-end: 3;
-      grid-column-start: 2;
+      position: absolute;
+      right: 0;
+      top: $margin / 2;
+
+      li.dropdown {
+        span.login-message {
+          display: none;
+        }
+
+        ul {
+          display: none;
+        }
+
+        label.dropdown-label::after {
+          content: ' \25bc'; // ▼
+          //content: ' \2630'; //☰
+        }
+
+        // sass-lint:disable no-ids, no-qualifying-elements
+        input#user-dropdown {
+          display: none;
+
+          &:checked ~ ul {
+            display: block;
+          }
+        }
+      }
+
+
+      //// sass-lint:disable no-ids, no-qualifying-elements
+      //li#user-dropdown:target {
+      //  ul {
+      //    display: block;
+      //    font-size: small;
+      //  }
+      //}
     }
 
     nav.menu {

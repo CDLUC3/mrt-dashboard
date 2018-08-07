@@ -25,6 +25,7 @@ p.environment {
   right: $margin / 4;
   top: $margin / 4;
   touch-action: none;
+  z-index: 999;
 }
 
 h3 {
