@@ -67,7 +67,9 @@ header {
   nav {
     a {
       color: inherit;
+      display: inline-block;
       text-decoration: none;
+      width: 100%;
     }
 
     a:hover {

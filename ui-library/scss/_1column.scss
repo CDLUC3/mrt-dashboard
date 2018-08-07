@@ -9,11 +9,7 @@
       grid-auto-flow: row;
 
       li {
-        margin: $margin / 2;
-
         ul {
-          padding-top: $margin / 4;
-
           li {
             margin-left: 0;
           }
@@ -34,22 +30,23 @@
     nav.login {
       position: absolute;
       right: $margin / 2;
-      top: $margin / 2;
+      top: $margin;
 
       ul {
         li {
-          margin-bottom: $margin / 4;
-          margin-top: $margin / 4;
+          font-size: large;
+          margin: $margin / 4;
         }
       }
     }
 
     nav.user {
       position: absolute;
-      right: 0;
-      top: $margin / 2;
+      right: $margin / 2;
+      top: $margin;
 
       li.dropdown {
+
         span.login-message {
           display: none;
         }
@@ -58,29 +55,44 @@
           display: none;
         }
 
-        label.dropdown-label::after {
-          content: ' \25bc'; // ▼
-          //content: ' \2630'; //☰
-        }
-
         // sass-lint:disable no-ids, no-qualifying-elements
         input#user-dropdown {
           display: none;
 
           &:checked ~ ul {
             display: block;
+            margin-top: $margin / 2;
+
+            li {
+              background-color: $midgray1;
+              border-left: 1px solid $lightgray;
+              border-right: 1px solid $lightgray;
+              border-top: 1px solid $lightgray;
+              font-size: large;
+              padding: $padding / 2;
+
+              &:last-of-type {
+                border-bottom: 1px solid $lightgray;
+              }
+            }
+          }
+        }
+
+        // sass-lint:disable no-ids, no-qualifying-elements
+        input#user-dropdown:checked + label {
+          background-color: $lightgray;
+        }
+
+        label.dropdown-label {
+          font-size: large;
+          padding: $padding / 2;
+
+          &::after {
+            content: ' \25bc'; // ▼
+            //content: ' \2630'; //☰
           }
         }
       }
-
-
-      //// sass-lint:disable no-ids, no-qualifying-elements
-      //li#user-dropdown:target {
-      //  ul {
-      //    display: block;
-      //    font-size: small;
-      //  }
-      //}
     }
 
     nav.menu {
@@ -113,4 +125,5 @@
   div.publication-info {
     margin: $padding / 2;
   }
+
 }
