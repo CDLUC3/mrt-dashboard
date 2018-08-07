@@ -95,8 +95,13 @@ header {
 
   nav.login {
     ul {
+      background-color: $orange;
+      border-radius: $corner-radius / 2;
+      height: $ucop-logo-height / 2;
+
       li {
         font-weight: bold;
+        padding: 0;
       }
     }
   }

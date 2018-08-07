@@ -39,6 +39,14 @@
     nav.login {
       grid-column-end: 3;
       grid-column-start: 2;
+      margin-right: $margin / 2;
+
+      ul {
+        li {
+          margin-bottom: $margin / 4;
+          margin-top: $margin / 4;
+        }
+      }
     }
 
     nav.user {
