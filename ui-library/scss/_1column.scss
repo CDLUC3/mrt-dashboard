@@ -1,0 +1,49 @@
+@media (max-width: $main-width-desktop) { // TODO: introduce 2-column layout
+
+  nav {
+    justify-content: start;
+
+    ul {
+      grid-auto-flow: row;
+    }
+  }
+
+  header {
+    grid-auto-flow: row;
+
+    div.masthead {
+      display: grid;
+
+      p {
+        padding-left: $padding / 2;
+      }
+    }
+
+    nav.menu {
+      li.dropdown {
+        ul {
+          li {
+            padding-left: 0;
+          }
+        }
+
+        &:hover {
+          background-color: $midgray1;
+        }
+      }
+
+      ul {
+        padding-left: 0;
+        padding-top: $margin / 4;
+      }
+    }
+  }
+
+  footer {
+    text-align: left;
+  }
+
+  div.publication-info {
+    margin: $padding / 2;
+  }
+}

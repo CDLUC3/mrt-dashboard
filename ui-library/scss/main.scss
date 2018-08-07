@@ -1,5 +1,7 @@
 @import 'open-sans';
 @import 'globals';
+@import '1column';
+@import '3column';
 
 body {
   align-items: center;
@@ -43,46 +45,6 @@ header {
   display: grid;
   width: 100%;
 
-  ul {
-    margin: 0;
-
-    li {
-      border: 0;
-      font-weight: bold;
-      padding: ($padding / 4) ($padding / 2);
-
-      a:hover {
-        text-decoration: none;
-      }
-    }
-
-
-    li.dropdown {
-      // allows nested UL to calculate width
-      position: relative;
-
-      ul {
-        background-color: $midgray1;
-        margin-left: -($margin / 2);
-        margin-top: ($margin / 4);
-        width: 100%;
-
-        li {
-          font-weight: normal;
-        }
-
-        li:hover {
-          background-color: $lightgray;
-        }
-      }
-    }
-
-    &:hover {
-      // align with right edge of dropdown items
-      border-right: 2px solid $lightgray;
-    }
-  }
-
   div.masthead {
     div.logos {
       align-items: center;
@@ -106,6 +68,29 @@ header {
     a:hover {
       text-decoration: underline;
     }
+
+    ul {
+      margin: 0;
+
+      li {
+        border: 0;
+        font-weight: bold;
+        padding: ($padding / 4) ($padding / 2);
+
+        a:hover {
+          text-decoration: none;
+        }
+      }
+
+
+      li.dropdown {
+        ul {
+          li {
+            font-weight: normal;
+          }
+        }
+      }
+    }
   }
 
   nav.login {
@@ -113,19 +98,6 @@ header {
       li {
         font-weight: bold;
       }
-    }
-  }
-
-  nav.user {
-    padding-right: $padding / 2;
-
-    li.dropdown:not(:hover) {
-      // avoid jitter when highlighted
-      border-right: 2px solid transparent;
-    }
-
-    li:hover {
-      background-color: $lightgray;
     }
   }
 
@@ -166,177 +138,5 @@ footer {
     }
   }
 
-}
-
-// ////////////////////////////////////////////////////////////
-// 3-column layout
-
-@media (min-width: $main-width-desktop) { // TODO: introduce 2-column layout
-
-  li.dropdown {
-    ul {
-      display: none;
-      position: absolute;
-    }
-
-    &::after {
-      content: '\25bc'; // ▼
-    }
-
-    &:hover {
-      ul {
-        border: 1px solid $lightgray;
-        display: block;
-
-        li:hover {
-          background-color: $lightgray;
-        }
-      }
-    }
-  }
-
-  header {
-    grid-template-columns: minmax(min-content, auto) max-content;
-
-    div.masthead {
-      align-items: center;
-      display: flex;
-      grid-column-end: 2;
-      grid-column-start: 1;
-
-      p {
-        margin-bottom: 0;
-        margin-left: auto;
-        margin-right: ($margin / 2);
-        margin-top: ($margin / 2);
-      }
-
-    }
-  }
-
-  nav.login {
-    background: none;
-    grid-column-end: 3;
-    grid-column-start: 2;
-    justify-items: end;
-
-    ul {
-      background-color: $orange;
-      border-radius: $corner-radius / 2;
-      height: $ucop-logo-height / 2;
-      margin-right: $margin;
-
-      li {
-        align-items: center;
-        display: flex;
-        justify-content: center;
-        padding: 0;
-
-        a {
-          display: block;
-          padding-left: $padding;
-          padding-right: $padding;
-        }
-      }
-    }
-  }
-
-  nav.menu {
-    grid-column-end: 3;
-    grid-column-start: 1;
-
-    ul {
-      grid-auto-flow: column;
-    }
-
-    li.dropdown {
-      ul {
-        background-color: $midgray1;
-        position: absolute;
-      }
-
-      &:hover {
-        ul {
-          margin-left: -($margin / 2);
-          margin-top: ($margin / 4);
-        }
-      }
-    }
-  }
-
-  footer {
-    text-align: center;
-
-    nav {
-      justify-content: center;
-
-      ul {
-        grid-auto-flow: column;
-        grid-column-gap: 0;
-
-        li {
-          padding-left: $padding / 4;
-          padding-right: $padding / 4;
-        }
-
-        li:not(:last-of-type) {
-          border-right: 1px solid $darkgray;
-        }
-      }
-    }
-  }
-}
-
-// ////////////////////////////////////////////////////////////
-// Single-column layout
-
-@media (max-width: $main-width-desktop) { // TODO: introduce 2-column layout
-
-  header {
-    grid-auto-flow: row;
-
-    div.masthead {
-      display: grid;
-
-      p {
-        padding-left: $padding / 2;
-      }
-    }
-  }
-
-  nav {
-    justify-content: start;
-
-    ul {
-      grid-auto-flow: row;
-    }
-  }
-
-  nav.menu {
-    li.dropdown {
-      ul {
-        li {
-          padding-left: 0;
-        }
-      }
-
-      &:hover {
-        background-color: $midgray1;
-      }
-    }
-
-    ul {
-      padding-left: 0;
-      padding-top: $margin / 4;
-    }
-  }
-
-  footer {
-    text-align: left;
-  }
-
-  div.publication-info {
-    margin: $padding / 2;
-  }
 }
 
