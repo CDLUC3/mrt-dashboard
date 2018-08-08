@@ -20,6 +20,12 @@ $main-width-desktop: $design-width-desktop - (2 * $margin);
 $main-width-2column: $design-width-2column - (2 * $margin);
 $main-width-1column: $design-width-1column - (2 * $margin);
 
+// //////////////////////////////
+// Legacy pages
+
+$design-width-legacy: 960px;
+$main-width-legacy: $design-width-legacy - (2 * $margin);
+
 // ////////////////////////////////////////////////////////////
 // Image sizes
 

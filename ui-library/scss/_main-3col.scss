@@ -121,6 +121,10 @@
     }
   }
 
+  main {
+    width: $main-width-legacy;
+  }
+
   footer {
     text-align: center;
 

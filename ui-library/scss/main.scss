@@ -2,6 +2,7 @@
 @import 'globals';
 @import 'main-1col';
 @import 'main-3col';
+@import 'home';
 
 body {
   align-items: center;
@@ -11,8 +12,17 @@ body {
   flex-direction: column;
   font-family: $font-family;
   font-size: smaller;
-  line-height: 1.2;
+  line-height: 1.5;
   margin: 0;
+}
+
+main {
+  background-color: $lightgray;
+  display: grid;
+  grid-auto-flow: column;
+  grid-gap: $margin;
+  margin: 0;
+  padding: $padding;
 }
 
 p {
@@ -120,6 +130,80 @@ header {
 
 section {
   background-color: $lightgray;
+
+  table {
+    border-collapse: collapse;
+    table-layout: auto;
+    width: 100%;
+
+    a {
+      text-decoration: none;
+    }
+
+    th {
+      padding: $padding / 4;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    td {
+      padding: $padding / 4;
+      vertical-align: top;
+    }
+
+    thead {
+      tr:last-child {
+        th {
+          border-bottom: 1px solid $darkgray;
+          border-top: 1px solid $midgray1;
+        }
+      }
+    }
+
+    tbody {
+      tr:not(:last-child) {
+        th {
+          border-bottom: 1px solid $midgray2;
+        }
+
+        td {
+          border-bottom: 1px solid $darkgray;
+        }
+      }
+
+      tr:last-child {
+        th {
+          padding-bottom: $padding;
+        }
+
+        td {
+          padding-bottom: $padding;
+        }
+      }
+    }
+
+    //tfoot {
+    //  th {
+    //    border-top: 1px solid $midgray1;
+    //  }
+    //}
+  }
+
+}
+
+aside {
+  display: grid;
+  grid-gap: $margin;
+
+  section.help {
+    ul {
+      list-style-type: square;
+
+      li {
+        margin-left: $margin;
+      }
+    }
+  }
 }
 
 footer {
