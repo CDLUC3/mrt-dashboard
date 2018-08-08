@@ -135,7 +135,6 @@ table.properties {
 
   tbody {
     th {
-      max-width: min-content;
       text-align: right;
       white-space: nowrap;
 
@@ -225,6 +224,22 @@ main {
   grid-gap: $margin;
   margin: 0;
   padding: $padding;
+
+  table.properties {
+    width: 100%;
+  }
+}
+
+div.files {
+  table.properties {
+    th {
+      width: 50%;
+    }
+
+    td {
+      width: 25%;
+    }
+  }
 }
 
 aside {
@@ -243,6 +258,10 @@ aside {
   section {
     ul {
       list-style-type: square;
+
+      th {
+        max-width: min-content;
+      }
 
       li {
         margin-left: $margin;

@@ -775,7 +775,6 @@ table.properties {
 }
 
 table.properties tbody th {
-  max-width: min-content;
   text-align: right;
   white-space: nowrap;
 }
@@ -853,6 +852,18 @@ main {
   padding: 24px;
 }
 
+main table.properties {
+  width: 100%;
+}
+
+div.files table.properties th {
+  width: 50%;
+}
+
+div.files table.properties td {
+  width: 25%;
+}
+
 aside {
   display: flex;
   flex-direction: column;
@@ -869,6 +880,10 @@ aside table.properties td {
 
 aside section ul {
   list-style-type: square;
+}
+
+aside section ul th {
+  max-width: min-content;
 }
 
 aside section ul li {
