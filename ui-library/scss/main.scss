@@ -104,12 +104,15 @@ header {
 
   nav.login {
     ul {
-      background-color: $orange;
-      border-radius: $corner-radius / 2;
-      height: $ucop-logo-height / 2;
-
       li {
+        background-color: $orange;
+        border-radius: $corner-radius / 2;
         font-weight: bold;
+        height: $ucop-logo-height / 2;
+
+        &:hover {
+          background-color: $orange;
+        }
       }
     }
   }

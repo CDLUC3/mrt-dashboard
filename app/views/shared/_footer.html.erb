@@ -1,9 +1,31 @@
-<div class="clear"></div>
-<div class="grid_16 foot_full">
-  <hr/>
-  Merritt is a service of the <a href="http://www.cdlib.org/services/uc3">University of California Curation Center</a> of the <a href="http://cdlib.org/">California Digital Library</a><br/>
-  Copyright &copy; 2009-<%=Time.new.year%> The Regents of the University of California <br />
-  <a href="http://www.cdlib.org/about/privacy.html">Privacy policy</a> | 
-  <%= link_to("Image credits", :controller => 'home', :action => 'credits') %>
-</div>
-<div class="clear"></div>
+<footer>
+  <nav>
+    <ul>
+      <% if user_logged_in? %>
+        <li><%= link_to('Logout', :controller => 'user_sessions', :action => 'logout') %></li>
+      <% else %>
+        <li><%= link_to('Login', :controller => 'user_sessions', :action => 'login') %></li>
+      <% end %>
+      <li><a href="https://github.com/CDLUC3/mrt-doc/wiki/User-documentation">Help</a></li>
+      <li><a href="https://www.cdlib.org/services/uc3/contact.html">Contact</a></li>
+    </ul>
+  </nav>
+
+  <div class="publication-info">
+    <p>
+      Merritt is a collaborative project between your UC campus and the
+      <a href="https://www.cdlib.org/">California Digital Library</a>.
+    </p>
+    <p>
+      Copyright © 2018 The Regents of the University of California
+    </p>
+  </div>
+
+  <nav>
+    <ul>
+      <li><a href="https://www.cdlib.org/about/terms.html">Terms of Use</a></li>
+      <li><a href="https://www.cdlib.org/about/privacy.html">Privacy Policy</a></li>
+      <li><a href="https://www.cdlib.org/about/accessibility.html">Accessibility Policy</a></li>
+    </ul>
+  </nav>
+</footer>

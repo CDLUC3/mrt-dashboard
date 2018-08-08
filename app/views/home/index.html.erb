@@ -1,15 +1,9 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+<% content_for(:title) do %>
+  UC3 Merritt
+<% end %>
 
-  <%= stylesheet_link_tag('main') %>
+<% content_for(:extra_head) do %>
   <%= stylesheet_link_tag('home') %>
-
-  <title>UC3 Merritt Home<%= ": #{env_str}" unless env_str.blank? %></title>
-</head>
-<body>
 <!-- Merritt monitoring test code. Please do not remove this comment since
 it will cause the monitoring scripts to fail.
 
@@ -18,59 +12,7 @@ it will cause the monitoring scripts to fail.
  - monitoring string SwuV4tac
 
 -->
-<% unless env_str.blank? %>
-<p class="environment"><%= env_str %></p>
 <% end %>
-
-<header>
-  <div class="masthead">
-    <img class="ucop-logo" src="images/logos/ucop-logo.svg" alt="University of California"
-         title="University of California"/>
-    <img class="ucop-logo" src="images/logos/ucop-logo-divider.svg" alt="|"/>
-    <img class="merritt-logo" src="images/logos/merritt-logo.svg" alt="Merritt" title="Merritt"/>
-  </div>
-  <% if user_logged_in? %>
-    <nav class="menu">
-      <input type="checkbox" id="nav-menu"/>
-      <label class="nav-menu-label" for="nav-menu"><img src="images/nav-menu.svg" alt="Menu"/></label>
-      <ul>
-        <li class="dropdown" id="user-dropdown">
-          <span class="login-message">Logged in as <%= current_user_displayname %></span>
-          <ul>
-            <li><%= link_to('Logout', controller: 'user_sessions', action: 'logout') %></li>
-            <%#  do not display Profile link for Guest user %>
-            <% unless guest_logged_in? %>
-              <li><%= link_to('Profile', params.merge(controller: 'user', action: 'update')) %></li>
-            <% end %>
-          </ul>
-        </li>
-        <% if session[:group_id] %>
-          <li><%= link_to('Collection home', controller: 'collection', action: 'index', group: session[:group_id]) %></li>
-          <% if current_user_can_write_to_collection? %>
-            <li><%= link_to('Add object', controller: 'object', action: 'add', group: session[:group_id]) %></li>
-          <% end %>
-        <% end %>
-        <li class="dropdown">
-          <% choose_collection_text = session[:group_id] ? 'Change collection' : 'Home' %>
-          <%= link_to(choose_collection_text, controller: 'home', action: 'choose_collection', group: session[:group_id]) %>
-          <% unless available_groups.empty? %>
-            <ul>
-              <% available_groups.each do |grp| %>
-                <li><%= link_to(grp[:description], controller: 'collection', action: 'index', group: grp[:id]) %></li>
-              <% end %>
-            </ul>
-          <% end %>
-        </li>
-      </ul>
-    </nav>
-  <% else %>
-    <nav class="login">
-      <ul>
-        <li><%= link_to('Login', controller: 'user_sessions', action: 'login') %></li>
-      </ul>
-    </nav>
-  <% end %>
-</header>
 
 <main>
   <section class="intro">
@@ -202,38 +144,3 @@ it will cause the monitoring scripts to fail.
     </ul>
   </section>
 </main>
-
-<footer>
-  <nav>
-    <ul>
-      <% if user_logged_in? %>
-        <li><%= link_to('Logout', :controller => 'user_sessions', :action => 'logout') %></li>
-      <% else %>
-        <li><%= link_to('Login', :controller => 'user_sessions', :action => 'login') %></li>
-      <% end %>
-      <li><a href="https://github.com/CDLUC3/mrt-doc/wiki/User-documentation">Help</a></li>
-      <li><a href="https://www.cdlib.org/services/uc3/contact.html">Contact</a></li>
-    </ul>
-  </nav>
-
-  <div class="publication-info">
-    <p>
-      Merritt is a collaborative project between your UC campus and the
-      <a href="https://www.cdlib.org/">California Digital Library</a>.
-    </p>
-    <p>
-      Copyright © 2018 The Regents of the University of California
-    </p>
-  </div>
-
-  <nav>
-    <ul>
-      <li><a href="https://www.cdlib.org/about/terms.html">Terms of Use</a></li>
-      <li><a href="https://www.cdlib.org/about/privacy.html">Privacy Policy</a></li>
-      <li><a href="https://www.cdlib.org/about/accessibility.html">Accessibility Policy</a></li>
-    </ul>
-  </nav>
-</footer>
-
-</body>
-</html>

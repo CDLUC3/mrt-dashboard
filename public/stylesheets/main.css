@@ -562,14 +562,15 @@ header nav ul li.dropdown ul li {
   font-weight: normal;
 }
 
-header nav.login ul {
+header nav.login ul li {
   background-color: #f28d1e;
   border-radius: 6px;
+  font-weight: bold;
   height: 30px;
 }
 
-header nav.login ul li {
-  font-weight: bold;
+header nav.login ul li:hover {
+  background-color: #f28d1e;
 }
 
 section {
