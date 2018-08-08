@@ -558,6 +558,7 @@ main.home img.cts-logo {
 }
 
 main.home section {
+  background-color: #f2f2f2;
   border-radius: 12px;
   padding: 24px;
 }
@@ -685,6 +686,10 @@ p.environment {
   z-index: 999;
 }
 
+h2 {
+  margin-bottom: 0;
+}
+
 h3 {
   font-size: 1em;
 }
@@ -697,8 +702,60 @@ img.merritt-logo {
   height: 30px;
 }
 
+div.breadcrumbs {
+  font-size: smaller;
+  margin-bottom: 12px;
+}
+
+span.title {
+  font-weight: bold;
+}
+
 ul {
   padding: 0;
+}
+
+table {
+  border-collapse: collapse;
+  font-size: smaller;
+  table-layout: auto;
+  width: 100%;
+}
+
+table a {
+  text-decoration: none;
+}
+
+table th {
+  padding: 6px;
+  text-align: left;
+  vertical-align: top;
+}
+
+table td {
+  padding: 6px;
+  vertical-align: top;
+}
+
+table thead tr:last-child th {
+  border-bottom: 1px solid #7c7e7f;
+  border-top: 1px solid #d8d8d9;
+}
+
+table tbody tr:not(:last-child) th {
+  border-bottom: 1px solid #e4e4e4;
+}
+
+table tbody tr:not(:last-child) td {
+  border-bottom: 1px solid #7c7e7f;
+}
+
+table tbody tr:last-child th {
+  padding-bottom: 24px;
+}
+
+table tbody tr:last-child td {
+  padding-bottom: 24px;
 }
 
 nav ul {
@@ -755,52 +812,6 @@ header nav.login ul li {
 
 header nav.login ul li:hover {
   background-color: #f28d1e;
-}
-
-section {
-  background-color: #f2f2f2;
-}
-
-section table {
-  border-collapse: collapse;
-  table-layout: auto;
-  width: 100%;
-}
-
-section table a {
-  text-decoration: none;
-}
-
-section table th {
-  padding: 6px;
-  text-align: left;
-  vertical-align: top;
-}
-
-section table td {
-  padding: 6px;
-  vertical-align: top;
-}
-
-section table thead tr:last-child th {
-  border-bottom: 1px solid #7c7e7f;
-  border-top: 1px solid #d8d8d9;
-}
-
-section table tbody tr:not(:last-child) th {
-  border-bottom: 1px solid #e4e4e4;
-}
-
-section table tbody tr:not(:last-child) td {
-  border-bottom: 1px solid #7c7e7f;
-}
-
-section table tbody tr:last-child th {
-  padding-bottom: 24px;
-}
-
-section table tbody tr:last-child td {
-  padding-bottom: 24px;
 }
 
 aside {

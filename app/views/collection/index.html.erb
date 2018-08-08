@@ -6,20 +6,19 @@
   <link rel="alternate" type="application/atom+xml" href="/object/recent.atom?collection=<%= @request_group.ark_id %>"/>
 <% end %>
 
-<div class="grid_11">
-  <h2>
-    Collection: <%= @request_group.description %>
-    <a href="/object/recent.atom?collection=<%= @request_group.ark_id %>">
-      <%= image_tag("feed-icon-14x14.png", :alt=>"atom feed") %>
-    </a>
-  </h2>
-  <div class="breadcrumbs"><%= link_to('Merritt', :controller => 'home', :action => 'index') %> &gt;
-    Collection: <%= @request_group.description %></div>
-
-    <br/>
+<main>
+  <section>
+    <h2>
+      Collection: <%= @request_group.description %>
+      <a href="/object/recent.atom?collection=<%= @request_group.ark_id %>">
+        <%= image_tag("feed-icon-14x14.png", :alt => "atom feed") %>
+      </a>
+    </h2>
+    <div class="breadcrumbs"><%= link_to('Merritt', :controller => 'home', :action => 'index') %> &gt;
+      Collection: <%= @request_group.description %></div>
 
     <table style="width:100%;">
-    <thead>
+      <thead>
       <tr>
         <th style="width: 30%;">Primary Id</th>
         <th style="width: 20%;">Object info</th>
@@ -27,16 +26,16 @@
           <%= will_paginate(@recent_objects) %>
         </th>
       </tr>
-    </thead>
-    <tbody>
+      </thead>
+      <tbody>
       <%= render :partial => "/object/table_row", :collection => @recent_objects %>
-    </tbody>
-  </table>
-</div>
-<div class="grid_1">&nbsp;</div>
-<div class="grid_4 sidebar">
-  <%= render :partial => '/shared/side_lookup' %><br/>
-  <%= render :partial => 'overview' %><br/>
-  <%= render :partial => 'help/help_sidebar' %>
-</div>
+      </tbody>
+    </table>
+  </section>
 
+  <aside>
+    <%= render :partial => '/shared/side_lookup' %><br/>
+    <%= render :partial => 'overview' %><br/>
+    <%= render :partial => 'help/help_sidebar' %>
+  </aside>
+</main>

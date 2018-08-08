@@ -44,6 +44,10 @@ p.environment {
   z-index: 999;
 }
 
+h2 {
+  margin-bottom: 0;
+}
+
 h3 {
   font-size: 1em;
 }
@@ -56,8 +60,76 @@ img.merritt-logo {
   height: $merritt-logo-height;
 }
 
+div.breadcrumbs {
+  font-size: smaller;
+  margin-bottom: $margin / 2;
+}
+
+span.title {
+  font-weight: bold;
+}
+
 ul {
   padding: 0;
+}
+
+table {
+  border-collapse: collapse;
+  font-size: smaller;
+  table-layout: auto;
+  width: 100%;
+
+  a {
+    text-decoration: none;
+  }
+
+  th {
+    padding: $padding / 4;
+    text-align: left;
+    vertical-align: top;
+  }
+
+  td {
+    padding: $padding / 4;
+    vertical-align: top;
+  }
+
+  thead {
+    tr:last-child {
+      th {
+        border-bottom: 1px solid $darkgray;
+        border-top: 1px solid $midgray1;
+      }
+    }
+  }
+
+  tbody {
+    tr:not(:last-child) {
+      th {
+        border-bottom: 1px solid $midgray2;
+      }
+
+      td {
+        border-bottom: 1px solid $darkgray;
+      }
+    }
+
+    tr:last-child {
+      th {
+        padding-bottom: $padding;
+      }
+
+      td {
+        padding-bottom: $padding;
+      }
+    }
+  }
+
+  //tfoot {
+  //  th {
+  //    border-top: 1px solid $midgray1;
+  //  }
+  //}
 }
 
 nav {
@@ -126,69 +198,6 @@ header {
       }
     }
   }
-}
-
-section {
-  background-color: $lightgray;
-
-  table {
-    border-collapse: collapse;
-    table-layout: auto;
-    width: 100%;
-
-    a {
-      text-decoration: none;
-    }
-
-    th {
-      padding: $padding / 4;
-      text-align: left;
-      vertical-align: top;
-    }
-
-    td {
-      padding: $padding / 4;
-      vertical-align: top;
-    }
-
-    thead {
-      tr:last-child {
-        th {
-          border-bottom: 1px solid $darkgray;
-          border-top: 1px solid $midgray1;
-        }
-      }
-    }
-
-    tbody {
-      tr:not(:last-child) {
-        th {
-          border-bottom: 1px solid $midgray2;
-        }
-
-        td {
-          border-bottom: 1px solid $darkgray;
-        }
-      }
-
-      tr:last-child {
-        th {
-          padding-bottom: $padding;
-        }
-
-        td {
-          padding-bottom: $padding;
-        }
-      }
-    }
-
-    //tfoot {
-    //  th {
-    //    border-top: 1px solid $midgray1;
-    //  }
-    //}
-  }
-
 }
 
 aside {
