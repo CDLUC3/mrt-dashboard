@@ -242,6 +242,12 @@ div.files {
   }
 }
 
+div.download-form {
+  border-top: 1px solid $midgray1;
+  margin-top: $margin;
+  padding-top: $padding / 2;
+}
+
 aside {
   display: flex;
   flex-direction: column;

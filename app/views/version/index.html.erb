@@ -40,14 +40,18 @@
     <h3>System Files</h3>
     <%= render :partial => '/version/files', :locals => {:files => @version.system_files.quickload_files} %>
 
-    <% if @version.exceeds_download_size? %>
-      Versions larger than <%= max_download_size_pretty %> cannot be downloaded as a .zip file.
-      Versions and individual files below that size can still be downloaded.
-    <% elsif current_user_can_download?(@version.inv_object) then %>
-      <form action="<%= url_for(:action => :download, :object => @version.inv_object, :version => @version) %>">
-        <input type="submit" value="Download version">
-      </form>
-    <% end %>
+    <div class="download-form">
+      <% if @version.exceeds_download_size? %>
+        <p>
+          Versions larger than <%= max_download_size_pretty %> cannot be downloaded as a .zip file.
+          Versions and individual files below that size can still be downloaded.
+        </p>
+      <% elsif current_user_can_download?(@version.inv_object) then %>
+        <form action="<%= url_for(:action => :download, :object => @version.inv_object, :version => @version) %>">
+          <input type="submit" value="Download version">
+        </form>
+      <% end %>
+    </div>
   </section>
 
   <aside>

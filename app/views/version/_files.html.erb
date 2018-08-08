@@ -39,13 +39,15 @@
       </tr>
     <%
       end
-      if any_file_too_large
-    %>
-      Files larger than <%= max_download_size_pretty %> cannot be downloaded.
-      For access to large files, please
-      <a href="http://www.cdlib.org/services/uc3/contact.html">contact UC3</a>.
-    <% end %>
+      %>
     </tbody>
   </table>
+  <% if any_file_too_large %>
+  <p>
+    Files larger than <%= max_download_size_pretty %> cannot be downloaded.
+    For access to large files, please
+    <a href="http://www.cdlib.org/services/uc3/contact.html">contact UC3</a>.
+  </p>
+  <% end %>
 <% end %>
 </div>
