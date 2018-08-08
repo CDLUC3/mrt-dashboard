@@ -37,7 +37,7 @@ module ApplicationHelper
     escaped_tooltip = html_escape(the_text).gsub("'", "\\'")
     tooltip_tag = <<~HTML
       <a href="#" onmouseover="Tip('#{escaped_tooltip}')">
-        #{image_tag('tip_icon.gif', size: '15x15')}
+        <img class="tip-icon" src="/images/tip_icon.svg" alt="(?)"/>
       </a>
     HTML
     tooltip_tag.html_safe

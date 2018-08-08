@@ -68,6 +68,10 @@ img.merritt-logo {
   height: $merritt-logo-height;
 }
 
+img.tip-icon {
+  height: 1.2em;
+}
+
 div.breadcrumbs {
   font-size: smaller;
   margin-bottom: $margin / 2;
@@ -227,6 +231,15 @@ main {
 
   table.properties {
     width: 100%;
+
+    input {
+      margin-left: $margin / 4;
+      margin-right: $margin / 4;
+    }
+
+    img.tip-icon {
+      vertical-align: middle;
+    }
   }
 }
 
@@ -272,6 +285,10 @@ aside {
 
   p {
     font-size: smaller;
+
+    img.tip-icon {
+      vertical-align: text-top;
+    }
 
     &:not(:first-of-type) {
       margin-top: 0;

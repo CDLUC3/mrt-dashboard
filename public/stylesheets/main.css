@@ -714,6 +714,10 @@ img.merritt-logo {
   height: 30px;
 }
 
+img.tip-icon {
+  height: 1.2em;
+}
+
 div.breadcrumbs {
   font-size: smaller;
   margin-bottom: 12px;
@@ -856,6 +860,15 @@ main table.properties {
   width: 100%;
 }
 
+main table.properties input {
+  margin-left: 6px;
+  margin-right: 6px;
+}
+
+main table.properties img.tip-icon {
+  vertical-align: middle;
+}
+
 form table.properties {
   margin-top: 12px;
 }
@@ -893,6 +906,10 @@ aside {
 
 aside p {
   font-size: smaller;
+}
+
+aside p img.tip-icon {
+  vertical-align: text-top;
 }
 
 aside p:not(:first-of-type) {
