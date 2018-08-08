@@ -1,4 +1,67 @@
 @charset "UTF-8";
+@media (max-width: 708px) {
+  img.service-logo {
+    max-height: 76.5px;
+    max-width: 204px;
+  }
+  h1 img.merritt-logo {
+    height: auto;
+    width: 204px;
+  }
+  main {
+    width: 330px;
+  }
+  section.related-services ul {
+    margin-left: auto;
+    margin-right: auto;
+    width: 204px;
+  }
+}
+
+@media (min-width: 708px) {
+  img.service-logo {
+    max-height: 76.5px;
+    max-width: 204px;
+  }
+  main {
+    grid-template-columns: repeat(3, 1fr);
+    width: 708px;
+  }
+  main h1 img.merritt-logo {
+    height: 60px;
+  }
+  section.intro {
+    grid-column-end: 4;
+    grid-column-start: 1;
+    grid-template-columns: repeat(3, 1fr);
+  }
+  section.intro div {
+    font-size: medium;
+    grid-column-end: 3;
+    grid-column-start: 1;
+    grid-row-end: 3;
+    grid-row-start: 1;
+    margin-right: -8px;
+  }
+  section.intro aside {
+    grid-column-end: 4;
+    grid-column-start: 3;
+    grid-row-end: 3;
+    grid-row-start: 2;
+    margin-left: 8px;
+  }
+  section.intro aside ul li {
+    padding-top: 12px;
+  }
+  section.related-services {
+    grid-column-end: 4;
+    grid-column-start: 1;
+  }
+  section.related-services ul {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
 img.cts-logo {
   height: 76.5px;
 }
@@ -95,67 +158,4 @@ section.related-services ul {
 
 section.related-services ul li {
   display: block;
-}
-
-@media (min-width: 708px) {
-  img.service-logo {
-    max-height: 76.5px;
-    max-width: 204px;
-  }
-  main {
-    grid-template-columns: repeat(3, 1fr);
-    width: 708px;
-  }
-  main h1 img.merritt-logo {
-    height: 60px;
-  }
-  section.intro {
-    grid-column-end: 4;
-    grid-column-start: 1;
-    grid-template-columns: repeat(3, 1fr);
-  }
-  section.intro div {
-    font-size: medium;
-    grid-column-end: 3;
-    grid-column-start: 1;
-    grid-row-end: 3;
-    grid-row-start: 1;
-    margin-right: -8px;
-  }
-  section.intro aside {
-    grid-column-end: 4;
-    grid-column-start: 3;
-    grid-row-end: 3;
-    grid-row-start: 2;
-    margin-left: 8px;
-  }
-  section.intro aside ul li {
-    padding-top: 12px;
-  }
-  section.related-services {
-    grid-column-end: 4;
-    grid-column-start: 1;
-  }
-  section.related-services ul {
-    grid-template-columns: repeat(3, 1fr);
-  }
-}
-
-@media (max-width: 708px) {
-  img.service-logo {
-    max-height: 76.5px;
-    max-width: 204px;
-  }
-  h1 img.merritt-logo {
-    height: auto;
-    width: 204px;
-  }
-  main {
-    width: 330px;
-  }
-  section.related-services ul {
-    margin-left: auto;
-    margin-right: auto;
-    width: 204px;
-  }
 }

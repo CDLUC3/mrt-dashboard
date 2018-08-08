@@ -3,7 +3,7 @@
 @media (min-width: $main-width-desktop) { // TODO: introduce 2-column layout
 
   header {
-    // TODO: can we get away with the same grid layout as _1column.scss here?
+    // TODO: can we get away with the same grid layout as _main-1col.scss here?
     grid-template-columns: minmax(min-content, auto) max-content;
 
     div.masthead {

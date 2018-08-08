@@ -1,0 +1,60 @@
+@import 'globals';
+
+@media (min-width: $main-width-desktop) { // TODO: introduce 2-column layout
+
+  img.service-logo {
+    max-height: $service-logo-height;
+    max-width: $service-logo-width;
+  }
+
+  main {
+    grid-template-columns: repeat(3, 1fr);
+    width: $main-width-desktop;
+
+    h1 {
+      img.merritt-logo {
+        height: 2 * $merritt-logo-height;
+      }
+    }
+  }
+
+  section.intro {
+    grid-column-end: 4;
+    grid-column-start: 1;
+    grid-template-columns: repeat(3, 1fr);
+
+    div {
+      font-size: medium;
+      grid-column-end: 3;
+      grid-column-start: 1;
+      grid-row-end: 3;
+      grid-row-start: 1;
+      // align with section.feature below
+      margin-right: -($margin / 3);
+    }
+
+    aside {
+      grid-column-end: 4;
+      grid-column-start: 3;
+      grid-row-end: 3;
+      grid-row-start: 2;
+      // align with section.feature below
+      margin-left: $margin / 3;
+
+      ul {
+        li {
+          padding-top: $padding / 2;
+        }
+      }
+    }
+  }
+
+  section.related-services {
+    grid-column-end: 4;
+    grid-column-start: 1;
+
+    ul {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+}
