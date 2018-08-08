@@ -252,6 +252,15 @@ aside {
   display: flex;
   flex-direction: column;
   grid-gap: $margin;
+  width: $column-width + ($margin / 2); // ad-hoc to fit search instructions
+
+  p {
+    font-size: smaller;
+
+    &:not(:first-of-type) {
+      margin-top: 0;
+    }
+  }
 
   table.properties {
     font-size: smaller;
