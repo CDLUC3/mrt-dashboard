@@ -27,7 +27,7 @@
       posted on a web server.
     </p>
 
-    <%= form_tag(action: :upload, multipart: true) do %>
+    <%= form_tag({action: :upload}, multipart: true) do %>
       <h3>Object info</h3>
 
       <table class="properties">
@@ -97,9 +97,9 @@
   </section>
 
   <aside>
-    <%= render :partial => '/shared/side_lookup' %>
-    <%= render :partial => 'help_add' %>
-    <%= render :partial => '/shared/help_sidebar' %>
+    <%= render(partial: '/shared/side_lookup') %>
+    <%= render(partial: 'help_add') %>
+    <%= render(partial: '/shared/help_sidebar') %>
   </aside>
 </main>
 
