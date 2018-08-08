@@ -1,4 +1,5 @@
-<% if group_choosen? then %>
+<section>
+<% if group_choosen? %>
   <h3>Object Lookup</h3>
   <%= form_tag({:controller => 'collection', :action => 'search_results'}, :method => :get) do %>
     <%= text_field_tag 'terms', params[:terms] %>
@@ -8,3 +9,4 @@
   
   <p>Search object author, title, date or identifier.</p>
 <% end %>
+</section>

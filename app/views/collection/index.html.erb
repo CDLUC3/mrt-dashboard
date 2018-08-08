@@ -17,7 +17,7 @@
     <div class="breadcrumbs"><%= link_to('Merritt', :controller => 'home', :action => 'index') %> &gt;
       Collection: <%= @request_group.description %></div>
 
-    <table style="width:100%;">
+    <table class="main">
       <thead>
       <tr>
         <th style="width: 30%;">Primary Id</th>
@@ -34,8 +34,8 @@
   </section>
 
   <aside>
-    <%= render :partial => '/shared/side_lookup' %><br/>
-    <%= render :partial => 'overview' %><br/>
+    <%= render :partial => '/shared/side_lookup' %>
+    <%= render :partial => 'overview' %>
     <%= render :partial => 'help/help_sidebar' %>
   </aside>
 </main>

@@ -16,13 +16,8 @@ body {
   margin: 0;
 }
 
-main {
-  background-color: $lightgray;
-  display: grid;
-  grid-auto-flow: column;
-  grid-gap: $margin;
-  margin: 0;
-  padding: $padding;
+a {
+  text-decoration: none;
 }
 
 p {
@@ -45,11 +40,20 @@ p.environment {
 }
 
 h2 {
+  line-height: 1.2em;
   margin-bottom: 0;
+  margin-top: 0;
 }
 
 h3 {
   font-size: 1em;
+  line-height: 1.2em;
+  margin-bottom: 0;
+  margin-top: 0;
+}
+
+form {
+  margin-top: $margin / 2;
 }
 
 img.ucop-logo {
@@ -76,21 +80,15 @@ ul {
 table {
   border-collapse: collapse;
   font-size: smaller;
+  margin-top: $margin / 2;
   table-layout: auto;
-  width: 100%;
-
-  a {
-    text-decoration: none;
-  }
 
   th {
-    padding: $padding / 4;
     text-align: left;
     vertical-align: top;
   }
 
   td {
-    padding: $padding / 4;
     vertical-align: top;
   }
 
@@ -102,34 +100,38 @@ table {
       }
     }
   }
+}
 
-  tbody {
-    tr:not(:last-child) {
-      th {
-        border-bottom: 1px solid $midgray2;
-      }
+table.main {
+  width: 100%;
 
-      td {
-        border-bottom: 1px solid $darkgray;
-      }
+  tr:not(:last-child) {
+    th {
+      border-bottom: 1px solid $midgray2;
+      padding: $padding / 4;
     }
 
-    tr:last-child {
-      th {
-        padding-bottom: $padding;
-      }
-
-      td {
-        padding-bottom: $padding;
-      }
+    td {
+      border-bottom: 1px solid $darkgray;
+      padding: $padding / 4;
     }
   }
+}
 
-  //tfoot {
-  //  th {
-  //    border-top: 1px solid $midgray1;
-  //  }
-  //}
+table.properties {
+  margin-right: auto;
+
+  tbody {
+    th {
+      max-width: min-content;
+      text-align: right;
+      white-space: nowrap;
+    }
+
+    td {
+      text-align: right;
+    }
+  }
 }
 
 nav {
@@ -198,6 +200,15 @@ header {
       }
     }
   }
+}
+
+main {
+  background-color: $lightgray;
+  display: grid;
+  grid-auto-flow: column;
+  grid-gap: $margin;
+  margin: 0;
+  padding: $padding;
 }
 
 aside {
