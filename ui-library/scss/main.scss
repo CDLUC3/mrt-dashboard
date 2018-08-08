@@ -46,9 +46,13 @@ h2 {
 }
 
 h3 {
+  border-bottom: 1px solid $midgray1;
   font-size: 1em;
   line-height: 1.2em;
   margin-bottom: 0;
+}
+
+h3:first-child {
   margin-top: 0;
 }
 
@@ -96,7 +100,6 @@ table {
     tr:last-child {
       th {
         border-bottom: 1px solid $darkgray;
-        border-top: 1px solid $midgray1;
       }
     }
   }
@@ -105,15 +108,21 @@ table {
 table.main {
   width: 100%;
 
+  th {
+    padding: $padding / 4;
+  }
+
+  td {
+    padding: $padding / 4;
+  }
+
   tr:not(:last-child) {
     th {
       border-bottom: 1px solid $midgray2;
-      padding: $padding / 4;
     }
 
     td {
       border-bottom: 1px solid $darkgray;
-      padding: $padding / 4;
     }
   }
 }
@@ -129,6 +138,7 @@ table.properties {
     }
 
     td {
+      padding-left: $padding / 2;
       text-align: right;
     }
   }

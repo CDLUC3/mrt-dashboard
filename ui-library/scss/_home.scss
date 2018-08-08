@@ -14,6 +14,10 @@ main.home {
   background-color: $darkgray;
   grid-auto-flow: row;
 
+  h3 {
+    border: 0;
+  }
+
   img.cts-logo {
     height: $service-logo-height;
   }

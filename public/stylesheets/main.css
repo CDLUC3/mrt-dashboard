@@ -553,6 +553,10 @@ main.home {
   grid-auto-flow: row;
 }
 
+main.home h3 {
+  border: 0;
+}
+
 main.home img.cts-logo {
   height: 76.5px;
 }
@@ -688,9 +692,13 @@ h2 {
 }
 
 h3 {
+  border-bottom: 1px solid #d8d8d9;
   font-size: 1em;
   line-height: 1.2em;
   margin-bottom: 0;
+}
+
+h3:first-child {
   margin-top: 0;
 }
 
@@ -737,21 +745,26 @@ table td {
 
 table thead tr:last-child th {
   border-bottom: 1px solid #7c7e7f;
-  border-top: 1px solid #d8d8d9;
 }
 
 table.main {
   width: 100%;
 }
 
+table.main th {
+  padding: 6px;
+}
+
+table.main td {
+  padding: 6px;
+}
+
 table.main tr:not(:last-child) th {
   border-bottom: 1px solid #e4e4e4;
-  padding: 6px;
 }
 
 table.main tr:not(:last-child) td {
   border-bottom: 1px solid #7c7e7f;
-  padding: 6px;
 }
 
 table.properties {
@@ -765,6 +778,7 @@ table.properties tbody th {
 }
 
 table.properties tbody td {
+  padding-left: 12px;
   text-align: right;
 }
 
