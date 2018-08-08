@@ -40,7 +40,7 @@
     <h3>System Files</h3>
     <%= render :partial => '/version/files', :locals => {:files => @version.system_files.quickload_files} %>
 
-    <div class="download-form">
+    <div class="form-submit">
       <% if @version.exceeds_download_size? %>
         <p>
           Versions larger than <%= max_download_size_pretty %> cannot be downloaded as a .zip file.

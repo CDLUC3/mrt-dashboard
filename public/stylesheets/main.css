@@ -856,6 +856,20 @@ main table.properties {
   width: 100%;
 }
 
+form table.properties {
+  margin-top: 12px;
+}
+
+form table.properties th {
+  padding-top: 6px;
+  width: 25%;
+}
+
+form table.properties td {
+  padding-top: 6px;
+  width: 75%;
+}
+
 div.files table.properties th {
   width: 50%;
 }
@@ -864,7 +878,7 @@ div.files table.properties td {
   width: 25%;
 }
 
-div.download-form {
+div.form-submit {
   border-top: 1px solid #d8d8d9;
   margin-top: 24px;
   padding-top: 12px;

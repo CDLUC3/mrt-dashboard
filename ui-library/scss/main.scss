@@ -230,6 +230,22 @@ main {
   }
 }
 
+form {
+  table.properties {
+    margin-top: $margin / 2;
+
+    th {
+      padding-top: $padding / 4;
+      width: 25%;
+    }
+
+    td {
+      padding-top: $padding / 4;
+      width: 75%;
+    }
+  }
+}
+
 div.files {
   table.properties {
     th {
@@ -242,7 +258,7 @@ div.files {
   }
 }
 
-div.download-form {
+div.form-submit {
   border-top: 1px solid $midgray1;
   margin-top: $margin;
   padding-top: $padding / 2;
