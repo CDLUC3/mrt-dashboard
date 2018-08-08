@@ -4,12 +4,6 @@ img.cts-logo {
   height: $service-logo-height;
 }
 
-div.publication-info {
-  p:first-of-type {
-    margin-top: 0;
-  }
-}
-
 main {
   background-color: $darkgray;
   display: grid;
@@ -153,6 +147,12 @@ section.related-services {
       grid-row-start: 2;
       // align with section.feature below
       margin-left: $margin / 3;
+
+      ul {
+        li {
+          padding-top: $padding / 2;
+        }
+      }
     }
   }
 
