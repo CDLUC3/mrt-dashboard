@@ -581,3 +581,7 @@ footer {
   background: #d8d8d9;
   width: 100%;
 }
+
+footer div.publication-info p:first-of-type {
+  margin-top: 0;
+}
