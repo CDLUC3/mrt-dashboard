@@ -2,6 +2,14 @@
 @import 'home-1col';
 @import 'home-3col';
 
+div.home-background {
+  align-items: center;
+  background-color: $darkgray;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
 main.home {
   background-color: $darkgray;
   grid-auto-flow: row;
