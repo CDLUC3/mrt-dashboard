@@ -1,13 +1,14 @@
-<% version = line_sidebar %>
-<% object = version.inv_object %>
-<% if (can_download) then  %>
-  <%= link_to "Version #{version.number}",
-              :controller => :version,
-              :action     => :index,
-              :object     => object,
-              :version    => version %>:
-<% else %>
-  Version <%= version.number %>:
-<% end %>
-<%= merritt_time(version.created) %>
-
+<p>
+  <% version = line_sidebar %>
+  <% object = version.inv_object %>
+  <% if can_download %>
+    <%= link_to "Version #{version.number}",
+                :controller => :version,
+                :action => :index,
+                :object => object,
+                :version => version %>:
+  <% else %>
+    Version <%= version.number %>:
+  <% end %>
+  <span class="timestamp"><%= merritt_time(version.created) %></span>
+</p>

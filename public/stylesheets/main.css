@@ -695,7 +695,7 @@ h3 {
   border-bottom: 1px solid #d8d8d9;
   font-size: 1em;
   line-height: 1.2em;
-  margin-bottom: 0;
+  margin-bottom: 12px;
 }
 
 h3:first-child {
@@ -704,10 +704,6 @@ h3:first-child {
 
 h3.object-title {
   font-weight: normal;
-}
-
-form {
-  margin-top: 12px;
 }
 
 img.ucop-logo {
@@ -727,13 +723,16 @@ span.title {
   font-weight: bold;
 }
 
+span.timestamp {
+  white-space: nowrap;
+}
+
 ul {
   padding: 0;
 }
 
 table {
   border-collapse: collapse;
-  margin-top: 12px;
   table-layout: auto;
 }
 
@@ -868,11 +867,11 @@ aside table.properties td {
   text-align: right;
 }
 
-aside section.help ul {
+aside section ul {
   list-style-type: square;
 }
 
-aside section.help ul li {
+aside section ul li {
   margin-left: 24px;
 }
 

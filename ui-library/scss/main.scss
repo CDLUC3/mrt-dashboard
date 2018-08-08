@@ -49,7 +49,7 @@ h3 {
   border-bottom: 1px solid $midgray1;
   font-size: 1em;
   line-height: 1.2em;
-  margin-bottom: 0;
+  margin-bottom: $margin / 2;
 }
 
 h3:first-child {
@@ -58,10 +58,6 @@ h3:first-child {
 
 h3.object-title {
   font-weight: normal;
-}
-
-form {
-  margin-top: $margin / 2;
 }
 
 img.ucop-logo {
@@ -81,13 +77,16 @@ span.title {
   font-weight: bold;
 }
 
+span.timestamp {
+  white-space: nowrap;
+}
+
 ul {
   padding: 0;
 }
 
 table {
   border-collapse: collapse;
-  margin-top: $margin / 2;
   table-layout: auto;
 
   th {
@@ -241,7 +240,7 @@ aside {
     }
   }
 
-  section.help {
+  section {
     ul {
       list-style-type: square;
 
