@@ -24,7 +24,6 @@ class UserSessionsController < ApplicationController
   def handle_login(user_id, password)
     session[:expiry_time] = Time.now
     if User.valid_ldap_credentials?(user_id, password)
-      flash[:notice] = 'Login was successful'
       session[:uid] = user_id
       redirect_back_or_default '/home/choose_collection'
     else
