@@ -1,36 +1,58 @@
-<div class="grid_11">
-  <h2>Large Object/Version Processing</h2>
-  <p>The object or version you have selected is very large (due to the
-    size or number of files) and will take some time to process for
-    download.</p>
-  <p>You can request background processing of the object or version
-    that will let you continue immediately with other Merritt tasks.</p>
-  <p>Please enter your email address so that you may be notified when
-    the object or version is ready for download</p>
-  <p>The notification email message will provide a link to the object
-    or version.</p>
-  <br/>
-  <% if !flash[:message].blank? then %>
-    <p class="dynamic_message"><%= flash[:message] %></p>
-  <% end %>
-  
-  <%= form_tag({:action => 'index'}, :class => 'indented_form') do%>
-    <br/>
-    <div class='short_left_label'>
-      <%= label_tag('user_agent_email', '* Email: ') %>
-    </div>
-    <div class='long_right_field'>
-      <%= text_field_tag('user_agent_email', params[:user_agent_email], :size => 50) %>
-    </div>
-    <div class="clear"></div>
-    <br/>
-    <div class='short_left_label'>
-      <span class="smaller">* Required</span>
-    </div>
-    <%= hidden_field_tag('userFriendly', params[:userFriendly]) %>
-    <%= hidden_field_tag('object', params[:object]) %>
-    <%= hidden_field_tag('version', params[:version]) %>
-    <%= submit_tag('Submit') %>
-    <%= submit_tag('Cancel', {:onClick => "window.close()"}) %>
-  <% end%>
-</div>
+<% content_for :title do %>
+  UC3 Merritt: Large Object/Version Processing
+<% end %>
+
+<main>
+  <section>
+    <h2>Large Object/Version Processing</h2>
+
+    <p>
+      The object or version you have selected is very large (due to the
+      size or number of files) and will take some time to process for
+      download.
+    </p>
+    <p>
+      You can request background processing of the object or version
+      that will let you continue immediately with other Merritt tasks.
+    </p>
+    <p>
+      Please enter your email address so that you may be notified when
+      the object or version is ready for download
+    </p>
+    <p>
+      The notification email message will provide a link to the object
+      or version.
+    </p>
+
+    <% unless flash[:message].blank? %>
+      <p class="dynamic_message"><%= flash[:message] %></p>
+    <% end %>
+
+    <%= form_tag({action: 'index'}) do %>
+
+      <table class="properties">
+        <tbody>
+        <tr>
+          <th><%= label_tag('user_agent_email', '* Email: ') %></th>
+          <td><%= text_field_tag('user_agent_email', params[:user_agent_email], :size => 50) %></td>
+        </tr>
+        </tbody>
+        <tfoot>
+        <tr>
+          <td colspan="2">* Required</td>
+        </tr>
+        </tfoot>
+      </table>
+
+      <%= hidden_field_tag('userFriendly', params[:userFriendly]) %>
+      <%= hidden_field_tag('object', params[:object]) %>
+      <%= hidden_field_tag('version', params[:version]) %>
+
+      <div class="form-submit">
+        <%= submit_tag('Submit') %>
+        <%= submit_tag('Cancel', {onClick: "window.close()"}) %>
+      </div>
+    <% end %>
+
+  </section>
+</main>
