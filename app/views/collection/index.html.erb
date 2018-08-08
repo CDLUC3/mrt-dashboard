@@ -14,8 +14,10 @@
         <%= image_tag("feed-icon-14x14.png", :alt => "atom feed") %>
       </a>
     </h2>
-    <div class="breadcrumbs"><%= link_to('Merritt', :controller => 'home', :action => 'index') %> &gt;
-      Collection: <%= @request_group.description %></div>
+    <div class="breadcrumbs">
+      <%= link_to('Merritt', :controller => 'home', :action => 'index') %> &gt;
+      Collection: <%= @request_group.description %>
+    </div>
 
     <table class="main">
       <thead>

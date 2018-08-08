@@ -702,6 +702,10 @@ h3:first-child {
   margin-top: 0;
 }
 
+h3.object-title {
+  font-weight: normal;
+}
+
 form {
   margin-top: 12px;
 }
@@ -729,7 +733,6 @@ ul {
 
 table {
   border-collapse: collapse;
-  font-size: smaller;
   margin-top: 12px;
   table-layout: auto;
 }
@@ -748,6 +751,7 @@ table thead tr:last-child th {
 }
 
 table.main {
+  font-size: smaller;
   width: 100%;
 }
 
@@ -777,9 +781,12 @@ table.properties tbody th {
   white-space: nowrap;
 }
 
+table.properties tbody th em {
+  font-weight: normal;
+}
+
 table.properties tbody td {
   padding-left: 12px;
-  text-align: right;
 }
 
 nav ul {
@@ -848,8 +855,17 @@ main {
 }
 
 aside {
-  display: grid;
+  display: flex;
+  flex-direction: column;
   grid-gap: 24px;
+}
+
+aside table.properties {
+  font-size: smaller;
+}
+
+aside table.properties td {
+  text-align: right;
 }
 
 aside section.help ul {
@@ -858,6 +874,10 @@ aside section.help ul {
 
 aside section.help ul li {
   margin-left: 24px;
+}
+
+aside section:not(:last-child) {
+  margin-bottom: 24px;
 }
 
 footer {

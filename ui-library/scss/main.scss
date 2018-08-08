@@ -56,6 +56,10 @@ h3:first-child {
   margin-top: 0;
 }
 
+h3.object-title {
+  font-weight: normal;
+}
+
 form {
   margin-top: $margin / 2;
 }
@@ -83,7 +87,6 @@ ul {
 
 table {
   border-collapse: collapse;
-  font-size: smaller;
   margin-top: $margin / 2;
   table-layout: auto;
 
@@ -106,6 +109,7 @@ table {
 }
 
 table.main {
+  font-size: smaller;
   width: 100%;
 
   th {
@@ -135,11 +139,14 @@ table.properties {
       max-width: min-content;
       text-align: right;
       white-space: nowrap;
+
+      em {
+        font-weight: normal;
+      }
     }
 
     td {
       padding-left: $padding / 2;
-      text-align: right;
     }
   }
 }
@@ -222,8 +229,17 @@ main {
 }
 
 aside {
-  display: grid;
+  display: flex;
+  flex-direction: column;
   grid-gap: $margin;
+
+  table.properties {
+    font-size: smaller;
+
+    td {
+      text-align: right;
+    }
+  }
 
   section.help {
     ul {
@@ -233,6 +249,11 @@ aside {
         margin-left: $margin;
       }
     }
+  }
+
+  // fake grid-gap for flexbox
+  section:not(:last-child) {
+    margin-bottom: $margin;
   }
 }
 
