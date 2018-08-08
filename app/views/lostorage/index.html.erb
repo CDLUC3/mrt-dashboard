@@ -25,7 +25,7 @@
     </p>
 
     <% unless flash[:message].blank? %>
-      <p class="dynamic_message"><%= flash[:message] %></p>
+      <p class="error-message"><%= flash[:message] %></p>
     <% end %>
 
     <%= form_tag({action: 'index'}) do %>

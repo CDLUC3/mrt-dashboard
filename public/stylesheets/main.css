@@ -671,6 +671,12 @@ p {
   margin-top: 12px;
 }
 
+p.error-message {
+  color: #bb0000;
+  font-size: larger;
+  font-weight: bold;
+}
+
 p.environment {
   color: #7c7e7f;
   font-weight: bold;
@@ -861,6 +867,11 @@ main table.properties {
 }
 
 main table.properties input {
+  margin-left: 6px;
+  margin-right: 6px;
+}
+
+main table.properties select {
   margin-left: 6px;
   margin-right: 6px;
 }

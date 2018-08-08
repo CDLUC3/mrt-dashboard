@@ -25,6 +25,12 @@ p {
   margin-top: $margin / 2;
 }
 
+p.error-message {
+  color: $red;
+  font-size: larger;
+  font-weight: bold;
+}
+
 p.environment {
   color: $darkgray;
   font-weight: bold;
@@ -233,6 +239,11 @@ main {
     width: 100%;
 
     input {
+      margin-left: $margin / 4;
+      margin-right: $margin / 4;
+    }
+
+    select {
       margin-left: $margin / 4;
       margin-right: $margin / 4;
     }
