@@ -2,18 +2,17 @@
 
 @media (max-width: $main-width-desktop) { // TODO: introduce 2-column layout
 
+  li {
+    margin: 0;
+    padding-top: $padding / 2;
+  }
+
   nav {
     justify-content: start;
 
     ul {
-      grid-auto-flow: row;
-
       li {
-        ul {
-          li {
-            margin-left: 0;
-          }
-        }
+        padding: $padding / 2;
       }
     }
   }
@@ -39,8 +38,8 @@
 
         li {
           font-size: medium;
-          padding-left: $margin / 2;
-          padding-right: $margin / 2;
+          padding-bottom: 0;
+          padding-top: 0;
 
           a {
             margin-top: $margin / 4;
@@ -54,6 +53,27 @@
       position: absolute;
       right: 0;
       top: 0;
+
+      ul {
+        grid-auto-flow: row;
+      }
+
+      li {
+        background-color: $midgray1;
+        border-top: 1px solid $lightgray;
+      }
+
+      li.dropdown {
+        padding-bottom: 0;
+
+        ul {
+          margin-top: $margin / 2;
+
+          li {
+            margin-left: 0;
+          }
+        }
+      }
 
       // sass-lint:disable no-ids, no-qualifying-elements
       input#nav-menu {
@@ -77,20 +97,6 @@
           max-width: $ucop-logo-height - $margin;
         }
       }
-
-      li {
-        background-color: $midgray1;
-        border-top: 1px solid $lightgray;
-        padding: $padding / 2;
-      }
-
-      li.dropdown {
-        padding-bottom: 0;
-
-        ul {
-          margin-top: $margin / 2;
-        }
-      }
     }
 
     nav.menu > ul {
@@ -110,10 +116,28 @@
 
   footer {
     text-align: left;
-  }
 
-  div.publication-info {
-    margin: $padding / 2;
-  }
+    nav {
+      margin-left: $margin;
+      margin-right: $margin;
 
+      ul {
+        grid-auto-flow: column;
+        margin: 0;
+
+        li {
+          text-align: center;
+        }
+      }
+    }
+
+    div.publication-info {
+      margin-left: $margin;
+      margin-right: $margin;
+
+      p {
+        text-align: center;
+      }
+    }
+  }
 }

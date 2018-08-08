@@ -15,6 +15,11 @@ body {
   margin: 0;
 }
 
+p {
+  margin-bottom: 0;
+  margin-top: $margin / 2;
+}
+
 p.environment {
   color: $darkgray;
   font-weight: bold;
@@ -119,24 +124,5 @@ section {
 footer {
   background: $midgray1;
   width: 100%;
-
-  nav { // TODO: push down to 3column
-    align-items: center;
-    display: flex;
-    justify-content: center;
-
-    ul {
-      grid-column-gap: $padding / 4;
-      margin: $margin / 2;
-
-      li {
-        display: block;
-        flex-basis: auto;
-        flex-grow: 0;
-        flex-shrink: 1;
-      }
-    }
-  }
-
 }
 

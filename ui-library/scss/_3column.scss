@@ -125,6 +125,8 @@
     text-align: center;
 
     nav {
+      align-items: center;
+      display: flex;
       justify-content: center;
 
       ul {
@@ -132,6 +134,10 @@
         grid-column-gap: 0;
 
         li {
+          display: block;
+          flex-basis: auto;
+          flex-grow: 0;
+          flex-shrink: 1;
           padding-left: $padding / 4;
           padding-right: $padding / 4;
         }
