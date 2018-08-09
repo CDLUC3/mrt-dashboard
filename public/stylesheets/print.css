@@ -7,11 +7,9 @@
   }
   img {
     break-inside: avoid;
-    page-break-inside: avoid;
   }
   main {
     background: none;
-    break-inside: auto;
     grid-auto-flow: row;
     grid-template-columns: 1fr;
     margin-right: auto;
