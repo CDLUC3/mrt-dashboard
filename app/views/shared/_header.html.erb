@@ -43,10 +43,12 @@
       </ul>
     </nav>
   <% else %>
+    <% unless action_name == 'login' %>
     <nav class="login">
       <ul>
         <li><%= link_to('Login', controller: 'user_sessions', action: 'login') %></li>
       </ul>
     </nav>
+    <% end %>
   <% end %>
 </header>
