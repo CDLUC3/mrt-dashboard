@@ -54,6 +54,6 @@ def log_out!
   # return if page.has_no_content?('Logout')
   return unless page.text.include?('Logout')
 
-  logout_link = find_link('Logout')
+  logout_link = first(:link, 'Logout')
   logout_link.click if logout_link
 end
