@@ -297,7 +297,7 @@
   }
   header nav.menu li {
     background-color: #d8d8d9;
-    border-top: 1px solid #f2f2f2;
+    border-top: 1px solid #d8d8d9;
   }
   header nav.menu li.dropdown {
     padding-bottom: 0;
@@ -307,6 +307,7 @@
   }
   header nav.menu li.dropdown ul li {
     margin-left: 0;
+    white-space: nowrap;
   }
   header nav.menu input#nav-menu {
     display: none;
@@ -330,11 +331,11 @@
     display: none;
   }
   header nav.menu > ul > li {
-    border-left: 1px solid #f2f2f2;
-    border-right: 1px solid #f2f2f2;
+    border-left: 1px solid #d8d8d9;
+    border-right: 1px solid #d8d8d9;
   }
   header nav.menu > ul > li:last-of-type {
-    border-bottom: 1px solid #f2f2f2;
+    border-bottom: 1px solid #d8d8d9;
   }
   main {
     width: 960px;
@@ -431,7 +432,7 @@
     border-right: 2px solid #f2f2f2;
   }
   header nav.menu li.dropdown:hover ul {
-    border: 1px solid #f2f2f2;
+    border: 1px solid #d8d8d9;
     display: block;
     margin-left: -12px;
     margin-top: 6px;
@@ -846,8 +847,13 @@ header nav ul li a:hover {
   text-decoration: none;
 }
 
+header nav ul li.dropdown ul {
+  min-width: max-content;
+}
+
 header nav ul li.dropdown ul li {
   font-weight: normal;
+  min-width: max-content;
 }
 
 header nav.login ul li {
@@ -956,6 +962,7 @@ aside section:not(:last-child) {
 
 footer {
   background: #d8d8d9;
+  flex-grow: 1;
   width: 100%;
 }
 
