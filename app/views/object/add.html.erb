@@ -46,7 +46,7 @@
       <table class="properties">
         <tbody>
         <tr>
-          <th>Title:</th>
+          <th><label for="title">Title:</label></th>
           <td>
             <%= text_field_tag('title', nil, :size => 30) %>
             <%= help_tip('We strongly recommend that you provide at least a title.') %>
@@ -54,7 +54,7 @@
         </tr>
 
         <tr>
-          <th>Creator:</th>
+          <th><label for="author">Creator:</label></th>
           <td>
             <%= text_field_tag('author', nil, :size => 30) %>
             <%= help_tip('Author or creator of the object.') %>
@@ -62,7 +62,7 @@
         </tr>
 
         <tr>
-          <th>Date:</th>
+          <th><label for="date">Date:</label></th>
           <td>
             <%= text_field_tag('date', nil, :size => 30) %>
             <%= help_tip('Publication date of object') %>
@@ -70,7 +70,7 @@
         </tr>
 
         <tr>
-          <th>Local ID:</th>
+          <th><label for="local_id">Local ID:</label></th>
           <td>
             <%= text_field_tag('local_id', nil, :size => 30) %>
             <%= help_tip('An existing identifier you use to track the object.') %>
@@ -78,7 +78,7 @@
         </tr>
 
         <tr>
-          <th>Primary ID:</th>
+          <th><label for="primary_id">Primary ID:</label></th>
           <td>
             <%= text_field_tag('primary_id', nil, :size => 30) %>
             <%= help_tip('Most commonly used for updates, this is the previously assigned primary identifier.') %>

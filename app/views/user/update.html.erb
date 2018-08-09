@@ -23,19 +23,19 @@
           <td><%= text_field_tag('givenname', @ldap_user['givenname'], :size => 30) %> *</td>
         </tr>
         <tr>
-          <th>Last name:</th>
+          <th><label for="sn">Last name:</label></th>
           <td><%= text_field_tag('sn', @ldap_user['sn'], :size => 30) %> *</td>
         </tr>
         <tr>
-          <th>Password:</th>
+          <th><label for="userpassword">Password:</label></th>
           <td><%= password_field_tag('userpassword', '!unchanged', :size => 30) %> *</td>
         </tr>
         <tr>
-          <th>Repeat Password:</th>
+          <th><label for="repeatuserpassword">Repeat Password:</label></th>
           <td><%= password_field_tag('repeatuserpassword', '!unchanged', :size => 30) %> *</td>
         </tr>
         <tr>
-          <th>Email:</th>
+          <th><label for="mail">Email:</label></th>
           <td><%= text_field_tag('mail', @ldap_user['mail'], :size => 30) %> *</td>
         </tr>
         <%
@@ -45,11 +45,11 @@
               .map {|zone| [zone.gsub('_', ' '), zone]}
         %>
         <tr>
-          <th>Time zone:</th>
+          <th><label for="tzregion">Time zone:</label></th>
           <td><%= select_tag('tzregion', options_for_select(zones, @ldap_user['tzregion'].first)) %></td>
         </tr>
         <tr>
-          <th>Phone:</th>
+          <th><label for="telephonenumber">Phone:</label></th>
           <td><%= text_field_tag('telephonenumber', @ldap_user['telephonenumber'], :size => 30) %></td>
         </tr>
         </tbody>

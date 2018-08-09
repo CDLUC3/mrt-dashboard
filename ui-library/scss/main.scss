@@ -157,6 +157,14 @@ table.properties {
       padding-left: $padding / 2;
     }
   }
+
+  th.table-section-header {
+    text-align: left;
+
+    h3 {
+      margin-top: $margin;
+    }
+  }
 }
 
 nav {
@@ -238,17 +246,12 @@ main {
   table.properties {
     width: 100%;
 
-    input {
-      margin-left: $margin / 4;
-      margin-right: $margin / 4;
-    }
-
-    select {
-      margin-left: $margin / 4;
-      margin-right: $margin / 4;
+    td {
+      padding-left: $padding / 4;
     }
 
     img.tip-icon {
+      margin-left: $margin / 4;
       vertical-align: middle;
     }
   }

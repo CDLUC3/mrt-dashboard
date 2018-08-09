@@ -797,6 +797,14 @@ table.properties tbody td {
   padding-left: 12px;
 }
 
+table.properties th.table-section-header {
+  text-align: left;
+}
+
+table.properties th.table-section-header h3 {
+  margin-top: 24px;
+}
+
 nav ul {
   display: grid;
   list-style-type: none;
@@ -866,17 +874,12 @@ main table.properties {
   width: 100%;
 }
 
-main table.properties input {
-  margin-left: 6px;
-  margin-right: 6px;
-}
-
-main table.properties select {
-  margin-left: 6px;
-  margin-right: 6px;
+main table.properties td {
+  padding-left: 6px;
 }
 
 main table.properties img.tip-icon {
+  margin-left: 6px;
   vertical-align: middle;
 }
 
