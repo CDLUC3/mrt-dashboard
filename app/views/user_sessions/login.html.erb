@@ -15,8 +15,8 @@ UC3 Merritt Login
         <th class="table-section-header" colspan="3"><h3>Guest login</h3></th>
       </tr>
       <tr>
-        <td colspan="2"><label for="submit_guest">Login as guest for read-only access</label></td>
-        <td><%= submit_tag('Guest', {tabindex: 1, id: 'submit_guest'}) %></td>
+        <td colspan="2">Login as guest for read-only access</td>
+        <td><%= submit_tag('Guest') %></td>
       </tr>
       <% end %>
 
@@ -26,13 +26,13 @@ UC3 Merritt Login
         </tr>
       <tr>
         <th><label for="login">Username</label></th>
-        <td><%= text_field_tag('login', params[:login], {tabindex: 2}) %></td>
-        <td><%= submit_tag('Login', {tabindex: 4, id: 'submit_login'}) %></td>
+        <td><%= text_field_tag('login', params[:login]) %></td>
+        <td><a href="http://www.cdlib.org/services/uc3/contact.html">Request a User Account</a></td>
       </tr>
         <tr>
           <th><label for="password">Password</label></th>
-          <td><%= password_field_tag('password', params[:password], {tabindex: 2}) %></td>
-          <td><a href="http://www.cdlib.org/services/uc3/contact.html">Request a User Account</a></td>
+          <td><%= password_field_tag('password', params[:password]) %></td>
+          <td><%= submit_tag('Login', {tabindex: 4, id: 'submit_login'}) %></td>
         </tr>
       <% end %>
       </tbody>
