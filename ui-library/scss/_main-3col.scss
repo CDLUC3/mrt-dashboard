@@ -78,11 +78,16 @@
         // allows nested UL to calculate width
         position: relative;
 
+        a {
+          white-space: nowrap;
+        }
+
         ul {
           background-color: $midgray1;
           display: none;
           margin-left: -($margin / 2);
           margin-top: ($margin / 4);
+          min-width: min-content;
           position: absolute;
           width: 100%;
         }

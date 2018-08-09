@@ -420,11 +420,15 @@
   header nav.menu li.dropdown {
     position: relative;
   }
+  header nav.menu li.dropdown a {
+    white-space: nowrap;
+  }
   header nav.menu li.dropdown ul {
     background-color: #d8d8d9;
     display: none;
     margin-left: -12px;
     margin-top: 6px;
+    min-width: min-content;
     position: absolute;
     width: 100%;
   }
@@ -896,14 +900,6 @@ form table.properties th {
 form table.properties td {
   padding-top: 6px;
   width: 75%;
-}
-
-div.files table.properties th {
-  width: 50%;
-}
-
-div.files table.properties td {
-  width: 25%;
 }
 
 div.form-submit {

@@ -34,11 +34,18 @@
     </h3>
     <%= render :partial => '/version/details_display', :object => @version %>
 
-    <h3>User Files</h3>
-    <%= render :partial => '/version/files', :locals => {:files => @version.producer_files.quickload_files} %>
-
-    <h3>System Files</h3>
-    <%= render :partial => '/version/files', :locals => {:files => @version.system_files.quickload_files} %>
+    <table class="properties">
+      <tbody>
+      <tr>
+        <th class="table-section-header" colspan="3"><h3>User Files</h3></th>
+        <%= render :partial => '/version/files', :locals => {:files => @version.producer_files.quickload_files} %>
+      </tr>
+      <tr>
+        <th class="table-section-header" colspan="3"><h3>System Files</h3></th>
+        <%= render :partial => '/version/files', :locals => {:files => @version.system_files.quickload_files} %>
+      </tr>
+      </tbody>
+    </table>
 
     <div class="form-submit">
       <% if @version.exceeds_download_size? %>

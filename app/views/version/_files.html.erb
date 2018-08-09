@@ -1,4 +1,3 @@
-<div class="files">
 <%
   if files[0]
     # this is the same for every file and if we don't cache it here it will hit the db for every file
@@ -11,8 +10,6 @@
     can_download_object = current_user_can_download?(object)
     any_file_too_large = false
 %>
-  <table class="properties">
-    <tbody>
     <%
       files.each do |file|
         file_basename = File.basename(file.pathname)
@@ -33,21 +30,20 @@
         <td>
           <%= clean_mime_type(file.mime_type) %>
         </td>
-        <td>
+        <td style="width: 100%;">
           <%= number_to_storage_size(file.full_size) %>
         </td>
       </tr>
     <%
       end
       %>
-    </tbody>
-  </table>
   <% if any_file_too_large %>
-  <p>
-    Files larger than <%= max_download_size_pretty %> cannot be downloaded.
-    For access to large files, please
-    <a href="http://www.cdlib.org/services/uc3/contact.html">contact UC3</a>.
-  </p>
+      <tr>
+        <td colspan="3">
+          Files larger than <%= max_download_size_pretty %> cannot be downloaded.
+          For access to large files, please
+          <a href="http://www.cdlib.org/services/uc3/contact.html">contact UC3</a>.
+        </td>
+      </tr>
   <% end %>
 <% end %>
-</div>
