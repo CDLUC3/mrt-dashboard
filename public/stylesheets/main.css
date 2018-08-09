@@ -564,7 +564,7 @@ main.home h3 {
 }
 
 main.home img.cts-logo {
-  height: 76.5px;
+  height: 86px;
 }
 
 main.home section {
@@ -590,7 +590,7 @@ main.home section.intro aside {
   background-color: #f28d1e;
   border-radius: 12px;
   display: block;
-  padding: 24px;
+  padding: 16px;
   width: auto;
 }
 
@@ -675,7 +675,7 @@ body {
   font-family: "Open Sans", "Neue Haas Grotesk", "Helvetica Neue", "Helvetica", "Nimbus Sans", "Nimbus Sans L", "Arial", sans-serif;
   font-size: smaller;
   height: 100%;
-  line-height: 1.4;
+  line-height: 1.4em;
   margin: 0;
 }
 

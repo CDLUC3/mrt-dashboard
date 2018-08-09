@@ -20,7 +20,7 @@ main.home {
   }
 
   img.cts-logo {
-    height: $service-logo-height;
+    height: $cts-logo-height;
   }
 
   section {
@@ -47,7 +47,7 @@ main.home {
       background-color: $orange;
       border-radius: $corner-radius;
       display: block;
-      padding: $padding;
+      padding: (2 * $padding) / 3;
       width: auto;
 
       h3 {
