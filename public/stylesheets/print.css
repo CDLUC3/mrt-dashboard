@@ -5,36 +5,11 @@
   header {
     background: none;
   }
-  img {
-    break-inside: avoid;
-  }
   main {
     background: none;
     grid-auto-flow: row;
     grid-template-columns: 1fr;
     margin-right: auto;
-  }
-  section {
-    background: none;
-  }
-  footer {
-    background: none;
-    text-align: left;
-  }
-  footer nav {
-    display: none;
-  }
-  nav {
-    display: none;
-  }
-  section.lookup {
-    display: none;
-  }
-  div.breadcrumbs {
-    display: none;
-  }
-  div.home-background {
-    background: none;
   }
   main.home {
     background: none;
@@ -50,14 +25,39 @@
   main.home section.feature h2 {
     text-align: left;
   }
+  main.home section.feature p {
+    margin-left: 0;
+  }
   main.home section.feature img {
     margin-left: 0;
     margin-right: auto;
   }
-  main.home section.feature p {
-    margin-left: 0;
-  }
   main.home section.related-services h2 {
     text-align: left;
+  }
+  footer {
+    background: none;
+    text-align: left;
+  }
+  footer nav {
+    display: none;
+  }
+  section {
+    background: none;
+  }
+  section.lookup {
+    display: none;
+  }
+  nav {
+    display: none;
+  }
+  img {
+    break-inside: avoid;
+  }
+  div.breadcrumbs {
+    display: none;
+  }
+  div.home-background {
+    background: none;
   }
 }

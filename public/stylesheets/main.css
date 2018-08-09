@@ -694,22 +694,6 @@ header {
   width: 100%;
 }
 
-header div.masthead {
-  align-items: center;
-  display: flex;
-}
-
-header nav a {
-  color: inherit;
-  display: inline-block;
-  text-decoration: none;
-  width: 100%;
-}
-
-header nav a:hover {
-  text-decoration: underline;
-}
-
 header nav ul {
   margin: 0;
 }
@@ -727,6 +711,17 @@ header nav ul li.dropdown ul li {
   font-weight: normal;
 }
 
+header nav a {
+  color: inherit;
+  display: inline-block;
+  text-decoration: none;
+  width: 100%;
+}
+
+header nav a:hover {
+  text-decoration: underline;
+}
+
 header nav.login ul li {
   background-color: #f28d1e;
   border-radius: 6px;
@@ -736,6 +731,11 @@ header nav.login ul li {
 
 header nav.login ul li:hover {
   background-color: #f28d1e;
+}
+
+header div.masthead {
+  align-items: center;
+  display: flex;
 }
 
 main {
@@ -780,16 +780,28 @@ aside {
   width: 232px;
 }
 
+aside section ul {
+  list-style-type: square;
+}
+
+aside section ul li {
+  margin-left: 24px;
+}
+
+aside section:not(:last-child) {
+  margin-bottom: 24px;
+}
+
 aside p {
   font-size: smaller;
 }
 
-aside p img.tip-icon {
-  vertical-align: text-top;
-}
-
 aside p:not(:first-of-type) {
   margin-top: 0;
+}
+
+aside p img.tip-icon {
+  vertical-align: text-top;
 }
 
 aside table.properties {
@@ -799,22 +811,6 @@ aside table.properties {
 
 aside table.properties td {
   text-align: right;
-}
-
-aside section ul {
-  list-style-type: square;
-}
-
-aside section ul th {
-  max-width: min-content;
-}
-
-aside section ul li {
-  margin-left: 24px;
-}
-
-aside section:not(:last-child) {
-  margin-bottom: 24px;
 }
 
 nav ul {
@@ -848,12 +844,6 @@ p {
   margin-top: 12px;
 }
 
-p.error-message {
-  color: #bb0000;
-  font-size: larger;
-  font-weight: bold;
-}
-
 p.environment {
   color: #7c7e7f;
   font-weight: bold;
@@ -868,6 +858,12 @@ p.environment {
   z-index: 999;
 }
 
+p.error-message {
+  color: #bb0000;
+  font-size: larger;
+  font-weight: bold;
+}
+
 ul {
   padding: 0;
 }
@@ -875,6 +871,10 @@ ul {
 table {
   border-collapse: collapse;
   table-layout: auto;
+}
+
+table thead tr:last-child th {
+  border-bottom: 1px solid #7c7e7f;
 }
 
 table th {
@@ -886,21 +886,9 @@ table td {
   vertical-align: top;
 }
 
-table thead tr:last-child th {
-  border-bottom: 1px solid #7c7e7f;
-}
-
 table.main {
   font-size: smaller;
   width: 100%;
-}
-
-table.main th {
-  padding: 6px;
-}
-
-table.main td {
-  padding: 6px;
 }
 
 table.main tr:not(:last-child) th {
@@ -909,6 +897,14 @@ table.main tr:not(:last-child) th {
 
 table.main tr:not(:last-child) td {
   border-bottom: 1px solid #7c7e7f;
+}
+
+table.main th {
+  padding: 6px;
+}
+
+table.main td {
+  padding: 6px;
 }
 
 table.properties {
@@ -923,16 +919,16 @@ table.properties tbody th em {
   font-weight: normal;
 }
 
-table.properties tbody td {
-  padding-left: 12px;
-}
-
-table.properties th.table-section-header {
+table.properties tbody th.table-section-header {
   text-align: left;
 }
 
-table.properties th.table-section-header h3 {
+table.properties tbody th.table-section-header h3 {
   margin-top: 24px;
+}
+
+table.properties tbody td {
+  padding-left: 12px;
 }
 
 form table.properties {
@@ -949,10 +945,6 @@ form table.properties td {
   width: 75%;
 }
 
-img.ucop-logo {
-  height: 60px;
-}
-
 img.merritt-logo {
   height: 30px;
   vertical-align: bottom;
@@ -960,6 +952,10 @@ img.merritt-logo {
 
 img.tip-icon {
   height: 1.2em;
+}
+
+img.ucop-logo {
+  height: 60px;
 }
 
 a {
