@@ -2,6 +2,16 @@
 
 @media (min-width: $main-width-desktop) { // TODO: introduce 2-column layout
 
+  span.timestamp {
+    white-space: nowrap;
+  }
+
+  table.properties {
+    th {
+      white-space: nowrap;
+    }
+  }
+
   header {
     // TODO: can we get away with the same grid layout as _main-1col.scss here?
     grid-template-columns: minmax(min-content, auto) max-content;
@@ -127,6 +137,8 @@
   }
 
   main {
+    grid-auto-flow: column;
+    grid-template-columns: 1fr auto;
     width: $main-width-legacy;
   }
 

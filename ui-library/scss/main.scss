@@ -93,10 +93,6 @@ span.title {
   font-weight: bold;
 }
 
-span.timestamp {
-  white-space: nowrap;
-}
-
 ul {
   padding: 0;
 }
@@ -152,7 +148,6 @@ table.properties {
   tbody {
     th {
       text-align: right;
-      white-space: nowrap;
 
       em {
         font-weight: normal;
@@ -244,9 +239,7 @@ header {
 main {
   background-color: $lightgray;
   display: grid;
-  grid-auto-flow: column;
   grid-gap: $margin;
-  grid-template-columns: 1fr auto;
   margin: 0;
   padding: $padding;
 
