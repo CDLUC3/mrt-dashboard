@@ -88,7 +88,7 @@ describe 'objects' do
 
     it 'should let the user navigate to a version' do
       click_link(version_str)
-      expect(page).to have_content("#{obj.ark} - #{version_str}")
+      expect(page).to have_content("#{obj.ark} — #{version_str}")
     end
   end
 
