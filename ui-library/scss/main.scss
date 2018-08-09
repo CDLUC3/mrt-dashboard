@@ -337,8 +337,12 @@ footer {
   flex-grow: 999;
   width: 100%;
 
+  a {
+    text-decoration: underline;
+  }
+
   div.publication-info {
-    p:first-of-type {
+    p {
       margin-top: 0;
     }
   }

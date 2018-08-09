@@ -49,6 +49,7 @@ main.home {
       border-radius: $corner-radius;
       display: block;
       padding: $padding;
+      width: auto;
 
       h3 {
         margin-bottom: 0;
@@ -73,6 +74,11 @@ main.home {
   }
 
   section.feature {
+
+    a {
+      text-decoration: underline;
+    }
+
     h2 {
       margin-top: 0;
       text-align: center;
@@ -88,12 +94,13 @@ main.home {
     ul {
       display: block;
       list-style-type: none;
+      margin-bottom: 0;
       width: fit-content;
     }
 
     img {
       display: block;
-      margin: $margin auto;
+      margin: ($margin / 2) auto;
     }
   }
 
