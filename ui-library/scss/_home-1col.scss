@@ -4,6 +4,14 @@
   main.home {
     width: $main-width-1column;
 
+    section.related-services {
+      ul {
+        margin-left: auto;
+        margin-right: auto;
+        width: $service-logo-width;
+      }
+    }
+
     img.service-logo {
       max-height: $service-logo-height;
       max-width: $service-logo-width;
@@ -12,14 +20,6 @@
     h1 {
       img.merritt-logo {
         height: auto;
-        width: $service-logo-width;
-      }
-    }
-
-    section.related-services {
-      ul {
-        margin-left: auto;
-        margin-right: auto;
         width: $service-logo-width;
       }
     }

@@ -5,9 +5,10 @@
     grid-template-columns: repeat(3, 1fr);
     width: $main-width-desktop;
 
-    img.service-logo {
-      max-height: $service-logo-height;
-      max-width: $service-logo-width;
+    section.related-services {
+      ul {
+        grid-template-columns: repeat(3, 1fr);
+      }
     }
 
     h1 {
@@ -16,10 +17,9 @@
       }
     }
 
-    section.related-services {
-      ul {
-        grid-template-columns: repeat(3, 1fr);
-      }
+    img.service-logo {
+      max-height: $service-logo-height;
+      max-width: $service-logo-width;
     }
 
     @media screen {
@@ -28,7 +28,7 @@
         grid-column-start: 1;
         grid-template-columns: repeat(3, 1fr);
 
-        div {
+        section {
           font-size: medium;
           grid-column-end: 3;
           grid-column-start: 1;

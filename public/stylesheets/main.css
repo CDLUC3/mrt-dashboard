@@ -494,17 +494,17 @@
   main.home {
     width: 330px;
   }
+  main.home section.related-services ul {
+    margin-left: auto;
+    margin-right: auto;
+    width: 204px;
+  }
   main.home img.service-logo {
     max-height: 76.5px;
     max-width: 204px;
   }
   main.home h1 img.merritt-logo {
     height: auto;
-    width: 204px;
-  }
-  main.home section.related-services ul {
-    margin-left: auto;
-    margin-right: auto;
     width: 204px;
   }
 }
@@ -514,15 +514,15 @@
     grid-template-columns: repeat(3, 1fr);
     width: 708px;
   }
-  main.home img.service-logo {
-    max-height: 76.5px;
-    max-width: 204px;
+  main.home section.related-services ul {
+    grid-template-columns: repeat(3, 1fr);
   }
   main.home h1 img.merritt-logo {
     height: 60px;
   }
-  main.home section.related-services ul {
-    grid-template-columns: repeat(3, 1fr);
+  main.home img.service-logo {
+    max-height: 76.5px;
+    max-width: 204px;
   }
 }
 
@@ -532,7 +532,7 @@
     grid-column-start: 1;
     grid-template-columns: repeat(3, 1fr);
   }
-  main.home section.intro div {
+  main.home section.intro section {
     font-size: medium;
     grid-column-end: 3;
     grid-column-start: 1;
@@ -556,27 +556,10 @@
   }
 }
 
-div.home-background {
-  align-items: center;
-  background-color: #7c7e7f;
-  display: flex;
-  flex-direction: column;
-  min-height: max-content;
-  width: 100%;
-}
-
 main.home {
   background-color: #7c7e7f;
   grid-auto-flow: row;
   grid-template-columns: auto;
-}
-
-main.home h3 {
-  border: 0;
-}
-
-main.home img.cts-logo {
-  height: 86px;
 }
 
 main.home section {
@@ -590,11 +573,15 @@ main.home section.intro {
   grid-gap: 24px;
 }
 
-main.home section.intro div h1 {
+main.home section.intro section {
+  padding: 0;
+}
+
+main.home section.intro section h1 {
   margin-top: 0;
 }
 
-main.home section.intro div h2 {
+main.home section.intro section h2 {
   margin-bottom: 0;
 }
 
@@ -625,10 +612,6 @@ main.home section.intro aside ul li::before {
   content: '•';
 }
 
-main.home section.feature a {
-  text-decoration: underline;
-}
-
 main.home section.feature h2 {
   margin-top: 0;
   text-align: center;
@@ -646,6 +629,10 @@ main.home section.feature ul {
   list-style-type: none;
   margin-bottom: 0;
   width: fit-content;
+}
+
+main.home section.feature a {
+  text-decoration: underline;
 }
 
 main.home section.feature img {
@@ -668,6 +655,23 @@ main.home section.related-services ul {
 
 main.home section.related-services ul li {
   display: block;
+}
+
+main.home h3 {
+  border: 0;
+}
+
+main.home img.cts-logo {
+  height: 86px;
+}
+
+div.home {
+  align-items: center;
+  background-color: #7c7e7f;
+  display: flex;
+  flex-direction: column;
+  min-height: max-content;
+  width: 100%;
 }
 
 html {
@@ -945,6 +949,10 @@ form table.properties td {
   width: 75%;
 }
 
+a {
+  text-decoration: none;
+}
+
 img.merritt-logo {
   height: 30px;
   vertical-align: bottom;
@@ -956,10 +964,6 @@ img.tip-icon {
 
 img.ucop-logo {
   height: 60px;
-}
-
-a {
-  text-decoration: none;
 }
 
 span.title {

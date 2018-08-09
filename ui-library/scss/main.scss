@@ -306,6 +306,10 @@ form {
   }
 }
 
+a {
+  text-decoration: none;
+}
+
 img.merritt-logo {
   height: $merritt-logo-height;
   vertical-align: bottom;
@@ -317,10 +321,6 @@ img.tip-icon {
 
 img.ucop-logo {
   height: $ucop-logo-height;
-}
-
-a {
-  text-decoration: none;
 }
 
 span.title {
