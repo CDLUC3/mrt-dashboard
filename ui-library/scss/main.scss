@@ -246,6 +246,7 @@ main {
   display: grid;
   grid-auto-flow: column;
   grid-gap: $margin;
+  grid-template-columns: 1fr auto;
   margin: 0;
   padding: $padding;
 
