@@ -675,7 +675,7 @@ body {
   font-family: "Open Sans", "Neue Haas Grotesk", "Helvetica Neue", "Helvetica", "Nimbus Sans", "Nimbus Sans L", "Arial", sans-serif;
   font-size: smaller;
   height: 100%;
-  line-height: 1.4em;
+  line-height: 1.4;
   margin: 0;
 }
 
