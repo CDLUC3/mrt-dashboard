@@ -4,6 +4,10 @@
 @import 'main-3col';
 @import 'home';
 
+html {
+  height: 100%;
+}
+
 body {
   align-items: center;
   background-color: $lightgray;
@@ -12,6 +16,7 @@ body {
   flex-direction: column;
   font-family: $font-family;
   font-size: smaller;
+  height: 100%;
   line-height: 1.5;
   margin: 0;
 }
@@ -328,6 +333,7 @@ aside {
 
 footer {
   background: $midgray1;
+  flex-grow: 999;
   width: 100%;
 
   div.publication-info {
