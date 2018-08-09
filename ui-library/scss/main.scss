@@ -169,6 +169,27 @@ nav {
   }
 }
 
+nav.login {
+  height: $ucop-logo-height;
+  position: absolute;
+  right: 0;
+  top: 0;
+
+  ul {
+    margin-right: $margin / 2;
+    margin-top: $margin / 2;
+
+    li {
+      padding-bottom: 0;
+      padding-top: 0;
+
+      a {
+        margin-top: $margin / 4;
+      }
+    }
+  }
+}
+
 h2 {
   line-height: 1.2em;
   margin-bottom: 0;

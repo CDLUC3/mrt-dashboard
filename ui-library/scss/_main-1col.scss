@@ -26,28 +26,6 @@
       }
     }
 
-    nav.login {
-      height: $ucop-logo-height;
-      position: absolute;
-      right: 0;
-      top: 0;
-
-      ul {
-        margin-right: $margin / 2;
-        margin-top: $margin / 2;
-
-        li {
-          font-size: medium;
-          padding-bottom: 0;
-          padding-top: 0;
-
-          a {
-            margin-top: $margin / 4;
-          }
-        }
-      }
-    }
-
     nav.menu {
       height: $ucop-logo-height;
       position: absolute;
