@@ -521,6 +521,12 @@
   main.home h1 img.merritt-logo {
     height: 60px;
   }
+  main.home section.related-services ul {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media screen and (min-width: 708px) {
   main.home section.intro {
     grid-column-end: 4;
     grid-column-start: 1;
@@ -547,9 +553,6 @@
   main.home section.related-services {
     grid-column-end: 4;
     grid-column-start: 1;
-  }
-  main.home section.related-services ul {
-    grid-template-columns: repeat(3, 1fr);
   }
 }
 
@@ -648,10 +651,6 @@ main.home section.feature ul {
 main.home section.feature img {
   display: block;
   margin: 12px auto;
-}
-
-main.home section.related-services {
-  background-color: #f2f2f2;
 }
 
 main.home section.related-services h2 {
