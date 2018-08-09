@@ -1,5 +1,5 @@
-@import 'open-sans';
 @import 'globals';
+@import 'open-sans';
 @import 'main-1col';
 @import 'main-3col';
 @import 'home';
@@ -21,183 +21,13 @@ body {
   margin: 0;
 }
 
-a {
-  text-decoration: none;
-}
-
-p {
-  margin-bottom: 0;
-  margin-top: $margin / 2;
-}
-
-p.error-message {
-  color: $red;
-  font-size: larger;
-  font-weight: bold;
-}
-
-p.environment {
-  color: $darkgray;
-  font-weight: bold;
-  margin: 0;
-  opacity: .75;
-  padding: 0;
-  pointer-events: none;
-  position: fixed;
-  right: $margin / 8;
-  top: $margin / 8;
-  touch-action: none;
-  z-index: 999;
-}
-
-h2 {
-  line-height: 1.2em;
-  margin-bottom: 0;
-  margin-top: 0;
-}
-
-h3 {
-  border-bottom: 1px solid $midgray1;
-  font-size: 1em;
-  line-height: 1.2em;
-  margin-bottom: $margin / 2;
-}
-
-h3:first-child {
-  margin-top: 0;
-}
-
-h3.object-title {
-  font-weight: normal;
-}
-
-img.ucop-logo {
-  height: $ucop-logo-height;
-}
-
-img.merritt-logo {
-  height: $merritt-logo-height;
-  vertical-align: bottom;
-}
-
-img.tip-icon {
-  height: 1.2em;
-}
-
-div.breadcrumbs {
-  font-size: smaller;
-  margin-bottom: $margin / 2;
-}
-
-span.title {
-  font-weight: bold;
-}
-
-ul {
-  padding: 0;
-}
-
-table {
-  border-collapse: collapse;
-  table-layout: auto;
-
-  th {
-    text-align: left;
-    vertical-align: top;
-  }
-
-  td {
-    vertical-align: top;
-  }
-
-  thead {
-    tr:last-child {
-      th {
-        border-bottom: 1px solid $darkgray;
-      }
-    }
-  }
-}
-
-table.main {
-  font-size: smaller;
-  width: 100%;
-
-  th {
-    padding: $padding / 4;
-  }
-
-  td {
-    padding: $padding / 4;
-  }
-
-  tr:not(:last-child) {
-    th {
-      border-bottom: 1px solid $midgray2;
-    }
-
-    td {
-      border-bottom: 1px solid $darkgray;
-    }
-  }
-}
-
-table.properties {
-  margin-right: auto;
-
-  tbody {
-    th {
-      text-align: right;
-
-      em {
-        font-weight: normal;
-      }
-    }
-
-    td {
-      padding-left: $padding / 2;
-    }
-  }
-
-  th.table-section-header {
-    text-align: left;
-
-    h3 {
-      margin-top: $margin;
-    }
-  }
-}
-
-nav {
-  ul {
-    display: grid;
-    list-style-type: none;
-  }
-}
-
 header {
   align-items: center;
   background: linear-gradient($midgray1, $midgray2);
   display: grid;
   width: 100%;
 
-  div.masthead {
-    align-items: center;
-    display: flex;
-  }
-
   nav {
-    a {
-      color: inherit;
-      display: inline-block;
-      text-decoration: none;
-      width: 100%;
-    }
-
-    a:hover {
-      text-decoration: underline;
-    }
-
     ul {
       margin: 0;
 
@@ -218,6 +48,17 @@ header {
         }
       }
     }
+
+    a {
+      color: inherit;
+      display: inline-block;
+      text-decoration: none;
+      width: 100%;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
   }
 
   nav.login {
@@ -233,6 +74,11 @@ header {
         }
       }
     }
+  }
+
+  div.masthead {
+    align-items: center;
+    display: flex;
   }
 }
 
@@ -257,6 +103,193 @@ main {
   }
 }
 
+footer {
+  background: $midgray1;
+  flex-grow: 999;
+  width: 100%;
+
+  a {
+    text-decoration: underline;
+  }
+
+  div.publication-info {
+    p {
+      margin-top: 0;
+    }
+  }
+}
+
+aside {
+  display: flex;
+  flex-direction: column;
+  grid-gap: $margin;
+  width: $column-width + ($margin / 2); // ad-hoc to fit search instructions
+
+  section {
+    ul {
+      list-style-type: square;
+
+      li {
+        margin-left: $margin;
+      }
+    }
+  }
+
+  // fake grid-gap for flexbox
+  section:not(:last-child) {
+    margin-bottom: $margin;
+  }
+
+  p {
+    font-size: smaller;
+
+    &:not(:first-of-type) {
+      margin-top: 0;
+    }
+
+    img.tip-icon {
+      vertical-align: text-top;
+    }
+  }
+
+  table.properties {
+    font-size: smaller;
+    width: auto;
+
+    td {
+      text-align: right;
+    }
+  }
+}
+
+nav {
+  ul {
+    display: grid;
+    list-style-type: none;
+  }
+}
+
+h2 {
+  line-height: 1.2em;
+  margin-bottom: 0;
+  margin-top: 0;
+}
+
+h3 {
+  border-bottom: 1px solid $midgray1;
+  font-size: 1em;
+  line-height: 1.2em;
+  margin-bottom: $margin / 2;
+}
+
+h3:first-child {
+  margin-top: 0;
+}
+
+h3.object-title {
+  font-weight: normal;
+}
+
+p {
+  margin-bottom: 0;
+  margin-top: $margin / 2;
+}
+
+p.environment {
+  color: $darkgray;
+  font-weight: bold;
+  margin: 0;
+  opacity: .75;
+  padding: 0;
+  pointer-events: none;
+  position: fixed;
+  right: $margin / 8;
+  top: $margin / 8;
+  touch-action: none;
+  z-index: 999;
+}
+
+p.error-message {
+  color: $red;
+  font-size: larger;
+  font-weight: bold;
+}
+
+ul {
+  padding: 0;
+}
+
+table {
+  border-collapse: collapse;
+  table-layout: auto;
+
+  thead {
+    tr:last-child {
+      th {
+        border-bottom: 1px solid $darkgray;
+      }
+    }
+  }
+
+  th {
+    text-align: left;
+    vertical-align: top;
+  }
+
+  td {
+    vertical-align: top;
+  }
+}
+
+table.main {
+  font-size: smaller;
+  width: 100%;
+
+  tr:not(:last-child) {
+    th {
+      border-bottom: 1px solid $midgray2;
+    }
+
+    td {
+      border-bottom: 1px solid $darkgray;
+    }
+  }
+
+  th {
+    padding: $padding / 4;
+  }
+
+  td {
+    padding: $padding / 4;
+  }
+}
+
+table.properties {
+  margin-right: auto;
+
+  tbody {
+    th {
+      text-align: right;
+
+      em {
+        font-weight: normal;
+      }
+    }
+
+    th.table-section-header {
+      text-align: left;
+
+      h3 {
+        margin-top: $margin;
+      }
+    }
+
+    td {
+      padding-left: $padding / 2;
+    }
+  }
+}
+
 form {
   table.properties {
     margin-top: $margin / 2;
@@ -273,72 +306,35 @@ form {
   }
 }
 
+img.merritt-logo {
+  height: $merritt-logo-height;
+  vertical-align: bottom;
+}
+
+img.tip-icon {
+  height: 1.2em;
+}
+
+img.ucop-logo {
+  height: $ucop-logo-height;
+}
+
+a {
+  text-decoration: none;
+}
+
+span.title {
+  font-weight: bold;
+}
+
+div.breadcrumbs {
+  font-size: smaller;
+  margin-bottom: $margin / 2;
+}
+
 div.form-submit {
   border-top: 1px solid $midgray1;
   margin-top: $margin;
   padding-top: $padding / 2;
-}
-
-aside {
-  display: flex;
-  flex-direction: column;
-  grid-gap: $margin;
-  width: $column-width + ($margin / 2); // ad-hoc to fit search instructions
-
-  p {
-    font-size: smaller;
-
-    img.tip-icon {
-      vertical-align: text-top;
-    }
-
-    &:not(:first-of-type) {
-      margin-top: 0;
-    }
-  }
-
-  table.properties {
-    font-size: smaller;
-    width: auto;
-
-    td {
-      text-align: right;
-    }
-  }
-
-  section {
-    ul {
-      list-style-type: square;
-
-      th {
-        max-width: min-content;
-      }
-
-      li {
-        margin-left: $margin;
-      }
-    }
-  }
-
-  // fake grid-gap for flexbox
-  section:not(:last-child) {
-    margin-bottom: $margin;
-  }
-}
-
-footer {
-  background: $midgray1;
-  flex-grow: 999;
-  width: 100%;
-
-  a {
-    text-decoration: underline;
-  }
-
-  div.publication-info {
-    p {
-      margin-top: 0;
-    }
-  }
 }
 
