@@ -190,6 +190,17 @@ nav.login {
   }
 }
 
+nav.menu {
+  // sass-lint:disable-block no-ids, no-qualifying-elements
+  input#nav-menu {
+    display: none;
+  }
+
+  label.nav-menu-label {
+    display: none;
+  }
+}
+
 h2 {
   line-height: 1.2em;
   margin-bottom: 0;

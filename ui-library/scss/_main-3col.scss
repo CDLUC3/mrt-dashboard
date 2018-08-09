@@ -20,15 +20,6 @@
       grid-column-end: 3;
       grid-column-start: 1;
 
-      // sass-lint:disable no-ids, no-qualifying-elements
-      input#nav-menu {
-        display: none;
-      }
-
-      label.nav-menu-label {
-        display: none;
-      }
-
       ul {
         background-color: $midgray1;
         display: flex;
@@ -39,10 +30,6 @@
         // allows nested UL to calculate width
         position: relative;
 
-        a {
-          white-space: nowrap;
-        }
-
         ul {
           background-color: $midgray1;
           display: none;
@@ -51,6 +38,10 @@
           min-width: min-content;
           position: absolute;
           width: 100%;
+        }
+
+        a {
+          white-space: nowrap;
         }
 
         &:hover {
@@ -71,11 +62,13 @@
         content: ' \25bc'; // ▼
       }
 
+      // sass-lint:disable-block no-ids, no-qualifying-elements
       li#user-dropdown {
         position: absolute;
         right: 0;
       }
 
+      // sass-lint:disable-block no-ids, no-qualifying-elements
       li#user-dropdown:not(:hover) {
         // avoid jitter when highlighted
         border-right: 2px solid transparent;

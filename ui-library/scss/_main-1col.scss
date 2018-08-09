@@ -18,14 +18,6 @@
   }
 
   header {
-    div.masthead {
-      display: grid;
-
-      p {
-        padding-left: $padding / 2;
-      }
-    }
-
     nav.menu {
       height: $ucop-logo-height;
       position: absolute;
@@ -54,9 +46,8 @@
         }
       }
 
-      // sass-lint:disable no-ids, no-qualifying-elements
+      // sass-lint:disable-block no-ids, no-qualifying-elements
       input#nav-menu {
-        display: none;
         margin: 0;
 
         &:checked ~ ul {
@@ -89,6 +80,14 @@
 
       &:last-of-type {
         border-bottom: 1px solid $midgray1;
+      }
+    }
+
+    div.masthead {
+      display: grid;
+
+      p {
+        padding-left: $padding / 2;
       }
     }
   }
