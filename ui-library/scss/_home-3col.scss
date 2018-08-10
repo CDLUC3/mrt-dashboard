@@ -5,6 +5,10 @@
     grid-template-columns: repeat(3, 1fr);
     width: $main-width-desktop;
 
+    section.feature {
+      width: $column-width - (2 * $padding);
+    }
+
     section.related-services {
       ul {
         grid-template-columns: repeat(3, 1fr);

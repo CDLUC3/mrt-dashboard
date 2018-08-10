@@ -463,6 +463,9 @@
     grid-template-columns: repeat(3, 1fr);
     width: 708px;
   }
+  main.home section.feature {
+    width: 172px;
+  }
   main.home section.related-services ul {
     grid-template-columns: repeat(3, 1fr);
   }
@@ -621,6 +624,137 @@ div.home {
   flex-direction: column;
   min-height: max-content;
   width: 100%;
+}
+
+@media screen and (-ms-high-contrast: active), screen and (-ms-high-contrast: none) {
+  div.masthead {
+    -ms-grid-columns: 103px 12px 128px auto;
+    display: -ms-grid;
+  }
+  div.masthead img.ucop-logo {
+    -ms-grid-column: 1;
+    width: 103px;
+  }
+  div.masthead img.ucop-logo-divider {
+    -ms-grid-column: 2;
+    width: 12px;
+  }
+  div.masthead img.merritt-logo {
+    -ms-grid-column: 3;
+    width: 128px;
+  }
+  header nav li.dropdown a {
+    background-color: #d8d8d9;
+  }
+  header nav li.dropdown a:hover {
+    background-color: #f2f2f2;
+  }
+  main {
+    -ms-grid-columns: 656px 24px 232px;
+    display: -ms-grid;
+  }
+  main section {
+    -ms-grid-column: 1;
+  }
+  main aside {
+    -ms-grid-column: 3;
+  }
+  main.home {
+    -ms-grid-columns: 220px 24px 220px 24px 220px;
+    -ms-grid-rows: 488px 24px 288px 24px 336px;
+  }
+  main.home section.intro {
+    -ms-grid-column: 1;
+    -ms-grid-column-span: 5;
+    -ms-grid-columns: 440px 24px 196px;
+    -ms-grid-row: 1;
+    -ms-grid-rows: 120px 320px;
+    display: -ms-grid;
+  }
+  main.home section.intro section {
+    -ms-grid-row-span: 2;
+  }
+  main.home section.intro aside {
+    -ms-grid-column: 3;
+    -ms-grid-row: 2;
+  }
+  main.home section#ie-learn-more {
+    -ms-grid-column: 1;
+    -ms-grid-row: 3;
+  }
+  main.home section#ie-request-account {
+    -ms-grid-column: 3;
+    -ms-grid-row: 3;
+  }
+  main.home section#ie-trusted-repository {
+    -ms-grid-column: 5;
+    -ms-grid-row: 3;
+  }
+  main.home section.related-services {
+    -ms-grid-column: 1;
+    -ms-grid-column-span: 5;
+    -ms-grid-row: 5;
+  }
+  main.home section.related-services ul {
+    -ms-grid-columns: 204px 24px 204px 24px 204px;
+    -ms-grid-rows: 80px 24px 80px;
+    display: -ms-grid;
+  }
+  main.home section.related-services ul li {
+    display: block;
+    padding: 6px;
+  }
+  main.home section.related-services ul li#ie-uc3-logo {
+    -ms-grid-column: 1;
+    -ms-grid-row: 1;
+  }
+  main.home section.related-services ul li#ie-uc3-logo img {
+    height: 76px;
+    width: 176px;
+  }
+  main.home section.related-services ul li#ie-calisphere-logo {
+    -ms-grid-column: 3;
+    -ms-grid-row: 1;
+  }
+  main.home section.related-services ul li#ie-calisphere-logo img {
+    height: 42px;
+    width: 204px;
+  }
+  main.home section.related-services ul li#ie-cdl-logo {
+    -ms-grid-column: 5;
+    -ms-grid-row: 1;
+  }
+  main.home section.related-services ul li#ie-cdl-logo img {
+    height: 75px;
+    width: 204px;
+  }
+  main.home section.related-services ul li#ie-ezid-logo {
+    -ms-grid-column: 1;
+    -ms-grid-row: 3;
+  }
+  main.home section.related-services ul li#ie-ezid-logo img {
+    height: 31px;
+    width: 204px;
+  }
+  main.home section.related-services ul li#ie-dash-logo {
+    -ms-grid-column: 3;
+    -ms-grid-row: 3;
+  }
+  main.home section.related-services ul li#ie-dash-logo img {
+    height: 40px;
+    width: 140px;
+  }
+  main.home section.related-services ul li#ie-escholarship-logo {
+    -ms-grid-column: 5;
+    -ms-grid-row: 3;
+  }
+  main.home section.related-services ul li#ie-escholarship-logo img {
+    height: 63px;
+    width: 204px;
+  }
+  footer nav ul {
+    display: -ms-flexbox;
+  }
 }
 
 html {
@@ -941,6 +1075,10 @@ img.tip-icon {
 }
 
 img.ucop-logo {
+  height: 60px;
+}
+
+img.ucop-logo-divider {
   height: 60px;
 }
 

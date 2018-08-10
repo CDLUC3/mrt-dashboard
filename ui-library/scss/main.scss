@@ -3,6 +3,7 @@
 @import 'main-1col';
 @import 'main-3col';
 @import 'home';
+@import 'ie10';
 
 html {
   height: 100%;
@@ -352,6 +353,10 @@ img.tip-icon {
 }
 
 img.ucop-logo {
+  height: $ucop-logo-height;
+}
+
+img.ucop-logo-divider {
   height: $ucop-logo-height;
 }
 
