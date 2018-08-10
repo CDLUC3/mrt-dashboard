@@ -53,7 +53,7 @@ module ApplicationHelper
 
   # Return true if a user is logged in
   def user_logged_in?
-    !session[:uid].blank?
+    !current_user.nil?
   end
 
   # Return true if logged in as guest
@@ -63,6 +63,6 @@ module ApplicationHelper
 
   # Return true if user has choosen a group
   def group_choosen?
-    !session[:group_id].nil?
+    !current_group.nil?
   end
 end
