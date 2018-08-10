@@ -2,8 +2,10 @@
 @import 'home-1col';
 @import 'home-3col';
 
+$home-bg-color: $slateblue;
+
 main.home {
-  background-color: $darkgray;
+  background-color: $home-bg-color;
   grid-auto-flow: row;
   grid-template-columns: auto;
 
@@ -119,7 +121,7 @@ main.home {
 
 div.home {
   align-items: center;
-  background-color: $darkgray;
+  background-color: $home-bg-color;
   display: flex;
   flex-direction: column;
   min-height: max-content;

@@ -262,30 +262,6 @@
   nav ul li {
     padding: 12px;
   }
-  header div.masthead {
-    display: grid;
-  }
-  header div.masthead p {
-    padding-left: 12px;
-  }
-  header nav.login {
-    height: 60px;
-    position: absolute;
-    right: 0;
-    top: 0;
-  }
-  header nav.login ul {
-    margin-right: 12px;
-    margin-top: 12px;
-  }
-  header nav.login ul li {
-    font-size: medium;
-    padding-bottom: 0;
-    padding-top: 0;
-  }
-  header nav.login ul li a {
-    margin-top: 6px;
-  }
   header nav.menu {
     height: 60px;
     position: absolute;
@@ -310,7 +286,6 @@
     white-space: nowrap;
   }
   header nav.menu input#nav-menu {
-    display: none;
     margin: 0;
   }
   header nav.menu input#nav-menu:checked ~ ul {
@@ -336,6 +311,12 @@
   }
   header nav.menu > ul > li:last-of-type {
     border-bottom: 1px solid #d8d8d9;
+  }
+  header div.masthead {
+    display: grid;
+  }
+  header div.masthead p {
+    padding-left: 12px;
   }
   main {
     width: 330px;
@@ -364,59 +345,15 @@
 }
 
 @media (min-width: 708px) {
-  span.timestamp {
-    white-space: nowrap;
-  }
-  table.properties th {
-    white-space: nowrap;
-  }
-  header {
-    grid-template-columns: minmax(min-content, auto) max-content;
-  }
-  header div.masthead {
-    align-items: center;
-    display: flex;
-    grid-column-end: 2;
-    grid-column-start: 1;
-  }
   header nav ul li {
     padding: 6px 12px;
   }
   header nav ul li:hover {
     background: #f2f2f2;
   }
-  header nav.login {
-    background: none;
-    grid-column-end: 3;
-    grid-column-start: 2;
-    justify-items: end;
-  }
-  header nav.login ul {
-    margin-right: 24px;
-  }
-  header nav.login ul li {
-    align-items: center;
-    display: flex;
-    justify-content: center;
-    padding: 0;
-  }
-  header nav.login ul li a {
-    display: block;
-    padding-left: 24px;
-    padding-right: 24px;
-  }
-  header nav.login ul li:hover {
-    background: inherit;
-  }
   header nav.menu {
     grid-column-end: 3;
     grid-column-start: 1;
-  }
-  header nav.menu input#nav-menu {
-    display: none;
-  }
-  header nav.menu label.nav-menu-label {
-    display: none;
   }
   header nav.menu ul {
     background-color: #d8d8d9;
@@ -426,9 +363,6 @@
   header nav.menu li.dropdown {
     position: relative;
   }
-  header nav.menu li.dropdown a {
-    white-space: nowrap;
-  }
   header nav.menu li.dropdown ul {
     background-color: #d8d8d9;
     display: none;
@@ -437,6 +371,9 @@
     min-width: min-content;
     position: absolute;
     width: 100%;
+  }
+  header nav.menu li.dropdown a {
+    white-space: nowrap;
   }
   header nav.menu li.dropdown:hover {
     border-right: 2px solid #f2f2f2;
@@ -459,6 +396,12 @@
   }
   header nav.menu span.login-message::after {
     content: ' \25bc';
+  }
+  header div.masthead {
+    align-items: center;
+    display: flex;
+    grid-column-end: 2;
+    grid-column-start: 1;
   }
   main {
     grid-auto-flow: column;
@@ -487,6 +430,12 @@
   }
   footer nav ul li:not(:last-of-type) {
     border-right: 1px solid #7c7e7f;
+  }
+  table.properties th {
+    white-space: nowrap;
+  }
+  span.timestamp {
+    white-space: nowrap;
   }
 }
 
@@ -557,7 +506,7 @@
 }
 
 main.home {
-  background-color: #7c7e7f;
+  background-color: #708090;
   grid-auto-flow: row;
   grid-template-columns: auto;
 }
@@ -667,7 +616,7 @@ main.home img.cts-logo {
 
 div.home {
   align-items: center;
-  background-color: #7c7e7f;
+  background-color: #708090;
   display: flex;
   flex-direction: column;
   min-height: max-content;
@@ -820,6 +769,35 @@ aside table.properties td {
 nav ul {
   display: grid;
   list-style-type: none;
+}
+
+nav.login {
+  height: 60px;
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
+nav.login ul {
+  margin-right: 12px;
+  margin-top: 12px;
+}
+
+nav.login ul li {
+  padding-bottom: 0;
+  padding-top: 0;
+}
+
+nav.login ul li a {
+  margin-top: 6px;
+}
+
+nav.menu input#nav-menu {
+  display: none;
+}
+
+nav.menu label.nav-menu-label {
+  display: none;
 }
 
 h2 {
