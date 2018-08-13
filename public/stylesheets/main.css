@@ -368,9 +368,9 @@
     display: none;
     margin-left: -12px;
     margin-top: 6px;
-    min-width: min-content;
+    min-width: 100%;
     position: absolute;
-    width: 100%;
+    width: auto;
   }
   header nav.menu li.dropdown a {
     white-space: nowrap;
@@ -643,12 +643,6 @@ div.home {
     -ms-grid-column: 3;
     width: 128px;
   }
-  header nav li.dropdown a {
-    background-color: #d8d8d9;
-  }
-  header nav li.dropdown a:hover {
-    background-color: #f2f2f2;
-  }
   main {
     -ms-grid-columns: 656px 24px 232px;
     display: -ms-grid;
@@ -754,6 +748,11 @@ div.home {
   }
   footer nav ul {
     display: -ms-flexbox;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  a img {
+    border: 0;
   }
 }
 

@@ -35,9 +35,9 @@
           display: none;
           margin-left: -($margin / 2);
           margin-top: ($margin / 4);
-          min-width: min-content;
+          min-width: 100%;
           position: absolute;
-          width: 100%;
+          width: auto;
         }
 
         a {
