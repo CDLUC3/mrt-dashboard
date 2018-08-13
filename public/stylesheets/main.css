@@ -757,50 +757,58 @@ div.home {
 }
 
 @supports not (display: grid) {
-  main {
-    display: flex;
-  }
-  main section {
-    width: 660px;
-  }
   main aside {
-    margin-left: 24px;
-    width: 244px;
+    padding-top: 12px;
   }
-  main.home {
-    flex-direction: column;
+  main.home section {
+    width: auto;
   }
-  main.home section.intro {
-    width: 100%;
+  main.home section.intro section {
+    width: auto;
   }
   main.home section.intro aside {
     margin-top: 24px;
   }
   main.home section.feature {
     margin-top: 24px;
-    width: 100%;
-  }
-  main.home section.feature h2 {
-    text-align: left;
-  }
-  main.home section.feature img {
-    margin-left: 0;
+    width: auto;
   }
   main.home section.related-services {
     margin-top: 24px;
-    width: 100%;
+    width: auto;
   }
-  main.home section.related-services ul {
-    align-items: start;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-  }
-  main.home section.related-services ul li {
-    margin: 12px;
-  }
-  footer nav ul {
-    display: flex;
+  @media (min-width: 708px) {
+    main {
+      display: flex;
+    }
+    main section {
+      width: 660px;
+    }
+    main aside {
+      margin-left: 24px;
+      width: 244px;
+    }
+    main.home {
+      flex-direction: column;
+    }
+    main.home section.feature h2 {
+      text-align: left;
+    }
+    main.home section.feature img {
+      margin-left: 0;
+    }
+    main.home section.related-services ul {
+      align-items: start;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+    }
+    main.home section.related-services ul li {
+      margin: 12px;
+    }
+    footer nav ul {
+      display: flex;
+    }
   }
 }
 
