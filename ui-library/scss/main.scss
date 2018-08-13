@@ -21,6 +21,7 @@ body {
   height: 100%;
   line-height: 1.4;
   margin: 0;
+  min-height: min-content;
 }
 
 header {
@@ -281,7 +282,7 @@ table.main {
 
   tr:not(:last-child) {
     th {
-      border-bottom: 1px solid $midgray2;
+      border-bottom: 1px solid $midgray1;
     }
 
     td {

@@ -827,6 +827,7 @@ body {
   height: 100%;
   line-height: 1.4;
   margin: 0;
+  min-height: min-content;
 }
 
 header {
@@ -1063,7 +1064,7 @@ table.main {
 }
 
 table.main tr:not(:last-child) th {
-  border-bottom: 1px solid #e4e4e4;
+  border-bottom: 1px solid #d8d8d9;
 }
 
 table.main tr:not(:last-child) td {
