@@ -1,224 +1,63 @@
-/* 
-    Document   : print.css
-
-*/
-
-/* 
-   TODO customize this sample style
-   Syntax recommendation http://www.w3.org/TR/REC-CSS2/
-*/
-
-/* Overall styles */
-
-root { 
-    display: block;
-}
-
-
-.grid_11 {
-  font-family: Helvetica, Verdana, Tahoma, Arial, sans-serif;
-  font-size: 12px; 
-}
-
-.sidebar {
-  display: none;
-}
-
-.menu {
-  display: none;
-}
-
-
-.head_right {
-  display: none;
-}
-
-
-.breadcrumbs {
-  display: none;
-}
-
-.foot_full {
+@media print {
+  body {
+    background: none;
+  }
+  header {
+    background: none;
+  }
+  main {
+    background: none;
+    grid-auto-flow: row;
+    grid-template-columns: 1fr;
+    margin-right: auto;
+  }
+  main.home {
+    background: none;
+    grid-auto-flow: row;
+    grid-template-columns: 1fr;
+  }
+  main.home section {
+    background: none;
+  }
+  main.home section.intro aside {
+    background: #f2f2f2;
+  }
+  main.home section.feature h2 {
+    text-align: left;
+  }
+  main.home section.feature p {
+    margin-left: 0;
+  }
+  main.home section.feature img {
+    margin-left: 0;
+    margin-right: auto;
+  }
+  main.home section.related-services h2 {
+    text-align: left;
+  }
+  footer {
+    background: none;
+    text-align: left;
+  }
+  footer nav {
     display: none;
-}
-
-
-.centered {
-    display: block;
-    margin-left: auto;
-    margin-right: auto 
-}
-
-
-h1 {
-  display: block;
-  font: 26px Helvetica, Arial;
-  color: #363636;
-  margin-top: 20px;
-}
-
-h2 {
-  display: block;
-  margin-top: 20px;
-  font: 18px Helvetica, Arial;
-  color: #363636;
-  margin-bottom: 5px;
-}
-
-h3 {
-  display: block;
-  width: 100%;
-  border-bottom-color: #cccccc;
-  border-bottom-style: solid;
-  border-bottom-width: 1px;
-  font: 16px Helvetica, Arial;
-  color: #363636;
-  margin-top: 25px;
-  margin-bottom: 5px;
-}
-
-a {
-  text-decoration: none;
-}
-
-/* form styles */
-/* for 2 column forms */
-div.left_label {
-  margin-top: 0.25em;
-  margin-bottom:0.25em;
-  margin-right:0.5em;
-  display: block;
-  clear: left;
-  float:left;
-  width: 150px;
-  text-align: right;
-}
-
-div.right_field {
-  margin-top: 0.25em;
-  margin-bottom:0.25em;
-  display: block;
-  float: left;
-  width: 250px;
-  text-align: left;
-}
-
-/* for 3 column forms with help icon to the side
-add this to the side of right_field to add another column*/
-div.short_text_description {
-  margin-top: 0.25em;
-  margin-bottom:0.25em;
-  float: left;
-  clear: right;
-  height: 1.2em;
-  width:12em;
-  vertical-align: text-bottom;
-}
-
-/* for 3 column radio buttons with help icon to the side
-contain the short_option and short_option_description within
-option_container in place of "right_field" */
-
-div.option_container {
-  float: left;
-  margin-top: 0.25em;
-  margin-bottom: 0.25em;
-}
-
-div.short_option {
-  float:left;
-  clear:left;
-  height:1.2em;
-  width:8em;
-}
-
-div.short_option_description {
-  float: left;
-  clear: right;
-  height: 1.2em;
-  width:12em;
-  vertical-align: text-bottom;
-}
-
-/* normal key-value styles */
-div.key {
-  /*margin-top: 0.25em;
-  margin-bottom:0.25em; */
-  font-weight: bold;
-  margin-right:0.5em;
-  display: block;
-  clear: left;
-  float:left;
-  width: 200px;
-  text-align: right;
-}
-
-div.value {
-  /* margin-top: 0.25em;
-  margin-bottom:0.25em; */
-  display: block;
-  float: left;
-  width: 420px;
-  text-align: left;
-}
-
-dl {
-  width:100%; 
-} 
-
-dt {
- float: left;
- clear: left;
- width: 150px;
- text-align: right;
- font-weight: bold;
- padding: 5px;
-}
-
-dd {
- margin: 0 0 0 160px;
- padding: 5px;
-}
-
-
-/* table styles */
-table{
-    border-collapse:collapse;
-  font-size: 11px;
-}
-
-table, th {
-    /*border: 1px solid #cccccc;*/
-  border:0;
-}
-
-th {
-  text-align: left;
-  vertical-align: top;
-  font-weight: bold;
-  border-bottom: 1px solid #363636;
-  color: #1C1C1C;
-  padding-left: 5px;
-}
-tr {
-  /*border-top:1px solid #1C1C1C;*/
-}
-
-tr.even, tr.even td {
-  background-color: #ffffff;
-}
-
-tr.odd, tr.odd td {
-  background-color: #ffffff;
-}
-
-td {
-  border-top:1px solid #b5b5b5;
-  text-align: left;
-  vertical-align: top;
-  padding: 5px;
-  padding-bottom: 8px;
-  border-bottom:0;
-  border-left:0;
-  border-right:0;
+  }
+  section {
+    background: none;
+  }
+  section.lookup {
+    display: none;
+  }
+  nav {
+    display: none;
+  }
+  img {
+    break-inside: avoid;
+  }
+  div.breadcrumbs {
+    display: none;
+  }
+  div.home {
+    background: none;
+  }
 }

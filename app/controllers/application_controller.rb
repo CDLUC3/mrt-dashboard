@@ -65,16 +65,15 @@ class ApplicationController < ActionController::Base
 
   # Returns true if the user can upload to the session group
   def current_user_can_write_to_collection?
-    current_group.user_has_permission?(current_uid, 'write')
+    session[:group_id] && current_group.user_has_permission?(current_uid, 'write')
   end
 
   # Return the groups which the user may be a member of
   def available_groups
-    groups = current_user.groups.sort_by { |g| g.description.downcase } || []
-    groups.map do |group|
-      { id:               group.id,
-        description:      group.description,
-        user_permissions: group.user_permissions(current_user.login) }
+    @available_groups ||= begin
+      current_user.groups
+        .sort_by { |g| g.description.downcase }
+        .map { |g| { id: g.id, description: g.description, user_permissions: g.user_permissions(current_user.login) } }
     end
   end
 
@@ -114,6 +113,7 @@ class ApplicationController < ActionController::Base
   def require_user_or_401
     render(status: 401, text: '') && return unless current_user
   end
+
   # :nocov:
 
   def current_group

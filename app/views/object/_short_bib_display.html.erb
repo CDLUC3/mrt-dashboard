@@ -7,5 +7,5 @@
 <% end %>
 
 <% if !dc_nice(short_bib_display.current_version.dk_when).blank? %>
-  (<%= dc_nice(short_bib_display.current_version.dk_when) %>)
+  <span class="timestamp">(<%= dc_nice(short_bib_display.current_version.dk_when) %>)</span>
 <% end %>

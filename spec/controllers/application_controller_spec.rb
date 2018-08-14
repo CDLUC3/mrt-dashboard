@@ -13,6 +13,38 @@ describe ApplicationController do
     end
   end
 
+  describe ':available_groups' do
+    attr_reader :user_id
+
+    before(:each) do
+      @user_id = mock_user(name: 'Jane Doe', password: 'correcthorsebatterystaple')
+      controller.session[:uid] = user_id
+    end
+
+    it 'returns [] if no groups' do
+      groups = controller.send(:available_groups)
+      expect(groups).to eq([])
+    end
+
+    it 'returns each group as a hash' do
+      collections = Array.new(3) do |i|
+        collection = create(:private_collection, name: "Collection #{i}", mnemonic: "collection #{i}")
+        mock_ldap_for_collection(collection)
+        collection
+      end
+      mock_permissions_all(user_id, collections.map(&:mnemonic))
+
+      groups = controller.send(:available_groups)
+      expect(groups.size).to eq(collections.size)
+      collections.each_with_index do |collection, i|
+        group = groups[i]
+        expect(group[:id]).to eq(collection.mnemonic)
+        expect(group[:description]).to eq(collection.name)
+        expect(group[:user_permissions]).to eq(PERMISSIONS_ALL)
+      end
+    end
+  end
+
   describe ':current_user' do
     attr_reader :user_id
     attr_reader :password

@@ -1,0 +1,89 @@
+@import 'globals';
+
+@media print {
+  body {
+    background: none;
+  }
+
+  header {
+    background: none;
+  }
+
+  main {
+    background: none;
+    grid-auto-flow: row;
+    grid-template-columns: 1fr;
+    margin-right: auto;
+  }
+
+  main.home {
+    background: none;
+    grid-auto-flow: row;
+    grid-template-columns: 1fr;
+
+    section {
+      background: none;
+    }
+
+    section.intro {
+      aside {
+        background: $lightgray;
+      }
+    }
+
+    section.feature {
+      h2 {
+        text-align: left;
+      }
+
+      p {
+        margin-left: 0;
+      }
+
+      img {
+        margin-left: 0;
+        margin-right: auto;
+      }
+    }
+
+    section.related-services {
+      h2 {
+        text-align: left;
+      }
+    }
+  }
+
+  footer {
+    background: none;
+    text-align: left;
+
+    nav {
+      display: none;
+    }
+  }
+
+  section {
+    background: none;
+  }
+
+  section.lookup {
+    display: none;
+  }
+
+  nav {
+    display: none;
+  }
+
+  img {
+    // doesn't currently work but let's try it anyway
+    break-inside: avoid;
+  }
+
+  div.breadcrumbs {
+    display: none;
+  }
+
+  div.home {
+    background: none;
+  }
+}

@@ -25,11 +25,13 @@ describe 'profile' do
   end
 
   it 'should have a profile link' do
+    find('#user-dropdown').hover
     expect(page).to have_content('Profile')
   end
 
   describe 'profile link' do
     before(:each) do
+      find('#user-dropdown').hover
       click_link('Profile')
     end
 
@@ -46,7 +48,6 @@ describe 'profile' do
     it 'should allow the user to change their telephone number' do
       new_number = '+1 999-958-5555'
 
-      click_link('Profile')
       fill_in('telephonenumber', with: new_number)
 
       allow(User::LDAP).to receive(:replace_attribute).with(user_id, any_args).and_return(true)
@@ -58,7 +59,6 @@ describe 'profile' do
     it 'should allow the user to delete their telephone number' do
       new_number = ''
 
-      click_link('Profile')
       fill_in('telephonenumber', with: new_number)
 
       allow(User::LDAP).to receive(:replace_attribute).with(user_id, any_args).and_return(true)
@@ -68,7 +68,6 @@ describe 'profile' do
     end
 
     it 'should allow the user to change their time zone' do
-      click_link('Profile')
       select('Europe/Helsinki', from: 'tzregion')
 
       allow(User::LDAP).to receive(:replace_attribute).with(user_id, any_args).and_return(true)
@@ -86,7 +85,6 @@ describe 'profile' do
     end
 
     it 'should allow the user to change their password' do
-      click_link('Profile')
       new_password = 'elvis'
       fill_in('userpassword', with: new_password)
       fill_in('repeatuserpassword', with: new_password)
@@ -97,7 +95,6 @@ describe 'profile' do
     end
 
     it 'should require passwords to match' do
-      click_link('Profile')
       fill_in('userpassword', with: 'elvis')
       fill_in('repeatuserpassword', with: 'not elvis')
       allow(User::LDAP).to receive(:replace_attribute).with(user_id, any_args).and_return(true)

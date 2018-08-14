@@ -1,7 +1,8 @@
-<% content_for :title do %>
+<% content_for(:title) do %>
   UC3 Merritt Home
 <% end %>
 
+<% content_for(:extra_head) do %>
 <!-- Merritt monitoring test code. Please do not remove this comment since
 it will cause the monitoring scripts to fail.
 
@@ -10,35 +11,130 @@ it will cause the monitoring scripts to fail.
  - monitoring string SwuV4tac
 
 -->
+<% end %>
 
-<div class="grid_16 home">
-<div class="clear"></div>
+<div class="home">
+  <main class="home">
+    <section class="intro">
+      <section>
+        <h1>
+          <img class="merritt-logo" src="/images/logos/merritt-logo.svg" alt="Merritt"/>
+        </h1>
+        <h2>A trusted, cost-effective digital preservation repository</h2>
+        <p>
+          Merritt is an open-source digital preservation repository maintained by the University of
+          California Curation Center (UC3) at the California Digital Library (CDL).
+        </p>
+        <p>
+          Merritt is designed for both restricted access (also known as “dark archive”) and open public access to
+          digital content. Merritt provides multiple methods for deposit, supports multiple metadata formats, and
+          provides preservation functions and reporting.
+        </p>
+        <p>
+          Merritt is available to all members of the University of California community to assist in
+          managing, archiving, and/or sharing digital content.
+        </p>
+      </section>
 
-<div class="grid_11">
-  <%= render :partial => '/shared/flash_show' %>
+      <aside>
+        <h3>
+          Merritt’s preservation repository ensures:
+        </h3>
+        <ul>
+          <li>
+            Long-term preservation assurance for your digital content
+          </li>
+          <li>
+            Trusted repository support for both dark archives and retrieval copies
+          </li>
+          <li>
+            Low-cost, high-quality option for meeting data sharing and preservation requirements of
+            grant-funded projects
+          </li>
+        </ul>
+      </aside>
+    </section>
 
-<p>Merritt is a new cost-effective repository service from the University of California Curation Center (UC3) that lets the UC community manage, archive, and share its valuable digital content.  Use Merritt to provide long-term preservation of digital assets, share your research with others or meet the data sharing and preservation requirements of a grant-funded project. </p>
+    <section class="feature" id="ie-learn-more">
+      <h2>Learn More</h2>
+      <p>
+        Merritt can help you manage, preserve, and provide access to your digital content. Read more
+        information about how Merritt works:
+      </p>
+      <ul>
+        <li><a href="https://github.com/CDLUC3/mrt-doc/wiki/User-documentation">User Documentation</a></li>
+        <li><a href="https://github.com/CDLUC3/mrt-doc/wiki/Technical-Documentation">Technical
+          Documentation</a></li>
+      </ul>
+    </section>
 
-<p>Merritt is built upon a Micro-Services approach to digital curation based on devolving curation function into a set of independent, but interoperable, services that embody curation values and strategies. Since each of the services is small and self-contained, they are collectively easier to develop, deploy, maintain, and enhance.  This design approach is detailed in the <a href="https://confluence.ucop.edu/download/attachments/13860983/UC3-Foundations-latest.pdf?version=1" target="_blank">UC3 Curation Foundations</a> paper.</p>
+    <section class="feature" id="ie-request-account">
+      <h2>Request Account</h2>
+      <p>
+        Merritt is available for use by libraries, archives, museums, academic departments,
+        laboratories, and other organizational units of the University of California.
+      </p>
+      <ul>
+        <li><a href="https://www.cdlib.org/services/uc3/contact.html">Contact us for an account</a>
+        </li>
+      </ul>
+    </section>
 
+    <section class="feature" id="ie-trusted-repository">
+      <h2>Trusted Repository</h2>
+      <a href="https://www.coretrustseal.org/wp-content/uploads/2018/08/UC3-Merritt.pdf">
+        <img class="cts-logo" src="/images/logos/cts-logo.svg" alt="CoreTrustSeal certification (PDF)"/>
+      </a>
+      <p>Merritt is a CoreTrustSeal-certified digital repository.</p>
+      <ul>
+        <li>
+          <a href="https://www.coretrustseal.org/wp-content/uploads/2018/08/UC3-Merritt.pdf">Learn more about Merritt’s
+            CoreTrustSeal certification</a>
+        </li>
+      </ul>
+    </section>
 
-<h2>Learn more about Merritt:</h2>
-<ul>
-  <li><%= link_to("Handout: Merritt Uses and FAQ", "/docs/merritt_handout.pdf") %></li>
-  <li><%= link_to("Merritt User Guide", "/docs/merritt_user_guide.pdf") %></li>
-</ul>
+    <section class="related-services">
+      <h2>Related CDL Services</h2>
 
-<h2>Need a Merritt Account?</h2>
-<p>Fill out the <a href="http://www.cdlib.org/services/uc3/contact.html">Contact UC3 form</a> or email <strong>uc3@ucop.edu</strong>.</p>
+      <p>
+        Merritt serves as the preservation repository for many library and archival projects across the University of
+        California. This includes a number of products and services offered by California Digital Library (CDL) and
+        University of California Curation Center (UC3).
+      </p>
 
-<br />
-<br />
-<br />
-
+      <ul>
+        <li id="ie-uc3-logo">
+          <a href="https://uc3.cdlib.org/"><img class="service-logo"
+                                                src="/images/logos/uc3-logo.svg"
+                                                alt="UC Curation Center logo"/></a>
+        </li>
+        <li id="ie-calisphere-logo">
+          <a href="https://calisphere.org/"><img class="service-logo"
+                                                 src="/images/logos/calisphere-logo.svg"
+                                                 alt="Calisphere logo"/></a>
+        </li>
+        <li id="ie-cdl-logo">
+          <a href="https://www.cdlib.org/"><img class="service-logo"
+                                                src="/images/logos/cdl-logo.svg"
+                                                alt="California Digital Library logo"/></a>
+        </li>
+        <li id="ie-ezid-logo">
+          <a href="https://ezid.cdlib.org/"><img class="service-logo"
+                                                 src="/images/logos/ezid-logo.svg"
+                                                 alt="EZID logo"/></a>
+        </li>
+        <li id="ie-dash-logo">
+          <a href="https://dash.ucop.edu/"><img class="service-logo"
+                                                src="/images/logos/dash-logo.svg"
+                                                alt="Dash logo"/></a>
+        </li>
+        <li id="ie-escholarship-logo">
+          <a href="https://escholarship.org/"><img class="service-logo"
+                                                   src="/images/logos/escholarship-logo.svg"
+                                                   alt="eScholarship logo"/></a>
+        </li>
+      </ul>
+    </section>
+  </main>
 </div>
-<div class="grid_4">
-
-</div>
-</div>
-
-

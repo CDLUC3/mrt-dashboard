@@ -1,47 +1,50 @@
 <% content_for :title do %>
-  UC3 Merritt: Object -- <%= @object.ark %>
+  UC3 Merritt: Object — <%= @object.ark %>
 <% end %>
 
-<div class="grid_11">
-  <h2>Object: <%= @object.ark %></h2>
-  <div class="breadcrumbs">
+<main>
+  <section>
+    <h2>Object: <%= @object.ark %></h2>
+    <div class="breadcrumbs">
+      <%= link_to('Merritt', :controller => 'home', :action => 'index') %> &gt;
+      <%= link_to("Collection: #{@object.group.description}", :controller => 'collection', :action => 'index', :group => @object.group) %> &gt;
+      Object: <%= @object.ark %>
+    </div>
 
-    <%= link_to('Merritt', :controller => 'home', :action => 'index') %> &gt;
-    <%= link_to("Collection: #{@object.group.description}", :controller => 'collection', :action => 'index', :group => @object.group) %> &gt;
+    <%= render :partial => '/shared/flash_show' %>
 
-    Object: <%= @object.ark %> 
+    <h3 class="object-title">
+      <%= render :partial => "/object/short_bib_display", :object => @object %>
+    </h3>
 
-  </div>
-<br/>
-  <%= render :partial => '/shared/flash_show' %>
-  <h3 style="font-weight: normal;">
-    <%= render :partial => "/object/short_bib_display", :object => @object %></h3>
     <%= render :partial => 'details_display', :object => @object %>
-  <div class="clear"></div>
-  <div class="key">&nbsp;</div><div class="value">&nbsp;</div>
-  <div class="key">&nbsp;</div>
-  <div class="value">
-    <% if @object.exceeds_download_size? %>
-      Objects larger than <%= max_download_size_pretty %> cannot be downloaded as a .zip file.
-      Versions and individual files below that size can still be downloaded.
-    <% elsif current_user_can_download?(@object) then %>
-      <form action="<%= url_for(:action=>:download, :object => @object) %>">
-        <input type="submit" value="Download object">
-      </form>
+
+    <div class="form-submit">
+      <% if @object.exceeds_download_size? %>
+        <p>
+          Objects larger than <%= max_download_size_pretty %> cannot be downloaded as a .zip file.
+          Versions and individual files below that size can still be downloaded.
+        </p>
+      <% elsif current_user_can_download?(@object) then %>
+        <form action="<%= url_for(:action => :download, :object => @object) %>">
+          <input type="submit" value="Download object">
+        </form>
+      <% end %>
+    </div>
+
+  </section>
+
+  <aside>
+    <%= render(partial: '/shared/side_lookup') %>
+    <%= render(partial: '/version/current_sidebar', object: @object.current_version) %>
+    <% if @object.inv_versions.length > 1 %>
+      <section>
+        <h3>Prior Versions</h3>
+        <%= render :partial => '/version/line_sidebar',
+                   :collection => @object.inv_versions.reverse[1..-1],
+                   :locals => {:can_download => current_user_can_download?(@object)} %>
+        <br/>
+      </section>
     <% end %>
-  </div>
-
-
-</div>
-<div class="grid_1">&nbsp;</div>
-<div class="grid_4 sidebar">
-  <%= render :partial => '/shared/side_lookup' %><br/>
-  <%= render :partial => '/version/current_sidebar', :object => @object.current_version %><br/>
-  <% if @object.inv_versions.length > 1 then %>
-    <h3>Prior Versions</h3>
-    <%= render :partial => '/version/line_sidebar', 
-               :collection => @object.inv_versions.reverse[1..-1],
-               :locals => {:can_download => current_user_can_download?(@object) } %>
-    <br/>
-  <% end %>
-</div>
+  </aside>
+</main>

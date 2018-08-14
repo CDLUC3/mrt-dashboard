@@ -1,30 +1,41 @@
 <% content_for :title do %>
   UC3 Merritt: Submission Error
 <% end %>
-<div class="grid_12">
-  <h2>Submission Error</h2>
-  <div class="breadcrumbs">
-    <%= link_to('Merritt', :controller => 'home', :action => 'index') %> &gt;
-    <%= link_to("Collection: #{current_group.description}", :controller => 'collection', :action => 'index', :group => current_group.id) %>
-    &gt; Submission Error
-  </div>
 
-  <br/>
+<main>
+  <section>
+    <h2>Submission Error</h2>
 
-  <p>Your request to add data to the Merritt repository ran into a problem.  It
-  returned the following error:</p>
+    <div class="breadcrumbs">
+      <%= link_to('Merritt', :controller => 'home', :action => 'index') %> &gt;
+      <%= link_to(
+              "Collection: #{current_group.description}",
+              controller: 'collection',
+              action: 'index',
+              group: current_group.id
+          ) %> &gt;
+      Submission Error
+    </div>
 
-  <p><strong><%=@description%></strong></p>
+    <p>
+      Your request to add data to the Merritt repository ran into a problem. It
+      returned the following error:
+    </p>
 
-  <p><strong><%=@error%></strong></p>
+    <p><strong><%= @description %></strong></p>
 
-  <p>Please double-check any manifest format you're using and
-   <a href="http://www.cdlib.org/services/uc3/contact.html">Contact us</a>
-  for assistance in troubleshooting this problem if this does not resolve the issue.
-  Please include the error message shown
-  above which will help us in troubleshooting the issue.</p>
+    <p><strong><%= @error %></strong></p>
 
-</div>
-<div class="grid_4 sidebar">
-  <%= render :partial => '/shared/side_lookup' %><br/>
-</div>
+    <p>
+      Please double-check any manifest format you're using and
+      <a href="http://www.cdlib.org/services/uc3/contact.html">contact us</a>
+      for assistance in troubleshooting this problem if this does not resolve the issue.
+      Please include the error message shown
+      above which will help us in troubleshooting the issue.
+    </p>
+  </section>
+
+  <aside>
+    <%= render(partial: '/shared/side_lookup') %>
+  </aside>
+</main>

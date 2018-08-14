@@ -1,0 +1,379 @@
+@import 'globals';
+@import 'open-sans';
+@import 'main-1col';
+@import 'main-3col';
+@import 'home';
+@import 'ie10';
+@import 'nogrid';
+
+html {
+  height: 100%;
+}
+
+body {
+  align-items: center;
+  background-color: $lightgray;
+  color: $black;
+  display: flex;
+  flex-direction: column;
+  font-family: $font-family;
+  font-size: smaller;
+  height: 100%;
+  line-height: 1.4;
+  margin: 0;
+  min-height: min-content;
+}
+
+header {
+  align-items: center;
+  background: linear-gradient($midgray1, $midgray2);
+  display: grid;
+  width: 100%;
+
+  nav {
+    ul {
+      margin: 0;
+
+      li {
+        border: 0;
+        font-weight: bold;
+
+        a:hover {
+          text-decoration: none;
+        }
+      }
+
+      li.dropdown {
+        ul {
+          li {
+            font-weight: normal;
+          }
+        }
+      }
+    }
+
+    a {
+      color: inherit;
+      display: inline-block;
+      text-decoration: none;
+      width: 100%;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+  }
+
+  nav.login {
+    ul {
+      li {
+        background-color: $orange;
+        border-radius: $corner-radius / 2;
+        font-weight: bold;
+        height: $ucop-logo-height / 2;
+
+        &:hover {
+          background-color: $orange;
+        }
+      }
+    }
+  }
+
+  div.masthead {
+    align-items: center;
+    display: flex;
+  }
+}
+
+main {
+  background-color: $lightgray;
+  display: grid;
+  grid-gap: $margin;
+  margin: 0;
+  padding: $padding;
+
+  table.properties {
+    width: 100%;
+
+    td {
+      padding-left: $padding / 4;
+    }
+
+    img.tip-icon {
+      margin-left: $margin / 4;
+      vertical-align: middle;
+    }
+  }
+}
+
+footer {
+  background: $midgray1;
+  flex-grow: 999;
+  width: 100%;
+
+  a {
+    text-decoration: underline;
+  }
+
+  div.publication-info {
+    p {
+      margin-top: 0;
+    }
+  }
+}
+
+aside {
+  display: flex;
+  flex-direction: column;
+  grid-gap: $margin;
+  width: $column-width + ($margin / 2); // ad-hoc to fit search instructions
+
+  section {
+    ul {
+      list-style-type: square;
+
+      li {
+        margin-left: $margin;
+      }
+    }
+  }
+
+  // fake grid-gap for flexbox
+  section:not(:last-child) {
+    margin-bottom: $margin;
+  }
+
+  p {
+    font-size: smaller;
+
+    &:not(:first-of-type) {
+      margin-top: 0;
+    }
+
+    img.tip-icon {
+      vertical-align: text-top;
+    }
+  }
+
+  table.properties {
+    font-size: smaller;
+    width: auto;
+
+    td {
+      text-align: right;
+    }
+  }
+}
+
+nav {
+  ul {
+    display: grid;
+    list-style-type: none;
+  }
+}
+
+nav.login {
+  height: $ucop-logo-height;
+  position: absolute;
+  right: 0;
+  top: 0;
+
+  ul {
+    margin-right: $margin / 2;
+    margin-top: $margin / 2;
+
+    li {
+      padding-bottom: 0;
+      padding-top: 0;
+
+      a {
+        margin-top: $margin / 4;
+      }
+    }
+  }
+}
+
+nav.menu {
+  // sass-lint:disable-block no-ids, no-qualifying-elements
+  input#nav-menu {
+    display: none;
+  }
+
+  label.nav-menu-label {
+    display: none;
+  }
+}
+
+h2 {
+  line-height: 1.2em;
+  margin-bottom: 0;
+  margin-top: 0;
+}
+
+h3 {
+  border-bottom: 1px solid $midgray1;
+  font-size: 1em;
+  line-height: 1.2em;
+  margin-bottom: $margin / 2;
+}
+
+h3:first-child {
+  margin-top: 0;
+}
+
+h3.object-title {
+  font-weight: normal;
+}
+
+p {
+  margin-bottom: 0;
+  margin-top: $margin / 2;
+}
+
+p.environment {
+  color: $darkgray;
+  font-weight: bold;
+  margin: 0;
+  opacity: .75;
+  padding: 0;
+  pointer-events: none;
+  position: fixed;
+  right: $margin / 8;
+  top: $margin / 8;
+  touch-action: none;
+  z-index: 999;
+}
+
+p.error-message {
+  color: $red;
+  font-size: larger;
+  font-weight: bold;
+}
+
+ul {
+  padding: 0;
+}
+
+table {
+  border-collapse: collapse;
+  table-layout: auto;
+
+  thead {
+    tr:last-child {
+      th {
+        border-bottom: 1px solid $darkgray;
+      }
+    }
+  }
+
+  th {
+    text-align: left;
+    vertical-align: top;
+  }
+
+  td {
+    vertical-align: top;
+  }
+}
+
+table.main {
+  font-size: smaller;
+  width: 100%;
+
+  tr:not(:last-child) {
+    th {
+      border-bottom: 1px solid $midgray1;
+    }
+
+    td {
+      border-bottom: 1px solid $darkgray;
+    }
+  }
+
+  th {
+    padding: $padding / 4;
+  }
+
+  td {
+    padding: $padding / 4;
+  }
+}
+
+table.properties {
+  margin-right: auto;
+
+  tbody {
+    th {
+      text-align: right;
+
+      em {
+        font-weight: normal;
+      }
+    }
+
+    th.table-section-header {
+      text-align: left;
+
+      h3 {
+        margin-top: $margin;
+      }
+    }
+
+    td {
+      padding-left: $padding / 2;
+    }
+  }
+}
+
+form {
+  table.properties {
+    margin-top: $margin / 2;
+
+    th {
+      padding-top: $padding / 4;
+      width: 25%;
+    }
+
+    td {
+      padding-top: $padding / 4;
+      width: 75%;
+    }
+  }
+}
+
+a {
+  text-decoration: none;
+}
+
+img.merritt-logo {
+  height: $merritt-logo-height;
+  vertical-align: bottom;
+}
+
+img.tip-icon {
+  height: 1.2em;
+}
+
+img.ucop-logo {
+  height: $ucop-logo-height;
+}
+
+img.ucop-logo-divider {
+  height: $ucop-logo-height;
+}
+
+span.title {
+  font-weight: bold;
+}
+
+div.breadcrumbs {
+  font-size: smaller;
+  margin-bottom: $margin / 2;
+}
+
+div.form-submit {
+  border-top: 1px solid $midgray1;
+  margin-top: $margin;
+  padding-top: $padding / 2;
+}
+

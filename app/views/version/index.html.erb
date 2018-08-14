@@ -1,60 +1,73 @@
 <% content_for :title do %>
-  UC3 Merritt: Version -- <%= @version.inv_object.ark %>, Version <%= @version.number %>
+  UC3 Merritt: Version — <%= @version.inv_object.ark %>, Version <%= @version.number %>
 <% end %>
 
-<div class="grid_11">
-  <h2>
-    <%= @version.inv_object.ark %> - 
-    Version <%= @version.number %>:
-    <%= merritt_time(@version.created)%>
-  </h2>
-  <div class="breadcrumbs">
-    <%= link_to('Merritt', :controller => 'home', :action => 'index') %> &gt;
-    <%= link_to("Collection: #{@version.inv_object.group.description}", 
-                :controller => 'collection',
-                :group => @version.inv_object.group.id,
-                :action => 'index') %> &gt;
-    <%= link_to("Object: #{@version.inv_object.ark}", 
-                :controller => 'object', 
-                :action => 'index',
-                :object => @version.inv_object) %> &gt;
-    Version <%= @version.number %>
-  </div>
-  <br/>
-  <%= render :partial => '/shared/flash_show' %>
+<main>
+  <section>
+    <h2>
+      <%= @version.inv_object.ark %> —
+      Version <%= @version.number %>:
+      <span class="timestamp"><%= merritt_time(@version.created) %></span>
+    </h2>
 
-  <br/>
-  <h3 style="font-weight: normal;">
-    <%= render :partial => "/object/short_bib_display", :object => @version.inv_object %>
-  </h3>
+    <div class="breadcrumbs">
+      <%= link_to('Merritt', controller: 'home', action: 'index') %> &gt;
+      <%= link_to(
+              "Collection: #{@version.inv_object.group.description}",
+              controller: 'collection',
+              group: @version.inv_object.group.id,
+              action: 'index'
+          ) %> &gt;
+      <%= link_to(
+              "Object: #{@version.inv_object.ark}",
+              controller: 'object',
+              action: 'index',
+              object: @version.inv_object
+          ) %> &gt;
+      Version <%= @version.number %>
+    </div>
 
-  <%= render :partial => '/version/details_display', :object => @version %>
-  <div class="clear"></div>
+    <%= render :partial => '/shared/flash_show' %>
 
-  <h3>User Files</h3>
-  <%= render :partial => '/version/files', :locals => {:files => @version.producer_files.quickload_files } %>
-  <h3>System Files</h3>
-  <%= render :partial => '/version/files', :locals => {:files => @version.system_files.quickload_files } %>
+    <h3 class="object-title">
+      <%= render :partial => "/object/short_bib_display", :object => @version.inv_object %>
+    </h3>
+    <%= render :partial => '/version/details_display', :object => @version %>
 
-  <div class="key">&nbsp;</div><div class="value">&nbsp;</div>
-  <div class="key">&nbsp;</div>
-  <div class="value">
-    <% if @version.exceeds_download_size? %>
-      Versions larger than <%= max_download_size_pretty %> cannot be downloaded as a .zip file.
-      Versions and individual files below that size can still be downloaded.
-    <% elsif current_user_can_download?(@version.inv_object) then %>
-      <form action="<%= url_for(:action=>:download, :object=> @version.inv_object, :version => @version) %>">
-        <input type="submit" value="Download version">
-      </form>
-    <% end %>
-  </div>
-</div>
-<div class="grid_1">&nbsp;</div>
-<div class="grid_4 sidebar">
-  <%= render :partial => '/shared/side_lookup' %><br/>
-  <h3>All Versions</h3>
-  <%= render :partial => 'line_sidebar', 
-             :collection => @version.inv_object.inv_versions.reverse,
-             :locals => {:can_download => current_user_can_download?(@version.inv_object) } %>
-  <br/>
-</div>
+    <table class="properties">
+      <tbody>
+      <tr>
+        <th class="table-section-header" colspan="3"><h3>User Files</h3></th>
+        <%= render :partial => '/version/files', :locals => {:files => @version.producer_files.quickload_files} %>
+      </tr>
+      <tr>
+        <th class="table-section-header" colspan="3"><h3>System Files</h3></th>
+        <%= render :partial => '/version/files', :locals => {:files => @version.system_files.quickload_files} %>
+      </tr>
+      </tbody>
+    </table>
+
+    <div class="form-submit">
+      <% if @version.exceeds_download_size? %>
+        <p>
+          Versions larger than <%= max_download_size_pretty %> cannot be downloaded as a .zip file.
+          Versions and individual files below that size can still be downloaded.
+        </p>
+      <% elsif current_user_can_download?(@version.inv_object) then %>
+        <form action="<%= url_for(:action => :download, :object => @version.inv_object, :version => @version) %>">
+          <input type="submit" value="Download version">
+        </form>
+      <% end %>
+    </div>
+  </section>
+
+  <aside>
+    <%= render :partial => '/shared/side_lookup' %><br/>
+    <section>
+      <h3>All Versions</h3>
+      <%= render :partial => 'line_sidebar',
+                 :collection => @version.inv_object.inv_versions.reverse,
+                 :locals => {:can_download => current_user_can_download?(@version.inv_object)} %>
+    </section>
+  </aside>
+</main>

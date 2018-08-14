@@ -11,7 +11,7 @@ describe 'home' do
   end
 
   it 'has a login link' do
-    click_link 'Login'
+    click_link('Login', match: :first)
     expect(page).to have_content('Merritt')
   end
 
@@ -38,10 +38,8 @@ describe 'home' do
       mock_permissions_all(user_id, col_ids)
       log_in_with(user_id, password)
 
-      find(:xpath, '//table/tbody/tr[1]/td[1]/a[1]').click
-      within('#menu-1') do
-        expect(page).to have_content('Collection home')
-      end
+      click_link('Collection 1', match: :first)
+      expect(page).to have_content('Collection home')
     end
 
     it "should redirect to the collection page if there's only one" do

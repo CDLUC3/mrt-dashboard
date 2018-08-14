@@ -1,0 +1,87 @@
+@import 'globals';
+
+@supports not (display: grid) {
+
+  main {
+    aside {
+      padding-top: $padding / 2;
+    }
+  }
+
+  main.home {
+    section {
+      width: auto;
+    }
+
+    section.intro {
+      section {
+        width: auto;
+      }
+
+      aside {
+        margin-top: $margin;
+      }
+    }
+
+    section.feature {
+      margin-top: $margin;
+      width: auto;
+    }
+
+    section.related-services {
+      margin-top: $margin;
+      width: auto;
+    }
+  }
+
+  @media (min-width: $main-width-desktop) { // TODO: introduce 2-column layout
+    main {
+      display: flex;
+
+      section {
+        width: 3 * $column-width;
+      }
+
+      aside {
+        margin-left: $margin;
+        width: $column-width + $margin;
+      }
+    }
+
+    main.home {
+      flex-direction: column;
+
+      section.feature {
+        h2 {
+          text-align: left;
+        }
+
+        img {
+          margin-left: 0;
+        }
+      }
+
+      section.related-services {
+        ul {
+          align-items: start;
+          display: flex;
+          flex-wrap: wrap;
+          justify-content: space-between;
+
+          li {
+            margin: $margin / 2;
+          }
+        }
+      }
+    }
+
+    footer {
+      nav {
+        ul {
+          display: flex;
+        }
+      }
+    }
+  }
+
+}

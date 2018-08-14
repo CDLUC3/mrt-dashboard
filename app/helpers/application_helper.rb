@@ -37,21 +37,23 @@ module ApplicationHelper
     escaped_tooltip = html_escape(the_text).gsub("'", "\\'")
     tooltip_tag = <<~HTML
       <a href="#" onmouseover="Tip('#{escaped_tooltip}')">
-        #{image_tag('tip_icon.gif', size: '15x15')}
+        <img class="tip-icon" src="/images/tip_icon.svg" alt="(?)"/>
       </a>
     HTML
     tooltip_tag.html_safe
   end
 
   # outputs a formatted string for the current environment, except production
-  def show_environment
-    return '' if Rails.env.include?('production')
-    Rails.env
+  def env_str
+    @env_str ||= begin
+      env = Rails.env
+      env.include?('production') ? '' : env
+    end
   end
 
   # Return true if a user is logged in
   def user_logged_in?
-    !session[:uid].blank?
+    !current_user.nil?
   end
 
   # Return true if logged in as guest
@@ -61,6 +63,6 @@ module ApplicationHelper
 
   # Return true if user has choosen a group
   def group_choosen?
-    !session[:group_id].nil?
+    !current_group.nil?
   end
 end
