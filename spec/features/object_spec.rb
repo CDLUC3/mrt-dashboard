@@ -140,10 +140,10 @@ describe 'objects' do
     log_in_with(user_id, password)
 
     index_path = url_for(
-        controller: :object,
-        action: :index,
-        object: obj.ark,
-        only_path: true
+      controller: :object,
+      action: :index,
+      object: obj.ark,
+      only_path: true
     )
     visit(index_path)
 

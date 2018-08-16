@@ -154,11 +154,11 @@ describe 'versions' do
     log_in_with(user_id, password)
 
     index_path = url_for(
-        controller: :version,
-        action: :index,
-        object: obj.ark,
-        version: version.number,
-        only_path: true
+      controller: :version,
+      action: :index,
+      object: obj.ark,
+      version: version.number,
+      only_path: true
     )
     visit(index_path)
 
@@ -174,11 +174,11 @@ describe 'versions' do
     log_in_with(user_id, password)
 
     index_path = url_for(
-        controller: :version,
-        action: :index,
-        object: obj.ark,
-        version: version.number,
-        only_path: true
+      controller: :version,
+      action: :index,
+      object: obj.ark,
+      version: version.number,
+      only_path: true
     )
     visit(index_path)
 
