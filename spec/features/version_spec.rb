@@ -1,5 +1,6 @@
 require 'features_helper'
 
+# TODO: refactor this to separate logged-in-with-permissions tests from others
 describe 'versions' do
   attr_reader :user_id
   attr_reader :password
@@ -145,6 +146,49 @@ describe 'versions' do
     expect(URI(download_action).path).to eq(URI(expected_uri).path)
   end
 
+  it 'should not display a download button w/o download permission' do
+    user_id = mock_user(name: 'Rachel Roe', password: password)
+    mock_permissions_view_only(user_id, collection_1_id)
+
+    log_out!
+    log_in_with(user_id, password)
+
+    index_path = url_for(
+        controller: :version,
+        action: :index,
+        object: obj.ark,
+        version: version.number,
+        only_path: true
+    )
+    visit(index_path)
+
+    expect(page).not_to have_content('Download version')
+    expect(page).to have_content('You do not have permission to download this object.')
+  end
+
+  it 'should not link files w/o download permission' do
+    user_id = mock_user(name: 'Rachel Roe', password: password)
+    mock_permissions_view_only(user_id, collection_1_id)
+
+    log_out!
+    log_in_with(user_id, password)
+
+    index_path = url_for(
+        controller: :version,
+        action: :index,
+        object: obj.ark,
+        version: version.number,
+        only_path: true
+    )
+    visit(index_path)
+
+    all_files = producer_files + system_files
+    all_files.each do |f|
+      basename = f.pathname.sub(%r{^(producer|system)/}, '')
+      expect(page).not_to have_link(basename)
+    end
+  end
+
   it 'should link back to the object' do
     click_link("Object: #{obj.ark}")
     expect(page.title).to include('Object')
@@ -167,8 +211,8 @@ describe 'versions' do
         # TODO: figure out why this is only half-double-encoded, unlike the object page
         expected_uri = CGI.unescape(expected_uri)
 
+        expect(page).to have_link(basename)
         download_link = find_link(basename)
-        expect(download_link).not_to be_nil
         download_href = download_link['href']
 
         expect(URI(download_href).path).to eq(URI(expected_uri).path)

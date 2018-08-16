@@ -20,15 +20,21 @@
     <%= render :partial => 'details_display', :object => @object %>
 
     <div class="form-submit">
-      <% if @object.exceeds_download_size? %>
+      <% if current_user_can_download?(@object) %>
+        <% if @object.exceeds_download_size? %>
+          <p>
+            Objects larger than <%= max_download_size_pretty %> cannot be downloaded as a .zip file.
+            Versions and individual files below that size can still be downloaded.
+          </p>
+        <% else %>
+          <form action="<%= url_for(:action => :download, :object => @object) %>">
+            <input type="submit" value="Download object">
+          </form>
+        <% end %>
+      <% else %>
         <p>
-          Objects larger than <%= max_download_size_pretty %> cannot be downloaded as a .zip file.
-          Versions and individual files below that size can still be downloaded.
+          You do not have permission to download this object.
         </p>
-      <% elsif current_user_can_download?(@object) then %>
-        <form action="<%= url_for(:action => :download, :object => @object) %>">
-          <input type="submit" value="Download object">
-        </form>
       <% end %>
     </div>
 

@@ -7,6 +7,7 @@ require 'support/ark'
 GUEST_USER_ID = 'anonymous'.freeze
 PERMISSIONS_ALL = %w[read write download admin].freeze
 PERMISSIONS_READ_ONLY = %w[read download].freeze
+PERMISSIONS_VIEW_ONLY = %w[read].freeze
 
 def to_id(name)
   name.gsub(/[^A-Za-z0-9_]+/, '_').underscore
@@ -77,6 +78,11 @@ end
 def mock_permissions_read_only(user_id, group_id_or_ids)
   gids = Array(group_id_or_ids)
   mock_permissions(user_id, gids.map { |gid| [gid, PERMISSIONS_READ_ONLY] }.to_h)
+end
+
+def mock_permissions_view_only(user_id, group_id_or_ids)
+  gids = Array(group_id_or_ids)
+  mock_permissions(user_id, gids.map { |gid| [gid, PERMISSIONS_VIEW_ONLY] }.to_h)
 end
 
 def mock_permissions(user_id, perms_by_group_id)

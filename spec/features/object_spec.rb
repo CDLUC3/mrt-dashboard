@@ -132,6 +132,25 @@ describe 'objects' do
     expect(URI(download_action).path).to eq(URI(expected_uri).path)
   end
 
+  it 'should not display a download button w/o download permission' do
+    user_id = mock_user(name: 'Rachel Roe', password: password)
+    mock_permissions_view_only(user_id, collection_1_id)
+
+    log_out!
+    log_in_with(user_id, password)
+
+    index_path = url_for(
+        controller: :object,
+        action: :index,
+        object: obj.ark,
+        only_path: true
+    )
+    visit(index_path)
+
+    expect(page).not_to have_content('Download object')
+    expect(page).to have_content('You do not have permission to download this object.')
+  end
+
   describe 'version info' do
     it 'should display the version' do
       expect(page).to have_content(version_str)
