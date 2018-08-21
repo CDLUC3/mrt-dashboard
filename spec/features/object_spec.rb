@@ -5,6 +5,7 @@ describe 'objects' do
   attr_reader :password
   attr_reader :obj
   attr_reader :version_str
+  attr_reader :collection_1_id
 
   attr_reader :producer_files
   attr_reader :system_files
@@ -14,7 +15,7 @@ describe 'objects' do
     @user_id = mock_user(name: 'Jane Doe', password: password)
 
     inv_collection_1 = create(:inv_collection, name: 'Collection 1', mnemonic: 'collection_1')
-    collection_1_id = mock_ldap_for_collection(inv_collection_1)
+    @collection_1_id = mock_ldap_for_collection(inv_collection_1)
     mock_permissions_all(user_id, collection_1_id)
 
     @obj = create(:inv_object, erc_who: 'Doe, Jane', erc_what: 'Object 1', erc_when: '2018-01-01')
@@ -62,6 +63,56 @@ describe 'objects' do
     expect(page).to have_content("Object: #{obj.ark}")
   end
 
+  it 'requires view permissions' do
+    user_id = mock_user(name: 'Rachel Roe', password: password)
+    expect(obj.user_has_read_permission?(user_id)).to eq(false) # just to be sure
+
+    log_out!
+    log_in_with(user_id, password)
+
+    index_path = url_for(
+      controller: :object,
+      action: :index,
+      object: obj.ark,
+      only_path: true
+    )
+    visit(index_path)
+
+    expect(page.title).to include('401')
+    expect(page).to have_content('not authorized')
+  end
+
+  it 'automatically logs in as guest' do
+    mock_permissions_read_only(LDAP_CONFIG['guest_user'], collection_1_id)
+
+    log_out!
+    index_path = url_for(
+      controller: :object,
+      action: :index,
+      object: obj.ark,
+      only_path: true
+    )
+    visit(index_path)
+    expect(page).to have_content('Logged in as Guest')
+    expect(page).to have_content('You must be logged in to access the page you requested')
+  end
+
+  it 'requires view permissions even for guest auto-login' do
+    expect(obj.user_has_read_permission?(LDAP_CONFIG['guest_user'])).to eq(false) # just to be sure
+
+    log_out!
+    index_path = url_for(
+      controller: :object,
+      action: :index,
+      object: obj.ark,
+      only_path: true
+    )
+    visit(index_path)
+
+    expect(page.title).to include('401')
+    expect(page).to have_content('not authorized')
+  end
+
   it 'should display minimal metadata' do
     expect(page).to have_content(obj.erc_who)
     expect(page).to have_content(obj.erc_what)
@@ -79,6 +130,25 @@ describe 'objects' do
       object: obj
     )
     expect(URI(download_action).path).to eq(URI(expected_uri).path)
+  end
+
+  it 'should not display a download button w/o download permission' do
+    user_id = mock_user(name: 'Rachel Roe', password: password)
+    mock_permissions_view_only(user_id, collection_1_id)
+
+    log_out!
+    log_in_with(user_id, password)
+
+    index_path = url_for(
+      controller: :object,
+      action: :index,
+      object: obj.ark,
+      only_path: true
+    )
+    visit(index_path)
+
+    expect(page).not_to have_content('Download object')
+    expect(page).to have_content('You do not have permission to download this object.')
   end
 
   describe 'version info' do

@@ -37,7 +37,9 @@ class VersionController < ApplicationController
     raise ActiveRecord::RecordNotFound if @version.nil?
   end
 
-  def index; end
+  def index
+    render(file: "#{Rails.root}/public/401.html", status: 401, layout: false) unless @version.inv_object.user_has_read_permission?(current_uid)
+  end
 
   def async
     if @version.exceeds_download_size?
