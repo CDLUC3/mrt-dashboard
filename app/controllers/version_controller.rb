@@ -28,6 +28,10 @@ class VersionController < ApplicationController
     end
   end
 
+  before_filter(only: :index) do
+    render(file: "#{Rails.root}/public/401.html", status: 401, layout: false) unless current_user_can_read?(@version.inv_object)
+  end
+
   def load_version
     @version = InvVersion.joins(:inv_object)
       .where('inv_objects.ark = ?', params_u(:object))
@@ -38,7 +42,8 @@ class VersionController < ApplicationController
   end
 
   def index
-    render(file: "#{Rails.root}/public/401.html", status: 401, layout: false) unless @version.inv_object.user_has_read_permission?(current_uid)
+    @producer_files = FileView.producer_files(@version, view_context)
+    @system_files = FileView.system_files(@version, view_context)
   end
 
   def async
@@ -67,4 +72,9 @@ class VersionController < ApplicationController
                     'application/zip')
   end
 
+  private
+
+  def current_user_can_read?(object)
+    object.user_has_read_permission?(current_uid)
+  end
 end

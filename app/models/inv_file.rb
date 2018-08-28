@@ -1,11 +1,15 @@
 class InvFile < ActiveRecord::Base
+  include Encoder
+
   belongs_to :inv_version, inverse_of: :inv_files
   belongs_to :inv_object
+
   scope :system_files, -> { where("pathname LIKE 'system/%'") }
   scope :producer_files, -> { where("pathname LIKE 'producer/%'") }
-  scope :quickload_files, -> { select(%w[mime_type pathname full_size inv_version_id]) }
-
-  include Encoder
+  scope :quickload_files, -> do
+    select(%w[mime_type pathname full_size inv_version_id])
+      .order(pathname: :asc)
+  end
 
   def to_param
     urlencode(pathname)

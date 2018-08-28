@@ -1,9 +1,8 @@
 <%
-  if files[0]
+  if files.any?
     # this is the same for every file and if we don't cache it here it will hit the db for every file
-    version = files[0].inv_version
-    version_id = version.to_param
-    object = version.inv_object
+    version_id = @version.to_param
+    object = @version.inv_object
     object_id = object.to_param
 
     # would be cleaner code if we had this check inside the file.each but it is slower for pages with many files
@@ -12,7 +11,7 @@
 %>
     <%
       files.each do |file|
-        file_basename = File.basename(file.pathname)
+        file_basename = file.basename
         file_too_large = file.exceeds_download_size?
         any_file_too_large ||= file_too_large
     %>
@@ -28,10 +27,10 @@
           <% end %>
         </th>
         <td>
-          <%= clean_mime_type(file.mime_type) %>
+          <%= file.mime_type %>
         </td>
         <td style="width: 100%;">
-          <%= number_to_storage_size(file.full_size) %>
+          <%= file.size %>
         </td>
       </tr>
     <%
