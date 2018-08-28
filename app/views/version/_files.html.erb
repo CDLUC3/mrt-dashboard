@@ -8,41 +8,48 @@
     # would be cleaner code if we had this check inside the file.each but it is slower for pages with many files
     can_download_object = current_user_can_download?(object)
     any_file_too_large = false
+    last_dirname = nil
 %>
+  <%
+    files.each do |file|
+      any_file_too_large ||= file.exceeds_download_size?
+     %>
     <%
-      files.each do |file|
-        file_basename = file.basename
-        file_too_large = file.exceeds_download_size?
-        any_file_too_large ||= file_too_large
+      if file.dirname && (file.dirname != last_dirname)
+        last_dirname = file.dirname
     %>
       <tr>
-        <th>
-          <% if can_download_object && !file_too_large %>
-            <%# not using link_to speeds this up %>
-            <a href="/d/<%= object_id %>/<%= version_id %>/<%= file.to_param %>">
-              <%= file_basename %>
-            </a>
-          <% else %>
-            <%= file_basename %>
-          <% end %>
+        <th colspan="3" class="table-subsection-header">
+          <h4><%= file.dirname %>/</h4>
         </th>
-        <td>
-          <%= file.mime_type %>
-        </td>
-        <td style="width: 100%;">
-          <%= file.size %>
-        </td>
       </tr>
-    <%
-      end
-      %>
+    <% end %>
+    <tr>
+      <th>
+        <% if can_download_object && !file.exceeds_download_size? %>
+          <%# not using link_to speeds this up %>
+          <a href="/d/<%= object_id %>/<%= version_id %>/<%= file.to_param %>">
+            <%= file.basename %>
+          </a>
+        <% else %>
+          <%= file.basename %>
+        <% end %>
+      </th>
+      <td>
+        <%= file.mime_type %>
+      </td>
+      <td style="width: 100%;">
+        <%= file.size %>
+      </td>
+    </tr>
+  <% end %>
   <% if any_file_too_large %>
-      <tr>
-        <td colspan="3">
-          Files larger than <%= max_download_size_pretty %> cannot be downloaded.
-          For access to large files, please
-          <a href="http://www.cdlib.org/services/uc3/contact.html">contact UC3</a>.
-        </td>
-      </tr>
+    <tr>
+      <td colspan="3">
+        Files larger than <%= max_download_size_pretty %> cannot be downloaded.
+        For access to large files, please
+        <a href="http://www.cdlib.org/services/uc3/contact.html">contact UC3</a>.
+      </td>
+    </tr>
   <% end %>
 <% end %>

@@ -20,7 +20,11 @@ class FileView
   end
 
   def dirname
-    @dirname ||= File.dirname(pathname)
+    return @dirname if defined?(@dirname)
+    @dirname ||= begin
+      name = File.dirname(pathname).sub(%r{^(producer|system)/?}, '')
+      name.blank? ? nil : name
+    end
   end
 
   def basename

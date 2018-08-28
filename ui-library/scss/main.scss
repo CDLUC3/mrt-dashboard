@@ -214,7 +214,7 @@ h3 {
   border-bottom: 1px solid $midgray1;
   font-size: 1em;
   line-height: 1.2em;
-  margin-bottom: $margin / 2;
+  margin-bottom: $margin / 4;
 }
 
 h3:first-child {
@@ -223,6 +223,11 @@ h3:first-child {
 
 h3.object-title {
   font-weight: normal;
+}
+
+h4 {
+  margin-bottom: 0;
+  margin-top: $margin / 4;
 }
 
 p {
@@ -317,6 +322,11 @@ table.properties {
       h3 {
         margin-top: $margin;
       }
+    }
+
+    th.table-subsection-header {
+      border-bottom: 1px dotted $midgray1;
+      text-align: left;
     }
 
     td {

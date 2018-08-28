@@ -1000,7 +1000,7 @@ h3 {
   border-bottom: 1px solid #d8d8d9;
   font-size: 1em;
   line-height: 1.2em;
-  margin-bottom: 12px;
+  margin-bottom: 6px;
 }
 
 h3:first-child {
@@ -1009,6 +1009,11 @@ h3:first-child {
 
 h3.object-title {
   font-weight: normal;
+}
+
+h4 {
+  margin-bottom: 0;
+  margin-top: 6px;
 }
 
 p {
@@ -1097,6 +1102,11 @@ table.properties tbody th.table-section-header {
 
 table.properties tbody th.table-section-header h3 {
   margin-top: 24px;
+}
+
+table.properties tbody th.table-subsection-header {
+  border-bottom: 1px dotted #d8d8d9;
+  text-align: left;
 }
 
 table.properties tbody td {
