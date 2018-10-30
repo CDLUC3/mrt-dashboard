@@ -313,6 +313,7 @@ end
 namespace :atom do
   desc "Generic ATOM to Merritt processor"
   task :update, [:root, :user, :profile, :collection, :feeddatefile] => :environment do |cmd, args|
+    # TODO: normalize task arg / function parameter names, use named parameters for function
     process_atom_feed(args[:user], args[:profile], args[:collection], args[:feeddatefile], args[:root])
   end
 end
