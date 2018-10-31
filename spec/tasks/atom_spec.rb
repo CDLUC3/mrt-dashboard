@@ -100,12 +100,20 @@ describe 'atom', type: :task do
       write_feeddate(feed_updated - 1) # -1 day
     end
     
-    skip 'sleeps if pause file is present' do
+    it 'sleeps if pause file is present' do
       FileUtils.mkdir_p(atom_dir)
       pause_file = "#{atom_dir}/PAUSE_ATOM_#{profile}"
       FileUtils.touch(pause_file)
 
-      fail("not implemented")
+      @sleep_count = 0
+      allow_any_instance_of(Object).to receive(:sleep).with(300) do
+        @sleep_count += 1
+        FileUtils.remove_entry_secure(pause_file)
+      end
+
+      invoke_update!
+
+      expect(@sleep_count).to eq(1)
     end
 
     pending 'requires a submitter'
