@@ -86,6 +86,7 @@ def process_atom_feed(submitter, profile, collection, feeddatefile, starting_poi
     for j in 0..2
       begin
         p = open(next_page, OPEN_URI_ARGS)
+        # TODO: this doesn't actually work -- 404 results in OpenURI::HTTPError
         if (p.status.first == "404")
           puts "Page not found, exiting... #{next_page}"
           return
@@ -114,6 +115,7 @@ def process_atom_feed(submitter, profile, collection, feeddatefile, starting_poi
     end
 
     # Merritt Collection (optional)
+    # TODO: NARRATOR: It wasn't optional.
     begin
       merrittCollection = doc.at_xpath("//xmlns:merritt_collection_id").text
       merrittCollectionCredentials = ATOM_CONFIG["#{merrittCollection}_credentials"]
@@ -124,6 +126,7 @@ def process_atom_feed(submitter, profile, collection, feeddatefile, starting_poi
         merrittCollectionLocalidElement.empty = "atom:id"     # default
       end
     rescue Exception => ex
+      # TODO: shouldn't we exit here?
     end
     puts "Processing merritt collection #{merrittCollection}" if ! merrittCollection.nil?
     puts "Found merritt collection credentials" if ! merrittCollectionCredentials.nil?
@@ -291,6 +294,7 @@ def process_atom_feed(submitter, profile, collection, feeddatefile, starting_poi
   end
 ensure
   if ! lastFeedUpdate then
+    # TODO: merrittCollectionLastFeedUpdatedFile isn't set if feed was up to date or feeddatefile did not exist
     puts "Updating file: #{merrittCollectionLastFeedUpdatedFile}"
     puts "Updating feed date to: #{feedUpdated}"
     begin
