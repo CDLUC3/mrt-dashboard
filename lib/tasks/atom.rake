@@ -93,7 +93,7 @@ def process_atom_feed(submitter, profile, collection, feeddatefile, starting_poi
         end
         doc = Nokogiri::XML(p)
         break
-      rescue Exception=>ex
+      rescue =>ex
         puts ex.message
         puts ex.backtrace
         puts "Error processing page #{next_page}"
@@ -125,7 +125,7 @@ def process_atom_feed(submitter, profile, collection, feeddatefile, starting_poi
       if (merrittCollectionLocalidElement.empty) then
         merrittCollectionLocalidElement.empty = "atom:id"     # default
       end
-    rescue Exception => ex
+    rescue => ex
       # TODO: shouldn't we exit here?
     end
     puts "Processing merritt collection #{merrittCollection}" if ! merrittCollection.nil?
@@ -143,22 +143,22 @@ def process_atom_feed(submitter, profile, collection, feeddatefile, starting_poi
         # DC metadata
         begin
           local_id = entry.at_xpath("#{merrittCollectionLocalidElement}").text
-        rescue Exception => ex
+        rescue => ex
           # ex.backtrace
         end
         begin
           dc_title = entry.at_xpath("dc:title").text
-        rescue Exception => ex
+        rescue => ex
           dc_title = nil
         end
         begin
           dc_date = entry.at_xpath("dc:date").text
-        rescue Exception => ex
+        rescue => ex
           dc_date = nil
         end
         begin
           dc_creator = entry.at_xpath("dc:creator").text
-        rescue Exception => ex
+        rescue => ex
           dc_creator = nil
         end
         creator = entry.xpath("atom:author", NS).map { |au|
@@ -238,7 +238,7 @@ def process_atom_feed(submitter, profile, collection, feeddatefile, starting_poi
           # puts "User Agent: #{resp.user_agent}"
           # puts "Batch ID: #{resp.batch_id}"
           # puts "Submission Date: #{resp.submission_date}"
-      rescue Exception=>ex
+      rescue =>ex
         puts ex.message
         puts ex.backtrace
         local_id = xpath_content(entry, "atom:id")
