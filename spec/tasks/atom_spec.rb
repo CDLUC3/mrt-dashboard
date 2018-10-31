@@ -38,6 +38,8 @@ describe 'atom', type: :task do
     attr_reader :collection_ark
     attr_reader :feeddatefile
 
+    attr_reader :pause_file
+
     def atom_dir
       "#{tmp_home}/dpr2/apps/ui/atom/"
     end
@@ -70,6 +72,8 @@ describe 'atom', type: :task do
       @feeddatefile = "#{tmp_home}/dpr2/apps/ui/atom/LastUpdate/lastFeedUpdate_#{collection}"
       write_feeddate(Time.now)
 
+      @pause_file = "#{atom_dir}/PAUSE_ATOM_#{profile}"
+
       stub_request(:get, starting_point).to_return(status: 200, body: feed_xml_str, headers: {})
     end
 
@@ -83,8 +87,46 @@ describe 'atom', type: :task do
       invoke_update!
     end
 
-    it 'waits for the one-time file server to exit' do
-      expect(server).to receive(:join_server)
+    it 'sleeps if pause file is present' do
+      FileUtils.mkdir_p(atom_dir)
+      FileUtils.touch(pause_file)
+
+      # hack to "expect().to receive" global sleep call
+      @sleep_count = 0
+      allow_any_instance_of(Object).to receive(:sleep).with(300) do
+        @sleep_count += 1
+        FileUtils.remove_entry_secure(pause_file)
+      end
+
+      invoke_update!
+      expect(@sleep_count).to eq(1)
+    end
+
+    it "doesn't sleep if pause file not present" do
+      expect(File.exist?(pause_file)).to be_falsey # just to be sure
+
+      # hack to "expect().not_to receive" global sleep call
+      @sleep_count = 0
+      allow_any_instance_of(Object).to receive(:sleep).with(300) do
+        @sleep_count += 1
+        FileUtils.remove_entry_secure(pause_file)
+      end
+
+      invoke_update!
+      expect(@sleep_count).to eq(0)
+    end
+
+    # TODO: fix code, then re-enable this test
+    skip 'exits without trying to parse if request returns 404' do
+      stub_request(:get, starting_point).to_return(status: [404, "Not Found"])
+      expect(Nokogiri).not_to receive(:XML)
+      invoke_update!
+    end
+
+    # TODO: fix code, then re-enable this test
+    skip 'writes new feed date file and exits if feed date file not found' do
+      FileUtils.remove_entry_secure(feeddatefile)
+      expect(Mrt::Ingest::IObject).not_to receive(:new)
       invoke_update!
     end
 
@@ -95,26 +137,21 @@ describe 'atom', type: :task do
       invoke_update!
     end
 
-    skip 'updates if feed updated since last harvest' do
+    it 'updates if feed updated since last harvest' do
       feed_updated = DateTime.parse(feed_xml.at_xpath("//xmlns:updated").text)
       write_feeddate(feed_updated - 1) # -1 day
-    end
-    
-    it 'sleeps if pause file is present' do
-      FileUtils.mkdir_p(atom_dir)
-      pause_file = "#{atom_dir}/PAUSE_ATOM_#{profile}"
-      FileUtils.touch(pause_file)
 
-      @sleep_count = 0
-      allow_any_instance_of(Object).to receive(:sleep).with(300) do
-        @sleep_count += 1
-        FileUtils.remove_entry_secure(pause_file)
-      end
+      expect(server).to receive(:add_file).exactly(2).times
 
       invoke_update!
-
-      expect(@sleep_count).to eq(1)
     end
+
+    # TODO: make this happen
+    pending 'exits with an error if ATOM_CONFIG does not include collection credentials'
+    pending 'exits with an error if ATOM_CONFIG does not include local ID element'
+
+    pending 'stops paginating when next page is nil'
+    pending "doesn't update if initial feed is nil"
 
     pending 'requires a submitter'
     pending 'requires a profile'
@@ -122,5 +159,9 @@ describe 'atom', type: :task do
     pending 'requires a feeddatefile'
     pending 'requires a starting_point'
 
+    it 'waits for the one-time file server to exit' do
+      expect(server).to receive(:join_server)
+      invoke_update!
+    end
   end
 end
