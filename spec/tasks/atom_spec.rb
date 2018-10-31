@@ -13,6 +13,10 @@ describe 'atom', type: :task do
     WebMock.disable_net_connect!
   end
 
+  after(:each) do
+    WebMock.allow_net_connect!
+  end
+
   it 'is configured' do
     expect(APP_CONFIG['ingest_service']).not_to be_nil
   end
