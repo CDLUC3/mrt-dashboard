@@ -187,8 +187,9 @@ describe 'atom', type: :task do
       TMP1
 
       expected = [
-        expected0,
-        expected1
+        # Mrt::Ingest::IObject leaves trailing spaces when value is nil
+        expected0.gsub(/^(w[^:]+):\n/, "\\1: \n"),
+        expected1.gsub(/^(w[^:]+):\n/, "\\1: \n"),
       ]
 
       temp_contents = @tempfiles.map { |f| File.read(f) }
