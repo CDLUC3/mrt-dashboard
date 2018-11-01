@@ -165,6 +165,14 @@ def process_atom_feed(submitter, profile, collection, feeddatefile, starting_poi
           xpath_content(au, "atom:name")
         }.join("; ")
 
+        # add second localid if present
+        begin
+          local_id2 = entry.at_xpath("nx:identifier").text
+        rescue Exception => ex
+          # ex.backtrace
+        end
+        local_id.concat("; ", local_id2) if !local_id2.nil?
+
         puts "Processing local_id:	#{local_id}"
         puts "Processing Title:		" + (dc_title || title)
         puts "Processing Date:		" + (dc_date || published)
