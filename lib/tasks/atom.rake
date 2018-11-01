@@ -171,7 +171,8 @@ def process_atom_feed(submitter, profile, collection, feeddatefile, starting_poi
         puts "Processing Creator:	" + (dc_creator || creator)
         puts "Processing Updated:	#{updated}"
         p =  up_to_date?(local_id, collection, updated, feeddate)
-        return if p.nil?
+
+        return if p.nil? # TODO: why and when would this happen & why return if so?
 
         # No need to process this record
         next if p
@@ -318,6 +319,7 @@ namespace :atom do
   desc "Generic ATOM to Merritt processor"
   task :update, [:root, :user, :profile, :collection, :feeddatefile] => :environment do |cmd, args|
     # TODO: normalize task arg / function parameter names, use named parameters for function
+    # TODO: & note "user" is really a user agent
     process_atom_feed(args[:user], args[:profile], args[:collection], args[:feeddatefile], args[:root])
   end
 end
