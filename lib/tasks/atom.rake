@@ -168,7 +168,7 @@ def process_atom_feed(submitter, profile, collection, feeddatefile, starting_poi
         rescue Exception => ex
           # ex.backtrace
         end
-        local_id.concat(local_id, "; ", local_id2) if !local_id2.nil?
+        local_id.concat("; ", local_id2) if !local_id2.nil?
 
         puts "Processing local_id:	#{local_id}"
         puts "Processing Title:		" + (dc_title || title)
