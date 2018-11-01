@@ -50,16 +50,13 @@ describe 'atom', type: :task do
     end
 
     def add_file
-      tmpfile = Tempfile.new
+      tmpfile = Tempfile.new('', tmp_home)
       @tempfiles << tmpfile
       File.open(tmpfile, 'w+') { |f| yield f }
       ["http://ingest.example.edu/#{File.basename(tmpfile)}", tmpfile]
     end
 
     before(:each) do
-      @feed_xml_str = File.read('spec/data/ucldc_collection_5551212.atom').freeze
-      @feed_xml = Nokogiri::XML(feed_xml_str)
-
       @original_home = ENV['HOME']
       @tmp_home = Dir.mktmpdir
       ENV['HOME'] = @tmp_home
@@ -74,6 +71,8 @@ describe 'atom', type: :task do
       allow(server).to receive(:join_server)
       allow(server).to(receive(:add_file).with(no_args)) { |&block| add_file(&block) }
 
+      @feed_xml_str = File.read('spec/data/ucldc_collection_5551212.atom').freeze
+      @feed_xml = Nokogiri::XML(feed_xml_str)
       @starting_point = 'https://s3.example.com/static.ucldc.example.edu/merritt/ucldc_collection_26144.atom'
       @submitter = 'Atom processor/Example U Digital Special Collections'
       @profile = 'example_ingest_profile'
@@ -92,7 +91,6 @@ describe 'atom', type: :task do
     after(:each) do
       ENV['HOME'] = original_home
       FileUtils.remove_entry_secure(@tmp_home)
-      @tempfiles.each { |f| FileUtils.remove_entry_secure(f) }
     end
 
     it 'starts the one-time file server' do
@@ -230,6 +228,40 @@ describe 'atom', type: :task do
         }
       ]
       expect(request_args).to eq(expected_args)
+    end
+
+    describe 'with nx:identifier' do
+      before(:each) do
+        @feed_xml_str = File.read('spec/data/ucldc_collection_1212555_nxidentifier.atom').freeze
+        @feed_xml = Nokogiri::XML(feed_xml_str)
+        @collection = 'FK12125555'
+        @collection_ark = "ark:/99999/#{collection}"
+        @feeddatefile = "#{tmp_home}/dpr2/apps/ui/atom/LastUpdate/lastFeedUpdate_#{collection}"
+        @pause_file = "#{atom_dir}/PAUSE_ATOM_#{profile}"
+        stub_request(:get, starting_point).to_return(status: 200, body: feed_xml_str, headers: {})
+      end
+
+      it 'parses nx:identifier as a second local ID' do
+        feed_updated = DateTime.parse(feed_xml.at_xpath('//xmlns:updated').text)
+        write_feeddate(feed_updated - 1) # -1 day
+
+        request_args = []
+        allow(client).to(receive(:ingest)) { |request| request_args << request.mk_args }
+
+        invoke_update!
+
+        expected_ids = [
+          'c9c0834e-d22b-40a1-a35d-811dc40f20ed; ark:/99999/FKd2x08p',
+          '5875b691-e05f-4036-ab0a-8e37cc32a8a3; ark:/99999/FKd28w60'
+        ]
+
+        expected_ids.each_with_index do |expected_id, i|
+          actual_id = request_args[i]['localIdentifier']
+          expect(actual_id).to eq(expected_id)
+        end
+      end
+
+      pending 'parses nx:identifier as first local ID if configured element not present'
     end
 
     # TODO: make this happen
