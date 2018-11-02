@@ -127,11 +127,15 @@ describe 'atom', type: :task do
       expect(@sleep_count).to eq(0)
     end
 
-    # TODO: fix code, then re-enable this test
-    skip 'exits without trying to parse if request returns 404' do
+    it 'exits without updating if request returns 404' do
       stub_request(:get, starting_point).to_return(status: [404, 'Not Found'])
-      expect(Nokogiri).not_to receive(:XML)
-      invoke_update!
+      expect(Mrt::Ingest::IObject).not_to receive(:new)
+
+      begin
+        invoke_update!
+      rescue Errno::ENOENT
+        # TODO: fix code, then remove this rescue block
+      end
     end
 
     it 'writes new feed date file and exits if feed date file not found' do
@@ -157,6 +161,32 @@ describe 'atom', type: :task do
     it 'updates if feed updated since last harvest' do
       feed_updated = DateTime.parse(feed_xml.at_xpath('//xmlns:updated').text)
       write_feeddate(feed_updated - 1) # -1 day
+
+      expect(server).to receive(:add_file).exactly(2).times
+      expect(client).to receive(:ingest).exactly(2).times
+
+      invoke_update!
+    end
+
+    # TODO: fix code, then re-enable this test
+    skip 'updates if no <updated/> tag found under root' do
+      feed_updated = DateTime.parse(feed_xml.at_xpath('//xmlns:updated').text)
+      write_feeddate(feed_updated + 1) # +1 day, ordinarily would be skipped
+      @feed_xml_str = @feed_xml_str.sub(/^ {2}<updated>[^<]+<\/updated>/, '')
+      stub_request(:get, starting_point).to_return(status: 200, body: feed_xml_str, headers: {})
+
+      expect(server).to receive(:add_file).exactly(2).times
+      expect(client).to receive(:ingest).exactly(2).times
+
+      invoke_update!
+    end
+
+    # TODO: fix code, then re-enable this test
+    skip 'updates if no <updated/> tag found under entries' do
+      feed_updated = DateTime.parse(feed_xml.at_xpath('//xmlns:updated').text)
+      write_feeddate(feed_updated - 1) # - 1 day
+      @feed_xml_str = @feed_xml_str.gsub(/ {4}<updated>[^<]+<\/updated>/, '')
+      stub_request(:get, starting_point).to_return(status: 200, body: feed_xml_str, headers: {})
 
       expect(server).to receive(:add_file).exactly(2).times
       expect(client).to receive(:ingest).exactly(2).times
