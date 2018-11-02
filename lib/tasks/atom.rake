@@ -50,7 +50,9 @@ def up_to_date?(local_id, collection_id, updated, feeddate)
     return false
   else
     if updated.nil? then
-      return false
+      # :nocov:
+      return false # TODO: unreachable code (DateTime.parse() would have blown up)
+      # :nocov:
     else
       submit = updated_date <= obj.first.modified
       if (! submit) then
@@ -87,17 +89,20 @@ def process_atom_feed(submitter, profile, collection, feeddatefile, starting_poi
     for j in 0..2
       begin
         p = open(next_page, OPEN_URI_ARGS)
+        # :nocov:
         # TODO: this doesn't actually work -- 404 results in OpenURI::HTTPError
         if (p.status.first == "404")
           puts "Page not found, exiting... #{next_page}"
           return
         end
+        # :nocov:
         doc = Nokogiri::XML(p)
         break
       rescue =>ex
         puts ex.message
         puts ex.backtrace
         puts "Error processing page #{next_page}"
+        # TODO: should exit here or at least skip the page
       end
     end
 
