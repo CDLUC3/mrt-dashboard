@@ -60,7 +60,19 @@ describe 'atom', type: :task do
       expect(request_args.size).to eq(2)
       files = request_args.map {|ra| ra['file']}
 
-      # TODO: check file contents
+      # TODO: check file contents, should be something like:
+      # #%checkm_0.7
+      # #%profile http://uc3.cdlib.org/registry/ingest/manifest/mrt-ingest-manifest
+      # #%prefix | mrt: | http://uc3.cdlib.org/ontology/mom#
+      # #%prefix | nfo: | http://www.semanticdesktop.org/ontologies/2007/03/22/nfo#
+      # #%fields | nfo:fileUrl | nfo:hashAlgorithm | nfo:hashValue | nfo:fileSize | nfo:fileLastModified | nfo:fileName | mrt:mimeType
+      # https://merritt:1212555@nuxeo.cdlib.org/Merritt/494672cf-2937-4975-8b33-90bf80b4c8a6.xml |  |  |  | | nuxeo.cdlib.org/Merritt/494672cf-2937-4975-8b33-90bf80b4c8a6.xml |
+      # https://s3.example.com/static.ucldc.example.edu/media_json/494672cf-2937-4975-8b33-90bf80b4c8a6-media.json |  |  |  | | s3.example.com/static.ucldc.example.edu/media_json/494672cf-2937-4975-8b33-90bf80b4c8a6-media.json |
+      # https://merritt:1212555@nuxeo.cdlib.org/Nuxeo/nxfile/default/494672cf-2937-4975-8b33-90bf80b4c8a6/file:content/ucm_mcdmugbk_cover_front_k.tif | md5 | 7bf2be3db6bbc38edf12b66bfa2d6eb8 |  | | nuxeo.cdlib.org/Nuxeo/nxfile/default/494672cf-2937-4975-8b33-90bf80b4c8a6/file:content/ucm_mcdmugbk_cover_front_k.tif |
+      # https://merritt:1212555@nuxeo.cdlib.org/Merritt/24b0f168-5372-4c5c-95ea-385c0e75d5c7.xml |  |  |  | | nuxeo.cdlib.org/Merritt/24b0f168-5372-4c5c-95ea-385c0e75d5c7.xml |
+      # https://merritt:1212555@nuxeo.cdlib.org/Nuxeo/nxfile/default/24b0f168-5372-4c5c-95ea-385c0e75d5c7/file:content/ucm_mcdmugbk_cover_front_k.tif | md5 | 7bf2be3db6bbc38edf12b66bfa2d6eb8 |  | | nuxeo.cdlib.org/Nuxeo/nxfile/default/24b0f168-5372-4c5c-95ea-385c0e75d5c7/file:content/ucm_mcdmugbk_cover_front_k.tif |
+      # https://merritt:1212555@nuxeo.cdlib.org/Merritt/6cf93a70-6b0d-41cf-b108-4c5c388c88c8.xml |  |  |  | | nuxeo.cdlib.org/Merritt/6cf93a70-6b0d-41cf-b108-4c5c388c88c8.xml |
+
       expected_args = [
         {
           'file' => files[0],
@@ -359,6 +371,10 @@ describe 'atom', type: :task do
     end
 
     skip 'sends basic-auth credentials for links to nuxeo.cdlib.org' do
+      # TODO: figure out how to test this
+    end
+
+    skip 'doesn\'t send basic-auth credentials for links to sites other than nuxeo.cdlib.org' do
       # TODO: figure out how to test this
     end
 
