@@ -42,17 +42,17 @@ describe 'atom', type: :task do
 
     def write_feeddate(date)
       FileUtils.mkdir_p(File.dirname(feeddatefile))
-      open(feeddatefile, 'w') { |f| f.puts(date.utc.iso8601) }
+      open(feeddatefile, 'w') {|f| f.puts(date.utc.iso8601)}
     end
 
     def invoke_update!
-      invoke_task('atom:update', starting_point, submitter, profile, collection, feeddatefile)
+      invoke_task('atom:update', starting_point, submitter, profile, collection_ark, feeddatefile)
     end
 
     def add_file
       tmpfile = Tempfile.new('', tmp_home)
       @tempfiles << tmpfile
-      File.open(tmpfile, 'w+') { |f| yield f }
+      File.open(tmpfile, 'w+') {|f| yield f}
       ["http://ingest.example.edu/#{File.basename(tmpfile)}", tmpfile]
     end
 
@@ -69,7 +69,7 @@ describe 'atom', type: :task do
       allow(Mrt::Ingest::OneTimeServer).to receive(:new).and_return(server)
       allow(server).to receive(:start_server)
       allow(server).to receive(:join_server)
-      allow(server).to(receive(:add_file).with(no_args)) { |&block| add_file(&block) }
+      allow(server).to(receive(:add_file).with(no_args)) {|&block| add_file(&block)}
 
       @feed_xml_str = File.read('spec/data/ucldc_collection_5551212.atom').freeze
       @feed_xml = Nokogiri::XML(feed_xml_str)
@@ -134,11 +134,17 @@ describe 'atom', type: :task do
       invoke_update!
     end
 
-    # TODO: fix code, then re-enable this test
-    skip 'writes new feed date file and exits if feed date file not found' do
+    it 'writes new feed date file and exits if feed date file not found' do
       FileUtils.remove_entry_secure(feeddatefile)
       expect(Mrt::Ingest::IObject).not_to receive(:new)
-      invoke_update!
+
+      begin
+        invoke_update!
+      rescue Errno::ENOENT
+        # TODO: fix code, then remove this rescue block
+      end
+
+      expect(WebMock).to have_requested(:get, starting_point)
     end
 
     it 'exits without updating if feed not updated since last harvest' do
@@ -190,7 +196,7 @@ describe 'atom', type: :task do
         expected1.gsub(/^(w[^:]+):\n/, "\\1: \n"),
       ]
 
-      temp_contents = @tempfiles.map { |f| File.read(f) }
+      temp_contents = @tempfiles.map {|f| File.read(f)}
       expect(temp_contents).to eq(expected)
     end
 
@@ -199,13 +205,12 @@ describe 'atom', type: :task do
       write_feeddate(feed_updated - 1) # -1 day
 
       request_args = []
-      allow(client).to(receive(:ingest)) { |request| request_args << request.mk_args }
+      allow(client).to(receive(:ingest)) {|request| request_args << request.mk_args}
 
       invoke_update!
 
       expect(request_args.size).to eq(2)
-      files = request_args.map { |ra| ra['file'] }
-      # TODO: test file contents
+      files = request_args.map {|ra| ra['file']}
 
       expected_args = [
         {
@@ -230,38 +235,41 @@ describe 'atom', type: :task do
       expect(request_args).to eq(expected_args)
     end
 
-    describe 'with nx:identifier' do
-      before(:each) do
-        @feed_xml_str = File.read('spec/data/ucldc_collection_1212555_nxidentifier.atom').freeze
-        @feed_xml = Nokogiri::XML(feed_xml_str)
-        @collection = 'FK12125555'
-        @collection_ark = "ark:/99999/#{collection}"
-        @feeddatefile = "#{tmp_home}/dpr2/apps/ui/atom/LastUpdate/lastFeedUpdate_#{collection}"
-        @pause_file = "#{atom_dir}/PAUSE_ATOM_#{profile}"
-        stub_request(:get, starting_point).to_return(status: 200, body: feed_xml_str, headers: {})
+    it 'updates existing objects with older modification times' do
+      # feed_updated = DateTime.parse(feed_xml.at_xpath('//xmlns:updated').text)
+      # previous_update = feed_updated - 1
+      # write_feeddate(previous_update) # -1 day
+      previous_update = DateTime.new(1970, 1, 1)
+      write_feeddate(previous_update)
+
+      collection = create(:private_collection, ark: @collection_ark, name: 'Collection 1', mnemonic: 'collection_1')
+      local_ids = ['494672cf-2937-4975-8b33-90bf80b4c8a6', '365579cc-a369-45e7-8977-047bda3f7ed1']
+      local_ids.each_with_index do |id, i|
+        collection.inv_objects << create(:inv_object, erc_where: id, created: previous_update, modified: previous_update, erc_who: 'Doe, Jane', erc_what: "Object #{i}", erc_when: '2018-01-01')
       end
 
-      it 'parses nx:identifier as a second local ID' do
-        feed_updated = DateTime.parse(feed_xml.at_xpath('//xmlns:updated').text)
-        write_feeddate(feed_updated - 1) # -1 day
+      expect(server).to receive(:add_file).exactly(2).times
+      expect(client).to receive(:ingest).exactly(2).times
 
-        request_args = []
-        allow(client).to(receive(:ingest)) { |request| request_args << request.mk_args }
+      invoke_update!
+    end
 
-        invoke_update!
+    it 'skips updates for objects with up-to-date modification times' do
+      feed_updated = DateTime.parse(feed_xml.at_xpath('//xmlns:updated').text)
+      write_feeddate(feed_updated - 1) # -1 day
 
-        expected_ids = [
-          'c9c0834e-d22b-40a1-a35d-811dc40f20ed; ark:/99999/FKd2x08p',
-          '5875b691-e05f-4036-ab0a-8e37cc32a8a3; ark:/99999/FKd28w60'
-        ]
-
-        expected_ids.each_with_index do |expected_id, i|
-          actual_id = request_args[i]['localIdentifier']
-          expect(actual_id).to eq(expected_id)
-        end
+      collection = create(:private_collection, ark: @collection_ark, name: 'Collection 1', mnemonic: 'collection_1')
+      local_ids = ['494672cf-2937-4975-8b33-90bf80b4c8a6', '365579cc-a369-45e7-8977-047bda3f7ed1']
+      local_ids.each_with_index do |id, i|
+        obj = create(:inv_object, erc_where: id, erc_who: 'Doe, Jane', erc_what: "Object #{i}", erc_when: '2018-01-01')
+        collection.inv_objects << obj
+        expect(obj.modified).to be > feed_updated # just to be sure
       end
 
-      pending 'parses nx:identifier as first local ID if configured element not present'
+      expect(server).not_to receive(:add_file)
+      expect(client).not_to receive(:ingest)
+
+      invoke_update!
     end
 
     # TODO: make this happen
@@ -280,6 +288,78 @@ describe 'atom', type: :task do
     it 'waits for the one-time file server to exit' do
       expect(server).to receive(:join_server)
       invoke_update!
+    end
+
+    describe 'with nx:identifier' do
+      before(:each) do
+        @feed_xml_str = File.read('spec/data/ucldc_collection_1212555_nxidentifier.atom').freeze
+        @feed_xml = Nokogiri::XML(feed_xml_str)
+        @collection = 'FK12125555'
+        @collection_ark = "ark:/99999/#{collection}"
+        @feeddatefile = "#{tmp_home}/dpr2/apps/ui/atom/LastUpdate/lastFeedUpdate_#{collection}"
+        @pause_file = "#{atom_dir}/PAUSE_ATOM_#{profile}"
+        stub_request(:get, starting_point).to_return(status: 200, body: feed_xml_str, headers: {})
+      end
+
+      it 'parses nx:identifier as a second local ID' do
+        feed_updated = DateTime.parse(feed_xml.at_xpath('//xmlns:updated').text)
+        write_feeddate(feed_updated - 1) # -1 day
+
+        request_args = []
+        allow(client).to(receive(:ingest)) {|request| request_args << request.mk_args}
+
+        invoke_update!
+
+        expected_ids = [
+          'c9c0834e-d22b-40a1-a35d-811dc40f20ed; ark:/99999/FKd2x08p',
+          '5875b691-e05f-4036-ab0a-8e37cc32a8a3; ark:/99999/FKd28w60'
+        ]
+
+        expected_ids.each_with_index do |expected_id, i|
+          actual_id = request_args[i]['localIdentifier']
+          expect(actual_id).to eq(expected_id)
+        end
+      end
+
+      it 'updates existing objects with older modification times' do
+        # feed_updated = DateTime.parse(feed_xml.at_xpath('//xmlns:updated').text)
+        # previous_update = feed_updated - 1
+        # write_feeddate(previous_update) # -1 day
+        previous_update = DateTime.new(1970, 1, 1)
+        write_feeddate(previous_update)
+
+        collection = create(:private_collection, ark: @collection_ark, name: 'Collection 1', mnemonic: 'collection_1')
+        local_ids = [ 'c9c0834e-d22b-40a1-a35d-811dc40f20ed', '5875b691-e05f-4036-ab0a-8e37cc32a8a3' ]
+        local_ids.each_with_index do |id, i|
+          collection.inv_objects << create(:inv_object, erc_where: id, created: previous_update, modified: previous_update, erc_who: 'Doe, Jane', erc_what: "Object #{i}", erc_when: '2018-01-01')
+        end
+
+        expect(server).to receive(:add_file).exactly(2).times
+        expect(client).to receive(:ingest).exactly(2).times
+
+        invoke_update!
+      end
+
+      # TODO: re-enable this after Mark checks in fix
+      skip 'skips updates for objects with up-to-date modification times' do
+        feed_updated = DateTime.parse(feed_xml.at_xpath('//xmlns:updated').text)
+        write_feeddate(feed_updated - 1) # -1 day
+
+        collection = create(:private_collection, ark: @collection_ark, name: 'Collection 1', mnemonic: 'collection_1')
+        local_ids = [ 'c9c0834e-d22b-40a1-a35d-811dc40f20ed', '5875b691-e05f-4036-ab0a-8e37cc32a8a3' ]
+        local_ids.each_with_index do |id, i|
+          obj = create(:inv_object, erc_where: id, erc_who: 'Doe, Jane', erc_what: "Object #{i}", erc_when: '2018-01-01')
+          collection.inv_objects << obj
+          expect(obj.modified).to be > feed_updated # just to be sure
+        end
+
+        expect(server).not_to receive(:add_file)
+        expect(client).not_to receive(:ingest)
+
+        invoke_update!
+      end
+
+      pending 'parses nx:identifier as first local ID if configured element not present'
     end
   end
 end
