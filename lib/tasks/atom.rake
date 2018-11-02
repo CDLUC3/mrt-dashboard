@@ -129,7 +129,10 @@ def process_atom_feed(submitter, profile, collection, feeddatefile, starting_poi
       # merrittCollectionLastFeedUpdatedFile = ATOM_CONFIG["#{merrittCollection}_lastFeedUpdate"]
       merrittCollectionLastFeedUpdatedFile = feeddatefile
       if (merrittCollectionLocalidElement.empty) then
+        # :nocov:
+        # TODO: this is broken
         merrittCollectionLocalidElement.empty = "atom:id"     # default
+        # :nocov:
       end
     rescue => ex
       # TODO: shouldn't we exit here?
