@@ -56,6 +56,34 @@ describe 'atom', type: :task do
       ["http://ingest.example.edu/#{File.basename(tmpfile)}", tmpfile]
     end
 
+    def validate_request!(request_args)
+      expect(request_args.size).to eq(2)
+      files = request_args.map {|ra| ra['file']}
+
+      # TODO: check file contents
+      expected_args = [
+        {
+          'file' => files[0],
+          'filename' => File.basename(files[0]),
+          'localIdentifier' => '494672cf-2937-4975-8b33-90bf80b4c8a6',
+          'profile' => 'example_ingest_profile',
+          'responseForm' => 'json',
+          'submitter' => 'Atom processor/Example U Digital Special Collections',
+          'type' => 'object-manifest'
+        },
+        {
+          'file' => files[1],
+          'filename' => File.basename(files[1]),
+          'localIdentifier' => '365579cc-a369-45e7-8977-047bda3f7ed1',
+          'profile' => 'example_ingest_profile',
+          'responseForm' => 'json',
+          'submitter' => 'Atom processor/Example U Digital Special Collections',
+          'type' => 'object-manifest'
+        }
+      ]
+      expect(request_args).to eq(expected_args)
+    end
+
     before(:each) do
       @original_home = ENV['HOME']
       @tmp_home = Dir.mktmpdir
@@ -239,30 +267,99 @@ describe 'atom', type: :task do
 
       invoke_update!
 
-      expect(request_args.size).to eq(2)
-      files = request_args.map {|ra| ra['file']}
+      validate_request!(request_args)
+    end
 
-      expected_args = [
-        {
-          'file' => files[0],
-          'filename' => File.basename(files[0]),
-          'localIdentifier' => '494672cf-2937-4975-8b33-90bf80b4c8a6',
-          'profile' => 'example_ingest_profile',
-          'responseForm' => 'json',
-          'submitter' => 'Atom processor/Example U Digital Special Collections',
-          'type' => 'object-manifest'
-        },
-        {
-          'file' => files[1],
-          'filename' => File.basename(files[1]),
-          'localIdentifier' => '365579cc-a369-45e7-8977-047bda3f7ed1',
-          'profile' => 'example_ingest_profile',
-          'responseForm' => 'json',
-          'submitter' => 'Atom processor/Example U Digital Special Collections',
-          'type' => 'object-manifest'
-        }
+    it 'doesn\'t require <dc:title/>' do
+      feed_updated = DateTime.parse(feed_xml.at_xpath('//xmlns:updated').text)
+      write_feeddate(feed_updated - 1) # -1 day
+
+      @feed_xml_str = @feed_xml_str.gsub(/<dc:title>[^<]+<\/dc:title>/, '')
+      stub_request(:get, starting_point).to_return(status: 200, body: feed_xml_str, headers: {})
+
+      request_args = []
+      allow(client).to(receive(:ingest)) {|request| request_args << request.mk_args}
+
+      invoke_update!
+
+      validate_request!(request_args)
+    end
+
+    # TODO: fix code, then re-enable this test
+    skip 'doesn\'t require <dc:date/>' do
+      feed_updated = DateTime.parse(feed_xml.at_xpath('//xmlns:updated').text)
+      write_feeddate(feed_updated - 1) # -1 day
+
+      @feed_xml_str = @feed_xml_str.gsub(/<dc:date>[^<]+<\/dc:date>/, '')
+      @feed_xml_str = @feed_xml_str.gsub(/<dc:date\/>/, '')
+      stub_request(:get, starting_point).to_return(status: 200, body: feed_xml_str, headers: {})
+
+      request_args = []
+      allow(client).to(receive(:ingest)) {|request| request_args << request.mk_args}
+
+      invoke_update!
+
+      validate_request!(request_args)
+    end
+
+    it 'falls back to <atom:published/> when <dc:date/> empty' do
+      feed_updated = DateTime.parse(feed_xml.at_xpath('//xmlns:updated').text)
+      write_feeddate(feed_updated - 1) # -1 day
+
+      @feed_xml_str = @feed_xml_str.gsub(/<dc:date>[^<]+<\/dc:date>/, '<dc:date/>')
+      stub_request(:get, starting_point).to_return(status: 200, body: feed_xml_str, headers: {})
+
+      request_args = []
+      allow(client).to(receive(:ingest)) {|request| request_args << request.mk_args}
+
+      invoke_update!
+
+      validate_request!(request_args)
+    end
+
+    it 'falls back to <atom:published/> when <dc:date/> not present' do
+      feed_updated = DateTime.parse(feed_xml.at_xpath('//xmlns:updated').text)
+      write_feeddate(feed_updated - 1) # -1 day
+
+      @feed_xml_str = @feed_xml_str.gsub(/<dc:date>[^<]+<\/dc:date>/, '')
+      @feed_xml_str = @feed_xml_str.gsub(/<dc:date\/>/, '')
+      @feed_xml_str = @feed_xml_str.gsub(/<updated>([^<]+)<\/updated>/, "<published>\\1</published>\n    <updated>\\1</updated>")
+      stub_request(:get, starting_point).to_return(status: 200, body: feed_xml_str, headers: {})
+
+      request_args = []
+      allow(client).to(receive(:ingest)) {|request| request_args << request.mk_args}
+
+      invoke_update!
+
+      validate_request!(request_args)
+    end
+
+    # TODO: fix code, then re-enable this test
+    skip 'falls back to <atom:id/> if <dc:identifier/> not found' do
+      feed_updated = DateTime.parse(feed_xml.at_xpath('//xmlns:updated').text)
+      write_feeddate(feed_updated - 1) # -1 day
+
+      @feed_xml_str = @feed_xml_str.gsub(/<dc:identifier>[^<]+<\/dc:identifier>/, '')
+      stub_request(:get, starting_point).to_return(status: 200, body: feed_xml_str, headers: {})
+
+      request_args = []
+      allow(client).to(receive(:ingest)) {|request| request_args << request.mk_args}
+
+      invoke_update!
+
+      expected_ids = [
+        'https://nuxeo.cdlib.org/Nuxeo/nxdoc/default/494672cf-2937-4975-8b33-90bf80b4c8a6/view_documents',
+        'https://nuxeo.cdlib.org/Nuxeo/nxdoc/default/365579cc-a369-45e7-8977-047bda3f7ed1/view_documents'
       ]
-      expect(request_args).to eq(expected_args)
+
+      expected_ids.each_with_index do |expected_id, i|
+        actual_id = request_args[i]['localIdentifier']
+        expect(actual_id).to eq(expected_id)
+      end
+    end
+
+    skip 'sends basic-auth credentials for links to nuxeo.cdlib.org' do
+      # TODO: figure out how to test this
     end
 
     it 'updates existing objects with older modification times' do
@@ -343,6 +440,30 @@ describe 'atom', type: :task do
         expected_ids = [
           'c9c0834e-d22b-40a1-a35d-811dc40f20ed; ark:/99999/FKd2x08p',
           '5875b691-e05f-4036-ab0a-8e37cc32a8a3; ark:/99999/FKd28w60'
+        ]
+
+        expected_ids.each_with_index do |expected_id, i|
+          actual_id = request_args[i]['localIdentifier']
+          expect(actual_id).to eq(expected_id)
+        end
+      end
+
+      # TODO: fix code, then re-enable this test
+      skip 'falls back to <atom:id/> if <dc:identifier/> not found' do
+        feed_updated = DateTime.parse(feed_xml.at_xpath('//xmlns:updated').text)
+        write_feeddate(feed_updated - 1) # -1 day
+
+        @feed_xml_str = @feed_xml_str.gsub(/<dc:identifier>[^<]+<\/dc:identifier>/, '')
+        stub_request(:get, starting_point).to_return(status: 200, body: feed_xml_str, headers: {})
+
+        request_args = []
+        allow(client).to(receive(:ingest)) {|request| request_args << request.mk_args}
+
+        invoke_update!
+
+        expected_ids = [
+          'https://nuxeo.cdlib.org/Nuxeo/nxdoc/default/c9c0834e-d22b-40a1-a35d-811dc40f20ed/view_documents; ark:/99999/FKd2x08p',
+          'https://nuxeo.cdlib.org/Nuxeo/nxdoc/default/5875b691-e05f-4036-ab0a-8e37cc32a8a3/view_documents; ark:/99999/FKd28w60'
         ]
 
         expected_ids.each_with_index do |expected_id, i|
