@@ -173,6 +173,8 @@ def process_atom_feed(submitter, profile, collection, feeddatefile, starting_poi
         puts "Processing Updated:	#{updated}"
         p =  up_to_date?(local_id, collection, updated, feeddate)
 
+        local_id.concat("; ", local_id2) if !local_id2.nil?
+
         return if p.nil? # TODO: why and when would this happen & why return if so?
 
         # No need to process this record
