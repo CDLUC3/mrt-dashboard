@@ -340,8 +340,7 @@ describe 'atom', type: :task do
         invoke_update!
       end
 
-      # TODO: re-enable this after Mark checks in fix
-      skip 'skips updates for objects with up-to-date modification times' do
+      it 'skips updates for objects with up-to-date modification times' do
         feed_updated = DateTime.parse(feed_xml.at_xpath('//xmlns:updated').text)
         write_feeddate(feed_updated - 1) # -1 day
 
