@@ -5,6 +5,10 @@ require 'fileutils'
 
 describe 'atom', type: :task do
 
+  ATOM_NS = {"atom" => "http://www.w3.org/2005/Atom"}
+  EXPECTED_MANIFESTS = (0..1).map {|i| File.read("spec/data/ucldc_collection_5551212-manifest-#{i}.checkm").freeze}.freeze
+  EXPECTED_ERC_CHECKSUMS = ['664d879f4609ef03f043dae7e4353959'.freeze, '0a10eaecc019131f17de4da54c32085b'.freeze]
+
   before(:each) do
     WebMock.disable_net_connect!
   end
@@ -56,22 +60,15 @@ describe 'atom', type: :task do
       ["http://ingest.example.edu/#{File.basename(tmpfile)}", tmpfile]
     end
 
-    def validate_request!(request_args)
+    def actual_erc_filenames
+      Dir.entries(tmp_home)
+        .select {|f| File.file?("#{tmp_home}/#{f}")}
+        .sort_by {|f| File.ctime("#{tmp_home}/#{f}")}
+    end
+
+    def validate_request!(request_args, erc_checksums = EXPECTED_ERC_CHECKSUMS)
       expect(request_args.size).to eq(2)
       files = request_args.map {|ra| ra['file']}
-
-      # TODO: check file contents, should be something like:
-      # #%checkm_0.7
-      # #%profile http://uc3.cdlib.org/registry/ingest/manifest/mrt-ingest-manifest
-      # #%prefix | mrt: | http://uc3.cdlib.org/ontology/mom#
-      # #%prefix | nfo: | http://www.semanticdesktop.org/ontologies/2007/03/22/nfo#
-      # #%fields | nfo:fileUrl | nfo:hashAlgorithm | nfo:hashValue | nfo:fileSize | nfo:fileLastModified | nfo:fileName | mrt:mimeType
-      # https://merritt:1212555@nuxeo.cdlib.org/Merritt/494672cf-2937-4975-8b33-90bf80b4c8a6.xml |  |  |  | | nuxeo.cdlib.org/Merritt/494672cf-2937-4975-8b33-90bf80b4c8a6.xml |
-      # https://s3.example.com/static.ucldc.example.edu/media_json/494672cf-2937-4975-8b33-90bf80b4c8a6-media.json |  |  |  | | s3.example.com/static.ucldc.example.edu/media_json/494672cf-2937-4975-8b33-90bf80b4c8a6-media.json |
-      # https://merritt:1212555@nuxeo.cdlib.org/Nuxeo/nxfile/default/494672cf-2937-4975-8b33-90bf80b4c8a6/file:content/ucm_mcdmugbk_cover_front_k.tif | md5 | 7bf2be3db6bbc38edf12b66bfa2d6eb8 |  | | nuxeo.cdlib.org/Nuxeo/nxfile/default/494672cf-2937-4975-8b33-90bf80b4c8a6/file:content/ucm_mcdmugbk_cover_front_k.tif |
-      # https://merritt:1212555@nuxeo.cdlib.org/Merritt/24b0f168-5372-4c5c-95ea-385c0e75d5c7.xml |  |  |  | | nuxeo.cdlib.org/Merritt/24b0f168-5372-4c5c-95ea-385c0e75d5c7.xml |
-      # https://merritt:1212555@nuxeo.cdlib.org/Nuxeo/nxfile/default/24b0f168-5372-4c5c-95ea-385c0e75d5c7/file:content/ucm_mcdmugbk_cover_front_k.tif | md5 | 7bf2be3db6bbc38edf12b66bfa2d6eb8 |  | | nuxeo.cdlib.org/Nuxeo/nxfile/default/24b0f168-5372-4c5c-95ea-385c0e75d5c7/file:content/ucm_mcdmugbk_cover_front_k.tif |
-      # https://merritt:1212555@nuxeo.cdlib.org/Merritt/6cf93a70-6b0d-41cf-b108-4c5c388c88c8.xml |  |  |  | | nuxeo.cdlib.org/Merritt/6cf93a70-6b0d-41cf-b108-4c5c388c88c8.xml |
 
       expected_args = [
         {
@@ -94,6 +91,21 @@ describe 'atom', type: :task do
         }
       ]
       expect(request_args).to eq(expected_args)
+
+      erc_filenames = actual_erc_filenames
+      files.each_with_index do |f, i|
+        actual_manifest_lines = f.read.strip.split("\n").map { |line| line.strip }
+        expected_manifest_lines = EXPECTED_MANIFESTS[i]
+                                    .sub('ACTUAL_ERC_FILENAME', "http://ingest.example.edu/#{erc_filenames[i]}")
+                                    .sub('EXPECTED_ERC_CHECKSUM', erc_checksums[i])
+                                    .strip.split("\n").map { |line| line.strip }
+        expect(actual_manifest_lines.size).to eq(expected_manifest_lines.size)
+        aggregate_failures 'manifest differences' do
+          expected_manifest_lines.each_with_index do |expected_line, j|
+            expect(actual_manifest_lines[j]).to eq(expected_line)
+          end
+        end
+      end
     end
 
     before(:each) do
@@ -326,7 +338,8 @@ describe 'atom', type: :task do
 
       invoke_update!
 
-      validate_request!(request_args)
+      expected_erc_checksums = ['b80b93b52e4f48c90dcb9c84ba13286b', 'e5a4ff1c14ed93e0c89f8d367d4e1cb9']
+      validate_request!(request_args, expected_erc_checksums)
     end
 
     it 'falls back to <atom:published/> when <dc:date/> not present' do
@@ -343,7 +356,8 @@ describe 'atom', type: :task do
 
       invoke_update!
 
-      validate_request!(request_args)
+      expected_erc_checksums = ['90c5a778f44df8661a8cd11b7868f519', '9d59734d7f1254d3d51c26ed999d3159']
+      validate_request!(request_args, expected_erc_checksums)
     end
 
     # TODO: fix code, then re-enable this test
@@ -496,7 +510,7 @@ describe 'atom', type: :task do
         write_feeddate(previous_update)
 
         collection = create(:private_collection, ark: @collection_ark, name: 'Collection 1', mnemonic: 'collection_1')
-        local_ids = [ 'c9c0834e-d22b-40a1-a35d-811dc40f20ed', '5875b691-e05f-4036-ab0a-8e37cc32a8a3' ]
+        local_ids = ['c9c0834e-d22b-40a1-a35d-811dc40f20ed', '5875b691-e05f-4036-ab0a-8e37cc32a8a3']
         local_ids.each_with_index do |id, i|
           collection.inv_objects << create(:inv_object, erc_where: id, created: previous_update, modified: previous_update, erc_who: 'Doe, Jane', erc_what: "Object #{i}", erc_when: '2018-01-01')
         end
@@ -512,7 +526,7 @@ describe 'atom', type: :task do
         write_feeddate(feed_updated - 1) # -1 day
 
         collection = create(:private_collection, ark: @collection_ark, name: 'Collection 1', mnemonic: 'collection_1')
-        local_ids = [ 'c9c0834e-d22b-40a1-a35d-811dc40f20ed', '5875b691-e05f-4036-ab0a-8e37cc32a8a3' ]
+        local_ids = ['c9c0834e-d22b-40a1-a35d-811dc40f20ed', '5875b691-e05f-4036-ab0a-8e37cc32a8a3']
         local_ids.each_with_index do |id, i|
           obj = create(:inv_object, erc_where: id, erc_who: 'Doe, Jane', erc_what: "Object #{i}", erc_when: '2018-01-01')
           collection.inv_objects << obj
