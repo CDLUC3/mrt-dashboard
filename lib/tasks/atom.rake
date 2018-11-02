@@ -65,6 +65,7 @@ def up_to_date?(local_id, collection_id, updated, feeddate)
   end
 end
 
+# TODO: "collection" is actually collection ARK, rename it
 def process_atom_feed(submitter, profile, collection, feeddatefile, starting_point)
   client = Mrt::Ingest::Client.new(APP_CONFIG['ingest_service'])
   server = Mrt::Ingest::OneTimeServer.new
