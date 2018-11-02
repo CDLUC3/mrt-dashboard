@@ -4,22 +4,22 @@
   <id>https://s3.example.com/static.ucldc.cdlib.org/merritt/ucldc_collection_1212555.atom</id>
   <title>UCLDC Metadata Feed</title>
   <author>UC Libraries Digital Collection</author>
-  <link href="https://nuxeo.example.edu/Nuxeo/nxdoc/default/afa37e7d-051f-4fbc-a5b4-e83aa6171aef/view_documents" rel="alternate" title="Costume Designs by Dunya Ramicova"/>
+  <link href="https://nuxeo.cdlib.org/Nuxeo/nxdoc/default/afa37e7d-051f-4fbc-a5b4-e83aa6171aef/view_documents" rel="alternate" title="Costume Designs by Dunya Ramicova"/>
   <link href="https://s3.example.com/static.ucldc.cdlib.org/merritt/ucldc_collection_1212555.atom" rel="self"/>
   <link href="https://s3.example.com/static.ucldc.cdlib.org/merritt/ucldc_collection_1212555.atom" rel="first"/>
   <link href="https://s3.example.com/static.ucldc.cdlib.org/merritt/ucldc_collection_1212555.atom" rel="last"/>
   <merritt_collection_id>ark:/99999/FK1212555</merritt_collection_id>
   <entry>
-    <id>https://nuxeo.example.edu/Nuxeo/nxdoc/default/c9c0834e-d22b-40a1-a35d-811dc40f20ed/view_documents</id>
+    <id>https://nuxeo.cdlib.org/Nuxeo/nxdoc/default/c9c0834e-d22b-40a1-a35d-811dc40f20ed/view_documents</id>
     <title>Zimin - Max, David A. Rasmusson</title>
     <updated>2018-09-21T03:58:10.447000+00:00</updated>
     <author>UC Libraries Digital Collection</author>
-    <link href="https://nuxeo.example.edu/Merritt/c9c0834e-d22b-40a1-a35d-811dc40f20ed.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Merritt/c9c0834e-d22b-40a1-a35d-811dc40f20ed.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
     <link href="https://s3.example.com/static.ucldc.cdlib.org/media_json/c9c0834e-d22b-40a1-a35d-811dc40f20ed-media.json" rel="alternate" title="Deep Harvest metadata for this object" type="application/json"/>
-    <link href="https://nuxeo.example.edu/Nuxeo/nxfile/default/c9c0834e-d22b-40a1-a35d-811dc40f20ed/file:content/ucm_dr_026_007_a.tif" rel="alternate" title="Main content file">
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/c9c0834e-d22b-40a1-a35d-811dc40f20ed/file:content/ucm_dr_026_007_a.tif" rel="alternate" title="Main content file">
       <opensearch:checksum algorithm="MD5">85af1bb13e90bd6f944e662f53d691ae</opensearch:checksum>
     </link>
-    <link href="https://nuxeo.example.edu/Nuxeo/nxfile/default/c9c0834e-d22b-40a1-a35d-811dc40f20ed/files:files/0/file/ucm_dr_026_007.tif" rel="alternate" title="Auxiliary file">
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/c9c0834e-d22b-40a1-a35d-811dc40f20ed/files:files/0/file/ucm_dr_026_007.tif" rel="alternate" title="Auxiliary file">
       <opensearch:checksum algorithm="MD5">a2110aad467ff7c0d1febe93ce774596</opensearch:checksum>
     </link>
     <dc:creator>Ramicova, Dunya</dc:creator>
@@ -30,16 +30,16 @@
     <nx:collection>https://registry.example.edu/api/v1/collection/1212555/</nx:collection>
   </entry>
   <entry>
-    <id>https://nuxeo.example.edu/Nuxeo/nxdoc/default/5875b691-e05f-4036-ab0a-8e37cc32a8a3/view_documents</id>
+    <id>https://nuxeo.cdlib.org/Nuxeo/nxdoc/default/5875b691-e05f-4036-ab0a-8e37cc32a8a3/view_documents</id>
     <title>Visitors to the Temple, Mr. Wang, and Mr. Sing</title>
     <updated>2018-02-07T21:17:31.484000+00:00</updated>
     <author>UC Libraries Digital Collection</author>
-    <link href="https://nuxeo.example.edu/Merritt/5875b691-e05f-4036-ab0a-8e37cc32a8a3.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Merritt/5875b691-e05f-4036-ab0a-8e37cc32a8a3.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
     <link href="https://s3.example.com/static.ucldc.cdlib.org/media_json/5875b691-e05f-4036-ab0a-8e37cc32a8a3-media.json" rel="alternate" title="Deep Harvest metadata for this object" type="application/json"/>
-    <link href="https://nuxeo.example.edu/Nuxeo/nxfile/default/5875b691-e05f-4036-ab0a-8e37cc32a8a3/file:content/ucm_dr_039_003.tif" rel="alternate" title="Main content file">
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/5875b691-e05f-4036-ab0a-8e37cc32a8a3/file:content/ucm_dr_039_003.tif" rel="alternate" title="Main content file">
       <opensearch:checksum algorithm="MD5">78e31ae2989d469af2f371848af34eb0</opensearch:checksum>
     </link>
-    <link href="https://nuxeo.example.edu/Nuxeo/nxfile/default/5875b691-e05f-4036-ab0a-8e37cc32a8a3/files:files/0/file/ucm_dr_039_003.tif" rel="alternate" title="Auxiliary file">
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/5875b691-e05f-4036-ab0a-8e37cc32a8a3/files:files/0/file/ucm_dr_039_003.tif" rel="alternate" title="Auxiliary file">
       <opensearch:checksum algorithm="MD5">9f1af4aeaeabb3f8c69485c7c71119a0</opensearch:checksum>
     </link>
     <dc:creator>Ramicova, Dunya</dc:creator>
