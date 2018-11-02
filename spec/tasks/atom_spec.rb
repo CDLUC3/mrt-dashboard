@@ -433,6 +433,7 @@ describe 'atom', type: :task do
     pending 'exits with an error if ATOM_CONFIG does not include collection credentials'
     pending 'exits with an error if ATOM_CONFIG does not include local ID element'
 
+    pending 'pages through results'
     pending 'stops paginating when next page is nil'
     pending 'doesn\'t update if initial feed is nil'
 
