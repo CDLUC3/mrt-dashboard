@@ -168,11 +168,19 @@ def process_atom_feed(submitter, profile, collection, feeddatefile, starting_poi
         puts "Processing Creator:	" + (dc_creator || creator)
         puts "Processing Updated:	#{updated}"
         p =  up_to_date?(local_id, collection, updated, feeddate)
-
         return if p.nil?
 
-        # advance to next
+        # No need to process this record
         next if p
+
+        # Add second localid if present
+        begin
+          local_id2 = entry.at_xpath("nx:identifier").text
+          puts "Processing additional local_id:	#{local_id2}"
+        rescue Exception => ex
+          # ex.backtrace
+        end
+        local_id.concat("; ", local_id2) if !local_id2.nil?
 
         wait = true
 
