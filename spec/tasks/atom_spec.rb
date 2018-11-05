@@ -448,6 +448,47 @@ describe 'atom', type: :task do
       invoke_update!
     end
 
+    describe 'pagination' do
+      attr_reader :feed_xml_strs
+      attr_reader :feed_urls
+
+      before(:each) do
+        feed_files = (1..3).map { |x| "ucldc_collection_9585555-#{x}.atom"}
+        @feed_xml_strs = feed_files.map { |f| File.read("spec/data/#{f}").freeze }
+        @feed_urls = feed_files.map { |f| "https://s3.example.com/static.ucldc.example.edu/merritt/#{f}" }
+        feed_urls.each_with_index do |url, i|
+          stub_request(:get, url).to_return(status: 200, body: feed_xml_strs[i], headers: {})
+        end
+
+        @starting_point = feed_urls[0]
+        @feed_xml_str = feed_xml_strs[0]
+        @feed_xml = Nokogiri::XML(feed_xml_str)
+        @collection = 'FK9585555'
+        @collection_ark = "ark:/99999/#{collection}"
+        @feeddatefile = "#{tmp_home}/dpr2/apps/ui/atom/LastUpdate/lastFeedUpdate_#{collection}"
+        @pause_file = "#{atom_dir}/PAUSE_ATOM_#{profile}"
+
+        feed_updated = DateTime.parse(feed_xml.at_xpath('//xmlns:updated').text)
+        write_feeddate(feed_updated - 1) # -1 day
+      end
+
+      it 'paginates' do
+        expect(server).to receive(:add_file).exactly(9).times
+        expect(client).to receive(:ingest).exactly(9).times
+        invoke_update!
+      end
+
+      it 'ignores bad "next" links that link to the page itself' do
+        last_link = '<link href="https://s3.example.com/static.ucldc.example.edu/merritt/ucldc_collection_9585555-3.atom" rel="last"/>'
+        feed_xml_str_self_next = feed_xml_strs[2].sub(last_link, "#{last_link}\n  #{last_link.sub('last', 'next')}")
+        stub_request(:get, feed_urls[2]).to_return(status: 200, body: feed_xml_str_self_next)
+
+        expect(server).to receive(:add_file).exactly(9).times
+        expect(client).to receive(:ingest).exactly(9).times
+        invoke_update!
+      end
+    end
+
     describe 'with nx:identifier' do
       before(:each) do
         @feed_xml_str = File.read('spec/data/ucldc_collection_1212555_nxidentifier.atom').freeze
