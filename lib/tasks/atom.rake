@@ -174,26 +174,25 @@ def process_atom_feed(submitter, profile, collection, feeddatefile, starting_poi
           xpath_content(au, "atom:name")
         }.join("; ")
 
-        # add second localid if present
-        begin
-          local_id2 = entry.at_xpath("nx:identifier").text
-        rescue Exception => ex
-          # ex.backtrace
-        end
-
         puts "Processing local_id:	#{local_id}"
         puts "Processing Title:		" + (dc_title || title)
         puts "Processing Date:		" + (dc_date || published)
         puts "Processing Creator:	" + (dc_creator || creator)
         puts "Processing Updated:	#{updated}"
         p =  up_to_date?(local_id, collection, updated, feeddate)
-
-        local_id.concat("; ", local_id2) if !local_id2.nil?
-
         return if p.nil? # TODO: why and when would this happen & why return if so?
 
-        # advance to next
+        # No need to process this record
         next if p
+
+        # Add second localid if present
+        begin
+          local_id2 = entry.at_xpath("nx:identifier").text
+          puts "Processing additional local_id:	#{local_id2}"
+        rescue Exception => ex
+          # ex.backtrace
+        end
+        local_id.concat("; ", local_id2) if !local_id2.nil?
 
         wait = true
 
