@@ -1,0 +1,105 @@
+<?xml version='1.0' encoding='utf-8'?>
+<feed xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:nx="http://www.nuxeo.org/ecm/project/schemas/tingle-california-digita/ucldc_schema" xmlns:opensearch="http://a9.com/-/spec/opensearch/1.1/" xmlns="http://www.w3.org/2005/Atom">
+  <updated>2018-10-09T23:20:23.497508+00:00</updated>
+  <id>https://s3.example.com/static.ucldc.example.edu/merritt/ucldc_collection_9585555.atom</id>
+  <title>UCLDC Metadata Feed</title>
+  <author>UC Libraries Digital Collection</author>
+  <link href="https://nuxeo.cdlib.org/Nuxeo/nxdoc/default/133be0f7-99b2-4e88-8842-d247993d7bac/view_documents" rel="alternate" title="Don Pedro Project"/>
+  <link href="https://s3.example.com/static.ucldc.example.edu/merritt/ucldc_collection_9585555-2.atom" rel="self"/>
+  <link href="https://s3.example.com/static.ucldc.example.edu/merritt/ucldc_collection_9585555-1.atom" rel="first"/>
+  <link href="https://s3.example.com/static.ucldc.example.edu/merritt/ucldc_collection_9585555-1.atom" rel="previous"/>
+  <link href="https://s3.example.com/static.ucldc.example.edu/merritt/ucldc_collection_9585555-3.atom" rel="next"/>
+  <link href="https://s3.example.com/static.ucldc.example.edu/merritt/ucldc_collection_9585555-3.atom" rel="last"/>
+  <merritt_collection_id>ark:/99999/FK9585555</merritt_collection_id>
+  <entry>
+    <id>https://nuxeo.cdlib.org/Nuxeo/nxdoc/default/9eb519ed-7baf-4da5-915f-3570ae2bfd04/view_documents</id>
+    <title>Native American Traditional Cultural Properties Study, Don Pedro Project, FERC No. 2299.</title>
+    <updated>2016-04-28T18:31:17.148000+00:00</updated>
+    <author>UC Libraries Digital Collection</author>
+    <link href="https://nuxeo.cdlib.org/Merritt/9eb519ed-7baf-4da5-915f-3570ae2bfd04.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://s3.example.com/static.ucldc.example.edu/media_json/9eb519ed-7baf-4da5-915f-3570ae2bfd04-media.json" rel="alternate" title="Deep Harvest metadata for this object" type="application/json"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/9eb519ed-7baf-4da5-915f-3570ae2bfd04/file:content/Don%20Pedro%20TCP%20Study%20Report%20Final_April%202015.pdf" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">d25070d8eef5476a0974b2e634093e92</opensearch:checksum>
+    </link>
+    <dc:creator>Moratto, Michael J.</dc:creator>
+    <dc:creator>Applied EarthWorks, Inc.</dc:creator>
+    <dc:title>Native American Traditional Cultural Properties Study, Don Pedro Project, FERC No. 2299.</dc:title>
+    <dc:date>2015-04.</dc:date>
+    <dc:identifier>9eb519ed-7baf-4da5-915f-3570ae2bfd04</dc:identifier>
+    <nx:collection/>
+  </entry>
+  <entry>
+    <id>https://nuxeo.cdlib.org/Nuxeo/nxdoc/default/b3b19edd-f774-4c49-affd-beae7776d977/view_documents</id>
+    <title>Traditional cultural property study for relicensing of the Don Pedro Project, Tuolumne County, California (FERC No. 2299)&#13;
+</title>
+    <updated>2016-03-04T00:42:27.367000+00:00</updated>
+    <author>UC Libraries Digital Collection</author>
+    <link href="https://nuxeo.cdlib.org/Merritt/b3b19edd-f774-4c49-affd-beae7776d977.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://s3.example.com/static.ucldc.example.edu/media_json/b3b19edd-f774-4c49-affd-beae7776d977-media.json" rel="alternate" title="Deep Harvest metadata for this object" type="application/json"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/b3b19edd-f774-4c49-affd-beae7776d977/file:content/Don%20Pedro%20Confidential%20Field%20Notes.pdf" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">bda2a5d086b7de207c234ddba5f58e1a</opensearch:checksum>
+    </link>
+    <dc:creator>Moratto, Michael J.</dc:creator>
+    <dc:title>Traditional cultural property study for relicensing of the Don Pedro Project, Tuolumne County, California (FERC No. 2299)&#13;
+</dc:title>
+    <dc:date>2012-2014</dc:date>
+    <dc:identifier>b3b19edd-f774-4c49-affd-beae7776d977</dc:identifier>
+    <nx:collection/>
+  </entry>
+  <entry>
+    <id>https://nuxeo.cdlib.org/Nuxeo/nxdoc/default/dae7f78e-591f-430d-b574-b3c1b75663e2/view_documents</id>
+    <title>(Unpublished) Ethnographic Field Notes for the Native American Traditional Cultural Properties Study, Don Pedro Project, FERC No. 2299, in Tuolumne County, California.</title>
+    <updated>2016-02-26T23:48:16.110000+00:00</updated>
+    <author>UC Libraries Digital Collection</author>
+    <link href="https://nuxeo.cdlib.org/Merritt/dae7f78e-591f-430d-b574-b3c1b75663e2.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://s3.example.com/static.ucldc.example.edu/media_json/dae7f78e-591f-430d-b574-b3c1b75663e2-media.json" rel="alternate" title="Deep Harvest metadata for this object" type="application/json"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/dae7f78e-591f-430d-b574-b3c1b75663e2/file:content/130416_003.MP3" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">da17af952da431459d389bc8cf48010e</opensearch:checksum>
+    </link>
+    <dc:creator>Moratto, Michael J.</dc:creator>
+    <dc:title>(Unpublished) Ethnographic Field Notes for the Native American Traditional Cultural Properties Study, Don Pedro Project, FERC No. 2299, in Tuolumne County, California.</dc:title>
+    <dc:date>2012-2014</dc:date>
+    <dc:identifier>dae7f78e-591f-430d-b574-b3c1b75663e2</dc:identifier>
+    <nx:collection/>
+    <link href="https://nuxeo.cdlib.org/Merritt/e50771c7-9fee-4165-a297-dcd950db4910.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/e50771c7-9fee-4165-a297-dcd950db4910/file:content/130416_004.MP3" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">b2409a52852db634089ce931ceaac593</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/c43fc2ab-5bac-494d-8ed1-f6719406f8c7.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/c43fc2ab-5bac-494d-8ed1-f6719406f8c7/file:content/130416_005.MP3" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">69854050d057c8ace68c27fbfe5cfaf8</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/6263fe72-394a-477f-a1cc-d4a80d206014.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/6263fe72-394a-477f-a1cc-d4a80d206014/file:content/130416_006.MP3" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">601080c4d2d63314959c0b08e9169a1c</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/a916aaa0-6555-48a7-bb61-c01bea72ccd5.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/a916aaa0-6555-48a7-bb61-c01bea72ccd5/file:content/130416_007.MP3" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">2ad202de6f1152a9cedeb89df06ee994</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/bdd96fa5-b44d-4742-8a21-8ac59f8e8c05.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/bdd96fa5-b44d-4742-8a21-8ac59f8e8c05/file:content/130416_008.MP3" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">fc53e68eda4cf2ade13b99bec172a3ae</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/ad0e1d95-2aed-4716-8d04-a69f03bf23fa.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/ad0e1d95-2aed-4716-8d04-a69f03bf23fa/file:content/130417_001.MP3" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">be4bc13c68441431415156520b32d2d1</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/c4f74f36-b10f-46f1-9ce2-fbc9589355b6.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/c4f74f36-b10f-46f1-9ce2-fbc9589355b6/file:content/130417_002.MP3" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">988431b5035cb1c10b293caf203076b9</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/1affce31-1d4b-4906-a0e7-7f4c3dd3bd6b.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/1affce31-1d4b-4906-a0e7-7f4c3dd3bd6b/file:content/130611_001.MP3" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">05f198b968a622a64da7a00f4957dde9</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/6549fcc5-df26-4925-a109-9e98e5cef284.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/6549fcc5-df26-4925-a109-9e98e5cef284/file:content/130612_001.MP3" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">cf4c662b8b5a245533e9995e3f460674</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/5b700c78-e36b-4d89-9698-e162c15e738f.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/5b700c78-e36b-4d89-9698-e162c15e738f/file:content/130612_002.MP3" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">23afe00aa806abeac060ffd4365b333a</opensearch:checksum>
+    </link>
+  </entry>
+</feed>
