@@ -487,6 +487,29 @@ describe 'atom', type: :task do
         expect(client).to receive(:ingest).exactly(9).times
         invoke_update!
       end
+
+      it 'pauses between batches' do
+        batch_size_orig = Object.send(:remove_const, :BATCH_SIZE)
+        Object.send(:const_set, :BATCH_SIZE, 2)
+        expect(BATCH_SIZE).to eq(2) # just to be sure
+
+        begin
+          obj_count = 9
+          expected_sleeps = (obj_count / BATCH_SIZE) - 1
+          expect(server).to receive(:add_file).exactly(obj_count).times
+          expect(client).to receive(:ingest).exactly(obj_count).times
+
+          # HACK: to "expect().to receive" global sleep call
+          @sleep_count = 0
+          allow_any_instance_of(Object).to(receive(:sleep).with(300)) { @sleep_count += 1 }
+
+          invoke_update!
+          expect(@sleep_count).to eq(expected_sleeps)
+        ensure
+          Object.send(:remove_const, :BATCH_SIZE)
+          Object.send(:const_set, :BATCH_SIZE, batch_size_orig)
+        end
+      end
     end
 
     describe 'with nx:identifier' do
