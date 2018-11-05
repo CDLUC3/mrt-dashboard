@@ -288,7 +288,7 @@ def process_atom_feed(submitter, profile, collection, feeddatefile, starting_poi
     next_page = xpath_content(doc, "/atom:feed/atom:link[@rel=\"next\"]/@href")
 
     if (! next_page.nil?) then
-      if (current_page == next_page || next_page.empty)
+      if (current_page == next_page || next_page.empty?)
         puts "No page processing or no new page."
         next_page = nil
       else
