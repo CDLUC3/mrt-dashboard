@@ -226,7 +226,44 @@ describe 'atom', type: :task do
       invoke_update!
     end
 
-    it 'updates if feed updated since last harvest' do
+    it 'retries three times if unable to read feed URL' do
+      feed_updated = DateTime.parse(feed_xml.at_xpath('//xmlns:updated').text)
+      write_feeddate(feed_updated - 1) # -1 day
+
+      @try = 0
+      stub_request(:get, starting_point).to_return do |_|
+        @try += 1
+        if @try != 3
+          { status: 500, body: 'Oops, try again!', headers: {} }
+        else
+          { status: 200, body: feed_xml_str, headers: {} }
+        end
+      end
+      expect(server).to receive(:add_file).exactly(2).times
+      expect(client).to receive(:ingest).exactly(2).times
+
+      invoke_update!
+      expect(@try).to eq(3) # just to be sure
+    end
+
+    # TODO: fix code, then re-enable this test
+    skip 'gives up after three tries' do
+      feed_updated = DateTime.parse(feed_xml.at_xpath('//xmlns:updated').text)
+      write_feeddate(feed_updated - 1) # -1 day
+
+      @try = 0
+      stub_request(:get, starting_point).to_return do |_|
+        @try += 1
+        { status: 500, body: 'Oops, try again!', headers: {} }
+      end
+      expect(server).not_to receive(:add_file)
+      expect(client).not_to receive(:ingest)
+
+      invoke_update!
+      expect(@try).to eq(3) # just to be sure
+    end
+
+    it 'continues in the event of an ingest failure' do
       feed_updated = DateTime.parse(feed_xml.at_xpath('//xmlns:updated').text)
       write_feeddate(feed_updated - 1) # -1 day
 
