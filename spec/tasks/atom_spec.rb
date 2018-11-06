@@ -220,6 +220,24 @@ describe 'atom', type: :task do
       invoke_update!
     end
 
+    it 'updates if feed updated since last harvest' do
+      feed_updated = DateTime.parse(feed_xml.at_xpath('//xmlns:updated').text)
+      write_feeddate(feed_updated - 1) # -1 day
+
+      @start_count = 0
+      expect(server).to receive(:start_server).exactly(3).times do
+        @start_count += 1
+        if @start_count == 2
+          raise 'random failure on second object'
+        end
+      end
+
+      expect(server).to receive(:add_file).exactly(2).times
+      expect(client).to receive(:ingest).exactly(1).times
+
+      invoke_update!
+    end
+
     # TODO: fix code, then re-enable this test
     skip 'updates if no <updated/> tag found under root' do
       feed_updated = DateTime.parse(feed_xml.at_xpath('//xmlns:updated').text)
