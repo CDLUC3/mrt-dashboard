@@ -1,4 +1,4 @@
-require 'lib/atom'
+require 'merritt/atom'
 
 namespace :atom do
   desc 'Generic Atom to Merritt processor'

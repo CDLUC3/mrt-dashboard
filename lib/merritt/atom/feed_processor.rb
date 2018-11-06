@@ -23,8 +23,8 @@ module Merritt
 
       def process_page(page_url)
         return unless page_url
-        handler = new PageHandler(page_url: page_url, atom_processor: self)
-        next_page = handler.handle_page_and_get_next
+        page_processor = new PageProcessor(page_url: page_url, atom_processor: self)
+        next_page = page_processor.process
         process_page(next_page)
       end
     end
