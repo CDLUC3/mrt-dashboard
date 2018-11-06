@@ -1,0 +1,5 @@
+inherit_from: ../.rubocop.yml
+
+Style/DateTime:
+  Exclude:
+    - atom_spec.rb
