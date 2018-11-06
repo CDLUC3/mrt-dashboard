@@ -10,7 +10,6 @@ module Merritt
 
       before(:each) do
         WebMock.disable_net_connect!
-
         @feed_processor = instance_double(FeedProcessor)
       end
 
@@ -28,7 +27,7 @@ module Merritt
         page2_url = 'https://s3.example.com/static.ucldc.example.edu/merritt/ucldc_collection_9585555-2.atom'
         expect(next_page).to eq(page2_url)
       end
-      
+
       it 'returns nil if no next page' do
         page3_url = 'https://s3.example.com/static.ucldc.example.edu/merritt/ucldc_collection_9585555-3.atom'
         page3_path = 'spec/data/ucldc_collection_9585555-3.atom'
@@ -54,7 +53,7 @@ module Merritt
         end
 
         (1..2).each do |t|
-          expect(Rails.logger).to receive(:error).with(%r{Error processing page #{page1_url} \(tries = #{t}\): 500 Internal Server Error}).ordered
+          expect(Rails.logger).to receive(:error).with(/Error processing page #{page1_url} \(tries = #{t}\): 500 Internal Server Error/).ordered
         end
 
         page_processor = PageProcessor.new(page_url: page1_url, feed_processor: feed_processor)
@@ -74,7 +73,7 @@ module Merritt
         end
 
         (1..3).each do |t|
-          expect(Rails.logger).to receive(:error).with(%r{Error processing page #{page1_url} \(tries = #{t}\): 500 Internal Server Error}).ordered
+          expect(Rails.logger).to receive(:error).with(/Error processing page #{page1_url} \(tries = #{t}\): 500 Internal Server Error/).ordered
         end
 
         page_processor = PageProcessor.new(page_url: page1_url, feed_processor: feed_processor)

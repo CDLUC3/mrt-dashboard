@@ -1,10 +1,9 @@
 require 'nokogiri'
-require 'time'
 
 module Merritt
   module Atom
     class XmlProcessor
-      include Merritt::Atom::Logging
+      include Merritt::Atom::Util
 
       NS = {
         'atom' => 'http://www.w3.org/2005/Atom',
@@ -29,11 +28,7 @@ module Merritt
         updated_elem = first_xpath_match('//atom:updated')
         return unless updated_elem
         updated_str = updated_elem.content
-        begin
-          Time.parse(updated_str)
-        rescue ArgumentError => e
-          log_error("Unable to parse #{updated_elem}", e)
-        end
+        parse_time(updated_str)
       end
 
       def first_xpath_match(query)

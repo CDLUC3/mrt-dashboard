@@ -5,7 +5,7 @@ require 'time'
 module Merritt
   module Atom
     class PageProcessor
-      include Merritt::Atom::Logging
+      include Merritt::Atom::Util
 
       attr_reader :page_url
       attr_reader :feed_processor

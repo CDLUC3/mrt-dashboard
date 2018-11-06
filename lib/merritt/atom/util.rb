@@ -1,8 +1,17 @@
 require 'rails'
+require 'time'
 
 module Merritt
   module Atom
-    module Logging
+    module Util
+      def log_info(message)
+        if (log = Rails.logger)
+          log.info(message)
+        else
+          $stdout.puts(message)
+        end
+      end
+
       def log_error(message, exception = nil)
         msg = message
         msg << ": #{exception}" if exception
@@ -13,6 +22,12 @@ module Merritt
         else
           warn(msg)
         end
+      end
+
+      def parse_time(time_str)
+        Time.parse(time_str)
+      rescue ArgumentError => e
+        log_error("Unable to parse #{time_str}", e)
       end
 
       private
