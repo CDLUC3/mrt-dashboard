@@ -1,3 +1,4 @@
+# :nocov:
 require 'fileutils'
 require 'open3'
 require 'pathname'
@@ -148,3 +149,4 @@ namespace :ui do
     UIDemo.new(project_root).compile_to_production!
   end
 end
+# :nocov:
