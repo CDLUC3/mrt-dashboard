@@ -28,22 +28,6 @@ module Merritt
         process_page(next_page)
       end
 
-      def log_error(error, details = nil)
-        msg = error.to_s
-        msg << ": #{details}" if details
-        if (backtrace = (error.respond_to?(:backtrace) && error.backtrace))
-          backtrace.each do |line|
-            msg << "\n"
-            msg << line
-          end
-        end
-
-        if (log = Rails.logger)
-          log.error(msg)
-        else
-          $stderr.puts(msg)
-        end
-      end
     end
   end
 end

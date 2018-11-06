@@ -54,7 +54,7 @@ module Merritt
         end
 
         (1..2).each do |t|
-          expect(feed_processor).to receive(:log_error).with("Error processing page #{page1_url} (tries = #{t})", RestClient::InternalServerError).ordered
+          expect(Rails.logger).to receive(:error).with(%r{Error processing page #{page1_url} \(tries = #{t}\): 500 Internal Server Error}).ordered
         end
 
         page_processor = PageProcessor.new(page_url: page1_url, feed_processor: feed_processor)
@@ -74,7 +74,7 @@ module Merritt
         end
 
         (1..3).each do |t|
-          expect(feed_processor).to receive(:log_error).with("Error processing page #{page1_url} (tries = #{t})", RestClient::InternalServerError).ordered
+          expect(Rails.logger).to receive(:error).with(%r{Error processing page #{page1_url} \(tries = #{t}\): 500 Internal Server Error}).ordered
         end
 
         page_processor = PageProcessor.new(page_url: page1_url, feed_processor: feed_processor)
