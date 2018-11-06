@@ -5,9 +5,9 @@ require 'fileutils'
 
 describe 'atom', type: :task do
 
-  ATOM_NS = {"atom" => "http://www.w3.org/2005/Atom"}
-  EXPECTED_MANIFESTS = (0..1).map {|i| File.read("spec/data/ucldc_collection_5551212-manifest-#{i}.checkm").freeze}.freeze
-  EXPECTED_ERC_CHECKSUMS = ['664d879f4609ef03f043dae7e4353959'.freeze, '0a10eaecc019131f17de4da54c32085b'.freeze]
+  ATOM_NS = { 'atom' => 'http://www.w3.org/2005/Atom' }.freeze
+  EXPECTED_MANIFESTS = (0..1).map { |i| File.read("spec/data/ucldc_collection_5551212-manifest-#{i}.checkm").freeze }.freeze
+  EXPECTED_ERC_CHECKSUMS = ['664d879f4609ef03f043dae7e4353959'.freeze, '0a10eaecc019131f17de4da54c32085b'.freeze].freeze
 
   before(:each) do
     WebMock.disable_net_connect!
@@ -46,7 +46,7 @@ describe 'atom', type: :task do
 
     def write_feeddate(date)
       FileUtils.mkdir_p(File.dirname(feeddatefile))
-      open(feeddatefile, 'w') {|f| f.puts(date.utc.iso8601)}
+      File.open(feeddatefile, 'w') { |f| f.puts(date.utc.iso8601) }
     end
 
     def invoke_update!
@@ -56,19 +56,20 @@ describe 'atom', type: :task do
     def add_file
       tmpfile = Tempfile.new('', tmp_home)
       @tempfiles << tmpfile
-      File.open(tmpfile, 'w+') {|f| yield f}
+      File.open(tmpfile, 'w+') { |f| yield f }
       ["http://ingest.example.edu/#{File.basename(tmpfile)}", tmpfile]
     end
 
     def actual_erc_filenames
       Dir.entries(tmp_home)
-        .select {|f| File.file?("#{tmp_home}/#{f}")}
-        .sort_by {|f| File.ctime("#{tmp_home}/#{f}")}
+        .select { |f| File.file?("#{tmp_home}/#{f}") }
+        .sort_by { |f| File.ctime("#{tmp_home}/#{f}") }
     end
 
+    # rubocop:disable Metrics/AbcSize
     def validate_request!(request_args, erc_checksums = EXPECTED_ERC_CHECKSUMS)
       expect(request_args.size).to eq(2)
-      files = request_args.map {|ra| ra['file']}
+      files = request_args.map { |ra| ra['file'] }
 
       expected_args = [
         {
@@ -94,11 +95,11 @@ describe 'atom', type: :task do
 
       erc_filenames = actual_erc_filenames
       files.each_with_index do |f, i|
-        actual_manifest_lines = f.read.strip.split("\n").map { |line| line.strip }
+        actual_manifest_lines = f.read.strip.split("\n").map(&:strip)
         expected_manifest_lines = EXPECTED_MANIFESTS[i]
-                                    .sub('ACTUAL_ERC_FILENAME', "http://ingest.example.edu/#{erc_filenames[i]}")
-                                    .sub('EXPECTED_ERC_CHECKSUM', erc_checksums[i])
-                                    .strip.split("\n").map { |line| line.strip }
+          .sub('ACTUAL_ERC_FILENAME', "http://ingest.example.edu/#{erc_filenames[i]}")
+          .sub('EXPECTED_ERC_CHECKSUM', erc_checksums[i])
+          .strip.split("\n").map(&:strip)
         expect(actual_manifest_lines.size).to eq(expected_manifest_lines.size)
         aggregate_failures 'manifest differences' do
           expected_manifest_lines.each_with_index do |expected_line, j|
@@ -107,6 +108,7 @@ describe 'atom', type: :task do
         end
       end
     end
+    # rubocop:enable Metrics/AbcSize
 
     before(:each) do
       @original_home = ENV['HOME']
@@ -121,7 +123,7 @@ describe 'atom', type: :task do
       allow(Mrt::Ingest::OneTimeServer).to receive(:new).and_return(server)
       allow(server).to receive(:start_server)
       allow(server).to receive(:join_server)
-      allow(server).to(receive(:add_file).with(no_args)) {|&block| add_file(&block)}
+      allow(server).to(receive(:add_file).with(no_args)) { |&block| add_file(&block) }
 
       @feed_xml_str = File.read('spec/data/ucldc_collection_5551212.atom').freeze
       @feed_xml = Nokogiri::XML(feed_xml_str)
@@ -183,22 +185,26 @@ describe 'atom', type: :task do
       stub_request(:get, starting_point).to_return(status: [404, 'Not Found'])
       expect(Mrt::Ingest::IObject).not_to receive(:new)
 
+      # rubocop:disable Lint/HandleExceptions
       begin
         invoke_update!
       rescue Errno::ENOENT
         # TODO: fix code, then remove this rescue block
       end
+      # rubocop:enable Lint/HandleExceptions
     end
 
     it 'writes new feed date file and exits if feed date file not found' do
       FileUtils.remove_entry_secure(feeddatefile)
       expect(Mrt::Ingest::IObject).not_to receive(:new)
 
+      # rubocop:disable Lint/HandleExceptions
       begin
         invoke_update!
       rescue Errno::ENOENT
         # TODO: fix code, then remove this rescue block
       end
+      # rubocop:enable Lint/HandleExceptions
 
       expect(WebMock).to have_requested(:get, starting_point)
     end
@@ -227,9 +233,7 @@ describe 'atom', type: :task do
       @start_count = 0
       expect(server).to receive(:start_server).exactly(3).times do
         @start_count += 1
-        if @start_count == 2
-          raise 'random failure on second object'
-        end
+        raise 'random failure on second object' if @start_count == 2
       end
 
       expect(server).to receive(:add_file).exactly(2).times
@@ -242,7 +246,7 @@ describe 'atom', type: :task do
     skip 'updates if no <updated/> tag found under root' do
       feed_updated = DateTime.parse(feed_xml.at_xpath('//xmlns:updated').text)
       write_feeddate(feed_updated + 1) # +1 day, ordinarily would be skipped
-      @feed_xml_str = @feed_xml_str.sub(/^ {2}<updated>[^<]+<\/updated>/, '')
+      @feed_xml_str = @feed_xml_str.sub(%r{^ {2}<updated>[^<]+</updated>}, '')
       stub_request(:get, starting_point).to_return(status: 200, body: feed_xml_str, headers: {})
 
       expect(server).to receive(:add_file).exactly(2).times
@@ -255,7 +259,7 @@ describe 'atom', type: :task do
     skip 'updates if no <updated/> tag found under entries' do
       feed_updated = DateTime.parse(feed_xml.at_xpath('//xmlns:updated').text)
       write_feeddate(feed_updated - 1) # - 1 day
-      @feed_xml_str = @feed_xml_str.gsub(/ {4}<updated>[^<]+<\/updated>/, '')
+      @feed_xml_str = @feed_xml_str.gsub(%r{ {4}<updated>[^<]+</updated>}, '')
       stub_request(:get, starting_point).to_return(status: 200, body: feed_xml_str, headers: {})
 
       expect(server).to receive(:add_file).exactly(2).times
@@ -293,10 +297,10 @@ describe 'atom', type: :task do
       expected = [
         # Mrt::Ingest::IObject leaves trailing spaces when value is nil
         expected0.gsub(/^(w[^:]+):\n/, "\\1: \n"),
-        expected1.gsub(/^(w[^:]+):\n/, "\\1: \n"),
+        expected1.gsub(/^(w[^:]+):\n/, "\\1: \n")
       ]
 
-      temp_contents = @tempfiles.map {|f| File.read(f)}
+      temp_contents = @tempfiles.map { |f| File.read(f) }
       expect(temp_contents).to eq(expected)
     end
 
@@ -305,7 +309,7 @@ describe 'atom', type: :task do
       write_feeddate(feed_updated - 1) # -1 day
 
       request_args = []
-      allow(client).to(receive(:ingest)) {|request| request_args << request.mk_args}
+      allow(client).to(receive(:ingest)) { |request| request_args << request.mk_args }
 
       invoke_update!
 
@@ -316,11 +320,11 @@ describe 'atom', type: :task do
       feed_updated = DateTime.parse(feed_xml.at_xpath('//xmlns:updated').text)
       write_feeddate(feed_updated - 1) # -1 day
 
-      @feed_xml_str = @feed_xml_str.gsub(/<dc:title>[^<]+<\/dc:title>/, '')
+      @feed_xml_str = @feed_xml_str.gsub(%r{<dc:title>[^<]+</dc:title>}, '')
       stub_request(:get, starting_point).to_return(status: 200, body: feed_xml_str, headers: {})
 
       request_args = []
-      allow(client).to(receive(:ingest)) {|request| request_args << request.mk_args}
+      allow(client).to(receive(:ingest)) { |request| request_args << request.mk_args }
 
       invoke_update!
 
@@ -332,12 +336,12 @@ describe 'atom', type: :task do
       feed_updated = DateTime.parse(feed_xml.at_xpath('//xmlns:updated').text)
       write_feeddate(feed_updated - 1) # -1 day
 
-      @feed_xml_str = @feed_xml_str.gsub(/<dc:date>[^<]+<\/dc:date>/, '')
-      @feed_xml_str = @feed_xml_str.gsub(/<dc:date\/>/, '')
+      @feed_xml_str = @feed_xml_str.gsub(%r{<dc:date>[^<]+</dc:date>}, '')
+      @feed_xml_str = @feed_xml_str.gsub('<dc:date/>', '')
       stub_request(:get, starting_point).to_return(status: 200, body: feed_xml_str, headers: {})
 
       request_args = []
-      allow(client).to(receive(:ingest)) {|request| request_args << request.mk_args}
+      allow(client).to(receive(:ingest)) { |request| request_args << request.mk_args }
 
       invoke_update!
 
@@ -348,15 +352,15 @@ describe 'atom', type: :task do
       feed_updated = DateTime.parse(feed_xml.at_xpath('//xmlns:updated').text)
       write_feeddate(feed_updated - 1) # -1 day
 
-      @feed_xml_str = @feed_xml_str.gsub(/<dc:date>[^<]+<\/dc:date>/, '<dc:date/>')
+      @feed_xml_str = @feed_xml_str.gsub(%r{<dc:date>[^<]+</dc:date>}, '<dc:date/>')
       stub_request(:get, starting_point).to_return(status: 200, body: feed_xml_str, headers: {})
 
       request_args = []
-      allow(client).to(receive(:ingest)) {|request| request_args << request.mk_args}
+      allow(client).to(receive(:ingest)) { |request| request_args << request.mk_args }
 
       invoke_update!
 
-      expected_erc_checksums = ['b80b93b52e4f48c90dcb9c84ba13286b', 'e5a4ff1c14ed93e0c89f8d367d4e1cb9']
+      expected_erc_checksums = %w[b80b93b52e4f48c90dcb9c84ba13286b e5a4ff1c14ed93e0c89f8d367d4e1cb9]
       validate_request!(request_args, expected_erc_checksums)
     end
 
@@ -364,17 +368,17 @@ describe 'atom', type: :task do
       feed_updated = DateTime.parse(feed_xml.at_xpath('//xmlns:updated').text)
       write_feeddate(feed_updated - 1) # -1 day
 
-      @feed_xml_str = @feed_xml_str.gsub(/<dc:date>[^<]+<\/dc:date>/, '')
-      @feed_xml_str = @feed_xml_str.gsub(/<dc:date\/>/, '')
-      @feed_xml_str = @feed_xml_str.gsub(/<updated>([^<]+)<\/updated>/, "<published>\\1</published>\n    <updated>\\1</updated>")
+      @feed_xml_str = @feed_xml_str.gsub(%r{<dc:date>[^<]+</dc:date>}, '')
+      @feed_xml_str = @feed_xml_str.gsub('<dc:date/>', '')
+      @feed_xml_str = @feed_xml_str.gsub(%r{<updated>([^<]+)</updated>}, "<published>\\1</published>\n    <updated>\\1</updated>")
       stub_request(:get, starting_point).to_return(status: 200, body: feed_xml_str, headers: {})
 
       request_args = []
-      allow(client).to(receive(:ingest)) {|request| request_args << request.mk_args}
+      allow(client).to(receive(:ingest)) { |request| request_args << request.mk_args }
 
       invoke_update!
 
-      expected_erc_checksums = ['90c5a778f44df8661a8cd11b7868f519', '9d59734d7f1254d3d51c26ed999d3159']
+      expected_erc_checksums = %w[90c5a778f44df8661a8cd11b7868f519 9d59734d7f1254d3d51c26ed999d3159]
       validate_request!(request_args, expected_erc_checksums)
     end
 
@@ -383,11 +387,11 @@ describe 'atom', type: :task do
       feed_updated = DateTime.parse(feed_xml.at_xpath('//xmlns:updated').text)
       write_feeddate(feed_updated - 1) # -1 day
 
-      @feed_xml_str = @feed_xml_str.gsub(/<dc:identifier>[^<]+<\/dc:identifier>/, '')
+      @feed_xml_str = @feed_xml_str.gsub(%r{<dc:identifier>[^<]+</dc:identifier>}, '')
       stub_request(:get, starting_point).to_return(status: 200, body: feed_xml_str, headers: {})
 
       request_args = []
-      allow(client).to(receive(:ingest)) {|request| request_args << request.mk_args}
+      allow(client).to(receive(:ingest)) { |request| request_args << request.mk_args }
 
       invoke_update!
 
@@ -420,7 +424,15 @@ describe 'atom', type: :task do
       collection = create(:private_collection, ark: @collection_ark, name: 'Collection 1', mnemonic: 'collection_1')
       local_ids = ['494672cf-2937-4975-8b33-90bf80b4c8a6', '365579cc-a369-45e7-8977-047bda3f7ed1']
       local_ids.each_with_index do |id, i|
-        collection.inv_objects << create(:inv_object, erc_where: id, created: previous_update, modified: previous_update, erc_who: 'Doe, Jane', erc_what: "Object #{i}", erc_when: '2018-01-01')
+        collection.inv_objects << create(
+          :inv_object,
+          erc_where: id,
+          created: previous_update,
+          modified: previous_update,
+          erc_who: 'Doe, Jane',
+          erc_what: "Object #{i}",
+          erc_when: '2018-01-01'
+        )
       end
 
       expect(server).to receive(:add_file).exactly(2).times
@@ -471,7 +483,7 @@ describe 'atom', type: :task do
       attr_reader :feed_urls
 
       before(:each) do
-        feed_files = (1..3).map { |x| "ucldc_collection_9585555-#{x}.atom"}
+        feed_files = (1..3).map { |x| "ucldc_collection_9585555-#{x}.atom" }
         @feed_xml_strs = feed_files.map { |f| File.read("spec/data/#{f}").freeze }
         @feed_urls = feed_files.map { |f| "https://s3.example.com/static.ucldc.example.edu/merritt/#{f}" }
         feed_urls.each_with_index do |url, i|
@@ -546,7 +558,7 @@ describe 'atom', type: :task do
         write_feeddate(feed_updated - 1) # -1 day
 
         request_args = []
-        allow(client).to(receive(:ingest)) {|request| request_args << request.mk_args}
+        allow(client).to(receive(:ingest)) { |request| request_args << request.mk_args }
 
         invoke_update!
 
@@ -566,11 +578,11 @@ describe 'atom', type: :task do
         feed_updated = DateTime.parse(feed_xml.at_xpath('//xmlns:updated').text)
         write_feeddate(feed_updated - 1) # -1 day
 
-        @feed_xml_str = @feed_xml_str.gsub(/<dc:identifier>[^<]+<\/dc:identifier>/, '')
+        @feed_xml_str = @feed_xml_str.gsub(%r{<dc:identifier>[^<]+</dc:identifier>}, '')
         stub_request(:get, starting_point).to_return(status: 200, body: feed_xml_str, headers: {})
 
         request_args = []
-        allow(client).to(receive(:ingest)) {|request| request_args << request.mk_args}
+        allow(client).to(receive(:ingest)) { |request| request_args << request.mk_args }
 
         invoke_update!
 
@@ -595,7 +607,13 @@ describe 'atom', type: :task do
         collection = create(:private_collection, ark: @collection_ark, name: 'Collection 1', mnemonic: 'collection_1')
         local_ids = ['c9c0834e-d22b-40a1-a35d-811dc40f20ed', '5875b691-e05f-4036-ab0a-8e37cc32a8a3']
         local_ids.each_with_index do |id, i|
-          collection.inv_objects << create(:inv_object, erc_where: id, created: previous_update, modified: previous_update, erc_who: 'Doe, Jane', erc_what: "Object #{i}", erc_when: '2018-01-01')
+          collection.inv_objects << create(:inv_object,
+                                           erc_where: id,
+                                           created: previous_update,
+                                           modified: previous_update,
+                                           erc_who: 'Doe, Jane',
+                                           erc_what: "Object #{i}",
+                                           erc_when: '2018-01-01')
         end
 
         expect(server).to receive(:add_file).exactly(2).times
