@@ -1,89 +1,45 @@
+require 'nokogiri'
+
 module Merritt
   module Atom
-    # noinspection RubyTooManyInstanceVariablesInspection
-    class FeedProcessor
+    class FeedProcessor # TODO: rename this
       include Merritt::Atom::Util
 
-      ARG_KEYS = %i[starting_point submitter profile collection_ark feed_update_file].freeze
+      FUTURE = Time.utc(9999)
 
-      attr_reader :starting_point
-      attr_reader :submitter
-      attr_reader :profile
-      attr_reader :collection_ark
-      attr_reader :feed_update_file
-      attr_reader :delay
-      attr_reader :batch_size
+      attr_reader :atom_xml
+      attr_reader :harvester
 
-      # rubocop:disable Metrics/ParameterLists
-      def initialize(starting_point:, submitter:, profile:, collection_ark:, feed_update_file:, delay:, batch_size:)
-        @starting_point = starting_point
-        @submitter = submitter
-        @profile = profile
-        @collection_ark = collection_ark
-        @feed_update_file = feed_update_file
-        @delay = delay
-        @batch_size = batch_size
-      end
-      # rubocop:enable Metrics/ParameterLists
-
-      def process_feed!
-        process_from(starting_point)
-      ensure
-        join_server!
+      def initialize(atom_xml:, harvester:)
+        @atom_xml = atom_xml
+        @harvester = harvester
       end
 
-      def last_feed_update
-        return NEVER unless feed_update_file_exists?
-        @last_feed_update ||= begin
-          feed_update_str = File.read(feed_update_file)
-          parse_time(feed_update_str)
+      # @return The next page, or nil if there is no next page
+      def process_xml!
+        return if feed_updated < harvester.last_feed_update
+        atom_xml.xpath('//atom:entry', NS).each do |entry|
+          entry_processor = EntryProcessor.new(entry: entry, harvester: harvester)
+          entry_processor.process_entry!
         end
-      end
-
-      def one_time_server
-        @one_time_server ||= begin
-          server = Mrt::Ingest::OneTimeServer.new
-          server.start_server
-          server
-        end
-      end
-
-      def ingest_client
-        # TODO: validate config?
-        @ingest_client ||= Mrt::Ingest::Client.new(APP_CONFIG['ingest_service'])
-      end
-
-      def join_server!
-        @one_time_server.join_server if @one_time_server
-      rescue StandardError => e
-        log_error('Error joining server', e)
+        next_page
       end
 
       private
 
-      def pause_file_path
-        @pause_file_path ||= "#{ENV['HOME']}/dpr2/apps/ui/atom/PAUSE_ATOM_#{profile}"
+      def collection_ark
+        # TODO: what if this doesn't match the one passed to the rake task?
+        @collection_ark ||= xpath_content(atom_xml, '//atom:merritt_collection_id')
       end
 
-      def pause_file_exists?
-        File.exist?(pause_file_path)
+      def feed_updated
+        updated_elem = atom_xml.at_xpath('//atom:updated', NS)
+        parse_time(updated_elem && updated_elem.content, default: FUTURE)
       end
 
-      def feed_update_file_exists?
-        @feed_update_file_exists ||= File.exist?(feed_update_file)
+      def next_page
+        xpath_content(atom_xml, '/atom:feed/atom:link[@rel="next"]/@href')
       end
-
-      def process_from(page_url)
-        return unless page_url
-        while pause_file_exists?
-          log_info("Pausing processing #{profile} for #{delay} seconds")
-          sleep(delay)
-        end
-        page_processor = PageProcessor.new(page_url: page_url, feed_processor: self)
-        next_page = page_processor.process_page!
-        process_from(next_page)
-      end
-
     end
   end
 end

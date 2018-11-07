@@ -1,25 +1,26 @@
 require 'nokogiri'
 require 'rest-client'
 require 'time'
+require 'mrt/ingest'
 
 module Merritt
   module Atom
-    class PageProcessor
+    class PageClient
       include Merritt::Atom::Util
 
       attr_reader :page_url
-      attr_reader :feed_processor
+      attr_reader :harvester
 
-      def initialize(page_url:, feed_processor:)
+      def initialize(page_url:, harvester:)
         @page_url = page_url
-        @feed_processor = feed_processor
+        @harvester = harvester
       end
 
       # @return The next page, or nil if there is no next page
       def process_page!
         return unless (atom_xml = parse_xml)
-        xml_processor = XmlProcessor.new(atom_xml: atom_xml, feed_processor: feed_processor)
-        xml_processor.process_xml!
+        feed_processor = FeedProcessor.new(atom_xml: atom_xml, harvester: harvester)
+        feed_processor.process_xml!
       end
 
       private

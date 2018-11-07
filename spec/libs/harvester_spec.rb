@@ -4,7 +4,7 @@ require 'merritt/atom'
 
 module Merritt
   module Atom
-    describe FeedProcessor do
+    describe Harvester do
 
       # ------------------------------------------------------------
       # Fixture
@@ -13,11 +13,10 @@ module Merritt
       attr_reader :tmp_home
       attr_reader :atom_dir
       attr_reader :args
-      attr_reader :page_processor
+      attr_reader :page_client
 
-      # TODO: rename these to match instance variables
-      attr_reader :server
-      attr_reader :client
+      attr_reader :one_time_server
+      attr_reader :ingest_client
 
       before(:each) do
         WebMock.disable_net_connect!
@@ -41,17 +40,17 @@ module Merritt
           batch_size: 10
         }
 
-        @page_processor = instance_double(PageProcessor)
-        allow(PageProcessor).to receive(:new).and_return(page_processor)
+        @page_client = instance_double(PageClient)
+        allow(PageClient).to receive(:new).and_return(page_client)
 
-        @server = instance_double(Mrt::Ingest::OneTimeServer)
-        allow(Mrt::Ingest::OneTimeServer).to receive(:new).and_return(server)
-        allow(server).to receive(:start_server)
-        allow(server).to receive(:join_server)
+        @one_time_server = instance_double(Mrt::Ingest::OneTimeServer)
+        allow(Mrt::Ingest::OneTimeServer).to receive(:new).and_return(one_time_server)
+        allow(one_time_server).to receive(:start_server)
+        allow(one_time_server).to receive(:join_server)
 
-        @client = instance_double(Mrt::Ingest::Client)
-        allow(Mrt::Ingest::Client).to receive(:new).with(APP_CONFIG['ingest_service']).and_return(client)
-        allow(client).to receive(:ingest)
+        @ingest_client = instance_double(Mrt::Ingest::Client)
+        allow(Mrt::Ingest::Client).to receive(:new).with(APP_CONFIG['ingest_service']).and_return(ingest_client)
+        allow(ingest_client).to receive(:ingest)
       end
 
       after(:each) do
@@ -64,26 +63,26 @@ module Merritt
       # Tests
 
       it 'processes the first page' do
-        feed_processor = FeedProcessor.new(args)
-        expect(page_processor).to receive(:process_page!).and_return(nil)
-        feed_processor.process_feed!
+        harvester = Harvester.new(args)
+        expect(page_client).to receive(:process_page!).and_return(nil)
+        harvester.process_feed!
       end
 
       it 'processes all pages' do
         page_urls = (1..5).map { |i| "http://example.org/feed/#{i}.atom" }
 
         @args[:starting_point] = page_urls[0]
-        feed_processor = FeedProcessor.new(args)
+        harvester = Harvester.new(args)
         page_urls.each_with_index do |page_url, i|
-          pp = instance_double(PageProcessor)
-          expect(PageProcessor).to receive(:new)
-            .with(page_url: page_url, feed_processor: feed_processor)
+          pp = instance_double(PageClient)
+          expect(PageClient).to receive(:new)
+            .with(page_url: page_url, harvester: harvester)
             .ordered
             .and_return(pp)
           next_page = i + 1 < page_urls.length ? page_urls[i + 1] : nil
           expect(pp).to receive(:process_page!).and_return(next_page)
         end
-        feed_processor.process_feed!
+        harvester.process_feed!
       end
 
       it 'pauses if pause file is present' do
@@ -99,9 +98,9 @@ module Merritt
           FileUtils.remove_entry_secure(pause_file_path)
         end
 
-        feed_processor = FeedProcessor.new(args)
-        expect(page_processor).to receive(:process_page!)
-        feed_processor.process_feed!
+        harvester = Harvester.new(args)
+        expect(page_client).to receive(:process_page!)
+        harvester.process_feed!
       end
 
     end

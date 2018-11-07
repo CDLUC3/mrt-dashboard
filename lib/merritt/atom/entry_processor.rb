@@ -6,33 +6,31 @@ module Merritt
       include Merritt::Atom::Util
 
       attr_reader :entry
-      attr_reader :feed_processor
+      attr_reader :harvester
 
-      def initialize(entry:, feed_processor:)
+      def initialize(entry:, harvester:)
         @entry = entry
-        @feed_processor = feed_processor
+        @harvester = harvester
       end
 
+      # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
       def process_entry!
-        obj = Mrt::Ingest::IObject.new(erc: erc, server: one_time_server, local_identifier: local_id, archival_id: archival_id)
+        obj = harvester.new_ingest_object(
+          local_id: local_id,
+          erc_who: dc_creator || atom_author_names,
+          erc_what: dc_title || atom_title,
+          erc_when: dc_date || atom_published,
+          erc_where: archival_id, # TODO: find out how archival_id was supposed to work
+          erc_when_created: atom_published,
+          erc_when_modified: atom_updated
+        )
         urls.each { |url| add_url(obj, url) }
-        object.start_ingest(ingest_client, profile, submitter)
+        harvester.start_ingest(obj)
       end
+      # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
 
       def add_url(obj, url)
         # code here
-      end
-
-      def erc
-        # TODO: test each fallback
-        @erc ||= {
-          'who' => dc_creator || atom_author_names,
-          'what' => dc_title || atom_title,
-          'when' => dc_date || atom_published,
-          'where' => archival_id, # TODO: find out how this was supposed to work,
-          'when/created' => atom_published,
-          'when/modified' => atom_updated
-        }
       end
 
       def urls
@@ -72,25 +70,15 @@ module Merritt
         @archival_id ||= urls.select { |u| u[:rel] == 'archival' }.first
       end
 
+      def local_id
+        @local_id ||= xpath_content(entry, local_id_query)
+      end
+
+      def local_id_query
+        harvester.local_id_query
+      end
+
       private
-
-      # TODO: make feed_processor create & submit the object so we can kill these
-
-      def profile
-        feed_processor.profile
-      end
-
-      def submitter
-        feed_processor.submitter
-      end
-
-      def one_time_server
-        feed_processor.one_time_server
-      end
-
-      def inget_client
-        feed_processor.ingest_client
-      end
 
       def to_url_hash(link)
         {

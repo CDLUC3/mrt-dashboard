@@ -4,15 +4,16 @@ require 'merritt/atom'
 
 module Merritt
   module Atom
-    describe PageProcessor do
+    describe PageClient do
 
+      attr_reader :harvester
       attr_reader :feed_processor
-      attr_reader :xml_processor
 
       before(:each) do
         WebMock.disable_net_connect!
-        @feed_processor = instance_double(FeedProcessor)
-        allow(feed_processor).to receive(:last_feed_update).and_return(Util::NEVER)
+        @harvester = instance_double(Harvester)
+        allow(harvester).to receive(:last_feed_update).and_return(Util::NEVER)
+        allow(harvester).to receive(:local_id_query).and_return('dc:identifier')
       end
 
       after(:each) do
@@ -24,7 +25,13 @@ module Merritt
         page1_path = 'spec/data/ucldc_collection_9585555-1.atom'
         stub_request(:get, page1_url).to_return(status: 200, body: File.new(page1_path), headers: {})
 
-        page_processor = PageProcessor.new(page_url: page1_url, feed_processor: feed_processor)
+        3.times do
+          ingest_obj = instance_double(Mrt::Ingest::IObject)
+          expect(harvester).to receive(:new_ingest_object).and_return(ingest_obj).ordered
+          expect(harvester).to receive(:start_ingest).with(ingest_obj).ordered
+        end
+
+        page_processor = PageClient.new(page_url: page1_url, harvester: harvester)
         next_page = page_processor.process_page!
         page2_url = 'https://s3.example.com/static.ucldc.example.edu/merritt/ucldc_collection_9585555-2.atom'
         expect(next_page).to eq(page2_url)
@@ -35,7 +42,11 @@ module Merritt
         page3_path = 'spec/data/ucldc_collection_9585555-3.atom'
         stub_request(:get, page3_url).to_return(status: 200, body: File.new(page3_path), headers: {})
 
-        page_processor = PageProcessor.new(page_url: page3_url, feed_processor: feed_processor)
+        ingest_obj = instance_double(Mrt::Ingest::IObject)
+        allow(harvester).to receive(:new_ingest_object).and_return(ingest_obj)
+        allow(harvester).to receive(:start_ingest).with(ingest_obj)
+
+        page_processor = PageClient.new(page_url: page3_url, harvester: harvester)
         next_page = page_processor.process_page!
         expect(next_page).to be_nil
       end
@@ -58,7 +69,13 @@ module Merritt
           expect(Rails.logger).to receive(:error).with(/Error processing page #{page1_url} \(tries = #{t}\): 500 Internal Server Error/).ordered
         end
 
-        page_processor = PageProcessor.new(page_url: page1_url, feed_processor: feed_processor)
+        3.times do
+          ingest_obj = instance_double(Mrt::Ingest::IObject)
+          expect(harvester).to receive(:new_ingest_object).and_return(ingest_obj).ordered
+          expect(harvester).to receive(:start_ingest).with(ingest_obj).ordered
+        end
+
+        page_processor = PageClient.new(page_url: page1_url, harvester: harvester)
         next_page = page_processor.process_page!
         page2_url = 'https://s3.example.com/static.ucldc.example.edu/merritt/ucldc_collection_9585555-2.atom'
         expect(next_page).to eq(page2_url)
@@ -78,7 +95,9 @@ module Merritt
           expect(Rails.logger).to receive(:error).with(/Error processing page #{page1_url} \(tries = #{t}\): 500 Internal Server Error/).ordered
         end
 
-        page_processor = PageProcessor.new(page_url: page1_url, feed_processor: feed_processor)
+        expect(harvester).not_to receive(:new_ingest_object)
+
+        page_processor = PageClient.new(page_url: page1_url, harvester: harvester)
         next_page = page_processor.process_page!
         expect(next_page).to be_nil
         expect(@try).to eq(3)
