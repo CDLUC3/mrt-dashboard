@@ -2,49 +2,43 @@ require 'nokogiri'
 
 module Merritt
   module Atom
-    class XmlProcessor
+    class XmlProcessor # TODO: rename this
       include Merritt::Atom::Util
 
-      NS = {
-        'atom' => 'http://www.w3.org/2005/Atom',
-        'xhtml' => 'http://www.w3.org/1999/xhtml'
-      }.freeze
+      FUTURE = Time.utc(9999)
 
       attr_reader :atom_xml
+      attr_reader :feed_processor
 
       def initialize(atom_xml:, feed_processor:)
         @atom_xml = atom_xml
+        @feed_processor = feed_processor
       end
 
       # @return The next page, or nil if there is no next page
       def process_xml!
-        updated_str = xpath_content('//atom:updated')
+        return if feed_updated < feed_processor.last_feed_update
+        atom_xml.xpath('//atom:entry', NS).each do |entry|
+          entry_processor = EntryProcessor.new(entry: entry, feed_processor: feed_processor)
+          entry_processor.process_entry!
+        end
         next_page
       end
 
       private
 
-      def updated
-        updated_elem = first_xpath_match('//atom:updated')
-        return unless updated_elem
-        updated_str = updated_elem.content
-        parse_time(updated_str)
+      def collection_ark
+        # TODO: what if this doesn't match the one passed to the rake task?
+        @collection_ark ||= xpath_content(atom_xml, '//atom:merritt_collection_id')
       end
 
-      def first_xpath_match(query)
-        nodes = atom_xml.xpath(query, NS)
-        return unless nodes && !nodes.empty?
-        nodes[0]
-      end
-
-      def xpath_content(query)
-        match = first_xpath_match(query)
-        return unless match
-        match.content
+      def feed_updated
+        updated_elem = atom_xml.at_xpath('//atom:updated', NS)
+        parse_time(updated_elem && updated_elem.content, default: FUTURE)
       end
 
       def next_page
-        xpath_content('/atom:feed/atom:link[@rel="next"]/@href')
+        xpath_content(atom_xml, '/atom:feed/atom:link[@rel="next"]/@href')
       end
     end
   end

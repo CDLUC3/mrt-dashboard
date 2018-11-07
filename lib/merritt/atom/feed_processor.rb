@@ -5,7 +5,6 @@ module Merritt
       include Merritt::Atom::Util
 
       ARG_KEYS = %i[starting_point submitter profile collection_ark feed_update_file].freeze
-      NEVER = Time.utc(0)
 
       attr_reader :starting_point
       attr_reader :submitter
@@ -29,6 +28,35 @@ module Merritt
 
       def process_feed!
         process_from(starting_point)
+      ensure
+        join_server!
+      end
+
+      def last_feed_update
+        return NEVER unless feed_update_file_exists?
+        @last_feed_update ||= begin
+          feed_update_str = File.read(feed_update_file)
+          parse_time(feed_update_str)
+        end
+      end
+
+      def one_time_server
+        @one_time_server ||= begin
+          server = Mrt::Ingest::OneTimeServer.new
+          server.start_server
+          server
+        end
+      end
+
+      def ingest_client
+        # TODO: validate config?
+        @ingest_client ||= Mrt::Ingest::Client.new(APP_CONFIG['ingest_service'])
+      end
+
+      def join_server!
+        @one_time_server.join_server if @one_time_server
+      rescue StandardError => e
+        log_error('Error joining server', e)
       end
 
       private
@@ -43,14 +71,6 @@ module Merritt
 
       def feed_update_file_exists?
         @feed_update_file_exists ||= File.exist?(feed_update_file)
-      end
-
-      def last_feed_update
-        return NEVER unless feed_update_file_exists?
-        @last_feed_update ||= begin
-          feed_update_str = File.read(feed_update_file)
-          parse_time(feed_update_str)
-        end
       end
 
       def process_from(page_url)

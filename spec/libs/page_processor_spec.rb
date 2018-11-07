@@ -7,10 +7,12 @@ module Merritt
     describe PageProcessor do
 
       attr_reader :feed_processor
+      attr_reader :xml_processor
 
       before(:each) do
         WebMock.disable_net_connect!
         @feed_processor = instance_double(FeedProcessor)
+        allow(feed_processor).to receive(:last_feed_update).and_return(Util::NEVER)
       end
 
       after(:each) do

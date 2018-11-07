@@ -15,6 +15,10 @@ module Merritt
       attr_reader :args
       attr_reader :page_processor
 
+      # TODO: rename these to match instance variables
+      attr_reader :server
+      attr_reader :client
+
       before(:each) do
         WebMock.disable_net_connect!
 
@@ -39,6 +43,15 @@ module Merritt
 
         @page_processor = instance_double(PageProcessor)
         allow(PageProcessor).to receive(:new).and_return(page_processor)
+
+        @server = instance_double(Mrt::Ingest::OneTimeServer)
+        allow(Mrt::Ingest::OneTimeServer).to receive(:new).and_return(server)
+        allow(server).to receive(:start_server)
+        allow(server).to receive(:join_server)
+
+        @client = instance_double(Mrt::Ingest::Client)
+        allow(Mrt::Ingest::Client).to receive(:new).with(APP_CONFIG['ingest_service']).and_return(client)
+        allow(client).to receive(:ingest)
       end
 
       after(:each) do
