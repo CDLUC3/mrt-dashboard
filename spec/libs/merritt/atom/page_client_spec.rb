@@ -14,6 +14,7 @@ module Merritt
         @harvester = instance_double(Harvester)
         allow(harvester).to receive(:last_feed_update).and_return(Util::NEVER)
         allow(harvester).to receive(:local_id_query).and_return('dc:identifier')
+        allow(harvester).to receive(:add_credentials!)
       end
 
       after(:each) do
@@ -27,8 +28,10 @@ module Merritt
 
         3.times do
           ingest_obj = instance_double(Mrt::Ingest::IObject)
+          allow(ingest_obj).to receive(:add_component)
           expect(harvester).to receive(:new_ingest_object).and_return(ingest_obj).ordered
           expect(harvester).to receive(:start_ingest).with(ingest_obj).ordered
+          allow(ingest_obj).to receive(:add_component)
         end
 
         page_processor = PageClient.new(page_url: page1_url, harvester: harvester)
@@ -43,6 +46,7 @@ module Merritt
         stub_request(:get, page3_url).to_return(status: 200, body: File.new(page3_path), headers: {})
 
         ingest_obj = instance_double(Mrt::Ingest::IObject)
+        allow(ingest_obj).to receive(:add_component)
         allow(harvester).to receive(:new_ingest_object).and_return(ingest_obj)
         allow(harvester).to receive(:start_ingest).with(ingest_obj)
 
@@ -71,6 +75,7 @@ module Merritt
 
         3.times do
           ingest_obj = instance_double(Mrt::Ingest::IObject)
+          allow(ingest_obj).to receive(:add_component)
           expect(harvester).to receive(:new_ingest_object).and_return(ingest_obj).ordered
           expect(harvester).to receive(:start_ingest).with(ingest_obj).ordered
         end

@@ -5,6 +5,10 @@ module Merritt
     class EntryProcessor
       include Merritt::Atom::Util
 
+      # 'workaround for funky site'
+      # https://github.com/CDLUC3/mrt-dashboard/blob/3793a10252b964cb861ca15ff676ccc6c637898d/lib/tasks/atom.rake#L144-#L145
+      PREFETCH_OPTIONS = { 'Accept' => 'text/html, */*' }.freeze
+
       attr_reader :entry
       attr_reader :harvester
 
@@ -24,17 +28,43 @@ module Merritt
           erc_when_created: atom_published,
           erc_when_modified: atom_updated
         )
-        urls.each { |url| add_url(obj, url) }
+        links.each { |link| add_component(obj, link) }
         harvester.start_ingest(obj)
       end
       # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
 
-      def add_url(obj, url)
-        # code here
+      private
+
+      def add_component(obj, link)
+        uri = to_uri(link['href'])
+        harvester.add_credentials!(uri)
+
+        checksum = xpath_content(link, 'opensearch:checksum')
+        digest = to_digest(checksum)
+
+        name = link['href'].sub(%r{^https?://}, '')
+
+        # TODO: do we even support prefetch any more?
+        obj.add_component(uri, name: name, digest: digest, prefetch: true, prefetch_options: PREFETCH_OPTIONS)
       end
 
-      def urls
-        @urls ||= entry.xpath('atom:link', NS).map { |link| to_url_hash(link) }
+      def to_uri(url)
+        URI.parse(url)
+      rescue URI::InvalidURIError
+        # UCR feed has URLs with square brackets in them, could be one of those
+        # https://github.com/CDLUC3/mrt-dashboard/commit/ec9ef6451668d423147e8e3a64b737235429854a
+        escaped = { '[' => '%5B', ']' => '%5D' }.reduce(url) { |u, (k, v)| u.gsub(k, v) }
+        # if that doesn't solve it, we'll go ahead and raise
+        URI.parse(escaped)
+      end
+
+      def to_digest(checksum)
+        return if checksum.blank? # includes nil, at least in Rails
+        Mrt::Ingest::MessageDigest::MD5.new(checksum)
+      end
+
+      def links
+        @links ||= entry.xpath('atom:link', NS)
       end
 
       def dc_creator
@@ -67,7 +97,7 @@ module Merritt
 
       def archival_id
         # TODO: why doesn't IObject actually use this, & if it did, how did it ever work?
-        @archival_id ||= urls.select { |u| u[:rel] == 'archival' }.first
+        @archival_id ||= links.select { |u| u[:rel] == 'archival' }.first
       end
 
       def local_id
@@ -76,17 +106,6 @@ module Merritt
 
       def local_id_query
         harvester.local_id_query
-      end
-
-      private
-
-      def to_url_hash(link)
-        {
-          rel: link['rel'],
-          url: link['href'],
-          checksum: xpath_content(link, 'opensearch:checksum'),
-          name: link['href'].sub(%r{^https?://}, '')
-        }
       end
     end
   end

@@ -66,6 +66,11 @@ module Merritt
         ingest_object.start_ingest(ingest_client, profile, submitter)
       end
 
+      def add_credentials!(uri)
+        return unless uri.host.include?('nuxeo.cdlib.org')
+        uri.user, uri.password = credentials
+      end
+
       private
 
       def one_time_server
@@ -79,6 +84,13 @@ module Merritt
       def ingest_client
         # TODO: validate config?
         @ingest_client ||= Mrt::Ingest::Client.new(APP_CONFIG['ingest_service'])
+      end
+
+      def credentials
+        @credentials ||= begin
+          credentials_str = ATOM_CONFIG["#{collection_ark}_credentials"]
+          credentials_str ? credentials_str.split(':') : [nil, nil]
+        end
       end
 
       def join_server!
