@@ -147,11 +147,12 @@ describe 'atom', type: :task do
       FileUtils.remove_entry_secure(@tmp_home)
     end
 
-    it 'starts the one-time file server' do
+    it 'starts the one-time file server and waits for it to exit' do
       feed_updated = DateTime.parse(feed_xml.at_xpath('//xmlns:updated').text)
       write_feeddate(feed_updated - 1) # -1 day
 
-      expect(server).to receive(:start_server)
+      expect(server).to receive(:start_server).ordered
+      expect(server).to receive(:join_server).ordered
       invoke_update!
     end
 
@@ -289,6 +290,7 @@ describe 'atom', type: :task do
 
       expect(server).to receive(:add_file).exactly(2).times
       expect(client).to receive(:ingest).exactly(1).times
+      expect(server).to receive(:join_server)
 
       invoke_update!
     end
@@ -523,11 +525,6 @@ describe 'atom', type: :task do
     pending 'requires a collection ARK'
     pending 'requires a feeddatefile'
     pending 'requires a starting_point'
-
-    it 'waits for the one-time file server to exit' do
-      expect(server).to receive(:join_server)
-      invoke_update!
-    end
 
     describe 'pagination' do
       attr_reader :feed_xml_strs
