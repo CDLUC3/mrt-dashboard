@@ -2,7 +2,7 @@ require 'nokogiri'
 
 module Merritt
   module Atom
-    class FeedProcessor # TODO: rename this
+    class FeedProcessor
       include Merritt::Atom::Util
 
       FUTURE = Time.utc(9999)
