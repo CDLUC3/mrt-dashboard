@@ -33,6 +33,14 @@ module Merritt
       end
       # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
 
+      def atom_id
+        xpath_content(entry, 'atom:id')
+      end
+
+      def local_id
+        @local_id ||= xpath_content(entry, local_id_query)
+      end
+
       private
 
       def add_component(obj, link)
@@ -102,10 +110,6 @@ module Merritt
       def archival_id
         # TODO: why doesn't IObject actually use this, & if it did, how did it ever work?
         @archival_id ||= links.select { |u| u[:rel] == 'archival' }.first
-      end
-
-      def local_id
-        @local_id ||= xpath_content(entry, local_id_query)
       end
 
       def local_id_query
