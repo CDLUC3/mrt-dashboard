@@ -522,15 +522,13 @@ describe 'atom', type: :task do
     pending 'exits with an error if ATOM_CONFIG does not include collection credentials'
     pending 'exits with an error if ATOM_CONFIG does not include local ID element'
 
-    pending 'pages through results'
-    pending 'stops paginating when next page is nil'
-    pending 'doesn\'t update if initial feed is nil'
-
     pending 'requires a submitter'
     pending 'requires a profile'
     pending 'requires a collection ARK'
     pending 'requires a feeddatefile'
     pending 'requires a starting_point'
+
+    pending 'exits with an error if <merritt_collection_id> tag doesn\'t match passed-in collection ARK'
 
     describe 'pagination' do
       attr_reader :feed_xml_strs
@@ -600,7 +598,7 @@ describe 'atom', type: :task do
       before(:each) do
         @feed_xml_str = File.read('spec/data/ucldc_collection_1212555_nxidentifier.atom').freeze
         @feed_xml = Nokogiri::XML(feed_xml_str)
-        @collection = 'FK12125555'
+        @collection = 'FK1212555'
         @collection_ark = "ark:/99999/#{collection}"
         @feeddatefile = "#{tmp_home}/dpr2/apps/ui/atom/LastUpdate/lastFeedUpdate_#{collection}"
         @pause_file = "#{atom_dir}/PAUSE_ATOM_#{profile}"
