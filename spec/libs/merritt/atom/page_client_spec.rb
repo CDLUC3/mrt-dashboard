@@ -55,6 +55,21 @@ module Merritt
         expect(next_page).to be_nil
       end
 
+      it 'returns nil if "next" link has same URL as "self"' do
+        page_url = 'https://s3.example.com/static.ucldc.example.edu/merritt/ucldc_collection_9585555-3.atom'
+        page_xml = File.read('spec/data/ucldc_collection_9585555-3.atom').gsub('rel="last"', 'rel="next"')
+        stub_request(:get, page_url).to_return(status: 200, body: page_xml, headers: {})
+
+        ingest_obj = instance_double(Mrt::Ingest::IObject)
+        allow(ingest_obj).to receive(:add_component)
+        allow(harvester).to receive(:new_ingest_object).and_return(ingest_obj)
+        allow(harvester).to receive(:start_ingest).with(ingest_obj)
+
+        page_processor = PageClient.new(page_url: page_url, harvester: harvester)
+        next_page = page_processor.process_page!
+        expect(next_page).to be_nil
+      end
+
       it 'retries three times in the event of an error' do
         page1_url = 'https://s3.example.com/static.ucldc.example.edu/merritt/ucldc_collection_9585555-1.atom'
         page1_path = 'spec/data/ucldc_collection_9585555-1.atom'

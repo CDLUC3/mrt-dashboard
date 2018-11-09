@@ -37,8 +37,16 @@ module Merritt
         parse_time(updated_elem && updated_elem.content, default: FUTURE)
       end
 
+      def next_href
+        @next_href ||= xpath_content(atom_xml, '/atom:feed/atom:link[@rel="next"]/@href')
+      end
+
+      def self_href
+        @self_href ||= xpath_content(atom_xml, '/atom:feed/atom:link[@rel="self"]/@href')
+      end
+
       def next_page
-        xpath_content(atom_xml, '/atom:feed/atom:link[@rel="next"]/@href')
+        next_href unless next_href == self_href
       end
     end
   end
