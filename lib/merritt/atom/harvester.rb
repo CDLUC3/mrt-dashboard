@@ -29,6 +29,7 @@ module Merritt
       # rubocop:enable Metrics/ParameterLists
 
       def process_feed!
+        return unless feed_update_file_exists?
         process_from(starting_point)
         update_feed_update_file!
       ensure
@@ -36,7 +37,6 @@ module Merritt
       end
 
       def last_feed_update
-        return NEVER unless feed_update_file_exists?
         @last_feed_update ||= begin
           feed_update_str = File.read(feed_update_file)
           parse_time(feed_update_str)

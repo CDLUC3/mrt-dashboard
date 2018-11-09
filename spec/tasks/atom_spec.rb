@@ -49,9 +49,12 @@ describe 'atom', type: :task do
       File.open(feeddatefile, 'w') { |f| f.puts(date.utc.iso8601) }
     end
 
+    # require 'tasks/atom_old'
+    # def invoke_update!
+    #   process_atom_feed(submitter, profile, collection_ark, feeddatefile, starting_point)
+    # end
+
     def invoke_update!
-      # require 'tasks/atom_old'
-      # process_atom_feed(submitter, profile, collection_ark, feeddatefile, starting_point)
       invoke_task('atom:update', starting_point, submitter, profile, collection_ark, feeddatefile)
     end
 
@@ -110,6 +113,7 @@ describe 'atom', type: :task do
         end
       end
     end
+
     # rubocop:enable Metrics/AbcSize
 
     before(:each) do
