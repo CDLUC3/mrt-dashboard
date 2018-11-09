@@ -38,7 +38,15 @@ module Merritt
       end
 
       def local_id
-        @local_id ||= xpath_content(entry, local_id_query)
+        @local_id ||= begin
+          primary_local_id = xpath_content(entry, local_id_query)
+          secondary_local_id = xpath_content(entry, 'nx:identifier')
+          if secondary_local_id
+            "#{primary_local_id}; #{secondary_local_id}"
+          else
+            primary_local_id
+          end
+        end
       end
 
       private
