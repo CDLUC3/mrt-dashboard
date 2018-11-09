@@ -15,6 +15,8 @@ module Merritt
         allow(harvester).to receive(:last_feed_update).and_return(Util::NEVER)
         allow(harvester).to receive(:local_id_query).and_return('dc:identifier')
         allow(harvester).to receive(:add_credentials!)
+        allow(harvester).to receive(:batch_size).and_return(1000)
+        allow(harvester).to receive(:collection_ark).and_return('ark:/99999/FK9855555')
       end
 
       after(:each) do
@@ -35,9 +37,9 @@ module Merritt
         end
 
         page_processor = PageClient.new(page_url: page1_url, harvester: harvester)
-        next_page = page_processor.process_page!
         page2_url = 'https://s3.example.com/static.ucldc.example.edu/merritt/ucldc_collection_9585555-2.atom'
-        expect(next_page).to eq(page2_url)
+        result = page_processor.process_page!
+        expect(result.next_page).to eq(page2_url)
       end
 
       it 'returns nil if no next page' do
@@ -51,8 +53,8 @@ module Merritt
         allow(harvester).to receive(:start_ingest).with(ingest_obj)
 
         page_processor = PageClient.new(page_url: page3_url, harvester: harvester)
-        next_page = page_processor.process_page!
-        expect(next_page).to be_nil
+        result = page_processor.process_page!
+        expect(result.next_page).to be_nil
       end
 
       it 'returns nil if "next" link has same URL as "self"' do
@@ -66,8 +68,8 @@ module Merritt
         allow(harvester).to receive(:start_ingest).with(ingest_obj)
 
         page_processor = PageClient.new(page_url: page_url, harvester: harvester)
-        next_page = page_processor.process_page!
-        expect(next_page).to be_nil
+        result = page_processor.process_page!
+        expect(result.next_page).to be_nil
       end
 
       it 'retries three times in the event of an error' do
@@ -96,9 +98,9 @@ module Merritt
         end
 
         page_processor = PageClient.new(page_url: page1_url, harvester: harvester)
-        next_page = page_processor.process_page!
         page2_url = 'https://s3.example.com/static.ucldc.example.edu/merritt/ucldc_collection_9585555-2.atom'
-        expect(next_page).to eq(page2_url)
+        result = page_processor.process_page!
+        expect(result.next_page).to eq(page2_url)
         expect(@try).to eq(3) # just to be sure
       end
 
@@ -118,8 +120,8 @@ module Merritt
         expect(harvester).not_to receive(:new_ingest_object)
 
         page_processor = PageClient.new(page_url: page1_url, harvester: harvester)
-        next_page = page_processor.process_page!
-        expect(next_page).to be_nil
+        result = page_processor.process_page!
+        expect(result).to be_nil
         expect(@try).to eq(3)
       end
     end

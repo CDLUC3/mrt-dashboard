@@ -111,17 +111,13 @@ module Merritt
         @pause_file_path ||= "#{ENV['HOME']}/dpr2/apps/ui/atom/PAUSE_ATOM_#{profile}"
       end
 
-      def pause_file_exists?
-        File.exist?(pause_file_path)
-      end
-
       def feed_update_file_exists?
         @feed_update_file_exists ||= File.exist?(feed_update_file)
       end
 
       def process_from(page_url)
         return unless page_url
-        while pause_file_exists?
+        while File.exist?(pause_file_path)
           log_info("Pausing processing #{profile} for #{delay} seconds")
           sleep(delay)
         end

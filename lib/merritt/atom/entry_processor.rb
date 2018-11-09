@@ -17,21 +17,12 @@ module Merritt
         @harvester = harvester
       end
 
-      # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
       def process_entry!
-        obj = harvester.new_ingest_object(
-          local_id: local_id,
-          erc_who: dc_creator || atom_author_names,
-          erc_what: dc_title || atom_title,
-          erc_when: dc_date || atom_published,
-          erc_where: archival_id, # TODO: find out how archival_id was supposed to work
-          erc_when_created: atom_published,
-          erc_when_modified: atom_updated
-        )
+        return if existing_object && existing_object.modified >= atom_updated
+        obj = new_ingest_object
         links.each { |link| add_component(obj, link) }
         harvester.start_ingest(obj)
       end
-      # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
 
       def atom_id
         xpath_content(entry, 'atom:id')
@@ -39,7 +30,6 @@ module Merritt
 
       def local_id
         @local_id ||= begin
-          primary_local_id = xpath_content(entry, local_id_query)
           secondary_local_id = xpath_content(entry, 'nx:identifier')
           if secondary_local_id
             "#{primary_local_id}; #{secondary_local_id}"
@@ -50,6 +40,30 @@ module Merritt
       end
 
       private
+
+      def existing_object
+        InvObject
+          .where('erc_where LIKE ?', "%#{primary_local_id}%")
+          .joins(:inv_collections)
+          .where(inv_collections: { ark: harvester.collection_ark })
+          .first
+      end
+
+      def primary_local_id
+        @primary_local_id ||= xpath_content(entry, local_id_query)
+      end
+
+      def new_ingest_object
+        harvester.new_ingest_object(
+          local_id: local_id,
+          erc_who: dc_creator || atom_author_names,
+          erc_what: dc_title || atom_title,
+          erc_when: dc_date || atom_published,
+          erc_where: archival_id, # TODO: find out how archival_id was supposed to work
+          erc_when_created: atom_published,
+          erc_when_modified: atom_updated
+        )
+      end
 
       def add_component(obj, link)
         uri = to_uri(link['href'])
@@ -64,11 +78,12 @@ module Merritt
         obj.add_component(uri, name: name, digest: digest, prefetch: true, prefetch_options: PREFETCH_OPTIONS)
       end
 
+      # rubocop:disable Lint/UriEscapeUnescape
       def to_uri(url)
         # TODO: why do we do this?
         # Original comment says 'Found spaces in Riverside feed' but surely we could just fix the spaces?
         # https://github.com/CDLUC3/mrt-dashboard/commit/52cb31b9f326c3fdfee952e09575392f703c1170
-        double_encoded = URI.encode(url)
+        double_encoded = URI.escape(url)
         URI.parse(double_encoded)
       rescue URI::InvalidURIError
         # UCR feed has URLs with square brackets in them, could be one of those
@@ -77,6 +92,7 @@ module Merritt
         # if that doesn't solve it, we'll go ahead and raise
         URI.parse(escaped)
       end
+      # rubocop:enable Lint/UriEscapeUnescape
 
       def to_digest(checksum)
         return if checksum.blank? # includes nil, at least in Rails

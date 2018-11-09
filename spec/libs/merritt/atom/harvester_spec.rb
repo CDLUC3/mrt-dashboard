@@ -30,12 +30,16 @@ module Merritt
 
         collection = 'FK5551212'
 
+        feed_update_file = "#{tmp_home}/dpr2/apps/ui/atom/LastUpdate/lastFeedUpdate_#{collection}"
+        FileUtils.mkdir_p(File.dirname(feed_update_file))
+        File.open(feed_update_file, 'w') { |f| f.puts(Util::NEVER) }
+
         @args = {
           starting_point: 'https://s3.example.com/static.ucldc.example.edu/merritt/ucldc_collection_26144.atom',
           submitter: 'Atom processor/Example U Digital Special Collections',
           profile: 'example_ingest_profile',
           collection_ark: "ark:/99999/#{collection}",
-          feed_update_file: "#{tmp_home}/dpr2/apps/ui/atom/LastUpdate/lastFeedUpdate_#{collection}",
+          feed_update_file: feed_update_file,
           delay: 123,
           batch_size: 10
         }
@@ -80,7 +84,8 @@ module Merritt
             .ordered
             .and_return(pp)
           next_page = i + 1 < page_urls.length ? page_urls[i + 1] : nil
-          expect(pp).to receive(:process_page!).and_return(next_page)
+          result = PageResult.new(atom_updated: Time.now.iso8601, next_page: next_page)
+          expect(pp).to receive(:process_page!).and_return(result)
         end
         harvester.process_feed!
       end
