@@ -155,6 +155,17 @@ describe 'atom', type: :task do
       invoke_update!
     end
 
+    it 'updates the feed date file' do
+      feed_updated = DateTime.parse(feed_xml.at_xpath('//xmlns:updated').text)
+      write_feeddate(feed_updated - 1) # -1 day
+
+      invoke_update!
+
+      expected = Time.parse('2018-10-09T22:12:23.218427+00:00')
+      actual = Time.parse(File.read(feeddatefile))
+      expect(actual).to eq(expected)
+    end
+
     it 'sleeps if pause file is present' do
       FileUtils.mkdir_p(atom_dir)
       FileUtils.touch(pause_file)

@@ -15,14 +15,14 @@ module Merritt
         @harvester = harvester
       end
 
-      # @return The next page, or nil if there is no next page
+      # @return [PageResult] the `<atom:updated/>` value from the feed and the URL of the next page, if any
       def process_xml!
         return if feed_updated < harvester.last_feed_update
         atom_xml.xpath('//atom:entry', NS).each do |entry|
           entry_processor = EntryProcessor.new(entry: entry, harvester: harvester)
           entry_processor.process_entry!
         end
-        next_page
+        PageResult.new(atom_updated: atom_updated, next_page: next_page)
       end
 
       private
@@ -32,9 +32,12 @@ module Merritt
         @collection_ark ||= xpath_content(atom_xml, '//atom:merritt_collection_id')
       end
 
+      def atom_updated
+        @atom_updated ||= xpath_content(atom_xml, '//atom:updated')
+      end
+
       def feed_updated
-        updated_elem = atom_xml.at_xpath('//atom:updated', NS)
-        parse_time(updated_elem && updated_elem.content, default: FUTURE)
+        parse_time(atom_updated, default: FUTURE)
       end
 
       def next_href

@@ -16,7 +16,7 @@ module Merritt
         @harvester = harvester
       end
 
-      # @return The next page, or nil if there is no next page
+      # @return [PageResult] the `<atom:updated/>` date from the feed and the URL of the next page, if any
       def process_page!
         return unless (atom_xml = parse_xml)
         feed_processor = FeedProcessor.new(atom_xml: atom_xml, harvester: harvester)

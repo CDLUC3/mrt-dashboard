@@ -14,6 +14,8 @@ module Merritt
       attr_reader :delay
       attr_reader :batch_size
 
+      attr_reader :atom_updated
+
       # rubocop:disable Metrics/ParameterLists
       def initialize(starting_point:, submitter:, profile:, collection_ark:, feed_update_file:, delay:, batch_size:)
         @starting_point = starting_point
@@ -28,6 +30,7 @@ module Merritt
 
       def process_feed!
         process_from(starting_point)
+        update_feed_update_file!
       ensure
         join_server!
       end
@@ -38,6 +41,11 @@ module Merritt
           feed_update_str = File.read(feed_update_file)
           parse_time(feed_update_str)
         end
+      end
+
+      def update_feed_update_file!
+        return unless atom_updated
+        File.open(feed_update_file, 'w') { |f| f.puts(atom_updated) }
       end
 
       def local_id_query
@@ -118,8 +126,10 @@ module Merritt
           sleep(delay)
         end
         page_processor = PageClient.new(page_url: page_url, harvester: self)
-        next_page = page_processor.process_page!
-        process_from(next_page)
+        return unless (result = page_processor.process_page!)
+
+        @atom_updated = result.atom_updated
+        process_from(result.next_page)
       end
 
     end
