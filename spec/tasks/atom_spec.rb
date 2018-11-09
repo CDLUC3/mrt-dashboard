@@ -50,6 +50,8 @@ describe 'atom', type: :task do
     end
 
     def invoke_update!
+      # require 'tasks/atom_old'
+      # process_atom_feed(submitter, profile, collection_ark, feeddatefile, starting_point)
       invoke_task('atom:update', starting_point, submitter, profile, collection_ark, feeddatefile)
     end
 
@@ -209,7 +211,7 @@ describe 'atom', type: :task do
       # rubocop:enable Lint/HandleExceptions
     end
 
-    it 'writes new feed date file and exits if feed date file not found' do
+    it 'exits without updating if feed date file not found' do
       FileUtils.remove_entry_secure(feeddatefile)
       expect(Mrt::Ingest::IObject).not_to receive(:new)
 
@@ -221,7 +223,7 @@ describe 'atom', type: :task do
       end
       # rubocop:enable Lint/HandleExceptions
 
-      expect(WebMock).to have_requested(:get, starting_point)
+      expect(File.exist?(feeddatefile)).to be_falsey
     end
 
     it 'exits without updating if feed not updated since last harvest' do
