@@ -16,11 +16,17 @@ module Merritt
       end
 
       # @return [PageResult] the `<atom:updated/>` value from the feed and the URL of the next page, if any
+      # rubocop:disable Metrics/AbcSize
       def process_xml!
         return if feed_updated < harvester.last_feed_update
-        atom_xml.xpath('//atom:entry', NS).each {|entry| process_entry(entry)}
+        batches = atom_xml.xpath('//atom:entry', NS).each_slice(harvester.batch_size)
+        batches.each_with_index do |batch, i|
+          batch.each { |entry| process_entry(entry) }
+          sleep(harvester.delay) if i + 1 < batches.size
+        end
         PageResult.new(atom_updated: atom_updated, next_page: next_page)
       end
+      # rubocop:enable Metrics/AbcSize
 
       private
 
@@ -29,9 +35,9 @@ module Merritt
         atom_id = entry_processor.atom_id
         local_id = entry_processor.local_id
         entry_processor.process_entry!
-      rescue => e
-        atom_id_str = atom_id ? atom_id : '(unknown)'
-        local_id_str = local_id ? local_id : '(unknown)'
+      rescue StandardError => e
+        atom_id_str = atom_id || '(unknown)'
+        local_id_str = local_id || '(unknown)'
         log_error("Error processing entry with Atom ID #{atom_id_str} (local ID: #{local_id_str})", e)
       end
 
