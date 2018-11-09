@@ -148,6 +148,9 @@ describe 'atom', type: :task do
     end
 
     it 'starts the one-time file server' do
+      feed_updated = DateTime.parse(feed_xml.at_xpath('//xmlns:updated').text)
+      write_feeddate(feed_updated - 1) # -1 day
+
       expect(server).to receive(:start_server)
       invoke_update!
     end
