@@ -5,7 +5,7 @@
 # Copyright:: Copyright (c) 2011 Regents of the University of California
 
 # TODO: write tests for this, then remove it from exclude list in top-level .rubocop.yml
-
+# :nocov:
 require 'tmpdir'
 require 'fileutils'
 require 'open-uri'
@@ -50,9 +50,7 @@ def up_to_date?(local_id, collection_id, updated, feeddate)
     return false
   else
     if updated.nil? then
-      # :nocov:
       return false # TODO: unreachable code (DateTime.parse() would have blown up)
-      # :nocov:
     else
       submit = updated_date <= obj.first.modified
       if (! submit) then
@@ -89,13 +87,11 @@ def process_atom_feed(submitter, profile, collection, feeddatefile, starting_poi
     for j in 0..2
       begin
         p = open(next_page, OPEN_URI_ARGS)
-        # :nocov:
         # TODO: this doesn't actually work -- 404 results in OpenURI::HTTPError
         if (p.status.first == "404")
           puts "Page not found, exiting... #{next_page}"
           return
         end
-        # :nocov:
         doc = Nokogiri::XML(p)
         break
       rescue =>ex
@@ -129,10 +125,8 @@ def process_atom_feed(submitter, profile, collection, feeddatefile, starting_poi
       # merrittCollectionLastFeedUpdatedFile = ATOM_CONFIG["#{merrittCollection}_lastFeedUpdate"]
       merrittCollectionLastFeedUpdatedFile = feeddatefile
       if (merrittCollectionLocalidElement.empty) then
-        # :nocov:
         # TODO: this is broken
         merrittCollectionLocalidElement.empty = "atom:id"     # default
-        # :nocov:
       end
     rescue => ex
       # TODO: shouldn't we exit here?
@@ -331,3 +325,4 @@ namespace :atom do
     process_atom_feed(args[:user], args[:profile], args[:collection], args[:feeddatefile], args[:root])
   end
 end
+# :nocov:
