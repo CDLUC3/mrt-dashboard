@@ -3,3 +3,7 @@ inherit_from: ../.rubocop.yml
 Metrics/ClassLength:
   Exclude:
   - 'ui.rake'
+
+Style/Semicolon:
+  Exclude:
+  - 'ui.rake'
