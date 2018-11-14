@@ -188,7 +188,7 @@ describe 'atom', type: :task do
       expect(@sleep_count).to eq(1)
     end
 
-    it 'doesn\'t sleep if pause file not present' do
+    it 'does not sleep if pause file not present' do
       expect(File.exist?(pause_file)).to be_falsey # just to be sure
 
       # HACK: to "expect().not_to receive" global sleep call
@@ -375,7 +375,7 @@ describe 'atom', type: :task do
       validate_request!(request_args)
     end
 
-    it 'doesn\'t require <dc:title/>' do
+    it 'does not require <dc:title/>' do
       feed_updated = DateTime.parse(feed_xml.at_xpath('//xmlns:updated').text)
       write_feeddate(feed_updated - 1) # -1 day
 
@@ -391,7 +391,7 @@ describe 'atom', type: :task do
     end
 
     # TODO: fix code, then re-enable this test
-    skip 'doesn\'t require <dc:date/>' do
+    skip 'does not require <dc:date/>' do
       feed_updated = DateTime.parse(feed_xml.at_xpath('//xmlns:updated').text)
       write_feeddate(feed_updated - 1) # -1 day
 
@@ -469,7 +469,7 @@ describe 'atom', type: :task do
       # TODO: figure out how to test this
     end
 
-    skip 'doesn\'t send basic-auth credentials for links to sites other than nuxeo.cdlib.org' do
+    skip 'does not send basic-auth credentials for links to sites other than nuxeo.cdlib.org' do
       # TODO: figure out how to test this
     end
 
@@ -528,7 +528,19 @@ describe 'atom', type: :task do
     pending 'requires a feeddatefile'
     pending 'requires a starting_point'
 
-    pending 'exits with an error if <merritt_collection_id> tag doesn\'t match passed-in collection ARK'
+    it 'exits with an error if <merritt_collection_id> tag does not match passed-in collection ARK' do
+      feed_updated = DateTime.parse(feed_xml.at_xpath('//xmlns:updated').text)
+      write_feeddate(feed_updated - 1) # -1 day
+
+      wrong_ark = 'ark:/99999/wrong-ARK'
+      collection_id_good = "<merritt_collection_id>#{collection_ark}</merritt_collection_id>"
+      collection_id_bad = collection_id_good.gsub(collection_ark, wrong_ark)
+      @feed_xml_str = @feed_xml_str.gsub(collection_id_good, collection_id_bad)
+      stub_request(:get, starting_point).to_return(status: 200, body: feed_xml_str, headers: {})
+
+      expect(Mrt::Ingest::IObject).not_to receive(:new)
+      expect { invoke_update! }.to raise_error(/#{collection_ark}.*#{wrong_ark}/)
+    end
 
     describe 'pagination' do
       attr_reader :feed_xml_strs
