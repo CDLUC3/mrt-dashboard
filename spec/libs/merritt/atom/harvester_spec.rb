@@ -108,6 +108,31 @@ module Merritt
         harvester.process_feed!
       end
 
+      it 'joins the server' do
+        expect(one_time_server).to receive(:join_server)
+        harvester = Harvester.new(args)
+        harvester.send(:one_time_server) # make sure it's initialized
+        allow(page_client).to receive(:process_page!).and_return(nil)
+        harvester.process_feed!
+      end
+
+      it 'joins the server even in the event of an error' do
+        expect(one_time_server).to receive(:join_server)
+        harvester = Harvester.new(args)
+        harvester.send(:one_time_server) # make sure it's initialized
+        allow(page_client).to receive(:process_page!).and_raise('Oops')
+        expect { harvester.process_feed! }.to raise_error('Oops')
+      end
+
+      it 'logs an error if server can\'t be joined' do
+        expect(one_time_server).to receive(:join_server).and_raise('Oops')
+        expect(Rails.logger).to receive(:error).with(/Oops/)
+
+        harvester = Harvester.new(args)
+        harvester.send(:one_time_server) # make sure it's initialized
+        allow(page_client).to receive(:process_page!).and_return(nil)
+        harvester.process_feed!
+      end
     end
   end
 end
