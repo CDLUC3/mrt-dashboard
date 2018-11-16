@@ -36,7 +36,7 @@ module Merritt
         return if expected_id == merritt_collection_id
         msg = <<~MSG
           Merritt Collection ID from feed XML does not match collection ARK passed to Rake task;
-          expected #{expected_id}, was #{merritt_collection_id || 'nil'}
+          expected '#{expected_id}', was #{"'#{merritt_collection_id}'" || 'nil'}
         MSG
         raise ArgumentError, msg.strip.tr("\n", ' ')
       end
