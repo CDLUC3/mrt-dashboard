@@ -49,10 +49,16 @@ class Profiler
     end
   end
 
+
   def profile
     @profile ||= begin
       profile = RubyProf::Profile.new
       profile.exclude_common_methods!
+      puts "Excluding methods from the following modules and all children: #{excludes}"
+      excludes.flat_map {|m| all_modules(m) }.each do |m|
+        methods = m.instance_methods + m.private_instance_methods
+        profile.exclude_methods!(m, methods)
+      end
       profile
     end
   end
@@ -85,6 +91,17 @@ class Profiler
 
   private
 
+  def excludes
+    # can't make this a constant b/c they haven't all been loaded
+    @excludes ||= [
+      ActiveSupport::Dependencies,
+      BasicObject,
+      DatabaseCleaner,
+      Kernel,
+      RSpec
+    ]
+  end
+
   def html
     report_format == 'html'
   end
@@ -97,8 +114,19 @@ class Profiler
     html || calltree
   end
 
+  def parent_of(mod)
+    parent_name = mod.name =~ /::[^:]+\Z/ ? $`.freeze : nil
+    Object.const_get(parent_name) if parent_name
+  end
+
+  def all_modules(mod)
+    [mod] + mod.constants.map { |c| mod.const_get(c) }
+              .select { |c| c.is_a?(Module) && parent_of(c) == mod }
+              .flat_map { |m| all_modules(m) }
+  end
+
   def print_report_calltree!
-    base_name = "profile-#{time_stopped.to_i}"
+    base_name = "profile"
     print "\nWriting calltree/cachegrind profile report to #{output_dir}/#{base_name}..."
     printer = RubyProf::CallTreePrinter.new(rp_result)
     printer.print(path: output_dir, profile: base_name)
