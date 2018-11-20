@@ -3,9 +3,9 @@ FactoryBot.define do
     inv_dublinkernel
   end
 
-  # noinspection RubyArgCount
-  after(:create) do |_|
-    # rebuild fulltext index
-    ActiveRecord::Base.connection.execute('OPTIMIZE TABLE sha_dublinkernels')
-  end
+  # # noinspection RubyArgCount
+  # after(:create) do |_|
+  #   # rebuild fulltext index
+  #   ActiveRecord::Base.connection.execute('OPTIMIZE TABLE sha_dublinkernels')
+  # end
 end
