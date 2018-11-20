@@ -1,8 +1,8 @@
 require 'merritt/atom'
 
 # TODO: make these non-constants
-DELAY = 300
-BATCH_SIZE = 1 # Nuxeo doesn't like us to queue up too many requests
+DELAY = Merritt::Atom::DEFAULT_DELAY
+BATCH_SIZE = Merritt::Atom::DEFAULT_BATCH_SIZE
 
 namespace :atom do
   desc 'Generic Atom to Merritt processor'

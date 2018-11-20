@@ -5,7 +5,6 @@ require 'fileutils'
 
 describe 'atom', type: :task do
 
-  DEFAULT_DELAY = 300
   ATOM_NS = { 'atom' => 'http://www.w3.org/2005/Atom' }.freeze
   EXPECTED_MANIFESTS = (0..1).map { |i| File.read("spec/data/ucldc_collection_5551212-manifest-#{i}.checkm").freeze }.freeze
   EXPECTED_ERC_CHECKSUMS = ['664d879f4609ef03f043dae7e4353959'.freeze, '0a10eaecc019131f17de4da54c32085b'.freeze].freeze

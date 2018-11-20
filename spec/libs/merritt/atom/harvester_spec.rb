@@ -21,6 +21,10 @@ module Merritt
       before(:each) do
         WebMock.disable_net_connect!
 
+        # HACK: to "expect().to receive" global sleep call
+        @sleep_count = 0
+        allow_any_instance_of(Object).to(receive(:sleep).with(DEFAULT_DELAY)) { @sleep_count += 1 }
+
         @original_home = ENV['HOME']
         @tmp_home = Dir.mktmpdir
         ENV['HOME'] = @tmp_home
