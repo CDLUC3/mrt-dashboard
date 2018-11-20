@@ -29,6 +29,7 @@ class ProfilePrinter < RubyProf::CallStackPrinter
   end
 end
 
+# rubocop:disable Metrics/ClassLength
 class Profiler
   attr_reader :report_format
   attr_reader :times_started
@@ -43,19 +44,17 @@ class Profiler
   end
 
   def start(_n10n)
-    if use_rubyprof?
-      puts 'Starting RubyProf'
-      profile.start
-    end
+    return unless use_rubyprof?
+    puts 'Starting RubyProf'
+    profile.start
   end
-
 
   def profile
     @profile ||= begin
       profile = RubyProf::Profile.new
       profile.exclude_common_methods!
       puts "Excluding methods from the following modules and all children: #{excludes}"
-      excludes.flat_map {|m| all_modules(m) }.each do |m|
+      excludes.flat_map { |m| all_modules(m) }.each do |m|
         methods = m.instance_methods + m.private_instance_methods
         profile.exclude_methods!(m, methods)
       end
@@ -128,16 +127,18 @@ class Profiler
 
   def all_modules(mod)
     [mod] + mod.constants.map { |c| to_const(mod, c) }
-              .compact
-              .select { |c| c.is_a?(Module) && parent_of(c) == mod }
-              .flat_map { |m| all_modules(m) }
+      .compact
+      .select { |c| c.is_a?(Module) && parent_of(c) == mod }
+      .flat_map { |m| all_modules(m) }
   end
 
+  # rubocop:disable Lint/HandleExceptions
   def to_const(parent, const_name)
     parent.const_get(const_name)
   rescue LoadError
     # we're loading everything unconditionally, & sometimes it doesn't work
   end
+  # rubocop:enable Lint/HandleExceptions
 
   def print_report_calltree!
     print "\nWriting calltree/cachegrind profile report to #{calltree_output_path}..."
@@ -186,3 +187,4 @@ class Profiler
   end
 
 end
+# rubocop:enable Metrics/ClassLength

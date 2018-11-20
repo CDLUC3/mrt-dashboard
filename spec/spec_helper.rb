@@ -21,7 +21,9 @@ RSpec.configure do |config|
 
   if (profile_args_str = ENV['PROFILE'])
     require 'support/profiler'
+    # rubocop:disable Security/Eval
     profile_args = eval(profile_args_str)
+    # rubocop:enable Security/Eval
     format = profile_args[:format]
     reporter = Profiler.new(format)
     config.reporter.register_listener(reporter, :start, :stop, :dump_summary, :example_started, :example_finished)
