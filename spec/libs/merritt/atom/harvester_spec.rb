@@ -97,7 +97,6 @@ module Merritt
         FileUtils.touch(pause_file_path)
 
         # HACK: to "expect().to receive" global sleep call
-        @sleep_count = 0
         allow_any_instance_of(Object).to receive(:sleep).with(expected_delay) do
           @sleep_count += 1
           FileUtils.remove_entry_secure(pause_file_path)

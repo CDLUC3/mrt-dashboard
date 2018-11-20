@@ -5,6 +5,7 @@ require 'fileutils'
 
 describe 'atom', type: :task do
 
+  DEFAULT_DELAY = 300
   ATOM_NS = { 'atom' => 'http://www.w3.org/2005/Atom' }.freeze
   EXPECTED_MANIFESTS = (0..1).map { |i| File.read("spec/data/ucldc_collection_5551212-manifest-#{i}.checkm").freeze }.freeze
   EXPECTED_ERC_CHECKSUMS = ['664d879f4609ef03f043dae7e4353959'.freeze, '0a10eaecc019131f17de4da54c32085b'.freeze].freeze
@@ -121,6 +122,10 @@ describe 'atom', type: :task do
       @tmp_home = Dir.mktmpdir
       ENV['HOME'] = @tmp_home
 
+      # HACK: to "expect().to receive" global sleep call
+      @sleep_count = 0
+      allow_any_instance_of(Object).to(receive(:sleep).with(DEFAULT_DELAY)) { @sleep_count += 1 }
+
       @client = instance_double(Mrt::Ingest::Client)
       allow(Mrt::Ingest::Client).to receive(:new).with(APP_CONFIG['ingest_service']).and_return(client)
       allow(client).to receive(:ingest)
@@ -179,7 +184,7 @@ describe 'atom', type: :task do
 
       # HACK: to "expect().to receive" global sleep call
       @sleep_count = 0
-      allow_any_instance_of(Object).to receive(:sleep).with(300) do
+      allow_any_instance_of(Object).to receive(:sleep).with(DEFAULT_DELAY) do
         @sleep_count += 1
         FileUtils.remove_entry_secure(pause_file)
       end
@@ -190,14 +195,6 @@ describe 'atom', type: :task do
 
     it 'does not sleep if pause file not present' do
       expect(File.exist?(pause_file)).to be_falsey # just to be sure
-
-      # HACK: to "expect().not_to receive" global sleep call
-      @sleep_count = 0
-      allow_any_instance_of(Object).to receive(:sleep).with(300) do
-        @sleep_count += 1
-        FileUtils.remove_entry_secure(pause_file)
-      end
-
       invoke_update!
       expect(@sleep_count).to eq(0)
     end
@@ -592,10 +589,6 @@ describe 'atom', type: :task do
           expected_sleeps = (obj_count / BATCH_SIZE) - 1
           expect(server).to receive(:add_file).exactly(obj_count).times
           expect(client).to receive(:ingest).exactly(obj_count).times
-
-          # HACK: to "expect().to receive" global sleep call
-          @sleep_count = 0
-          allow_any_instance_of(Object).to(receive(:sleep).with(300)) { @sleep_count += 1 }
 
           invoke_update!
           expect(@sleep_count).to eq(expected_sleeps)
