@@ -5,11 +5,17 @@ require File.expand_path('config/application', __dir__)
 MrtDashboard::Application.load_tasks
 
 # ------------------------------------------------------------
-# Coverage
+# Coverage & profiling
 
 desc 'Run all tests with coverage'
 task :coverage do
   ENV['COVERAGE'] = 'true'
+  Rake::Task[:spec].invoke
+end
+
+desc 'Run all tests with profiling'
+task :profile do
+  ENV['PROFILE'] = 'true'
   Rake::Task[:spec].invoke
 end
 
