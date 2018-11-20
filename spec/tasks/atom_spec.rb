@@ -202,28 +202,13 @@ describe 'atom', type: :task do
     it 'exits without updating if request returns 404' do
       stub_request(:get, starting_point).to_return(status: [404, 'Not Found'])
       expect(Mrt::Ingest::IObject).not_to receive(:new)
-
-      # rubocop:disable Lint/HandleExceptions
-      begin
-        invoke_update!
-      rescue Errno::ENOENT
-        # TODO: fix code, then remove this rescue block
-      end
-      # rubocop:enable Lint/HandleExceptions
+      invoke_update!
     end
 
     it 'exits without updating if feed date file not found' do
       FileUtils.remove_entry_secure(feeddatefile)
       expect(Mrt::Ingest::IObject).not_to receive(:new)
-
-      # rubocop:disable Lint/HandleExceptions
-      begin
-        invoke_update!
-      rescue Errno::ENOENT
-        # TODO: fix code, then remove this rescue block
-      end
-      # rubocop:enable Lint/HandleExceptions
-
+      invoke_update!
       expect(File.exist?(feeddatefile)).to be_falsey
     end
 
@@ -264,8 +249,7 @@ describe 'atom', type: :task do
       expect(@try).to eq(3) # just to be sure
     end
 
-    # TODO: fix code, then re-enable this test
-    skip 'gives up after three tries' do
+    it 'gives up after three tries' do
       feed_updated = DateTime.parse(feed_xml.at_xpath('//xmlns:updated').text)
       write_feeddate(feed_updated - 1) # -1 day
 
