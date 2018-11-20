@@ -121,8 +121,8 @@ module Merritt
           log_info("Pausing processing #{profile} for #{delay} seconds")
           sleep(delay)
         end
-        page_processor = PageClient.new(page_url: page_url, harvester: self)
-        return unless (result = page_processor.process_page!)
+        page_client = PageClient.new(page_url: page_url, harvester: self)
+        return unless (result = page_client.process_page!)
 
         @atom_updated = result.atom_updated
         process_from(result.next_page)
