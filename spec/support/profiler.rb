@@ -94,11 +94,18 @@ class Profiler
   def excludes
     # can't make this a constant b/c they haven't all been loaded
     @excludes ||= [
+      ActionController,
       ActiveSupport::Dependencies,
       BasicObject,
+      Capybara,
       DatabaseCleaner,
+      Enumerator,
       Kernel,
-      RSpec
+      Puma,
+      RSpec,
+      Sprockets,
+      Thread,
+      WebMock
     ]
   end
 
@@ -120,16 +127,23 @@ class Profiler
   end
 
   def all_modules(mod)
-    [mod] + mod.constants.map { |c| mod.const_get(c) }
+    [mod] + mod.constants.map { |c| to_const(mod, c) }
+              .compact
               .select { |c| c.is_a?(Module) && parent_of(c) == mod }
               .flat_map { |m| all_modules(m) }
   end
 
+  def to_const(parent, const_name)
+    parent.const_get(const_name)
+  rescue LoadError
+    # we're loading everything unconditionally, & sometimes it doesn't work
+  end
+
   def print_report_calltree!
-    base_name = "profile"
-    print "\nWriting calltree/cachegrind profile report to #{output_dir}/#{base_name}..."
+    print "\nWriting calltree/cachegrind profile report to #{calltree_output_path}..."
     printer = RubyProf::CallTreePrinter.new(rp_result)
-    printer.print(path: output_dir, profile: base_name)
+    printer.print(path: calltree_output_path)
+    Dir[output_dir]
     puts ' Done.'
   end
 
@@ -148,6 +162,14 @@ class Profiler
       profile_path = project_root_path + 'profile'
       FileUtils.mkdir_p(profile_path.to_s)
       profile_path
+    end
+  end
+
+  def calltree_output_path
+    @calltree_output_path ||= begin
+      ct_path = output_dir.realpath + "profile-#{time_stopped.to_i}"
+      FileUtils.mkdir_p(ct_path.to_s)
+      ct_path
     end
   end
 
