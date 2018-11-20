@@ -19,9 +19,12 @@ RSpec.configure do |config|
   # config.raise_errors_for_deprecations! # TODO: enable this
   config.mock_with :rspec
 
-  if ENV['PROFILE']
+  if (profile_args_str = ENV['PROFILE'])
     require 'support/profiler'
-    config.reporter.register_listener(ProfilingReporter.new, :start, :stop, :dump_summary, :example_started, :example_finished)
+    profile_args = eval(profile_args_str)
+    format = profile_args[:format]
+    reporter = Profiler.new(format)
+    config.reporter.register_listener(reporter, :start, :stop, :dump_summary, :example_started, :example_finished)
   end
 end
 

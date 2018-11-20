@@ -29,24 +29,37 @@ class ProfilePrinter < RubyProf::CallStackPrinter
   end
 end
 
-class ProfilingReporter
+class Profiler
+  attr_reader :report_format
   attr_reader :times_started
   attr_reader :times_elapsed
   attr_reader :time_stopped
   attr_reader :rp_result
 
+  def initialize(report_format)
+    @report_format = report_format
+    @times_started = {}
+    @times_elapsed = {}
+  end
+
   def start(_n10n)
-    RubyProf.start
+    if use_rubyprof?
+      puts 'Starting RubyProf'
+      profile.start
+    end
+  end
+
+  def profile
+    @profile ||= begin
+      profile = RubyProf::Profile.new
+      profile.exclude_common_methods!
+      profile
+    end
   end
 
   def stop(_n10n)
     @time_stopped = Time.now
-    @rp_result = RubyProf.stop
-  end
-
-  def initialize
-    @times_started = {}
-    @times_elapsed = {}
+    @rp_result = profile.stop if use_rubyprof?
   end
 
   def example_started(n10n)
@@ -66,18 +79,29 @@ class ProfilingReporter
       puts "#{format('%.4f', time_elapsed)}\t#{desc}"
     end
 
-    print_report_html!
-    # print_report_calltree!
+    print_report_html! if html
+    print_report_calltree! if calltree
   end
 
   private
 
-  # TODO: figure out how to configure this to produce reasonable filenames
-  # TODO: find a free tool that can display this output in a reasonable way
+  def html
+    report_format == 'html'
+  end
+
+  def calltree
+    report_format == 'calltree'
+  end
+
+  def use_rubyprof?
+    html || calltree
+  end
+
   def print_report_calltree!
-    print "\nWriting calltree/qcachegrind profile report to #{output_dir} ..."
+    base_name = "profile-#{time_stopped.to_i}"
+    print "\nWriting calltree/cachegrind profile report to #{output_dir}/#{base_name}..."
     printer = RubyProf::CallTreePrinter.new(rp_result)
-    printer.print(path: output_dir, profile: 'cachegrind.out')
+    printer.print(path: output_dir, profile: base_name)
     puts ' Done.'
   end
 
@@ -100,9 +124,7 @@ class ProfilingReporter
   end
 
   def html_output_path
-    @html_output_path ||= begin
-      (output_dir + 'index.html').realpath
-    end
+    @html_output_path ||= output_dir.realpath + 'index.html'
   end
 
   def desc(n10n)

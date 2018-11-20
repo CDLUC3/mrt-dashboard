@@ -13,9 +13,9 @@ task :coverage do
   Rake::Task[:spec].invoke
 end
 
-desc 'Run all tests with profiling'
-task :profile do
-  ENV['PROFILE'] = 'true'
+desc 'Run all tests with profiling (for full ruby-prof report, specify [calltree] or [html] format)'
+task :profile, [:format] do |_, args|
+  ENV['PROFILE'] = args.to_h.inspect
   Rake::Task[:spec].invoke
 end
 
