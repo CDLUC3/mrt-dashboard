@@ -8,6 +8,8 @@ mrt-dashboard.iml
 
 *.md.html
 
+/profile/
+
 .bundle
 db/*.sqlite3
 log/

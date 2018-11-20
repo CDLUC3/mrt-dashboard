@@ -18,6 +18,16 @@ RSpec.configure do |config|
   config.formatter = :documentation
   # config.raise_errors_for_deprecations! # TODO: enable this
   config.mock_with :rspec
+
+  if (profile_args_str = ENV['PROFILE'])
+    require 'support/profiler'
+    # rubocop:disable Security/Eval
+    profile_args = eval(profile_args_str)
+    # rubocop:enable Security/Eval
+    format = profile_args[:format]
+    reporter = Profiler.new(format)
+    config.reporter.register_listener(reporter, :start, :stop, :dump_summary, :example_started, :example_finished)
+  end
 end
 
 require 'rspec_custom_matchers'

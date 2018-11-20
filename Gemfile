@@ -32,6 +32,7 @@ group :development, :test do
   gem 'launchy'
   gem 'rspec-rails', '~> 3.0'
   gem 'rubocop', '0.58.1'
+  gem 'ruby-prof', '~> 0.17'
 end
 
 group :test do
