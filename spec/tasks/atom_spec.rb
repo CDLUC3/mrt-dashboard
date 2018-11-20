@@ -123,7 +123,7 @@ describe 'atom', type: :task do
 
       # HACK: to "expect().to receive" global sleep call
       @sleep_count = 0
-      allow_any_instance_of(Object).to(receive(:sleep).with(DEFAULT_DELAY)) { @sleep_count += 1 }
+      allow_any_instance_of(Object).to(receive(:sleep).with(Merritt::Atom::DEFAULT_DELAY)) { @sleep_count += 1 }
 
       @client = instance_double(Mrt::Ingest::Client)
       allow(Mrt::Ingest::Client).to receive(:new).with(APP_CONFIG['ingest_service']).and_return(client)
@@ -183,7 +183,7 @@ describe 'atom', type: :task do
 
       # HACK: to "expect().to receive" global sleep call
       @sleep_count = 0
-      allow_any_instance_of(Object).to receive(:sleep).with(DEFAULT_DELAY) do
+      allow_any_instance_of(Object).to receive(:sleep).with(Merritt::Atom::DEFAULT_DELAY) do
         @sleep_count += 1
         FileUtils.remove_entry_secure(pause_file)
       end
