@@ -1,0 +1,1017 @@
+<?xml version='1.0' encoding='utf-8'?>
+<feed xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:nx="http://www.nuxeo.org/ecm/project/schemas/tingle-california-digita/ucldc_schema" xmlns:opensearch="http://a9.com/-/spec/opensearch/1.1/" xmlns="http://www.w3.org/2005/Atom">
+  <updated>2018-10-09T22:12:23.218427+00:00</updated>
+  <id>https://s3.example.com/static.ucldc.example.edu/merritt/ucldc_collection_5551212.atom</id>
+  <title>UCLDC Metadata Feed</title>
+  <author>UC Libraries Digital Collection</author>
+  <link href="https://nuxeo.cdlib.org/Nuxeo/nxdoc/default/fa968400-0ce1-4ec4-9760-c9a26f74d210/view_documents" rel="alternate" title="Merced Local History Collection"/>
+  <link href="https://s3.example.com/static.ucldc.example.edu/merritt/ucldc_collection_5551212.atom" rel="self"/>
+  <link href="https://s3.example.com/static.ucldc.example.edu/merritt/ucldc_collection_5551212.atom" rel="first"/>
+  <link href="https://s3.example.com/static.ucldc.example.edu/merritt/ucldc_collection_5551212.atom" rel="last"/>
+  <merritt_collection_id>ark:/99999/FK5551212</merritt_collection_id>
+  <entry>
+    <id>https://nuxeo.cdlib.org/Nuxeo/nxdoc/default/494672cf-2937-4975-8b33-90bf80b4c8a6/view_documents</id>
+    <title>Merced County Sheriff's Office mug book</title>
+    <updated>2015-08-20T19:06:37.622000+00:00</updated>
+    <author>UC Libraries Digital Collection</author>
+    <link href="https://nuxeo.cdlib.org/Merritt/494672cf-2937-4975-8b33-90bf80b4c8a6.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://s3.example.com/static.ucldc.example.edu/media_json/494672cf-2937-4975-8b33-90bf80b4c8a6-media.json" rel="alternate" title="Deep Harvest metadata for this object" type="application/json"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/494672cf-2937-4975-8b33-90bf80b4c8a6/file:content/ucm_mcdmugbk_cover_front_k.tif" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">7bf2be3db6bbc38edf12b66bfa2d6eb8</opensearch:checksum>
+    </link>
+    <dc:creator>Merced County Sheriff's Office</dc:creator>
+    <dc:title>Merced County Sheriff's Office mug book</dc:title>
+    <dc:date>1885-19--?</dc:date>
+    <dc:identifier>494672cf-2937-4975-8b33-90bf80b4c8a6</dc:identifier>
+    <nx:collection> https://registry.example.edu/api/v1/collection/67/</nx:collection>
+    <link href="https://nuxeo.cdlib.org/Merritt/24b0f168-5372-4c5c-95ea-385c0e75d5c7.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/24b0f168-5372-4c5c-95ea-385c0e75d5c7/file:content/ucm_mcdmugbk_cover_front_k.tif" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">7bf2be3db6bbc38edf12b66bfa2d6eb8</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/6cf93a70-6b0d-41cf-b108-4c5c388c88c8.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/6cf93a70-6b0d-41cf-b108-4c5c388c88c8/file:content/ucm_mcdmugbk_001_k.tif" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">ed813cdc48d0a53f163d7a3f0c30cac5</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/6cf93a70-6b0d-41cf-b108-4c5c388c88c8/files:files/0/file/ucm_mcdmugbk_001.tif" rel="alternate" title="Auxiliary file">
+      <opensearch:checksum algorithm="MD5">4694d944648c975a717ade0de8bbfb5c</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/89ac09cc-66f0-40c2-8cd3-fa3333d2d66d.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/89ac09cc-66f0-40c2-8cd3-fa3333d2d66d/file:content/ucm_mcdmugbk_002_k.tif" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">7c543f0ced3c4e45920bd3163f3e6125</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/89ac09cc-66f0-40c2-8cd3-fa3333d2d66d/files:files/0/file/ucm_mcdmugbk_002.tif" rel="alternate" title="Auxiliary file">
+      <opensearch:checksum algorithm="MD5">48185270365abdaf03ff98c6b9e7ab03</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/7476bd0c-21dd-469e-b1a0-25b99739f448.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/7476bd0c-21dd-469e-b1a0-25b99739f448/file:content/ucm_mcdmugbk_003_k.tif" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">79bb19fe57337c79c2986e377d0feebd</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/7476bd0c-21dd-469e-b1a0-25b99739f448/files:files/0/file/ucm_mcdmugbk_003.tif" rel="alternate" title="Auxiliary file">
+      <opensearch:checksum algorithm="MD5">c5c28d5525a0f9e07a23d0506b968840</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/0fcd1673-517a-49b5-9455-3a90d89d1d79.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/0fcd1673-517a-49b5-9455-3a90d89d1d79/file:content/ucm_mcdmugbk_004_k.tif" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">795a54a50a5f2b3446f7979b5cccd35b</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/0fcd1673-517a-49b5-9455-3a90d89d1d79/files:files/0/file/ucm_mcdmugbk_004.tif" rel="alternate" title="Auxiliary file">
+      <opensearch:checksum algorithm="MD5">fc660c12a956b1b9e6fff35b7e34f27f</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/1a2a36fe-6cb2-4404-967b-18ca6232d3cc.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/1a2a36fe-6cb2-4404-967b-18ca6232d3cc/file:content/ucm_mcdmugbk_005_k.tif" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">25f803177b9fe3a126cc1fb325f3d731</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/1a2a36fe-6cb2-4404-967b-18ca6232d3cc/files:files/0/file/ucm_mcdmugbk_005.tif" rel="alternate" title="Auxiliary file">
+      <opensearch:checksum algorithm="MD5">80059d81960ca1af371e3844c8a0060f</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/7a86619b-8fdd-4134-ae47-40908fe1892b.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/7a86619b-8fdd-4134-ae47-40908fe1892b/file:content/ucm_mcdmugbk_006_k.tif" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">c86ee85940ba1b82a4aa034637b7153a</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/7a86619b-8fdd-4134-ae47-40908fe1892b/files:files/0/file/ucm_mcdmugbk_006.tif" rel="alternate" title="Auxiliary file">
+      <opensearch:checksum algorithm="MD5">6ea24267f4cd86bb7367594ea9ae252c</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/f68d172e-ecf8-4c3e-b113-3c5e5547f6c2.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/f68d172e-ecf8-4c3e-b113-3c5e5547f6c2/file:content/ucm_mcdmugbk_007_k.tif" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">9023588fb4e67461fbffcad722f2de54</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/f68d172e-ecf8-4c3e-b113-3c5e5547f6c2/files:files/0/file/ucm_mcdmugbk_007.tif" rel="alternate" title="Auxiliary file">
+      <opensearch:checksum algorithm="MD5">6595108ae5ca9ba1f0aee72f3d1dbbe2</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/2322b786-2ac6-4da5-a7c3-80692dd5b294.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/2322b786-2ac6-4da5-a7c3-80692dd5b294/file:content/ucm_mcdmugbk_008_k.tif" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">789f8b45758147559c7d0378210af8a4</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/2322b786-2ac6-4da5-a7c3-80692dd5b294/files:files/0/file/ucm_mcdmugbk_008.tif" rel="alternate" title="Auxiliary file">
+      <opensearch:checksum algorithm="MD5">698fd136f0d49e29bbc68b27446bf676</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/a69491ce-921c-41af-8eed-2c0ea4810447.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/a69491ce-921c-41af-8eed-2c0ea4810447/file:content/ucm_mcdmugbk_009_k.tif" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">62dfb505cd62a481d0c8107117890921</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/a69491ce-921c-41af-8eed-2c0ea4810447/files:files/0/file/ucm_mcdmugbk_009.tif" rel="alternate" title="Auxiliary file">
+      <opensearch:checksum algorithm="MD5">232dad11af22a216bebaec0f4b747221</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/f862b3bd-7d00-45bd-83bc-c347f69a5322.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/f862b3bd-7d00-45bd-83bc-c347f69a5322/file:content/ucm_mcdmugbk_010_k.tif" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">a65c6e71c3bd66c5c97795627ecb7a7d</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/f862b3bd-7d00-45bd-83bc-c347f69a5322/files:files/0/file/ucm_mcdmugbk_010.tif" rel="alternate" title="Auxiliary file">
+      <opensearch:checksum algorithm="MD5">161782c4f0bc275eb5ef38f05adf83a4</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/91e3bce7-2f27-4aa8-a345-d1610f5d3293.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/91e3bce7-2f27-4aa8-a345-d1610f5d3293/file:content/ucm_mcdmugbk_011_k.tif" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">1e663ddd9eac30b248f76e54f2bc34ea</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/91e3bce7-2f27-4aa8-a345-d1610f5d3293/files:files/0/file/ucm_mcdmugbk_011.tif" rel="alternate" title="Auxiliary file">
+      <opensearch:checksum algorithm="MD5">e04fd2b5c87497f8757b93dc898c9551</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/c3e20984-b4b4-4e42-b355-af1310bdef60.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/c3e20984-b4b4-4e42-b355-af1310bdef60/file:content/ucm_mcdmugbk_012_k.tif" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">db118d07c3e302b33b39708647511de8</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/c3e20984-b4b4-4e42-b355-af1310bdef60/files:files/0/file/ucm_mcdmugbk_012.tif" rel="alternate" title="Auxiliary file">
+      <opensearch:checksum algorithm="MD5">c8bf66ad49e39f48b1b9c4e95ab7a592</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/b0d69be1-b87e-4769-836d-99a28497752c.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/b0d69be1-b87e-4769-836d-99a28497752c/file:content/ucm_mcdmugbk_013_k.tif" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">6eb0d7f7c17a0a05bd009fbb115e8ce8</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/b0d69be1-b87e-4769-836d-99a28497752c/files:files/0/file/ucm_mcdmugbk_013.tif" rel="alternate" title="Auxiliary file">
+      <opensearch:checksum algorithm="MD5">9e7db918d510b703a3b913cec9ca5cae</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/d419703e-fc3e-4ec5-b460-d4550056e73b.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/d419703e-fc3e-4ec5-b460-d4550056e73b/file:content/ucm_mcdmugbk_014_k.tif" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">7364fed1945a3aed31eec679213aaac0</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/d419703e-fc3e-4ec5-b460-d4550056e73b/files:files/0/file/ucm_mcdmugbk_014.tif" rel="alternate" title="Auxiliary file">
+      <opensearch:checksum algorithm="MD5">e2ee93415ac7cb3bc05e77fa21b2099c</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/8b3a99bc-7ed4-4a9a-b64b-39aa4e33a86a.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/8b3a99bc-7ed4-4a9a-b64b-39aa4e33a86a/file:content/ucm_mcdmugbk_015a_k.tif" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">8429e643d919a9acfc19b7b52285d661</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/8b3a99bc-7ed4-4a9a-b64b-39aa4e33a86a/files:files/0/file/ucm_mcdmugbk_015a.tif" rel="alternate" title="Auxiliary file">
+      <opensearch:checksum algorithm="MD5">9066e7eb1752db3e62cda8026e222644</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/202d7b20-4346-4846-8628-a646fd94b4c0.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/202d7b20-4346-4846-8628-a646fd94b4c0/file:content/ucm_mcdmugbk_015b_k.tif" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">f85e4a04586774472659ecb647a08761</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/202d7b20-4346-4846-8628-a646fd94b4c0/files:files/0/file/ucm_mcdmugbk_015b.tif" rel="alternate" title="Auxiliary file">
+      <opensearch:checksum algorithm="MD5">cdb0dc0bb98ed625691b6e05c88f5522</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/f6003576-9ebc-4155-807c-09fb83b6650d.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/f6003576-9ebc-4155-807c-09fb83b6650d/file:content/ucm_mcdmugbk_016_k.tif" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">de736aae76cda6baceb8ced0df8dd2c8</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/f6003576-9ebc-4155-807c-09fb83b6650d/files:files/0/file/ucm_mcdmugbk_016.tif" rel="alternate" title="Auxiliary file">
+      <opensearch:checksum algorithm="MD5">f3a8112ff268a7295088f01d8eb234c8</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/0f2dc9dd-e67a-4e15-9052-7a82eec6ad4c.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/0f2dc9dd-e67a-4e15-9052-7a82eec6ad4c/file:content/ucm_mcdmugbk_017_k.tif" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">7c4a450cb1baa7145df85eecbdd0a3a7</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/0f2dc9dd-e67a-4e15-9052-7a82eec6ad4c/files:files/0/file/ucm_mcdmugbk_017.tif" rel="alternate" title="Auxiliary file">
+      <opensearch:checksum algorithm="MD5">75896f69265f308b94a5d411a3ad9ffe</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/cd47f2eb-ac2b-4e21-8e77-090d2e6b5616.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/cd47f2eb-ac2b-4e21-8e77-090d2e6b5616/file:content/ucm_mcdmugbk_018_k.tif" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">d2485b2e9b3f99a13ebd321694e59918</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/cd47f2eb-ac2b-4e21-8e77-090d2e6b5616/files:files/0/file/ucm_mcdmugbk_018.tif" rel="alternate" title="Auxiliary file">
+      <opensearch:checksum algorithm="MD5">1e2bed14778b4a3cf819de5e7c404643</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/b67afcdd-2b4f-4d40-951a-2e575a847d99.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/b67afcdd-2b4f-4d40-951a-2e575a847d99/file:content/ucm_mcdmugbk_019_k.tif" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">c6cd4cd4fd6807aa573e0696bbaf2d1e</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/b67afcdd-2b4f-4d40-951a-2e575a847d99/files:files/0/file/ucm_mcdmugbk_019.tif" rel="alternate" title="Auxiliary file">
+      <opensearch:checksum algorithm="MD5">006a3105c33336b6692ee7409af361e3</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/102629d2-73cc-4cee-9c03-1eeffc99a6be.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/102629d2-73cc-4cee-9c03-1eeffc99a6be/file:content/ucm_mcdmugbk_020_k.tif" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">16676ccc80f6c4d97880f266b8d2cf65</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/102629d2-73cc-4cee-9c03-1eeffc99a6be/files:files/0/file/ucm_mcdmugbk_020.tif" rel="alternate" title="Auxiliary file">
+      <opensearch:checksum algorithm="MD5">37df0f0dc5e038620e3a0a2b9ad0407b</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/d51adf93-c2ec-47a7-89d3-49f35ba60451.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/d51adf93-c2ec-47a7-89d3-49f35ba60451/file:content/ucm_mcdmugbk_022_k.tif" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">494c0d47fd00dabdf3161a15d5d49188</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/d51adf93-c2ec-47a7-89d3-49f35ba60451/files:files/0/file/ucm_mcdmugbk_022.tif" rel="alternate" title="Auxiliary file">
+      <opensearch:checksum algorithm="MD5">d5bd360e184a66ab8311b6b02f3d7ba0</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/eee94050-c12b-45a8-b45d-ef122f16e1de.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/eee94050-c12b-45a8-b45d-ef122f16e1de/file:content/ucm_mcdmugbk_021_k.tif" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">f74eacd5d00602048b4c9fd917632077</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/eee94050-c12b-45a8-b45d-ef122f16e1de/files:files/0/file/ucm_mcdmugbk_021.tif" rel="alternate" title="Auxiliary file">
+      <opensearch:checksum algorithm="MD5">10bcbc102cd881eb7131e0cd71a43fdb</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/d0d516ac-2fb4-4944-b773-79b89bad8f14.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/d0d516ac-2fb4-4944-b773-79b89bad8f14/file:content/ucm_mcdmugbk_023_k.tif" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">e8ad2a2ab375cf57388bbe734d91d225</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/d0d516ac-2fb4-4944-b773-79b89bad8f14/files:files/0/file/ucm_mcdmugbk_023.tif" rel="alternate" title="Auxiliary file">
+      <opensearch:checksum algorithm="MD5">74494353688ca7bd36368b2e6002f7da</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/58fc57b3-9d17-47b8-8905-4fc8cd0c4b17.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/58fc57b3-9d17-47b8-8905-4fc8cd0c4b17/file:content/ucm_mcdmugbk_024_k.tif" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">c8e71193e1dbbe3ff1cf8d1f46d35df5</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/58fc57b3-9d17-47b8-8905-4fc8cd0c4b17/files:files/0/file/ucm_mcdmugbk_024.tif" rel="alternate" title="Auxiliary file">
+      <opensearch:checksum algorithm="MD5">74df9909e3e7aaa8c58136bc0af024c1</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/f9279f08-1550-48cc-bb20-81f07e3fc177.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/f9279f08-1550-48cc-bb20-81f07e3fc177/file:content/ucm_mcdmugbk_025_k.tif" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">cff25d989787861619763ab26e4965cd</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/f9279f08-1550-48cc-bb20-81f07e3fc177/files:files/0/file/ucm_mcdmugbk_025.tif" rel="alternate" title="Auxiliary file">
+      <opensearch:checksum algorithm="MD5">ae38cae0e7c7726216217697ff4b2d06</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/5716fd80-4453-401e-9e5a-d3e4991b0ddb.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/5716fd80-4453-401e-9e5a-d3e4991b0ddb/file:content/ucm_mcdmugbk_026_k.tif" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">9150f8f71e1c349b4616b41e9038170d</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/5716fd80-4453-401e-9e5a-d3e4991b0ddb/files:files/0/file/ucm_mcdmugbk_026.tif" rel="alternate" title="Auxiliary file">
+      <opensearch:checksum algorithm="MD5">c4060a54bdb2f8b4a4f80c5bb5af4ea5</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/430d8bf0-568c-4e7c-8203-bcda76abe28e.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/430d8bf0-568c-4e7c-8203-bcda76abe28e/file:content/ucm_mcdmugbk_027_k.tif" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">f375f9c74bd8958c62ea476bdf5b1c57</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/430d8bf0-568c-4e7c-8203-bcda76abe28e/files:files/0/file/ucm_mcdmugbk_027.tif" rel="alternate" title="Auxiliary file">
+      <opensearch:checksum algorithm="MD5">c9ac717020b647938dd88c521f7b6cfb</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/cbf2b6f7-90fb-4e10-8c41-fddff20a2ea9.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/cbf2b6f7-90fb-4e10-8c41-fddff20a2ea9/file:content/ucm_mcdmugbk_028_k.tif" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">d04b2ee9f50141d8418b03dccc5070c9</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/cbf2b6f7-90fb-4e10-8c41-fddff20a2ea9/files:files/0/file/ucm_mcdmugbk_028.tif" rel="alternate" title="Auxiliary file">
+      <opensearch:checksum algorithm="MD5">ab19d5a7d14266a5188c5daf8a68bb48</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/328dcb3d-258c-4944-841e-30169d74003f.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/328dcb3d-258c-4944-841e-30169d74003f/file:content/ucm_mcdmugbk_029_k.tif" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">f65111c69a85dcaefbfbc23e966e5d95</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/328dcb3d-258c-4944-841e-30169d74003f/files:files/0/file/ucm_mcdmugbk_029.tif" rel="alternate" title="Auxiliary file">
+      <opensearch:checksum algorithm="MD5">d0fde059f691f964a5537b67cac0cf89</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/e65790ab-350b-4c34-8e6a-2e9bedd9aec8.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/e65790ab-350b-4c34-8e6a-2e9bedd9aec8/file:content/ucm_mcdmugbk_030_k.tif" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">77627208db9226b94befad1e60e51180</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/e65790ab-350b-4c34-8e6a-2e9bedd9aec8/files:files/0/file/ucm_mcdmugbk_030.tif" rel="alternate" title="Auxiliary file">
+      <opensearch:checksum algorithm="MD5">4061f174f64d76d26892b4418c4eb496</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/6b2654d7-3329-425d-a6e8-d36f9feb997a.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/6b2654d7-3329-425d-a6e8-d36f9feb997a/file:content/ucm_mcdmugbk_032_k.tif" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">8275551d738fbced6663f618b3d8f289</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/6b2654d7-3329-425d-a6e8-d36f9feb997a/files:files/0/file/ucm_mcdmugbk_032.tif" rel="alternate" title="Auxiliary file">
+      <opensearch:checksum algorithm="MD5">de231d663deb96716765499d0fa87bf6</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/c289f052-2d57-43b8-85de-d8b58a1c2126.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/c289f052-2d57-43b8-85de-d8b58a1c2126/file:content/ucm_mcdmugbk_031_k.tif" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">b233143ef2002aa6b30428725c155569</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/c289f052-2d57-43b8-85de-d8b58a1c2126/files:files/0/file/ucm_mcdmugbk_031.tif" rel="alternate" title="Auxiliary file">
+      <opensearch:checksum algorithm="MD5">fadb180f82f2799ff19a232ba7cd0320</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/00034d15-6284-4b08-8af6-19d9e170d448.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/00034d15-6284-4b08-8af6-19d9e170d448/file:content/ucm_mcdmugbk_033_k.tif" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">bcefd38f20a70dc0c609f9ea0b8b418b</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/00034d15-6284-4b08-8af6-19d9e170d448/files:files/0/file/ucm_mcdmugbk_033.tif" rel="alternate" title="Auxiliary file">
+      <opensearch:checksum algorithm="MD5">e5728b02014f0daf6aee09babdd12691</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/77bbccd9-ca40-46a2-ae81-b12c73e4b228.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/77bbccd9-ca40-46a2-ae81-b12c73e4b228/file:content/ucm_mcdmugbk_034_k.tif" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">558679267b6877518ad2a84388cbe2fe</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/77bbccd9-ca40-46a2-ae81-b12c73e4b228/files:files/0/file/ucm_mcdmugbk_034.tif" rel="alternate" title="Auxiliary file">
+      <opensearch:checksum algorithm="MD5">8205a542c4b8ebd323ab1d5300e49f73</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/0412fa19-7306-4dcd-bffa-fdafd2121847.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/0412fa19-7306-4dcd-bffa-fdafd2121847/file:content/ucm_mcdmugbk_035_k.tif" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">2dfbe6de139c39da6b9115b6e1fd8f8b</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/0412fa19-7306-4dcd-bffa-fdafd2121847/files:files/0/file/ucm_mcdmugbk_035.tif" rel="alternate" title="Auxiliary file">
+      <opensearch:checksum algorithm="MD5">c39897a97766d49d38229cf563e6b29b</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/80f3a3ec-d60c-4fa9-a47b-337bf795256c.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/80f3a3ec-d60c-4fa9-a47b-337bf795256c/file:content/ucm_mcdmugbk_036_k.tif" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">e90d16b9c58cdd5a36a8767fc5bfaba4</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/8993193c-d9d5-41cb-9bc0-5ea0c67a8d4a.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/8993193c-d9d5-41cb-9bc0-5ea0c67a8d4a/file:content/ucm_mcdmugbk_037_k.tif" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">2b4c017430ef7e7973675d30e713bcd2</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/723658d6-0fe6-40f7-8880-62b3408aad00.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/723658d6-0fe6-40f7-8880-62b3408aad00/file:content/ucm_mcdmugbk_038_k.tif" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">24bf14a5591c2d8fcd951b9b6f536a06</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/723658d6-0fe6-40f7-8880-62b3408aad00/files:files/0/file/ucm_mcdmugbk_038.tif" rel="alternate" title="Auxiliary file">
+      <opensearch:checksum algorithm="MD5">6722ce7bfb9a53019b2654c802d27e04</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/fa8f0ca4-ed0b-452a-a5f0-3892ac3e34b8.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/fa8f0ca4-ed0b-452a-a5f0-3892ac3e34b8/file:content/ucm_mcdmugbk_040_k.tif" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">1add80b496286279c5df16893f16ab85</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/fa8f0ca4-ed0b-452a-a5f0-3892ac3e34b8/files:files/0/file/ucm_mcdmugbk_040.tif" rel="alternate" title="Auxiliary file">
+      <opensearch:checksum algorithm="MD5">825760fc7cb5379223209ada4b5e11ea</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/5dfbd390-5c80-4378-a6f9-23168c3b57ea.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/5dfbd390-5c80-4378-a6f9-23168c3b57ea/file:content/ucm_mcdmugbk_039_k.tif" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">ffa5c275180a622e9620ffd8e7809464</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/5dfbd390-5c80-4378-a6f9-23168c3b57ea/files:files/0/file/ucm_mcdmugbk_039.tif" rel="alternate" title="Auxiliary file">
+      <opensearch:checksum algorithm="MD5">01c0f48906c94bfc2d84f395f944fea9</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/173eea65-bb0f-42f1-a283-57db9fc23ed8.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/173eea65-bb0f-42f1-a283-57db9fc23ed8/file:content/ucm_mcdmugbk_042_k.tif" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">f2bfa579151e811e3cccaefd1ef34078</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/173eea65-bb0f-42f1-a283-57db9fc23ed8/files:files/0/file/ucm_mcdmugbk_042.tif" rel="alternate" title="Auxiliary file">
+      <opensearch:checksum algorithm="MD5">6ec65f20ce9f50bfd9e3cf1f78001609</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/91a8af61-f381-45e5-abd1-3be4733fbb0b.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/91a8af61-f381-45e5-abd1-3be4733fbb0b/file:content/ucm_mcdmugbk_041_k.tif" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">195cf25b9bca0f684181fad937a8c2fc</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/91a8af61-f381-45e5-abd1-3be4733fbb0b/files:files/0/file/ucm_mcdmugbk_041.tif" rel="alternate" title="Auxiliary file">
+      <opensearch:checksum algorithm="MD5">c2bfb8af3596f8af4bf6a39ec7bb86a8</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/606e776e-fdc8-4119-956c-7536fbfcf5be.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/606e776e-fdc8-4119-956c-7536fbfcf5be/file:content/ucm_mcdmugbk_043_k.tif" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">a7d2d0a14d9fed7de14f4ca22c55c0b2</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/606e776e-fdc8-4119-956c-7536fbfcf5be/files:files/0/file/ucm_mcdmugbk_043.tif" rel="alternate" title="Auxiliary file">
+      <opensearch:checksum algorithm="MD5">a2b51b4a1c1bdd54d5be1ff6dddc9698</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/e8d396da-798d-4d38-aa16-1d558ba8ec93.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/e8d396da-798d-4d38-aa16-1d558ba8ec93/file:content/ucm_mcdmugbk_044_k.tif" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">3fadac18a874ec29c0359a511c44dec9</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/5b28c899-62fc-4e58-868c-e45653cd3152.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/5b28c899-62fc-4e58-868c-e45653cd3152/file:content/ucm_mcdmugbk_045_k.tif" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">707a0dce4999a56c392212508ca41db4</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/5b28c899-62fc-4e58-868c-e45653cd3152/files:files/0/file/ucm_mcdmugbk_045.tif" rel="alternate" title="Auxiliary file">
+      <opensearch:checksum algorithm="MD5">6c2bfde28835fe00d9a94587415108ec</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/12b7bad7-1cb4-4f84-9073-bb19a7fca713.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/12b7bad7-1cb4-4f84-9073-bb19a7fca713/file:content/ucm_mcdmugbk_046_k.tif" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">e73d9e1acde7b39e88534af4631b4eb7</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/ee9f0c2b-688e-4543-b877-84001112f867.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/ee9f0c2b-688e-4543-b877-84001112f867/file:content/ucm_mcdmugbk_047_k.tif" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">370059546d94838e6d6b65811e894ead</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/6b754c3e-93ca-4d63-bf17-eb95e405129e.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/6b754c3e-93ca-4d63-bf17-eb95e405129e/file:content/ucm_mcdmugbk_048_k.tif" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">8b51712ede887384950e8ee7aa1a950c</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/6b754c3e-93ca-4d63-bf17-eb95e405129e/files:files/0/file/ucm_mcdmugbk_048.tif" rel="alternate" title="Auxiliary file">
+      <opensearch:checksum algorithm="MD5">2205645939c4782c3cb8cc0475a1fb1f</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/52aeee65-6823-40a0-8145-ab06557b2685.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/52aeee65-6823-40a0-8145-ab06557b2685/file:content/ucm_mcdmugbk_050_k.tif" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">ee37da5424e2f3f9db0d9babd3303a9f</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/52aeee65-6823-40a0-8145-ab06557b2685/files:files/0/file/ucm_mcdmugbk_050.tif" rel="alternate" title="Auxiliary file">
+      <opensearch:checksum algorithm="MD5">c765e33bd2bde43e6096deeaec7d11bc</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/e589f30c-6265-41d4-9ab5-5fa60e7c0c45.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/e589f30c-6265-41d4-9ab5-5fa60e7c0c45/file:content/ucm_mcdmugbk_049_k.tif" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">a990e6a3cd5633fc72d545f31000c07d</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/e589f30c-6265-41d4-9ab5-5fa60e7c0c45/files:files/0/file/ucm_mcdmugbk_049.tif" rel="alternate" title="Auxiliary file">
+      <opensearch:checksum algorithm="MD5">aac705e3bd92c80ddfc8a389a8df7db2</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/ea5936b2-fe7a-48a7-98d1-43efbbc5cc70.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/ea5936b2-fe7a-48a7-98d1-43efbbc5cc70/file:content/ucm_mcdmugbk_052_k.tif" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">7361414092122ce25304d46aa2586da4</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/c465c476-d6ed-408f-8403-9acdac0553bb.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/c465c476-d6ed-408f-8403-9acdac0553bb/file:content/ucm_mcdmugbk_051_k.tif" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">d2fb5d37f25e7303730bd84191444797</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/c465c476-d6ed-408f-8403-9acdac0553bb/files:files/0/file/ucm_mcdmugbk_051.tif" rel="alternate" title="Auxiliary file">
+      <opensearch:checksum algorithm="MD5">54d8c5e5e21ceeb9f05a9907ecb4bef6</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/e8e2b556-ddc4-4adc-8670-0537ac3857b4.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/e8e2b556-ddc4-4adc-8670-0537ac3857b4/file:content/ucm_mcdmugbk_053_k.tif" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">7fa417de221fb62f3518cfec8b0d6d07</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/0315e9f4-a2c1-4e7e-bcbf-f0696f89ce37.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/0315e9f4-a2c1-4e7e-bcbf-f0696f89ce37/file:content/ucm_mcdmugbk_054_k.tif" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">3a6c76842e53cd4b9e5782b26985b798</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/0315e9f4-a2c1-4e7e-bcbf-f0696f89ce37/files:files/0/file/ucm_mcdmugbk_054.tif" rel="alternate" title="Auxiliary file">
+      <opensearch:checksum algorithm="MD5">70bd9f112acca3d1b71aa05e9016db87</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/8e66b5fe-4133-47d3-8185-18c0e9871dbb.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/8e66b5fe-4133-47d3-8185-18c0e9871dbb/file:content/ucm_mcdmugbk_055_k.tif" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">0576f08c497d6d6d4ccdb19d53c61c56</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/fdb14134-1674-4cc7-bb85-286a3b1cc552.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/fdb14134-1674-4cc7-bb85-286a3b1cc552/file:content/ucm_mcdmugbk_056_k.tif" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">f8ec021a28d1253649373e7f520a1174</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/a073de2c-372c-41a8-806f-6c6decf46f96.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/a073de2c-372c-41a8-806f-6c6decf46f96/file:content/ucm_mcdmugbk_057_k.tif" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">2d6a0ae215dd35a4ebebccd4003f9fd1</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/a073de2c-372c-41a8-806f-6c6decf46f96/files:files/0/file/ucm_mcdmugbk_057.tif" rel="alternate" title="Auxiliary file">
+      <opensearch:checksum algorithm="MD5">cc514cf5bab813830e319564e2ec8c85</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/fa6ad813-0e99-49b0-95f0-502cf70f98cf.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/fa6ad813-0e99-49b0-95f0-502cf70f98cf/file:content/ucm_mcdmugbk_058_k.tif" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">1799f5b790bcc0c16ee29a265dd1c351</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/fa6ad813-0e99-49b0-95f0-502cf70f98cf/files:files/0/file/ucm_mcdmugbk_058.tif" rel="alternate" title="Auxiliary file">
+      <opensearch:checksum algorithm="MD5">266c406e23a7ebbe68d662809f5f2719</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/5776a6b8-d2bb-47ac-9e95-7d2d79a8a6b3.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/5776a6b8-d2bb-47ac-9e95-7d2d79a8a6b3/file:content/ucm_mcdmugbk_059_k.tif" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">a6b5b525e37b68027d5d1a159d08653d</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/5776a6b8-d2bb-47ac-9e95-7d2d79a8a6b3/files:files/0/file/ucm_mcdmugbk_059.tif" rel="alternate" title="Auxiliary file">
+      <opensearch:checksum algorithm="MD5">d6ec24403f57025505187eda750c7b1b</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/a4766f3c-f68b-4f60-964a-88c18098dafb.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/a4766f3c-f68b-4f60-964a-88c18098dafb/file:content/ucm_mcdmugbk_060_k.tif" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">e0dcc0d69e464dabc17c4c6209d146ba</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/a4766f3c-f68b-4f60-964a-88c18098dafb/files:files/0/file/ucm_mcdmugbk_060.tif" rel="alternate" title="Auxiliary file">
+      <opensearch:checksum algorithm="MD5">0aa216845428cbc42c0e47b64dc46087</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/269baa9c-70f1-4a84-99f2-4cc9afa5c281.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/269baa9c-70f1-4a84-99f2-4cc9afa5c281/file:content/ucm_mcdmugbk_061_k.tif" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">2fe7ed048c3adae22db249832744243f</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/269baa9c-70f1-4a84-99f2-4cc9afa5c281/files:files/0/file/ucm_mcdmugbk_061.tif" rel="alternate" title="Auxiliary file">
+      <opensearch:checksum algorithm="MD5">7f560874566c5ab9ba8a193f4f4f7757</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/09a6f53b-d263-4d6b-bb10-b6248e6a2652.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/09a6f53b-d263-4d6b-bb10-b6248e6a2652/file:content/ucm_mcdmugbk_062_k.tif" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">62fd165e63ea3058a59962b7aec5e8dc</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/0b94484f-43da-4b38-917d-013b2f4d50b7.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/0b94484f-43da-4b38-917d-013b2f4d50b7/file:content/ucm_mcdmugbk_063_k.tif" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">e078b7a12b982d0b4edd9f2a253f8d8d</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/0b94484f-43da-4b38-917d-013b2f4d50b7/files:files/0/file/ucm_mcdmugbk_063.tif" rel="alternate" title="Auxiliary file">
+      <opensearch:checksum algorithm="MD5">d88df664fb946acb8e3a15df3315fe4b</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/6d5d46a0-d4dd-49da-a3ca-8775205d5a20.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/6d5d46a0-d4dd-49da-a3ca-8775205d5a20/file:content/ucm_mcdmugbk_064_k.tif" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">a16af4e84e98a7686e4b962062f1e191</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/6d5d46a0-d4dd-49da-a3ca-8775205d5a20/files:files/0/file/ucm_mcdmugbk_064.tif" rel="alternate" title="Auxiliary file">
+      <opensearch:checksum algorithm="MD5">c8cefab5d53b22230b17be01cfef2067</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/f9a3328f-3085-403f-835c-aa22319b4609.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/f9a3328f-3085-403f-835c-aa22319b4609/file:content/ucm_mcdmugbk_065_k.tif" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">6628d32d54f8bca10d8ab886b09e6bc8</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/f9a3328f-3085-403f-835c-aa22319b4609/files:files/0/file/ucm_mcdmugbk_065.tif" rel="alternate" title="Auxiliary file">
+      <opensearch:checksum algorithm="MD5">09533ed6488dbb9162837b4f37cdc0b4</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/cc4485e8-d344-432d-b5f5-b2eb002b3f12.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/cc4485e8-d344-432d-b5f5-b2eb002b3f12/file:content/ucm_mcdmugbk_066_k.tif" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">0310cf7e484b014dd9a8e7f2529963c2</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/afd45dd8-017a-4b12-b0a4-0d8086fb4eac.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/afd45dd8-017a-4b12-b0a4-0d8086fb4eac/file:content/ucm_mcdmugbk_067_k.tif" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">475f60bbd399fbfd251b5730cac1dd5b</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/afd45dd8-017a-4b12-b0a4-0d8086fb4eac/files:files/0/file/ucm_mcdmugbk_067.tif" rel="alternate" title="Auxiliary file">
+      <opensearch:checksum algorithm="MD5">0e6a2b1ecd5d3f54cab0e6961e842418</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/de8da608-5026-402c-ab76-f54419d1956b.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/de8da608-5026-402c-ab76-f54419d1956b/file:content/ucm_mcdmugbk_068_k.tif" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">68f9011051ab76e22b87cc5fb81f77f1</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/de8da608-5026-402c-ab76-f54419d1956b/files:files/0/file/ucm_mcdmugbk_068.tif" rel="alternate" title="Auxiliary file">
+      <opensearch:checksum algorithm="MD5">f8f5db52192483837acf584c7c3c93c8</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/1e6c2bd3-502b-4f92-bf91-90608a779e62.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/1e6c2bd3-502b-4f92-bf91-90608a779e62/file:content/ucm_mcdmugbk_069_k.tif" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">5ab7a2cd48375a1533ee98ce55b48cb3</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/1e6c2bd3-502b-4f92-bf91-90608a779e62/files:files/0/file/ucm_mcdmugbk_069.tif" rel="alternate" title="Auxiliary file">
+      <opensearch:checksum algorithm="MD5">db4e0bac3eb94e4b55e524e5161e55f6</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/a0b4db3f-04ab-4465-9a3a-8d17b5942373.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/a0b4db3f-04ab-4465-9a3a-8d17b5942373/file:content/ucm_mcdmugbk_070_k.tif" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">bdda3817fb98fe9f442209c44e11738c</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/a0b4db3f-04ab-4465-9a3a-8d17b5942373/files:files/0/file/ucm_mcdmugbk_070.tif" rel="alternate" title="Auxiliary file">
+      <opensearch:checksum algorithm="MD5">9b2c62954383184336a3ad4410eeb032</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/6ed180d4-c574-4fd8-bcfd-9f7e371e704c.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/6ed180d4-c574-4fd8-bcfd-9f7e371e704c/file:content/ucm_mcdmugbk_071_k.tif" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">713a0bb76902afb902566c77f3e04786</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/6ed180d4-c574-4fd8-bcfd-9f7e371e704c/files:files/0/file/ucm_mcdmugbk_071.tif" rel="alternate" title="Auxiliary file">
+      <opensearch:checksum algorithm="MD5">e81705efc36d75306b3cb3331cc8347d</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/aafabbfc-b2c8-4d5e-9db3-e2bc4515dbec.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/aafabbfc-b2c8-4d5e-9db3-e2bc4515dbec/file:content/ucm_mcdmugbk_072_k.tif" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">57d340f70d0cf142a2a8fd82d8f1c3f4</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/aafabbfc-b2c8-4d5e-9db3-e2bc4515dbec/files:files/0/file/ucm_mcdmugbk_072.tif" rel="alternate" title="Auxiliary file">
+      <opensearch:checksum algorithm="MD5">edd9f76bc6acc305259ad7abf2ee2ef2</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/7df22c9a-48f7-4cb0-85e9-ed4dae0c699f.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/7df22c9a-48f7-4cb0-85e9-ed4dae0c699f/file:content/ucm_mcdmugbk_073_k.tif" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">ee9baca6b19a22136de7f5e1024d6b6c</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/f4146764-0e20-4530-a903-4d845d0a8981.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/f4146764-0e20-4530-a903-4d845d0a8981/file:content/ucm_mcdmugbk_074_k.tif" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">4e0c3d30ba922d55c25748ce44eb5eda</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/9faadab2-d99e-4245-aa23-c53290b76624.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/9faadab2-d99e-4245-aa23-c53290b76624/file:content/ucm_mcdmugbk_075_k.tif" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">b80b89657382597a1d46a9c51ce1dc82</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/9faadab2-d99e-4245-aa23-c53290b76624/files:files/0/file/ucm_mcdmugbk_075.tif" rel="alternate" title="Auxiliary file">
+      <opensearch:checksum algorithm="MD5">6df982a390c175745103d692e51eef87</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/86f506bc-fbf4-49f3-be4b-3cd4a160f4f7.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/86f506bc-fbf4-49f3-be4b-3cd4a160f4f7/file:content/ucm_mcdmugbk_076_k.tif" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">390ef9e06e78a340bd6897249077fe7b</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/86f506bc-fbf4-49f3-be4b-3cd4a160f4f7/files:files/0/file/ucm_mcdmugbk_076.tif" rel="alternate" title="Auxiliary file">
+      <opensearch:checksum algorithm="MD5">1b9c8d95e733ba0c7d8b3218d27dfcbb</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/8e491ee5-0912-4ad1-b620-d11114f1e1d7.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/8e491ee5-0912-4ad1-b620-d11114f1e1d7/file:content/ucm_mcdmugbk_077_k.tif" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">e58c71bb117f743f39e1af8671f3383b</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/8e491ee5-0912-4ad1-b620-d11114f1e1d7/files:files/0/file/ucm_mcdmugbk_077.tif" rel="alternate" title="Auxiliary file">
+      <opensearch:checksum algorithm="MD5">f1e285c3946779077ffb38c423c27001</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/f191227a-1a91-41b5-a1a1-b8b24ae6dfa6.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/f191227a-1a91-41b5-a1a1-b8b24ae6dfa6/file:content/ucm_mcdmugbk_078_k.tif" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">3200ea28564c7b658c126281a0e00283</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/f191227a-1a91-41b5-a1a1-b8b24ae6dfa6/files:files/0/file/ucm_mcdmugbk_078.tif" rel="alternate" title="Auxiliary file">
+      <opensearch:checksum algorithm="MD5">da9060fb8af6b36b622ed92b37fed33a</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/62402d2e-8f27-4473-b756-13b10458a049.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/62402d2e-8f27-4473-b756-13b10458a049/file:content/ucm_mcdmugbk_079_k.tif" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">677243dede71a6c5e5342110e60bcef2</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/62402d2e-8f27-4473-b756-13b10458a049/files:files/0/file/ucm_mcdmugbk_079.tif" rel="alternate" title="Auxiliary file">
+      <opensearch:checksum algorithm="MD5">aea076a497a39d6947b60da7fb64e447</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/7611fd9c-bae3-4198-adb2-6c96eb799581.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/7611fd9c-bae3-4198-adb2-6c96eb799581/file:content/ucm_mcdmugbk_080_k.tif" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">7f42de0d87f6de675363c6d0d195a97f</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/7611fd9c-bae3-4198-adb2-6c96eb799581/files:files/0/file/ucm_mcdmugbk_080.tif" rel="alternate" title="Auxiliary file">
+      <opensearch:checksum algorithm="MD5">5c399b9f54cc99433ff9111d96763ef7</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/4cefaca6-4b20-4a0f-8f7e-b0a950e0c183.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/4cefaca6-4b20-4a0f-8f7e-b0a950e0c183/file:content/ucm_mcdmugbk_081_k.tif" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">681937b4c95ed3e6134808d49a0408fb</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/4cefaca6-4b20-4a0f-8f7e-b0a950e0c183/files:files/0/file/ucm_mcdmugbk_081.tif" rel="alternate" title="Auxiliary file">
+      <opensearch:checksum algorithm="MD5">3feb2b76e11f58d76302c441245637d9</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/5f6d47bb-5bd4-47d6-a14f-b677b1ab7dc9.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/5f6d47bb-5bd4-47d6-a14f-b677b1ab7dc9/file:content/ucm_mcdmugbk_082_k.tif" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">8257e67a21a9f4627fc3b582871eb36b</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/5f6d47bb-5bd4-47d6-a14f-b677b1ab7dc9/files:files/0/file/ucm_mcdmugbk_082.tif" rel="alternate" title="Auxiliary file">
+      <opensearch:checksum algorithm="MD5">405e1d2160fdd309df144145f86e6ef2</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/615adf60-f0d0-470c-8a38-6e656a2a19fc.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/615adf60-f0d0-470c-8a38-6e656a2a19fc/file:content/ucm_mcdmugbk_083_k.tif" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">922ef4d21b0eae0315b6de438ee415ba</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/615adf60-f0d0-470c-8a38-6e656a2a19fc/files:files/0/file/ucm_mcdmugbk_083.tif" rel="alternate" title="Auxiliary file">
+      <opensearch:checksum algorithm="MD5">67657600066ee01e8bea537bcb33b0fd</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/6f9b7124-0737-441e-8279-30ffa4370642.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/6f9b7124-0737-441e-8279-30ffa4370642/file:content/ucm_mcdmugbk_084_k.tif" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">5269346797c01190bafd3ea30b84df17</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/6f9b7124-0737-441e-8279-30ffa4370642/files:files/0/file/ucm_mcdmugbk_084.tif" rel="alternate" title="Auxiliary file">
+      <opensearch:checksum algorithm="MD5">1234d69a8ec5c2010e618cd32b958c77</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/80a93f9a-de2e-41aa-a9bc-9d5b107ace27.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/80a93f9a-de2e-41aa-a9bc-9d5b107ace27/file:content/ucm_mcdmugbk_085_k.tif" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">4cac76019e72a037f242407cba35531d</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/80a93f9a-de2e-41aa-a9bc-9d5b107ace27/files:files/0/file/ucm_mcdmugbk_085.tif" rel="alternate" title="Auxiliary file">
+      <opensearch:checksum algorithm="MD5">ef92b3c5258ff1bb8370afce5305761a</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/8aafd497-2e37-4fa1-9f77-7d20c36344c0.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/8aafd497-2e37-4fa1-9f77-7d20c36344c0/file:content/ucm_mcdmugbk_086_k.tif" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">24c556bf63bca73b8cc328818a3e3d82</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/8aafd497-2e37-4fa1-9f77-7d20c36344c0/files:files/0/file/ucm_mcdmugbk_086.tif" rel="alternate" title="Auxiliary file">
+      <opensearch:checksum algorithm="MD5">add69a6d281fffa7cd5df7395c24cbdc</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/1f8d55be-c4d4-479e-95c9-2f18b843fc66.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/1f8d55be-c4d4-479e-95c9-2f18b843fc66/file:content/ucm_mcdmugbk_087_k.tif" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">6ef6141d4df17beea79a3ca540adddc3</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/1f8d55be-c4d4-479e-95c9-2f18b843fc66/files:files/0/file/ucm_mcdmugbk_087.tif" rel="alternate" title="Auxiliary file">
+      <opensearch:checksum algorithm="MD5">afd771cf1839c46a6ac822cc7e965b39</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/6568f136-c4dd-41ae-bf72-a73ca49ac4fd.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/6568f136-c4dd-41ae-bf72-a73ca49ac4fd/file:content/ucm_mcdmugbk_088_k.tif" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">904e0838bf0489d93156f823e2ec962d</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/6568f136-c4dd-41ae-bf72-a73ca49ac4fd/files:files/0/file/ucm_mcdmugbk_088.tif" rel="alternate" title="Auxiliary file">
+      <opensearch:checksum algorithm="MD5">c67c55a2e4d717ec8a0f3ea4f4794816</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/5528c728-306f-4528-8d36-a9d1be182190.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/5528c728-306f-4528-8d36-a9d1be182190/file:content/ucm_mcdmugbk_089_k.tif" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">b27ba72207c5fa8dc435393d334736ec</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/9011816b-bd5b-4e91-88f4-1d7bd89f0bcf.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/9011816b-bd5b-4e91-88f4-1d7bd89f0bcf/file:content/ucm_mcdmugbk_090_k.tif" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">77efddc655d2cf75c88d48641fcf7fb1</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/9011816b-bd5b-4e91-88f4-1d7bd89f0bcf/files:files/0/file/ucm_mcdmugbk_090.tif" rel="alternate" title="Auxiliary file">
+      <opensearch:checksum algorithm="MD5">1d8ef528de8c5bdce4633426fc64da6a</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/276e8420-7681-47c7-98bc-12c0aa4bb8d5.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/276e8420-7681-47c7-98bc-12c0aa4bb8d5/file:content/ucm_mcdmugbk_091_k.tif" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">a8db5fcb573cc8f8787a68fd0e80bf34</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/276e8420-7681-47c7-98bc-12c0aa4bb8d5/files:files/0/file/ucm_mcdmugbk_091.tif" rel="alternate" title="Auxiliary file">
+      <opensearch:checksum algorithm="MD5">848e8153fa4779f44f32455498220dad</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/060c137f-59fd-4b16-8b08-23663c63b650.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/060c137f-59fd-4b16-8b08-23663c63b650/file:content/ucm_mcdmugbk_092_k.tif" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">329c0e62239f3c8fab9740f7281a0df0</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/060c137f-59fd-4b16-8b08-23663c63b650/files:files/0/file/ucm_mcdmugbk_092.tif" rel="alternate" title="Auxiliary file">
+      <opensearch:checksum algorithm="MD5">11564f8790084f281756b285d84dba33</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/6a290940-8af3-4793-b246-729e44774f80.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/6a290940-8af3-4793-b246-729e44774f80/file:content/ucm_mcdmugbk_093_k.tif" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">bedd06ea86bbe52edf6fe9efd846dc2c</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/256fd756-06de-4318-8804-4152d2fb33c4.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/256fd756-06de-4318-8804-4152d2fb33c4/file:content/ucm_mcdmugbk_094_k.tif" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">315212f92406b2b668150b6d3cd6a8d4</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/256fd756-06de-4318-8804-4152d2fb33c4/files:files/0/file/ucm_mcdmugbk_094.tif" rel="alternate" title="Auxiliary file">
+      <opensearch:checksum algorithm="MD5">90610ff91547dafe8c95fbef780049db</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/43f536a0-ffe3-424e-a0cd-48d9d9e7ced7.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/43f536a0-ffe3-424e-a0cd-48d9d9e7ced7/file:content/ucm_mcdmugbk_095_k.tif" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">4459d13a80f270722a0cb4669bf84157</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/43f536a0-ffe3-424e-a0cd-48d9d9e7ced7/files:files/0/file/ucm_mcdmugbk_095.tif" rel="alternate" title="Auxiliary file">
+      <opensearch:checksum algorithm="MD5">7c3c270f99f743cfbfbbc253342109a9</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/9bb8778c-9f6f-435e-9479-882e798ef485.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/9bb8778c-9f6f-435e-9479-882e798ef485/file:content/ucm_mcdmugbk_096_k.tif" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">817ec53fd6a5fef248e0c1a873411a0b</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/1d8f0091-357c-4933-8385-e6759867745b.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/1d8f0091-357c-4933-8385-e6759867745b/file:content/ucm_mcdmugbk_097_k.tif" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">24f6936180573131a7a2d016784c54c2</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/a38f096c-320e-4663-a594-6da1b776c539.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/a38f096c-320e-4663-a594-6da1b776c539/file:content/ucm_mcdmugbk_098_k.tif" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">cb7c21862cf87a8b7face5d423ef88ea</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/3b4483b8-5167-4cfb-942c-67eeaac27f6e.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/3b4483b8-5167-4cfb-942c-67eeaac27f6e/file:content/ucm_mcdmugbk_099_k.tif" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">ea2d05936b63545c6bb3598d1cb8e2ef</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/3b4483b8-5167-4cfb-942c-67eeaac27f6e/files:files/0/file/ucm_mcdmugbk_099.tif" rel="alternate" title="Auxiliary file">
+      <opensearch:checksum algorithm="MD5">be0d1f296d19953e561e7daf58c0a49c</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/550f5333-cdc2-4fbf-89a9-6f8422f7de28.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/550f5333-cdc2-4fbf-89a9-6f8422f7de28/file:content/ucm_mcdmugbk_100_k.tif" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">b93084d3893cc48d3fd9ce70fc0605e8</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/64a4489a-c05b-4e26-9306-caff7b28cc60.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/64a4489a-c05b-4e26-9306-caff7b28cc60/file:content/ucm_mcdmugbk_101_k.tif" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">f2d2106e91fbb019d9ebf484551656ad</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/64a4489a-c05b-4e26-9306-caff7b28cc60/files:files/0/file/ucm_mcdmugbk_101.tif" rel="alternate" title="Auxiliary file">
+      <opensearch:checksum algorithm="MD5">29dbf0cbda73d98684bbb97f8a78cd71</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/fdcc9ced-ce57-45ba-85e5-0bad2aceb048.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/fdcc9ced-ce57-45ba-85e5-0bad2aceb048/file:content/ucm_mcdmugbk_102_k.tif" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">13c706293aa1a4bd450bc06f91eff3ac</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/fdcc9ced-ce57-45ba-85e5-0bad2aceb048/files:files/0/file/ucm_mcdmugbk_102.tif" rel="alternate" title="Auxiliary file">
+      <opensearch:checksum algorithm="MD5">8965ddd1d58270da32f44517c7b4d1d3</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/2e413300-9301-404a-b9bb-54686fc560a7.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/2e413300-9301-404a-b9bb-54686fc560a7/file:content/ucm_mcdmugbk_103_k.tif" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">2a554267adf17802e0553e9345035ff1</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/2e413300-9301-404a-b9bb-54686fc560a7/files:files/0/file/ucm_mcdmugbk_103.tif" rel="alternate" title="Auxiliary file">
+      <opensearch:checksum algorithm="MD5">69fead295120e868049b2f4bd85fc5ea</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/339ed1f8-cac0-4d13-a20a-6a0faa90eece.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/339ed1f8-cac0-4d13-a20a-6a0faa90eece/file:content/ucm_mcdmugbk_104_k.tif" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">cd8780a0f6fd80a5c562723abf5232c1</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/339ed1f8-cac0-4d13-a20a-6a0faa90eece/files:files/0/file/ucm_mcdmugbk_104.tif" rel="alternate" title="Auxiliary file">
+      <opensearch:checksum algorithm="MD5">cc3038686a64bd45050f8ef298376916</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/619c0136-919c-4af2-8344-13430633d807.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/619c0136-919c-4af2-8344-13430633d807/file:content/ucm_mcdmugbk_105_k.tif" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">53137c64ea20a071d007962598df339d</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/619c0136-919c-4af2-8344-13430633d807/files:files/0/file/ucm_mcdmugbk_105.tif" rel="alternate" title="Auxiliary file">
+      <opensearch:checksum algorithm="MD5">ce3abdb9659d6bbb334f95b6dfde7b98</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/3d91ec14-9e1f-4c23-ad4d-c78729a3b3ec.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/3d91ec14-9e1f-4c23-ad4d-c78729a3b3ec/file:content/ucm_mcdmugbk_106_k.tif" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">00862d0c81b726c73caea4604feb802b</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/3d91ec14-9e1f-4c23-ad4d-c78729a3b3ec/files:files/0/file/ucm_mcdmugbk_106.tif" rel="alternate" title="Auxiliary file">
+      <opensearch:checksum algorithm="MD5">36f1eee346b170e481986d5a72b44063</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/64b12314-f1fb-4be7-a413-fca6bf4eebdf.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/64b12314-f1fb-4be7-a413-fca6bf4eebdf/file:content/ucm_mcdmugbk_107_k.tif" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">2784aab7875950075df00695f37c64da</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/64b12314-f1fb-4be7-a413-fca6bf4eebdf/files:files/0/file/ucm_mcdmugbk_107.tif" rel="alternate" title="Auxiliary file">
+      <opensearch:checksum algorithm="MD5">84913c87b9e42c8f79a6159f4f8c1ad8</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/b7eec7cb-98df-4fb4-99b7-ba92e8eefd80.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/b7eec7cb-98df-4fb4-99b7-ba92e8eefd80/file:content/ucm_mcdmugbk_108_k.tif" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">b7cf6a88dbca552c0336f41fa0b190a0</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/b7eec7cb-98df-4fb4-99b7-ba92e8eefd80/files:files/0/file/ucm_mcdmugbk_108.tif" rel="alternate" title="Auxiliary file">
+      <opensearch:checksum algorithm="MD5">647137c587acd5c026a7fc6f2d9fc96c</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/e98bd25c-55be-45fa-9fc3-29a42753b383.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/e98bd25c-55be-45fa-9fc3-29a42753b383/file:content/ucm_mcdmugbk_109_k.tif" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">aac0e4f1c44754ffd196394e084d72b2</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/e98bd25c-55be-45fa-9fc3-29a42753b383/files:files/0/file/ucm_mcdmugbk_109.tif" rel="alternate" title="Auxiliary file">
+      <opensearch:checksum algorithm="MD5">7db52f4c553121dfe42c38ebdd2c8ab0</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/aaa53a55-f45d-4d03-bb5f-065ee617b1b4.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/aaa53a55-f45d-4d03-bb5f-065ee617b1b4/file:content/ucm_mcdmugbk_110_k.tif" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">5a7604897b45949933c8747283fb80a9</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/aaa53a55-f45d-4d03-bb5f-065ee617b1b4/files:files/0/file/ucm_mcdmugbk_110.tif" rel="alternate" title="Auxiliary file">
+      <opensearch:checksum algorithm="MD5">fc0ee3c52805c7d83f4f2920172c80ff</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/215ca6b8-8f18-4e2a-8081-1394921d0843.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/215ca6b8-8f18-4e2a-8081-1394921d0843/file:content/ucm_mcdmugbk_111_k.tif" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">164335694197df711db74e0eab75c0a0</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/215ca6b8-8f18-4e2a-8081-1394921d0843/files:files/0/file/ucm_mcdmugbk_111.tif" rel="alternate" title="Auxiliary file">
+      <opensearch:checksum algorithm="MD5">c3408e6fd0f38badc2bcac5af06dd826</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/e9cb78e1-c59b-4902-ab30-f62c19358432.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/e9cb78e1-c59b-4902-ab30-f62c19358432/file:content/ucm_mcdmugbk_112_k.tif" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">6d4530018eac08d6362290f61f201fcb</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/e9cb78e1-c59b-4902-ab30-f62c19358432/files:files/0/file/ucm_mcdmugbk_112.tif" rel="alternate" title="Auxiliary file">
+      <opensearch:checksum algorithm="MD5">17e60a72d35296df92cda243da37dab6</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/adcd13c2-a3f5-4af1-8b1b-1a6e99263ba3.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/adcd13c2-a3f5-4af1-8b1b-1a6e99263ba3/file:content/ucm_mcdmugbk_113_k.tif" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">8575a2f1b68a2695e1dee61af41f7ba2</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/adcd13c2-a3f5-4af1-8b1b-1a6e99263ba3/files:files/0/file/ucm_mcdmugbk_113.tif" rel="alternate" title="Auxiliary file">
+      <opensearch:checksum algorithm="MD5">886a0464cef2de75baaeb40bef14d018</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/750c9a11-0477-4904-9bbf-d7775de04b5e.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/750c9a11-0477-4904-9bbf-d7775de04b5e/file:content/ucm_mcdmugbk_114_k.tif" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">5fcd43fa5b3fef88a3044d8bfa2c4c51</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/750c9a11-0477-4904-9bbf-d7775de04b5e/files:files/0/file/ucm_mcdmugbk_114.tif" rel="alternate" title="Auxiliary file">
+      <opensearch:checksum algorithm="MD5">f7d24084aa572f534f78f1e45695dbcf</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/1dac8267-edd6-4b03-a92d-f4416e4181ed.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/1dac8267-edd6-4b03-a92d-f4416e4181ed/file:content/ucm_mcdmugbk_115_k.tif" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">244cd43ad0babc75676e5183f4540d95</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/1dac8267-edd6-4b03-a92d-f4416e4181ed/files:files/0/file/ucm_mcdmugbk_115.tif" rel="alternate" title="Auxiliary file">
+      <opensearch:checksum algorithm="MD5">bf610ea9dcf067820571f055fdc8da13</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/f96211c7-72c8-4ee5-b756-e1e617e51723.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/f96211c7-72c8-4ee5-b756-e1e617e51723/file:content/ucm_mcdmugbk_116_k.tif" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">45920a35eaff6739884d2a1ce4043f99</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/f96211c7-72c8-4ee5-b756-e1e617e51723/files:files/0/file/ucm_mcdmugbk_116.tif" rel="alternate" title="Auxiliary file">
+      <opensearch:checksum algorithm="MD5">5c27451e83474ebfd84790effc6aead4</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/1effc541-5b6c-4362-a0e5-98212e809d2b.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/1effc541-5b6c-4362-a0e5-98212e809d2b/file:content/ucm_mcdmugbk_117_k.tif" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">d14ebee1f05db768f9530e5c48ed8cc0</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/1effc541-5b6c-4362-a0e5-98212e809d2b/files:files/0/file/ucm_mcdmugbk_117.tif" rel="alternate" title="Auxiliary file">
+      <opensearch:checksum algorithm="MD5">17ee0e74a9b807adbe467e3cf05c01e8</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/7bdc1dd6-85b2-44a2-9fc2-a9253fad7760.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/7bdc1dd6-85b2-44a2-9fc2-a9253fad7760/file:content/ucm_mcdmugbk_118_k.tif" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">922a4aed3010ffabe40b832c98ac449d</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/7bdc1dd6-85b2-44a2-9fc2-a9253fad7760/files:files/0/file/ucm_mcdmugbk_118.tif" rel="alternate" title="Auxiliary file">
+      <opensearch:checksum algorithm="MD5">bd611264d76824cab0add7b112b82bca</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/5fa89b16-7504-4ad1-ba64-d83040e40c5d.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/5fa89b16-7504-4ad1-ba64-d83040e40c5d/file:content/ucm_mcdmugbk_119_k.tif" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">b8b6a9759d66d769515338fae3b8945f</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/5fa89b16-7504-4ad1-ba64-d83040e40c5d/files:files/0/file/ucm_mcdmugbk_119.tif" rel="alternate" title="Auxiliary file">
+      <opensearch:checksum algorithm="MD5">90763f9352cbc1e7385f521c34329c0f</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/bb68742a-9c16-4ebb-940b-1f731b23d02a.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/bb68742a-9c16-4ebb-940b-1f731b23d02a/file:content/ucm_mcdmugbk_120_k.tif" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">f9fe4bfdab2933b28b3310565849608a</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/bb68742a-9c16-4ebb-940b-1f731b23d02a/files:files/0/file/ucm_mcdmugbk_120.tif" rel="alternate" title="Auxiliary file">
+      <opensearch:checksum algorithm="MD5">f463b6585fdef5980ae7afb243625548</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/d24042e4-0a22-4795-babb-6ff96fc88691.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/d24042e4-0a22-4795-babb-6ff96fc88691/file:content/ucm_mcdmugbk_121_k.tif" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">c106f0bdb4c118223f11b723f8864ba7</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/d24042e4-0a22-4795-babb-6ff96fc88691/files:files/0/file/ucm_mcdmugbk_121.tif" rel="alternate" title="Auxiliary file">
+      <opensearch:checksum algorithm="MD5">3d53c62118213814cf1809cfd0aea86d</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/c1cfc361-cf8b-4da1-8b4e-9b1744fb677d.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/c1cfc361-cf8b-4da1-8b4e-9b1744fb677d/file:content/ucm_mcdmugbk_122_k.tif" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">76fd0a5b629cb9ddde684cea65831a9b</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/c1cfc361-cf8b-4da1-8b4e-9b1744fb677d/files:files/0/file/ucm_mcdmugbk_122.tif" rel="alternate" title="Auxiliary file">
+      <opensearch:checksum algorithm="MD5">50ac9d545eba1d4e08dd6e2a2993ce15</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/559f26ec-bb7a-474e-bd60-858e83a3557d.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/559f26ec-bb7a-474e-bd60-858e83a3557d/file:content/ucm_mcdmugbk_123_k.tif" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">d7d541e5387141518dd1feca4c2a4687</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/559f26ec-bb7a-474e-bd60-858e83a3557d/files:files/0/file/ucm_mcdmugbk_123.tif" rel="alternate" title="Auxiliary file">
+      <opensearch:checksum algorithm="MD5">81628992fb07a16fc8cf832423127f0c</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/63d8323c-0188-4418-9419-46bbc36e8a73.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/63d8323c-0188-4418-9419-46bbc36e8a73/file:content/ucm_mcdmugbk_124_k.tif" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">b969409dcaa2bdd23716927c744d0172</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/63d8323c-0188-4418-9419-46bbc36e8a73/files:files/0/file/ucm_mcdmugbk_124.tif" rel="alternate" title="Auxiliary file">
+      <opensearch:checksum algorithm="MD5">3ae99d9d699daf6b3705edf8fb157c4c</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/d7cbaaff-4262-4066-b296-6e4007ba1dda.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/d7cbaaff-4262-4066-b296-6e4007ba1dda/file:content/ucm_mcdmugbk_125_k.tif" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">e3c6a142cb464e5f735f25a423e7eddb</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/f4f9aa86-e102-4dc8-a1d1-2826397f0d8e.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/f4f9aa86-e102-4dc8-a1d1-2826397f0d8e/file:content/ucm_mcdmugbk_cover_back_k.tif" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">763bfa17ad34773aca7f2adbfe15b552</opensearch:checksum>
+    </link>
+  </entry>
+  <entry>
+    <id>https://nuxeo.cdlib.org/Nuxeo/nxdoc/default/365579cc-a369-45e7-8977-047bda3f7ed1/view_documents</id>
+    <title>Merced Army Flying School</title>
+    <updated>2015-05-29T18:01:40.927000+00:00</updated>
+    <author>UC Libraries Digital Collection</author>
+    <link href="https://nuxeo.cdlib.org/Merritt/365579cc-a369-45e7-8977-047bda3f7ed1.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://s3.example.com/static.ucldc.example.edu/media_json/365579cc-a369-45e7-8977-047bda3f7ed1-media.json" rel="alternate" title="Deep Harvest metadata for this object" type="application/json"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/365579cc-a369-45e7-8977-047bda3f7ed1/file:content/Merced%20Army%20Flying%20School.pdf" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">5c66992caab03f795339b76dfa7974e2</opensearch:checksum>
+    </link>
+    <dc:title>Merced Army Flying School</dc:title>
+    <dc:date>194-?</dc:date>
+    <dc:identifier>365579cc-a369-45e7-8977-047bda3f7ed1</dc:identifier>
+    <nx:collection>https://registry.example.edu/api/v1/collection/26141/</nx:collection>
+    <link href="https://nuxeo.cdlib.org/Merritt/859f4aa3-ea5e-4468-9adb-d1694aa4ac1b.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/859f4aa3-ea5e-4468-9adb-d1694aa4ac1b/file:content/ucm_mafs_p00.tif" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">dea2122c449782cf5645aa2127a3505c</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/248586f9-e72d-429e-9027-bc7e57c96a3e.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/248586f9-e72d-429e-9027-bc7e57c96a3e/file:content/ucm_mafs_p01.tif" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">16858d1327d2901626f1aac2d2752e94</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/7c673a46-9d01-4a74-ada2-f969f33801b4.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/7c673a46-9d01-4a74-ada2-f969f33801b4/file:content/ucm_mafs_p02.tif" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">e4cbf591ab4d54a1772b35f29b76b28f</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/18f8bf7f-9590-43de-b5fe-2f2b8718539f.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/18f8bf7f-9590-43de-b5fe-2f2b8718539f/file:content/ucm_mafs_p03.tif" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">f241eab5edbda531529952f85273fa92</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/ded40f5d-5919-4cb3-8012-32a475d0e3d2.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/ded40f5d-5919-4cb3-8012-32a475d0e3d2/file:content/ucm_mafs_p04.tif" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">f41495097f108fa0b169c733fc8b5248</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/6f3a04c2-97b0-442c-8af0-c395d4378448.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/6f3a04c2-97b0-442c-8af0-c395d4378448/file:content/ucm_mafs_p05.tif" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">a3c2a7e917abba5882403a3aa00a6570</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/d4b2b90b-739b-43bf-893a-d7336eb4883b.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/d4b2b90b-739b-43bf-893a-d7336eb4883b/file:content/ucm_mafs_p06.tif" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">bdaaa58ffb40c3c73588c8f5a8c8207a</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/e0922869-129d-4df0-8745-991a16935f0a.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/e0922869-129d-4df0-8745-991a16935f0a/file:content/ucm_mafs_p07.tif" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">ad278607a99936cee4cfcae3d7f474f3</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/1c2ae0ff-9fc6-41a9-a46d-d182cb481d7b.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/1c2ae0ff-9fc6-41a9-a46d-d182cb481d7b/file:content/ucm_mafs_p08.tif" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">f382aea15ca36c904e4e56484420abda</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/bb98747f-2ab1-481b-8f83-100c20e32b52.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/bb98747f-2ab1-481b-8f83-100c20e32b52/file:content/ucm_mafs_p09.tif" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">bbaa12d8804876477b4037082bafdb4e</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/7f9aa03a-b512-458e-bf8f-af6858464b1f.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/7f9aa03a-b512-458e-bf8f-af6858464b1f/file:content/ucm_mafs_p10.tif" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">477bdd1fd3b00f312efd188d85d6fec0</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/b36d57d1-0d8e-4d8e-b639-3080c0717d41.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/b36d57d1-0d8e-4d8e-b639-3080c0717d41/file:content/ucm_mafs_p11.tif" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">9741c9a45ea4317b0450b3b287390219</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/9f121923-0549-405f-ba41-b753476959de.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/9f121923-0549-405f-ba41-b753476959de/file:content/ucm_mafs_p12.tif" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">3c1a0d02e605cdd8d5c033b810570102</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/ae445039-fdc9-46b9-8783-308d2ccc0951.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/ae445039-fdc9-46b9-8783-308d2ccc0951/file:content/ucm_mafs_p13.tif" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">4f9919c1929b7c72fc4fd8be07376a64</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/8dd25c89-f8ea-4899-8b49-c4fdf651ebab.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/8dd25c89-f8ea-4899-8b49-c4fdf651ebab/file:content/ucm_mafs_p14.tif" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">da7e25ce74679cad39d7e5762bbd6e2a</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/090062b2-027d-4e81-873e-fbe3145952e6.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/090062b2-027d-4e81-873e-fbe3145952e6/file:content/ucm_mafs_p15.tif" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">7a1dd5d50e5e95d7511c4a875a88203d</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/6cd1761a-98f4-4d33-8fd6-414ae7ca6920.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/6cd1761a-98f4-4d33-8fd6-414ae7ca6920/file:content/ucm_mafs_p16.tif" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">398e55551bd9fd699e0aff6778a52702</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/6440acc6-1991-4b96-8c3d-a43e591a3111.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/6440acc6-1991-4b96-8c3d-a43e591a3111/file:content/ucm_mafs_p17.tif" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">4fc2d25bfff41bc2a2ebda5234424fe7</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/e23ecbc7-fc1a-4eb4-91e7-b5dcdf07eae6.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/e23ecbc7-fc1a-4eb4-91e7-b5dcdf07eae6/file:content/ucm_mafs_p18.tif" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">1bd3f68c66b414d1290feccae4d55192</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/71e2ea7b-d662-46e3-9bf9-b217bc6e579e.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/71e2ea7b-d662-46e3-9bf9-b217bc6e579e/file:content/ucm_mafs_p19.tif" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">dd2152dd61fdf33816d32047d6fc66eb</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/f36e63a9-3525-4494-b352-76bf02d74d8a.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/f36e63a9-3525-4494-b352-76bf02d74d8a/file:content/ucm_mafs_p20.tif" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">5959b90f33d25714c0925b6025049a64</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/ce60da35-3fda-451d-a512-962ca194873f.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/ce60da35-3fda-451d-a512-962ca194873f/file:content/ucm_mafs_p21.tif" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">c67178b2c2a0408eedbbf76ea438daf8</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/3b6ac541-d1e4-4ffb-ac6a-3b01e0e8b00e.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/3b6ac541-d1e4-4ffb-ac6a-3b01e0e8b00e/file:content/ucm_mafs_p22.tif" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">ffccf9f1f63dbc6d0d9fa61dd49735db</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/f7133d72-f030-489c-a3de-e598c1f57e7e.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/f7133d72-f030-489c-a3de-e598c1f57e7e/file:content/ucm_mafs_p23.tif" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">c5ab5339fff6478afc8a3f3ae5f4aad9</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/c6df11b8-a856-49e3-9f05-7b79fb662869.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/c6df11b8-a856-49e3-9f05-7b79fb662869/file:content/ucm_mafs_p24.tif" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">fe2d06e6ffd625eb8619c1c2b7934050</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/e39446c2-d678-4450-90e0-e4d1de775226.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/e39446c2-d678-4450-90e0-e4d1de775226/file:content/ucm_mafs_p25.tif" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">185ca7294547855a66a8a13ea1f1f33f</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/f032f5c0-c679-4c79-ac1f-5703a05f9cde.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/f032f5c0-c679-4c79-ac1f-5703a05f9cde/file:content/ucm_mafs_p26.tif" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">5c3f13b71928cab91c33b4ede415831e</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/e2f07efc-b2bc-4521-a814-4a57adf16cda.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/e2f07efc-b2bc-4521-a814-4a57adf16cda/file:content/ucm_mafs_p27.tif" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">520bd4563d1a7d518d8d69f6e8445a9b</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/38cc3d85-2bfd-4810-b094-6d15db9087f2.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/38cc3d85-2bfd-4810-b094-6d15db9087f2/file:content/ucm_mafs_p28.tif" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">44baee201726e1644beedf743c092333</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/32c6a17c-506d-42f8-bcaa-d068efbd8b5c.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/32c6a17c-506d-42f8-bcaa-d068efbd8b5c/file:content/ucm_mafs_p29.tif" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">63305d95252bf9c6f30486d7c179dd5d</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/e5d74a3d-53a5-4e85-ac49-eb6010406104.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/e5d74a3d-53a5-4e85-ac49-eb6010406104/file:content/ucm_mafs_p30.tif" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">8f149fa5db038366c0cc664db0afaa52</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/cc2be374-545a-4735-bb17-4f866089d01c.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/cc2be374-545a-4735-bb17-4f866089d01c/file:content/ucm_mafs_p31.tif" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">e95db53a1676faa1e0f0c77022d58225</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/c1a51c76-fa69-44c7-98af-dad332f9ed62.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/c1a51c76-fa69-44c7-98af-dad332f9ed62/file:content/ucm_mafs_p32.tif" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">13853f8d90c8ee959887469d8e446f61</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/5767ac19-05ad-4a27-875b-cc2f2ea1f543.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/5767ac19-05ad-4a27-875b-cc2f2ea1f543/file:content/ucm_mafs_p33.tif" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">0a62025d0f01fd2b8191f8d69e103ed8</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/7d67ff19-32e8-4ac6-9f5e-f9fc9020c0c4.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/7d67ff19-32e8-4ac6-9f5e-f9fc9020c0c4/file:content/ucm_mafs_p34.tif" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">11c636771308199149f17f030bf8fd47</opensearch:checksum>
+    </link>
+    <link href="https://nuxeo.cdlib.org/Merritt/95069adc-01cd-4b34-9c79-977bb3ae9728.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
+    <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/95069adc-01cd-4b34-9c79-977bb3ae9728/file:content/ucm_mafs_p35.tif" rel="alternate" title="Main content file">
+      <opensearch:checksum algorithm="MD5">f083b3612faa6e1f91682b8d3fcd1125</opensearch:checksum>
+    </link>
+  </entry>
+</feed>

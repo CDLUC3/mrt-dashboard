@@ -284,6 +284,7 @@ DEPENDENCIES
   puma
   rack-cache
   rails (= 4.2.10)
+  rest-client (~> 2.0)
   rspec-rails (~> 3.0)
   rubocop (= 0.58.1)
   ruby-prof (~> 0.17)
