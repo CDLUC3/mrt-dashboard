@@ -71,7 +71,7 @@ namespace :deploy do
   desc 'Prompt for branch'
   task :prompt_for_tag do
     on roles(:app) do
-      puts 'Usage: TAG=test cap mrt-ui-dev deploy'
+      puts 'Usage: [CONF_TAG=<config repo tag>] TAG=<UI repo tag> cap mrt-ui-dev deploy'
       ask :branch, 'master' unless ENV['TAG']
       set :branch, ENV['TAG'] if ENV['TAG']
       puts "Setting branch to: #{fetch(:branch)}"
@@ -97,10 +97,18 @@ namespace :deploy do
         end
       end
 
-      config_branch = fetch(:config_branch, 'master')
+      if ENV['CONF_TAG']
+        set :config_tag, ENV['CONF_TAG']
+        puts "Setting #{config_repo} tag to: #{fetch(:config_tag)}"
+      else
+        puts "Defaulting #{config_repo} to master"
+      end
+      
+      config_tag = fetch(:config_tag, 'master')
       within "#{shared_dir}/#{config_repo}" do
+        puts "Updating #{config_repo} to #{config_tag}"
         execute 'git', 'fetch', '--all', '--tags'
-        execute 'git', 'reset', '--hard', config_branch
+        execute 'git', 'reset', '--hard', config_tag
       end
     end
   end
