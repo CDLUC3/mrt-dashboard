@@ -85,6 +85,11 @@ namespace :deploy do
 
       shared_dir = "#{deploy_to}/shared"
       if test("[ ! -d #{shared_dir}/#{config_repo} ]")
+        config_dir = "#{shared_dir}/config"
+        if test("[ -d #{config_dir} ]")
+          # move hard-coded config directory out of the way
+          execute "mv #{config_dir} #{config_dir}.old"
+        end
         within shared_dir do
           # clone config repo and link it as config directory
           execute 'git', 'clone', "git@github.com:cdlib/#{config_repo}"
