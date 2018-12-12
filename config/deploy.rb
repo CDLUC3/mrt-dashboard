@@ -29,6 +29,8 @@ set :keep_releases, 5
 
 # Prompt for TAG before deployment only
 before 'deploy', 'deploy:prompt_for_tag'
+# Update config repo before deployment only
+before 'deploy', 'deploy:update_config'
 
 namespace :deploy do
 
@@ -84,7 +86,7 @@ namespace :deploy do
       config_repo = 'mrt-dashboard-config'
 
       shared_dir = "#{deploy_to}/shared"
-      if test("[ ! -d #{shared_dir}/#{config_repo} ]")
+      unless test("[ -d #{shared_dir}/#{config_repo} ]")
         config_dir = "#{shared_dir}/config"
         if test("[ -d #{config_dir} ]")
           # move hard-coded config directory out of the way
