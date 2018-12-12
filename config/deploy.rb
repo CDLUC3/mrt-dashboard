@@ -83,6 +83,15 @@ namespace :deploy do
     on roles(:app) do
       config_repo = 'mrt-dashboard-config'
 
+      shared_dir = "#{deploy_to}/shared"
+      if test("[ ! -d #{shared_dir}/#{config_repo} ]")
+        within shared_dir do
+          # clone config repo and link it as config directory
+          execute 'git', 'clone', "git@github.com:cdlib/#{config_repo}"
+          execute 'ln', '-s', config_repo, 'config'
+        end
+      end
+
       config_branch = fetch(:config_branch, 'master')
       within "#{shared_dir}/#{config_repo}" do
         execute 'git', 'fetch', '--all', '--tags'
