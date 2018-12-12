@@ -83,13 +83,14 @@ namespace :deploy do
   desc 'Update configuration'
   task :update_config do
     on roles(:app) do
+      shared_dir = "#{deploy_to}/shared"
       config_repo = 'mrt-dashboard-config'
 
-      shared_dir = "#{deploy_to}/shared"
+      # make sure config repo is checked out & symlinked
       unless test("[ -d #{shared_dir}/#{config_repo} ]")
+        # move hard-coded config directory out of the way if needed
         config_dir = "#{shared_dir}/config"
         if test("[ -d #{config_dir} ]")
-          # move hard-coded config directory out of the way
           execute "mv #{config_dir} #{config_dir}.old"
         end
         within shared_dir do
@@ -99,13 +100,15 @@ namespace :deploy do
         end
       end
 
+      # check for specific config repo tag
       if ENV['CONF_TAG']
         set :config_tag, ENV['CONF_TAG']
         puts "Setting #{config_repo} tag to: #{fetch(:config_tag)}"
       else
         puts "Defaulting #{config_repo} to master"
       end
-      
+
+      # update config repo
       config_tag = fetch(:config_tag, 'master')
       within "#{shared_dir}/#{config_repo}" do
         puts "Updating #{config_repo} to #{config_tag}"
