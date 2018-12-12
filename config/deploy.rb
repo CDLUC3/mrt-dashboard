@@ -78,6 +78,19 @@ namespace :deploy do
     end
   end
 
+  desc 'Update configuration'
+  task :update_config do
+    on roles(:app) do
+      config_repo = 'mrt-dashboard-config'
+
+      config_branch = fetch(:config_branch, 'master')
+      within "#{shared_dir}/#{config_repo}" do
+        execute 'git', 'fetch', '--all', '--tags'
+        execute 'git', 'reset', '--hard', config_branch
+      end
+    end
+  end
+
 end
 
 namespace :bundle do
