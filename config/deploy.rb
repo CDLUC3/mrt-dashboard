@@ -29,6 +29,8 @@ set :keep_releases, 5
 
 # Prompt for TAG before deployment only
 before 'deploy', 'deploy:prompt_for_tag'
+# Update config repo before deployment only
+before 'deploy', 'deploy:update_config'
 
 namespace :deploy do
 
@@ -71,10 +73,46 @@ namespace :deploy do
   desc 'Prompt for branch'
   task :prompt_for_tag do
     on roles(:app) do
-      puts 'Usage: TAG=test cap mrt-ui-dev deploy'
+      puts 'Usage: [CONF_TAG=<config repo tag>] TAG=<UI repo tag> cap mrt-ui-dev deploy'
       ask :branch, 'master' unless ENV['TAG']
       set :branch, ENV['TAG'] if ENV['TAG']
       puts "Setting branch to: #{fetch(:branch)}"
+    end
+  end
+
+  desc 'Update configuration'
+  task :update_config do
+    on roles(:app) do
+      shared_dir = "#{deploy_to}/shared"
+      config_repo = 'mrt-dashboard-config'
+
+      # make sure config repo is checked out & symlinked
+      unless test("[ -d #{shared_dir}/#{config_repo} ]")
+        # move hard-coded config directory out of the way if needed
+        config_dir = "#{shared_dir}/config"
+        execute "mv #{config_dir} #{config_dir}.old" if test("[ -d #{config_dir} ]")
+        within shared_dir do
+          # clone config repo and link it as config directory
+          execute 'git', 'clone', "git@github.com:cdlib/#{config_repo}"
+          execute 'ln', '-s', config_repo, 'config'
+        end
+      end
+
+      # check for specific config repo tag
+      if ENV['CONF_TAG']
+        set :config_tag, ENV['CONF_TAG']
+        puts "Setting #{config_repo} tag to: #{fetch(:config_tag)}"
+      else
+        puts "Defaulting #{config_repo} to master"
+      end
+
+      # update config repo
+      config_tag = fetch(:config_tag, 'master')
+      within "#{shared_dir}/#{config_repo}" do
+        puts "Updating #{config_repo} to #{config_tag}"
+        execute 'git', 'fetch', '--all', '--tags'
+        execute 'git', 'reset', '--hard', "origin/#{config_tag}"
+      end
     end
   end
 

@@ -203,3 +203,41 @@ The Travis build is configured in the [`.travis.yml`](.travis.yml) file.
 It's a simple build, using the [`travis-prep.sh`](travis-prep.sh) script to
 set up the test database and test configuration files, and then running
 `bundle exec rake` -- the Travis default for a Ruby project.
+
+## Deployment
+
+This project is deployed with [Capistrano](https://capistranorb.com), as controlled
+by the [`config/deploy.rb`](config/deploy.rb) file. Note that the "environments"
+for Capistrano purposes are the individual servers, as defined in the
+[`config/deploy`](config/deploy) directory.
+
+### Configuration
+
+Configuration for this project is stored in the `mrt-dashboard-config`
+[private repository](https://github.com/cdlib/mrt-dashboard-config).
+
+The configuration directory is are deployed by default as part of the
+`mrt-dashboard` Capistrano deployment.
+
+- To redeploy a change to the config files without redeploying the code,
+  you can use `cap <ENV> deploy:update_config` in the `mrt-dashboard`
+  project. (You'll probably then also want to run `cap <ENV> deploy:stop;
+  cap <ENV> deploy:start`, so that the application will pick up the
+  changes.)
+- To deploy a specific tag (not branch!) of this config repository, you
+  can use the `$CONF_TAG` environment variable, either in a standalone
+  config deployment:
+
+  ```
+  CONF_TAG=<config tag> cap <ENV> deploy:update_config
+  ```
+
+  or in a deployment of the code:
+
+  ```
+  CONF_TAG=<config tag> [TAG=<code tag>] cap <ENV> deploy
+  ````
+
+  Note that you can separately specify the tag for the code itself with
+  `$TAG`.
+
