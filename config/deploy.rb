@@ -111,7 +111,7 @@ namespace :deploy do
       within "#{shared_dir}/#{config_repo}" do
         puts "Updating #{config_repo} to #{config_tag}"
         execute 'git', 'fetch', '--all', '--tags'
-        execute 'git', 'reset', '--hard', config_tag
+        execute 'git', 'reset', '--hard', "origin/#{config_tag}"
       end
     end
   end
