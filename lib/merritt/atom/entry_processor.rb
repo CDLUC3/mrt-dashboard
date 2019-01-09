@@ -18,7 +18,7 @@ module Merritt
       end
 
       def process_entry!
-        return if existing_object && existing_object.modified >= atom_updated
+        return if already_up_to_date?
         obj = new_ingest_object
         links.each { |link| add_component(obj, link) }
         harvester.start_ingest(obj)
@@ -37,6 +37,10 @@ module Merritt
             primary_local_id
           end
         end
+      end
+
+      def already_up_to_date?
+        @already_up_to_date ||= existing_object && existing_object.modified >= atom_updated
       end
 
       private

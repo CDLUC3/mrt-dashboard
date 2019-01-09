@@ -22,14 +22,25 @@ module Merritt
         return if feed_updated < harvester.last_feed_update
         batches = atom_xml.xpath('//atom:entry', NS).each_slice(harvester.batch_size)
         batches.each_with_index do |batch, i|
-          batch.each { |entry| process_entry(entry) }
-          sleep(harvester.delay) if i + 1 < batches.size
+          any_up_to_date = process_batch(batch)
+          no_more_batches = batches.size <= i + 1
+          next if any_up_to_date || no_more_batches
+          sleep(harvester.delay)
         end
         PageResult.new(atom_updated: atom_updated, next_page: next_page)
       end
       # rubocop:enable Metrics/AbcSize
 
       private
+
+      def process_batch(batch)
+        any_up_to_date = false
+        batch.each do |entry|
+          entry_up_to_date = process_entry(entry)
+          any_up_to_date ||= entry_up_to_date
+        end
+        any_up_to_date
+      end
 
       def verify_collection_id!
         expected_id = harvester.collection_ark
@@ -46,6 +57,7 @@ module Merritt
         atom_id = entry_processor.atom_id
         local_id = entry_processor.local_id
         entry_processor.process_entry!
+        entry_processor.already_up_to_date?
       rescue StandardError => e
         atom_id_str = atom_id || '(unknown)'
         local_id_str = local_id || '(unknown)'
