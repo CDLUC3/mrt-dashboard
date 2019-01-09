@@ -25,7 +25,7 @@ module Merritt
           any_up_to_date = process_batch(batch)
           no_more_batches = batches.size <= i + 1
           next if any_up_to_date || no_more_batches
-          sleep(harvester.delay) unless no_more_batches
+          sleep(harvester.delay)
         end
         PageResult.new(atom_updated: atom_updated, next_page: next_page)
       end
