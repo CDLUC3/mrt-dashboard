@@ -20,6 +20,7 @@ module Merritt
       def process_entry!
         return if already_up_to_date?
         obj = new_ingest_object
+        log_info("Ready to submit id: #{@local_id}")
         links.each { |link| add_component(obj, link) }
         harvester.start_ingest(obj)
       end
