@@ -56,6 +56,7 @@ module Merritt
         entry_processor = EntryProcessor.new(entry: entry, harvester: harvester)
         atom_id = entry_processor.atom_id
         local_id = entry_processor.local_id
+	log_info("Attempting to process id: #{local_id}")
         entry_processor.process_entry!
         entry_processor.already_up_to_date?
       rescue StandardError => e
