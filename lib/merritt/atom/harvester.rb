@@ -1,6 +1,7 @@
 module Merritt
   module Atom
     # noinspection RubyTooManyInstanceVariablesInspection
+    # rubocop:disable Metrics/ClassLength
     class Harvester
       include Merritt::Atom::Util
 
@@ -30,6 +31,7 @@ module Merritt
 
       def process_feed!
         return unless feed_update_file_exists?
+        log_info("Processing with batch size #{batch_size} and delay #{delay} seconds")
         process_from(starting_point)
         update_feed_update_file!
       ensure
@@ -129,5 +131,6 @@ module Merritt
       end
 
     end
+    # rubocop:enable Metrics/ClassLength
   end
 end
