@@ -9,7 +9,7 @@ namespace :atom do
   task :update, Merritt::Atom::Harvester::ARG_KEYS => :environment do |_, task_args|
     arg_hash = task_args.to_h
     delay, batch_size = throttler(task_args.extras)
-    args = arg_hash.merge(delay: delay, batch_size: batch_size)
+    args = arg_hash.merge(delay: delay.to_i, batch_size: batch_size.to_i)
     processor = Merritt::Atom::Harvester.new(args)
     processor.process_feed!
   end
