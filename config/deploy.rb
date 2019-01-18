@@ -33,8 +33,8 @@ set :keep_releases, 5
 before 'deploy', 'deploy:prompt_for_tag'
 # Update config repo before deployment only
 before 'deploy', 'deploy:update_config'
-# Update atom repo after deployment only
-after 'deploy', 'deploy:update_atom'
+# Update atom repo before deployment only
+before 'deploy', 'deploy:update_atom'
 
 namespace :deploy do
 
