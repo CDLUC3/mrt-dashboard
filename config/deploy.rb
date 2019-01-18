@@ -120,7 +120,7 @@ namespace :deploy do
   task :update_atom do
     on roles(:app) do
       shared_dir = "#{deploy_to}/shared"
-      atom_dir = "#{shared_dir}/atom"
+      atom_dir = "#{deploy_to}/atom"
       atom_repo = 'mrt-dashboard-config/atom'
 
       # make sure atom dirs are present
@@ -137,7 +137,7 @@ namespace :deploy do
       end
 
       # make sure atom repo is symlinked
-      within "#{shared_dir}/#{atom_dir}" do
+      within "#{atom_dir}" do
         execute 'ln', '-s', "#{shared_dir}/#{atom_repo}/bin", '.'
       end
     end
