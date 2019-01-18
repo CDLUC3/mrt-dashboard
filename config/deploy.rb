@@ -1,8 +1,6 @@
 # config valid only for Capistrano 3.1
 lock '3.4.1'
 
-require 'fileutils'
-
 set :application, 'merritt-ui'
 set :repo_url, 'https://github.com/CDLUC3/mrt-dashboard'
 
@@ -128,11 +126,11 @@ namespace :deploy do
       atom_repo = 'mrt-dashboard-config/atom'
 
       # make sure atom dirs are present
-      FileUtils.mkdir_p atom_dir unless File.directory? atom_dir
+      execute 'mkdir', atom_dir unless test("[ -d #{atom_dir} ]")
       log_dir = "#{atom_dir}/logs"
-      FileUtils.mkdir_p log_dir unless File.directory? log_dir
+      execute 'mkdir', log_dir unless test("[ -d #{log_dir} ]")
       last_update_dir = "#{atom_dir}/LastUpdate"
-      FileUtils.mkdir_p last_update_dir unless File.directory? last_update_dir
+      execute 'mkdir', last_update_dir unless test("[ -d #{last_update_dir} ]")
 
       # make sure atom repo is checked out
       unless test("[ -d #{shared_dir}/#{atom_repo} ]")
