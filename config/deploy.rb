@@ -1,6 +1,8 @@
 # config valid only for Capistrano 3.1
 lock '3.4.1'
 
+require 'fileutils'
+
 set :application, 'merritt-ui'
 set :repo_url, 'https://github.com/CDLUC3/mrt-dashboard'
 
@@ -31,6 +33,8 @@ set :keep_releases, 5
 before 'deploy', 'deploy:prompt_for_tag'
 # Update config repo before deployment only
 before 'deploy', 'deploy:update_config'
+# Update atom repo after deployment only
+after 'deploy', 'deploy:update_atom'
 
 namespace :deploy do
 
@@ -112,6 +116,48 @@ namespace :deploy do
         puts "Updating #{config_repo} to #{config_tag}"
         execute 'git', 'fetch', '--all', '--tags'
         execute 'git', 'reset', '--hard', "origin/#{config_tag}"
+      end
+    end
+  end
+
+  desc 'Update Atom scripts'
+  task :update_atom do
+    on roles(:app) do
+      shared_dir = "#{deploy_to}/shared"
+      atom_repo = 'mrt-dashboard-atom'
+
+      # make sure atom repo is checked out & symlinked
+      unless test("[ -d #{shared_dir}/#{atom_repo} ]")
+        atom_dir = "#{deploy_to}/atom"
+        within shared_dir do
+          # clone atom repo and link it as atom directory
+          execute 'git', 'clone', "git@github.com:cdlib/#{atom_repo}"
+          execute 'ln', '-s', atom_repo, atom_dir
+        end
+      end
+
+      # create supplement dirs
+      log_dir = "#{deploy_to}/#{atom_repo}/logs"
+      FileUtils.mkdir_p log_dir unless File.directory? log_dir
+      last_update_dir = "#{deploy_to}/#{atom_repo}/LastUpdate"
+      FileUtils.mkdir_p last_update_dir unless File.directory? last_update_dir
+
+      # make sure we update the correct branch
+      if ENV['ATOM_TAG']
+        set :atom_tag, ENV['ATOM_TAG']
+        puts "Setting #{atom_repo} tag to: #{fetch(:atom_tag)}"
+      else
+        puts "Defaulting #{atom_repo} to master"
+      end
+
+      # update atom repo
+      atom_tag = fetch(:atom_tag, 'master')
+      within "#{shared_dir}/#{atom_repo}" do
+        puts "Updating #{atom_repo} to #{atom_tag}"
+        # execute 'git', 'fetch', '--all', '--tags'
+        # execute 'git', 'reset', '--hard', "origin/#{atom_tag}"
+        execute 'git', 'pull'
+        execute 'git', 'checkout', atom_tag
       end
     end
   end
