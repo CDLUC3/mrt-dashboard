@@ -137,7 +137,7 @@ namespace :deploy do
       end
 
       # make sure atom repo is symlinked
-      within "#{atom_dir}" do
+      within atom_dir do
         execute 'ln', '-s', "#{shared_dir}/#{atom_repo}/bin", '.'
       end
     end
