@@ -34,7 +34,7 @@ before 'deploy', 'deploy:prompt_for_tag'
 # Update config repo before deployment only
 before 'deploy', 'deploy:update_config'
 # Update atom repo before deployment only
-before 'deploy', 'deploy:update_atom'
+after 'deploy:update_config', 'deploy:update_atom'
 
 namespace :deploy do
 
@@ -124,40 +124,25 @@ namespace :deploy do
   task :update_atom do
     on roles(:app) do
       shared_dir = "#{deploy_to}/shared"
-      atom_repo = 'mrt-dashboard-atom'
+      atom_dir = "#{shared_dir}/atom"
+      atom_repo = 'mrt-dashboard-config/atom'
 
-      # make sure atom repo is checked out & symlinked
-      unless test("[ -d #{shared_dir}/#{atom_repo} ]")
-        atom_dir = "#{deploy_to}/atom"
-        within shared_dir do
-          # clone atom repo and link it as atom directory
-          execute 'git', 'clone', "git@github.com:cdlib/#{atom_repo}"
-          execute 'ln', '-s', atom_repo, atom_dir
-        end
-      end
-
-      # create supplement dirs
-      log_dir = "#{deploy_to}/#{atom_repo}/logs"
+      # make sure atom dirs are present
+      FileUtils.mkdir_p atom_dir unless File.directory? atom_dir
+      log_dir = "#{atom_dir}/logs"
       FileUtils.mkdir_p log_dir unless File.directory? log_dir
-      last_update_dir = "#{deploy_to}/#{atom_repo}/LastUpdate"
+      last_update_dir = "#{atom_dir}/LastUpdate"
       FileUtils.mkdir_p last_update_dir unless File.directory? last_update_dir
 
-      # make sure we update the correct branch
-      if ENV['ATOM_TAG']
-        set :atom_tag, ENV['ATOM_TAG']
-        puts "Setting #{atom_repo} tag to: #{fetch(:atom_tag)}"
-      else
-        puts "Defaulting #{atom_repo} to master"
+      # make sure atom repo is checked out
+      unless test("[ -d #{shared_dir}/#{atom_repo} ]")
+        puts "[ERROR] Could not find atom repo: #{shared_dir}/#{atom_repo}"
+        return
       end
 
-      # update atom repo
-      atom_tag = fetch(:atom_tag, 'master')
-      within "#{shared_dir}/#{atom_repo}" do
-        puts "Updating #{atom_repo} to #{atom_tag}"
-        # execute 'git', 'fetch', '--all', '--tags'
-        # execute 'git', 'reset', '--hard', "origin/#{atom_tag}"
-        execute 'git', 'pull'
-        execute 'git', 'checkout', atom_tag
+      # make sure atom repo is symlinked
+      within "#{shared_dir}/#{atom_dir}" do
+        execute 'ln', '-s', "#{shared_dir}/#{atom_repo}/bin", '.'
       end
     end
   end
