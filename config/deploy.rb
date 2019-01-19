@@ -119,6 +119,7 @@ namespace :deploy do
   desc 'Update Atom scripts'
   task :update_atom do
     on roles(:app) do
+      puts 'Updating links to Atom scripts if necessary'
       shared_dir = "#{deploy_to}/shared"
       atom_dir = "#{deploy_to}/atom"
       atom_repo = 'mrt-dashboard-config/atom'
@@ -138,7 +139,7 @@ namespace :deploy do
 
       # make sure atom repo is symlinked
       within atom_dir do
-        execute 'ln', '-s', "#{shared_dir}/#{atom_repo}/bin", '.'
+        execute 'ln', '-s', "#{shared_dir}/#{atom_repo}/bin", '.' unless test("[ -h #{atom_dir}/bin ]")
       end
     end
   end
