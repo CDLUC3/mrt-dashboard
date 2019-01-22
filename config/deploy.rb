@@ -131,6 +131,8 @@ namespace :deploy do
       execute 'mkdir', log_dir unless test("[ -d #{log_dir} ]")
       last_update_dir = "#{atom_dir}/LastUpdate"
       execute 'mkdir', last_update_dir unless test("[ -d #{last_update_dir} ]")
+      lock_dir = "#{atom_dir}/LockFile"
+      execute 'mkdir', lock_dir unless test("[ -d #{lock_dir} ]")
 
       # make sure atom repo is checked out
       unless test("[ -d #{shared_dir}/#{atom_repo} ]")
