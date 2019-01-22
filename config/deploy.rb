@@ -29,8 +29,9 @@ set :keep_releases, 5
 
 # Prompt for TAG before deployment only
 before 'deploy', 'deploy:prompt_for_tag'
-# Update config repo before deployment only
+# Update config/atom repo before deployment only
 before 'deploy', 'deploy:update_config'
+before 'deploy', 'deploy:update_atom'
 
 namespace :deploy do
 
@@ -112,6 +113,34 @@ namespace :deploy do
         puts "Updating #{config_repo} to #{config_tag}"
         execute 'git', 'fetch', '--all', '--tags'
         execute 'git', 'reset', '--hard', "origin/#{config_tag}"
+      end
+    end
+  end
+
+  desc 'Update Atom scripts'
+  task :update_atom do
+    on roles(:app) do
+      puts 'Updating links to Atom scripts if necessary'
+      shared_dir = "#{deploy_to}/shared"
+      atom_dir = "#{deploy_to}/atom"
+      atom_repo = 'mrt-dashboard-config/atom'
+
+      # make sure atom dirs are present
+      execute 'mkdir', atom_dir unless test("[ -d #{atom_dir} ]")
+      log_dir = "#{atom_dir}/logs"
+      execute 'mkdir', log_dir unless test("[ -d #{log_dir} ]")
+      last_update_dir = "#{atom_dir}/LastUpdate"
+      execute 'mkdir', last_update_dir unless test("[ -d #{last_update_dir} ]")
+
+      # make sure atom repo is checked out
+      unless test("[ -d #{shared_dir}/#{atom_repo} ]")
+        puts "[ERROR] Could not find atom repo: #{shared_dir}/#{atom_repo}"
+        return
+      end
+
+      # make sure atom repo is symlinked
+      within atom_dir do
+        execute 'ln', '-s', "#{shared_dir}/#{atom_repo}/bin", '.' unless test("[ -h #{atom_dir}/bin ]")
       end
     end
   end
