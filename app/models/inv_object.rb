@@ -14,6 +14,8 @@ class InvObject < ActiveRecord::Base
   has_many :inv_nodes_inv_objects
   has_many :inv_nodes, through: :inv_nodes_inv_objects
 
+  has_many(:inv_localids, foreign_key: 'inv_object_ark')
+
   # work around erc_ tables taking forever to load
   scope :quickloadhack, -> {
     columns = %w[
@@ -103,6 +105,10 @@ class InvObject < ActiveRecord::Base
 
   def permalink
     "#{APP_CONFIG['n2t_uri']}#{ark}"
+  end
+
+  def all_local_ids
+    inv_localid_ids.map(&:local_id)
   end
 
   def exceeds_download_size?
