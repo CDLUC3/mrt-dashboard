@@ -48,12 +48,11 @@ xml.tag!('feed', :xmlns => 'http://www.w3.org/2005/Atom',
                                  action: 'download',
                                  object: obj))
       xml.tag!('dct:extent', obj.size.to_s)
-      unless obj.current_version.local_id.blank?
-        local_id = obj.current_version.local_id[0]
-        if !local_id.blank? && local_id.match(/^http/)
+      obj.all_local_ids.each do |local_id|
+        if local_id && local_id.match(/^http/)
           xml.tag!('link',
-                   'rel'  => 'alternate',
-                   'href' => local_id)
+            'rel'  => 'alternate',
+            'href' => local_id)
         end
       end
       xml.tag!('title', dc_nice(obj.current_version.dk_what))
