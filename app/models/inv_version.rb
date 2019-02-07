@@ -52,6 +52,7 @@ class InvVersion < ActiveRecord::Base
   end
 
   def local_id
+    # TODO LOCALIDS use inv_local_ids
     dk_where.reject { |v| v == ark }
   end
 
