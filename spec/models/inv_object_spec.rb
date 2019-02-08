@@ -12,7 +12,7 @@ describe InvObject do
 
   describe :all_local_ids do
     it 'extracts the localids' do
-      expected_lids = %w(foo bar baz)
+      expected_lids = %w[foo bar baz]
       expected_lids.each do |expected_lid|
         create(:inv_localid, local_id: expected_lid, inv_object: obj, inv_owner: obj.inv_owner)
       end
