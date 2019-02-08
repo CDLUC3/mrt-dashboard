@@ -14,7 +14,7 @@ class InvObject < ActiveRecord::Base
   has_many :inv_nodes_inv_objects
   has_many :inv_nodes, through: :inv_nodes_inv_objects
 
-  has_many(:inv_localids, foreign_key: 'inv_object_ark')
+  has_many(:inv_localids, foreign_key: 'inv_object_ark', primary_key: 'ark')
 
   # work around erc_ tables taking forever to load
   scope :quickloadhack, -> {
@@ -108,7 +108,7 @@ class InvObject < ActiveRecord::Base
   end
 
   def all_local_ids
-    inv_localid_ids.map(&:local_id)
+    inv_localids.map(&:local_id)
   end
 
   def exceeds_download_size?

@@ -4,6 +4,7 @@ describe 'objects' do
   attr_reader :user_id
   attr_reader :password
   attr_reader :obj
+  attr_reader :local_ids
   attr_reader :version_str
   attr_reader :collection_1_id
 
@@ -20,6 +21,10 @@ describe 'objects' do
 
     @obj = create(:inv_object, erc_who: 'Doe, Jane', erc_what: 'Object 1', erc_when: '2018-01-01')
     inv_collection_1.inv_objects << obj
+
+    @local_ids = Array.new(3) do |i|
+      create(:inv_localid, local_id: "local-id-#{i}", inv_object: obj, inv_owner: obj.inv_owner)
+    end
 
     @version_str = "Version #{obj.version_number}"
 
@@ -117,6 +122,10 @@ describe 'objects' do
     expect(page).to have_content(obj.erc_who)
     expect(page).to have_content(obj.erc_what)
     expect(page).to have_content(obj.erc_when)
+
+    local_ids.each do |lid|
+      expect(page).to have_content(lid.local_id)
+    end
   end
 
   it 'should display a download button' do

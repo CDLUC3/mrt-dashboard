@@ -10,6 +10,17 @@ describe InvObject do
     collection.inv_objects << obj
   end
 
+  describe :all_local_ids do
+    it 'extracts the localids' do
+      expected_lids = %w(foo bar baz)
+      expected_lids.each do |expected_lid|
+        create(:inv_localid, local_id: expected_lid, inv_object: obj, inv_owner: obj.inv_owner)
+      end
+      obj.reload
+      expect(obj.all_local_ids).to eq(expected_lids)
+    end
+  end
+
   describe :bytestream_uri do
     it 'generates the "uri_1" (content) URI' do
       # TODO: figure out why this produces double //s and stop doing it

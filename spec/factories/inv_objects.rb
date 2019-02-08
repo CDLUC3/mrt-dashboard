@@ -19,7 +19,6 @@ FactoryBot.define do
 
     # noinspection RubyArgCount
     after(:create) do |obj|
-      # TODO: LOCALIDS use inv_local_ids?
       version = create(:inv_version, inv_object: obj)
       [
         [1, 'who', nil, :erc_who],
