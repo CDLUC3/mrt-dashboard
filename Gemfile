@@ -46,6 +46,9 @@ group :test do
   gem 'selenium-webdriver', '~> 3.7'
   gem 'simplecov', '~> 0.14'
   gem 'simplecov-console', '~> 0.4'
-  gem 'sqlite3'
+
+  # TODO: update to 1.4.x once sqlite3-ruby #257 is fixed: https://github.com/sparklemotion/sqlite3-ruby/issues/257
+  gem 'sqlite3', '1.3.12'
+
   gem 'webmock', '~> 3.0'
 end
