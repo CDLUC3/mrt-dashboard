@@ -42,7 +42,7 @@ group :test do
   gem 'database_cleaner', '~> 1.5'
   gem 'diffy', '~> 3.1'
   gem 'equivalent-xml', '~> 0.6.0'
-  gem 'factory_bot_rails'
+  gem 'factory_bot_rails', '~> 4.11'
   gem 'selenium-webdriver', '~> 3.7'
   gem 'simplecov', '~> 0.14'
   gem 'simplecov-console', '~> 0.4'
