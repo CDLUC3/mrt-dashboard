@@ -4,12 +4,17 @@ require 'tempfile'
 class LostorageController < ApplicationController
   before_filter :require_user
 
+  EMAIL_INVALID_MSG = 'You must fill in a valid return email address.'.freeze
+  EMAIL_BLANK_MSG = 'Please enter the required fields'.freeze
   SUCCESS_MSG = 'Processing of large object compression has begun.  Please look for an email in your inbox'.freeze
   STORAGE_ERROR_MSG = 'Error processing large object in storage service.  Please contact uc3@ucop.edu'.freeze
 
   def index
-    do_submit(params) if params[:commit] == 'Submit'
-    redirect_to mk_merritt_url('m', params[:object], params[:version])
+    if params[:commit] == 'Submit' && email_valid?
+      do_submit!
+    elsif params[:commit] == 'Cancel'
+      redirect_to object_page_url
+    end
   end
 
   def direct
@@ -27,21 +32,20 @@ class LostorageController < ApplicationController
 
   private
 
-  def do_submit(params)
-    user_agent_email = params[:user_agent_email]
-    if (error_msg = validation_error(user_agent_email))
-      flash[:message] = error_msg
-    elsif post_los_request(user_agent_email, user_friendly?(params))
+  def do_submit!
+    if post_los_request(params[:user_agent_email], user_friendly?(params))
       flash[:message] = SUCCESS_MSG
     else
       flash[:error] = STORAGE_ERROR_MSG # TODO: flash error messages are not displaying properly
     end
+    redirect_to object_page_url
   end
 
-  def validation_error(user_agent_email)
-    return 'Please enter the required fields' if user_agent_email.blank?
-    return 'You must fill in a valid return email address.' unless user_agent_email.match?(/^.+@.+$/)
-    nil
+  def email_valid?
+    user_agent_email = params[:user_agent_email]
+    return true if user_agent_email && user_agent_email.match?(/^.+@.+$/)
+
+    flash[:message] = user_agent_email.blank? ? EMAIL_BLANK_MSG : EMAIL_INVALID_MSG
   end
 
   def user_friendly?(params)
@@ -69,6 +73,10 @@ class LostorageController < ApplicationController
     end
   end
   # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
+
+  def object_page_url
+    mk_merritt_url('m', params[:object], params[:version])
+  end
 
   def subject_or_default(subject_param)
     subject_param.blank? ? "Merritt #{@container_type.capitalize} Download Processing Completed" : subject_param
