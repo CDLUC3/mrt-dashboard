@@ -38,7 +38,7 @@ end
 
 group :test do
   gem 'capybara', '~> 2.16'
-  gem 'chromedriver-helper', '~> 1.1'
+  gem 'chromedriver-helper', '~> 2.0'
   gem 'database_cleaner', '~> 1.5'
   gem 'diffy', '~> 3.1'
   gem 'equivalent-xml', '~> 0.6.0'
