@@ -43,9 +43,18 @@ class LostorageController < ApplicationController
 
   def email_valid?
     user_agent_email = params[:user_agent_email]
-    return true if user_agent_email && user_agent_email.match?(/^.+@.+$/)
 
-    flash[:message] = user_agent_email.blank? ? EMAIL_BLANK_MSG : EMAIL_INVALID_MSG
+    if user_agent_email.blank?
+      flash[:message] = EMAIL_BLANK_MSG
+      return false
+    end
+
+    unless user_agent_email.match?(/^.+@.+$/)
+      flash[:message] = EMAIL_INVALID_MSG
+      return false
+    end
+
+    true
   end
 
   def user_friendly?(params)
