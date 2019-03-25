@@ -193,4 +193,27 @@ describe 'objects' do
     end
   end
 
+  describe 'large objects' do
+    before :each do
+      max_archive_size = APP_CONFIG['max_archive_size']
+      file_count = producer_files.size
+      producer_files.each do |f|
+        f.full_size = (max_archive_size / file_count) + 1
+        f.save!
+      end
+      expect(obj.exceeds_sync_size?).to eq(true) # just to be sure
+      expect(obj.exceeds_download_size?).to eq(false) # just to be sure
+    end
+
+    describe 'download button' do
+      it 'should display the large object email form' do
+        download_button = find_button('Download object')
+        download_button.click
+
+        expect(page.title).to include('Large Object')
+      end
+    end
+
+  end
+
 end
