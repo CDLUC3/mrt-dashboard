@@ -5,6 +5,7 @@
 
 .idea
 mrt-dashboard.iml
+/out
 
 *.md.html
 
