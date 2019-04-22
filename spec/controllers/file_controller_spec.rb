@@ -88,7 +88,15 @@ describe FileController do
       expected_headers.each do |header, value|
         expect(response_headers[header]).to eq(value)
       end
+    end
 
+    it 'handles filenames with spaces' do
+      mock_permissions_all(user_id, collection_id)
+
+      size_ok = APP_CONFIG['max_download_size'] - 1
+      inv_file.full_size = size_ok
+      inv_file.pathname = 'producer/Caltrans EHE Tests.pdf'
+      inv_file.save!
     end
   end
 end
