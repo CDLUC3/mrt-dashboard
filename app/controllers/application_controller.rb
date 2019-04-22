@@ -138,11 +138,12 @@ class ApplicationController < ActionController::Base
   end
 
   def stream_response(url, disposition, filename, mediatype, length = nil)
+    streamer = Streamer.new(url)
     response.headers['Content-Type'] = mediatype
     response.headers['Content-Disposition'] = "#{disposition}; filename=\"#{filename}\""
     response.headers['Content-Length'] = length.to_s unless length.nil?
     response.headers['Last-Modified'] = Time.now.httpdate
-    self.response_body = Streamer.new(url)
+    self.response_body = streamer
   end
 
   def is_ark?(str)
