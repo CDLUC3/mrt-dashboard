@@ -173,11 +173,6 @@ describe 'objects' do
 
   describe 'file info' do
     it 'should let the user download each file' do
-
-      expected_data = producer_files.map do |f|
-        "hello! I am the data for #{f}"
-      end
-
       producer_files.each_with_index do |f, i|
         basename = f.pathname.sub(%r{^producer/}, '')
 
@@ -194,37 +189,7 @@ describe 'objects' do
         download_href = download_link['href']
 
         expect(URI(download_href).path).to eq(URI(expected_uri).path)
-
-        # TODO: figure out how to get WebMock working so we can test the actual Streamer+HTTPClient bit
-        # storage_uri = "http://store.merritt.example.edu/content/9999/ark:%2F99999%2Ffk_object_00004/1/#{URI.escape(f.pathname)}"
-        # stub_request(:get, storage_uri).to_return(status: 200, body: expected_data[i])
-
-        # Can't use WebMock here because of threading issues
-        allow_any_instance_of(FileController).to receive(:download) do |fc|
-          fc.send_data(expected_data[i], filename: basename, type: 'application/octet-stream')
-        end
-
-        download_link.click
       end
-
-      timeout_secs = 60
-      begin
-        Downloads.wait_for(producer_files.size, timeout_secs)
-      rescue Timeout::Error
-        dl = Downloads.all.map { |p| p.to_s }
-        fail("Timeout (#{timeout_secs}s) exceeded; #{dl.size} files downloaded (#{dl.join(",")}")
-      end
-
-      producer_files.each_with_index do |f, i|
-        basename = f.pathname.sub(%r{^producer/}, '')
-
-        expected_path = Downloads.path + basename
-        expect(expected_path).to exist
-
-        actual_data = expected_path.read
-        expect(actual_data).to eq(expected_data[i])
-      end
-
     end
   end
 
