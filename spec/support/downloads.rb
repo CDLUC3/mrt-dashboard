@@ -41,14 +41,14 @@ class Downloads
     # ------------------------------------------------------------
     # Operations
 
-    def wait_for_downloads!(timeout = TIMEOUT)
-      Timeout.timeout(timeout) do
+    def wait_for_downloads!(timeout_secs = TIMEOUT)
+      Timeout.timeout(timeout_secs) do
         sleep 0.1 until complete?
       end
     end
 
-    def wait_for(count, timeout = TIMEOUT)
-      Timeout.timeout(timeout) do
+    def wait_for(count, timeout_secs = TIMEOUT)
+      Timeout.timeout(timeout_secs) do
         sleep 0.1 while in_progress? || all.size < count
       end
     end

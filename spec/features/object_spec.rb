@@ -29,7 +29,7 @@ describe 'objects' do
     @version_str = "Version #{obj.version_number}"
 
     @producer_files = Array.new(3) do |i|
-      size = 1024 * (2**i)
+      size = 1024 * (2 ** i)
       create(
         :inv_file,
         inv_object: obj,
@@ -42,7 +42,7 @@ describe 'objects' do
     end
 
     @system_files = Array.new(3) do |i|
-      size = 1024 * (2**i)
+      size = 1024 * (2 ** i)
       create(
         :inv_file,
         inv_object: obj,
@@ -207,7 +207,13 @@ describe 'objects' do
         download_link.click
       end
 
-      Downloads.wait_for(producer_files.size, 30)
+      timeout_secs = 60
+      begin
+        Downloads.wait_for(producer_files.size, timeout_secs)
+      rescue Timeout::Error
+        dl = Downloads.all.map { |p| p.to_s }
+        fail("Timeout (#{timeout_secs}s) exceeded; #{dl.size} files downloaded (#{dl.join(",")}")
+      end
 
       producer_files.each_with_index do |f, i|
         basename = f.pathname.sub(%r{^producer/}, '')
