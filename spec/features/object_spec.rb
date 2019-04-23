@@ -207,7 +207,7 @@ describe 'objects' do
         download_link.click
       end
 
-      Downloads.wait_for(producer_files.size)
+      Downloads.wait_for(producer_files.size, 30)
 
       producer_files.each_with_index do |f, i|
         basename = f.pathname.sub(%r{^producer/}, '')
