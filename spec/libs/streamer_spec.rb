@@ -16,7 +16,8 @@ describe Streamer do
         allow(client).to receive(writer).with(value)
       end
       allow(HTTPClient).to receive(:new).and_return(client)
-      allow(client).to receive(:get_content).with(url)
+      uri = URI.parse(url)
+      allow(client).to receive(:get_content).with(uri)
         .and_yield('chunk 1')
         .and_yield('chunk 2')
         .and_yield('chunk 3')
