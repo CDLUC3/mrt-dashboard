@@ -34,7 +34,7 @@ describe 'objects' do
         :inv_file,
         inv_object: obj,
         inv_version: obj.current_version,
-        pathname: "producer/file-#{i}.bin",
+        pathname: "producer/file #{i}.bin",
         full_size: size,
         billable_size: size,
         mime_type: 'application/octet-stream'
@@ -189,6 +189,17 @@ describe 'objects' do
         download_href = download_link['href']
 
         expect(URI(download_href).path).to eq(URI(expected_uri).path)
+
+        storage_uri = 'http://store.merritt.example.edu/content/9999/ark:%2F99999%2Ffk_object_00004/1/producer%2Ffile%200.bin'
+        stub_request(:get, storage_uri).to_return(status: 200, body: 'hello! I am a file')
+
+        download_link.click
+
+        wait_for_ajax!
+
+        # TODO figure out how to test download with Capybara/Selenium
+        # SPEC_OPTS="--pattern spec/features/object_spec.rb --example 'file info'" bundle exec rake spec
+        # expect(page).to have_content('hello! I am a file')
       end
     end
   end
