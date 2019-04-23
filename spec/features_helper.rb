@@ -2,11 +2,18 @@ require 'rails_helper'
 require 'capybara/dsl'
 require 'capybara/rails'
 require 'capybara/rspec'
+require 'support/downloads'
 require 'webmock/rspec'
 
 RSpec.configure do |config|
   config.before(:each) do
     WebMock.disable_net_connect!(allow_localhost: true)
+  end
+  config.after(:each) do
+    Downloads.clear!
+  end
+  config.after(:all) do
+    Downloads.remove_directory!
   end
 end
 
@@ -14,10 +21,18 @@ end
 # Capybara etc.
 
 Capybara.register_driver(:selenium) do |app|
+  profile = Selenium::WebDriver::Chrome::Profile.new
+  profile['download.default_directory'] = Downloads.dir
+
+  options = Selenium::WebDriver::Chrome::Options.new(
+    args: %w[incognito no-sandbox disable-gpu]
+  )
+
   Capybara::Selenium::Driver.new(
     app,
     browser: :chrome,
-    options: Selenium::WebDriver::Chrome::Options.new(args: %w[incognito no-sandbox disable-gpu])
+    profile: profile,
+    options: options
   )
 end
 

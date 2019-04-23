@@ -172,8 +172,13 @@ describe 'objects' do
   end
 
   describe 'file info' do
-    it 'should let the user download a file' do
-      producer_files.each do |f|
+    it 'should let the user download each file' do
+
+      expected_data = producer_files.map do |f|
+        "hello! I am the data for #{f}"
+      end
+
+      producer_files.each_with_index do |f, i|
         basename = f.pathname.sub(%r{^producer/}, '')
 
         expected_uri = url_for(
@@ -190,17 +195,30 @@ describe 'objects' do
 
         expect(URI(download_href).path).to eq(URI(expected_uri).path)
 
-        storage_uri = 'http://store.merritt.example.edu/content/9999/ark:%2F99999%2Ffk_object_00004/1/producer%2Ffile%200.bin'
-        stub_request(:get, storage_uri).to_return(status: 200, body: 'hello! I am a file')
+        # TODO: figure out how to get WebMock working so we can test the actual Streamer+HTTPClient bit
+        # storage_uri = "http://store.merritt.example.edu/content/9999/ark:%2F99999%2Ffk_object_00004/1/#{URI.escape(f.pathname)}"
+        # stub_request(:get, storage_uri).to_return(status: 200, body: expected_data[i])
+
+        # Can't use WebMock here because of threading issues
+        allow_any_instance_of(FileController).to receive(:download) do |fc|
+          fc.send_data(expected_data[i], filename: basename, type: 'application/octet-stream')
+        end
 
         download_link.click
-
-        wait_for_ajax!
-
-        # TODO figure out how to test download with Capybara/Selenium
-        # SPEC_OPTS="--pattern spec/features/object_spec.rb --example 'file info'" bundle exec rake spec
-        # expect(page).to have_content('hello! I am a file')
       end
+
+      Downloads.wait_for(producer_files.size)
+
+      producer_files.each_with_index do |f, i|
+        basename = f.pathname.sub(%r{^producer/}, '')
+
+        expected_path = Downloads.path + basename
+        expect(expected_path).to exist
+
+        actual_data = expected_path.read
+        expect(actual_data).to eq(expected_data[i])
+      end
+
     end
   end
 

@@ -180,7 +180,7 @@ describe ApplicationController do
     it 'disallows spaces in URLs' do
       url = 'http://store01-aws.cdlib.org:35221/content/5001/ark:%2F13030%2Fm5kh22mg/2/producer%2FCaltrans EHE Tests.pdf'
       expect do
-        controller.send(:stream_response, url, 'inline', 'Caltrans EHE Tests.pdf', 'text/pdf', 5354848)
+        controller.send(:stream_response, url, 'inline', 'Caltrans EHE Tests.pdf', 'text/pdf', 5_354_848)
       end.to raise_error(URI::InvalidURIError, "bad URI(is not URI?): #{url}")
     end
 
