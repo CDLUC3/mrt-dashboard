@@ -13,6 +13,7 @@ class ApplicationController < ActionController::Base
   include ErrorMixin
   include NumberMixin
   include PaginationMixin
+  include HttpMixin
 
   helper_method(
     :available_groups,
