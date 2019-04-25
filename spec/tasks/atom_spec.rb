@@ -71,7 +71,6 @@ describe 'atom', type: :task do
         .sort_by { |f| File.ctime("#{tmp_home}/#{f}") }
     end
 
-    # rubocop:disable Metrics/AbcSize
     def validate_request!(request_args, erc_checksums = EXPECTED_ERC_CHECKSUMS)
       expect(request_args.size).to eq(2)
       files = request_args.map { |ra| ra['file'] }
@@ -113,8 +112,6 @@ describe 'atom', type: :task do
         end
       end
     end
-
-    # rubocop:enable Metrics/AbcSize
 
     before(:each) do
       @original_home = ENV['HOME']

@@ -16,14 +16,9 @@ describe ObjectController do
 
   def mock_httpclient
     client = instance_double(HTTPClient)
-    {
-      receive_timeout: 7200,
-      send_timeout: 3600,
-      connect_timeout: 7200,
-      keep_alive_timeout: 3600
-    }.each do |param, value|
-      writer = "#{param}=".to_sym
-      allow(client).to receive(writer).with(value)
+    allow(client).to receive(:follow_redirect_count).and_return(10)
+    %i[receive_timeout= send_timeout= connect_timeout= keep_alive_timeout=].each do |m|
+      allow(client).to receive(m)
     end
     allow(HTTPClient).to receive(:new).and_return(client)
     client
@@ -427,6 +422,7 @@ describe ObjectController do
         </bat:batchState>
       XML
       ingest_response = instance_double(HTTP::Message)
+      allow(ingest_response).to receive(:status).and_return(200)
       allow(ingest_response).to receive(:content).and_return(xml)
 
       expect(client).to receive(:post).with(APP_CONFIG['ingest_service_update'], expected_params).and_return(ingest_response)

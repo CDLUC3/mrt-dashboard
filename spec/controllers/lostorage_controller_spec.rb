@@ -1,4 +1,5 @@
 require 'rails_helper'
+require 'webmock/rspec'
 
 describe LostorageController do
   attr_reader :client
@@ -13,14 +14,16 @@ describe LostorageController do
 
   attr_reader :object_page_url
 
-  before(:each) do
+  def mock_client!
     @client = instance_double(HTTPClient)
     allow(HTTPClient).to receive(:new).and_return(client)
+    allow(client).to receive(:follow_redirect_count).and_return(10)
+    %i[receive_timeout= send_timeout= connect_timeout= keep_alive_timeout=].each do |m|
+      allow(client).to receive(m)
+    end
+  end
 
-    @post_email_response = instance_double(HTTP::Message)
-    allow(post_email_response).to receive(:status).and_return(200)
-    allow(client).to receive(:post).and_return(post_email_response)
-
+  before(:each) do
     @object = create(:inv_object, erc_who: 'Doe, Jane', erc_what: 'Object 1', erc_when: '2018-01-01')
     @object_ark = object.ark
     @version_number = object.current_version.number
@@ -33,6 +36,7 @@ describe LostorageController do
 
   describe ':index' do
     before(:each) do
+      mock_client!
       params.merge!(commit: 'Submit')
     end
 
@@ -58,7 +62,10 @@ describe LostorageController do
     end
 
     it 'requires a successful email post' do
-      expect(post_email_response).to receive(:status).and_return(500)
+      @post_email_response = instance_double(HTTP::Message)
+      allow(post_email_response).to receive(:status).and_return(500)
+      allow(client).to receive(:post).and_return(post_email_response)
+
       post(:index, params, { uid: user_id })
       expect(flash[:error]).to include('uc3@ucop.edu')
     end
@@ -71,6 +78,13 @@ describe LostorageController do
     end
 
     describe 'success' do
+
+      before(:each) do
+        @post_email_response = instance_double(HTTP::Message)
+        allow(post_email_response).to receive(:status).and_return(200)
+        allow(client).to receive(:post).and_return(post_email_response)
+      end
+
       it 'emails the user' do
         expected_xml = <<~XML
           <?xml version="1.0" encoding="UTF-8"?>
@@ -230,6 +244,10 @@ describe LostorageController do
   end
 
   describe ':direct' do
+    before(:each) do
+      mock_client!
+    end
+
     it 'requires an email address' do
       expect(client).not_to receive(:post)
       params.delete(:user_agent_email)
@@ -245,44 +263,90 @@ describe LostorageController do
     end
 
     it 'requires a successful email post' do
-      expect(post_email_response).to receive(:status).and_return(500)
+      @post_email_response = instance_double(HTTP::Message)
+      allow(post_email_response).to receive(:status).and_return(500)
+      allow(client).to receive(:post).and_return(post_email_response)
       post(:direct, params, { uid: user_id })
       expect(response.status).to eq(503)
     end
 
-    it 'can succeed' do
-      expect(client).to receive(:post) do |url, post_params|
-        async_url = object.bytestream_uri.to_s.gsub(/content/, 'async') # TODO: maybe just put this on the object?
-        expect(url).to eq(async_url)
-        email_xml = post_params['email']
-        expect(email_xml).not_to be_nil # TODO: rewrite post_los_email so we don't pass live file pointers around & can actually test
-      end.and_return(post_email_response)
-      post(:direct, params, { uid: user_id })
-      expect(response.status).to eq(200)
+    describe ':success' do
+      before(:each) do
+        @post_email_response = instance_double(HTTP::Message)
+        allow(post_email_response).to receive(:status).and_return(200)
+      end
+
+      it 'can succeed' do
+        expect(client).to receive(:post) do |url, post_params|
+          async_url = object.bytestream_uri.to_s.gsub(/content/, 'async') # TODO: maybe just put this on the object?
+          expect(url).to eq(async_url)
+          email_xml = post_params['email']
+          expect(email_xml).not_to be_nil # TODO: rewrite post_los_email so we don't pass live file pointers around & can actually test
+        end.and_return(post_email_response)
+        post(:direct, params, { uid: user_id })
+        expect(response.status).to eq(200)
+      end
+
+      it 'uses the producer URL for "user friendly" download' do
+        params[:userFriendly] = 'true'
+        expect(client).to receive(:post) do |url, post_params|
+          async_url = object.bytestream_uri2.to_s.gsub(/producer/, 'producerasync') # TODO: maybe just put this on the object?
+          expect(url).to eq(async_url)
+          email_xml = post_params['email']
+          expect(email_xml).not_to be_nil # TODO: rewrite post_los_email so we don't pass live file pointers around & can actually test
+        end.and_return(post_email_response)
+        post(:direct, params, { uid: user_id })
+        expect(response.status).to eq(200)
+      end
+
+      it 'defaults to user-friendly' do
+        params[:userFriendly] = nil
+        expect(client).to receive(:post) do |url, post_params|
+          async_url = object.bytestream_uri2.to_s.gsub(/producer/, 'producerasync') # TODO: maybe just put this on the object?
+          expect(url).to eq(async_url)
+          email_xml = post_params['email']
+          expect(email_xml).not_to be_nil # TODO: rewrite post_los_email so we don't pass live file pointers around & can actually test
+        end.and_return(post_email_response)
+        post(:direct, params, { uid: user_id })
+        expect(response.status).to eq(200)
+      end
+    end
+  end
+
+  describe ':do_storage_post' do
+    attr_reader :async_url
+
+    def redirect_url
+      @redirect_url ||= begin
+        uri = URI.parse(async_url)
+        uri.host = 'store01.merritt.example.edu'
+        uri.port = 12_345
+        uri.to_s
+      end
     end
 
-    it 'uses the producer URL for "user friendly" download' do
-      params[:userFriendly] = 'true'
-      expect(client).to receive(:post) do |url, post_params|
-        async_url = object.bytestream_uri2.to_s.gsub(/producer/, 'producerasync') # TODO: maybe just put this on the object?
-        expect(url).to eq(async_url)
-        email_xml = post_params['email']
-        expect(email_xml).not_to be_nil # TODO: rewrite post_los_email so we don't pass live file pointers around & can actually test
-      end.and_return(post_email_response)
-      post(:direct, params, { uid: user_id })
-      expect(response.status).to eq(200)
+    before(:each) do
+      WebMock.disable_net_connect!
+      @async_url = object.bytestream_uri.to_s.gsub(/content/, 'async')
+      stub_request(:post, async_url).to_return(status: 307, headers: { Location: redirect_url })
+      stub_request(:post, redirect_url).to_return(status: 200, body: post_email_response)
+      controller.instance_variable_set(:@object, object)
     end
 
-    it 'defaults to user-friendly' do
-      params[:userFriendly] = nil
-      expect(client).to receive(:post) do |url, post_params|
-        async_url = object.bytestream_uri2.to_s.gsub(/producer/, 'producerasync') # TODO: maybe just put this on the object?
-        expect(url).to eq(async_url)
-        email_xml = post_params['email']
-        expect(email_xml).not_to be_nil # TODO: rewrite post_los_email so we don't pass live file pointers around & can actually test
-      end.and_return(post_email_response)
-      post(:direct, params, { uid: user_id })
-      expect(response.status).to eq(200)
+    after(:each) do
+      WebMock.allow_net_connect!
+    end
+
+    it 'follows redirects' do
+      resp = nil
+      Tempfile.create('mail.xml') do |email_xml_file|
+        user_friendly = false
+        to_addr = params[:user_agent_email]
+        unique_name = "#{UUIDTools::UUID.random_create.hash}.tar.gz"
+        resp = controller.send(:do_storage_post, email_xml_file, to_addr, unique_name, user_friendly)
+      end
+      status = resp && resp.status
+      expect(status).to eq(200)
     end
   end
 end

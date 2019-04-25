@@ -34,7 +34,7 @@ describe 'objects' do
         :inv_file,
         inv_object: obj,
         inv_version: obj.current_version,
-        pathname: "producer/file-#{i}.bin",
+        pathname: "producer/file #{i}.bin",
         full_size: size,
         billable_size: size,
         mime_type: 'application/octet-stream'
@@ -172,7 +172,7 @@ describe 'objects' do
   end
 
   describe 'file info' do
-    it 'should let the user download a file' do
+    it 'should let the user download each file' do
       producer_files.each do |f|
         basename = f.pathname.sub(%r{^producer/}, '')
 

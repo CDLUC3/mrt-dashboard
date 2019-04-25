@@ -103,7 +103,7 @@ class LostorageController < ApplicationController
     build_email_xml(email_xml_file, @los_from, to_addr, @los_subject, @los_body)
     email_xml_file.rewind
     params = { 'email' => email_xml_file, 'responseForm' => 'xml', 'containerForm' => 'targz', 'name' => unique_name }
-    HTTPClient.new.post(storage_url_for(@object, user_friendly), params)
+    http_post(storage_url_for(@object, user_friendly), params)
   end
 
   def build_email_xml(tempfile, from_addr, to_addr, subject, body)

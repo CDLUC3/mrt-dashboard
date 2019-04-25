@@ -21,7 +21,13 @@ describe InvFile do
 
   describe :bytestream_uri do
     it 'generates the "uri_1" (content) URI' do
-      # TODO: figure out why this produces double //s and stop doing it
+      expected_uri = "#{APP_CONFIG['uri_1']}#{obj.node_number}/#{obj.to_param}/#{version.to_param}/#{file.to_param}"
+      expect(file.bytestream_uri).to eq(URI.parse(expected_uri))
+    end
+
+    it 'correctly handles spaces in filenames' do
+      file.pathname = 'producer/Caltrans EHE Tests.pdf'
+      file.save!
       expected_uri = "#{APP_CONFIG['uri_1']}#{obj.node_number}/#{obj.to_param}/#{version.to_param}/#{file.to_param}"
       expect(file.bytestream_uri).to eq(URI.parse(expected_uri))
     end

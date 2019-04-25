@@ -115,16 +115,8 @@ class ObjectController < ApplicationController
   end
 
   def do_post(post_url, post_params)
-    resp = mk_httpclient.post(post_url, post_params, { 'Content-Type' => 'multipart/form-data' })
+    resp = http_post(post_url, post_params, { 'Content-Type' => 'multipart/form-data' })
     render(status: resp.status, content_type: resp.headers[:content_type], text: resp.body)
   end
 
-  def mk_httpclient
-    client = HTTPClient.new
-    client.receive_timeout = 7200
-    client.send_timeout = 3600
-    client.connect_timeout = 7200
-    client.keep_alive_timeout = 3600
-    client
-  end
 end

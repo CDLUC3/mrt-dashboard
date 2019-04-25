@@ -1,4 +1,5 @@
 module IngestMixin
+  include HttpMixin
   def ingest_params_from(params, current_user)
     {
       'creator'               => params[:creator],
@@ -95,7 +96,7 @@ module IngestMixin
 
   def post_upload
     ingest_params = upload_params_from(params, current_user, current_group)
-    resp          = mk_httpclient.post(APP_CONFIG['ingest_service_update'], ingest_params)
+    resp          = http_post(APP_CONFIG['ingest_service_update'], ingest_params)
     @doc          = Nokogiri::XML(resp.content) { |config| config.strict.noent.noblanks }
     @batch_id     = @doc.xpath('//bat:batchState/bat:batchID')[0].child.text
     @obj_count    = @doc.xpath('//bat:batchState/bat:jobStates').length

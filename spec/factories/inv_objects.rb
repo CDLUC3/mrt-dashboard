@@ -19,6 +19,9 @@ FactoryBot.define do
 
     # noinspection RubyArgCount
     after(:create) do |obj|
+      node = InvNode.take || create(:inv_node)
+      create(:inv_nodes_inv_object, inv_node_id: node.id, inv_object_id: obj.id)
+
       version = create(:inv_version, inv_object: obj)
       [
         [1, 'who', nil, :erc_who],
