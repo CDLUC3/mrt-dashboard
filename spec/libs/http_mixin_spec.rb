@@ -31,7 +31,7 @@ describe HttpMixin do
       expect(HTTPClient).to receive(:new).and_return(client)
 
       http = HttpStub.new
-      expect(http).not_to(be_nil)
+      expect(http.mk_httpclient).to eq(client)
     end
   end
 
