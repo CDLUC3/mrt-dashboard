@@ -42,6 +42,7 @@ Rails.application.config.middleware.use(
     exception_recipients: ['marisa.strong@ucop.edu',
                            'mark.reyes@ucop.edu',
                            'david.moles@ucop.edu',
+                           'eric.lopatin@ucop.edu',
                            'perry.willett@ucop.edu']
   }
 )
