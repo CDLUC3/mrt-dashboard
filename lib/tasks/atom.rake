@@ -14,6 +14,12 @@ namespace :atom do
     processor.process_feed!
   end
 
+  desc 'Generate CSH script for Atom feed harvesting'
+  task :gen_csh, Merritt::Atom::CSHGenerator::ARG_KEYS => :environment do |_, task_args|
+    csh_source = Merritt::Atom::CSHGenerator.generate_csh(task_args.to_h)
+    puts csh_source
+  end
+
   def throttler(extras)
     return extras if extras.any?
     [DELAY, BATCH_SIZE]

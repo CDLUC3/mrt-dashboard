@@ -7,5 +7,6 @@ module Merritt
     require_relative 'atom/feed_processor'
     require_relative 'atom/page_client'
     require_relative 'atom/harvester'
+    require_relative 'atom/csh_generator'
   end
 end

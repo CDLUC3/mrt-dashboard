@@ -91,12 +91,39 @@ describe FileController do
     end
 
     it 'handles filenames with spaces' do
+      pathname = 'producer/Caltrans EHE Tests.pdf'
       mock_permissions_all(user_id, collection_id)
 
       size_ok = APP_CONFIG['max_download_size'] - 1
       inv_file.full_size = size_ok
-      inv_file.pathname = 'producer/Caltrans EHE Tests.pdf'
+      inv_file.pathname = pathname
       inv_file.save!
+
+      streamer = double(Streamer)
+      expected_url = inv_file.bytestream_uri
+      allow(Streamer).to receive(:new).with(expected_url).and_return(streamer)
+
+      params[:file] = pathname
+      get(:download, params, { uid: user_id })
+      expect(response.status).to eq(200)
+    end
+
+    it 'handles filenames with spaces and pipes' do
+      pathname = 'producer/AIP/Subseries 1.1/Objects/Evolution book/Tate Collection |landscape2'
+      mock_permissions_all(user_id, collection_id)
+
+      size_ok = APP_CONFIG['max_download_size'] - 1
+      inv_file.full_size = size_ok
+      inv_file.pathname = pathname
+      inv_file.save!
+
+      streamer = double(Streamer)
+      expected_url = inv_file.bytestream_uri
+      allow(Streamer).to receive(:new).with(expected_url).and_return(streamer)
+
+      params[:file] = pathname
+      get(:download, params, { uid: user_id })
+      expect(response.status).to eq(200)
     end
   end
 end
