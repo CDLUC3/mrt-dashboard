@@ -680,4 +680,116 @@ describe 'atom', type: :task do
       pending 'parses nx:identifier as first local ID if configured element not present'
     end
   end
+
+  context ':gen_csh' do
+    it 'generates a CSH script' do
+      expected_csh = <<~CSH
+        # setenv RAILS_ENV stage
+        setenv PATH /dpr2/local/bin:${PATH}
+
+        set date = `date +%Y%m%d`
+        set base = /apps/dpr2/apps/ui/atom
+
+        cd /dpr2/apps/ui/current
+
+        # Nuxeo Collection
+        #    Atom URL: https://s3.amazonaws.com/static.ucldc.cdlib.org/merritt/ucldc_collection_26098.atom
+        #    Registry ID: 26098
+        #    Name: UCM Ramicova
+        #
+        # Merritt Collection
+        #    Collection ID: ark:/13030/m5b58sn8
+        #    Name: Merced Library Nuxeo collection
+        #    Mnemonic: ucm_lib_nuxeo
+
+        # To pause, uncomment...
+        #touch PAUSE_ATOM_ucm_lib_nuxeo_content
+
+        # Last feed update, defined in atom.ldap
+        # /dpr2/apps/ui/atom/LastUpdate/lastFeedUpdate_26098-m5b58sn8
+
+        set feedURL	= "https://s3.amazonaws.com/static.ucldc.cdlib.org/merritt/ucldc_collection_26098.atom"
+        set userAgent	= "Atom processor/Merced Library Nuxeo collection"
+        set profile	= "ucm_lib_nuxeo_content"
+        set groupID	= "ark:/13030/m5b58sn8"
+        set updateFile	= "/dpr2/apps/ui/atom/LastUpdate/lastFeedUpdate_26098-m5b58sn8"
+        set log		= "${base}/logs/${profile}_${date}.log"
+
+        # Log file
+        bundle exec rake "atom:update[${feedURL}, ${userAgent}, ${profile}, ${groupID}, ${updateFile}]" >& ${log} &
+
+        # No log file
+        # bundle exec rake "atom:update[${feedURL}, ${userAgent}, ${profile}, ${groupID}, ${updateFile}]"
+
+        exit
+      CSH
+
+      expect do
+        invoke_task(
+          'atom:gen_csh',
+          'UCM Ramicova',
+          'https://s3.amazonaws.com/static.ucldc.cdlib.org/merritt/ucldc_collection_26098.atom',
+          'ucm_lib_nuxeo',
+          'ark:/13030/m5b58sn8',
+          'Merced Library Nuxeo collection'
+        )
+      end.to output(expected_csh).to_stdout
+    end
+  end
+
+  context ':csv_to_csh' do
+    it 'generates CSH scripts' do
+      csv_data = <<~CSV
+        UCCE Humboldt,https://s3.amazonaws.com/static.ucldc.cdlib.org/merritt/ucldc_collection_27014.atom,ucm_lib_ucce_humboldt,ark:/13030/m590717c,UC Merced Library UCCE Humboldt County,
+        UCCE Ventura,https://s3.amazonaws.com/static.ucldc.cdlib.org/merritt/ucldc_collection_27013.atom,ucm_lib_ucce_ventura,ark:/13030/m5dr7rw3,UC Merced Library UCCE Ventura County,
+        UCCE Merced,https://s3.amazonaws.com/static.ucldc.cdlib.org/merritt/ucldc_collection_27012.atom,ucm_lib_ucce_merced,ark:/13030/m5jh8hmt,UC Merced Library UCCE Merced County,
+        LIJA/Clark Center,https://s3.amazonaws.com/static.ucldc.cdlib.org/merritt/ucldc_collection_65.atom,ucm_lib_clark,ark:/13030/m5n58jd1,UCM Library Clark Center for Japanese Art and Culture,Also exists on stage
+        McLean,https://s3.amazonaws.com/static.ucldc.cdlib.org/merritt/ucldc_collection_68.atom,ucm_lib_mclean,ark:/13030/m5p89893,UC Merced Library McLean Collection,
+        McDaniel,https://s3.amazonaws.com/static.ucldc.cdlib.org/merritt/ucldc_collection_14256.atom,ucm_lib_mcdaniel,ark:/13030/m5t20138,UC Merced Library McDaniel (Wilma E.) Papers,
+        Angel’s Camp,https://s3.amazonaws.com/static.ucldc.cdlib.org/merritt/ucldc_collection_69.atom,ucm_lib_acm,ark:/13030/m5xq22b2,UC Merced Library Angels Camp Museum,
+        "Raebel, Hermann C. Papers",https://s3.amazonaws.com/static.ucldc.cdlib.org/merritt/ucldc_collection_26899.atom,ucla_digital_lib,ark:/13030/m5k40smm,UCLA Digital Library Program,"Exists on stage only, for the UCLA pilot"
+        Miriam Matthews Photograph Collection,https://s3.amazonaws.com/static.ucldc.cdlib.org/merritt/ucldc_collection_26936.atom,ucla_digital_lib,ark:/13030/m5k40smm,UCLA Digital Library Program,"Exists on stage only, for the UCLA pilot"
+      CSV
+
+      expected_files = %w[
+        27014-UCCE-Humboldt-ucm_lib_ucce_humboldt.csh
+        27013-UCCE-Ventura-ucm_lib_ucce_ventura.csh
+        27012-UCCE-Merced-ucm_lib_ucce_merced.csh
+        65-LIJA-Clark-Center-ucm_lib_clark.csh
+        68-McLean-ucm_lib_mclean.csh
+        14256-McDaniel-ucm_lib_mcdaniel.csh
+        69-Angels-Camp-ucm_lib_acm.csh
+        26899-Raebel-Hermann-C-Papers-ucla_digital_lib.csh
+        26936-Miriam-Matthews-Photograph-Collection-ucla_digital_lib.csh
+      ]
+
+      Tempfile.create(%w[atom .csv]) do |csv_file|
+        File.open(csv_file, 'w') { |f| f.write(csv_data) }
+        Dir.mktmpdir do |tmpdir|
+          expected_output = "Wrote #{expected_files.size} CSH scripts to #{File.realpath(tmpdir)}\n"
+          expect { invoke_task('atom:csv_to_csh', csv_file.path, tmpdir) }.to output(expected_output).to_stdout
+          files = Dir.entries(tmpdir)
+            .map { |f| File.join(tmpdir, f) }
+            .select { |f| File.file?(f) }
+          index = 0
+          CSV.parse(csv_data) do |row|
+            nuxeo_collection_name, feed_url, collection_mnemonic, collection_ark, merritt_collection_name = row[0...5]
+            expected_file = File.join(tmpdir, expected_files[index])
+            expect(files).to include(expected_file)
+            expected_data = Merritt::Atom::CSHGenerator.generate_csh(
+              nuxeo_collection_name: nuxeo_collection_name,
+              feed_url: feed_url,
+              merritt_collection_mnemonic: collection_mnemonic,
+              merritt_collection_ark: collection_ark,
+              merritt_collection_name: merritt_collection_name
+            )
+            actual_data = File.read(expected_file)
+            expect(actual_data).to eq(expected_data)
+            index += 1
+          end
+          expect(files.size).to eq(expected_files.size)
+        end
+      end
+    end
+  end
 end

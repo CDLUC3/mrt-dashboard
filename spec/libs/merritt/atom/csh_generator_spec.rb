@@ -49,11 +49,11 @@ module Merritt
           CSH
 
           actual_csh = CSHGenerator.generate_csh(
+            nuxeo_collection_name: 'UCM Ramicova',
             feed_url: 'https://s3.amazonaws.com/static.ucldc.cdlib.org/merritt/ucldc_collection_26098.atom',
-            merritt_collection_ark: 'ark:/13030/m5b58sn8',
-            merritt_collection_name: 'Merced Library Nuxeo collection',
             merritt_collection_mnemonic: 'ucm_lib_nuxeo',
-            nuxeo_collection_name: 'UCM Ramicova'
+            merritt_collection_ark: 'ark:/13030/m5b58sn8',
+            merritt_collection_name: 'Merced Library Nuxeo collection'
           )
 
           File.open('tmp/expected.csh', 'w') { |f| f.write(expected_csh) }

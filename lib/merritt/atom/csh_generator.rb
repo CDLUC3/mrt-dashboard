@@ -5,7 +5,7 @@ require 'ostruct'
 module Merritt
   module Atom
     class CSHGenerator
-      ARG_KEYS = %i[feed_url collection_ark collection_name collection_mnemonic].freeze
+      ARG_KEYS = %i[nuxeo_collection_name feed_url merritt_collection_mnemonic merritt_collection_ark merritt_collection_name].freeze
       ARK_QUALIFIER_REGEXP = %r{(?<=/)[^/]+$}
       REGISTRY_ID_REGEXP = /(?<=_)[0-9]+(?=\.atom$)/
 
@@ -60,14 +60,13 @@ module Merritt
       attr_reader :merritt_collection_name
 
       def initialize(nuxeo_collection_name:, feed_url:, merritt_collection_mnemonic:, merritt_collection_ark:, merritt_collection_name:)
+        @nuxeo_collection_name = validate(nuxeo_collection_name, name: 'nuxeo_collection_name')
+        @feed_url = validate(feed_url, name: 'feed_url')
+        @merritt_collection_mnemonic = validate(merritt_collection_mnemonic, name: 'merritt_collection_mnemonic')
+        @merritt_collection_ark = validate(merritt_collection_ark, name: 'merritt_collection_ark')
+        @merritt_collection_name = validate(merritt_collection_name, name: 'merritt_collection_name')
         @collection_ark_qualifier = merritt_collection_ark.scan(ARK_QUALIFIER_REGEXP).first
         @registry_id = feed_url.scan(REGISTRY_ID_REGEXP).first
-
-        @nuxeo_collection_name = nuxeo_collection_name
-        @feed_url = feed_url
-        @merritt_collection_mnemonic = merritt_collection_mnemonic
-        @merritt_collection_ark = merritt_collection_ark
-        @merritt_collection_name = merritt_collection_name
       end
 
       def generate_csh
@@ -77,6 +76,14 @@ module Merritt
       def filename
         sanitized_name = CSHGenerator.sanitize_name(nuxeo_collection_name)
         "#{registry_id}-#{sanitized_name}-#{merritt_collection_mnemonic}.csh"
+      end
+
+      private
+
+      def validate(arg, name:)
+        raise ArgumentError, "#{name} argument not found" unless arg
+        raise ArgumentError, "#{name} argument '#{arg}' cannot be blank" if arg.strip == ''
+        arg
       end
 
       class << self
@@ -102,16 +109,15 @@ module Merritt
         end
 
         def from_csv(csv_data:, to_dir:)
-          CSV.parse(csv_data) do |row|
+          rows = CSV.parse(csv_data)
+          rows.each do |row|
             generator = CSHGenerator.new(
-              nuxeo_collection_name: row[0],
-              feed_url: row[1],
-              merritt_collection_mnemonic: row[2],
-              merritt_collection_ark: row[3],
-              merritt_collection_name: row[4]
+              nuxeo_collection_name: row[0], feed_url: row[1],
+              merritt_collection_mnemonic: row[2], merritt_collection_ark: row[3], merritt_collection_name: row[4]
             )
             File.open(File.join(to_dir, generator.filename), 'w') { |f| f.write(generator.generate_csh) }
           end
+          rows.size
         end
 
       end
