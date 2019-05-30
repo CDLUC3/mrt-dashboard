@@ -92,6 +92,7 @@ module Merritt
             production,McLean,https://s3.amazonaws.com/static.ucldc.cdlib.org/merritt/ucldc_collection_68.atom,ucm_lib_mclean,ark:/13030/m5p89893,UC Merced Library McLean Collection,
             production,McDaniel,https://s3.amazonaws.com/static.ucldc.cdlib.org/merritt/ucldc_collection_14256.atom,ucm_lib_mcdaniel,ark:/13030/m5t20138,UC Merced Library McDaniel (Wilma E.) Papers,
             production,Angel’s Camp,https://s3.amazonaws.com/static.ucldc.cdlib.org/merritt/ucldc_collection_69.atom,ucm_lib_acm,ark:/13030/m5xq22b2,UC Merced Library Angels Camp Museum,
+
             stage,"Raebel, Hermann C. Papers",https://s3.amazonaws.com/static.ucldc.cdlib.org/merritt/ucldc_collection_26899.atom,ucla_digital_lib,ark:/13030/m5k40smm,UCLA Digital Library Program,"Exists on stage only, for the UCLA pilot"
             stage,Miriam Matthews Photograph Collection,https://s3.amazonaws.com/static.ucldc.cdlib.org/merritt/ucldc_collection_26936.atom,ucla_digital_lib,ark:/13030/m5k40smm,UCLA Digital Library Program,"Exists on stage only, for the UCLA pilot"
           CSV
@@ -109,12 +110,14 @@ module Merritt
           ]
 
           Dir.mktmpdir do |tmpdir|
-            CSHGenerator.from_csv(csv_data: csv_data, to_dir: tmpdir)
+            count = CSHGenerator.from_csv(csv_data: csv_data, to_dir: tmpdir)
+            expect(count).to eq(expected_files.size)
             files = Dir.entries(tmpdir)
               .map { |f| File.join(tmpdir, f) }
               .select { |f| File.file?(f) }
             index = 0
             CSV.parse(csv_data) do |row|
+              next if row.compact == []
               environment, nuxeo_collection_name, feed_url, collection_mnemonic, collection_ark, merritt_collection_name = row[0...6]
               expected_file = File.join(tmpdir, expected_files[index])
               expect(files).to include(expected_file)

@@ -121,10 +121,10 @@ module Merritt
           name.gsub(/[^A-Za-z0-9]+/, '-').gsub(/-+%/, '').gsub(/([a-z])-s/, '\\1s')
         end
 
-        # rubocop:disable Metrics/MethodLength
+        # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
         def from_csv(csv_data:, to_dir:)
-          rows = CSV.parse(csv_data)
-          rows.each do |row|
+          count = 0
+          CSV.parse(csv_data).each do |row|
             next if row.compact == []
             environment, nuxeo_collection_name, feed_url, collection_mnemonic, collection_ark, merritt_collection_name = row[0...6]
             generator = CSHGenerator.new(
@@ -136,10 +136,11 @@ module Merritt
               merritt_collection_name: merritt_collection_name
             )
             File.open(File.join(to_dir, generator.filename), 'w') { |f| f.write(generator.generate_csh) }
+            count += 1
           end
-          rows.size
+          count
         end
-        # rubocop:enable Metrics/MethodLength
+        # rubocop:enable Metrics/MethodLength, Metrics/AbcSize
 
       end
     end
