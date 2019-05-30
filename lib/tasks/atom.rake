@@ -11,6 +11,7 @@ namespace :atom do
     delay, batch_size = throttler(task_args.extras)
     args = arg_hash.merge(delay: delay.to_i, batch_size: batch_size.to_i)
     processor = Merritt::Atom::Harvester.new(args)
+    processor.log_info("Initialized harvester: #{args.map { |k, v| "#{k}: #{v}" }.join(', ')}")
     processor.process_feed!
   end
 

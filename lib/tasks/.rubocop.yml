@@ -1,12 +1,16 @@
 inherit_from: ../.rubocop.yml
 
-Metrics/LineLength:
+Metrics/BlockLength:
   Exclude:
     - 'atom.rake'
 
 Metrics/ClassLength:
   Exclude:
     - 'ui.rake'
+
+Metrics/LineLength:
+  Exclude:
+    - 'atom.rake'
 
 Style/Semicolon:
   Exclude:

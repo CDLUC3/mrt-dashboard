@@ -61,6 +61,7 @@ module Merritt
         raise ArgumentError, msg.strip.tr("\n", ' ')
       end
 
+      # noinspection RubyScope
       def process_entry(entry)
         entry_processor = EntryProcessor.new(entry: entry, harvester: harvester)
         atom_id = entry_processor.atom_id
@@ -69,8 +70,8 @@ module Merritt
         entry_processor.process_entry!
         entry_processor.already_up_to_date?
       rescue StandardError => e
-        atom_id_str = atom_id || '(unknown)'
-        local_id_str = local_id || '(unknown)'
+        atom_id_str = (defined?(atom_id) && atom_id) || '(unknown)'
+        local_id_str = (defined?(local_id) && local_id) || '(unknown)'
         log_error("Error processing entry with Atom ID #{atom_id_str} (local ID: #{local_id_str})", e)
       end
 

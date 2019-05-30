@@ -114,7 +114,11 @@ module Merritt
       end
 
       def feed_update_file_exists?
-        @feed_update_file_exists ||= File.exist?(feed_update_file)
+        @feed_update_file_exists ||= begin
+          exists = File.exist?(feed_update_file)
+          log_info("Feed update file #{feed_update_file} #{exists ? 'found' : 'not found'}")
+          exists
+        end
       end
 
       def process_from(page_url)
