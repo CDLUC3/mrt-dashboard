@@ -16,7 +16,7 @@ namespace :atom do
 
   # Usage example:
   #
-  # bundle exec rake atom:gen_csh['UCM Ramicova','https://s3.amazonaws.com/static.ucldc.cdlib.org/merritt/ucldc_collection_26098.atom','ucm_lib_nuxeo','ark:/13030/m5b58sn8','Merced Library Nuxeo collection']
+  # bundle exec rake atom:gen_csh['production',UCM Ramicova','https://s3.amazonaws.com/static.ucldc.cdlib.org/merritt/ucldc_collection_26098.atom','ucm_lib_nuxeo','ark:/13030/m5b58sn8','Merced Library Nuxeo collection']
   desc 'Generate CSH script for Atom feed harvesting'
   task :gen_csh, Merritt::Atom::CSHGenerator::ARG_KEYS => :environment do |_, task_args|
     csh_source = Merritt::Atom::CSHGenerator.generate_csh(task_args.to_h)
@@ -25,7 +25,7 @@ namespace :atom do
 
   # The CSV file should be in the format:
   #
-  # nuxeo_collection_name,feed_url,merritt_collection_mnemonic,merritt_collection_ark,merritt_collection_name
+  # environment,nuxeo_collection_name,feed_url,merritt_collection_mnemonic,merritt_collection_ark,merritt_collection_name
   #
   # Usage example:
   #

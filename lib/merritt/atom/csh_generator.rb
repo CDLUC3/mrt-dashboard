@@ -5,12 +5,19 @@ require 'ostruct'
 module Merritt
   module Atom
     class CSHGenerator
-      ARG_KEYS = %i[nuxeo_collection_name feed_url merritt_collection_mnemonic merritt_collection_ark merritt_collection_name].freeze
+      ARG_KEYS = %i[
+        environment
+        nuxeo_collection_name
+        feed_url
+        merritt_collection_mnemonic
+        merritt_collection_ark
+        merritt_collection_name
+      ].freeze
       ARK_QUALIFIER_REGEXP = %r{(?<=/)[^/]+$}
       REGISTRY_ID_REGEXP = /(?<=_)[0-9]+(?=\.atom$)/
 
       CSH_TEMPLATE = <<~ERB.freeze
-        # setenv RAILS_ENV stage
+        setenv RAILS_ENV <%= environment %>
         setenv PATH /dpr2/local/bin:${PATH}
 
         set date = `date +%Y%m%d`
@@ -53,13 +60,16 @@ module Merritt
       attr_reader :collection_ark_qualifier
       attr_reader :registry_id
 
+      attr_reader :environment
       attr_reader :nuxeo_collection_name
       attr_reader :feed_url
       attr_reader :merritt_collection_mnemonic
       attr_reader :merritt_collection_ark
       attr_reader :merritt_collection_name
 
-      def initialize(nuxeo_collection_name:, feed_url:, merritt_collection_mnemonic:, merritt_collection_ark:, merritt_collection_name:)
+      # rubocop:disable Metrics/ParameterLists
+      def initialize(environment:, nuxeo_collection_name:, feed_url:, merritt_collection_mnemonic:, merritt_collection_ark:, merritt_collection_name:)
+        @environment = validate(environment, name: 'environment')
         @nuxeo_collection_name = validate(nuxeo_collection_name, name: 'nuxeo_collection_name')
         @feed_url = validate(feed_url, name: 'feed_url')
         @merritt_collection_mnemonic = validate(merritt_collection_mnemonic, name: 'merritt_collection_mnemonic')
@@ -68,6 +78,7 @@ module Merritt
         @collection_ark_qualifier = merritt_collection_ark.scan(ARK_QUALIFIER_REGEXP).first
         @registry_id = feed_url.scan(REGISTRY_ID_REGEXP).first
       end
+      # rubocop:enable Metrics/ParameterLists
 
       def generate_csh
         CSHGenerator.template.result(binding)
@@ -75,7 +86,7 @@ module Merritt
 
       def filename
         sanitized_name = CSHGenerator.sanitize_name(nuxeo_collection_name)
-        "#{registry_id}-#{sanitized_name}-#{merritt_collection_mnemonic}.csh"
+        "#{environment}-#{registry_id}-#{sanitized_name}-#{merritt_collection_mnemonic}.csh"
       end
 
       private
@@ -92,9 +103,10 @@ module Merritt
           @template ||= ERB.new(CSH_TEMPLATE)
         end
 
-        # noinspection RubyUnusedLocalVariable
-        def generate_csh(nuxeo_collection_name:, feed_url:, merritt_collection_mnemonic:, merritt_collection_ark:, merritt_collection_name:)
+        # rubocop:disable Metrics/ParameterLists, Metrics/LineLength
+        def generate_csh(environment:, nuxeo_collection_name:, feed_url:, merritt_collection_mnemonic:, merritt_collection_ark:, merritt_collection_name:)
           generator = CSHGenerator.new(
+            environment: environment,
             nuxeo_collection_name: nuxeo_collection_name,
             feed_url: feed_url,
             merritt_collection_mnemonic: merritt_collection_mnemonic,
@@ -103,22 +115,31 @@ module Merritt
           )
           generator.generate_csh
         end
+        # rubocop:enable Metrics/ParameterLists, Metrics/LineLength
 
         def sanitize_name(name)
           name.gsub(/[^A-Za-z0-9]+/, '-').gsub(/-+%/, '').gsub(/([a-z])-s/, '\\1s')
         end
 
+        # rubocop:disable Metrics/MethodLength
         def from_csv(csv_data:, to_dir:)
           rows = CSV.parse(csv_data)
           rows.each do |row|
+            next if row.compact == []
+            environment, nuxeo_collection_name, feed_url, collection_mnemonic, collection_ark, merritt_collection_name = row[0...6]
             generator = CSHGenerator.new(
-              nuxeo_collection_name: row[0], feed_url: row[1],
-              merritt_collection_mnemonic: row[2], merritt_collection_ark: row[3], merritt_collection_name: row[4]
+              environment: environment,
+              nuxeo_collection_name: nuxeo_collection_name,
+              feed_url: feed_url,
+              merritt_collection_mnemonic: collection_mnemonic,
+              merritt_collection_ark: collection_ark,
+              merritt_collection_name: merritt_collection_name
             )
             File.open(File.join(to_dir, generator.filename), 'w') { |f| f.write(generator.generate_csh) }
           end
           rows.size
         end
+        # rubocop:enable Metrics/MethodLength
 
       end
     end
