@@ -16,7 +16,7 @@ module Merritt
 
       def log_info(message)
         if (log = Rails.logger)
-          log.info(message)
+          log.info("Merritt::Atom: #{message}")
         else
           $stdout.puts(message)
         end
@@ -28,7 +28,7 @@ module Merritt
         append_backtrace(msg, exception)
 
         if (log = Rails.logger)
-          log.error(msg)
+          log.error("Merritt::Atom: #{msg}")
         else
           warn(msg)
         end

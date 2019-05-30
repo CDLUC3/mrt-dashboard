@@ -28,6 +28,7 @@ module Merritt
       def parse_xml
         tries = 0
         begin
+          log_info("Getting #{page_url} (tries: #{tries})")
           tries += 1
           response = RestClient.get(page_url, user_agent: "#{self.class} (https://merritt.cdlib.org)")
           Nokogiri::XML(response)

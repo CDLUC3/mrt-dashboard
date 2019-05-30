@@ -16,12 +16,13 @@ module Merritt
       end
 
       # @return [PageResult] the `<atom:updated/>` value from the feed and the URL of the next page, if any
-      # rubocop:disable Metrics/AbcSize
+      # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
       def process_xml!
         verify_collection_id!
-        return if feed_updated < harvester.last_feed_update
+        return if feed_up_to_date
         batches = atom_xml.xpath('//atom:entry', NS).each_slice(harvester.batch_size)
         batches.each_with_index do |batch, i|
+          log_info("Processing batch #{i} of #{batches.size} (#{batch.size} entries)")
           any_up_to_date = process_batch(batch)
           no_more_batches = batches.size <= i + 1
           next if any_up_to_date || no_more_batches
@@ -29,9 +30,17 @@ module Merritt
         end
         PageResult.new(atom_updated: atom_updated, next_page: next_page)
       end
-      # rubocop:enable Metrics/AbcSize
+      # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
 
       private
+
+      def feed_up_to_date
+        current_feed_update = feed_updated
+        last_feed_update = harvester.last_feed_update
+        up_to_date = current_feed_update < last_feed_update
+      ensure
+        log_info("Feed update date #{current_feed_update} #{up_to_date ? 'older' : 'newer'} than last_feed_update #{last_feed_update}")
+      end
 
       def process_batch(batch)
         any_up_to_date = false
