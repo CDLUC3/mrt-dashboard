@@ -713,7 +713,7 @@ describe 'atom', type: :task do
         set profile	= "ucm_lib_nuxeo_content"
         set groupID	= "ark:/13030/m5b58sn8"
         set updateFile	= "/dpr2/apps/ui/atom/LastUpdate/lastFeedUpdate_26098-m5b58sn8"
-        set log		= "${base}/logs/${profile}_${date}.log"
+        set log		= "${base}/logs/production-26098-${profile}_${date}.log"
 
         # Log file
         bundle exec rake "atom:update[${feedURL}, ${userAgent}, ${profile}, ${groupID}, ${updateFile}]" >& ${log} &

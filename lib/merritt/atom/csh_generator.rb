@@ -46,7 +46,7 @@ module Merritt
         set profile	= "<%= merritt_collection_mnemonic %>_content"
         set groupID	= "<%= merritt_collection_ark %>"
         set updateFile	= "/dpr2/apps/ui/atom/LastUpdate/lastFeedUpdate_<%= registry_id %>-<%= collection_ark_qualifier %>"
-        set log		= "${base}/logs/${profile}_${date}.log"
+        set log		= "${base}/logs/<%= environment %>-<%= registry_id %>-${profile}_${date}.log"
 
         # Log file
         bundle exec rake "atom:update[${feedURL}, ${userAgent}, ${profile}, ${groupID}, ${updateFile}]" >& ${log} &
