@@ -15,11 +15,8 @@ module Merritt
       NEVER = Time.utc(0)
 
       def log_info(message)
-        if (log = Rails.logger)
-          log.info("Merritt::Atom: #{message}")
-        else
-          $stdout.puts(message)
-        end
+        (log = Rails.logger) && log.info(message)
+        $stdout.puts(message)
       end
 
       def log_error(message, exception = nil)
@@ -27,11 +24,8 @@ module Merritt
         msg << ": #{exception}" if exception
         append_backtrace(msg, exception)
 
-        if (log = Rails.logger)
-          log.error("Merritt::Atom: #{msg}")
-        else
-          warn(msg)
-        end
+        (log = Rails.logger) && log.error(msg)
+        warn(msg)
       end
 
       def parse_time(time_str, default: NEVER)
