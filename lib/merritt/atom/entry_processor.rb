@@ -55,7 +55,7 @@ module Merritt
       end
 
       def primary_local_id
-        @primary_local_id ||= xpath_content(entry, local_id_query)
+        @primary_local_id ||= xpath_content(entry, 'dc:identifier')
       end
 
       def new_ingest_object
@@ -125,9 +125,6 @@ module Merritt
         @archival_id ||= links.select { |u| u[:rel] == 'archival' }.first
       end
 
-      def local_id_query
-        harvester.local_id_query
-      end
     end
   end
 end

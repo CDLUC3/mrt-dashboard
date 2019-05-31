@@ -13,7 +13,6 @@ module Merritt
         WebMock.disable_net_connect!
         @harvester = instance_double(Harvester)
         allow(harvester).to receive(:last_feed_update).and_return(Util::NEVER)
-        allow(harvester).to receive(:local_id_query).and_return('dc:identifier')
         allow(harvester).to receive(:add_credentials!)
         allow(harvester).to receive(:batch_size).and_return(1000)
         allow(harvester).to receive(:collection_ark).and_return('ark:/99999/FK9585555')

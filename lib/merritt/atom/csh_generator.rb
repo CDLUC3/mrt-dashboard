@@ -38,9 +38,6 @@ module Merritt
         # To pause, uncomment...
         #touch PAUSE_ATOM_<%= merritt_collection_mnemonic %>_content
 
-        # Last feed update, defined in atom.ldap
-        # /dpr2/apps/ui/atom/LastUpdate/lastFeedUpdate_<%= registry_id %>-<%= collection_ark_qualifier %>
-
         set feedURL	= "<%= feed_url %>"
         set userAgent	= "Atom processor/<%= merritt_collection_name %>"
         set profile	= "<%= merritt_collection_mnemonic %>_content"

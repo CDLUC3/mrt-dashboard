@@ -29,9 +29,6 @@ module Merritt
             # To pause, uncomment...
             #touch PAUSE_ATOM_ucm_lib_nuxeo_content
 
-            # Last feed update, defined in atom.ldap
-            # /dpr2/apps/ui/atom/LastUpdate/lastFeedUpdate_26098-m5b58sn8
-
             set feedURL	= "https://s3.amazonaws.com/static.ucldc.cdlib.org/merritt/ucldc_collection_26098.atom"
             set userAgent	= "Atom processor/Merced Library Nuxeo collection"
             set profile	= "ucm_lib_nuxeo_content"

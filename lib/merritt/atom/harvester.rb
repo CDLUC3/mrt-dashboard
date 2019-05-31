@@ -51,10 +51,6 @@ module Merritt
         File.open(feed_update_file, 'w') { |f| f.puts(atom_updated) }
       end
 
-      def local_id_query
-        @local_id_query ||= ATOM_CONFIG["#{collection_ark}_localidElement"] || 'atom:id'
-      end
-
       # rubocop:disable Metrics/MethodLength, Metrics/ParameterLists
       def new_ingest_object(local_id:, erc_who:, erc_what:, erc_when:, erc_where:, erc_when_created:, erc_when_modified:)
         Mrt::Ingest::IObject.new(
@@ -78,6 +74,7 @@ module Merritt
       end
 
       def add_credentials!(uri)
+        # TODO: allow customization based on feed URL (?)
         return unless uri.host.include?('nuxeo.cdlib.org')
         uri.user, uri.password = credentials
       end
@@ -99,7 +96,7 @@ module Merritt
 
       def credentials
         @credentials ||= begin
-          credentials_str = ATOM_CONFIG["#{collection_ark}_credentials"]
+          credentials_str = ATOM_CONFIG['credentials']
           credentials_str ? credentials_str.split(':') : [nil, nil]
         end
       end
