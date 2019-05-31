@@ -561,13 +561,13 @@ describe 'atom', type: :task do
       end
 
       it 'pauses between batches' do
-          batch_size = 2
-          obj_count = 9
-          expected_sleeps = (obj_count / batch_size) - 1
-          expect(server).to receive(:add_file).exactly(obj_count).times
-          expect(client).to receive(:ingest).exactly(obj_count).times
-          invoke_task('atom:update', starting_point, submitter, profile, collection_ark, feeddatefile, 60, batch_size)
-          expect(@sleep_count).to eq(expected_sleeps)
+        batch_size = 2
+        obj_count = 9
+        expected_sleeps = (obj_count / batch_size) - 1
+        expect(server).to receive(:add_file).exactly(obj_count).times
+        expect(client).to receive(:ingest).exactly(obj_count).times
+        invoke_task('atom:update', starting_point, submitter, profile, collection_ark, feeddatefile, 60, batch_size)
+        expect(@sleep_count).to eq(expected_sleeps)
       end
     end
 
