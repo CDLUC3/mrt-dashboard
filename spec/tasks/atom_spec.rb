@@ -201,11 +201,12 @@ describe 'atom', type: :task do
       invoke_update!
     end
 
-    it 'exits without updating if feed date file not found' do
+    it 'updates if feed date file not found' do
       FileUtils.remove_entry_secure(feeddatefile)
-      expect(Mrt::Ingest::IObject).not_to receive(:new)
+      expect(server).to receive(:add_file).exactly(2).times
+      expect(client).to receive(:ingest).exactly(2).times
       invoke_update!
-      expect(File.exist?(feeddatefile)).to be_falsey
+      expect(File.exist?(feeddatefile)).to be_truthy
     end
 
     it 'exits without updating if feed not updated since last harvest' do

@@ -30,7 +30,6 @@ module Merritt
       # rubocop:enable Metrics/ParameterLists
 
       def process_feed!
-        return unless feed_update_file_exists?
         log_info("Processing with batch size #{batch_size} and delay #{delay} seconds")
         process_from(starting_point)
         update_feed_update_file!
@@ -39,10 +38,11 @@ module Merritt
       end
 
       def last_feed_update
-        @last_feed_update ||= begin
-          feed_update_str = File.read(feed_update_file)
-          parse_time(feed_update_str)
-        end
+        @last_feed_update ||= if File.exist?(feed_update_file)
+                                parse_time(File.read(feed_update_file))
+                              else
+                                Time.utc(0)
+                              end
       end
 
       def update_feed_update_file!
