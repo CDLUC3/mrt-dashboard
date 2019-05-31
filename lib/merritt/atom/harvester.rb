@@ -39,8 +39,10 @@ module Merritt
 
       def last_feed_update
         @last_feed_update ||= if File.exist?(feed_update_file)
+                                log_info("Reading last update time from #{feed_update_file}")
                                 parse_time(File.read(feed_update_file))
                               else
+                                log_info("Feed update file #{feed_update_file} not found")
                                 Time.utc(0)
                               end
       end
@@ -111,14 +113,6 @@ module Merritt
 
       def pause_file_path
         @pause_file_path ||= "#{ENV['HOME']}/dpr2/apps/ui/atom/PAUSE_ATOM_#{profile}"
-      end
-
-      def feed_update_file_exists?
-        @feed_update_file_exists ||= begin
-          exists = File.exist?(feed_update_file)
-          log_info("Feed update file #{feed_update_file} #{exists ? 'found' : 'not found'}")
-          exists
-        end
       end
 
       def process_from(page_url)
