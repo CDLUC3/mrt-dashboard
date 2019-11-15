@@ -1,15 +1,15 @@
 sudo: false
 dist: xenial
 
+serices:
+  - mysql
+
 notifications:
   email:
     recipients:
       - mark.reyes@ucop.edu
       - terrence.brady@ucop.edu
       - eric.lopatin@ucop.edu
-
-serices:
-  - mysql
 
 addons:
   chrome: stable
