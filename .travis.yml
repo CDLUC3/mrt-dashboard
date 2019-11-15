@@ -1,21 +1,25 @@
 sudo: false
-dist: trusty
+dist: xenial
 
 notifications:
   email:
     recipients:
-      - david.moles@ucop.edu
       - mark.reyes@ucop.edu
+      - terrence.brady@ucop.edu
+      - eric.lopatin@ucop.edu
+
+serices:
+  - mysql
 
 addons:
   chrome: stable
   apt:
     update: true
-    sources:
-      - mysql-5.7-trusty
-    packages:
-      - mysql-server
-      - mysql-client
+    # sources:
+    #   - mysql-5.7-trusty
+    # packages:
+    #   - mysql-server
+    #   - mysql-client
 
 language: ruby
 
