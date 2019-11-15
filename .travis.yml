@@ -21,6 +21,7 @@ addons:
     packages:
       - mysql-server
       - mysql-client
+      - xvfb
 
 language: ruby
 
