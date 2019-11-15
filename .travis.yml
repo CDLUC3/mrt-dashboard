@@ -3,6 +3,7 @@ dist: xenial
 
 serices:
   - mysql
+  - xvfb
 
 notifications:
   email:
