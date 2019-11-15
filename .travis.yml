@@ -17,9 +17,9 @@ addons:
     update: true
     # sources:
     #   - mysql-5.7-trusty
-    # packages:
-    #   - mysql-server
-    #   - mysql-client
+    packages:
+      - mysql-server
+      - mysql-client
 
 language: ruby
 
