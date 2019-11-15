@@ -16,12 +16,10 @@ addons:
   chrome: stable
   apt:
     update: true
-    # sources:
-    #   - mysql-5.7-trusty
-    packages:
-      - mysql-server
-      - mysql-client
-      - xvfb
+    # packages:
+    #   - mysql-server
+    #   - mysql-client
+    #   - xvfb
 
 language: ruby
 
@@ -46,9 +44,6 @@ before_install:
 before_script:
   # run travis-prep.sh
   - ./travis-prep.sh
-
-  # set up xvfb and give it some time to start
+  # set up xvfb
   - "export DISPLAY=:99.0"
   - Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 &
-  # - "sh -e /etc/init.d/xvfb start"
-  # - "while [ ! -e /tmp/.X11-unix/X99 ]; do sleep 1; done"
