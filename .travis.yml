@@ -1,21 +1,21 @@
 sudo: false
-dist: trusty
+dist: xenial
+
+serices:
+  - mysql
+  - xvfb
 
 notifications:
   email:
     recipients:
-      - david.moles@ucop.edu
       - mark.reyes@ucop.edu
+      - terrence.brady@ucop.edu
+      - eric.lopatin@ucop.edu
 
 addons:
   chrome: stable
   apt:
     update: true
-    sources:
-      - mysql-5.7-trusty
-    packages:
-      - mysql-server
-      - mysql-client
 
 language: ruby
 
@@ -26,6 +26,10 @@ cache:
   bundler: true
 
 before_install:
+  # start mysql
+  - sudo systemctl start mysql
+  # wait for mysql service to respond
+  - which mysql && until mysql -u root -e "show status" &>/dev/null; do sleep 1; done
   # set up MySQL 5.7
   - sudo mysql -e "use mysql; update user set authentication_string=PASSWORD('') where User='root'; update user set plugin='mysql_native_password';FLUSH PRIVILEGES;"
   - sudo mysql_upgrade -u root
@@ -36,8 +40,6 @@ before_install:
 before_script:
   # run travis-prep.sh
   - ./travis-prep.sh
-
-  # set up xvfb and give it some time to start
+  # set up xvfb
   - "export DISPLAY=:99.0"
-  - "sh -e /etc/init.d/xvfb start"
-  - "while [ ! -e /tmp/.X11-unix/X99 ]; do sleep 1; done"
+  - Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 &
