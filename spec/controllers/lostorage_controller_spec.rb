@@ -91,7 +91,7 @@ describe LostorageController do
           <email>
             <from>marisa.strong@ucop.edu</from>
             <to>jdoe@example.edu</to>
-            <to>marisa.strong@ucop.edu</to>
+            <bcc>marisa.strong@ucop.edu</bcc>
             <subject>Merritt Version Download Processing Completed</subject>
             <msg/>
           </email>
@@ -115,7 +115,7 @@ describe LostorageController do
           <email>
             <from>merritt@example.edu</from>
             <to>jdoe@example.edu</to>
-            <to>marisa.strong@ucop.edu</to>
+            <bcc>marisa.strong@ucop.edu</bcc>
             <subject>Merritt Version Download Processing Completed</subject>
             <msg/>
           </email>
@@ -140,7 +140,7 @@ describe LostorageController do
           <email>
             <from>marisa.strong@ucop.edu</from>
             <to>jdoe@example.edu</to>
-            <to>marisa.strong@ucop.edu</to>
+            <bcc>marisa.strong@ucop.edu</bcc>
             <subject>Merritt Version Download Processing Completed</subject>
             <msg>Help I am trapped in a digital repository</msg>
           </email>
@@ -165,7 +165,7 @@ describe LostorageController do
           <email>
             <from>marisa.strong@ucop.edu</from>
             <to>jdoe@example.edu</to>
-            <to>marisa.strong@ucop.edu</to>
+            <bcc>marisa.strong@ucop.edu</bcc>
             <subject>Merritt Object Download Processing Completed</subject>
             <msg/>
           </email>
@@ -190,7 +190,7 @@ describe LostorageController do
           <email>
             <from>marisa.strong@ucop.edu</from>
             <to>jdoe@example.edu</to>
-            <to>marisa.strong@ucop.edu</to>
+            <bcc>marisa.strong@ucop.edu</bcc>
             <subject>Help I am trapped in a digital repository</subject>
             <msg/>
           </email>
@@ -221,7 +221,7 @@ describe LostorageController do
           <email>
             <from>marisa.strong@ucop.edu</from>
             <to>jdoe@example.edu</to>
-            <to>marisa.strong@ucop.edu</to>
+            <bcc>marisa.strong@ucop.edu</bcc>
             <subject>Merritt Version Download Processing Completed</subject>
             <msg/>
           </email>

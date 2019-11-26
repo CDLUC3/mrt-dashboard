@@ -112,7 +112,7 @@ class LostorageController < ApplicationController
     xml.email do
       xml.from(from_addr.blank? ? APP_CONFIG['lostorage_email_from'] : from_addr)
       xml.to(to_addr)
-      APP_CONFIG['lostorage_email_to'].each { |addr| xml.to(addr) }
+      APP_CONFIG['lostorage_email_to'].each { |addr| xml.bcc(addr) }
       xml.subject(subject)
       xml.msg(body)
     end
