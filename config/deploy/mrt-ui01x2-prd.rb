@@ -23,7 +23,7 @@ set :branch, 'prod'
 set :deploy_to, '/dpr2/apps/ui'
 
 # server 'ui01-aws.cdlib.org', user: 'dpr2', roles: %w[web app]
-server 'mrt-ui01x2-prd.cdlib.org', user: 'dpr2', roles: %w[web app]
+server 'uc3-mrtui01x2-prd.cdlib.org', user: 'dpr2', roles: %w[web app]
 
 set :puma_pid, "#{deploy_to}/shared/pid/puma.pid"
 set :puma_log, "#{deploy_to}/shared/log/puma.log"
