@@ -3,3 +3,7 @@ inherit_from: ../.rubocop.yml
 Metrics/BlockLength:
   Exclude:
   - 'views/object/recent.atom.builder'
+
+Metrics/ClassLength:
+  Exclude:
+  - 'controllers/application_controller.rb'
