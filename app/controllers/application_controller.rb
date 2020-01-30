@@ -106,7 +106,8 @@ class ApplicationController < ActionController::Base
     return if current_uid
     store_location
     flash[:notice] = 'You must be logged in to access the page you requested'
-    redirect_to(controller: 'user_sessions', action: 'guest_login') && return
+    ret = url_for_with_proto({ controller: 'user_sessions', action: 'guest_login' })
+    redirect_to(ret) && return
   end
 
   # :nocov:
@@ -126,7 +127,7 @@ class ApplicationController < ActionController::Base
   end
 
   def store_location
-    session[:return_to] = request.fullpath
+    session[:return_to] = url_string_with_proto(request.fullpath)
   end
 
   def redirect_back_or_default(default)
@@ -149,5 +150,17 @@ class ApplicationController < ActionController::Base
 
   def is_ark?(str)
     str.match?(%r{ark:/[0-9a-zA-Z]{1}[0-9]{4}/[a-z0-9+]})
+  end
+
+  def url_for_with_proto(opts)
+    opts[:protocol] = 'https' if APP_CONFIG['proto_force'] == 'https'
+    url_for(opts)
+  end
+
+  def url_string_with_proto(url, force_https = false)
+    return url unless force_https || APP_CONFIG['proto_force'] == 'https'
+    uri = URI.parse(url)
+    uri.scheme = 'https'
+    uri.to_s
   end
 end

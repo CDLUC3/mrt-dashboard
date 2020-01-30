@@ -172,6 +172,22 @@ describe ApplicationController do
     end
   end
 
+  describe ':url_string_with_proto' do
+    it 'verify unchanged url' do
+      host = 'foo.bar'
+      http_req = "http://#{host}"
+      expect(controller.send(:url_string_with_proto, http_req)).to eq(http_req), 'Location should be unmodified'
+    end
+
+    it 'verify https replacement in url' do
+      host = 'foo.bar'
+      http_req = "http://#{host}"
+      https_req = "https://#{host}"
+      # For testing purposes, simulate APP_CONFIG['proto_force'] == 'https'
+      expect(controller.send(:url_string_with_proto, http_req, true)).to eq(https_req), 'Location should start with https'
+    end
+  end
+
   describe ':stream_response' do
     before(:each) do
       WebMock.disable_net_connect!
@@ -208,4 +224,5 @@ describe ApplicationController do
       response.close
     end
   end
+
 end

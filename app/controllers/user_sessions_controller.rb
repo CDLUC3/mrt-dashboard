@@ -12,7 +12,7 @@ class UserSessionsController < ApplicationController
   def logout
     reset_session
     flash[:notice] = 'You are now logged out'
-    redirect_back_or_default '/'
+    redirect_back_or_default url_for_with_proto({ controller: 'home', action: 'index' })
   end
 
   def guest_login
@@ -25,10 +25,11 @@ class UserSessionsController < ApplicationController
     session[:expiry_time] = Time.now
     if User.valid_ldap_credentials?(user_id, password)
       session[:uid] = user_id
-      redirect_back_or_default '/home/choose_collection'
+      redirect_back_or_default url_for_with_proto({ controller: 'home', action: 'choose_collection' })
     else
       flash[:notice] = 'Login unsuccessful'
       render action: :login
     end
   end
+
 end
