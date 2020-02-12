@@ -11,9 +11,10 @@ docker: &docker
   <<: *defaults
   max_archive_size:  200000  # 9999 bytes ~= 99 KiB
   max_download_size: 3000000  # 1048576 bytes = 1 MiB
-  dua_email_to:         [no-email@ucop.edu]
-  lostorage_email_to:   [no-email@ucop.edu]
-  lostorage_email_from: no-email@ucop.edu
+  # Marisa is coded into rspec tests
+  dua_email_to:         [marisa.strong@ucop.edu]
+  lostorage_email_to:   [marisa.strong@ucop.edu]
+  lostorage_email_from: marisa.strong@ucop.edu
   merritt_server:       "http://localhost:8089"
   container_url:        "http://localhost:8081/cloudcontainer/"
   n2t_uri:              "http://n2t-wf.cdlib.org/"
