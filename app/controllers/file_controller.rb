@@ -28,6 +28,14 @@ class FileController < ApplicationController
     end
   end
 
+  def presign
+    stream_response(@file.bytestream_uri,
+                    'inline',
+                    File.basename(@file.pathname),
+                    @file.mime_type,
+                    @file.full_size)
+  end
+
   private
 
   def load_file

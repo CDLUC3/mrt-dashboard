@@ -40,6 +40,7 @@ MrtDashboard::Application.routes.draw do
   get('d/:object' => 'object#download')
   get('d/:object/:version' => 'version#download')
   get('d/:object/:version/*file' => 'file#download', :format => false)
+  get('presign-file/:object/:version/*file' => 'file#presign', :format => false)
   get('u/:object' => 'object#download_user')
   get('u/:object/:version' => 'version#download_user')
   get('dm/:object' => 'object#download_manifest')
