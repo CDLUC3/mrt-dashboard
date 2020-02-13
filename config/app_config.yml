@@ -25,6 +25,7 @@ docker: &docker
   uri_1: "http://store:8080/store/content/"
   uri_2: "http://store:8080/store/producer/"
   uri_3: "http://store:8080/store/manifest/"
+  inventory_presign_file: "http://inventory:8080/presign-file"
 
 stage:
   <<: *defaults

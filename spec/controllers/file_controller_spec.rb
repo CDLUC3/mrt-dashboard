@@ -12,6 +12,17 @@ describe FileController do
   attr_reader :inv_file
   attr_reader :pathname
   attr_reader :basename
+  attr_reader :client
+
+  def mock_httpclient
+    client = instance_double(HTTPClient)
+    allow(client).to receive(:follow_redirect_count).and_return(10)
+    %i[receive_timeout= send_timeout= connect_timeout= keep_alive_timeout=].each do |m|
+      allow(client).to receive(m)
+    end
+    allow(HTTPClient).to receive(:new).and_return(client)
+    client
+  end
 
   before(:each) do
     @user_id = mock_user(name: 'Jane Doe', password: 'correcthorsebatterystaple')
@@ -33,6 +44,7 @@ describe FileController do
 
     @pathname = inv_file.pathname
     @basename = File.basename(pathname)
+    @client = mock_httpclient
   end
 
   describe ':download' do
@@ -126,4 +138,55 @@ describe FileController do
       expect(response.status).to eq(200)
     end
   end
+
+  describe ':presign' do
+    attr_reader :params
+
+    before(:each) do
+      @params = { object: object_ark, file: pathname, version: object.current_version.number }
+    end
+
+    it 'requires a login' do
+      get(:presign, params, { uid: nil })
+      expect(response.status).to eq(302)
+      expect(response.headers['Location']).to include('guest_login')
+    end
+
+    it 'prevents presign without permissions' do
+      get(:presign, params, { uid: user_id })
+      expect(response.status).to eq(401)
+    end
+
+    it 'gets presign url for the file' do
+      mock_permissions_all(user_id, collection_id)
+
+      puts(params)
+      result = {node_id: 1111, key: params[:file]}
+      expect(client).to receive(:get_content).with(
+            APP_CONFIG['inventory_presign_file'],
+            params,
+            { 'Accept' => 'application/json' }
+          ).and_return(result.to_json())
+      get(:presign, params, { uid: user_id })
+
+      puts(response.body)
+
+      expect(response.status).to eq(200)
+
+      expected_headers = {
+        'Location' => 'location'
+      }
+      response_headers = response.headers
+      expected_headers.each do |header, value|
+        expect(response_headers[header]).to eq(value)
+      end
+    end
+
+    skip it 'handles filenames with spaces' do
+    end
+
+    skip it 'handles filenames with spaces and pipes' do
+    end
+  end
+
 end

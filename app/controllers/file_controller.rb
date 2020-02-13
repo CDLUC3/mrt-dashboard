@@ -1,3 +1,6 @@
+require 'httpclient'
+require 'json'
+
 class FileController < ApplicationController
   before_filter :require_user
   before_filter :redirect_to_latest_version
@@ -10,7 +13,7 @@ class FileController < ApplicationController
     end
   end
 
-  before_filter(only: [:download]) do
+  before_filter(only: [:download, :presign]) do
     version = @file.inv_version
     obj = version.inv_object
     check_dua(obj, { object: obj, version: version, file: @file })
@@ -29,11 +32,15 @@ class FileController < ApplicationController
   end
 
   def presign
-    stream_response(@file.bytestream_uri,
-                    'inline',
-                    File.basename(@file.pathname),
-                    @file.mime_type,
-                    @file.full_size)
+    version = @file.inv_version
+    obj = version.inv_object
+    url = APP_CONFIG['inventory_presign_file']
+    response_str = HTTPClient.new.get_content(
+                  url,
+                  { object: obj.ark, version: version.number, file: @file.pathname },
+                  { 'Accept' => 'application/json' })
+    response = JSON.parse(response_str)
+    puts(response)
   end
 
   private
