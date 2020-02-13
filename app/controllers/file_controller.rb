@@ -32,15 +32,8 @@ class FileController < ApplicationController
   end
 
   def presign
-    version = @file.inv_version
-    obj = version.inv_object
-    url = APP_CONFIG['inventory_presign_file']
-    response_str = HTTPClient.new.get_content(
-                  url,
-                  { object: obj.ark, version: version.number, file: @file.pathname },
-                  { 'Accept' => 'application/json' })
-    response = JSON.parse(response_str)
-    puts(response)
+    node_key = presign_node_key()
+    response = presign_get_by_node_key(node_key)
   end
 
   private
@@ -59,5 +52,26 @@ class FileController < ApplicationController
       .where('inv_files.pathname = ?', filename)
       .first
     raise ActiveRecord::RecordNotFound if @file.nil?
+  end
+
+  def presign_node_key
+    version = @file.inv_version
+    obj = version.inv_object
+    node_key_str = HTTPClient.new.get_content(
+                  APP_CONFIG['inventory_presign_file'],
+                  { object: obj.ark, version: version.number, file: @file.pathname },
+                  { 'Accept' => 'application/json' })
+    node_key = JSON.parse(node_key_str)
+    puts(node_key)
+    node_key
+  end
+
+  def presign_get_by_node_key(node_key)
+    response = HTTPClient.new.get(
+            APP_CONFIG['storage_presign_file'],
+            query = { node: node_key['node_id'], key: node_key['key'] },
+            extheader = { 'Accept' => 'application/json' })
+    puts(response)
+    response
   end
 end

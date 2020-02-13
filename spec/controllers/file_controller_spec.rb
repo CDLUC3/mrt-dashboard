@@ -161,12 +161,22 @@ describe FileController do
       mock_permissions_all(user_id, collection_id)
 
       puts(params)
-      result = {node_id: 1111, key: params[:file]}
+      nk = {node_id: 1111, key: params[:file]}
+      ps = {
+        url: 'https://merritt.cdlib.org',
+        expires: '2020-11-05T08:15:30-08:00'
+      }
+
       expect(client).to receive(:get_content).with(
             APP_CONFIG['inventory_presign_file'],
             params,
             { 'Accept' => 'application/json' }
-          ).and_return(result.to_json())
+          ).and_return(nk.to_json())
+      expect(client).to receive(:get).with(
+            APP_CONFIG['storage_presign_file'],
+            query = {node: nk[:node_id], key: nk[:key]},
+            extheader = { 'Accept' => 'application/json' }
+          ).and_return(ps.to_json())
       get(:presign, params, { uid: user_id })
 
       puts(response.body)
