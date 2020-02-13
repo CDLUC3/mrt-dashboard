@@ -160,31 +160,35 @@ describe FileController do
     it 'gets presign url for the file' do
       mock_permissions_all(user_id, collection_id)
 
-      puts(params)
-      nk = {node_id: 1111, key: params[:file]}
+      nk = { node_id: 1111, key: params[:file] }
       ps = {
         url: 'https://merritt.cdlib.org',
         expires: '2020-11-05T08:15:30-08:00'
       }
 
-      expect(client).to receive(:get_content).with(
-            APP_CONFIG['inventory_presign_file'],
-            params,
-            { 'Accept' => 'application/json' }
-          ).and_return(nk.to_json())
+      mockresp = instance_double(HTTP::Message)
+      allow(mockresp).to receive(:status).and_return(200)
+      allow(mockresp).to receive(:content).and_return(nk.to_json)
       expect(client).to receive(:get).with(
-            APP_CONFIG['storage_presign_file'],
-            query = {node: nk[:node_id], key: nk[:key]},
-            extheader = { 'Accept' => 'application/json' }
-          ).and_return(ps.to_json())
+        APP_CONFIG['inventory_presign_file'],
+        params,
+        { 'Accept' => 'application/json' }
+      ).and_return(mockresp)
+
+      mockresp = instance_double(HTTP::Message)
+      allow(mockresp).to receive(:status).and_return(200)
+      allow(mockresp).to receive(:content).and_return(ps.to_json)
+      expect(client).to receive(:get).with(
+        APP_CONFIG['storage_presign_file'],
+        { node: nk[:node_id], key: nk[:key] },
+        { 'Accept' => 'application/json' }
+      ).and_return(mockresp)
+
       get(:presign, params, { uid: user_id })
-
-      puts(response.body)
-
-      expect(response.status).to eq(200)
+      expect(response.status).to eq(303)
 
       expected_headers = {
-        'Location' => 'location'
+        'Location' => 'https://merritt.cdlib.org'
       }
       response_headers = response.headers
       expected_headers.each do |header, value|

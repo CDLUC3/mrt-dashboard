@@ -13,7 +13,7 @@ class FileController < ApplicationController
     end
   end
 
-  before_filter(only: [:download, :presign]) do
+  before_filter(only: %i[download presign]) do
     version = @file.inv_version
     obj = version.inv_object
     check_dua(obj, { object: obj, version: version, file: @file })
@@ -31,9 +31,14 @@ class FileController < ApplicationController
     end
   end
 
+  # https://github.com/CDLUC3/mrt-doc/blob/master/endopoints/ui/presign-file.md
   def presign
-    node_key = presign_node_key()
-    response = presign_get_by_node_key(node_key)
+    # The following are private methods... can I invoke rspec tests on these methods?
+    node_key = presign_node_key
+    presigned = presign_get_by_node_key(node_key)
+    url = presigned['url']
+    response.headers['Location'] = url
+    render status: 303, text: ''
   end
 
   private
@@ -54,24 +59,55 @@ class FileController < ApplicationController
     raise ActiveRecord::RecordNotFound if @file.nil?
   end
 
+  # https://github.com/CDLUC3/mrt-doc/blob/master/endopoints/inventory/presign-file.md
   def presign_node_key
     version = @file.inv_version
     obj = version.inv_object
-    node_key_str = HTTPClient.new.get_content(
-                  APP_CONFIG['inventory_presign_file'],
-                  { object: obj.ark, version: version.number, file: @file.pathname },
-                  { 'Accept' => 'application/json' })
-    node_key = JSON.parse(node_key_str)
-    puts(node_key)
-    node_key
+    r = HTTPClient.new.get(
+      APP_CONFIG['inventory_presign_file'],
+      { object: obj.ark, version: version.number, file: @file.pathname },
+      { 'Accept' => 'application/json' }
+    )
+    eval_presign_node_key(r)
   end
 
-  def presign_get_by_node_key(node_key)
-    response = HTTPClient.new.get(
-            APP_CONFIG['storage_presign_file'],
-            query = { node: node_key['node_id'], key: node_key['key'] },
-            extheader = { 'Accept' => 'application/json' })
-    puts(response)
-    response
+  def eval_presign_node_key(r)
+    if r.status == 200
+      JSON.parse(r.content)
+    else
+      render status: 404
+    end
   end
+
+  # https://github.com/CDLUC3/mrt-doc/blob/master/endopoints/storage/presign-file.md
+  def presign_get_by_node_key(node_key)
+    r = HTTPClient.new.get(
+      APP_CONFIG['storage_presign_file'],
+      { node: node_key['node_id'], key: node_key['key'] },
+      { 'Accept' => 'application/json' }
+    )
+    eval_presign_get_by_node_key(r)
+  end
+
+  def eval_presign_get_by_node_key(r)
+    if r.status == 409
+      download_response
+    elsif r.status == 200
+      JSON.parse(r.content)
+    else
+      render status: 404
+    end
+  end
+
+  def download_response
+    {
+      url: download_url,
+      expires: 'tbd'
+    }
+  end
+
+  def download_url
+    'http://merritt.cdlib.org'
+  end
+
 end
