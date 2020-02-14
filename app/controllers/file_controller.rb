@@ -35,7 +35,9 @@ class FileController < ApplicationController
   def presign
     # The following are private methods... can I invoke rspec tests on these methods?
     node_key = presign_node_key
+    return unless response.status == 200
     presigned = presign_get_by_node_key(node_key)
+    return unless response.status == 200
     url = presigned['url']
     response.headers['Location'] = url
     render status: 303, text: ''
@@ -75,7 +77,7 @@ class FileController < ApplicationController
     if r.status == 200
       JSON.parse(r.content)
     else
-      render status: 404
+      render status: 404, text: '404 Not Found'
     end
   end
 
@@ -83,19 +85,23 @@ class FileController < ApplicationController
   def presign_get_by_node_key(node_key)
     r = HTTPClient.new.get(
       APP_CONFIG['storage_presign_file'],
-      { node: node_key['node_id'], key: node_key['key'] },
+      node_key_params(node_key),
       { 'Accept' => 'application/json' }
     )
     eval_presign_get_by_node_key(r)
+  end
+
+  def node_key_params(n)
+    { node: n['node_id'], key: n['key'] }.with_indifferent_access
   end
 
   def eval_presign_get_by_node_key(r)
     if r.status == 409
       download_response
     elsif r.status == 200
-      JSON.parse(r.content)
+      JSON.parse(r.content).with_indifferent_access
     else
-      render status: 404
+      render status: 404, text: '404 Not Found'
     end
   end
 
@@ -103,11 +109,11 @@ class FileController < ApplicationController
     {
       url: download_url,
       expires: 'tbd'
-    }
+    }.with_indifferent_access
   end
 
   def download_url
-    'http://merritt.cdlib.org'
+    @file.bytestream_uri.to_s
   end
 
 end

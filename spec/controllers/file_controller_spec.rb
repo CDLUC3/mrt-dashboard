@@ -142,6 +142,33 @@ describe FileController do
   describe ':presign' do
     attr_reader :params
 
+    def my_presign
+      inv_file.bytestream_uri.to_s + '?presign=pretend'
+    end
+
+    def my_node_key(params)
+      { 'node_id': 1111, 'key': params[:file] }.with_indifferent_access
+    end
+
+    def my_node_key_params(params)
+      n = my_node_key(params)
+      { node: n['node_id'], key: n['key'] }
+    end
+
+    def my_presign_wrapper
+      {
+        url: my_presign,
+        expires: '2020-11-05T08:15:30-08:00'
+      }.with_indifferent_access
+    end
+
+    def mock_response(status = 200, content = '')
+      mockresp = instance_double(HTTP::Message)
+      allow(mockresp).to receive(:status).and_return(status)
+      allow(mockresp).to receive(:content).and_return(content)
+      mockresp
+    end
+
     before(:each) do
       @params = { object: object_ark, file: pathname, version: object.current_version.number }
     end
@@ -157,38 +184,27 @@ describe FileController do
       expect(response.status).to eq(401)
     end
 
-    it 'gets presign url for the file' do
+    it 'redirects to presign url for the file' do
       mock_permissions_all(user_id, collection_id)
 
-      nk = { node_id: 1111, key: params[:file] }
-      ps = {
-        url: 'https://merritt.cdlib.org',
-        expires: '2020-11-05T08:15:30-08:00'
-      }
-
-      mockresp = instance_double(HTTP::Message)
-      allow(mockresp).to receive(:status).and_return(200)
-      allow(mockresp).to receive(:content).and_return(nk.to_json)
       expect(client).to receive(:get).with(
         APP_CONFIG['inventory_presign_file'],
         params,
         { 'Accept' => 'application/json' }
-      ).and_return(mockresp)
+      ).and_return(mock_response(200, my_node_key(params).to_json))
 
-      mockresp = instance_double(HTTP::Message)
-      allow(mockresp).to receive(:status).and_return(200)
-      allow(mockresp).to receive(:content).and_return(ps.to_json)
       expect(client).to receive(:get).with(
         APP_CONFIG['storage_presign_file'],
-        { node: nk[:node_id], key: nk[:key] },
+        my_node_key_params(params),
         { 'Accept' => 'application/json' }
-      ).and_return(mockresp)
+      ).and_return(mock_response(200, my_presign_wrapper.to_json))
 
       get(:presign, params, { uid: user_id })
       expect(response.status).to eq(303)
+      expect(response.body).to eq('')
 
       expected_headers = {
-        'Location' => 'https://merritt.cdlib.org'
+        'Location' => my_presign
       }
       response_headers = response.headers
       expected_headers.each do |header, value|
@@ -196,11 +212,134 @@ describe FileController do
       end
     end
 
-    skip it 'handles filenames with spaces' do
+    it 'redirects request for FILENAME WITH SPACES to presign url for the file' do
+      pathname = 'producer/AIP/Subseries 1.1/Objects/Evolution book/Tate Collection |landscape2'
+      mock_permissions_all(user_id, collection_id)
+
+      inv_file.pathname = pathname
+      inv_file.save!
+
+      params[:file] = pathname
+
+      expect(client).to receive(:get).with(
+        APP_CONFIG['inventory_presign_file'],
+        params,
+        { 'Accept' => 'application/json' }
+      ).and_return(mock_response(200, my_node_key(params).to_json))
+
+      expect(client).to receive(:get).with(
+        APP_CONFIG['storage_presign_file'],
+        my_node_key_params(params),
+        { 'Accept' => 'application/json' }
+      ).and_return(mock_response(200, my_presign_wrapper.to_json))
+
+      get(:presign, params, { uid: user_id })
+      expect(response.status).to eq(303)
+      expect(response.body).to eq('')
+
+      expected_headers = {
+        'Location' => my_presign
+      }
+      response_headers = response.headers
+      expected_headers.each do |header, value|
+        expect(response_headers[header]).to eq(value)
+      end
     end
 
-    skip it 'handles filenames with spaces and pipes' do
+    it 'redirects request for FILENAME WITH SPACES AND PIPES to presign url for the file' do
+      pathname = 'producer/AIP/Subseries 1.1/Objects/Evolution book/Tate Collection |landscape2'
+      mock_permissions_all(user_id, collection_id)
+
+      inv_file.pathname = pathname
+      inv_file.save!
+
+      params[:file] = pathname
+
+      expect(client).to receive(:get).with(
+        APP_CONFIG['inventory_presign_file'],
+        params,
+        { 'Accept' => 'application/json' }
+      ).and_return(mock_response(200, my_node_key(params).to_json))
+
+      expect(client).to receive(:get).with(
+        APP_CONFIG['storage_presign_file'],
+        my_node_key_params(params),
+        { 'Accept' => 'application/json' }
+      ).and_return(mock_response(200, my_presign_wrapper.to_json))
+
+      get(:presign, params, { uid: user_id })
+      expect(response.status).to eq(303)
+      expect(response.body).to eq('')
+
+      expected_headers = {
+        'Location' => my_presign
+      }
+      response_headers = response.headers
+      expected_headers.each do |header, value|
+        expect(response_headers[header]).to eq(value)
+      end
     end
+
+    it 'returns 404 if presign lookup fails' do
+      mock_permissions_all(user_id, collection_id)
+
+      expect(client).to receive(:get).with(
+        APP_CONFIG['inventory_presign_file'],
+        params,
+        { 'Accept' => 'application/json' }
+      ).and_return(mock_response(404))
+
+      get(:presign, params, { uid: user_id })
+      expect(response.status).to eq(404)
+    end
+
+    it 'returns 404 if presign url creation fails' do
+      mock_permissions_all(user_id, collection_id)
+
+      expect(client).to receive(:get).with(
+        APP_CONFIG['inventory_presign_file'],
+        params,
+        { 'Accept' => 'application/json' }
+      ).and_return(mock_response(200, my_node_key(params).to_json))
+
+      expect(client).to receive(:get).with(
+        APP_CONFIG['storage_presign_file'],
+        my_node_key_params(params),
+        { 'Accept' => 'application/json' }
+      ).and_return(mock_response(404))
+
+      get(:presign, params, { uid: user_id })
+      expect(response.status).to eq(404)
+    end
+
+    it 'redirects to download url when presign is unsupported' do
+      mock_permissions_all(user_id, collection_id)
+
+      expect(client).to receive(:get).with(
+        APP_CONFIG['inventory_presign_file'],
+        params,
+        { 'Accept' => 'application/json' }
+      ).and_return(mock_response(200, my_node_key(params).to_json))
+
+      expect(client).to receive(:get).with(
+        APP_CONFIG['storage_presign_file'],
+        my_node_key_params(params),
+        { 'Accept' => 'application/json' }
+      ).and_return(mock_response(409, my_presign_wrapper.to_json))
+
+      get(:presign, params, { uid: user_id })
+      expect(response.status).to eq(303)
+      expect(response.body).to eq('')
+
+      expected_headers = {
+        'Location' => inv_file.bytestream_uri.to_s
+      }
+      response_headers = response.headers
+      expected_headers.each do |header, value|
+        expect(response_headers[header]).to eq(value)
+      end
+    end
+
   end
 
 end
