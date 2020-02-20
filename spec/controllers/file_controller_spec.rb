@@ -147,12 +147,18 @@ describe FileController do
     end
 
     def my_node_key(params)
-      { 'node_id': 1111, 'key': params[:file] }.with_indifferent_access
+      {
+        'node_id': 1111,
+        'key': params[:file]
+      }.with_indifferent_access
     end
 
     def my_node_key_params(params)
       n = my_node_key(params)
-      { node: n['node_id'], key: n['key'] }
+      {
+        node: n['node_id'],
+        key: n['key']
+      }
     end
 
     def my_presign_wrapper
@@ -162,11 +168,21 @@ describe FileController do
       }.with_indifferent_access
     end
 
-    def mock_response(status = 200, content = '')
+    def mock_response(status = 200, message='', json = {})
+      json['status'] = status
+      json['message'] = message
       mockresp = instance_double(HTTP::Message)
       allow(mockresp).to receive(:status).and_return(status)
-      allow(mockresp).to receive(:content).and_return(content)
+      allow(mockresp).to receive(:content).and_return(json.to_json)
       mockresp
+    end
+
+    def expect_get_storage_key_success
+      expect(client).to receive(:get).with(
+        APP_CONFIG['get_storage_key_file'],
+        params,
+        { 'Accept' => 'application/json' }
+      ).and_return(mock_response(200, '', my_node_key(params)))
     end
 
     before(:each) do
@@ -187,17 +203,13 @@ describe FileController do
     it 'redirects to presign url for the file' do
       mock_permissions_all(user_id, collection_id)
 
-      expect(client).to receive(:get).with(
-        APP_CONFIG['inventory_presign_file'],
-        params,
-        { 'Accept' => 'application/json' }
-      ).and_return(mock_response(200, my_node_key(params).to_json))
+      expect_get_storage_key_success
 
       expect(client).to receive(:get).with(
         APP_CONFIG['storage_presign_file'],
         my_node_key_params(params),
         { 'Accept' => 'application/json' }
-      ).and_return(mock_response(200, my_presign_wrapper.to_json))
+      ).and_return(mock_response(200, '', my_presign_wrapper))
 
       get(:presign, params, { uid: user_id })
       expect(response.status).to eq(303)
@@ -212,120 +224,98 @@ describe FileController do
       end
     end
 
-    it 'redirects request for FILENAME WITH SPACES to presign url for the file' do
-      pathname = 'producer/AIP/Subseries 1.1/Objects/Evolution book/Tate Collection |landscape2'
-      mock_permissions_all(user_id, collection_id)
-
-      inv_file.pathname = pathname
-      inv_file.save!
-
-      params[:file] = pathname
-
-      expect(client).to receive(:get).with(
-        APP_CONFIG['inventory_presign_file'],
-        params,
-        { 'Accept' => 'application/json' }
-      ).and_return(mock_response(200, my_node_key(params).to_json))
-
-      expect(client).to receive(:get).with(
-        APP_CONFIG['storage_presign_file'],
-        my_node_key_params(params),
-        { 'Accept' => 'application/json' }
-      ).and_return(mock_response(200, my_presign_wrapper.to_json))
-
-      get(:presign, params, { uid: user_id })
-      expect(response.status).to eq(303)
-      expect(response.body).to eq('')
-
-      expected_headers = {
-        'Location' => my_presign
-      }
-      response_headers = response.headers
-      expected_headers.each do |header, value|
-        expect(response_headers[header]).to eq(value)
-      end
-    end
-
-    it 'redirects request for FILENAME WITH SPACES AND PIPES to presign url for the file' do
-      pathname = 'producer/AIP/Subseries 1.1/Objects/Evolution book/Tate Collection |landscape2'
-      mock_permissions_all(user_id, collection_id)
-
-      inv_file.pathname = pathname
-      inv_file.save!
-
-      params[:file] = pathname
-
-      expect(client).to receive(:get).with(
-        APP_CONFIG['inventory_presign_file'],
-        params,
-        { 'Accept' => 'application/json' }
-      ).and_return(mock_response(200, my_node_key(params).to_json))
-
-      expect(client).to receive(:get).with(
-        APP_CONFIG['storage_presign_file'],
-        my_node_key_params(params),
-        { 'Accept' => 'application/json' }
-      ).and_return(mock_response(200, my_presign_wrapper.to_json))
-
-      get(:presign, params, { uid: user_id })
-      expect(response.status).to eq(303)
-      expect(response.body).to eq('')
-
-      expected_headers = {
-        'Location' => my_presign
-      }
-      response_headers = response.headers
-      expected_headers.each do |header, value|
-        expect(response_headers[header]).to eq(value)
-      end
-    end
-
-    it 'returns 404 if presign lookup fails' do
+    it 'returns 404 if presign lookup returns 404 - not found' do
       mock_permissions_all(user_id, collection_id)
 
       expect(client).to receive(:get).with(
-        APP_CONFIG['inventory_presign_file'],
+        APP_CONFIG['get_storage_key_file'],
         params,
         { 'Accept' => 'application/json' }
-      ).and_return(mock_response(404))
+      ).and_return(mock_response(404, 'File not found'))
 
       get(:presign, params, { uid: user_id })
       expect(response.status).to eq(404)
+      json = JSON.parse(response.body)
+      expect(json['status']).to eq(response.status)
+      expect(json['message']).to eq('File not found')
     end
 
-    it 'returns 404 if presign url creation fails' do
+    it 'returns 500 if presign lookup returns 500' do
       mock_permissions_all(user_id, collection_id)
 
       expect(client).to receive(:get).with(
-        APP_CONFIG['inventory_presign_file'],
+        APP_CONFIG['get_storage_key_file'],
         params,
         { 'Accept' => 'application/json' }
-      ).and_return(mock_response(200, my_node_key(params).to_json))
+      ).and_return(mock_response(500, 'System Error'))
 
+      get(:presign, params, { uid: user_id })
+      expect(response.status).to eq(500)
+      json = JSON.parse(response.body)
+      expect(json['status']).to eq(response.status)
+      expect(json['message']).to eq('System Error')
+    end
+
+    it 'returns 404 if presign url returns 404 - not found' do
+      mock_permissions_all(user_id, collection_id)
+
+      expect_get_storage_key_success
       expect(client).to receive(:get).with(
         APP_CONFIG['storage_presign_file'],
         my_node_key_params(params),
         { 'Accept' => 'application/json' }
-      ).and_return(mock_response(404))
+      ).and_return(mock_response(404, 'File not found'))
 
       get(:presign, params, { uid: user_id })
       expect(response.status).to eq(404)
+      json = JSON.parse(response.body)
+      expect(json['status']).to eq(response.status)
+      expect(json['message']).to eq('File not found')
+    end
+
+    it 'returns 403 if presign url not supported - Glacier' do
+      mock_permissions_all(user_id, collection_id)
+
+      expect_get_storage_key_success
+      expect(client).to receive(:get).with(
+        APP_CONFIG['storage_presign_file'],
+        my_node_key_params(params),
+        { 'Accept' => 'application/json' }
+      ).and_return(mock_response(403, 'File is in offline storage, request is not supported'))
+
+      get(:presign, params, { uid: user_id })
+      expect(response.status).to eq(403)
+      json = JSON.parse(response.body)
+      expect(json['status']).to eq(response.status)
+      expect(json['message']).to eq('File is in offline storage, request is not supported')
+    end
+
+    it 'returns 500 if presign url returns 500' do
+      mock_permissions_all(user_id, collection_id)
+
+      expect_get_storage_key_success
+      expect(client).to receive(:get).with(
+        APP_CONFIG['storage_presign_file'],
+        my_node_key_params(params),
+        { 'Accept' => 'application/json' }
+      ).and_return(mock_response(500, 'System Error'))
+
+      get(:presign, params, { uid: user_id })
+      expect(response.status).to eq(500)
+      json = JSON.parse(response.body)
+      expect(json['status']).to eq(response.status)
+      expect(json['message']).to eq('System Error')
     end
 
     it 'redirects to download url when presign is unsupported' do
       mock_permissions_all(user_id, collection_id)
 
-      expect(client).to receive(:get).with(
-        APP_CONFIG['inventory_presign_file'],
-        params,
-        { 'Accept' => 'application/json' }
-      ).and_return(mock_response(200, my_node_key(params).to_json))
-
+      expect_get_storage_key_success
       expect(client).to receive(:get).with(
         APP_CONFIG['storage_presign_file'],
         my_node_key_params(params),
         { 'Accept' => 'application/json' }
-      ).and_return(mock_response(409, my_presign_wrapper.to_json))
+      ).and_return(mock_response(409, 'Redirecting to download URL', my_presign_wrapper))
 
       get(:presign, params, { uid: user_id })
       expect(response.status).to eq(303)
@@ -338,6 +328,41 @@ describe FileController do
       expected_headers.each do |header, value|
         expect(response_headers[header]).to eq(value)
       end
+    end
+
+  end
+
+  describe ':storage_key' do
+    attr_reader :params
+
+    def mock_response(status = 200, message='', json = {})
+      json['status'] = status
+      json['message'] = message
+      mockresp = instance_double(HTTP::Message)
+      allow(mockresp).to receive(:status).and_return(status)
+      allow(mockresp).to receive(:content).and_return(json.to_json)
+      mockresp
+    end
+
+    before(:each) do
+      @params = { object: object_ark, file: pathname, version: object.current_version.number }
+    end
+
+    it 'gets storage node and key for the file' do
+      mock_permissions_all(user_id, collection_id)
+
+      expect(client).to receive(:get).with(
+        APP_CONFIG['get_storage_key_file'],
+        params,
+        { 'Accept' => 'application/json' }
+      ).and_return(mock_response(200))
+
+      r = HTTPClient.new.get(
+        APP_CONFIG['get_storage_key_file'],
+        params,
+        { 'Accept' => 'application/json' }
+      )
+      expect(response.status).to eq(200)
     end
 
   end

@@ -13,7 +13,7 @@ class FileController < ApplicationController
     end
   end
 
-  before_filter(only: %i[download presign]) do
+  before_filter(only: %i[download presign storage_key]) do
     version = @file.inv_version
     obj = version.inv_object
     check_dua(obj, { object: obj, version: version, file: @file })
@@ -40,7 +40,16 @@ class FileController < ApplicationController
     return unless response.status == 200
     url = presigned['url']
     response.headers['Location'] = url
-    render status: 303, text: ''
+    render status: 303, :text => ''
+  end
+
+  def storage_key
+    sql = 'select 123 as foo where 1=1'
+    results = ActiveRecord::Base.connection.exec_query(sql)
+    return nil unless results.present?
+    puts('TBTB')
+    puts(results)
+    render status: 200, text: 'foo'
   end
 
   private
@@ -66,7 +75,7 @@ class FileController < ApplicationController
     version = @file.inv_version
     obj = version.inv_object
     r = HTTPClient.new.get(
-      APP_CONFIG['inventory_presign_file'],
+      APP_CONFIG['get_storage_key_file'],
       { object: obj.ark, version: version.number, file: @file.pathname },
       { 'Accept' => 'application/json' }
     )
@@ -77,7 +86,8 @@ class FileController < ApplicationController
     if r.status == 200
       JSON.parse(r.content)
     else
-      render status: 404, text: '404 Not Found'
+      json = JSON.parse(r.content).with_indifferent_access
+      render status: r.status, :json => json
     end
   end
 
@@ -101,7 +111,8 @@ class FileController < ApplicationController
     elsif r.status == 200
       JSON.parse(r.content).with_indifferent_access
     else
-      render status: 404, text: '404 Not Found'
+      json = JSON.parse(r.content).with_indifferent_access
+      render status: r.status, :json => json
     end
   end
 

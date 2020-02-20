@@ -5,6 +5,7 @@ defaults: &defaults
   max_download_size:    322122547200  # 322122547200 bytes = 300 GiB
   dua_email_from:       no-reply-merritt@ucop.edu
   mrt_dua_file:         producer/mrt-dua.txt
+  get_storage_key_file: "/api/get-storage-key-file"
   proto_force:          ""
 
 docker: &docker
@@ -25,7 +26,6 @@ docker: &docker
   uri_1: "http://store:8080/store/content/"
   uri_2: "http://store:8080/store/producer/"
   uri_3: "http://store:8080/store/manifest/"
-  inventory_presign_file: "http://inventory:8080/presign-file"
   storage_presign_file: "http://storage:8080/presign-file"
 
 stage:
@@ -42,7 +42,6 @@ stage:
   uri_1:                "http://store-aws-stg.cdlib.org:35121/content/"
   uri_2:                "http://store-aws-stg.cdlib.org:35121/producer/"
   uri_3:                "http://store-aws-stg.cdlib.org:35121/manifest/"
-  inventory_presign_file: "http://inv-aws-stg.cdlib.org:36221/presign-file"
   storage_presign_file: "http://store-aws-stg.cdlib.org:35121/presign-file/"
   proto_force:          "https"
 
@@ -60,7 +59,6 @@ production:
   uri_1:                "http://store-aws.cdlib.org:35121/content/"
   uri_2:                "http://store-aws.cdlib.org:35121/producer/"
   uri_3:                "http://store-aws.cdlib.org:35121/manifest/"
-  inventory_presign_file: "http://inventory.cdlib.org:36221/presign-file"
   storage_presign_file: "http://store-aws.cdlib.org:35121/presign-file/"
   proto_force:          "https"
 
@@ -73,7 +71,6 @@ test:
   uri_2: "http://store.merritt.example.edu/producer/"
   ingest_service:       "http://ingest.merritt.example.edu/poster/submit/"
   ingest_service_update: "http://ingest.merritt.example.edu/poster/update/"
-  inventory_presign_file: "http://inventory.merritt.example.edu/presign-file"
   storage_presign_file: "http://store.merritt.example.edu/presign-file/"
 local:
   <<: *docker
