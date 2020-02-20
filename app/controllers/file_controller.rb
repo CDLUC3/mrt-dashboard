@@ -44,7 +44,13 @@ class FileController < ApplicationController
   end
 
   def storage_key
-    sql = "select 123 where now() > '2022-01-01'"
+    sql = %{
+SELECT user, name
+FROM users
+WHERE users.id = ?
+LIMIT ?
+}
+    sql = "select count(*) from inv_files"
     results = ActiveRecord::Base.connection.exec_query(sql)
     return nil unless results.present?
     render status: 200, text: 'foo'
