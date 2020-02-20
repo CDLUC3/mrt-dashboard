@@ -168,7 +168,7 @@ describe FileController do
       }.with_indifferent_access
     end
 
-    def mock_response(status = 200, message='', json = {})
+    def mock_response(status = 200, message = '', json = {})
       json['status'] = status
       json['message'] = message
       mockresp = instance_double(HTTP::Message)
@@ -335,7 +335,7 @@ describe FileController do
   describe ':storage_key' do
     attr_reader :params
 
-    def mock_response(status = 200, message='', json = {})
+    def mock_response(status = 200, message = '', json = {})
       json['status'] = status
       json['message'] = message
       mockresp = instance_double(HTTP::Message)
@@ -351,18 +351,13 @@ describe FileController do
     it 'gets storage node and key for the file' do
       mock_permissions_all(user_id, collection_id)
 
-      expect(client).to receive(:get).with(
-        APP_CONFIG['get_storage_key_file'],
+      get(
+        :storage_key,
         params,
-        { 'Accept' => 'application/json' }
-      ).and_return(mock_response(200))
-
-      r = HTTPClient.new.get(
-        APP_CONFIG['get_storage_key_file'],
-        params,
-        { 'Accept' => 'application/json' }
+        { uid: user_id }
       )
       expect(response.status).to eq(200)
+      expect(response.body).to eq('foo')
     end
 
   end

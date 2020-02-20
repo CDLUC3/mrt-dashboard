@@ -40,15 +40,13 @@ class FileController < ApplicationController
     return unless response.status == 200
     url = presigned['url']
     response.headers['Location'] = url
-    render status: 303, :text => ''
+    render status: 303, text: ''
   end
 
   def storage_key
     sql = 'select 123 as foo where 1=1'
     results = ActiveRecord::Base.connection.exec_query(sql)
     return nil unless results.present?
-    puts('TBTB')
-    puts(results)
     render status: 200, text: 'foo'
   end
 
@@ -87,7 +85,7 @@ class FileController < ApplicationController
       JSON.parse(r.content)
     else
       json = JSON.parse(r.content).with_indifferent_access
-      render status: r.status, :json => json
+      render status: r.status, json: json
     end
   end
 
@@ -112,14 +110,13 @@ class FileController < ApplicationController
       JSON.parse(r.content).with_indifferent_access
     else
       json = JSON.parse(r.content).with_indifferent_access
-      render status: r.status, :json => json
+      render status: r.status, json: json
     end
   end
 
   def download_response
     {
-      url: download_url,
-      expires: 'tbd'
+      url: download_url
     }.with_indifferent_access
   end
 

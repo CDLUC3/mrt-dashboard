@@ -7,3 +7,4 @@ Metrics/BlockLength:
 Metrics/ClassLength:
   Exclude:
   - 'controllers/application_controller.rb'
+  - 'controllers/file_controller.rb'
