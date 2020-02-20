@@ -44,7 +44,7 @@ class FileController < ApplicationController
   end
 
   def storage_key
-    sql = "select 123 as foo where now() > '2022-01-01'"
+    sql = "select 123 where now() > '2022-01-01'"
     results = ActiveRecord::Base.connection.exec_query(sql)
     return nil unless results.present?
     render status: 200, text: 'foo'
