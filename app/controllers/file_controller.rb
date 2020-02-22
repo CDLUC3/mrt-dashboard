@@ -43,15 +43,66 @@ class FileController < ApplicationController
     render status: 303, text: ''
   end
 
+  # rubocop:disable all
   def storage_key
+    version = @file.inv_version
+    obj = version.inv_object
     sql = %{
-      select count(*)
-      from inv_files
+      SELECT
+        n.NUMBER AS node,
+        n.logical_volume,
+        o.version_number,
+        o.md5_3,
+        f.billable_size,
+        v.ark,
+        v.NUMBER AS key_version,
+        f.pathname
+      FROM
+        inv_versions AS v,
+        inv_nodes_inv_objects AS NO,
+        inv_nodes AS n,
+        inv_files AS f,
+        inv_objects AS o
+      WHERE
+        v.ark = ?
+        #if version is > 0
+        AND f.pathname = ?
+        AND o.id = v.inv_object_id
+        AND NO.role = 'primary'
+        AND f.inv_version_id = v.id
+        AND NO.inv_object_id = v.inv_object_id
+        AND n.id = NO.inv_node_id
+        AND f.billable_size > 0
     }
-    results = ActiveRecord::Base.connection.exec_query(sql)
-    return nil unless results.present?
-    render status: 200, text: 'foo'
+    sql2 = sql + ' AND v.number <= ?'
+    ret = {status: 404, message: 'Not found'}
+    if version.number == 0
+      results = ActiveRecord::Base
+        .connection
+        .raw_connection
+        .prepare(sql)
+        .execute(version.ark, @file.pathname)
+    else
+      results = ActiveRecord::Base
+        .connection
+        .raw_connection
+        .prepare(sql2)
+        .execute(version.ark, @file.pathname, version.number)
+    end
+
+    if results.present?
+      results.each do |row|
+        ret = {
+          status: 200,
+          message: '',
+          node_id: row[1],
+          key: row[5] + '|' + row[6].to_s + '|' + row[7]
+        }
+      end
+    end
+    render ret['status'], json: ret.to_json
   end
+  # rubocop:enable all
 
   private
 

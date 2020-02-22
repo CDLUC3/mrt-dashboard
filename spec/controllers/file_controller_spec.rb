@@ -39,7 +39,8 @@ describe FileController do
       inv_object: object,
       inv_version: object.current_version,
       pathname: 'producer/foo.bin',
-      mime_type: 'application/octet-stream'
+      mime_type: 'application/octet-stream',
+      billable_size: 1000
     )
 
     @pathname = inv_file.pathname
@@ -335,21 +336,13 @@ describe FileController do
   describe ':storage_key' do
     attr_reader :params
 
-    def mock_response(status = 200, message = '', json = {})
-      json['status'] = status
-      json['message'] = message
-      mockresp = instance_double(HTTP::Message)
-      allow(mockresp).to receive(:status).and_return(status)
-      allow(mockresp).to receive(:content).and_return(json.to_json)
-      mockresp
-    end
-
     before(:each) do
-      @params = { object: object_ark, file: pathname, version: object.current_version.number }
     end
 
-    it 'gets storage node and key for the file' do
+    it 'gets storage node and key for the file for a specific version' do
       mock_permissions_all(user_id, collection_id)
+
+      params = { object: object_ark, file: pathname, version: object.current_version.number }
 
       get(
         :storage_key,
@@ -357,9 +350,26 @@ describe FileController do
         { uid: user_id }
       )
       expect(response.status).to eq(200)
-      expect(response.body).to eq('foo')
+      json = JSON.parse(response.body)
+      expect(json['node_id']).to eq('nodes-mrt-mock|9999')
+      expect(json['key']).to eq(object.current_version.ark + '|' + object.current_version.number.to_s + '|' + @pathname)
     end
 
+    it 'gets storage node and key for the file for version 0' do
+      mock_permissions_all(user_id, collection_id)
+
+      params = { object: object_ark, file: pathname, version: 0 }
+
+      get(
+        :storage_key,
+        params,
+        { uid: user_id }
+      )
+      expect(response.status).to eq(200)
+      json = JSON.parse(response.body)
+      expect(json['node_id']).to eq('nodes-mrt-mock|9999')
+      expect(json['key']).to eq(object.current_version.ark + '|' + object.current_version.number.to_s + '|' + @pathname)
+    end
   end
 
 end
