@@ -28,6 +28,9 @@ docker: &docker
   uri_3: "http://store:8080/store/manifest/"
   storage_presign_file: "http://storage:8080/presign-file"
 
+development:
+  <<: *docker
+
 stage:
   <<: *defaults
   dua_email_to:         [marisa.strong@ucop.edu, eric.lopatin@ucop.edu]
