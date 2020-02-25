@@ -3,17 +3,21 @@ require 'json'
 
 class FileController < ApplicationController
   before_filter :require_user
-  before_filter :redirect_to_latest_version
-  before_filter :load_file
+  before_filter(except: %i[storage_key]) do
+    redirect_to_latest_version
+  end
+  before_filter(except: %i[storage_key]) do
+    load_file
+  end
 
-  before_filter do
+  before_filter(except: %i[storage_key]) do
     unless current_user_can_download?(@file.inv_version.inv_object)
       flash[:error] = 'You do not have download permissions.'
       render file: "#{Rails.root}/public/401.html", status: 401, layout: false
     end
   end
 
-  before_filter(only: %i[download presign storage_key]) do
+  before_filter(only: %i[download presign]) do
     version = @file.inv_version
     obj = version.inv_object
     check_dua(obj, { object: obj, version: version, file: @file })
@@ -45,8 +49,9 @@ class FileController < ApplicationController
 
   # rubocop:disable all
   def storage_key
-    version = @file.inv_version
-    obj = version.inv_object
+    version = params_u(:version).to_i
+    ark = params_u(:object)
+    pathname = params_u(:file)
 
     sql = %{
       SELECT
@@ -75,20 +80,21 @@ class FileController < ApplicationController
         AND n.id = NO.inv_node_id
         AND f.billable_size > 0
     }
-    sql2 = sql + ' AND v.number <= ?'
-    ret = {status: 404, message: 'Not found'}
-    if params_u(:version) == 0
+    sql2 = sql + ' AND v.number = ?'
+    ret = {status: 404, message: 'Not found'}.with_indifferent_access
+
+    if version == 0
       results = ActiveRecord::Base
         .connection
         .raw_connection
         .prepare(sql)
-        .execute(version.ark, @file.pathname)
+        .execute(ark, pathname)
     else
       results = ActiveRecord::Base
         .connection
         .raw_connection
         .prepare(sql2)
-        .execute(version.ark, @file.pathname, version.number)
+        .execute(ark, pathname, version)
     end
 
     if results.present?
@@ -98,10 +104,10 @@ class FileController < ApplicationController
           message: '',
           node_id: row[1],
           key: row[5] + '|' + row[6].to_s + '|' + row[7]
-        }
+        }.with_indifferent_access
       end
     end
-    render ret['status'], json: ret.to_json
+    render status: ret['status'], json: ret.to_json
   end
   # rubocop:enable all
 

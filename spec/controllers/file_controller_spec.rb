@@ -34,6 +34,10 @@ describe FileController do
     collection.inv_objects << object
     @object_ark = object.ark
 
+    # Ensure the consistency of the object ark and version ark
+    object.current_version.ark = @object_ark
+    object.current_version.save!
+
     @inv_file = create(
       :inv_file,
       inv_object: object,
@@ -337,42 +341,37 @@ describe FileController do
     attr_reader :params
 
     before(:each) do
+      @params = { object: object_ark, file: pathname }
     end
 
     it 'gets storage node and key for the file for a specific version' do
       mock_permissions_all(user_id, collection_id)
 
+      @params[:version] = object.current_version.number
       get(
         :storage_key,
-        {
-          object: object_ark,
-          version: object.current_version.number,
-          file: @pathname
-        },
+        @params,
         { uid: user_id }
       )
       expect(response.status).to eq(200)
       json = JSON.parse(response.body)
       expect(json['node_id']).to eq('nodes-mrt-mock|9999')
-      expect(json['key']).to eq(object.current_version.ark + '|' + object.current_version.number.to_s + '|' + @pathname)
+      expect(json['key']).to eq(object_ark + '|' + @params[:version].to_s + '|' + @pathname)
     end
 
     it 'gets storage node and key for the file for version 0' do
       mock_permissions_all(user_id, collection_id)
 
+      @params[:version] = 0
       get(
         :storage_key,
-        {
-          object: object_ark,
-          version: 0,
-          file: @pathname
-        },
+        @params,
         { uid: user_id }
       )
       expect(response.status).to eq(200)
       json = JSON.parse(response.body)
       expect(json['node_id']).to eq('nodes-mrt-mock|9999')
-      expect(json['key']).to eq(object.current_version.ark + '|' + object.current_version.number.to_s + '|' + @pathname)
+      expect(json['key']).to eq(object_ark + '|' + object.current_version.number.to_s + '|' + @pathname)
     end
 
     it 'gets storage node and key for the file for a specific version 2' do
@@ -394,13 +393,10 @@ describe FileController do
       )
       mock_permissions_all(user_id, collection_id)
 
+      @params[:version] = object.current_version.number + 1
       get(
         :storage_key,
-        {
-          object: object_ark,
-          version: object.current_version.number + 1,
-          file: @pathname
-        },
+        @params,
         { uid: user_id }
       )
       expect(response.status).to eq(200)
@@ -409,6 +405,30 @@ describe FileController do
       expect(json['key']).to eq(ver.ark + '|' + ver.number.to_s + '|' + @pathname)
     end
 
+    it 'gets 404 when requesting version 3' do
+      mock_permissions_all(user_id, collection_id)
+
+      @params[:version] = 3
+      get(
+        :storage_key,
+        @params,
+        { uid: user_id }
+      )
+      expect(response.status).to eq(404)
+    end
+
+    it 'gets 404 when requesting non existent ark' do
+      mock_permissions_all(user_id, collection_id)
+
+      @params[:object] = 'ark:does-not-exist'
+      @params[:version] = 1
+      get(
+        :storage_key,
+        @params,
+        { uid: user_id }
+      )
+      expect(response.status).to eq(404)
+    end
   end
 
 end
