@@ -342,11 +342,13 @@ describe FileController do
     it 'gets storage node and key for the file for a specific version' do
       mock_permissions_all(user_id, collection_id)
 
-      params = { object: object_ark, file: pathname, version: object.current_version.number }
-
       get(
         :storage_key,
-        params,
+        {
+          object: object_ark,
+          version: object.current_version.number,
+          file: @pathname
+        },
         { uid: user_id }
       )
       expect(response.status).to eq(200)
@@ -358,11 +360,13 @@ describe FileController do
     it 'gets storage node and key for the file for version 0' do
       mock_permissions_all(user_id, collection_id)
 
-      params = { object: object_ark, file: pathname, version: 0 }
-
       get(
         :storage_key,
-        params,
+        {
+          object: object_ark,
+          version: 0,
+          file: @pathname
+        },
         { uid: user_id }
       )
       expect(response.status).to eq(200)
@@ -370,6 +374,41 @@ describe FileController do
       expect(json['node_id']).to eq('nodes-mrt-mock|9999')
       expect(json['key']).to eq(object.current_version.ark + '|' + object.current_version.number.to_s + '|' + @pathname)
     end
+
+    it 'gets storage node and key for the file for a specific version 2' do
+      ver = create(
+        :inv_version,
+        inv_object: object,
+        ark: object_ark,
+        number: object.current_version.number + 1,
+        note: 'Sample Version 2'
+      )
+
+      @inv_file = create(
+        :inv_file,
+        inv_object: object,
+        inv_version: ver,
+        pathname: 'producer/foo.bin',
+        mime_type: 'application/octet-stream',
+        billable_size: 2000
+      )
+      mock_permissions_all(user_id, collection_id)
+
+      get(
+        :storage_key,
+        {
+          object: object_ark,
+          version: object.current_version.number + 1,
+          file: @pathname
+        },
+        { uid: user_id }
+      )
+      expect(response.status).to eq(200)
+      json = JSON.parse(response.body)
+      expect(json['node_id']).to eq('nodes-mrt-mock|9999')
+      expect(json['key']).to eq(ver.ark + '|' + ver.number.to_s + '|' + @pathname)
+    end
+
   end
 
 end

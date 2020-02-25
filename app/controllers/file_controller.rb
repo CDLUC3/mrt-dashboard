@@ -47,6 +47,7 @@ class FileController < ApplicationController
   def storage_key
     version = @file.inv_version
     obj = version.inv_object
+
     sql = %{
       SELECT
         n.NUMBER AS node,
@@ -76,7 +77,7 @@ class FileController < ApplicationController
     }
     sql2 = sql + ' AND v.number <= ?'
     ret = {status: 404, message: 'Not found'}
-    if version.number == 0
+    if params_u(:version) == 0
       results = ActiveRecord::Base
         .connection
         .raw_connection
