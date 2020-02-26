@@ -143,7 +143,7 @@ class FileController < ApplicationController
     version = @file.inv_version
     obj = version.inv_object
     r = HTTPClient.new.get(
-      storage_key_file_url({ object: obj.ark, version: version.number, file: @file.pathname }),
+      APP_CONFIG['merritt_api_base_url'] + storage_key_file_path({ object: obj.ark, version: version.number, file: @file.pathname }),
       {},
       { 'Accept' => 'application/json' }
     )

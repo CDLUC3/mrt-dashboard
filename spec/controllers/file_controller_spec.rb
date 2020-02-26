@@ -186,7 +186,7 @@ describe FileController do
 
     def expect_get_storage_key_success
       expect(client).to receive(:get).with(
-        storage_key_file_url(params),
+        APP_CONFIG['merritt_api_base_url'] + storage_key_file_path(params),
         {},
         { 'Accept' => 'application/json' }
       ).and_return(mock_response(200, '', my_node_key(params)))
@@ -235,7 +235,7 @@ describe FileController do
       mock_permissions_all(user_id, collection_id)
 
       expect(client).to receive(:get).with(
-        storage_key_file_url(params),
+        APP_CONFIG['merritt_api_base_url'] + storage_key_file_path(params),
         {},
         { 'Accept' => 'application/json' }
       ).and_return(mock_response(404, 'File not found'))
@@ -251,7 +251,7 @@ describe FileController do
       mock_permissions_all(user_id, collection_id)
 
       expect(client).to receive(:get).with(
-        storage_key_file_url(params),
+        APP_CONFIG['merritt_api_base_url'] + storage_key_file_path(params),
         {},
         { 'Accept' => 'application/json' }
       ).and_return(mock_response(500, 'System Error'))
