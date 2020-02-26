@@ -41,6 +41,7 @@ class FileController < ApplicationController
     node_key = presign_node_key
     return unless response.status == 200
     presigned = presign_get_by_node_key(node_key)
+    puts(presigned)
     return unless response.status == 200
     url = presigned['url']
     response.headers['Location'] = url
