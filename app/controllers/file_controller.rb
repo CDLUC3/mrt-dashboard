@@ -2,7 +2,9 @@ require 'httpclient'
 require 'json'
 
 class FileController < ApplicationController
-  before_filter :require_user
+  before_filter(except: %i[storage_key]) do
+    require_user
+  end
   before_filter(except: %i[storage_key]) do
     redirect_to_latest_version
   end
