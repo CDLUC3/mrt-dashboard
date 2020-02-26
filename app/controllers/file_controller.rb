@@ -17,10 +17,15 @@ class FileController < ApplicationController
     end
   end
 
-  before_filter(only: %i[download presign]) do
+  before_filter(only: %i[download]) do
     version = @file.inv_version
     obj = version.inv_object
     check_dua(obj, { object: obj, version: version, file: @file })
+  end
+
+  before_filter(only: %i[presign]) do
+    version = @file.inv_version
+    obj = version.inv_object
   end
 
   def download
