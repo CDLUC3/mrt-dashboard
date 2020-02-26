@@ -147,10 +147,12 @@ class FileController < ApplicationController
       {},
       { 'Accept' => 'application/json' }
     )
+    puts(r)
     eval_presign_node_key(r)
   end
 
   def eval_presign_node_key(r)
+    puts("TBTB in eval")
     if r.status == 200
       JSON.parse(r.content)
     else
