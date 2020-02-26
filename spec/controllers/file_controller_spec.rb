@@ -168,8 +168,10 @@ describe FileController do
 
     def my_presign_wrapper
       {
+        status: 200,
         url: my_presign,
-        expires: '2020-11-05T08:15:30-08:00'
+        expires: '2020-11-05T08:15:30-08:00',
+        message: 'Presigned URL created'
       }.with_indifferent_access
     end
 
@@ -184,8 +186,8 @@ describe FileController do
 
     def expect_get_storage_key_success
       expect(client).to receive(:get).with(
-        :storage_key,
-        params,
+        storage_key_file_url(params),
+        {},
         { 'Accept' => 'application/json' }
       ).and_return(mock_response(200, '', my_node_key(params)))
     end
@@ -233,8 +235,8 @@ describe FileController do
       mock_permissions_all(user_id, collection_id)
 
       expect(client).to receive(:get).with(
-        :storage_key,
-        params,
+        storage_key_file_url(params),
+        {},
         { 'Accept' => 'application/json' }
       ).and_return(mock_response(404, 'File not found'))
 
@@ -249,8 +251,8 @@ describe FileController do
       mock_permissions_all(user_id, collection_id)
 
       expect(client).to receive(:get).with(
-        :storage_key,
-        params,
+        storage_key_file_url(params),
+        {},
         { 'Accept' => 'application/json' }
       ).and_return(mock_response(500, 'System Error'))
 

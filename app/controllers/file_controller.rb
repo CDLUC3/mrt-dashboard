@@ -134,8 +134,12 @@ class FileController < ApplicationController
     version = @file.inv_version
     obj = version.inv_object
     r = HTTPClient.new.get(
-      :storage_key,
-      { object: obj.ark, version: version.number, file: @file.pathname },
+      storage_key_file_url({
+        object: obj.ark,
+        version: version.number,
+        file: @file.pathname
+      }),
+      {},
       { 'Accept' => 'application/json' }
     )
     eval_presign_node_key(r)
