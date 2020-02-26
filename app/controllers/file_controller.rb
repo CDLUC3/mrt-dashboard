@@ -44,6 +44,7 @@ class FileController < ApplicationController
   def presign
     # The following are private methods... can I invoke rspec tests on these methods?
     node_key = presign_node_key
+    puts(node_key)
     return unless response.status == 200
     presigned = presign_get_by_node_key(node_key)
     puts(presigned)
