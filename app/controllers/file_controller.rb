@@ -134,7 +134,7 @@ class FileController < ApplicationController
     version = @file.inv_version
     obj = version.inv_object
     r = HTTPClient.new.get(
-      APP_CONFIG['get_storage_key_file'],
+      :storage_key,
       { object: obj.ark, version: version.number, file: @file.pathname },
       { 'Accept' => 'application/json' }
     )

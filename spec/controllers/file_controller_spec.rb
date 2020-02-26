@@ -184,7 +184,7 @@ describe FileController do
 
     def expect_get_storage_key_success
       expect(client).to receive(:get).with(
-        APP_CONFIG['get_storage_key_file'],
+        :storage_key,
         params,
         { 'Accept' => 'application/json' }
       ).and_return(mock_response(200, '', my_node_key(params)))
@@ -233,7 +233,7 @@ describe FileController do
       mock_permissions_all(user_id, collection_id)
 
       expect(client).to receive(:get).with(
-        APP_CONFIG['get_storage_key_file'],
+        :storage_key,
         params,
         { 'Accept' => 'application/json' }
       ).and_return(mock_response(404, 'File not found'))
@@ -249,7 +249,7 @@ describe FileController do
       mock_permissions_all(user_id, collection_id)
 
       expect(client).to receive(:get).with(
-        APP_CONFIG['get_storage_key_file'],
+        :storage_key,
         params,
         { 'Accept' => 'application/json' }
       ).and_return(mock_response(500, 'System Error'))
