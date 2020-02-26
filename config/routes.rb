@@ -41,7 +41,7 @@ MrtDashboard::Application.routes.draw do
   get('d/:object/:version' => 'version#download')
   get('d/:object/:version/*file' => 'file#download', :format => false)
   get('api/presign-file/:object/:version/*file' => 'file#presign', :format => false, :as => 'presign_file')
-  get('api/get-storage-key-file/:object/:version/*file' => 'file#storage-key', :format => false, :as => 'storage_key_file')
+  get('api/get-storage-key-file/:object/:version/*file' => 'file#storage_key', :format => false, :as => 'storage_key_file')
   get('u/:object' => 'object#download_user')
   get('u/:object/:version' => 'version#download_user')
   get('dm/:object' => 'object#download_manifest')
