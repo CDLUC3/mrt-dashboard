@@ -27,7 +27,7 @@ class FileController < ApplicationController
 
   before_filter(only: %i[presign]) do
     version = @file.inv_version
-    obj = version.inv_object
+    version.inv_object
   end
 
   def download

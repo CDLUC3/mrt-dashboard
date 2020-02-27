@@ -154,7 +154,7 @@ describe FileController do
     def my_node_key_params(params)
       r = get(:storage_key, params, { uid: user_id })
       json = JSON.parse(r.body)
-      ret = {
+      {
         node: json['node_id'],
         key: json['key']
       }
