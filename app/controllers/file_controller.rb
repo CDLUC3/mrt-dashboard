@@ -45,6 +45,8 @@ class FileController < ApplicationController
   # https://github.com/CDLUC3/mrt-doc/blob/master/endopoints/ui/presign-file.md
   def presign
     nk = storage_key_do
+    puts("TBTB 1")
+    puts(nk)
     presigned = presign_get_by_node_key(nk)
     return unless response.status == 200
     url = presigned['url']
@@ -145,6 +147,7 @@ class FileController < ApplicationController
       node: json[:node_id], key: json[:key]
     }.with_indifferent_access
 
+    puts("TBTB 2")
     puts(APP_CONFIG['storage_presign_file'])
     puts(nk)
     r = HTTPClient.new.get(
