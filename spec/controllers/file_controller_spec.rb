@@ -151,18 +151,12 @@ describe FileController do
       inv_file.bytestream_uri.to_s + '?presign=pretend'
     end
 
-    def my_node_key(params)
-      {
-        'node_id': 1111,
-        'key': params[:file]
-      }.with_indifferent_access
-    end
-
     def my_node_key_params(params)
-      n = my_node_key(params)
-      {
-        node: n['node_id'],
-        key: n['key']
+      r = get(:storage_key, params, { uid: user_id })
+      json = JSON.parse(r.body)
+      ret = {
+        node: json['node_id'],
+        key: json['key']
       }
     end
 
@@ -184,14 +178,6 @@ describe FileController do
       mockresp
     end
 
-    def expect_get_storage_key_success
-      expect(client).to receive(:get).with(
-        APP_CONFIG['merritt_api_base_url'] + storage_key_file_path(params),
-        {},
-        { 'Accept' => 'application/json' }
-      ).and_return(mock_response(200, '', my_node_key(params)))
-    end
-
     before(:each) do
       @params = { object: object_ark, file: pathname, version: object.current_version.number }
     end
@@ -209,8 +195,6 @@ describe FileController do
 
     it 'redirects to presign url for the file' do
       mock_permissions_all(user_id, collection_id)
-
-      expect_get_storage_key_success
 
       expect(client).to receive(:get).with(
         APP_CONFIG['storage_presign_file'],
@@ -231,42 +215,9 @@ describe FileController do
       end
     end
 
-    it 'returns 404 if presign lookup returns 404 - not found' do
-      mock_permissions_all(user_id, collection_id)
-
-      expect(client).to receive(:get).with(
-        APP_CONFIG['merritt_api_base_url'] + storage_key_file_path(params),
-        {},
-        { 'Accept' => 'application/json' }
-      ).and_return(mock_response(404, 'File not found'))
-
-      get(:presign, params, { uid: user_id })
-      expect(response.status).to eq(404)
-      json = JSON.parse(response.body)
-      expect(json['status']).to eq(response.status)
-      expect(json['message']).to eq('File not found')
-    end
-
-    it 'returns 500 if presign lookup returns 500' do
-      mock_permissions_all(user_id, collection_id)
-
-      expect(client).to receive(:get).with(
-        APP_CONFIG['merritt_api_base_url'] + storage_key_file_path(params),
-        {},
-        { 'Accept' => 'application/json' }
-      ).and_return(mock_response(500, 'System Error'))
-
-      get(:presign, params, { uid: user_id })
-      expect(response.status).to eq(500)
-      json = JSON.parse(response.body)
-      expect(json['status']).to eq(response.status)
-      expect(json['message']).to eq('System Error')
-    end
-
     it 'returns 404 if presign url returns 404 - not found' do
       mock_permissions_all(user_id, collection_id)
 
-      expect_get_storage_key_success
       expect(client).to receive(:get).with(
         APP_CONFIG['storage_presign_file'],
         my_node_key_params(params),
@@ -283,7 +234,6 @@ describe FileController do
     it 'returns 403 if presign url not supported - Glacier' do
       mock_permissions_all(user_id, collection_id)
 
-      expect_get_storage_key_success
       expect(client).to receive(:get).with(
         APP_CONFIG['storage_presign_file'],
         my_node_key_params(params),
@@ -300,7 +250,6 @@ describe FileController do
     it 'returns 500 if presign url returns 500' do
       mock_permissions_all(user_id, collection_id)
 
-      expect_get_storage_key_success
       expect(client).to receive(:get).with(
         APP_CONFIG['storage_presign_file'],
         my_node_key_params(params),
@@ -317,7 +266,6 @@ describe FileController do
     it 'redirects to download url when presign is unsupported' do
       mock_permissions_all(user_id, collection_id)
 
-      expect_get_storage_key_success
       expect(client).to receive(:get).with(
         APP_CONFIG['storage_presign_file'],
         my_node_key_params(params),
