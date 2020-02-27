@@ -49,7 +49,7 @@ class FileController < ApplicationController
     return unless response.status == 200
     url = presigned['url']
     response.headers['Location'] = url
-    render status: 303, text: ''
+    render status: 409, text: ''
   end
 
   def storage_key
