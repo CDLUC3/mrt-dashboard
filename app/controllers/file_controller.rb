@@ -49,7 +49,7 @@ class FileController < ApplicationController
     return unless response.status == 200
     url = presigned['url']
     response.headers['Location'] = url
-    render status: 409, text: ''
+    render status: 303, text: ''
   end
 
   def storage_key
@@ -145,11 +145,14 @@ class FileController < ApplicationController
       node: json[:node_id], key: json[:key]
     }.with_indifferent_access
 
+    puts(APP_CONFIG['storage_presign_file'])
+    puts(nk)
     r = HTTPClient.new.get(
       APP_CONFIG['storage_presign_file'],
       nk,
       { 'Accept' => 'application/json' }
     )
+    puts(r)
     eval_presign_get_by_node_key(r)
   end
 
