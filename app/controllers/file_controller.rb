@@ -45,8 +45,6 @@ class FileController < ApplicationController
   # https://github.com/CDLUC3/mrt-doc/blob/master/endopoints/ui/presign-file.md
   def presign
     nk = storage_key_do
-    puts("TBTB 1")
-    puts(nk)
     presigned = presign_get_by_node_key(nk)
     return unless response.status == 200
     url = presigned['url']
@@ -121,6 +119,7 @@ class FileController < ApplicationController
         }
       end
     end
+    ret['url'] = get_presign_url(ret.to_json)
     ret.with_indifferent_access
   end
   # rubocop:enable all
@@ -141,21 +140,18 @@ class FileController < ApplicationController
     raise ActiveRecord::RecordNotFound if @file.nil?
   end
 
+  def get_presign_url(json)
+    obj = JSON.parse(json).with_indifferent_access
+    "#{APP_CONFIG['storage_presign_file']}/#{ERB::Util.url_encode(obj[:node_id])}/#{ERB::Util.url_encode(obj[:key])}"
+  end
+
   # https://github.com/CDLUC3/mrt-doc/blob/master/endopoints/storage/presign-file.md
   def presign_get_by_node_key(json)
-    nk = {
-      node: json[:node_id], key: json[:key]
-    }.with_indifferent_access
-
-    puts("TBTB 2")
-    puts(APP_CONFIG['storage_presign_file'])
-    puts(nk)
     r = HTTPClient.new.get(
-      APP_CONFIG['storage_presign_file'],
-      nk,
-      { 'Accept' => 'application/json' }
+      get_presign_url(json),
+      {},
+      {}
     )
-    puts(r)
     eval_presign_get_by_node_key(r)
   end
 
