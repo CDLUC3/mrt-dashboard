@@ -2,12 +2,16 @@ require 'httpclient'
 require 'json'
 
 class FileController < ApplicationController
-  before_filter(except: %i[storage_key]) do
+  before_filter do
     require_user
   end
+
+  # Do not force redirect to latest version for key lookup
   before_filter(except: %i[storage_key]) do
     redirect_to_latest_version
   end
+
+  # Do not force load of file for key lookup
   before_filter(except: %i[storage_key]) do
     load_file
   end
@@ -19,15 +23,10 @@ class FileController < ApplicationController
     end
   end
 
-  before_filter(only: %i[download]) do
+  before_filter(only: %i[download presign]) do
     version = @file.inv_version
     obj = version.inv_object
     check_dua(obj, { object: obj, version: version, file: @file })
-  end
-
-  before_filter(only: %i[presign]) do
-    version = @file.inv_version
-    version.inv_object
   end
 
   def download
@@ -60,7 +59,7 @@ class FileController < ApplicationController
   private
 
   def get_storage_presign_url(obj)
-    "#{APP_CONFIG['storage_presign_file']}#{ERB::Util.url_encode(obj[:node_id])}/#{ERB::Util.url_encode(obj[:key])}"
+    "#{APP_CONFIG['storage_presign_file']}/#{ERB::Util.url_encode(obj[:node_id])}/#{ERB::Util.url_encode(obj[:key])}"
   end
 
   # rubocop:disable all
