@@ -59,6 +59,10 @@ class FileController < ApplicationController
 
   private
 
+  def get_storage_presign_url(obj)
+    "#{APP_CONFIG['storage_presign_file']}#{ERB::Util.url_encode(obj[:node_id])}/#{ERB::Util.url_encode(obj[:key])}"
+  end
+
   # rubocop:disable all
   def storage_key_do
     version = params_u(:version).to_i
@@ -119,7 +123,9 @@ class FileController < ApplicationController
         }
       end
     end
-    ret['url'] = get_presign_url(ret.to_json)
+
+    # For debugging, show url in thre return object
+    ret[:url] = get_storage_presign_url(ret.with_indifferent_access)
     ret.with_indifferent_access
   end
   # rubocop:enable all
@@ -140,15 +146,10 @@ class FileController < ApplicationController
     raise ActiveRecord::RecordNotFound if @file.nil?
   end
 
-  def get_presign_url(json)
-    obj = JSON.parse(json).with_indifferent_access
-    "#{APP_CONFIG['storage_presign_file']}/#{ERB::Util.url_encode(obj[:node_id])}/#{ERB::Util.url_encode(obj[:key])}"
-  end
-
   # https://github.com/CDLUC3/mrt-doc/blob/master/endopoints/storage/presign-file.md
-  def presign_get_by_node_key(json)
+  def presign_get_by_node_key(obj)
     r = HTTPClient.new.get(
-      get_presign_url(json),
+      get_storage_presign_url(obj),
       {},
       {}
     )
