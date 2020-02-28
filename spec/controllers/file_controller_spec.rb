@@ -147,6 +147,10 @@ describe FileController do
   describe ':presign' do
     attr_reader :params
 
+    def get_storage_presign_url(obj)
+      "#{APP_CONFIG['storage_presign_file']}#{ERB::Util.url_encode(obj[:node_id])}/#{ERB::Util.url_encode(obj[:key])}"
+    end
+
     def my_presign
       inv_file.bytestream_uri.to_s + '?presign=pretend'
     end
@@ -155,7 +159,7 @@ describe FileController do
       r = get(:storage_key, params, { uid: user_id })
       json = JSON.parse(r.body)
       {
-        node: json['node_id'],
+        node_id: json['node_id'],
         key: json['key']
       }
     end
@@ -197,9 +201,9 @@ describe FileController do
       mock_permissions_all(user_id, collection_id)
 
       expect(client).to receive(:get).with(
-        APP_CONFIG['storage_presign_file'],
-        my_node_key_params(params),
-        { 'Accept' => 'application/json' }
+        get_storage_presign_url(my_node_key_params(params)),
+        {},
+        {}
       ).and_return(mock_response(200, '', my_presign_wrapper))
 
       get(:presign, params, { uid: user_id })
@@ -219,9 +223,9 @@ describe FileController do
       mock_permissions_all(user_id, collection_id)
 
       expect(client).to receive(:get).with(
-        APP_CONFIG['storage_presign_file'],
-        my_node_key_params(params),
-        { 'Accept' => 'application/json' }
+        get_storage_presign_url(my_node_key_params(params)),
+        {},
+        {}
       ).and_return(mock_response(404, 'File not found'))
 
       get(:presign, params, { uid: user_id })
@@ -235,9 +239,9 @@ describe FileController do
       mock_permissions_all(user_id, collection_id)
 
       expect(client).to receive(:get).with(
-        APP_CONFIG['storage_presign_file'],
-        my_node_key_params(params),
-        { 'Accept' => 'application/json' }
+        get_storage_presign_url(my_node_key_params(params)),
+        {},
+        {}
       ).and_return(mock_response(403, 'File is in offline storage, request is not supported'))
 
       get(:presign, params, { uid: user_id })
@@ -251,9 +255,9 @@ describe FileController do
       mock_permissions_all(user_id, collection_id)
 
       expect(client).to receive(:get).with(
-        APP_CONFIG['storage_presign_file'],
-        my_node_key_params(params),
-        { 'Accept' => 'application/json' }
+        get_storage_presign_url(my_node_key_params(params)),
+        {},
+        {}
       ).and_return(mock_response(500, 'System Error'))
 
       get(:presign, params, { uid: user_id })
@@ -267,9 +271,9 @@ describe FileController do
       mock_permissions_all(user_id, collection_id)
 
       expect(client).to receive(:get).with(
-        APP_CONFIG['storage_presign_file'],
-        my_node_key_params(params),
-        { 'Accept' => 'application/json' }
+        get_storage_presign_url(my_node_key_params(params)),
+        {},
+        {}
       ).and_return(mock_response(409, 'Redirecting to download URL', my_presign_wrapper))
 
       get(:presign, params, { uid: user_id })
