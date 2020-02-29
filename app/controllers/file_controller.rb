@@ -59,7 +59,7 @@ class FileController < ApplicationController
   private
 
   def get_storage_presign_url(obj)
-    "#{APP_CONFIG['storage_presign_file']}/#{ERB::Util.url_encode(obj[:node_id])}/#{ERB::Util.url_encode(obj[:key])}"
+    "#{APP_CONFIG['storage_presign_file']}/#{obj[:node_id]}/#{obj[:key]}"
   end
 
   # rubocop:disable all
@@ -117,8 +117,8 @@ class FileController < ApplicationController
         ret = {
           status: 200,
           message: '',
-          node_id: row[1],
-          key: row[5] + '|' + row[6].to_s + '|' + row[7]
+          node_id: row[0],
+          key: ERB::Util.url_encode(row[5]) + '/' + row[6].to_s + '/' + ERB::Util.url_encode(row[7])
         }
       end
     end

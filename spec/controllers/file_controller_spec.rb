@@ -148,7 +148,7 @@ describe FileController do
     attr_reader :params
 
     def get_storage_presign_url(obj)
-      "#{APP_CONFIG['storage_presign_file']}/#{ERB::Util.url_encode(obj[:node_id])}/#{ERB::Util.url_encode(obj[:key])}"
+      "#{APP_CONFIG['storage_presign_file']}/#{obj[:node_id]}/#{obj[:key]}"
     end
 
     def my_presign
