@@ -56,19 +56,19 @@ class FileController < ApplicationController
     render status: ret['status'], json: ret.to_json
   end
 
-  def build_storage_key(ark, version, file)
+  def self.build_storage_key(ark, version, file)
     "#{ark}|#{version}|#{file}"
   end
 
-  def encode_storage_key(ark, version, file)
-    ERB::Util.url_encode(build_storage_key(ark, version, file))
+  def self.encode_storage_key(ark, version, file)
+    ERB::Util.url_encode(FileController.build_storage_key(ark, version, file))
+  end
+
+  def self.get_storage_presign_url(obj)
+    "#{APP_CONFIG['storage_presign_file']}/#{obj[:node_id]}/#{obj[:key]}"
   end
 
   private
-
-  def get_storage_presign_url(obj)
-    "#{APP_CONFIG['storage_presign_file']}#{obj[:node_id]}/#{obj[:key]}"
-  end
 
   # rubocop:disable all
   def storage_key_do
@@ -126,13 +126,13 @@ class FileController < ApplicationController
           status: 200,
           message: '',
           node_id: row[0],
-          key: encode_storage_key(row[5], row[6], row[7])
+          key: FileController.encode_storage_key(row[5], row[6], row[7])
         }
       end
     end
 
     # For debugging, show url in thre return object
-    ret[:url] = get_storage_presign_url(ret.with_indifferent_access)
+    ret[:url] = FileController.get_storage_presign_url(ret.with_indifferent_access)
     ret.with_indifferent_access
   end
   # rubocop:enable all
@@ -156,7 +156,7 @@ class FileController < ApplicationController
   # https://github.com/CDLUC3/mrt-doc/blob/master/endopoints/storage/presign-file.md
   def presign_get_by_node_key(obj)
     r = HTTPClient.new.get(
-      get_storage_presign_url(obj),
+      FileController.get_storage_presign_url(obj),
       {},
       {}
     )
@@ -182,10 +182,6 @@ class FileController < ApplicationController
 
   def external_download_url
     @file.external_bytestream_uri.to_s
-  end
-
-  def download_url
-    @file.bytestream_uri.to_s
   end
 
 end

@@ -1,4 +1,5 @@
 require 'rails_helper'
+require 'file_controller'
 
 describe FileController do
 
@@ -147,10 +148,6 @@ describe FileController do
   describe ':presign' do
     attr_reader :params
 
-    def get_storage_presign_url(obj)
-      "#{APP_CONFIG['storage_presign_file']}#{obj[:node_id]}/#{obj[:key]}"
-    end
-
     def my_presign
       inv_file.bytestream_uri.to_s + '?presign=pretend'
     end
@@ -201,7 +198,7 @@ describe FileController do
       mock_permissions_all(user_id, collection_id)
 
       expect(client).to receive(:get).with(
-        get_storage_presign_url(my_node_key_params(params)),
+        FileController.get_storage_presign_url(my_node_key_params(params)),
         {},
         {}
       ).and_return(mock_response(200, '', my_presign_wrapper))
@@ -223,7 +220,7 @@ describe FileController do
       mock_permissions_all(user_id, collection_id)
 
       expect(client).to receive(:get).with(
-        get_storage_presign_url(my_node_key_params(params)),
+        FileController.get_storage_presign_url(my_node_key_params(params)),
         {},
         {}
       ).and_return(mock_response(404, 'File not found'))
@@ -239,7 +236,7 @@ describe FileController do
       mock_permissions_all(user_id, collection_id)
 
       expect(client).to receive(:get).with(
-        get_storage_presign_url(my_node_key_params(params)),
+        FileController.get_storage_presign_url(my_node_key_params(params)),
         {},
         {}
       ).and_return(mock_response(403, 'File is in offline storage, request is not supported'))
@@ -255,7 +252,7 @@ describe FileController do
       mock_permissions_all(user_id, collection_id)
 
       expect(client).to receive(:get).with(
-        get_storage_presign_url(my_node_key_params(params)),
+        FileController.get_storage_presign_url(my_node_key_params(params)),
         {},
         {}
       ).and_return(mock_response(500, 'System Error'))
@@ -271,7 +268,7 @@ describe FileController do
       mock_permissions_all(user_id, collection_id)
 
       expect(client).to receive(:get).with(
-        get_storage_presign_url(my_node_key_params(params)),
+        FileController.get_storage_presign_url(my_node_key_params(params)),
         {},
         {}
       ).and_return(mock_response(409, 'Redirecting to download URL', my_presign_wrapper))
@@ -294,14 +291,6 @@ describe FileController do
   describe ':storage_key' do
     attr_reader :params
 
-    def build_storage_key(ark, version, file)
-      "#{ark}|#{version}|#{file}"
-    end
-
-    def encode_storage_key(ark, version, file)
-      ERB::Util.url_encode(build_storage_key(ark, version, file))
-    end
-
     before(:each) do
       @params = { object: object_ark, file: pathname }
     end
@@ -318,7 +307,7 @@ describe FileController do
       expect(response.status).to eq(200)
       json = JSON.parse(response.body)
       expect(json['node_id']).to eq(9999)
-      expect(json['key']).to eq(encode_storage_key(object_ark,  @params[:version], @pathname))
+      expect(json['key']).to eq(FileController.encode_storage_key(object_ark, @params[:version], @pathname))
     end
 
     it 'gets storage node and key for the file for version 0' do
@@ -333,7 +322,7 @@ describe FileController do
       expect(response.status).to eq(200)
       json = JSON.parse(response.body)
       expect(json['node_id']).to eq(9999)
-      expect(json['key']).to eq(encode_storage_key(object_ark,  object.current_version.number, @pathname))
+      expect(json['key']).to eq(FileController.encode_storage_key(object_ark, object.current_version.number, @pathname))
     end
 
     it 'gets storage node and key for the file for a specific version 2' do
@@ -364,7 +353,7 @@ describe FileController do
       expect(response.status).to eq(200)
       json = JSON.parse(response.body)
       expect(json['node_id']).to eq(9999)
-      expect(json['key']).to eq(encode_storage_key(ver.ark,  ver.number, @pathname))
+      expect(json['key']).to eq(FileController.encode_storage_key(ver.ark, ver.number, @pathname))
     end
 
     it 'gets 404 when requesting version 3' do
