@@ -56,10 +56,18 @@ class FileController < ApplicationController
     render status: ret['status'], json: ret.to_json
   end
 
+  def build_storage_key(ark, version, file)
+    "#{ark}|#{version}|#{file}"
+  end
+
+  def encode_storage_key(ark, version, file)
+    ERB::Util.url_encode(build_storage_key(ark, version, file))
+  end
+
   private
 
   def get_storage_presign_url(obj)
-    "#{APP_CONFIG['storage_presign_file']}/#{ERB::Util.url_encode(obj[:node_id])}/#{ERB::Util.url_encode(obj[:key])}"
+    "#{APP_CONFIG['storage_presign_file']}#{obj[:node_id]}/#{obj[:key]}"
   end
 
   # rubocop:disable all
@@ -117,8 +125,8 @@ class FileController < ApplicationController
         ret = {
           status: 200,
           message: '',
-          node_id: row[1],
-          key: row[5] + '|' + row[6].to_s + '|' + row[7]
+          node_id: row[0],
+          key: encode_storage_key(row[5], row[6], row[7])
         }
       end
     end
@@ -168,8 +176,12 @@ class FileController < ApplicationController
 
   def download_response
     {
-      url: download_url
+      url: external_download_url
     }.with_indifferent_access
+  end
+
+  def external_download_url
+    @file.external_bytestream_uri.to_s
   end
 
   def download_url

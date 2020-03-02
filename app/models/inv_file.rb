@@ -15,6 +15,10 @@ class InvFile < ActiveRecord::Base
     URI.parse("#{APP_CONFIG['uri_1']}#{inv_version.inv_object.node_number}/#{inv_version.inv_object.to_param}/#{inv_version.to_param}/#{to_param}")
   end
 
+  def external_bytestream_uri
+    URI.parse("#{APP_CONFIG['merritt_server']}/d/#{inv_version.inv_object.to_param}/#{inv_version.to_param}/#{to_param}")
+  end
+
   def exceeds_download_size?
     full_size > APP_CONFIG['max_download_size']
   end

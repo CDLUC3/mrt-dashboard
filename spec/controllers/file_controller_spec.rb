@@ -148,7 +148,7 @@ describe FileController do
     attr_reader :params
 
     def get_storage_presign_url(obj)
-      "#{APP_CONFIG['storage_presign_file']}/#{ERB::Util.url_encode(obj[:node_id])}/#{ERB::Util.url_encode(obj[:key])}"
+      "#{APP_CONFIG['storage_presign_file']}#{obj[:node_id]}/#{obj[:key]}"
     end
 
     def my_presign
@@ -281,7 +281,7 @@ describe FileController do
       expect(response.body).to eq('')
 
       expected_headers = {
-        'Location' => inv_file.bytestream_uri.to_s
+        'Location' => inv_file.external_bytestream_uri.to_s
       }
       response_headers = response.headers
       expected_headers.each do |header, value|
@@ -293,6 +293,14 @@ describe FileController do
 
   describe ':storage_key' do
     attr_reader :params
+
+    def build_storage_key(ark, version, file)
+      "#{ark}|#{version}|#{file}"
+    end
+
+    def encode_storage_key(ark, version, file)
+      ERB::Util.url_encode(build_storage_key(ark, version, file))
+    end
 
     before(:each) do
       @params = { object: object_ark, file: pathname }
@@ -309,8 +317,8 @@ describe FileController do
       )
       expect(response.status).to eq(200)
       json = JSON.parse(response.body)
-      expect(json['node_id']).to eq('nodes-mrt-mock|9999')
-      expect(json['key']).to eq(object_ark + '|' + @params[:version].to_s + '|' + @pathname)
+      expect(json['node_id']).to eq(9999)
+      expect(json['key']).to eq(encode_storage_key(object_ark,  @params[:version], @pathname))
     end
 
     it 'gets storage node and key for the file for version 0' do
@@ -324,8 +332,8 @@ describe FileController do
       )
       expect(response.status).to eq(200)
       json = JSON.parse(response.body)
-      expect(json['node_id']).to eq('nodes-mrt-mock|9999')
-      expect(json['key']).to eq(object_ark + '|' + object.current_version.number.to_s + '|' + @pathname)
+      expect(json['node_id']).to eq(9999)
+      expect(json['key']).to eq(encode_storage_key(object_ark,  object.current_version.number, @pathname))
     end
 
     it 'gets storage node and key for the file for a specific version 2' do
@@ -355,8 +363,8 @@ describe FileController do
       )
       expect(response.status).to eq(200)
       json = JSON.parse(response.body)
-      expect(json['node_id']).to eq('nodes-mrt-mock|9999')
-      expect(json['key']).to eq(ver.ark + '|' + ver.number.to_s + '|' + @pathname)
+      expect(json['node_id']).to eq(9999)
+      expect(json['key']).to eq(encode_storage_key(ver.ark,  ver.number, @pathname))
     end
 
     it 'gets 404 when requesting version 3' do
