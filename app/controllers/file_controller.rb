@@ -159,7 +159,8 @@ class FileController < ApplicationController
     r = HTTPClient.new.get(
       FileController.get_storage_presign_url(obj),
       {},
-      {}
+      {},
+      :follow_redirect => true
     )
     eval_presign_get_by_node_key(r)
   end
