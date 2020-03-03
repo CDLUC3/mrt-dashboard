@@ -65,7 +65,8 @@ class FileController < ApplicationController
   end
 
   def self.get_storage_presign_url(obj)
-    "#{APP_CONFIG['storage_presign_file']}/#{obj[:node_id]}/#{obj[:key]}"
+    # Note - assume the config variable contains a slash...do not duplicate the slash
+    "#{APP_CONFIG['storage_presign_file']}#{obj[:node_id]}/#{obj[:key]}"
   end
 
   private
