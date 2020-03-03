@@ -20,7 +20,7 @@
         <th>
           <% if can_download_object && !file_too_large %>
             <%# not using link_to speeds this up %>
-            <a href="/d/<%= object_id %>/<%= version_id %>/<%= file.to_param %>">
+            <a href="/api/presign-file/<%= object_id %>/<%= version_id %>/<%= file.to_param %>">
               <%= file_basename %>
             </a>
           <% else %>
