@@ -148,10 +148,12 @@ describe FileController do
   describe ':presign' do
     attr_reader :params
 
+    # Simulated presign url
     def my_presign
       inv_file.bytestream_uri.to_s + '?presign=pretend'
     end
 
+    # Simulated response from the storage service presign file request
     def my_node_key_params(params)
       r = get(:storage_key, params, { uid: user_id })
       json = JSON.parse(r.body)
@@ -161,15 +163,18 @@ describe FileController do
       }
     end
 
+    # Simulated presign response
     def my_presign_wrapper
+      exp = Time.now + (60 * 60 * 24)
       {
         status: 200,
         url: my_presign,
-        expires: '2020-11-05T08:15:30-08:00',
+        expires: exp.strftime('%Y-%m-%dT%H:%M:%S%:z'),
         message: 'Presigned URL created'
       }.with_indifferent_access
     end
 
+    # Mock a response from the storage presign file request
     def mock_response(status = 200, message = '', json = {})
       json['status'] = status
       json['message'] = message
@@ -192,6 +197,16 @@ describe FileController do
     it 'prevents presign without permissions' do
       get(:presign, params, { uid: user_id })
       expect(response.status).to eq(401)
+    end
+
+    it 'verify that presign request does not contain duplicate slashes' do
+      url = FileController.get_storage_presign_url(my_node_key_params(params))
+      expect(url).not_to include('//')
+    end
+
+    it 'verify that external download url does not contain duplicate slashes' do
+      url = inv_file.external_bytestream_uri.to_s
+      expect(url).not_to include('//')
     end
 
     it 'redirects to presign url for the file' do

@@ -41,6 +41,7 @@ class FileController < ApplicationController
     end
   end
 
+  # API Call to redirect to presign URL for a file.
   # https://github.com/CDLUC3/mrt-doc/blob/master/endopoints/ui/presign-file.md
   def presign
     nk = storage_key_do
@@ -51,26 +52,30 @@ class FileController < ApplicationController
     render status: 303, text: ''
   end
 
+  # API to return the node id and key for a file within the storage service.
   def storage_key
     ret = storage_key_do
     render status: ret['status'], json: ret.to_json
   end
 
+  # Construct a storage key from component parts
   def self.build_storage_key(ark, version, file)
     "#{ark}|#{version}|#{file}"
   end
 
+  # Encode a storage key constructed from component parts
   def self.encode_storage_key(ark, version, file)
     ERB::Util.url_encode(FileController.build_storage_key(ark, version, file))
   end
 
   def self.get_storage_presign_url(obj)
     # Note - assume the config variable contains a slash...do not duplicate the slash
-    "#{APP_CONFIG['storage_presign_file']}#{obj[:node_id]}/#{obj[:key]}"
+    "#{APP_CONFIG['storage_presign_file']}/#{obj[:node_id]}/#{obj[:key]}".gsub(%r{/\/+/}, '/')
   end
 
   private
 
+  # Perform database lookup for storge node and key
   # rubocop:disable all
   def storage_key_do
     version = params_u(:version).to_i
@@ -154,6 +159,7 @@ class FileController < ApplicationController
     raise ActiveRecord::RecordNotFound if @file.nil?
   end
 
+  # Call storage service to create a presigned URL for a file
   # https://github.com/CDLUC3/mrt-doc/blob/master/endopoints/storage/presign-file.md
   def presign_get_by_node_key(obj)
     r = HTTPClient.new.get(
@@ -167,12 +173,14 @@ class FileController < ApplicationController
 
   # this is a workaround until the storage service produces clean json
   def parse_response(body)
-    x = body.gsub(/\s+(expires|status|url|message)/, '"\1"')
-      .gsub(/\s+\}/, '}')
+    x = body.gsub(%r{/\s+(expires|status|url|message)/}, '"\1"')
+      .gsub(%r{/\s+\}/}, '}')
       .tr('\'', '"')
     JSON.parse(x)
   end
 
+  # Evaluate response from the storage service presign request
+  # If 409 is returned, redirect to the traditional file download
   def eval_presign_get_by_node_key(r)
     if r.status == 409
       download_response
@@ -184,12 +192,14 @@ class FileController < ApplicationController
     end
   end
 
+  # Return download URL as if it were a presigned URL
   def download_response
     {
       url: external_download_url
     }.with_indifferent_access
   end
 
+  # Construct outward-facing download URL
   def external_download_url
     @file.external_bytestream_uri.to_s
   end
