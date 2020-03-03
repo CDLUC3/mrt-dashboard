@@ -85,32 +85,37 @@ class FileController < ApplicationController
     sql = %{
       SELECT
         n.NUMBER AS node,
-        n.logical_volume,
-        o.version_number,
-        o.md5_3,
-        f.billable_size,
-        v.ark,
-        v.NUMBER AS key_version,
-        f.pathname
+        v.number
       FROM
-        inv_versions AS v,
-        inv_nodes_inv_objects AS NO,
-        inv_nodes AS n,
-        inv_files AS f,
-        inv_objects AS o
+        inv_nodes AS n
+      INNER JOIN inv_nodes_inv_objects NO
+        ON n.id = NO.inv_node_id
+          and NO.role = 'primary'
+      INNER JOIN inv_objects o
+        ON NO.inv_object_id = o.id
+      INNER JOIN inv_versions v
+        ON v.inv_object_id = o.id
+      INNER JOIN inv_files f
+        ON f.inv_version_id = v.id
+          AND f.billable_size > 0
       WHERE
-        v.ark = ?
-        #if version is > 0
+        o.ark = ?
         AND f.pathname = ?
-        AND o.id = v.inv_object_id
-        AND NO.role = 'primary'
-        AND f.inv_version_id = v.id
-        AND NO.inv_object_id = v.inv_object_id
-        AND n.id = NO.inv_node_id
-        AND f.billable_size > 0
     }
-    sql2 = sql + ' AND v.number = ?'
+    sql2 = sql + %{
+      AND v.number <= ?
+      AND EXISTS (
+        SELECT 1
+        FROM inv_versions iv
+        WHERE
+          iv.inv_object_id = o.id
+        AND
+          iv.number = ?
+      )
+    }
     ret = {status: 404, message: 'Not found'}
+    sql += " ORDER BY v.number DESC limit 1"
+    sql2 += " ORDER BY v.number DESC limit 1"
 
     if version == 0
       results = ActiveRecord::Base
@@ -123,7 +128,7 @@ class FileController < ApplicationController
         .connection
         .raw_connection
         .prepare(sql2)
-        .execute(ark, pathname, version)
+        .execute(ark, pathname, version, version)
     end
 
     if results.present?
@@ -132,7 +137,7 @@ class FileController < ApplicationController
           status: 200,
           message: '',
           node_id: row[0],
-          key: FileController.encode_storage_key(row[5], row[6], row[7])
+          key: FileController.encode_storage_key(ark, row[1], pathname)
         }
       end
     end
