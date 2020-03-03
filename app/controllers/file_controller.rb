@@ -165,13 +165,21 @@ class FileController < ApplicationController
     eval_presign_get_by_node_key(r)
   end
 
+  # this is a workaround until the storage service produces clean json
+  def parse_response(body)
+    x = body.gsub(/\s+(expires|status|url|message)/, '"\1"')
+      .gsub(/\s+\}/, '}')
+      .tr('\'', '"')
+    JSON.parse(x)
+  end
+
   def eval_presign_get_by_node_key(r)
     if r.status == 409
       download_response
     elsif r.status == 200
-      JSON.parse(r.content).with_indifferent_access
+      parse_response(r.content).with_indifferent_access
     else
-      json = JSON.parse(r.content).with_indifferent_access
+      json = parse_response(r.content).with_indifferent_access
       render status: r.status, json: json
     end
   end
