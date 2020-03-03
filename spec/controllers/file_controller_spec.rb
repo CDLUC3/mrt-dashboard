@@ -201,7 +201,7 @@ describe FileController do
         FileController.get_storage_presign_url(my_node_key_params(params)),
         {},
         {},
-        :follow_redirect => true
+        follow_redirect: true
       ).and_return(mock_response(200, '', my_presign_wrapper))
 
       get(:presign, params, { uid: user_id })
@@ -224,7 +224,7 @@ describe FileController do
         FileController.get_storage_presign_url(my_node_key_params(params)),
         {},
         {},
-        :follow_redirect => true
+        follow_redirect: true
       ).and_return(mock_response(404, 'File not found'))
 
       get(:presign, params, { uid: user_id })
@@ -241,7 +241,7 @@ describe FileController do
         FileController.get_storage_presign_url(my_node_key_params(params)),
         {},
         {},
-        :follow_redirect => true
+        follow_redirect: true
       ).and_return(mock_response(403, 'File is in offline storage, request is not supported'))
 
       get(:presign, params, { uid: user_id })
@@ -258,7 +258,7 @@ describe FileController do
         FileController.get_storage_presign_url(my_node_key_params(params)),
         {},
         {},
-        :follow_redirect => true
+        follow_redirect: true
       ).and_return(mock_response(500, 'System Error'))
 
       get(:presign, params, { uid: user_id })
@@ -275,7 +275,7 @@ describe FileController do
         FileController.get_storage_presign_url(my_node_key_params(params)),
         {},
         {},
-        :follow_redirect => true
+        follow_redirect: true
       ).and_return(mock_response(409, 'Redirecting to download URL', my_presign_wrapper))
 
       get(:presign, params, { uid: user_id })
