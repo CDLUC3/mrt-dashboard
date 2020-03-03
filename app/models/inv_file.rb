@@ -17,7 +17,7 @@ class InvFile < ActiveRecord::Base
 
   # Construct outward facing download URL
   def external_bytestream_uri
-    URI.parse("#{APP_CONFIG['merritt_server']}/d/#{inv_version.inv_object.to_param}/#{inv_version.to_param}/#{to_param}".gsub(%r{/\/+/}, '/'))
+    URI.parse("#{APP_CONFIG['merritt_server'].chomp('/')}/d/#{inv_version.inv_object.to_param}/#{inv_version.to_param}/#{to_param}")
   end
 
   def exceeds_download_size?

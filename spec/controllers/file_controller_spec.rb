@@ -201,12 +201,12 @@ describe FileController do
 
     it 'verify that presign request does not contain duplicate slashes' do
       url = FileController.get_storage_presign_url(my_node_key_params(params))
-      expect(url).not_to include('//')
+      expect(url).not_to match('https?://.*//')
     end
 
     it 'verify that external download url does not contain duplicate slashes' do
       url = inv_file.external_bytestream_uri.to_s
-      expect(url).not_to include('//')
+      expect(url).not_to match('https?://.*//')
     end
 
     it 'redirects to presign url for the file' do

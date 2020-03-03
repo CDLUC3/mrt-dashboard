@@ -70,7 +70,7 @@ class FileController < ApplicationController
 
   def self.get_storage_presign_url(obj)
     # Note - assume the config variable contains a slash...do not duplicate the slash
-    "#{APP_CONFIG['storage_presign_file']}/#{obj[:node_id]}/#{obj[:key]}".gsub(%r{/\/+/}, '/')
+    "#{APP_CONFIG['storage_presign_file'].chomp('/')}/#{obj[:node_id]}/#{obj[:key]}"
   end
 
   private
