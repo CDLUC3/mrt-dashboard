@@ -65,7 +65,8 @@ class FileController < ApplicationController
 
   # Encode a storage key constructed from component parts
   def self.encode_storage_key(ark, version, file)
-    ERB::Util.url_encode(FileController.build_storage_key(ark, version, file))
+    key = FileController.build_storage_key(ark, version, file)
+    URI.encode(key)
   end
 
   def self.get_storage_presign_url(obj)
