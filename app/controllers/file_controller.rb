@@ -2,32 +2,17 @@ require 'httpclient'
 require 'json'
 
 class FileController < ApplicationController
-  before_filter do
-    require_user
-  end
+  before_filter :require_user
 
   # Do not force redirect to latest version for key lookup
-  before_filter(except: %i[storage_key]) do
-    redirect_to_latest_version
-  end
+  before_filter :redirect_to_latest_version, except: %i[storage_key]
 
   # Do not force load of file for key lookup
-  before_filter(except: %i[storage_key]) do
-    load_file
-  end
+  before_filter :load_file, except: %i[storage_key]
 
-  before_filter(except: %i[storage_key]) do
-    unless current_user_can_download?(@file.inv_version.inv_object)
-      flash[:error] = 'You do not have download permissions.'
-      render file: "#{Rails.root}/public/401.html", status: 401, layout: false
-    end
-  end
+  before_filter :check_download, except: %i[storage_key]
 
-  before_filter(only: %i[download presign]) do
-    version = @file.inv_version
-    obj = version.inv_object
-    check_dua(obj, { object: obj, version: version, file: @file })
-  end
+  before_filter :check_version, only: %i[download presign]
 
   def download
     if @file.exceeds_download_size?
@@ -66,15 +51,32 @@ class FileController < ApplicationController
   # Encode a storage key constructed from component parts
   def self.encode_storage_key(ark, version, file)
     key = FileController.build_storage_key(ark, version, file)
-    ERB::Util.url_encode(key)
+    URI.encode_www_form_component(key)
   end
 
   def self.get_storage_presign_url(obj)
-    # Note - assume the config variable contains a slash...do not duplicate the slash
-    "#{APP_CONFIG['storage_presign_file'].chomp('/')}/#{obj[:node_id]}/#{obj[:key]}"
+    base = APP_CONFIG['storage_presign_file']
+    return File.join(base, 'not-applicable') unless obj.key?(:node_id) && obj.key?(:key)
+    File.join(
+      APP_CONFIG['storage_presign_file'],
+      obj[:node_id].to_s,
+      obj[:key]
+    )
   end
 
   private
+
+  def check_download
+    return if current_user_can_download?(@file.inv_version.inv_object)
+    flash[:error] = 'You do not have download permissions.'
+    render file: "#{Rails.root}/public/401.html", status: 401, layout: false
+  end
+
+  def check_version
+    version = @file.inv_version
+    obj = version.inv_object
+    check_dua(obj, { object: obj, version: version, file: @file })
+  end
 
   # Perform database lookup for storge node and key
   # rubocop:disable all

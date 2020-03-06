@@ -1,7 +1,6 @@
 require 'rails_helper'
-require 'file_controller'
 
-describe FileController do
+RSpec.describe FileController, type: :controller do
 
   attr_reader :user_id
   attr_reader :collection
