@@ -5,10 +5,8 @@ class InvFile < ActiveRecord::Base
   scope :producer_files, -> { where("pathname LIKE 'producer/%'") }
   scope :quickload_files, -> { select(%w[mime_type pathname full_size inv_version_id]) }
 
-  include Encoder
-
   def to_param
-    urlencode(pathname)
+    Encoder.urlencode(pathname)
   end
 
   def bytestream_uri

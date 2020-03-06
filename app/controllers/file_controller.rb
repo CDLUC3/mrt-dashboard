@@ -51,7 +51,7 @@ class FileController < ApplicationController
   # Encode a storage key constructed from component parts
   def self.encode_storage_key(ark, version, file)
     key = FileController.build_storage_key(ark, version, file)
-    URI.encode_www_form_component(key)
+    Encoder.urlencode(key)
   end
 
   def self.get_storage_presign_url(obj)

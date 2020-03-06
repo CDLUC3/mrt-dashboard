@@ -45,8 +45,8 @@ class ApplicationController < ActionController::Base
 
   # Makes a url of the form /m/ark.../1/file with optionally blank versions and files
   def mk_merritt_url(letter, object, version = nil, file = nil)
-    object = urlencode(urlunencode(object))
-    file = file.blank? ? nil : urlencode(urlunencode(file))
+    object = Encoder.urlencode(Encoder.urlunencode(object))
+    file = file.blank? ? nil : Encoder.urlencode(Encoder.urlunencode(file))
     "/#{letter}/" + [object, version, file].reject(&:blank?).join('/')
   end
 
@@ -136,7 +136,7 @@ class ApplicationController < ActionController::Base
   end
 
   def params_u(param)
-    urlunencode(params[param])
+    Encoder.urlunencode(params[param])
   end
 
   def stream_response(url, disposition, filename, mediatype, length = nil)

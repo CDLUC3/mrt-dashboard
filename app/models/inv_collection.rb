@@ -5,7 +5,7 @@ class InvCollection < ActiveRecord::Base
   include Encoder
 
   def to_param
-    urlencode(ark)
+    Encoder.urlencode(ark)
   end
 
   def group

@@ -36,10 +36,8 @@ class InvObject < ActiveRecord::Base
     select(columns)
   }
 
-  include Encoder
-
   def to_param
-    urlencode(ark)
+    Encoder.urlencode(ark)
   end
 
   # content
