@@ -10,8 +10,8 @@ defaults: &defaults
 
 docker: &docker
   <<: *defaults
-  max_archive_size:  200000  # 9999 bytes ~= 99 KiB
-  max_download_size: 3000000  # 1048576 bytes = 1 MiB
+  max_archive_size:  10000000  # 9999 bytes ~= 99 KiB
+  max_download_size: 20000000  # 1048576 bytes = 1 MiB
   # Marisa is coded into rspec tests
   dua_email_to:         [marisa.strong@ucop.edu]
   lostorage_email_to:   [marisa.strong@ucop.edu]
