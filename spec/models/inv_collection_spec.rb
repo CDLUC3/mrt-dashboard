@@ -9,7 +9,7 @@ describe InvCollection do
 
   describe :to_param do
     it 'encodes the ark' do
-      encoded_ark = collection.urlencode(collection.ark)
+      encoded_ark = Encoder.urlencode(collection.ark)
       expect(collection.to_param).to eq(encoded_ark)
     end
   end
