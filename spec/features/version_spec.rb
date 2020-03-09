@@ -203,7 +203,7 @@ describe 'versions' do
 
         expected_uri = url_for(
           controller: :file,
-          action: :download,
+          action: :presign,
           object: ERB::Util.url_encode(obj.ark), # TODO: figure out why this needs to be double-encoded, then stop doing it
           version: obj.version_number.to_s,
           file: ERB::Util.url_encode(f.pathname) # TODO: should we really encode this, or just escape the '/'?

@@ -13,14 +13,12 @@
     <%
       files.each do |file|
         file_basename = File.basename(file.pathname)
-        file_too_large = file.exceeds_download_size?
-        any_file_too_large ||= file_too_large
     %>
       <tr>
         <th>
-          <% if can_download_object && !file_too_large %>
+          <% if can_download_object %>
             <%# not using link_to speeds this up %>
-            <a href="/d/<%= object_id %>/<%= version_id %>/<%= file.to_param %>">
+            <a href="/api/presign-file/<%= object_id %>/<%= version_id %>/<%= file.to_param %>">
               <%= file_basename %>
             </a>
           <% else %>
@@ -37,13 +35,4 @@
     <%
       end
       %>
-  <% if any_file_too_large %>
-      <tr>
-        <td colspan="3">
-          Files larger than <%= max_download_size_pretty %> cannot be downloaded.
-          For access to large files, please
-          <a href="http://www.cdlib.org/services/uc3/contact.html">contact UC3</a>.
-        </td>
-      </tr>
-  <% end %>
 <% end %>
