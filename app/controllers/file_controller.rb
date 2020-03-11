@@ -33,7 +33,7 @@ class FileController < ApplicationController
     presigned = presign_get_by_node_key(nk)
     return unless response.status == 200
     url = presigned['url']
-    response.headers['Location'] = url
+    presign_set_headers(url)
     render status: 303, text: ''
   end
 
@@ -65,6 +65,17 @@ class FileController < ApplicationController
   end
 
   private
+
+  # rubocop:disable Metrics/AbcSize
+  def presign_set_headers(url)
+    response.headers['Location'] = url
+    filename = File.basename(@file.pathname)
+    response.headers['Content-Type'] = @file.mime_type
+    response.headers['Content-Disposition'] = "inline; filename=\"#{filename}\""
+    response.headers['Content-Length'] = @file.full_size.to_s unless @file.full_size.nil?
+    response.headers['Last-Modified'] = Time.now.httpdate
+  end
+  # rubocop:enable Metrics/AbcSize
 
   def check_download
     return if current_user_can_download?(@file.inv_version.inv_object)
