@@ -172,7 +172,7 @@ class FileController < ApplicationController
   def presign_get_by_node_key(obj)
     r = HTTPClient.new.get(
       FileController.get_storage_presign_url(obj),
-      {},
+      { contentType: @file.mime_type },
       {},
       follow_redirect: true
     )
