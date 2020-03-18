@@ -108,6 +108,15 @@ class ObjectController < ApplicationController
     end
   end
 
+  def presign
+    nk = {
+      node_id: @object.node_number,
+      key: ApplicationController.encode_storage_key(ark),
+      pretend_status: 200
+    }
+    ApplicationController.presign_get_obj_by_node_key(nk)
+  end
+
   private
 
   def pairtree_encode(ark)

@@ -78,6 +78,79 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  # Construct a storage key from component parts
+  def self.build_storage_key(ark, version = '', file = '')
+    key = ark
+    key += "|#{version}" unless version == ''
+    key += "|#{file}" unless file == ''
+    key
+  end
+
+  # Encode a storage key constructed from component parts
+  def self.encode_storage_key(ark, version = '', file = '')
+    key = ApplicationController.build_storage_key(ark, version, file)
+    Encoder.urlencode(key)
+  end
+
+  def self.get_storage_presign_url(nodekey, has_file = true)
+    base = has_file ? APP_CONFIG['storage_presign_file'] : APP_CONFIG['storage_presign_obj']
+    return File.join(base, 'not-applicable') unless nodekey.key?(:node_id) && nodekey.key?(:key)
+    File.join(
+      base,
+      nodekey[:node_id].to_s,
+      nodekey[:key]
+    )
+  end
+
+  # rubocop:disable all
+  def self.eval_presign_get_obj_by_node_key(r)
+    ret = {}
+    if r.status == 200
+      ret = {
+        status: 200,
+        message: 'Request queued, use token to check status',
+        token: 'AAA',
+        'anticipated-availability-time': ''
+      }
+    elsif r.status == 404
+      ret = {
+        status: 404,
+        message: 'Object not found'
+      }
+    else
+      ret = {
+        status: 404,
+        message: 'Error'
+      }
+    end
+    render status: r.status, json: ret.with_indifferent_access.to_json
+  end
+
+  def self.presign_get_obj_by_node_key(nodekey)
+    r = HTTPClient.new.get(
+      ApplicationController.get_storage_presign_url(nodekey, False),
+      {},
+      {},
+      follow_redirect: true
+    )
+    if nodekey.key?(:pretend_status)
+      r.status = nodekey[:pretend_status]
+    end
+    ApplicationController.eval_presign_get_obj_by_node_key(r)
+  end
+  # rubocop:enable all
+
+  def presign_obj_by_token
+    token = params[:token]
+    r = HTTPClient.new.get(
+      "#{APP_CONFIG['storage_presign_token']}/#{token}",
+      {},
+      {},
+      follow_redirect: true
+    )
+    render r.status, body: r.content
+  end
+
   private
 
   # Return the current user. Uses either the session user OR if the
