@@ -103,7 +103,7 @@ class ApplicationController < ActionController::Base
   end
 
   # rubocop:disable all
-  def self.eval_presign_get_obj_by_node_key(r)
+  def eval_presign_get_obj_by_node_key(r)
     ret = {}
     if r.status == 200
       ret = {
@@ -125,10 +125,11 @@ class ApplicationController < ActionController::Base
     end
     render status: r.status, json: ret.with_indifferent_access.to_json
   end
+  # rubocop:enable all
 
-  def self.presign_get_obj_by_node_key(nodekey)
+  def presign_get_obj_by_node_key(nodekey)
     r = HTTPClient.new.get(
-      ApplicationController.get_storage_presign_url(nodekey, False),
+      ApplicationController.get_storage_presign_url(nodekey, false),
       {},
       {},
       follow_redirect: true
@@ -136,9 +137,8 @@ class ApplicationController < ActionController::Base
     if nodekey.key?(:pretend_status)
       r.status = nodekey[:pretend_status]
     end
-    ApplicationController.eval_presign_get_obj_by_node_key(r)
+    eval_presign_get_obj_by_node_key(r)
   end
-  # rubocop:enable all
 
   def presign_obj_by_token
     token = params[:token]

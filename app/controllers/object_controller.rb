@@ -114,7 +114,7 @@ class ObjectController < ApplicationController
       key: ApplicationController.encode_storage_key(ark),
       pretend_status: 200
     }
-    ApplicationController.presign_get_obj_by_node_key(nk)
+    presign_get_obj_by_node_key(nk)
   end
 
   private
