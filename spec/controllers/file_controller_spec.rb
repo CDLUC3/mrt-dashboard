@@ -205,7 +205,7 @@ RSpec.describe FileController, type: :controller do
 
     it 'verify that external download url does not contain duplicate slashes' do
       url = inv_file.external_bytestream_uri.to_s
-      expect(url).not_to match('https?://.*//')
+      expect(url).not_to match('https?://.*//.*')
     end
 
     it 'redirects to presign url for the file' do
