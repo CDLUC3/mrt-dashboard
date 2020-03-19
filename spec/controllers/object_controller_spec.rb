@@ -259,6 +259,24 @@ describe ObjectController do
     end
   end
 
+  describe ':presign' do
+    it 'requires a login' do
+      get(:presign, { object: object_ark }, { uid: nil })
+      expect(response.status).to eq(302)
+      expect(response.headers['Location']).to include('guest_login')
+    end
+
+    it 'prevents presign without permissions' do
+      get(:presign, { object: object_ark }, { uid: user_id })
+      expect(response.status).to eq(401)
+    end
+
+    skip it 'request async assembly of an object' do
+    end
+    skip it 'request async assembly of a non-existent object' do
+    end
+  end
+
   describe ':download_user' do
     it 'requires a login' do
       get(:download_user, { object: object_ark }, { uid: nil })

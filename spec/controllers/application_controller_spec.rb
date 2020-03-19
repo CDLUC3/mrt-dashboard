@@ -225,4 +225,66 @@ describe ApplicationController do
     end
   end
 
+  describe 'assemble / presign url construction' do
+    before(:each) do
+      @ark = 'ark:/99999/abc'
+      @arkenc = 'ark%3A%2F99999%2Fabc'
+      @ver = 2
+      @path = 'foo bar.doc'
+    end
+
+    it 'build_storage_key(ark, version, file)' do
+      key = ApplicationController.build_storage_key(@ark, @ver, @path)
+      expect(key).to eq("#{@ark}|#{@ver}|#{@path}")
+    end
+
+    it 'build_storage_key(ark, version)' do
+      key = ApplicationController.build_storage_key(@ark, @ver)
+      expect(key).to eq("#{@ark}|#{@ver}")
+    end
+
+    it 'build_storage_key(ark)' do
+      key = ApplicationController.build_storage_key(@ark)
+      expect(key).to eq("#{@ark}")
+    end
+
+    it 'encode_storage_key' do
+      enckey = ApplicationController.encode_storage_key(@ark)
+      expect(enckey).to eq(@arkenc)
+    end
+
+    it 'get_storage_presign_url does not contain //' do
+      nk = { node_id: 9999, key: @arkenc }
+      url = ApplicationController.get_storage_presign_url(nk)
+      expect(url).not_to match('https?://.*//.*')
+    end
+
+    it 'get_storage_presign_url(nodekey, has_file = true)' do
+      key = ApplicationController.build_storage_key(@ark, @ver, @path)
+      enckey = ApplicationController.encode_storage_key(key)
+      nk = { node_id: 9999, key: enckey }
+      url = ApplicationController.get_storage_presign_url(nk, true)
+      expect(url).to match('.*/presign-file/.*')
+    end
+
+    it 'get_storage_presign_url(nodekey, has_file = false)' do
+      key = ApplicationController.build_storage_key(@ark, @ver)
+      enckey = ApplicationController.encode_storage_key(key)
+      nk = { node_id: 9999, key: enckey }
+      url = ApplicationController.get_storage_presign_url(nk, false)
+      expect(url).to match('.*/presign-obj/.*')
+    end
+
+    skip it 'presign_obj_by_token 200' do
+    end
+
+    skip it 'presign_obj_by_token 202' do
+    end
+
+    skip it 'presign_obj_by_token 404' do
+    end
+
+    skip it 'presign_obj_by_token 500' do
+    end
+  end
 end

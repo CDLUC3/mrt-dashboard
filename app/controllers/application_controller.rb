@@ -94,7 +94,7 @@ class ApplicationController < ActionController::Base
 
   def self.get_storage_presign_url(nodekey, has_file = true)
     base = has_file ? APP_CONFIG['storage_presign_file'] : APP_CONFIG['storage_presign_obj']
-    return File.join(base, 'not-applicable') unless nodekey.key?(:node_id) && nodekey.key?(:key)
+    return File.join(base, 'not-applicable') unless nodekey.has_key?(:node_id) && nodekey.has_key?(:key)
     File.join(
       base,
       nodekey[:node_id].to_s,
@@ -103,42 +103,17 @@ class ApplicationController < ActionController::Base
   end
 
   # rubocop:disable all
-  def eval_presign_get_obj_by_node_key(r)
-    ret = {}
-    if r.status == 200
-      ret = {
-        status: 200,
-        message: 'Request queued, use token to check status',
-        token: 'AAA',
-        'anticipated-availability-time': ''
-      }
-    elsif r.status == 404
-      ret = {
-        status: 404,
-        message: 'Object not found'
-      }
-    else
-      ret = {
-        status: 404,
-        message: 'Error'
-      }
-    end
-    render status: r.status, json: ret.with_indifferent_access.to_json
-  end
-  # rubocop:enable all
-
-  def presign_get_obj_by_node_key(nodekey)
+  def presign_get_obj_by_node_key(nodekey, pretend = Nil)
     r = HTTPClient.new.get(
       ApplicationController.get_storage_presign_url(nodekey, false),
       {},
       {},
       follow_redirect: true
     )
-    if nodekey.key?(:pretend_status)
-      r.status = nodekey[:pretend_status]
-    end
-    eval_presign_get_obj_by_node_key(r)
+    render status: r.status, json: r.content if pretend == Nil
+    render status: pretend.status, json: pretend.with_indifferent_access.to_json
   end
+  # rubocop:enable all
 
   def presign_obj_by_token
     token = params[:token]
@@ -148,7 +123,7 @@ class ApplicationController < ActionController::Base
       {},
       follow_redirect: true
     )
-    render r.status, body: r.content
+    render status: r.status, body: r.content
   end
 
   private
