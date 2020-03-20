@@ -56,7 +56,7 @@ class FileController < ApplicationController
 
   def self.get_storage_presign_url(obj)
     base = APP_CONFIG['storage_presign_file']
-    return File.join(base, 'not-applicable') unless obj.key?(:node_id) && obj.key?(:key)
+    return nil unless obj.key?(:node_id) && obj.key?(:key)
     File.join(
       APP_CONFIG['storage_presign_file'],
       obj[:node_id].to_s,
@@ -146,7 +146,8 @@ class FileController < ApplicationController
     end
 
     # For debugging, show url in thre return object
-    ret[:url] = FileController.get_storage_presign_url(ret.with_indifferent_access)
+    url = FileController.get_storage_presign_url(ret.with_indifferent_access)
+    ret[:url] = url unless url == nil
     ret.with_indifferent_access
   end
   # rubocop:enable all
@@ -170,8 +171,10 @@ class FileController < ApplicationController
   # Call storage service to create a presigned URL for a file
   # https://github.com/CDLUC3/mrt-doc/blob/master/endopoints/storage/presign-file.md
   def presign_get_by_node_key(obj)
+    url = FileController.get_storage_presign_url(obj)
+    render status: 404, message: 'Not found' if url == nil
     r = HTTPClient.new.get(
-      FileController.get_storage_presign_url(obj),
+      url,
       { contentType: @file.mime_type },
       {},
       follow_redirect: true
