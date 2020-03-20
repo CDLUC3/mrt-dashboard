@@ -187,8 +187,7 @@ class FileController < ApplicationController
     elsif r.status == 200
       JSON.parse(r.content).with_indifferent_access
     else
-      json = JSON.parse(r.content).with_indifferent_access
-      render status: r.status, json: json
+      render status: r.status, body: r.content
     end
   end
 
