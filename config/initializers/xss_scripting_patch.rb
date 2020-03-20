@@ -1,5 +1,6 @@
 # this is a fix for CVE-2020-5267 which isn't patched in rails 4 since it's out of lifetime support now
 
+# rubocop:disable all
 ActionView::Helpers::JavaScriptHelper::JS_ESCAPE_MAP.merge!(
     {
         "`" => "\\`",
@@ -23,3 +24,4 @@ module ActionView::Helpers::JavaScriptHelper
 
   alias :j :escape_javascript
 end
+# rubocop:enable all
