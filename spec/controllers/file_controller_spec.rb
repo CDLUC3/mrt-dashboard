@@ -243,9 +243,14 @@ RSpec.describe FileController, type: :controller do
 
       get(:presign, params, { uid: user_id })
       expect(response.status).to eq(404)
-      json = JSON.parse(response.body)
-      expect(json['status']).to eq(response.status)
-      expect(json['message']).to eq('File not found')
+    end
+
+    it 'returns 404 if presign url returns 404 - file path not found' do
+      mock_permissions_all(user_id, collection_id)
+
+      params[:file] = 'non-existent.path'
+      get(:presign, params, { uid: user_id })
+      expect(response.status).to eq(404)
     end
 
     it 'returns 403 if presign url not supported - Glacier' do
@@ -260,9 +265,6 @@ RSpec.describe FileController, type: :controller do
 
       get(:presign, params, { uid: user_id })
       expect(response.status).to eq(403)
-      json = JSON.parse(response.body)
-      expect(json['status']).to eq(response.status)
-      expect(json['message']).to eq('File is in offline storage, request is not supported')
     end
 
     it 'returns 500 if presign url returns 500' do
@@ -277,9 +279,6 @@ RSpec.describe FileController, type: :controller do
 
       get(:presign, params, { uid: user_id })
       expect(response.status).to eq(500)
-      json = JSON.parse(response.body)
-      expect(json['status']).to eq(response.status)
-      expect(json['message']).to eq('System Error')
     end
 
     it 'redirects to download url when presign is unsupported' do

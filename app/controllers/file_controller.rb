@@ -56,6 +56,7 @@ class FileController < ApplicationController
 
   def self.get_storage_presign_url(obj)
     return nil unless obj.key?(:node_id) && obj.key?(:key)
+    return nil if obj[:node_id].nil? || obj[:key].nil?
     File.join(
       APP_CONFIG['storage_presign_file'],
       obj[:node_id].to_s,
@@ -200,8 +201,10 @@ class FileController < ApplicationController
       download_response
     elsif r.status == 200
       JSON.parse(r.content).with_indifferent_access
+    elsif r.status == 404
+      render status: r.status, text: '404 Not Found'
     else
-      render status: r.status, body: r.content
+      render status: r.status, text: 'Error'
     end
   end
 
