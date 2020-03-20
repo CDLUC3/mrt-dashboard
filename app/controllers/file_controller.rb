@@ -176,17 +176,22 @@ class FileController < ApplicationController
 
   # Call storage service to create a presigned URL for a file
   # https://github.com/CDLUC3/mrt-doc/blob/master/endopoints/storage/presign-file.md
+  # rubocop:disable all
   def presign_get_by_node_key(obj)
     url = FileController.get_storage_presign_url(obj)
-    render status: 404, body: not_found_obj.to_json if url.nil?
-    r = HTTPClient.new.get(
-      url,
-      { contentType: @file.mime_type },
-      {},
-      follow_redirect: true
-    )
-    eval_presign_get_by_node_key(r)
+    if url.nil?
+      render status: 404, body: not_found_obj.to_json
+    else
+      r = HTTPClient.new.get(
+        url,
+        { contentType: @file.mime_type },
+        {},
+        follow_redirect: true
+      )
+      eval_presign_get_by_node_key(r)
+    end
   end
+  # rubocop:enable all
 
   # Evaluate response from the storage service presign request
   # If 409 is returned, redirect to the traditional file download
