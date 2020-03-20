@@ -180,7 +180,7 @@ class FileController < ApplicationController
   def presign_get_by_node_key(obj)
     url = FileController.get_storage_presign_url(obj)
     if url.nil?
-      render status: 404, body: not_found_obj.to_json
+      render status: 404, text: '404 Not Found'
     else
       r = HTTPClient.new.get(
         url,
