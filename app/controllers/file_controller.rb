@@ -55,7 +55,6 @@ class FileController < ApplicationController
   end
 
   def self.get_storage_presign_url(obj)
-    base = APP_CONFIG['storage_presign_file']
     return nil unless obj.key?(:node_id) && obj.key?(:key)
     File.join(
       APP_CONFIG['storage_presign_file'],
@@ -76,6 +75,13 @@ class FileController < ApplicationController
     version = @file.inv_version
     obj = version.inv_object
     check_dua(obj, { object: obj, version: version, file: @file })
+  end
+
+  def not_found_obj
+    {
+      status: 404,
+      message: 'Not found'
+    }
   end
 
   # Perform database lookup for storge node and key
@@ -116,7 +122,7 @@ class FileController < ApplicationController
           iv.number = ?
       )
     }
-    ret = {status: 404, message: 'Not found'}
+    ret = not_found_obj
     sql += " ORDER BY v.number DESC limit 1"
     sql2 += " ORDER BY v.number DESC limit 1"
 
@@ -147,7 +153,7 @@ class FileController < ApplicationController
 
     # For debugging, show url in thre return object
     url = FileController.get_storage_presign_url(ret.with_indifferent_access)
-    ret[:url] = url unless url == nil
+    ret[:url] = url unless url.nil?
     ret.with_indifferent_access
   end
   # rubocop:enable all
@@ -172,7 +178,7 @@ class FileController < ApplicationController
   # https://github.com/CDLUC3/mrt-doc/blob/master/endopoints/storage/presign-file.md
   def presign_get_by_node_key(obj)
     url = FileController.get_storage_presign_url(obj)
-    render status: 404, message: 'Not found' if url == nil
+    render status: 404, body: not_found_obj.to_json if url.nil?
     r = HTTPClient.new.get(
       url,
       { contentType: @file.mime_type },
