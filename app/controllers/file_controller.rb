@@ -200,6 +200,7 @@ class FileController < ApplicationController
 
   # Evaluate response from the storage service presign request
   # If 409 is returned, redirect to the traditional file download
+  # rubocop:disable all
   def eval_presign_get_by_node_key(r)
     if r.status == 409
       download_response
@@ -211,6 +212,7 @@ class FileController < ApplicationController
       render file: "#{Rails.root}/public/500.html", status: r.status, layout: nil
     end
   end
+  # rubocop:enable all
 
   # Return download URL as if it were a presigned URL
   def download_response
