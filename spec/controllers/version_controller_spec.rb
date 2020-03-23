@@ -107,7 +107,7 @@ describe VersionController do
     end
     skip it 'request async assembly of a past version of an object' do
     end
-    skip it 'request async assembly of a non-existing version of an object'  do
+    skip it 'request async assembly of a non-existing version of an object' do
     end
   end
 
