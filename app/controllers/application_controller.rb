@@ -78,6 +78,54 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  # Construct a storage key from component parts
+  def self.build_storage_key(ark, version = '', file = '')
+    key = ark
+    key += "|#{version}" unless version == ''
+    key += "|#{file}" unless file == ''
+    key
+  end
+
+  # Encode a storage key constructed from component parts
+  def self.encode_storage_key(ark, version = '', file = '')
+    key = ApplicationController.build_storage_key(ark, version, file)
+    Encoder.urlencode(key)
+  end
+
+  def self.get_storage_presign_url(nodekey, has_file = true)
+    base = has_file ? APP_CONFIG['storage_presign_file'] : APP_CONFIG['storage_presign_obj']
+    return File.join(base, 'not-applicable') unless nodekey.has_key?(:node_id) && nodekey.has_key?(:key)
+    File.join(
+      base,
+      nodekey[:node_id].to_s,
+      nodekey[:key]
+    )
+  end
+
+  # rubocop:disable all
+  def presign_get_obj_by_node_key(nodekey, pretend = Nil)
+    r = HTTPClient.new.get(
+      ApplicationController.get_storage_presign_url(nodekey, false),
+      {},
+      {},
+      follow_redirect: true
+    )
+    render status: r.status, json: r.content if pretend == Nil
+    render status: pretend.status, json: pretend.with_indifferent_access.to_json
+  end
+  # rubocop:enable all
+
+  def presign_obj_by_token
+    token = params[:token]
+    r = HTTPClient.new.get(
+      "#{APP_CONFIG['storage_presign_token']}/#{token}",
+      {},
+      {},
+      follow_redirect: true
+    )
+    render status: r.status, body: r.content
+  end
+
   private
 
   # Return the current user. Uses either the session user OR if the

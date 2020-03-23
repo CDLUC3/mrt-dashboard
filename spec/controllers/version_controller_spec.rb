@@ -85,6 +85,32 @@ describe VersionController do
     end
   end
 
+  describe ':presign' do
+    attr_reader :params
+
+    before(:each) do
+      @params = { object: object_ark, version: version.number }
+    end
+
+    it 'requires a login' do
+      get(:download, params, { uid: nil })
+      expect(response.status).to eq(302)
+      expect(response.headers['Location']).to include('guest_login')
+    end
+
+    it 'prevents download without permissions' do
+      get(:download, params, { uid: user_id })
+      expect(response.status).to eq(401)
+    end
+
+    skip it 'request async assembly of the current version of an object' do
+    end
+    skip it 'request async assembly of a past version of an object' do
+    end
+    skip it 'request async assembly of a non-existing version of an object'  do
+    end
+  end
+
   describe ':download_user' do
     attr_reader :params
 

@@ -43,27 +43,6 @@ class FileController < ApplicationController
     render status: ret['status'], json: ret.to_json
   end
 
-  # Construct a storage key from component parts
-  def self.build_storage_key(ark, version, file)
-    "#{ark}|#{version}|#{file}"
-  end
-
-  # Encode a storage key constructed from component parts
-  def self.encode_storage_key(ark, version, file)
-    key = FileController.build_storage_key(ark, version, file)
-    Encoder.urlencode(key)
-  end
-
-  def self.get_storage_presign_url(obj)
-    return nil unless obj.key?(:node_id) && obj.key?(:key)
-    return nil if obj[:node_id].nil? || obj[:key].nil?
-    File.join(
-      APP_CONFIG['storage_presign_file'],
-      obj[:node_id].to_s,
-      obj[:key]
-    )
-  end
-
   private
 
   def check_download
@@ -147,13 +126,13 @@ class FileController < ApplicationController
           status: 200,
           message: '',
           node_id: row[0],
-          key: FileController.encode_storage_key(ark, row[1], pathname)
+          key: ApplicationController.encode_storage_key(ark, row[1], pathname)
         }
       end
     end
 
     # For debugging, show url in thre return object
-    url = FileController.get_storage_presign_url(ret.with_indifferent_access)
+    url = ApplicationController.get_storage_presign_url(ret.with_indifferent_access, true)
     ret[:url] = url unless url.nil?
     ret.with_indifferent_access
   end

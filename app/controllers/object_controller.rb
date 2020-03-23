@@ -5,7 +5,7 @@ class ObjectController < ApplicationController
   include IngestMixin
 
   before_filter :require_user, except: %i[jupload_add recent ingest mint update]
-  before_filter :load_object, only: %i[index download download_user download_manifest async]
+  before_filter :load_object, only: %i[index download download_user download_manifest async presign]
 
   before_filter(only: %i[download download_user download_manifest async]) do
     unless current_user_can_download?(@object)
@@ -106,6 +106,15 @@ class ObjectController < ApplicationController
       format.html
       format.atom
     end
+  end
+
+  def presign
+    nk = {
+      node_id: @object.node_number,
+      key: ApplicationController.encode_storage_key(@object.ark),
+      pretend_status: 200
+    }
+    presign_get_obj_by_node_key(nk)
   end
 
   private
