@@ -57,6 +57,13 @@ class FileController < ApplicationController
     check_dua(obj, { object: obj, version: version, file: @file })
   end
 
+  def not_found_obj
+    {
+      status: 404,
+      message: 'Not found'
+    }
+  end
+
   # Perform database lookup for storge node and key
   # rubocop:disable all
   def storage_key_do
@@ -95,7 +102,7 @@ class FileController < ApplicationController
           iv.number = ?
       )
     }
-    ret = {status: 404, message: 'Not found'}
+    ret = not_found_obj
     sql += " ORDER BY v.number DESC limit 1"
     sql2 += " ORDER BY v.number DESC limit 1"
 
@@ -125,7 +132,8 @@ class FileController < ApplicationController
     end
 
     # For debugging, show url in thre return object
-    ret[:url] = ApplicationController.get_storage_presign_url(ret.with_indifferent_access, true)
+    url = ApplicationController.get_storage_presign_url(ret.with_indifferent_access, true)
+    ret[:url] = url unless url.nil?
     ret.with_indifferent_access
   end
   # rubocop:enable all
@@ -146,11 +154,22 @@ class FileController < ApplicationController
     raise ActiveRecord::RecordNotFound if @file.nil?
   end
 
+  def presign_get_by_node_key(nk)
+    url = FileController.get_storage_presign_url(nk)
+    # :nocov:
+    if url.nil?
+      render file: "#{Rails.root}/public/404.html", status: 404, layout: nil
+      return
+    end
+    # :nocov:
+    presign_get_by_url(url)
+  end
+
   # Call storage service to create a presigned URL for a file
   # https://github.com/CDLUC3/mrt-doc/blob/master/endopoints/storage/presign-file.md
-  def presign_get_by_node_key(nodekey)
+  def presign_get_by_url(url)
     r = HTTPClient.new.get(
-      ApplicationController.get_storage_presign_url(nodekey, true),
+      url,
       { contentType: @file.mime_type },
       {},
       follow_redirect: true
@@ -160,15 +179,19 @@ class FileController < ApplicationController
 
   # Evaluate response from the storage service presign request
   # If 409 is returned, redirect to the traditional file download
+  # rubocop:disable all
   def eval_presign_get_by_node_key(r)
     if r.status == 409
       download_response
     elsif r.status == 200
       JSON.parse(r.content).with_indifferent_access
+    elsif r.status == 404
+      render file: "#{Rails.root}/public/404.html", status: 404, layout: nil
     else
-      render status: r.status, body: r.content
+      render file: "#{Rails.root}/public/500.html", status: r.status, layout: nil
     end
   end
+  # rubocop:enable all
 
   # Return download URL as if it were a presigned URL
   def download_response
