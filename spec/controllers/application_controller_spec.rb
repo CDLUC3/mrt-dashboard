@@ -1,4 +1,5 @@
 require 'rails_helper'
+require "securerandom"
 
 describe ApplicationController do
 
@@ -231,6 +232,26 @@ describe ApplicationController do
       @arkenc = 'ark%3A%2F99999%2Fabc'
       @ver = 2
       @path = 'foo bar.doc'
+      @client = mock_httpclient
+    end
+
+    def mock_httpclient
+      client = instance_double(HTTPClient)
+      allow(client).to receive(:follow_redirect_count).and_return(10)
+      %i[receive_timeout= send_timeout= connect_timeout= keep_alive_timeout=].each do |m|
+        allow(client).to receive(m)
+      end
+      allow(HTTPClient).to receive(:new).and_return(client)
+      client
+    end
+
+    def mock_response(status = 200, message = '', json = {})
+      json['status'] = status
+      json['message'] = message
+      mockresp = instance_double(HTTP::Message)
+      allow(mockresp).to receive(:status).and_return(status)
+      allow(mockresp).to receive(:content).and_return(json.to_json)
+      mockresp
     end
 
     it 'build_storage_key(ark, version, file)' do
@@ -275,16 +296,82 @@ describe ApplicationController do
       expect(url).to match('.*/presign-obj/.*')
     end
 
-    skip it 'presign_obj_by_token 200' do
+    # This test illustrates the return object, it does not perform any meaningful check since the mock constructs the return object
+    it 'presign_obj_by_token 200' do
+      token = SecureRandom.uuid
+      expect(@client).to receive(:get).with(
+        File.join(APP_CONFIG['storage_presign_token'], token),
+        {},
+        {},
+      ).and_return(
+        mock_response(
+          200,
+          'Object is available',
+          {
+            token: token,
+            'anticipated-size': 12345,
+            url: 'https://...'
+          }
+        )
+      )
+      get(:presign_obj_by_token, {token: token})
+      expect(response.status).to eq(200)
     end
 
-    skip it 'presign_obj_by_token 202' do
+    # This test illustrates the return object, it does not perform any meaningful check since the mock constructs the return object
+    it 'presign_obj_by_token 202' do
+      token = SecureRandom.uuid
+      expect(@client).to receive(:get).with(
+        File.join(APP_CONFIG['storage_presign_token'], token),
+        {},
+        {},
+      ).and_return(
+        mock_response(
+          202,
+          'Object is not ready',
+          {
+            token: token,
+            'anticipated-size': 12345,
+            'anticipated-availability-time': '2009-06-15T13:45:30'
+          }
+        )
+      )
+      get(:presign_obj_by_token, {token: token})
+      expect(response.status).to eq(202)
     end
 
-    skip it 'presign_obj_by_token 404' do
+    # This test illustrates the return object, it does not perform any meaningful check since the mock constructs the return object
+    it 'presign_obj_by_token 404' do
+      token = SecureRandom.uuid
+      expect(@client).to receive(:get).with(
+        File.join(APP_CONFIG['storage_presign_token'], token),
+        {},
+        {},
+      ).and_return(
+        mock_response(
+          404,
+          'Object not found'
+        )
+      )
+      get(:presign_obj_by_token, {token: token})
+      expect(response.status).to eq(404)
     end
 
-    skip it 'presign_obj_by_token 500' do
+    # This test illustrates the return object, it does not perform any meaningful check since the mock constructs the return object
+    it 'presign_obj_by_token 500' do
+      token = SecureRandom.uuid
+      expect(@client).to receive(:get).with(
+        File.join(APP_CONFIG['storage_presign_token'], token),
+        {},
+        {},
+      ).and_return(
+        mock_response(
+          500,
+          'error message'
+        )
+      )
+      get(:presign_obj_by_token, {token: token})
+      expect(response.status).to eq(500)
     end
   end
 end

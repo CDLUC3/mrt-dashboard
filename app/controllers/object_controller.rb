@@ -7,7 +7,7 @@ class ObjectController < ApplicationController
   before_filter :require_user, except: %i[jupload_add recent ingest mint update]
   before_filter :load_object, only: %i[index download download_user download_manifest async presign]
 
-  before_filter(only: %i[download download_user download_manifest async]) do
+  before_filter(only: %i[download download_user download_manifest async presign]) do
     unless current_user_can_download?(@object)
       flash[:error] = 'You do not have download permissions.'
       render file: "#{Rails.root}/public/401.html", status: 401, layout: false
