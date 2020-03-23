@@ -1,5 +1,5 @@
 require 'rails_helper'
-require "securerandom"
+require 'securerandom'
 
 describe ApplicationController do
 
@@ -266,7 +266,7 @@ describe ApplicationController do
 
     it 'build_storage_key(ark)' do
       key = ApplicationController.build_storage_key(@ark)
-      expect(key).to eq("#{@ark}")
+      expect(key).to eq(@ark)
     end
 
     it 'encode_storage_key' do
@@ -302,19 +302,19 @@ describe ApplicationController do
       expect(@client).to receive(:get).with(
         File.join(APP_CONFIG['storage_presign_token'], token),
         {},
-        {},
+        {}
       ).and_return(
         mock_response(
           200,
           'Object is available',
           {
             token: token,
-            'anticipated-size': 12345,
+            'anticipated-size': 12_345,
             url: 'https://...'
           }
         )
       )
-      get(:presign_obj_by_token, {token: token})
+      get(:presign_obj_by_token, { token: token })
       expect(response.status).to eq(200)
     end
 
@@ -324,19 +324,19 @@ describe ApplicationController do
       expect(@client).to receive(:get).with(
         File.join(APP_CONFIG['storage_presign_token'], token),
         {},
-        {},
+        {}
       ).and_return(
         mock_response(
           202,
           'Object is not ready',
           {
             token: token,
-            'anticipated-size': 12345,
+            'anticipated-size': 12_345,
             'anticipated-availability-time': '2009-06-15T13:45:30'
           }
         )
       )
-      get(:presign_obj_by_token, {token: token})
+      get(:presign_obj_by_token, { token: token })
       expect(response.status).to eq(202)
     end
 
@@ -346,14 +346,14 @@ describe ApplicationController do
       expect(@client).to receive(:get).with(
         File.join(APP_CONFIG['storage_presign_token'], token),
         {},
-        {},
+        {}
       ).and_return(
         mock_response(
           404,
           'Object not found'
         )
       )
-      get(:presign_obj_by_token, {token: token})
+      get(:presign_obj_by_token, { token: token })
       expect(response.status).to eq(404)
     end
 
@@ -363,14 +363,14 @@ describe ApplicationController do
       expect(@client).to receive(:get).with(
         File.join(APP_CONFIG['storage_presign_token'], token),
         {},
-        {},
+        {}
       ).and_return(
         mock_response(
           500,
           'error message'
         )
       )
-      get(:presign_obj_by_token, {token: token})
+      get(:presign_obj_by_token, { token: token })
       expect(response.status).to eq(500)
     end
   end

@@ -94,7 +94,7 @@ class ApplicationController < ActionController::Base
 
   def self.get_storage_presign_url(nodekey, has_file = true)
     base = has_file ? APP_CONFIG['storage_presign_file'] : APP_CONFIG['storage_presign_obj']
-    return File.join(base, 'not-applicable') unless nodekey.has_key?(:node_id) && nodekey.has_key?(:key)
+    return File.join(base, 'not-applicable') unless nodekey.key?(:node_id) && nodekey.key?(:key)
     File.join(
       base,
       nodekey[:node_id].to_s,
