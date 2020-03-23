@@ -103,14 +103,14 @@ class ApplicationController < ActionController::Base
   end
 
   # rubocop:disable all
-  def presign_get_obj_by_node_key(nodekey, pretend = Nil)
+  def presign_get_obj_by_node_key(nodekey, pretend = nil)
     r = HTTPClient.new.get(
       ApplicationController.get_storage_presign_url(nodekey, false),
       {},
       {},
       follow_redirect: true
     )
-    render status: r.status, json: r.content if pretend == Nil
+    render status: r.status, json: r.content if pretend == nil
     render status: pretend.status, json: pretend.with_indifferent_access.to_json
   end
   # rubocop:enable all
@@ -118,15 +118,30 @@ class ApplicationController < ActionController::Base
   def presign_obj_by_token
     token = params[:token]
     r = HTTPClient.new.get(
-      "#{APP_CONFIG['storage_presign_token']}/#{token}",
+      File.join(APP_CONFIG['storage_presign_token'], token),
       {},
-      {},
-      follow_redirect: true
+      {}
     )
     render status: r.status, body: r.content
   end
 
   private
+
+  # rubocop:disable all
+  def eval_presign_obj_by_token(r)
+    if r.status == 409
+      download_response
+    elsif r.status == 200
+      JSON.parse(r.content).with_indifferent_access
+    elsif r.status == 403
+      render file: "#{Rails.root}/public/403.html", status: 403, layout: nil
+    elsif r.status == 404
+      render file: "#{Rails.root}/public/404.html", status: 404, layout: nil
+    else
+      render file: "#{Rails.root}/public/500.html", status: r.status, layout: nil
+    end
+  end
+  # rubocop:enable all
 
   # Return the current user. Uses either the session user OR if the
   # user supplied HTTP basic auth info, uses that. Returns nil if
