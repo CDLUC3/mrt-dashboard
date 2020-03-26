@@ -50,6 +50,9 @@ MrtDashboard::Application.routes.draw do
   get('dm/:object' => 'object#download_manifest')
   get('s/:group' => 'collection#search_results')
   get('a/:group' => 'object#add')
+  get('downloads/add/:token' => 'downloads#add', :format => false)
+  get('downloads/get/:token' => 'downloads#get', :format => false)
+  get('downloads' => 'downloads#index', :format => false)
 
   # This is a legacy wild controller route that's not recommended for RESTful applications.
   # Note: This route will make all actions in every controller accessible via GET requests.
