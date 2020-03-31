@@ -32,6 +32,10 @@ class FileController < ApplicationController
     nk = storage_key_do
     presigned = presign_get_by_node_key(nk)
     return unless response.status == 200
+    if params.key?(:no_redirect)
+      render status: 200, json: presigned.to_json
+      return
+    end
     url = presigned['url']
     response.headers['Location'] = url
     render status: 303, text: ''
