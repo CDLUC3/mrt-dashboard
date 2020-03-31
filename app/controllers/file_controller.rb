@@ -32,6 +32,10 @@ class FileController < ApplicationController
     nk = storage_key_do
     presigned = presign_get_by_node_key(nk)
     return unless response.status == 200
+    if params.key?(:no_redirect)
+      render status: 200, json: presigned.to_json
+      return
+    end
     url = presigned['url']
     response.headers['Location'] = url
     render status: 303, text: ''
@@ -55,8 +59,8 @@ class FileController < ApplicationController
   end
 
   def self.get_storage_presign_url(obj)
-    base = APP_CONFIG['storage_presign_file']
-    return File.join(base, 'not-applicable') unless obj.key?(:node_id) && obj.key?(:key)
+    return nil unless obj.key?(:node_id) && obj.key?(:key)
+    return nil if obj[:node_id].nil? || obj[:key].nil?
     File.join(
       APP_CONFIG['storage_presign_file'],
       obj[:node_id].to_s,
@@ -76,6 +80,13 @@ class FileController < ApplicationController
     version = @file.inv_version
     obj = version.inv_object
     check_dua(obj, { object: obj, version: version, file: @file })
+  end
+
+  def not_found_obj
+    {
+      status: 404,
+      message: 'Not found'
+    }
   end
 
   # Perform database lookup for storge node and key
@@ -116,7 +127,7 @@ class FileController < ApplicationController
           iv.number = ?
       )
     }
-    ret = {status: 404, message: 'Not found'}
+    ret = not_found_obj
     sql += " ORDER BY v.number DESC limit 1"
     sql2 += " ORDER BY v.number DESC limit 1"
 
@@ -146,7 +157,8 @@ class FileController < ApplicationController
     end
 
     # For debugging, show url in thre return object
-    ret[:url] = FileController.get_storage_presign_url(ret.with_indifferent_access)
+    url = FileController.get_storage_presign_url(ret.with_indifferent_access)
+    ret[:url] = url unless url.nil?
     ret.with_indifferent_access
   end
   # rubocop:enable all
@@ -167,12 +179,23 @@ class FileController < ApplicationController
     raise ActiveRecord::RecordNotFound if @file.nil?
   end
 
+  def presign_get_by_node_key(nk)
+    url = FileController.get_storage_presign_url(nk)
+    # :nocov:
+    if url.nil?
+      render file: "#{Rails.root}/public/404.html", status: 404, layout: nil
+      return
+    end
+    # :nocov:
+    presign_get_by_url(url)
+  end
+
   # Call storage service to create a presigned URL for a file
   # https://github.com/CDLUC3/mrt-doc/blob/master/endopoints/storage/presign-file.md
-  def presign_get_by_node_key(obj)
+  def presign_get_by_url(url)
     r = HTTPClient.new.get(
-      FileController.get_storage_presign_url(obj),
-      {},
+      url,
+      { contentType: @file.mime_type },
       {},
       follow_redirect: true
     )
@@ -181,16 +204,19 @@ class FileController < ApplicationController
 
   # Evaluate response from the storage service presign request
   # If 409 is returned, redirect to the traditional file download
+  # rubocop:disable all
   def eval_presign_get_by_node_key(r)
     if r.status == 409
       download_response
     elsif r.status == 200
       JSON.parse(r.content).with_indifferent_access
+    elsif r.status == 404
+      render file: "#{Rails.root}/public/404.html", status: 404, layout: nil
     else
-      json = JSON.parse(r.content).with_indifferent_access
-      render status: r.status, json: json
+      render file: "#{Rails.root}/public/500.html", status: r.status, layout: nil
     end
   end
+  # rubocop:enable all
 
   # Return download URL as if it were a presigned URL
   def download_response

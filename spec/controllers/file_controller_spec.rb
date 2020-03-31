@@ -213,7 +213,7 @@ RSpec.describe FileController, type: :controller do
 
       expect(client).to receive(:get).with(
         FileController.get_storage_presign_url(my_node_key_params(params)),
-        {},
+        { contentType: inv_file.mime_type },
         {},
         follow_redirect: true
       ).and_return(mock_response(200, '', my_presign_wrapper))
@@ -231,21 +231,43 @@ RSpec.describe FileController, type: :controller do
       end
     end
 
+    it 'returns presign url for the file' do
+      mock_permissions_all(user_id, collection_id)
+
+      params[:no_redirect] = true
+      expect(client).to receive(:get).with(
+        FileController.get_storage_presign_url(my_node_key_params(params)),
+        { contentType: inv_file.mime_type },
+        {},
+        follow_redirect: true
+      ).and_return(mock_response(200, '', my_presign_wrapper))
+
+      get(:presign, params, { uid: user_id })
+      expect(response.status).to eq(200)
+      json = JSON.parse(response.body)
+      expect(json['url']).to eq(my_presign)
+    end
+
     it 'returns 404 if presign url returns 404 - not found' do
       mock_permissions_all(user_id, collection_id)
 
       expect(client).to receive(:get).with(
         FileController.get_storage_presign_url(my_node_key_params(params)),
-        {},
+        { contentType: inv_file.mime_type },
         {},
         follow_redirect: true
       ).and_return(mock_response(404, 'File not found'))
 
       get(:presign, params, { uid: user_id })
       expect(response.status).to eq(404)
-      json = JSON.parse(response.body)
-      expect(json['status']).to eq(response.status)
-      expect(json['message']).to eq('File not found')
+    end
+
+    it 'returns 404 if presign url returns 404 - file path not found' do
+      mock_permissions_all(user_id, collection_id)
+
+      params[:file] = 'non-existent.path'
+      get(:presign, params, { uid: user_id })
+      expect(response.status).to eq(404)
     end
 
     it 'returns 403 if presign url not supported - Glacier' do
@@ -253,16 +275,13 @@ RSpec.describe FileController, type: :controller do
 
       expect(client).to receive(:get).with(
         FileController.get_storage_presign_url(my_node_key_params(params)),
-        {},
+        { contentType: inv_file.mime_type },
         {},
         follow_redirect: true
       ).and_return(mock_response(403, 'File is in offline storage, request is not supported'))
 
       get(:presign, params, { uid: user_id })
       expect(response.status).to eq(403)
-      json = JSON.parse(response.body)
-      expect(json['status']).to eq(response.status)
-      expect(json['message']).to eq('File is in offline storage, request is not supported')
     end
 
     it 'returns 500 if presign url returns 500' do
@@ -270,16 +289,13 @@ RSpec.describe FileController, type: :controller do
 
       expect(client).to receive(:get).with(
         FileController.get_storage_presign_url(my_node_key_params(params)),
-        {},
+        { contentType: inv_file.mime_type },
         {},
         follow_redirect: true
       ).and_return(mock_response(500, 'System Error'))
 
       get(:presign, params, { uid: user_id })
       expect(response.status).to eq(500)
-      json = JSON.parse(response.body)
-      expect(json['status']).to eq(response.status)
-      expect(json['message']).to eq('System Error')
     end
 
     it 'redirects to download url when presign is unsupported' do
@@ -287,7 +303,7 @@ RSpec.describe FileController, type: :controller do
 
       expect(client).to receive(:get).with(
         FileController.get_storage_presign_url(my_node_key_params(params)),
-        {},
+        { contentType: inv_file.mime_type },
         {},
         follow_redirect: true
       ).and_return(mock_response(409, 'Redirecting to download URL', my_presign_wrapper))
@@ -399,6 +415,7 @@ RSpec.describe FileController, type: :controller do
       )
       expect(response.status).to eq(404)
     end
+
   end
 
 end
