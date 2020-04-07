@@ -158,7 +158,7 @@ class ApplicationController < ActionController::Base
   end
 
   def url_string_with_proto(url, force_https = false)
-    return uri.to_s unless force_https || APP_CONFIG['proto_force'] == 'https'
+    return url unless force_https || APP_CONFIG['proto_force'] == 'https'
     begin
       uri = URI.parse(url)
       uri.scheme = 'https'
