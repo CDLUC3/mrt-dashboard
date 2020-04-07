@@ -163,8 +163,10 @@ class ApplicationController < ActionController::Base
       uri = URI.parse(url)
       uri.scheme = 'https'
       uri.to_s
-    rescue
-      puts("Url format error caught: #{url}")
+    rescue StandardError => e
+      # :nocov:
+      log_error("Url format error caught: #{url}", e)
+      # :nocov:
     end
   end
 end
