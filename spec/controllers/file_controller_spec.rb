@@ -236,7 +236,7 @@ RSpec.describe FileController, type: :controller do
 
       params[:no_redirect] = true
       expect(client).to receive(:get).with(
-        FileController.get_storage_presign_url(my_node_key_params(params)),
+        FileController.get_storage_presign_url(my_node_key_params(params), true),
         { contentType: inv_file.mime_type },
         {},
         follow_redirect: true

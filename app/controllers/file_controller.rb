@@ -136,7 +136,8 @@ class FileController < ApplicationController
     end
 
     # For debugging, show url in thre return object
-    ret[:url] = ApplicationController.get_storage_presign_url(ret.with_indifferent_access, true)
+    url = ApplicationController.get_storage_presign_url(ret.with_indifferent_access, true)
+    ret[:url] = url unless url.nil?
     ret.with_indifferent_access
   end
   # rubocop:enable all
