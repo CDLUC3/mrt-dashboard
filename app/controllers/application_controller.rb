@@ -157,16 +157,26 @@ class ApplicationController < ActionController::Base
     url_for(opts)
   end
 
+  def log_error(message, exception = nil)
+    msg = message
+    msg << ": #{exception}" if exception
+
+    (log = Rails.logger) && log.error(msg)
+    warn(msg)
+  end
+
   def url_string_with_proto(url, force_https = false)
+    puts(url)
+    log_error("Url: #{url}")
     return url unless force_https || APP_CONFIG['proto_force'] == 'https'
     begin
       uri = URI.parse(url)
       uri.scheme = 'https'
       uri.to_s
+    # :nocov:
     rescue StandardError => e
-      # :nocov:
       log_error("Url format error caught: #{url}", e)
-      # :nocov:
     end
+    # :nocov:
   end
 end
