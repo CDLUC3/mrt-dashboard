@@ -320,7 +320,7 @@ RSpec.describe ObjectController, type: :controller do
       ).and_return(mock_response(404, 'Not found'))
 
       get(:presign, params, { uid: user_id })
-      expect(response.status).to eq(403)
+      expect(response.status).to eq(404)
     end
 
     it 'simulate 500 from the storage service' do
