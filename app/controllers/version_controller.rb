@@ -71,8 +71,7 @@ class VersionController < ApplicationController
     obj = @version.inv_object
     nk = {
       node_id: obj.node_number,
-      key: ApplicationController.encode_storage_key(obj.ark, @version.number),
-      pretend_status: 200
+      key: ApplicationController.encode_storage_key(obj.ark, @version.number)
     }
     presign_get_obj_by_node_key(nk)
   end

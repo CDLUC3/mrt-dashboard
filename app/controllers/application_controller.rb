@@ -102,15 +102,27 @@ class ApplicationController < ActionController::Base
     )
   end
 
-  # rubocop:disable all
-  def presign_get_obj_by_node_key(nodekey, pretend = nil)
+  def presign_get_obj_by_node_key(nodekey)
     r = HTTPClient.new.get(
       ApplicationController.get_storage_presign_url(nodekey, false),
       {},
       {},
       follow_redirect: true
     )
-    render status: r.status, json: r.content 
+    eval_presign_obj_by_node_key(r)
+  end
+
+  # rubocop:disable all
+  def eval_presign_obj_by_node_key(r)
+    if r.status == 200
+      render status: r.status, json: r.content
+    elsif r.status == 403
+      render file: "#{Rails.root}/public/403.html", status: 403, layout: nil
+    elsif r.status == 404
+      render file: "#{Rails.root}/public/404.html", status: 404, layout: nil
+    else
+      render file: "#{Rails.root}/public/500.html", status: r.status, layout: nil
+    end
   end
   # rubocop:enable all
 
@@ -121,19 +133,17 @@ class ApplicationController < ActionController::Base
       {},
       {}
     )
-    render status: r.status, body: r.content
+    eval_presign_obj_by_token(r)
   end
 
   private
 
   # rubocop:disable all
   def eval_presign_obj_by_token(r)
-    if r.status == 409
-      download_response
-    elsif r.status == 200
-      JSON.parse(r.content).with_indifferent_access
-    elsif r.status == 403
-      render file: "#{Rails.root}/public/403.html", status: 403, layout: nil
+    if r.status == 200
+      render status: r.status, json: r.content
+    elsif r.status == 202
+      render status: r.status, json: r.content
     elsif r.status == 404
       render file: "#{Rails.root}/public/404.html", status: 404, layout: nil
     else

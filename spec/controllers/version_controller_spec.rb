@@ -1,4 +1,5 @@
 require 'rails_helper'
+require 'support/presigned'
 
 RSpec.describe VersionController, type: :controller do
   attr_reader :user_id
@@ -10,6 +11,8 @@ RSpec.describe VersionController, type: :controller do
 
   attr_reader :version
 
+  attr_reader :client
+
   before(:each) do
     @user_id = mock_user(name: 'Jane Doe', password: 'correcthorsebatterystaple')
 
@@ -19,8 +22,12 @@ RSpec.describe VersionController, type: :controller do
     @object = create(:inv_object, erc_who: 'Doe, Jane', erc_what: 'Object 1', erc_when: '2018-01-01')
     collection.inv_objects << object
     @object_ark = object.ark
+    object.current_version.ark = @object_ark
+    object.current_version.save!
 
     @version = object.current_version
+
+    @client = mock_httpclient
   end
 
   describe ':download' do
@@ -89,25 +96,71 @@ RSpec.describe VersionController, type: :controller do
     attr_reader :params
 
     before(:each) do
-      @params = { object: object_ark, version: version.number }
+
+      ver = create(
+        :inv_version,
+        inv_object: object,
+        ark: object_ark,
+        number: object.current_version.number + 1,
+        note: 'Sample Version 2'
+      )
+      ver.save!
+      @params = { object: object_ark, version: ver.number }
     end
 
     it 'requires a login' do
-      get(:download, params, { uid: nil })
+      get(:presign, params, { uid: nil })
       expect(response.status).to eq(302)
       expect(response.headers['Location']).to include('guest_login')
     end
 
     it 'prevents download without permissions' do
-      get(:download, params, { uid: user_id })
+      get(:presign, params, { uid: user_id })
       expect(response.status).to eq(401)
     end
 
-    skip it 'request async assembly of the current version of an object' do
+    it 'request async assembly of the current version of an object' do
+      mock_permissions_all(user_id, collection_id)
+
+      params[:version] = 2
+      nk = {
+        node_id: @object.node_number,
+        key: ApplicationController.encode_storage_key(@object.ark, params[:version])
+      }
+      expect(client).to receive(:get).with(
+        ApplicationController.get_storage_presign_url(nk, false),
+        {},
+        {},
+        follow_redirect: true
+      ).and_return(mock_response(200, 'succ'))
+
+      get(:presign, params, { uid: user_id })
+      expect(response.status).to eq(200)
     end
-    skip it 'request async assembly of a past version of an object' do
+
+    it 'request async assembly of a past version of an object' do
+      mock_permissions_all(user_id, collection_id)
+      params[:version] = 1
+      nk = {
+        node_id: @object.node_number,
+        key: ApplicationController.encode_storage_key(@object.ark, params[:version])
+      }
+      expect(client).to receive(:get).with(
+        ApplicationController.get_storage_presign_url(nk, false),
+        {},
+        {},
+        follow_redirect: true
+      ).and_return(mock_response(200, 'succ'))
+
+      get(:presign, params, { uid: user_id })
+      expect(response.status).to eq(200)
     end
-    skip it 'request async assembly of a non-existing version of an object' do
+
+    it 'request async assembly of a non-existing version of an object' do
+      mock_permissions_all(user_id, collection_id)
+      params[:version] = 3
+      get(:presign, params, { uid: user_id })
+      expect(response.status).to eq(404)
     end
   end
 
