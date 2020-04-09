@@ -1,13 +1,15 @@
 class DownloadsController < ApplicationController
-  def add()
+  def add
+    puts("add #{params[:token]}")
     render(file: 'app/views/downloads/index.html.erb')
   end
 
-  def get()
+  def get
+    puts("get #{params[:token]}")
     if params.key?('available')
-      redirect_to("https://merritt-stage.cdlib.org/d/ark%253A%252F99999%252Ffk4g46174f")
+      redirect_to('https://merritt-stage.cdlib.org/d/ark%253A%252F99999%252Ffk4g46174f')
     else
-      redirect_to("/downloads")
+      redirect_to('/downloads')
     end
   end
 end

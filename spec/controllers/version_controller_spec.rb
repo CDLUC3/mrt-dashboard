@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe VersionController do
+RSpec.describe VersionController, type: :controller do
   attr_reader :user_id
   attr_reader :collection
   attr_reader :collection_id

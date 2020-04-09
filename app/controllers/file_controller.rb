@@ -158,17 +158,6 @@ class FileController < ApplicationController
     raise ActiveRecord::RecordNotFound if @file.nil?
   end
 
-  def presign_get_by_node_key(nk)
-    url = FileController.get_storage_presign_url(nk)
-    # :nocov:
-    if url.nil?
-      render file: "#{Rails.root}/public/404.html", status: 404, layout: nil
-      return
-    end
-    # :nocov:
-    presign_get_by_url(url)
-  end
-
   # Call storage service to create a presigned URL for a file
   # https://github.com/CDLUC3/mrt-doc/blob/master/endopoints/storage/presign-file.md
   def presign_get_by_node_key(nodekey)

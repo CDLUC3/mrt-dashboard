@@ -111,8 +111,7 @@ class ObjectController < ApplicationController
   def presign
     nk = {
       node_id: @object.node_number,
-      key: ApplicationController.encode_storage_key(@object.ark),
-      pretend_status: 200
+      key: ApplicationController.encode_storage_key(@object.ark)
     }
     presign_get_obj_by_node_key(nk)
   end

@@ -110,8 +110,7 @@ class ApplicationController < ActionController::Base
       {},
       follow_redirect: true
     )
-    render status: r.status, json: r.content if pretend == nil
-    render status: pretend.status, json: pretend.with_indifferent_access.to_json
+    render status: r.status, json: r.content 
   end
   # rubocop:enable all
 

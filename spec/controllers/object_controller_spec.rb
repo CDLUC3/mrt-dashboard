@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe ObjectController do
+RSpec.describe ObjectController, type: :controller do
 
   attr_reader :user_id
 
@@ -260,20 +260,56 @@ describe ObjectController do
   end
 
   describe ':presign' do
+    attr_reader :params
+
+    def mock_response(status = 200, message = '', json = {})
+      json['status'] = status
+      json['message'] = message
+      mockresp = instance_double(HTTP::Message)
+      allow(mockresp).to receive(:status).and_return(status)
+      allow(mockresp).to receive(:content).and_return(json.to_json)
+      mockresp
+    end
+
+    before(:each) do
+      @params = { object: object_ark }
+    end
+
     it 'requires a login' do
-      get(:presign, { object: object_ark }, { uid: nil })
+
+      get(:presign, params, { uid: nil })
       expect(response.status).to eq(302)
       expect(response.headers['Location']).to include('guest_login')
     end
 
     it 'prevents presign without permissions' do
-      get(:presign, { object: object_ark }, { uid: user_id })
+      get(:presign, params, { uid: user_id })
       expect(response.status).to eq(401)
     end
 
-    skip it 'request async assembly of an object' do
+    it 'request async assembly of an object' do
+      mock_permissions_all(user_id, collection_id)
+
+      nk = {
+        node_id: @object.node_number,
+        key: ApplicationController.encode_storage_key(@object.ark)
+      }
+      expect(client).to receive(:get).with(
+        ApplicationController.get_storage_presign_url(nk, false),
+        {},
+        {},
+        follow_redirect: true
+      ).and_return(mock_response(200, 'succ'))
+
+      get(:presign, params, { uid: user_id })
+      expect(response.status).to eq(200)
     end
-    skip it 'request async assembly of a non-existent object' do
+
+    it 'request async assembly of a non-existent object' do
+      mock_permissions_all(user_id, collection_id)
+      params[:object] = object_ark + '_non_exist'
+      get(:presign, params, { uid: user_id })
+      expect(response.status).to eq(404)
     end
   end
 
