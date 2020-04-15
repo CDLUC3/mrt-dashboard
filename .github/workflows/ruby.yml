@@ -36,6 +36,28 @@ jobs:
       run: |
         bundle exec rubocop
 
+    - name: Prep for coverage tests
+      run: |
+        sudo systemctl start mysql
+        # wait for mysql service to respond
+        which mysql && until mysql -u root -e "show status" &>/dev/null; do sleep 1; done
+        # set up MySQL 5.7
+        sudo mysql -e "use mysql; update user set authentication_string=PASSWORD('') where User='root'; update user set plugin='mysql_native_password';FLUSH PRIVILEGES;"
+        sudo mysql_upgrade -u root
+        sudo service mysql restart
+        # update gems
+        gem update --system
+
+    - name: xvfb setup
+      run: |
+        export DISPLAY=:99.0
+        Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 &
+
+
+    - name: Copy test config
+      run: |
+        travis-prep.sh
+
     - name: Run rspec tests
       run: |
         bundle exec rspec spec/controllers
