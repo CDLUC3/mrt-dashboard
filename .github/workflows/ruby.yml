@@ -10,14 +10,14 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
-    container: ubuntu
+    #container: ubuntu
 
     services:
       # https://medium.com/@ldarren/number-of-ways-to-setup-database-in-github-actions-2cd48df9faae
       mysql-container:
         image: mysql:5.7
         env:
-          MYSQL_DATABASE: 'db-name'
+          MYSQL_DATABASE: 'mrt_dashboard_test'
           MYSQL_USER: 'user'
           MYSQL_PASSWORD: 'password'
           MYSQL_ROOT_PASSWORD: 'root-password'
@@ -34,10 +34,11 @@ jobs:
 
     - name: Check db
       run: |
-        apt update
-        apt install -y mysql-client
+        #pt update
+        #apt install -y mysql-client
         mysql --version
-        mysql --host mysql-container --port 3306 -u user --password=password -e "SHOW DATABASES"
+        mysql --host 127.0.0.1 --port 3306 -u user --password=password -e "SHOW DATABASES"
+        mysql --host 127.0.0.1 --port 3306 --password=root-password -e "SHOW DATABASES"
 
     - name: Setup Bundler 1.17.1
       run: |
