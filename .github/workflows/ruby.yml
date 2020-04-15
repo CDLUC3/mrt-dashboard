@@ -38,7 +38,7 @@ jobs:
         #apt install -y mysql-client
         mysql --version
         mysql --host 127.0.0.1 --port 3306 -u user --password=password -e "SHOW DATABASES"
-        mysql --host 127.0.0.1 --port 3306 --password=root-password -e "SHOW DATABASES"
+        mysql --host 127.0.0.1 --port 3306 -u root --password=root-password -e "SHOW DATABASES"
 
     - name: Setup Bundler 1.17.1
       run: |
