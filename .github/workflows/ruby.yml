@@ -17,6 +17,9 @@ jobs:
       mysql-container:
         image: mysql:5.7
         env:
+          MYSQL_DATABASE: 'db-name'
+          MYSQL_USER: 'user'
+          MYSQL_PASSWORD: 'password'
           MYSQL_ROOT_PASSWORD: 'root-password'
         ports:
         - 3306:3306
@@ -34,7 +37,7 @@ jobs:
         apt update
         apt install -y mysql-client
         mysql --version
-        mysql --host mysql-container --port 3306 -uroot -p root-password -e "SHOW DATABASES"
+        mysql --host mysql-container --port 3306 -u user -p password -e "SHOW DATABASES"
 
     - name: Setup Bundler 1.17.1
       run: |
