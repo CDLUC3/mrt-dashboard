@@ -30,8 +30,7 @@ jobs:
 
     - name: Check db
       run: |
-        sudo apt-get install -y mysql-client
-        mysql --host 127.0.0.1 --port ${{ job.services.mysql.ports['3306'] }} -uroot -p root-password -e "SHOW DATABASES"
+        mysql --host mysql --port ${{ job.services.mysql.ports['3306'] }} -uroot -p root-password -e "SHOW DATABASES"
 
     - name: Setup Bundler 1.17.1
       run: |
