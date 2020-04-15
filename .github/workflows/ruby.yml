@@ -63,7 +63,7 @@ jobs:
 
     - name: Load schema
       run: |
-        bundle exec rake db:migrate
+        bundle exec rake db:schema:load
 
     - name: Run rspec tests
       run: |
