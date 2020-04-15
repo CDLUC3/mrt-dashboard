@@ -36,14 +36,26 @@ jobs:
       run: |
         bundle exec rubocop
 
-    - name: Prep for coverage tests
+    - name: Start mysql
       run: |
         sudo systemctl start mysql
         # wait for mysql service to respond
+
+    - name: Wait for mysql
+      run: |
         which mysql && until mysql -u root -e "show status" &>/dev/null; do sleep 1; done
         # set up MySQL 5.7
+
+    - name: Set empty password
+      run: |
         sudo mysql -e "use mysql; update user set authentication_string=PASSWORD('') where User='root'; update user set plugin='mysql_native_password';FLUSH PRIVILEGES;"
+
+    - name: Upgrade mysql
+      run: |
         sudo mysql_upgrade -u root
+
+    - name: Restart mysql
+      run: |
         sudo systemctl restart mysql
         # update gems
         #gem update --system
