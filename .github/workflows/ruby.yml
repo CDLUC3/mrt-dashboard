@@ -67,6 +67,9 @@ jobs:
 
     - name: Run rspec tests
       run: |
+        PROJECT_ROOT=`pwd`
+        # Make sure Rails cache directory exists
+        mkdir -p "${PROJECT_ROOT}/tmp/cache"
         bundle exec rspec spec/controllers
 
     - name: xvfb setup
