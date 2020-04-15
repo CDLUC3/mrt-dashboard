@@ -36,9 +36,9 @@ jobs:
       run: |
         bundle exec rubocop
 
-    - name: Setup Bundler 1.17.1
+    - name: Run rspec tests
       run: |
-        bundle exec rspec spec
+        bundle exec rspec spec/controllers
 
     - name: Coverage Checks
       run: |
