@@ -38,7 +38,7 @@ jobs:
 
     - name: Start mysql
       run: |
-        sudo systemctl start mysql
+        sudo service mysql start
         # wait for mysql service to respond
 
     - name: Wait for mysql
@@ -56,7 +56,7 @@ jobs:
 
     - name: Restart mysql
       run: |
-        sudo systemctl restart mysql
+        sudo service mysql restart
         # update gems
         #gem update --system
 
