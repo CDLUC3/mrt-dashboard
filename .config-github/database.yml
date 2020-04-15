@@ -1,8 +1,9 @@
 default: &default
-  host: mysql
+  host: mysql-container
   adapter: mysql2
   database: mrt_dashboard_test
-  username: travis
+  username: root
+  password: root-password
   encoding: utf8   # schema won't load if it's utf8mb4
 
 development:
