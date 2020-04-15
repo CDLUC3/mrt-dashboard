@@ -65,17 +65,18 @@ jobs:
       run: |
         bundle exec rake db:schema:load
 
-    - name: Run rspec tests
+    - name: Prep rspec tests
       run: |
         PROJECT_ROOT=`pwd`
         # Make sure Rails cache directory exists
         mkdir -p "${PROJECT_ROOT}/tmp/cache"
+        # rspec runs with coverage...delete once coverage is working
         bundle exec rspec spec/controllers
 
     - name: xvfb setup
       run: |
         export DISPLAY=:99.0
-        Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 &
+        xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 &
 
     - name: Coverage Checks
       run: |
