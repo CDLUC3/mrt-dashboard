@@ -10,15 +10,16 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
+    container: ubuntu
 
     services:
-      # How to use MySQL
+      # https://medium.com/@ldarren/number-of-ways-to-setup-database-in-github-actions-2cd48df9faae
       mysql:
         image: mysql:5.7
         env:
           MYSQL_ROOT_PASSWORD: 'root-password'
         ports:
-        - 3306
+        - 3306:3306
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
 
     steps:
@@ -30,7 +31,7 @@ jobs:
 
     - name: Check db
       run: |
-        mysql --host mysql --port ${{ job.services.mysql.ports['3306'] }} -uroot -p root-password -e "SHOW DATABASES"
+        mysql --host mysql --port 3306 -uroot -p root-password -e "SHOW DATABASES"
 
     - name: Setup Bundler 1.17.1
       run: |
