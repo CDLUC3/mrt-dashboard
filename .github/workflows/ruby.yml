@@ -77,14 +77,6 @@ jobs:
         export DISPLAY=:99.0
         Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 &
 
-    - name: Copy test config
-      run: |
-        travis-prep.sh
-
-    - name: Run rspec tests
-      run: |
-        bundle exec rspec spec/controllers
-
     - name: Coverage Checks
       run: |
         bundle exec rake coverage
