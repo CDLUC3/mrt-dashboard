@@ -36,11 +36,6 @@ jobs:
       run: |
         bundle exec rubocop
 
-    - name: Run rspec tests
-      run: |
-        cp .config-travis/* config
-        bundle exec rspec spec/controllers
-
     - name: Prep for coverage tests
       run: |
         sudo apt-get mysql
@@ -53,6 +48,11 @@ jobs:
         sudo service mysql restart
         # update gems
         #gem update --system
+
+    - name: Run rspec tests
+      run: |
+        cp .config-travis/* config
+        bundle exec rspec spec/controllers
 
     - name: xvfb setup
       run: |
