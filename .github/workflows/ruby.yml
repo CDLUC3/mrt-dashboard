@@ -20,6 +20,7 @@ jobs:
     - name: Build and test with Rake
       run: |
         gem install bundler -v 1.17.1
+        bundle -v
         # https://stackoverflow.com/a/34151536/3846548
         bundle update sqlite3
         bundle install --jobs 4 --retry 3
