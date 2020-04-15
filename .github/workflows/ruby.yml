@@ -31,7 +31,8 @@ jobs:
 
     - name: Check db
       run: |
-        apt-get install -y mysql-client
+        apt update
+        apt install -y mysql-client
         mysql --version
         mysql --host mysql-container --port 3306 -uroot -p root-password -e "SHOW DATABASES"
 
