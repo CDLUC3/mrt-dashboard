@@ -31,7 +31,7 @@ jobs:
 
     - name: Check db
       run: |
-        sudo apt-get install -y mysql-client
+        apt-get install -y mysql-client
         mysql --version
         mysql --host mysql-container --port 3306 -uroot -p root-password -e "SHOW DATABASES"
 
@@ -43,7 +43,7 @@ jobs:
     - name: Ensure sqlite3 installation
       run: |
         # https://stackoverflow.com/a/34151536/3846548
-        sudo apt-get install libsqlite3-dev
+        apt-get install libsqlite3-dev
 
     - name: Bundle install
       run: |
