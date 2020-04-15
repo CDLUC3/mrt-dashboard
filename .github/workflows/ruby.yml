@@ -15,7 +15,7 @@ jobs:
       # How to use MySQL
       mysql:
         image: mysql:5.7
-        environment:
+        env:
           MYSQL_ROOT_PASSWORD: 'root-password'
         ports:
         - 3306
