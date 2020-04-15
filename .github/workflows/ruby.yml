@@ -48,14 +48,13 @@ jobs:
 
     - name: Run rspec tests
       run: |
-        cp .config-travis/* config
+        cp .config-github/* config
         bundle exec rspec spec/controllers
 
     - name: xvfb setup
       run: |
         export DISPLAY=:99.0
         Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 &
-
 
     - name: Copy test config
       run: |
