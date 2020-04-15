@@ -1,6 +1,6 @@
 require 'features_helper'
 
-describe 'objects' do
+describe 'objects', js: true do
   attr_reader :user_id
   attr_reader :password
   attr_reader :obj

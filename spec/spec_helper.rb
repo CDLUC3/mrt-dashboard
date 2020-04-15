@@ -1,4 +1,5 @@
 require 'colorize'
+require 'capybara/webmock'
 
 # ------------------------------------------------------------
 # SimpleCov
@@ -27,6 +28,24 @@ RSpec.configure do |config|
     format = profile_args[:format]
     reporter = Profiler.new(format)
     config.reporter.register_listener(reporter, :start, :stop, :dump_summary, :example_started, :example_finished)
+  end
+
+  # Enable Capybara webmocks if we are testing a feature
+  config.before(:each) do |example|
+    if example.metadata[:type] == :feature
+      Capybara::Webmock.start
+      # Allow Capybara to make localhost requests and also contact the
+      # google api chromedriver store
+      # WebMock.allow_net_connect!(net_http_connect_on_start: true)
+      # WebMock.disable_net_connect!(allow: '*')
+      # WebMock.disable_net_connect!(
+      #   allow_localhost: true,
+      #   allow: %w[chromedriver.storage.googleapis.com]
+      # )
+    end
+  end
+  config.after(:suite) do
+    Capybara::Webmock.stop
   end
 end
 
