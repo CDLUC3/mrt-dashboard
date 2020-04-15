@@ -9,6 +9,16 @@ on:
 jobs:
   build:
 
+   services:
+      # How to use MySQL
+      mysql:
+        image: mysql:5.7
+        env:
+          MYSQL_ALLOW_EMPTY_PASSWORD: yes
+        ports:
+        - 3306
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+
     runs-on: ubuntu-latest
 
     steps:
@@ -35,30 +45,6 @@ jobs:
     - name: Rubocop checks
       run: |
         bundle exec rubocop
-
-    - name: Start mysql
-      run: |
-        sudo service mysql start
-        # wait for mysql service to respond
-
-    - name: Wait for mysql
-      run: |
-        which mysql && until mysql -u root -e "show status" &>/dev/null; do sleep 1; done
-        # set up MySQL 5.7
-
-    - name: Set empty password
-      run: |
-        sudo mysql -e "use mysql; update user set authentication_string=PASSWORD('') where User='root'; update user set plugin='mysql_native_password';FLUSH PRIVILEGES;"
-
-    - name: Upgrade mysql
-      run: |
-        sudo mysql_upgrade -u root
-
-    - name: Restart mysql
-      run: |
-        sudo service mysql restart
-        # update gems
-        #gem update --system
 
     - name: Run rspec tests
       run: |
