@@ -15,8 +15,8 @@ jobs:
       # How to use MySQL
       mysql:
         image: mysql:5.7
-        env:
-          MYSQL_ALLOW_EMPTY_PASSWORD: yes
+        environment:
+          MYSQL_ROOT_PASSWORD: 'root-password'
         ports:
         - 3306
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
@@ -31,7 +31,7 @@ jobs:
     - name: Check db
       run: |
         sudo apt-get install -y mysql-client
-        mysql --host 127.0.0.1 --port ${{ job.services.mysql.ports['3306'] }} -e "SHOW DATABASES"
+        mysql --host 127.0.0.1 --port ${{ job.services.mysql.ports['3306'] }} -uroot root-password -e "SHOW DATABASES"
 
     - name: Setup Bundler 1.17.1
       run: |
