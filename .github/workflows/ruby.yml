@@ -34,8 +34,6 @@ jobs:
 
     - name: Check db
       run: |
-        #pt update
-        #apt install -y mysql-client
         mysql --version
         mysql --host 127.0.0.1 --port 3306 -u user --password=password -e "SHOW DATABASES"
         mysql --host 127.0.0.1 --port 3306 -u root --password=root-password -e "SHOW DATABASES"
@@ -59,9 +57,16 @@ jobs:
       run: |
         bundle exec rubocop
 
-    - name: Run rspec tests
+    - name: Copy config files
       run: |
         cp .config-github/* config
+
+    - name: Load schema
+      run: |
+        bundle exec rake db:migrate
+
+    - name: Run rspec tests
+      run: |
         bundle exec rspec spec/controllers
 
     - name: xvfb setup
