@@ -38,7 +38,7 @@ jobs:
 
     - name: Prep for coverage tests
       run: |
-        sudo apt-get mysql
+        sudo apt-get install mysql
         sudo systemctl start mysql
         # wait for mysql service to respond
         which mysql && until mysql -u root -e "show status" &>/dev/null; do sleep 1; done
