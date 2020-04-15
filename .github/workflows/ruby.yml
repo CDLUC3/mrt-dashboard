@@ -14,7 +14,7 @@ jobs:
 
     services:
       # https://medium.com/@ldarren/number-of-ways-to-setup-database-in-github-actions-2cd48df9faae
-      mysql:
+      mysql-container:
         image: mysql:5.7
         env:
           MYSQL_ROOT_PASSWORD: 'root-password'
@@ -31,7 +31,8 @@ jobs:
 
     - name: Check db
       run: |
-        mysql --host mysql --port 3306 -uroot -p root-password -e "SHOW DATABASES"
+        mysql --version
+        mysql --host mysql-container --port 3306 -uroot -p root-password -e "SHOW DATABASES"
 
     - name: Setup Bundler 1.17.1
       run: |
