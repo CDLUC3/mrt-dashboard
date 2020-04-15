@@ -48,7 +48,7 @@ jobs:
     - name: Ensure sqlite3 installation
       run: |
         # https://stackoverflow.com/a/34151536/3846548
-        apt-get install libsqlite3-dev
+        sudo apt-get install libsqlite3-dev
 
     - name: Bundle install
       run: |
