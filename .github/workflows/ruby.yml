@@ -71,13 +71,13 @@ jobs:
         # Make sure Rails cache directory exists
         mkdir -p "${PROJECT_ROOT}/tmp/cache"
         # rspec runs with coverage...delete once coverage is working
-        bundle exec rspec spec/controllers
+        # bundle exec rspec spec/controllers
 
-    - name: xvfb setup
-      run: |
-        export DISPLAY=:99.0
-        xvfb :99 -screen 0 1024x768x24 &
+    # - name: xvfb setup
+    #  run: |
+    #    export DISPLAY=:99.0
+    #    xvfb :99 -screen 0 1024x768x24 &
 
     - name: Coverage Checks
       run: |
-        bundle exec rake spec
+        bundle exec rake coverage
