@@ -80,4 +80,5 @@ jobs:
 
     - name: Coverage Checks
       run: |
+        chromedriver-update
         bundle exec rake coverage
