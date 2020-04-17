@@ -79,4 +79,7 @@ jobs:
     #    xvfb :99 -screen 0 1024x768x24 &
 
     - name: Coverage Checks
-      run: bundle exec rake coverage
+      run: |
+        chromedriver-update
+        chromedriver-helper --version
+        bundle exec rake coverage
