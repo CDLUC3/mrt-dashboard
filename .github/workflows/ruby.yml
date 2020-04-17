@@ -63,7 +63,7 @@ jobs:
 
     - name: Load schema
       run: |
-        bundle exec rake db:setup RAILS_ENV=test
+        bundle exec rake db:schema:load RAILS_ENV=test
 
     - name: Prep rspec tests
       run: |
