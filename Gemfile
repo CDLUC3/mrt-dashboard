@@ -38,7 +38,7 @@ end
 
 group :test do
   gem 'capybara'
-  gem "capybara-webmock"
+  gem 'capybara-webmock'
   # gem 'chromedriver-helper', '~> 2.0'
   gem 'database_cleaner', '~> 1.5'
   gem 'diffy', '~> 3.1'

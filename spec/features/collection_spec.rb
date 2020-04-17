@@ -144,7 +144,7 @@ describe 'collections' do
       expect(page).to have_content('Not authorized')
     end
 
-    it 'requires a valid group', js: true  do
+    it 'requires a valid group', js: true do
       mock_permissions_all(user_id, collection_id)
       allow(Group).to receive(:find).with(collection_id).and_raise(LdapMixin::LdapException)
       log_in_with(user_id, password)
