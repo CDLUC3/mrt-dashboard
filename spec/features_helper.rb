@@ -1,7 +1,6 @@
-require 'rails_helper'
-require 'capybara/dsl'
-require 'capybara/rails'
-require 'capybara/rspec'
+# frozen_string_literal: true
+
+require 'webdrivers/chromedriver'
 require 'support/downloads'
 require 'webmock/rspec'
 
@@ -20,31 +19,32 @@ end
 # ------------------------------------------------------------
 # Capybara etc.
 
-# Capybara.javascript_driver = :chrome
+Capybara.default_driver = :rack_test
 
-# Capybara.register_driver :chrome do |app|
-#   Capybara::Selenium::Driver.new(app, browser: :chrome)
-# end
+# This is a customisation of the default :selenium_chrome_headless config in:
+# https://github.com/teamcapybara/capybara/blob/master/lib/capybara.rb
+#
+# This adds the --no-sandbox flag to fix TravisCI as described here:
+# https://docs.travis-ci.com/user/chrome#sandboxing
+Capybara.javascript_driver = :capybara_webmock_chrome_headless
 
-Capybara.register_driver :headless_chrome do |app|
-  caps = Selenium::WebDriver::Remote::Capabilities.chrome(loggingPrefs: { browser: 'ALL' })
-  opts = Selenium::WebDriver::Chrome::Options.new
+RSpec.configure do |config|
 
-  chrome_args = %w[--headless --no-sandbox --disable-gpu --window-size=1920,1080 --remote-debugging-port=9222]
-  chrome_args.each { |arg| opts.add_argument(arg) }
-  Capybara::Selenium::Driver.new(app, browser: :chrome, options: opts, desired_capabilities: caps)
+  config.before(:each, type: :feature, js: false) do
+    Capybara.use_default_driver
+  end
+
+  config.before(:each, type: :feature, js: true) do
+    Capybara.current_driver = :capybara_webmock_chrome_headless
+  end
+
 end
-
-Capybara.javascript_driver = :headless_chrome
 
 Capybara.configure do |config|
-  config.default_max_wait_time = 10
-  config.default_driver = :headless_chrome
-  config.server_port = 33_000
-  config.app_host = 'http://localhost:33000'
+  config.default_max_wait_time = 5 # seconds
+  config.server                = :webrick
+  config.raise_server_errors   = true
 end
-
-# Capybara.server = :puma
 
 # ------------------------------------------------------------
 # Capybara helpers
