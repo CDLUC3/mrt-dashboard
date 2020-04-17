@@ -23,21 +23,21 @@ describe 'guest' do
     expect(page).not_to have_content('Profile')
   end
 
-  it 'should have a link for each available colleciton' do
+  it 'should have a link for each available colleciton', js: true do
     collections.each do |collection|
       collection_link = find_link(collection.name)
       expect(collection_link).not_to be_nil
     end
   end
 
-  it 'allows guest user to click on a collection' do
+  it 'allows guest user to click on a collection', js: true do
     collection = collections[0]
     collection_link = find_link(collection.name)
     collection_link.click
     expect(page.title).to include(collection.name)
   end
 
-  it 'should respect read-only permissions' do
+  it 'should respect read-only permissions', js: true do
     find_link(collections[0].name).click
     expect(page).to_not have_content('Add object')
   end

@@ -37,7 +37,8 @@ group :development, :test do
 end
 
 group :test do
-  gem 'capybara', '~> 2.16'
+  gem 'capybara'
+  gem "capybara-webmock"
   # gem 'chromedriver-helper', '~> 2.0'
   gem 'database_cleaner', '~> 1.5'
   gem 'diffy', '~> 3.1'

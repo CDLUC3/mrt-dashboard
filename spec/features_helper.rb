@@ -1,12 +1,16 @@
 # frozen_string_literal: true
 
-require 'webdrivers/chromedriver'
+require 'rails_helper'
+require 'capybara/dsl'
+require 'capybara/rails'
+require 'capybara/rspec'
 require 'support/downloads'
 require 'webmock/rspec'
 
 RSpec.configure do |config|
   config.before(:each) do
-    WebMock.disable_net_connect!(allow_localhost: true)
+    #WebMock.disable_net_connect!(allow_localhost: true)
+    WebMock.allow_net_connect!(net_http_connect_on_start: true)
   end
   config.after(:each) do
     Downloads.clear!
@@ -26,7 +30,7 @@ Capybara.default_driver = :rack_test
 #
 # This adds the --no-sandbox flag to fix TravisCI as described here:
 # https://docs.travis-ci.com/user/chrome#sandboxing
-Capybara.javascript_driver = :capybara_webmock_chrome_headless
+Capybara.javascript_driver = :selenium_chrome_headless
 
 RSpec.configure do |config|
 
@@ -35,7 +39,7 @@ RSpec.configure do |config|
   end
 
   config.before(:each, type: :feature, js: true) do
-    Capybara.current_driver = :capybara_webmock_chrome_headless
+    Capybara.current_driver = :selenium_chrome_headless
   end
 
 end

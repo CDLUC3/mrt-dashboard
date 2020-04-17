@@ -43,7 +43,7 @@ describe 'collections' do
       expect(page).not_to have_content('calculating') # indicates ajax count failure
     end
 
-    describe 'happy path' do
+    describe 'happy path', js: true do
       before(:each) do
         mock_permissions_all(user_id, collection_id)
         log_in_with(user_id, password)
@@ -138,13 +138,13 @@ describe 'collections' do
       expect(page).to have_content('Not authorized')
     end
 
-    it 'requires read permissions' do
+    it 'requires read permissions', js: true do
       log_in_with(user_id, password)
       visit(index_path)
       expect(page).to have_content('Not authorized')
     end
 
-    it 'requires a valid group' do
+    it 'requires a valid group', js: true  do
       mock_permissions_all(user_id, collection_id)
       allow(Group).to receive(:find).with(collection_id).and_raise(LdapMixin::LdapException)
       log_in_with(user_id, password)
