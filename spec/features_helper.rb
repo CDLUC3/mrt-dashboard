@@ -21,8 +21,6 @@ end
 
 Capybara.default_driver = :rack_test
 
-# Cache for one hour
-Webdrivers.cache_time = 3600
 # This is a customisation of the default :selenium_chrome_headless config in:
 # https://github.com/teamcapybara/capybara/blob/master/lib/capybara.rb
 #
