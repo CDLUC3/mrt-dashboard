@@ -20,32 +20,31 @@ end
 # ------------------------------------------------------------
 # Capybara etc.
 
-Capybara.register_driver(:selenium) do |app|
-  profile = Selenium::WebDriver::Chrome::Profile.new
-  profile['download.default_directory'] = Downloads.dir
+# Capybara.javascript_driver = :chrome
 
-  options = Selenium::WebDriver::Chrome::Options.new(
-    args: %w[incognito no-sandbox disable-gpu]
-  )
+# Capybara.register_driver :chrome do |app|
+#   Capybara::Selenium::Driver.new(app, browser: :chrome)
+# end
 
-  Capybara::Selenium::Driver.new(
-    app,
-    browser: :chrome,
-    profile: profile,
-    options: options
-  )
+Capybara.register_driver :headless_chrome do |app|
+  caps = Selenium::WebDriver::Remote::Capabilities.chrome(loggingPrefs: { browser: 'ALL' })
+  opts = Selenium::WebDriver::Chrome::Options.new
+
+  chrome_args = %w[--headless --no-sandbox --disable-gpu --window-size=1920,1080 --remote-debugging-port=9222]
+  chrome_args.each { |arg| opts.add_argument(arg) }
+  Capybara::Selenium::Driver.new(app, browser: :chrome, options: opts, desired_capabilities: caps)
 end
 
-Capybara.javascript_driver = :chrome
+Capybara.javascript_driver = :headless_chrome
 
 Capybara.configure do |config|
   config.default_max_wait_time = 10
-  config.default_driver = :selenium
+  config.default_driver = :headless_chrome
   config.server_port = 33_000
   config.app_host = 'http://localhost:33000'
 end
 
-Capybara.server = :puma
+# Capybara.server = :puma
 
 # ------------------------------------------------------------
 # Capybara helpers
