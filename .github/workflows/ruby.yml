@@ -32,11 +32,20 @@ jobs:
       with:
         ruby-version: 2.4
 
-    - name: Check db
-      run: |
-        mysql --version
-        mysql --host 127.0.0.1 --port 3306 -u user --password=password -e "SHOW DATABASES"
-        mysql --host 127.0.0.1 --port 3306 -u root --password=root-password -e "SHOW DATABASES"
+    #- name: Check db
+    #  run: |
+    #    mysql --version
+    #    mysql --host 127.0.0.1 --port 3306 -u user --password=password -e "SHOW DATABASES"
+    #    mysql --host 127.0.0.1 --port 3306 -u root --password=root-password -e "SHOW DATABASES"
+
+    # Try to retrieve the gems from the cache
+    - name: 'Cache Gems'
+      uses: actions/cache@v1
+      with:
+        path: vendor/bundle
+        key: ${{ runner.os }}-gem-${{ hashFiles('**/Gemfile.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-gem-
 
     - name: Setup Bundler 1.17.1
       run: |
@@ -65,19 +74,9 @@ jobs:
       run: |
         bundle exec rake db:schema:load RAILS_ENV=test
 
-    - name: Prep rspec tests
+    - name: Coverage Checks
       run: |
         PROJECT_ROOT=`pwd`
         # Make sure Rails cache directory exists
         mkdir -p "${PROJECT_ROOT}/tmp/cache"
-        # rspec runs with coverage...delete once coverage is working
-        # bundle exec rspec spec/controllers
-
-    # - name: xvfb setup
-    #  run: |
-    #    export DISPLAY=:99.0
-    #    xvfb :99 -screen 0 1024x768x24 &
-
-    - name: Coverage Checks
-      run: |
         bundle exec rake coverage
