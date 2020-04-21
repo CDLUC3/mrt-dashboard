@@ -3,19 +3,19 @@ class VersionController < ApplicationController
   before_filter :redirect_to_latest_version
   before_filter :load_version
 
-  before_filter(only: %i[download download_user async]) do
+  before_filter(only: %i[download download_user async presign]) do
     unless current_user_can_download?(@version.inv_object)
       flash[:error] = 'You do not have download permissions.'
       render file: "#{Rails.root}/public/401.html", status: 401, layout: false
     end
   end
 
-  before_filter(only: %i[download download_user]) do
+  before_filter(only: %i[download download_user presign]) do
     obj = @version.inv_object
     check_dua(obj, { object: obj, version: @version })
   end
 
-  before_filter(only: %i[download download_user]) do
+  before_filter(only: %i[download download_user presign]) do
     if @version.exceeds_download_size?
       render file: "#{Rails.root}/public/403.html", status: 403, layout: false
     elsif @version.exceeds_sync_size?
@@ -65,6 +65,15 @@ class VersionController < ApplicationController
                     'attachment',
                     "#{Orchard::Pairtree.encode(@version.inv_object.ark.to_s)}_version_#{@version.number}.zip",
                     'application/zip')
+  end
+
+  def presign
+    obj = @version.inv_object
+    nk = {
+      node_id: obj.node_number,
+      key: ApplicationController.encode_storage_key(obj.ark, @version.number)
+    }
+    presign_get_obj_by_node_key(nk)
   end
 
 end

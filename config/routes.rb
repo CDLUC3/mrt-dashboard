@@ -42,11 +42,17 @@ MrtDashboard::Application.routes.draw do
   get('d/:object/:version/*file' => 'file#download', :format => false)
   get('api/presign-file/:object/:version/*file' => 'file#presign', :format => false, :as => 'presign_file')
   get('api/get-storage-key-file/:object/:version/*file' => 'file#storage_key', :format => false, :as => 'storage_key_file')
+  get('api/presign-version/:object/:version' => 'version#presign', :format => false, :as => 'presign_version')
+  get('api/presign-obj/:object' => 'object#presign', :format => false, :as => 'presign_obj')
+  get('api/presign-obj-by-token/:token' => 'application#presign_obj_by_token', :format => false, :as => 'presign_obj_by_token')
   get('u/:object' => 'object#download_user')
   get('u/:object/:version' => 'version#download_user')
   get('dm/:object' => 'object#download_manifest')
   get('s/:group' => 'collection#search_results')
   get('a/:group' => 'object#add')
+  get('downloads/add/:token' => 'downloads#add', :format => false)
+  get('downloads/get/:token' => 'downloads#get', :format => false)
+  get('downloads' => 'downloads#index', :format => false)
 
   # This is a legacy wild controller route that's not recommended for RESTful applications.
   # Note: This route will make all actions in every controller accessible via GET requests.

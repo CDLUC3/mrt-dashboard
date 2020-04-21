@@ -78,7 +78,79 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  # Construct a storage key from component parts
+  def self.build_storage_key(ark, version = '', file = '')
+    key = ark
+    key += "|#{version}" unless version == ''
+    key += "|#{file}" unless file == ''
+    key
+  end
+
+  # Encode a storage key constructed from component parts
+  def self.encode_storage_key(ark, version = '', file = '')
+    key = ApplicationController.build_storage_key(ark, version, file)
+    Encoder.urlencode(key)
+  end
+
+  def self.get_storage_presign_url(nodekey, has_file = true)
+    base = has_file ? APP_CONFIG['storage_presign_file'] : APP_CONFIG['storage_presign_obj']
+    return File.join(base, 'not-applicable') unless nodekey.key?(:node_id) && nodekey.key?(:key)
+    File.join(
+      base,
+      nodekey[:node_id].to_s,
+      nodekey[:key]
+    )
+  end
+
+  def presign_get_obj_by_node_key(nodekey)
+    r = HTTPClient.new.get(
+      ApplicationController.get_storage_presign_url(nodekey, false),
+      {},
+      {},
+      follow_redirect: true
+    )
+    eval_presign_obj_by_node_key(r)
+  end
+
+  # rubocop:disable all
+  def eval_presign_obj_by_node_key(r)
+    if r.status == 200
+      render status: r.status, json: r.content
+    elsif r.status == 403
+      render file: "#{Rails.root}/public/403.html", status: 403, layout: nil
+    elsif r.status == 404
+      render file: "#{Rails.root}/public/404.html", status: 404, layout: nil
+    else
+      render file: "#{Rails.root}/public/500.html", status: r.status, layout: nil
+    end
+  end
+  # rubocop:enable all
+
+  def presign_obj_by_token
+    token = params[:token]
+    r = HTTPClient.new.get(
+      File.join(APP_CONFIG['storage_presign_token'], token),
+      {},
+      {}
+    )
+    eval_presign_obj_by_token(r)
+  end
+
   private
+
+  # rubocop:disable all
+  def eval_presign_obj_by_token(r)
+    if r.status == 200
+      render status: r.status, json: r.content
+    elsif r.status == 202
+      render status: r.status, json: r.content
+    elsif r.status == 404
+      render file: "#{Rails.root}/public/404.html", status: 404, layout: nil
+    else
+      render file: "#{Rails.root}/public/500.html", status: r.status, layout: nil
+    end
+  end
+  # rubocop:enable all
 
   # Return the current user. Uses either the session user OR if the
   # user supplied HTTP basic auth info, uses that. Returns nil if
@@ -157,22 +229,10 @@ class ApplicationController < ActionController::Base
     url_for(opts)
   end
 
-  def log_error(message, exception = nil)
-    msg = message
-    msg << ": #{exception}" if exception
-
-    (log = Rails.logger) && log.error(msg)
-    warn(msg)
-  end
-
   def url_string_with_proto(url, force_https = false)
     return url unless force_https || APP_CONFIG['proto_force'] == 'https'
-    begin
-      uri = URI.parse(url)
-      uri.scheme = 'https'
-      uri.to_s
-    rescue StandardError => e
-      log_error("Url format error caught: #{url}", e)
-    end
+    uri = URI.parse(url)
+    uri.scheme = 'https'
+    uri.to_s
   end
 end

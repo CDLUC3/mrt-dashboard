@@ -1,4 +1,5 @@
 require 'rails_helper'
+require 'support/presigned'
 
 RSpec.describe FileController, type: :controller do
 
@@ -13,16 +14,6 @@ RSpec.describe FileController, type: :controller do
   attr_reader :pathname
   attr_reader :basename
   attr_reader :client
-
-  def mock_httpclient
-    client = instance_double(HTTPClient)
-    allow(client).to receive(:follow_redirect_count).and_return(10)
-    %i[receive_timeout= send_timeout= connect_timeout= keep_alive_timeout=].each do |m|
-      allow(client).to receive(m)
-    end
-    allow(HTTPClient).to receive(:new).and_return(client)
-    client
-  end
 
   before(:each) do
     @user_id = mock_user(name: 'Jane Doe', password: 'correcthorsebatterystaple')
@@ -173,16 +164,6 @@ RSpec.describe FileController, type: :controller do
       }.with_indifferent_access
     end
 
-    # Mock a response from the storage presign file request
-    def mock_response(status = 200, message = '', json = {})
-      json['status'] = status
-      json['message'] = message
-      mockresp = instance_double(HTTP::Message)
-      allow(mockresp).to receive(:status).and_return(status)
-      allow(mockresp).to receive(:content).and_return(json.to_json)
-      mockresp
-    end
-
     before(:each) do
       @params = { object: object_ark, file: pathname, version: object.current_version.number }
     end
@@ -199,20 +180,20 @@ RSpec.describe FileController, type: :controller do
     end
 
     it 'verify that presign request does not contain duplicate slashes' do
-      url = FileController.get_storage_presign_url(my_node_key_params(params))
+      url = FileController.get_storage_presign_url(my_node_key_params(params), true)
       expect(url).not_to match('https?://.*//')
     end
 
     it 'verify that external download url does not contain duplicate slashes' do
       url = inv_file.external_bytestream_uri.to_s
-      expect(url).not_to match('https?://.*//')
+      expect(url).not_to match('https?://.*//.*')
     end
 
     it 'redirects to presign url for the file' do
       mock_permissions_all(user_id, collection_id)
 
       expect(client).to receive(:get).with(
-        FileController.get_storage_presign_url(my_node_key_params(params)),
+        FileController.get_storage_presign_url(my_node_key_params(params), true),
         { contentType: inv_file.mime_type },
         {},
         follow_redirect: true
@@ -236,7 +217,7 @@ RSpec.describe FileController, type: :controller do
 
       params[:no_redirect] = true
       expect(client).to receive(:get).with(
-        FileController.get_storage_presign_url(my_node_key_params(params)),
+        FileController.get_storage_presign_url(my_node_key_params(params), true),
         { contentType: inv_file.mime_type },
         {},
         follow_redirect: true
@@ -252,7 +233,7 @@ RSpec.describe FileController, type: :controller do
       mock_permissions_all(user_id, collection_id)
 
       expect(client).to receive(:get).with(
-        FileController.get_storage_presign_url(my_node_key_params(params)),
+        FileController.get_storage_presign_url(my_node_key_params(params), true),
         { contentType: inv_file.mime_type },
         {},
         follow_redirect: true
@@ -274,7 +255,7 @@ RSpec.describe FileController, type: :controller do
       mock_permissions_all(user_id, collection_id)
 
       expect(client).to receive(:get).with(
-        FileController.get_storage_presign_url(my_node_key_params(params)),
+        FileController.get_storage_presign_url(my_node_key_params(params), true),
         { contentType: inv_file.mime_type },
         {},
         follow_redirect: true
@@ -288,7 +269,7 @@ RSpec.describe FileController, type: :controller do
       mock_permissions_all(user_id, collection_id)
 
       expect(client).to receive(:get).with(
-        FileController.get_storage_presign_url(my_node_key_params(params)),
+        FileController.get_storage_presign_url(my_node_key_params(params), true),
         { contentType: inv_file.mime_type },
         {},
         follow_redirect: true
@@ -302,7 +283,7 @@ RSpec.describe FileController, type: :controller do
       mock_permissions_all(user_id, collection_id)
 
       expect(client).to receive(:get).with(
-        FileController.get_storage_presign_url(my_node_key_params(params)),
+        FileController.get_storage_presign_url(my_node_key_params(params), true),
         { contentType: inv_file.mime_type },
         {},
         follow_redirect: true

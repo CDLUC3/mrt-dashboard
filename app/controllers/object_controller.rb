@@ -5,9 +5,9 @@ class ObjectController < ApplicationController
   include IngestMixin
 
   before_filter :require_user, except: %i[jupload_add recent ingest mint update]
-  before_filter :load_object, only: %i[index download download_user download_manifest async]
+  before_filter :load_object, only: %i[index download download_user download_manifest async presign]
 
-  before_filter(only: %i[download download_user download_manifest async]) do
+  before_filter(only: %i[download download_user download_manifest async presign]) do
     unless current_user_can_download?(@object)
       flash[:error] = 'You do not have download permissions.'
       render file: "#{Rails.root}/public/401.html", status: 401, layout: false
@@ -106,6 +106,14 @@ class ObjectController < ApplicationController
       format.html
       format.atom
     end
+  end
+
+  def presign
+    nk = {
+      node_id: @object.node_number,
+      key: ApplicationController.encode_storage_key(@object.ark)
+    }
+    presign_get_obj_by_node_key(nk)
   end
 
   private
