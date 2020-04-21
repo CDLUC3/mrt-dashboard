@@ -1,0 +1,82 @@
+name: Ruby
+
+on:
+  push:
+    branches: [ ghactions ]
+  pull_request:
+    branches: [ ghactions ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    #container: ubuntu
+
+    services:
+      # https://medium.com/@ldarren/number-of-ways-to-setup-database-in-github-actions-2cd48df9faae
+      mysql-container:
+        image: mysql:5.7
+        env:
+          MYSQL_DATABASE: 'mrt_dashboard_test'
+          MYSQL_USER: 'user'
+          MYSQL_PASSWORD: 'password'
+          MYSQL_ROOT_PASSWORD: 'root-password'
+        ports:
+        - 3306:3306
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Ruby 2.4
+      uses: actions/setup-ruby@v1
+      with:
+        ruby-version: 2.4
+
+    #- name: Check db
+    #  run: |
+    #    mysql --version
+    #    mysql --host 127.0.0.1 --port 3306 -u user --password=password -e "SHOW DATABASES"
+    #    mysql --host 127.0.0.1 --port 3306 -u root --password=root-password -e "SHOW DATABASES"
+
+    # Try to retrieve the gems from the cache
+    - name: 'Cache Gems'
+      uses: actions/cache@v1
+      with:
+        path: vendor/bundle
+        key: ${{ runner.os }}-gem-${{ hashFiles('**/Gemfile.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-gem-
+
+    - name: Setup Bundler 1.17.1
+      run: |
+        gem uninstall bundler
+        gem install bundler:1.17.1
+
+    - name: Ensure sqlite3 installation
+      run: |
+        # https://stackoverflow.com/a/34151536/3846548
+        sudo apt-get install libsqlite3-dev
+
+    - name: Bundle install
+      run: |
+        bundle update sqlite3
+        bundle install --jobs 4 --retry 3
+
+    - name: Rubocop checks
+      run: |
+        bundle exec rubocop
+
+    - name: Copy config files
+      run: |
+        cp .config-github/* config
+
+    - name: Load schema
+      run: |
+        bundle exec rake db:schema:load RAILS_ENV=test
+
+    - name: Coverage Checks
+      run: |
+        PROJECT_ROOT=`pwd`
+        # Make sure Rails cache directory exists
+        mkdir -p "${PROJECT_ROOT}/tmp/cache"
+        bundle exec rake coverage

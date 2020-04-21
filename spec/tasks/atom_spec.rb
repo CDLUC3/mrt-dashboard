@@ -455,7 +455,7 @@ describe 'atom', type: :task do
       # feed_updated = DateTime.parse(feed_xml.at_xpath('//xmlns:updated').text)
       # previous_update = feed_updated - 1
       # write_feeddate(previous_update) # -1 day
-      previous_update = DateTime.new(1970, 1, 1)
+      previous_update = DateTime.new(1971, 1, 1)
       write_feeddate(previous_update)
 
       collection = create(:private_collection, ark: @collection_ark, name: 'Collection 1', mnemonic: 'collection_1')
@@ -630,7 +630,7 @@ describe 'atom', type: :task do
         # feed_updated = DateTime.parse(feed_xml.at_xpath('//xmlns:updated').text)
         # previous_update = feed_updated - 1
         # write_feeddate(previous_update) # -1 day
-        previous_update = DateTime.new(1970, 1, 1)
+        previous_update = DateTime.new(1971, 1, 1)
         write_feeddate(previous_update)
 
         collection = create(:private_collection, ark: @collection_ark, name: 'Collection 1', mnemonic: 'collection_1')

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 require 'capybara/dsl'
 require 'capybara/rails'
@@ -7,7 +9,8 @@ require 'webmock/rspec'
 
 RSpec.configure do |config|
   config.before(:each) do
-    WebMock.disable_net_connect!(allow_localhost: true)
+    # WebMock.disable_net_connect!(allow_localhost: true)
+    WebMock.allow_net_connect!(net_http_connect_on_start: true)
   end
   config.after(:each) do
     Downloads.clear!
@@ -20,32 +23,32 @@ end
 # ------------------------------------------------------------
 # Capybara etc.
 
-Capybara.register_driver(:selenium) do |app|
-  profile = Selenium::WebDriver::Chrome::Profile.new
-  profile['download.default_directory'] = Downloads.dir
+Capybara.default_driver = :rack_test
 
-  options = Selenium::WebDriver::Chrome::Options.new(
-    args: %w[incognito no-sandbox disable-gpu]
-  )
+# This is a customisation of the default :selenium_chrome_headless config in:
+# https://github.com/teamcapybara/capybara/blob/master/lib/capybara.rb
+#
+# This adds the --no-sandbox flag to fix TravisCI as described here:
+# https://docs.travis-ci.com/user/chrome#sandboxing
+Capybara.javascript_driver = :selenium_chrome_headless
 
-  Capybara::Selenium::Driver.new(
-    app,
-    browser: :chrome,
-    profile: profile,
-    options: options
-  )
+RSpec.configure do |config|
+
+  config.before(:each, type: :feature, js: false) do
+    Capybara.use_default_driver
+  end
+
+  config.before(:each, type: :feature, js: true) do
+    Capybara.current_driver = :selenium_chrome_headless
+  end
+
 end
-
-Capybara.javascript_driver = :chrome
 
 Capybara.configure do |config|
-  config.default_max_wait_time = 10
-  config.default_driver = :selenium
-  config.server_port = 33_000
-  config.app_host = 'http://localhost:33000'
+  config.default_max_wait_time = 5 # seconds
+  config.server                = :webrick
+  config.raise_server_errors   = true
 end
-
-Capybara.server = :puma
 
 # ------------------------------------------------------------
 # Capybara helpers
