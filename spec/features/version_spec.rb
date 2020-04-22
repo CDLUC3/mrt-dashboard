@@ -139,7 +139,7 @@ describe 'versions', js: true do
 
     expected_uri = url_for(
       controller: :version,
-      action: :download,
+      action: :presign,
       object: obj,
       version: version
     )

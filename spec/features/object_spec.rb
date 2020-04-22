@@ -135,7 +135,7 @@ describe 'objects', js: true do
 
     expected_uri = url_for(
       controller: :object,
-      action: :download,
+      action: :presign,
       object: obj
     )
     expect(URI(download_action).path).to eq(URI(expected_uri).path)

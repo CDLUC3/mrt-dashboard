@@ -127,7 +127,7 @@ RSpec.describe VersionController, type: :controller do
         node_id: @object.node_number,
         key: ApplicationController.encode_storage_key(@object.ark, params[:version])
       }
-      expect(client).to receive(:get).with(
+      expect(client).to receive(:post).with(
         ApplicationController.get_storage_presign_url(nk, false),
         {},
         {},
@@ -145,7 +145,7 @@ RSpec.describe VersionController, type: :controller do
         node_id: @object.node_number,
         key: ApplicationController.encode_storage_key(@object.ark, params[:version])
       }
-      expect(client).to receive(:get).with(
+      expect(client).to receive(:post).with(
         ApplicationController.get_storage_presign_url(nk, false),
         {},
         {},

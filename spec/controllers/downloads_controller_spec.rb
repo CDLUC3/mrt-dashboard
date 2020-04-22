@@ -11,13 +11,13 @@ RSpec.describe DownloadsController, type: :controller do
 
     it 'check a token' do
       get 'get', token: 'aaa'
-      expect(response.status).to eq(302)
+      expect(response.status).to eq(303)
       expect(request.fullpath).to eq('/downloads/get/aaa')
     end
 
     it 'check a token mocked as available' do
       get 'get', token: 'aaa', available: 'true'
-      expect(response.status).to eq(302)
+      expect(response.status).to eq(303)
     end
   end
 end

@@ -293,7 +293,7 @@ describe ApplicationController do
       enckey = ApplicationController.encode_storage_key(key)
       nk = { node_id: 9999, key: enckey }
       url = ApplicationController.get_storage_presign_url(nk, false)
-      expect(url).to match('.*/presign-obj/.*')
+      expect(url).to match(".*/assemble-obj/9999/#{enckey}")
     end
 
     # This test illustrates the return object, it does not perform any meaningful check since the mock constructs the return object
@@ -315,7 +315,7 @@ describe ApplicationController do
         )
       )
       get(:presign_obj_by_token, { token: token })
-      expect(response.status).to eq(200)
+      expect(response.status).to eq(303)
     end
 
     # This test illustrates the return object, it does not perform any meaningful check since the mock constructs the return object

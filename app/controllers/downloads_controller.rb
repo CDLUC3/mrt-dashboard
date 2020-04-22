@@ -5,11 +5,6 @@ class DownloadsController < ApplicationController
   end
 
   def get
-    puts("get #{params[:token]}")
-    if params.key?('available')
-      redirect_to('https://merritt-stage.cdlib.org/d/ark%253A%252F99999%252Ffk4g46174f')
-    else
-      redirect_to('/downloads')
-    end
+    redirect_to(controller: :application, action: :presign_obj_by_token, token: params[:token])
   end
 end

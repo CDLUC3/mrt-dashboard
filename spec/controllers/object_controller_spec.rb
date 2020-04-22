@@ -276,7 +276,7 @@ RSpec.describe ObjectController, type: :controller do
         node_id: @object.node_number,
         key: ApplicationController.encode_storage_key(@object.ark)
       }
-      expect(client).to receive(:get).with(
+      expect(client).to receive(:post).with(
         ApplicationController.get_storage_presign_url(nk, false),
         {},
         {},
@@ -284,7 +284,7 @@ RSpec.describe ObjectController, type: :controller do
       ).and_return(mock_response(200, 'succ'))
 
       get(:presign, params, { uid: user_id })
-      expect(response.status).to eq(200)
+      expect(response.status).to eq(303)
     end
 
     it 'simulate 403 (object on glacier) from storage servcie' do
@@ -294,7 +294,7 @@ RSpec.describe ObjectController, type: :controller do
         node_id: @object.node_number,
         key: ApplicationController.encode_storage_key(@object.ark)
       }
-      expect(client).to receive(:get).with(
+      expect(client).to receive(:post).with(
         ApplicationController.get_storage_presign_url(nk, false),
         {},
         {},
@@ -312,7 +312,7 @@ RSpec.describe ObjectController, type: :controller do
         node_id: @object.node_number,
         key: ApplicationController.encode_storage_key(@object.ark)
       }
-      expect(client).to receive(:get).with(
+      expect(client).to receive(:post).with(
         ApplicationController.get_storage_presign_url(nk, false),
         {},
         {},
@@ -330,7 +330,7 @@ RSpec.describe ObjectController, type: :controller do
         node_id: @object.node_number,
         key: ApplicationController.encode_storage_key(@object.ark)
       }
-      expect(client).to receive(:get).with(
+      expect(client).to receive(:post).with(
         ApplicationController.get_storage_presign_url(nk, false),
         {},
         {},
