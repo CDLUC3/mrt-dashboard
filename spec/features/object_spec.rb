@@ -206,11 +206,11 @@ describe 'objects', js: true do
     end
 
     describe 'download button' do
-      it 'should display the large object email form' do
+      it 'presign object no longer displays the large object email form' do
         download_button = find_button('Download object')
         download_button.click
 
-        expect(page.title).to include('Large Object')
+        expect(page.title).not_to include('Large Object')
       end
     end
 
