@@ -1,7 +1,12 @@
 require 'rails_helper'
+require 'support/presigned'
 
 RSpec.describe DownloadsController, type: :controller do
   describe ':downloads' do
+
+    before(:each) do
+      @client = mock_httpclient
+    end
 
     it 'add token to page' do
       get 'add', token: 'aaa'
@@ -10,14 +15,27 @@ RSpec.describe DownloadsController, type: :controller do
     end
 
     it 'check a token' do
-      get 'get', token: 'aaa'
+      token = SecureRandom.uuid
+      presign = 'https://foo.bar'
+      expect(@client).to receive(:get).with(
+        File.join(APP_CONFIG['storage_presign_token'], token),
+        {},
+        {}
+      ).and_return(
+        mock_response(
+          200,
+          'Object is available',
+          {
+            token: token,
+            'anticipated-size': 12_345,
+            url: presign
+          }
+        )
+      )
+      get 'get', token: token
       expect(response.status).to eq(303)
-      expect(request.fullpath).to eq('/downloads/get/aaa')
+      expect(response.headers['Location']).to eq(presign)
     end
 
-    it 'check a token mocked as available' do
-      get 'get', token: 'aaa', available: 'true'
-      expect(response.status).to eq(303)
-    end
   end
 end

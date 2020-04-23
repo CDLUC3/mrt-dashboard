@@ -132,10 +132,11 @@ RSpec.describe VersionController, type: :controller do
         {},
         {},
         follow_redirect: true
-      ).and_return(mock_response(200, 'succ'))
+      ).and_return(mock_response(200, 'succ', { token: 'aaa' }))
 
       get(:presign, params, { uid: user_id })
-      expect(response.status).to eq(200)
+      expect(response.status).to eq(302)
+      expect(response.headers['Location']).to include('/downloads/add/aaa')
     end
 
     it 'request async assembly of a past version of an object' do
@@ -150,10 +151,11 @@ RSpec.describe VersionController, type: :controller do
         {},
         {},
         follow_redirect: true
-      ).and_return(mock_response(200, 'succ'))
+      ).and_return(mock_response(200, 'succ', { token: 'aaa' }))
 
       get(:presign, params, { uid: user_id })
-      expect(response.status).to eq(200)
+      expect(response.status).to eq(302)
+      expect(response.headers['Location']).to include('/downloads/add/aaa')
     end
 
     it 'request async assembly of a non-existing version of an object' do

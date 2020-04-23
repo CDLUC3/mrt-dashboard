@@ -5,6 +5,6 @@ class DownloadsController < ApplicationController
   end
 
   def get
-    redirect_to(controller: :application, action: :presign_obj_by_token, token: params[:token])
+    presign_obj_by_token
   end
 end

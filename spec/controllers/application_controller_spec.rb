@@ -1,5 +1,6 @@
 require 'rails_helper'
 require 'securerandom'
+require 'support/presigned'
 
 describe ApplicationController do
 
@@ -243,15 +244,6 @@ describe ApplicationController do
       end
       allow(HTTPClient).to receive(:new).and_return(client)
       client
-    end
-
-    def mock_response(status = 200, message = '', json = {})
-      json['status'] = status
-      json['message'] = message
-      mockresp = instance_double(HTTP::Message)
-      allow(mockresp).to receive(:status).and_return(status)
-      allow(mockresp).to receive(:content).and_return(json.to_json)
-      mockresp
     end
 
     it 'build_storage_key(ark, version, file)' do

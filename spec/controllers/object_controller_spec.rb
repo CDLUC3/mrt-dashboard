@@ -281,10 +281,11 @@ RSpec.describe ObjectController, type: :controller do
         {},
         {},
         follow_redirect: true
-      ).and_return(mock_response(200, 'succ'))
+      ).and_return(mock_response(200, 'succ', { token: 'aaa' }))
 
       get(:presign, params, { uid: user_id })
-      expect(response.status).to eq(303)
+      expect(response.status).to eq(302)
+      expect(response.headers['Location']).to include('/downloads/add/aaa')
     end
 
     it 'simulate 403 (object on glacier) from storage servcie' do
