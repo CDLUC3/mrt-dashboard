@@ -110,16 +110,22 @@ class ApplicationController < ActionController::Base
       {},
       follow_redirect: true
     )
-    eval_presign_obj_by_node_key(r)
+    eval_presign_obj_by_node_key(r, nodekey[:key])
   end
 
   # rubocop:disable all
-  def eval_presign_obj_by_node_key(r)
+  def eval_presign_obj_by_node_key(r, key)
     if r.status == 200
       resp = JSON.parse(r.content)
       if resp.key?('token')
-        token = resp['token']
-        redirect_to(controller: :downloads, action: :add, token: token)
+        redirect_to(
+          controller: :downloads,
+          action: :add,
+          key:key,
+          token: resp['token'],
+          size: resp['cloud-content-bytes'],
+          available: resp['anticipated-availability-time']
+         )
       else
         redirect_to(controller: :downloads)
       end
