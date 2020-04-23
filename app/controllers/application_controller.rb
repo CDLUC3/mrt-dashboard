@@ -88,9 +88,7 @@ class ApplicationController < ActionController::Base
 
   # Encode a storage key constructed from component parts
   def self.encode_storage_key(ark, version = '', file = '')
-    if version != '' && file == ''
-      return "#{Encoder.urlencode(ark)}/#{version}"
-    end
+    return "#{Encoder.urlencode(ark)}/#{version}" if version != '' && file == ''
     key = ApplicationController.build_storage_key(ark, version, file)
     Encoder.urlencode(key)
   end
@@ -137,22 +135,25 @@ class ApplicationController < ActionController::Base
   # rubocop:enable all
 
   def presign_obj_by_token
-    token = params[:token]
+    do_presign_obj_by_token(params[:token], params[:no_redirect])
+  end
+
+  def do_presign_obj_by_token(token, no_redirect = nil)
     r = HTTPClient.new.get(
       File.join(APP_CONFIG['storage_presign_token'], token),
       {},
       {}
     )
-    eval_presign_obj_by_token(r)
+    eval_presign_obj_by_token(r, no_redirect)
   end
 
   private
 
   # rubocop:disable all
-  def eval_presign_obj_by_token(r)
+  def eval_presign_obj_by_token(r, no_redirect = nil)
     if r.status == 200
       resp = JSON.parse(r.content)
-      if params.key?(:no_redirect)
+      if no_redirect != nil
         render status: 200, json: r.content
         return
       end

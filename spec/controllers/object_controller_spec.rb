@@ -288,6 +288,25 @@ RSpec.describe ObjectController, type: :controller do
       expect(response.headers['Location']).to include('/downloads/add/aaa')
     end
 
+    it 'assembly object - token not returned - list downloads (error coverage)' do
+      mock_permissions_all(user_id, collection_id)
+
+      nk = {
+        node_id: @object.node_number,
+        key: ApplicationController.encode_storage_key(@object.ark)
+      }
+      expect(client).to receive(:post).with(
+        ApplicationController.get_storage_presign_url(nk, false),
+        {},
+        {},
+        follow_redirect: true
+      ).and_return(mock_response(200, 'succ', {}))
+
+      get(:presign, params, { uid: user_id })
+      expect(response.status).to eq(302)
+      expect(response.headers['Location']).to match('.*/downloads$')
+    end
+
     it 'simulate 403 (object on glacier) from storage servcie' do
       mock_permissions_all(user_id, collection_id)
 
