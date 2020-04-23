@@ -30,7 +30,7 @@ class FileController < ApplicationController
   # https://github.com/CDLUC3/mrt-doc/blob/master/endopoints/ui/presign-file.md
   def presign
     nk = storage_key_do
-    presigned = presign_get_by_node_key(nk)
+    presigned = presign_get_by_node_key(nk, params)
     return unless response.status == 200
     if params.key?(:no_redirect)
       render status: 200, json: presigned.to_json
@@ -160,10 +160,12 @@ class FileController < ApplicationController
 
   # Call storage service to create a presigned URL for a file
   # https://github.com/CDLUC3/mrt-doc/blob/master/endopoints/storage/presign-file.md
-  def presign_get_by_node_key(nodekey)
+  def presign_get_by_node_key(nodekey, params)
+    p = { contentType: @file.mime_type }
+    p[:contentDisposition] = params[:contentDisposition] if params.key?(:contentDisposition)
     r = HTTPClient.new.get(
       ApplicationController.get_storage_presign_url(nodekey, true),
-      { contentType: @file.mime_type },
+      p,
       {},
       follow_redirect: true
     )

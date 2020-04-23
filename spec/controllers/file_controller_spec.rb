@@ -212,7 +212,7 @@ RSpec.describe FileController, type: :controller do
       end
     end
 
-    it 'returns presign url for the file' do
+    it 'returns presign url for the file (no_redirect)' do
       mock_permissions_all(user_id, collection_id)
 
       params[:no_redirect] = true
@@ -227,6 +227,22 @@ RSpec.describe FileController, type: :controller do
       expect(response.status).to eq(200)
       json = JSON.parse(response.body)
       expect(json['url']).to eq(my_presign)
+    end
+
+    it 'redirects presign url for the file - contentDisposition=attachment' do
+      mock_permissions_all(user_id, collection_id)
+
+      params[:contentDisposition] = 'attachment'
+      expect(client).to receive(:get).with(
+        FileController.get_storage_presign_url(my_node_key_params(params), true),
+        { contentType: inv_file.mime_type, contentDisposition: 'attachment' },
+        {},
+        follow_redirect: true
+      ).and_return(mock_response(200, '', my_presign_wrapper))
+
+      get(:presign, params, { uid: user_id })
+      expect(response.status).to eq(303)
+      expect(response.headers['Location']).to eq(my_presign)
     end
 
     it 'returns 404 if presign url returns 404 - not found' do
