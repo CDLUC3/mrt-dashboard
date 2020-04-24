@@ -1,5 +1,6 @@
 require 'rails_helper'
 require 'securerandom'
+require 'support/presigned'
 
 describe ApplicationController do
 
@@ -245,15 +246,6 @@ describe ApplicationController do
       client
     end
 
-    def mock_response(status = 200, message = '', json = {})
-      json['status'] = status
-      json['message'] = message
-      mockresp = instance_double(HTTP::Message)
-      allow(mockresp).to receive(:status).and_return(status)
-      allow(mockresp).to receive(:content).and_return(json.to_json)
-      mockresp
-    end
-
     it 'build_storage_key(ark, version, file)' do
       key = ApplicationController.build_storage_key(@ark, @ver, @path)
       expect(key).to eq("#{@ark}|#{@ver}|#{@path}")
@@ -293,16 +285,18 @@ describe ApplicationController do
       enckey = ApplicationController.encode_storage_key(key)
       nk = { node_id: 9999, key: enckey }
       url = ApplicationController.get_storage_presign_url(nk, false)
-      expect(url).to match('.*/presign-obj/.*')
+      expect(url).to match(".*/assemble-obj/9999/#{enckey}")
     end
 
     # This test illustrates the return object, it does not perform any meaningful check since the mock constructs the return object
     it 'presign_obj_by_token 200' do
       token = SecureRandom.uuid
+      presign = 'https://presign.example'
       expect(@client).to receive(:get).with(
         File.join(APP_CONFIG['storage_presign_token'], token),
         {},
-        {}
+        {},
+        follow_redirect: true
       ).and_return(
         mock_response(
           200,
@@ -310,12 +304,38 @@ describe ApplicationController do
           {
             token: token,
             'anticipated-size': 12_345,
-            url: 'https://...'
+            url: presign
           }
         )
       )
       get(:presign_obj_by_token, { token: token })
+      expect(response.status).to eq(303)
+      expect(response.headers['Location']).to eq(presign)
+    end
+
+    it 'presign_obj_by_token with no_redirect 200' do
+      token = SecureRandom.uuid
+      presign = 'https://presign.example'
+      expect(@client).to receive(:get).with(
+        File.join(APP_CONFIG['storage_presign_token'], token),
+        {},
+        {},
+        follow_redirect: true
+      ).and_return(
+        mock_response(
+          200,
+          'Object is available',
+          {
+            token: token,
+            'anticipated-size': 12_345,
+            url: presign
+          }
+        )
+      )
+      get(:presign_obj_by_token, { token: token, no_redirect: 1 })
       expect(response.status).to eq(200)
+      json = JSON.parse(response.body)
+      expect(json['url']).to eq(presign)
     end
 
     # This test illustrates the return object, it does not perform any meaningful check since the mock constructs the return object
@@ -324,7 +344,8 @@ describe ApplicationController do
       expect(@client).to receive(:get).with(
         File.join(APP_CONFIG['storage_presign_token'], token),
         {},
-        {}
+        {},
+        follow_redirect: true
       ).and_return(
         mock_response(
           202,
@@ -346,7 +367,8 @@ describe ApplicationController do
       expect(@client).to receive(:get).with(
         File.join(APP_CONFIG['storage_presign_token'], token),
         {},
-        {}
+        {},
+        follow_redirect: true
       ).and_return(
         mock_response(
           404,
@@ -363,7 +385,8 @@ describe ApplicationController do
       expect(@client).to receive(:get).with(
         File.join(APP_CONFIG['storage_presign_token'], token),
         {},
-        {}
+        {},
+        follow_redirect: true
       ).and_return(
         mock_response(
           500,

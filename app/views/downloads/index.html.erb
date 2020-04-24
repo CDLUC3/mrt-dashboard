@@ -26,6 +26,12 @@ it will cause the monitoring scripts to fail.
     showTable();
   });
 
+  //https://stackoverflow.com/a/5158301/3846548
+  function getParameterByName(name) {
+      var match = RegExp('[?&]' + name + '=([^&]*)').exec(window.location.search);
+      return match && decodeURIComponent(decodeURIComponent(match[1].replace(/\+/g, ' ')));
+  }
+
   function getToken() {
     var loc = document.location.pathname;
     var arr = loc.split("/");
@@ -55,7 +61,7 @@ it will cause the monitoring scripts to fail.
     document.location = "/downloads/add/" + uuidv4();
   }
 
-  function mockData() {
+  function clearData() {
     localStorage.tokens = "";
     showTable();
   }
@@ -67,11 +73,11 @@ it will cause the monitoring scripts to fail.
     if (data['ready']) {
       href += "?available=true";
     }
-    var link = $("<a/>").attr("href", href).text(token)
+    var link = $("<a/>").attr("href", href).text(data['name'])
     $("<th/>").appendTo(tr).append(link);
-    $("<td/>").appendTo(tr).text(data['name']);
-    $("<td/>").appendTo(tr).text(formatTime(t, data['available']));
-    $("<td/>").appendTo(tr).text(formatTime(t, data['expires']));
+    $("<td/>").appendTo(tr).text(formatTime(getTime(), data['available']));
+    $("<td/>").appendTo(tr).text(formatTime(getTime(), data['expires']));
+    $("<td/>").appendTo(tr).text(data['size']);
     return tr;
   }
 
@@ -124,14 +130,21 @@ it will cause the monitoring scripts to fail.
   }
 
   function addToken(token) {
-    var t = getTime();
     if (token == "") {
       return;
     }
     var tokens = getTokenList();
     tokens.push(token);
     localStorage.tokens = tokens.join(",");
-    data = {name: 'Ark for ' + token, available: t + Math.random()*60000, expires: t + 300000}
+    var now = new Date();
+    var d = new Date(getParameterByName('available'));
+
+    data = {
+      name: getParameterByName('key'),
+      available: d.getTime(),
+      expires: d.getTime() + 60 * 60000,
+      size: getParameterByName('size')
+    }
     localStorage[token] = JSON.stringify(data);
   }
 </script>
@@ -157,17 +170,16 @@ it will cause the monitoring scripts to fail.
         </h1>
         <h2>Merritt Downloads</h2>
         <div>
-          <button onclick="javscript:mockToken()">Simulate Download</button>
-          <button onclick="javscript:mockData()">Clear Downloads</button>
+          <button onclick="javscript:clearData()">Clear Downloads</button>
         </div>
         <div class="merritt_downloads">
           <table class="merritt_downloads">
             <thead>
             <tr class="header">
-              <th>Token</th>
               <th>Content</th>
               <th>Expected Availability</th>
               <th>Expires</th>
+              <th>Size</th>
             </tr>
             </thead>
             <tbody>

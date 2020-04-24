@@ -127,15 +127,16 @@ RSpec.describe VersionController, type: :controller do
         node_id: @object.node_number,
         key: ApplicationController.encode_storage_key(@object.ark, params[:version])
       }
-      expect(client).to receive(:get).with(
+      expect(client).to receive(:post).with(
         ApplicationController.get_storage_presign_url(nk, false),
         {},
         {},
         follow_redirect: true
-      ).and_return(mock_response(200, 'succ'))
+      ).and_return(mock_response(200, 'succ', { token: 'aaa' }))
 
       get(:presign, params, { uid: user_id })
-      expect(response.status).to eq(200)
+      expect(response.status).to eq(302)
+      expect(response.headers['Location']).to include('/downloads/add/aaa')
     end
 
     it 'request async assembly of a past version of an object' do
@@ -145,15 +146,16 @@ RSpec.describe VersionController, type: :controller do
         node_id: @object.node_number,
         key: ApplicationController.encode_storage_key(@object.ark, params[:version])
       }
-      expect(client).to receive(:get).with(
+      expect(client).to receive(:post).with(
         ApplicationController.get_storage_presign_url(nk, false),
         {},
         {},
         follow_redirect: true
-      ).and_return(mock_response(200, 'succ'))
+      ).and_return(mock_response(200, 'succ', { token: 'aaa' }))
 
       get(:presign, params, { uid: user_id })
-      expect(response.status).to eq(200)
+      expect(response.status).to eq(302)
+      expect(response.headers['Location']).to include('/downloads/add/aaa')
     end
 
     it 'request async assembly of a non-existing version of an object' do

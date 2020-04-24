@@ -88,6 +88,7 @@ class ApplicationController < ActionController::Base
 
   # Encode a storage key constructed from component parts
   def self.encode_storage_key(ark, version = '', file = '')
+    return "#{Encoder.urlencode(ark)}/#{version}" if version != '' && file == ''
     key = ApplicationController.build_storage_key(ark, version, file)
     Encoder.urlencode(key)
   end
@@ -103,19 +104,32 @@ class ApplicationController < ActionController::Base
   end
 
   def presign_get_obj_by_node_key(nodekey)
-    r = HTTPClient.new.get(
+    r = HTTPClient.new.post(
       ApplicationController.get_storage_presign_url(nodekey, false),
       {},
       {},
       follow_redirect: true
     )
-    eval_presign_obj_by_node_key(r)
+    eval_presign_obj_by_node_key(r, nodekey[:key])
   end
 
   # rubocop:disable all
-  def eval_presign_obj_by_node_key(r)
+  def eval_presign_obj_by_node_key(r, key)
     if r.status == 200
-      render status: r.status, json: r.content
+      resp = JSON.parse(r.content)
+      if resp.key?('token')
+        redirect_to(
+          controller: :downloads,
+          action: :add,
+          key:key,
+          token: resp['token'],
+          size: resp['cloud-content-bytes'],
+          available: resp['anticipated-availability-time']
+         )
+      else
+        redirect_to(controller: :downloads)
+      end
+      return
     elsif r.status == 403
       render file: "#{Rails.root}/public/403.html", status: 403, layout: nil
     elsif r.status == 404
@@ -127,21 +141,32 @@ class ApplicationController < ActionController::Base
   # rubocop:enable all
 
   def presign_obj_by_token
-    token = params[:token]
+    do_presign_obj_by_token(params[:token], params[:no_redirect])
+  end
+
+  def do_presign_obj_by_token(token, no_redirect = nil)
     r = HTTPClient.new.get(
       File.join(APP_CONFIG['storage_presign_token'], token),
       {},
-      {}
+      {},
+      follow_redirect: true
     )
-    eval_presign_obj_by_token(r)
+    eval_presign_obj_by_token(r, no_redirect)
   end
 
   private
 
   # rubocop:disable all
-  def eval_presign_obj_by_token(r)
+  def eval_presign_obj_by_token(r, no_redirect = nil)
     if r.status == 200
-      render status: r.status, json: r.content
+      resp = JSON.parse(r.content)
+      if no_redirect != nil
+        render status: 200, json: r.content
+        return
+      end
+      url = resp['url']
+      response.headers['Location'] = url
+      render status: 303, text: ''
     elsif r.status == 202
       render status: r.status, json: r.content
     elsif r.status == 404

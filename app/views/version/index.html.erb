@@ -59,7 +59,7 @@
             Versions and individual files below that size can still be downloaded.
           </p>
         <% else %>
-          <form action="<%= url_for(:action => :download, :object => @version.inv_object, :version => @version) %>">
+          <form action="<%= url_for(:action => :presign, :object => @version.inv_object, :version => @version) %>">
             <input type="submit" value="Download version">
           </form>
         <% end %>
