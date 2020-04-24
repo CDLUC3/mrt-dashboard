@@ -1,12 +1,6 @@
 class DownloadsController < ApplicationController
   def add
-    respond_to :html, :json
-    render(file: 'app/views/downloads/index.html.erb')
-  end
-
-
-  def index
-    respond_to :html, :json
+    render(action: 'index')
   end
 
   def get
