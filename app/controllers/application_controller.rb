@@ -145,14 +145,12 @@ class ApplicationController < ActionController::Base
   end
 
   def do_presign_obj_by_token(token, no_redirect = nil)
-    Rails.logger.error("TBTB do_presign #{File.join(APP_CONFIG['storage_presign_token'], token)}")
     r = HTTPClient.new.get(
       File.join(APP_CONFIG['storage_presign_token'], token),
       {},
-      {}
+      {},
+      follow_redirect: true
     )
-    Rails.logger.error("TBTB res")
-    Rails.logger.error(r.body)
     eval_presign_obj_by_token(r, no_redirect)
   end
 

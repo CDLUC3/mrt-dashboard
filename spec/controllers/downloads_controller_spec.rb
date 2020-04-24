@@ -26,7 +26,8 @@ RSpec.describe DownloadsController, type: :controller do
       expect(@client).to receive(:get).with(
         File.join(APP_CONFIG['storage_presign_token'], token),
         {},
-        {}
+        {},
+        follow_redirect: true
       ).and_return(
         mock_response(
           200,
@@ -49,7 +50,8 @@ RSpec.describe DownloadsController, type: :controller do
       expect(@client).to receive(:get).with(
         File.join(APP_CONFIG['storage_presign_token'], token),
         {},
-        {}
+        {},
+        follow_redirect: true
       ).and_return(
         mock_response(
           200,
