@@ -6,4 +6,5 @@ $(document).ready(function(){
     document.location = "/downloads";
   }
   showTable();
+  initDialogs();
 });

@@ -119,3 +119,24 @@ function addToken(token) {
   }
   localStorage[token] = JSON.stringify(data);
 }
+
+function initDialogs() {
+  dialog = $("#download").dialog({
+    autoOpen : false,
+    height : 600,
+    width : 700,
+    modal : true,
+    buttons : {
+      "Add Barcode" : function() {
+        addCurrentBarcode();
+      },
+      "Done" : function() {
+        dialog.dialog("close");
+        $("#gsheetdiv").show();
+      }
+    },
+    close : function(event, ui) {
+      $("#gsheetdiv").show();
+    }
+  });
+}

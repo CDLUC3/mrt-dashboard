@@ -1,4 +1,3 @@
-Rails.application.config.assets.precompile += %w[
-  presign_download,
-  presign_download_page
- ]
+Rails.application.config.assets.precompile += %w( presign_download.js )
+Rails.application.config.assets.precompile += %w( presign_download_page.js )
+Rails.application.config.assets.precompile += %w( presign_download.css )

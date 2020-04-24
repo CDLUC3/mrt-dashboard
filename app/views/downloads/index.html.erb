@@ -17,18 +17,7 @@ it will cause the monitoring scripts to fail.
   integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
   crossorigin="anonymous"></script>
 <%= javascript_include_tag "presign_download_page"%>
-<style type="text/css">
-  table.merritt_downloads, div.merritt_downloads {
-    width: 100%;
-  }
-  table.merritt_downloads th, table.merritt_downloads td {
-    border: solid thin black;
-    padding: 2px;
-  }
-  table.merritt_downloads thead th, table.merritt_downloads thead td {
-    background-color: orange;
-  }
-</style>
+<%= stylesheet_link_tag "presign_download"%>
 <% end %>
 
 <div class="home">
@@ -37,7 +26,22 @@ it will cause the monitoring scripts to fail.
         <h1>
           <img class="merritt-logo" src="/images/logos/merritt-logo.svg" alt="Merritt"/>
         </h1>
-        <h2>Merritt Downloads</h2>
+        <h2>Merritt Single Download</h2>
+        <div id="download_wrap">
+          <div id="download">
+            <h1>Preparing Download</h1>
+            <h3>Title: Predicting Cognitive Decline (2012)</h3>
+            <p>
+              Merritt needs time to prepare your download.
+              Your requested object will automatically download when it is ready.
+            </p>
+            <p>
+              Closing this window will not cancel your download.
+            </p>
+          </div>
+        </div>
+        <hr/>
+        <h2>Merritt Download Tables</h2>
         <div>
           <button onclick="javscript:clearData()">Clear Downloads</button>
         </div>
