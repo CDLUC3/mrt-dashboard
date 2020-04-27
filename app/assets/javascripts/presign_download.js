@@ -121,14 +121,25 @@ function addToken(token) {
 }
 
 var dialog;
+
+function makeDialogHtml(){
+  return $("<div/>")
+    .append($("<h1>Preparing Download</h1>"))
+    .append($("<h3>Title: Predicting Cognitive Decline (2012)</h3>"))
+    .append($("<p>Merritt needs time to prepare your download. Your requested object will automatically download when it is ready.</p>"))
+    .append($("<p>Closing this window will not cancel your download.</p>"));
+}
+
 function initDialogs() {
-  dialog = $("#download").dialog({
-    autoOpen : false,
+  dialog = makeDialogHtml();
+  dialog.dialog({
+    autoOpen : true,
     height : 600,
     width : 700,
     modal : true,
     buttons : {
       "Add Barcode" : function() {
+        var x = 0;
       },
       "Done" : function() {
         dialog.dialog("close");
@@ -137,5 +148,6 @@ function initDialogs() {
     close : function(event, ui) {
     }
   });
+  alert(123);
   dialog.setVisible(true);
 }
