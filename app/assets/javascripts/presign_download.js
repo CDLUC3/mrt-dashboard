@@ -120,6 +120,7 @@ function addToken(token) {
   localStorage[token] = JSON.stringify(data);
 }
 
+var dialog;
 function initDialogs() {
   dialog = $("#download").dialog({
     autoOpen : false,
@@ -128,15 +129,13 @@ function initDialogs() {
     modal : true,
     buttons : {
       "Add Barcode" : function() {
-        addCurrentBarcode();
       },
       "Done" : function() {
         dialog.dialog("close");
-        $("#gsheetdiv").show();
       }
     },
     close : function(event, ui) {
-      $("#gsheetdiv").show();
     }
   });
+  dialog.setVisible(true);
 }
