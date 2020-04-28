@@ -124,7 +124,6 @@ var dialog;
 
 function makeDialogHtml(){
   return $("<div/>")
-    .append($("<h1>Preparing Download</h1>"))
     .append($("<h3>Title: Predicting Cognitive Decline (2012)</h3>"))
     .append($("<p>Merritt needs time to prepare your download. Your requested object will automatically download when it is ready.</p>"))
     .append($("<p>Closing this window will not cancel your download.</p>"));
@@ -133,12 +132,18 @@ function makeDialogHtml(){
 function initDialogs() {
   dialog = makeDialogHtml();
   dialog.dialog({
+    title: "Preparing Download",
     autoOpen : true,
     height : 600,
     width : 700,
+    position: {
+      my: "center",
+      at: "center",
+      of: window
+    },
     modal : true,
     buttons : {
-      "Add Barcode" : function() {
+      "Option 1" : function() {
         var x = 0;
       },
       "Done" : function() {
@@ -148,6 +153,4 @@ function initDialogs() {
     close : function(event, ui) {
     }
   });
-  alert(123);
-  dialog.setVisible(true);
 }

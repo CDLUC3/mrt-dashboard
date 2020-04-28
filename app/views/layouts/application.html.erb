@@ -11,6 +11,11 @@
   <%= javascript_include_tag "effects", "controls", "dragdrop", "protofish", "prototype", "rails" %>
 
   <%= csrf_meta_tag %>
+
+  <script	src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.2/themes/smoothness/jquery-ui.css"></link>
+
   <%= yield :extra_head %>
 
   <title><%= yield :title %><%= ": #{env_str}" unless env_str.blank? %></title>
