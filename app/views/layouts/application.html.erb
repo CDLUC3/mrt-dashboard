@@ -7,14 +7,11 @@
   <%= stylesheet_link_tag('main') %>
   <%= stylesheet_link_tag('main', media: "print") %>
   <%= stylesheet_link_tag('print', media: "print") %>
+  <%= stylesheet_link_tag('jquery-ui') %>
 
-  <%= javascript_include_tag "effects", "controls", "dragdrop", "protofish", "prototype", "rails" %>
+  <%= javascript_include_tag "effects", "controls", "dragdrop", "protofish", "prototype", "rails", "jquery.min", "jquery-ui.min" %>
 
   <%= csrf_meta_tag %>
-
-  <script	src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-  <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min.js"></script>
-  <link rel="stylesheet" type="text/css" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.2/themes/smoothness/jquery-ui.css"></link>
 
   <%= yield :extra_head %>
 
