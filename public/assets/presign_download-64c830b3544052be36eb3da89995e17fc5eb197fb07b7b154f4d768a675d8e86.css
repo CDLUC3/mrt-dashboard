@@ -1,0 +1,15 @@
+table.merritt_downloads, div.merritt_downloads {
+  width: 100%;
+}
+table.merritt_downloads th, table.merritt_downloads td {
+  border: solid thin black;
+  padding: 2px;
+}
+table.merritt_downloads thead th, table.merritt_downloads thead td {
+  background-color: orange;
+}
+
+#download_wrap {
+  border: thin solid black;
+  padding: 0px 10px 20px 10px;
+}
