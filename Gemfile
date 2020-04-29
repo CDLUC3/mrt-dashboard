@@ -52,8 +52,5 @@ group :test do
   # for all supported webdrivers.
   gem 'webdrivers', '~> 3.0'
 
-  # TODO: update to 1.4.x once sqlite3-ruby #257 is fixed: https://github.com/sparklemotion/sqlite3-ruby/issues/257
-  gem 'sqlite3', '1.3.12'
-
   gem 'webmock', '~> 3.0'
 end

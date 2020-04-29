@@ -1,6 +1,11 @@
 ##################################################
 # Custom ignores
 
+public/assets/*.js
+public/assets/*.css
+public/assets/*.gz
+public/assets/.sprockets*
+
 .config-secret
 
 .idea
