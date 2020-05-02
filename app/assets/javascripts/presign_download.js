@@ -40,16 +40,17 @@ function clearData() {
 
 function createRow(token, data) {
   var t = getTime();
-  var tr = $("<tr/>");
+  var tr = jQuery("<tr/>");
   var href = "/downloads/get/"+token;
   if (data['ready']) {
     href += "?available=true";
   }
-  var link = $("<a/>").attr("href", href).text(data['name'])
-  $("<th/>").appendTo(tr).append(link);
-  $("<td/>").appendTo(tr).text(formatTime(getTime(), data['available']));
-  $("<td/>").appendTo(tr).text(formatTime(getTime(), data['expires']));
-  $("<td/>").appendTo(tr).text(data['size']);
+  var link = jQuery("<a/>").attr("href", href).text(data['name'])
+  jQuery("<th/>").appendTo(tr).append(link);
+  jQuery("<td/>").appendTo(tr).text(data['title']);
+  jQuery("<td/>").appendTo(tr).text(formatTime(getTime(), data['available']));
+  jQuery("<td/>").appendTo(tr).text(formatTime(getTime(), data['expires']));
+  jQuery("<td/>").appendTo(tr).text(data['size']);
   return tr;
 }
 
@@ -69,7 +70,7 @@ function getTokenData(token) {
 }
 
 function showTable() {
-  $("table.merritt_downloads tbody tr").remove();
+  jQuery("table.merritt_downloads tbody tr").remove();
   var tokens = getTokenList();
   var activeTokens = [];
   for (var i=0; i<tokens.length; i++) {
@@ -77,7 +78,7 @@ function showTable() {
     var data = getTokenData(token);
     if (data) {
       activeTokens.push(token)
-      $("table.merritt_downloads tbody")
+      jQuery("table.merritt_downloads tbody")
         .append(createRow(token, data));
     }
   }
@@ -101,7 +102,7 @@ function getTime() {
   return new Date().getTime();
 }
 
-function addToken(token) {
+function addToken(token, key, title, available, size) {
   if (token == "") {
     return;
   }
@@ -109,33 +110,38 @@ function addToken(token) {
   tokens.push(token);
   localStorage.tokens = tokens.join(",");
   var now = new Date();
-  var d = new Date(getParameterByName('available'));
+  var d = new Date(available);
 
   data = {
-    name: getParameterByName('key'),
+    name: key,
+    title: title,
     available: d.getTime(),
     expires: d.getTime() + 60 * 60000,
-    size: getParameterByName('size')
+    size: size
   }
+  console.log(data);
   localStorage[token] = JSON.stringify(data);
 }
 
 var dialog;
 
-function makeDialogHtml(){
-  return $("<div/>")
-    .append($("<h3>Title: Predicting Cognitive Decline (2012)</h3>"))
-    .append($("<p>Merritt needs time to prepare your download. Your requested object will automatically download when it is ready.</p>"))
-    .append($("<p>Closing this window will not cancel your download.</p>"));
+function makeDialogHtml(title){
+  return jQuery("<div/>")
+    .append(jQuery("<h3/>").text(title))
+    .append(jQuery("<p>Merritt needs time to prepare your download. Your requested object will automatically download when it is ready.</p>"))
+    .append(jQuery("<p>Closing this window will not cancel your download.</p>"))
+    .append(jQuery("<div id='progressbar'/>"))
+    .append(jQuery("<div class='progress-label'/>"))
+    .append(jQuery("<div id='progress-download'/>"));
 }
 
-function initDialogs() {
-  dialog = makeDialogHtml();
+function initDialogs(data, key, title) {
+  dialog = makeDialogHtml(title);
   dialog.dialog({
-    title: "Preparing Download",
+    title: "Preparing Download: " + key,
     autoOpen : true,
-    height : 600,
-    width : 700,
+    height : 450,
+    width : 600,
     position: {
       my: "center",
       at: "center",
@@ -153,4 +159,52 @@ function initDialogs() {
     close : function(event, ui) {
     }
   });
+
+  var progressbar = jQuery( "div#progressbar" );
+  var progressLabel = jQuery( ".progress-label" );
+  var progressDownload = jQuery( "div#progress-download" );
+  var progressTimer = setTimeout( progress, 100 );
+
+  function progress() {
+    var val = jQuery( "div#progressbar" ).progressbar( "value" ) || 0;
+    jQuery( "div#progressbar" ).progressbar( "value", val + 1 );
+    if ( val < 100 ) {
+      progressTimer = setTimeout( progress, 100 );
+    }
+  }
+
+  progressbar.progressbar({
+    value: false,
+    change: function() {
+      progressLabel.text( "Current Progress: " + progressbar.progressbar( "value" ) + "%" );
+    },
+    complete: function() {
+      progressLabel.text( "Current Progress: Ready!" );
+      progressDownload
+        .empty()
+        .append(
+          jQuery("<a>Download</a>")
+            .attr("href", "/api/presign-obj-by-token/" + data['token'])
+        );
+    }
+  });
+
+}
+
+function getTokenKey() {
+  return jQuery('h2.key').text();
+}
+
+function getTokenTitle() {
+  return jQuery('h3.object-title span.title').text();
+}
+
+function addTokenData(data) {
+  addToken(
+    data['token'],
+    getTokenKey(),
+    getTokenTitle(),
+    data['anticipated-availability-time'],
+    data['cloud-content-byte']
+  );
 }

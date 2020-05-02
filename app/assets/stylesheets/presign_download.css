@@ -13,3 +13,19 @@ table.merritt_downloads thead th, table.merritt_downloads thead td {
   border: thin solid black;
   padding: 0px 10px 20px 10px;
 }
+
+#progressbar {
+  margin-top: 20px;
+  width: 100%;
+}
+
+.progress-label {
+  font-weight: bold;
+  font-style: italic;
+  text-shadow: 1px 1px 0 #fff;
+}
+
+#progress-download a {
+  color: blue;
+  margin-top: 10px;
+}

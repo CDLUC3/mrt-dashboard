@@ -115,21 +115,9 @@ class ApplicationController < ActionController::Base
 
   # rubocop:disable all
   def eval_presign_obj_by_node_key(r, key)
-    if r.status == 200
+    if r.status.in?([ 200, 202 ])
       resp = JSON.parse(r.content)
-      if resp.key?('token')
-        redirect_to(
-          controller: :downloads,
-          action: :add,
-          key:key,
-          token: resp['token'],
-          size: resp['cloud-content-bytes'],
-          available: resp['anticipated-availability-time']
-         )
-      else
-        redirect_to(controller: :downloads)
-      end
-      return
+      render status: r.status , json: resp
     elsif r.status == 403
       render file: "#{Rails.root}/public/403.html", status: 403, layout: nil
     elsif r.status == 404
