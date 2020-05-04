@@ -29,3 +29,7 @@ table.merritt_downloads thead th, table.merritt_downloads thead td {
   color: blue;
   margin-top: 10px;
 }
+
+div.assemble-ark {
+  font-style: italic;  
+}
