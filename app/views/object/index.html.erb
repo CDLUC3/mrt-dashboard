@@ -28,7 +28,7 @@
           </p>
         <% else %>
           <%= form_tag({action: :presign, object: @object}, remote: true, method: 'GET', id: 'button_presign_obj', dataType: 'json') do %>
-            <%= submit_tag "Download object" %>
+            <%= submit_tag "Download object", onClick: "return assemblyTokenList.checkToken()" %>
           <% end %>
         <% end %>
       <% else %>

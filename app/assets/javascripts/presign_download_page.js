@@ -12,11 +12,12 @@ jQuery(document).ready(function(){
   if (document.location.pathname.match("^/downloads.*")) {
     assemblyTokenList.showTable();
   }
+  assemblyTokenList.showDownloadLink();
 
   jQuery("form#button_presign_obj")
   .on("ajax:success", function(evt, data, status, xhr) {
-    assemblyTokenList.addTokenData(data);
-    initAssemblyDialogs(data, assemblyTokenList.getTokenKey(), assemblyTokenList.getTokenTitle());
+    var tokenData = assemblyTokenList.addTokenData(data);
+    initAssemblyDialogs(tokenData, assemblyTokenList.getTokenKey(), assemblyTokenList.getTokenTitle());
   })
   .on("ajax:error", function( event, xhr, status, error ) {
     var message = error;

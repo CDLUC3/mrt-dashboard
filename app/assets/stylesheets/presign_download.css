@@ -25,11 +25,15 @@ table.merritt_downloads thead th, table.merritt_downloads thead td {
   text-shadow: 1px 1px 0 #fff;
 }
 
-#progress-download a {
+#assemble-message a {
   color: blue;
   margin-top: 10px;
 }
 
 div.assemble-ark {
-  font-style: italic;  
+  font-style: italic;
+}
+
+span.presign-title {
+  font-style: italic;
 }
