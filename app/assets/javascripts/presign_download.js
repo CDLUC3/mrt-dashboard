@@ -21,7 +21,8 @@ var AssemblyTokenList = function() {
     if (data['ready']) {
       href += "?available=true";
     }
-    var link = jQuery("<a/>").attr("href", href).text(data['name'])
+    var name = data['name'] == "" ? "No Name" : data['name'];
+    var link = jQuery("<a/>").attr("href", href).text(name)
     jQuery("<th/>").appendTo(tr).append(link);
     jQuery("<td/>").appendTo(tr).text(data['title']);
     jQuery("<td/>").appendTo(tr).text(this.formatTime(this.getTime(), data['available']));
@@ -33,14 +34,14 @@ var AssemblyTokenList = function() {
   this.getTokenData = function(token) {
     var datastr = localStorage[token];
     if (!datastr) {
-      clearActiveToken(token);
+      this.clearActiveToken(token);
       return null;
     }
     var data = JSON.parse(datastr);
     var t = this.getTime();
     if (data['expires'] < t) {
       localStorage.removeItem(token);
-      clearActiveToken(token);
+      this.clearActiveToken(token);
       return null;
     }
     data['ready'] = (data['available'] <= t);
@@ -121,7 +122,7 @@ var AssemblyTokenList = function() {
   }
 
   this.setDownloadIcon = function() {
-    var text = this.checkNoActiveToken() ? "Downloads(0)" : "Downloads(1)";
+    var text = this.checkNoActiveToken() ? "Downloads: None" : "Downloads: Pending";
     jQuery("#downloads").text(text);
   }
 
@@ -197,7 +198,7 @@ var AssemblyTokenList = function() {
   }
 
   this.getTokenKey = function() {
-    return jQuery('h2.key').text();
+    return jQuery('h2 span.key').text();
   }
 
   this.getTokenTitle = function() {
@@ -226,12 +227,15 @@ var AssemblyProgress = function(assembler) {
     return jQuery( "div#progressbar" ).progressbar({
       value: false,
       change: function() {
-        var msg = "Current Progress: " + jQuery( "div#progressbar" ).progressbar( "value" ) + "%";
+        var msg = jQuery( "div#progressbar" ).progressbar( "value" ) + "%";
         jQuery( ".progress-label" ).text( msg );
+        jQuery("#downloads").text("Downloads: " + msg);
       },
       complete: function() {
+        self.assembler.dialog.dialog({title: "Download Available"});
         jQuery("button.presign-cancel").hide();
-        jQuery( ".progress-label" ).text( "Current Progress: Ready!" );
+        jQuery( ".progress-label" ).text( "100%" );
+        jQuery("#downloads").text("Downloads: 100%");
         jQuery( "div#assemble-message" )
           .empty()
           .append(jQuery("<p>Your download is available at the following URL:</p>"))
@@ -291,10 +295,9 @@ var ObjectAssembler = function(data, key, title) {
       .append(jQuery("<p>Merritt needs time to prepare your download. Your requested object will automatically download when it is ready.</p>"))
       .append(jQuery("<p>Closing this window will not cancel your download.</p>"));
     return jQuery("<div id='assembly-dialog'/>")
-      .append(jQuery("<h3/>").text(title))
-      .append(jQuery("<div class='assemble-ark'/>").text(key))
+      .append(jQuery("<h2/>").text("Title: " + title))
+      //.append(jQuery("<div class='assemble-ark'/>").text(key))
       .append(jQuery(msg))
-      .append(jQuery("<hr/>"))
       .append(jQuery("<div id='progressbar'/>"))
       .append(jQuery("<div class='progress-label'/>"));
   }
@@ -344,24 +347,15 @@ var ObjectAssembler = function(data, key, title) {
       return;
     }
     this.dialog.dialog({
-      title: "Assembling Object for Download",
+      title: "Preparing Download",
       autoOpen : false,
-      height : 350,
+      height : 320,
       width : 600,
       modal : true,
       buttons : [
         {
           click: function() {
-            assemblyTokenList.clearToken();
-            clearTimeout(self.progressTimer);
-            self.dialog.dialog("close");
-          },
-          text: 'Cancel Download',
-          class: 'presign presign-cancel'
-        },
-        {
-          click: function() {
-            clearTimeout(self.progressTimer);
+            //clearTimeout(self.progressTimer);
             self.dialog.dialog("close");
           },
           text: 'Close',

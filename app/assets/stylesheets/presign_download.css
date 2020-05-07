@@ -17,12 +17,16 @@ table.merritt_downloads thead th, table.merritt_downloads thead td {
 #progressbar {
   margin-top: 20px;
   width: 100%;
+  color: navy;
+  height: 4px;
 }
 
 .progress-label {
   font-weight: bold;
   font-style: italic;
   text-shadow: 1px 1px 0 #fff;
+  text-align: center;
+  color: black;
 }
 
 #assemble-message a {
