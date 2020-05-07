@@ -32,6 +32,7 @@ before 'deploy', 'deploy:prompt_for_tag'
 # Update config/atom repo before deployment only
 before 'deploy', 'deploy:update_config'
 before 'deploy', 'deploy:update_atom'
+before 'deploy', 'deploy:prep_assets'
 
 namespace :deploy do
 
@@ -117,6 +118,13 @@ namespace :deploy do
     end
   end
 
+  desc 'Precompile Assets'
+  task :prep_assets do
+    on roles(:app) do
+      execute "cd #{current_path} && bundle exec rake assets:precompile"
+    end
+  end
+
   desc 'Update Atom scripts'
   task :update_atom do
     on roles(:app) do
@@ -155,7 +163,6 @@ namespace :bundle do
   task :install do
     on roles(:app) do
       execute "cd #{current_path} && bundle install --without=test"
-      execute "cd #{current_path} && bundle exec rake assets:precompile"
     end
   end
 end
