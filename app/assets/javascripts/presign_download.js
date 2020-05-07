@@ -100,21 +100,34 @@ var AssemblyTokenList = function() {
     }
     localStorage[token] = JSON.stringify(data);
     this.showDownloadLink();
-    localStorage['active'] = token;
+    this.setActiveToken(token);
     return data;
   }
 
   this.showDownloadLink = function() {
+    this.checkNoActiveToken();
     jQuery("#downloads")
       .on("click", function(){
         if (objectAssembler) {
           objectAssembler.createDialogs()
         }
       });
+    this.setDownloadIcon();
   }
 
   this.clearToken = function() {
     localStorage['active'] = '';
+    this.setDownloadIcon();
+  }
+
+  this.setDownloadIcon = function() {
+    var text = this.checkNoActiveToken() ? "Downloads(0)" : "Downloads(1)";
+    jQuery("#downloads").text(text);
+  }
+
+  this.setActiveToken = function(token) {
+    localStorage['active'] = token;
+    this.setDownloadIcon();
   }
 
   this.clearActiveToken = function(token) {
@@ -123,7 +136,7 @@ var AssemblyTokenList = function() {
     }
   }
 
-  this.checkToken = function() {
+  this.checkNoActiveToken = function() {
     if (!(localStorage['active'])) {
       return true;
     }
@@ -136,6 +149,13 @@ var AssemblyTokenList = function() {
       return true;
     }
     if (!objectAssembler) {
+      objectAssembler = new ObjectAssembler(data, data['name'], data['title']);
+    }
+    return false;
+  }
+
+  this.checkToken = function() {
+    if (this.checkNoActiveToken()) {
       return true;
     }
     var p1 = jQuery("<p>Your previous download </p>")
@@ -144,7 +164,7 @@ var AssemblyTokenList = function() {
       .append(jQuery("<span>You may only download one object at a time.</span>"));
     var p2 = jQuery("<p>Do you want to download this current object (and cancel the previous download)</p>")
       .append(jQuery("<span> or continue the previous download?</span>"));
-    var inProg = jQuery("<div/>")
+    jQuery("<div/>")
       .append(p1)
       .append(p2)
       .dialog({
@@ -156,6 +176,7 @@ var AssemblyTokenList = function() {
       buttons : [
         {
           click: function() {
+            jQuery("form#button_presign_obj").attr("disabled", false);
             jQuery(this).dialog("close");
             objectAssembler.createDialogs();
           },
@@ -163,6 +184,7 @@ var AssemblyTokenList = function() {
         },
         {
           click: function() {
+            jQuery("form#button_presign_obj").attr("disabled", false);
             assemblyTokenList.clearToken();
             jQuery(this).dialog("close");
             jQuery("#button_presign_obj").submit();
@@ -193,10 +215,78 @@ var AssemblyTokenList = function() {
   }
 }
 
+var AssemblyProgress = function(assembler) {
+  var self = this;
+  this.duration = 500;
+  this.durationNotReady = 1000;
+  this.assembler = assembler;
+  this.counter = 0;
+
+  this.makeProgressBar = function(){
+    return jQuery( "div#progressbar" ).progressbar({
+      value: false,
+      change: function() {
+        var msg = "Current Progress: " + jQuery( "div#progressbar" ).progressbar( "value" ) + "%";
+        jQuery( ".progress-label" ).text( msg );
+      },
+      complete: function() {
+        jQuery("button.presign-cancel").hide();
+        jQuery( ".progress-label" ).text( "Current Progress: Ready!" );
+        jQuery( "div#assemble-message" )
+          .empty()
+          .append(jQuery("<p>Your download is available at the following URL:</p>"))
+          .append(
+            jQuery("<a onclick='assemblyTokenList.clearToken()'>Download</a>")
+              .attr("href", self.assembler.presignedUrl)
+          );
+      }
+    });
+  }
+
+  this.progressInit = function() {
+    self.progressbar = self.makeProgressBar();
+    self.progress();
+  }
+  this.progress = function() {
+    if (self.counter != self.assembler.counter) {
+      return;
+    }
+    var val = this.assembler.getPercent();
+    if (this.assembler.presignedUrl != "") {
+      val = 100;
+    }
+    self.progressbar.progressbar( "value", val );
+    if ( val == 100 ) {
+      return;
+    } else if ( val < 90 ) {
+      self.progressTimer = setTimeout( function(){ self.progress() }, self.duration );
+      return;
+    }
+    jQuery.ajax({
+      url: "/api/presign-obj-by-token/"+data['token'],
+      data: { no_redirect: 1 },
+      success: function(data, status, xhr){
+        if (xhr.status == 200) {
+          self.assembler.presignedUrl = data['url'];
+          self.assembler.progressTimer = setTimeout( function(){ self.progress() }, 50 );
+        } else {
+          self.assembler.progressTimer = setTimeout( function(){ self.progress() }, self.durationNotReady );
+        }
+      },
+      error: function(xhr, status, err){
+        this.assembler.makeErrorDialog("Error in object assembly: " + err);
+      },
+      dataType: "json",
+    });
+  }
+
+}
+
 var ObjectAssembler = function(data, key, title) {
   var self = this;
 
   this.makeDialogHtml = function(title, key){
+    jQuery("div#assembly-dialog").remove();
     var msg = jQuery("<div id='assemble-message'/>")
       .append(jQuery("<p>Merritt needs time to prepare your download. Your requested object will automatically download when it is ready.</p>"))
       .append(jQuery("<p>Closing this window will not cancel your download.</p>"));
@@ -204,15 +294,24 @@ var ObjectAssembler = function(data, key, title) {
       .append(jQuery("<h3/>").text(title))
       .append(jQuery("<div class='assemble-ark'/>").text(key))
       .append(jQuery(msg))
+      .append(jQuery("<hr/>"))
       .append(jQuery("<div id='progressbar'/>"))
       .append(jQuery("<div class='progress-label'/>"));
   }
 
+  this.counter = 0;
   this.dialog = this.makeDialogHtml(title, key);
   this.tokenData = data;
   this.ready = new Date(data['available']);
   this.start = new Date();
   this.presignedUrl = "";
+  this.assemblyProgress = new AssemblyProgress(this);
+  this.progressTimer;
+
+  this.startTimer = function(){
+    self.assemblyProgress.counter = self.counter;
+    self.assemblyProgress.progressInit();
+  }
 
   this.getPercent = function() {
     var d = new Date().getTime();
@@ -240,10 +339,13 @@ var ObjectAssembler = function(data, key, title) {
   }
 
   this.createDialogs = function() {
-    jQuery("button.presign").show();
+    if (!this.tokenData['token']) {
+      this.makeErrorDialog("No download assembly is in progress.")
+      return;
+    }
     this.dialog.dialog({
       title: "Assembling Object for Download",
-      autoOpen : true,
+      autoOpen : false,
       height : 350,
       width : 600,
       modal : true,
@@ -251,75 +353,24 @@ var ObjectAssembler = function(data, key, title) {
         {
           click: function() {
             assemblyTokenList.clearToken();
-            clearTimeout(progressTimer);
-            jQuery(this).dialog("close");
+            clearTimeout(self.progressTimer);
+            self.dialog.dialog("close");
           },
           text: 'Cancel Download',
           class: 'presign presign-cancel'
         },
         {
           click: function() {
-            clearTimeout(progressTimer);
-            jQuery(this).dialog("close");
+            clearTimeout(self.progressTimer);
+            self.dialog.dialog("close");
           },
           text: 'Close',
           class: 'presign presign-close'
         }
       ]
     });
-
-    var progressbar = jQuery( "div#progressbar" );
-    var progressLabel = jQuery( ".progress-label" );
-    var progressMessage = jQuery( "div#assemble-message" );
-    var progressTimer = setTimeout( progress, 250 );
-
-    function progress() {
-      var val = self.getPercent();
-      if (self.presignedUrl != "") {
-        val = 100;
-      }
-      jQuery( "div#progressbar" ).progressbar( "value", val );
-      if ( val == 100 ) {
-        return;
-      } else if ( val < 90 ) {
-        progressTimer = setTimeout( progress, 250 );
-        return;
-      }
-      jQuery.ajax({
-        url: "/api/presign-obj-by-token/"+data['token'],
-        data: { no_redirect: 1 },
-        success: function(data, status, xhr){
-          if (xhr.status == 200) {
-            self.presignedUrl = data['url'];
-            progressTimer = setTimeout( progress, 0 );
-          } else {
-            progressTimer = setTimeout( progress, 250 );
-          }
-        },
-        error: function(xhr, status, err){
-          alert(err);
-        },
-        dataType: "json",
-      });
-    }
-
-    progressbar.progressbar({
-      value: false,
-      change: function() {
-        progressLabel.text( "Current Progress: " + progressbar.progressbar( "value" ) + "%");
-      },
-      complete: function() {
-        jQuery("button.presign-cancel").hide();
-        progressLabel.text( "Current Progress: Ready!" );
-        progressMessage
-          .empty()
-          .append(jQuery("<p>Your download is available at the following URL:</p>"))
-          .append(
-            jQuery("<a onclick='assemblyTokenList.clearToken()'>Download</a>")
-              .attr("href", self.presignedUrl)
-          );
-      }
-    });
-
+    jQuery("button.presign").show();
+    this.dialog.dialog("open");
+    this.startTimer();
   }
 }

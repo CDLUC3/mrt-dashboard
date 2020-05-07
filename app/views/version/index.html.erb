@@ -59,9 +59,9 @@
             Versions and individual files below that size can still be downloaded.
           </p>
         <% else %>
-          <form action="<%= url_for(:action => :presign, :object => @version.inv_object, :version => @version) %>">
-            <input type="submit" value="Download version">
-          </form>
+          <%= form_tag({action: :presign, :object => @version.inv_object, :version => @version}, remote: true, method: 'GET', id: 'button_presign_obj', dataType: 'json') do %>
+            <%= submit_tag "Download version", onClick: "return assemblyTokenList.checkToken()" %>
+          <% end %>
         <% end %>
       <% else %>
         <p>

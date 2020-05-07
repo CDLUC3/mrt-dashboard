@@ -15,6 +15,7 @@ jQuery(document).ready(function(){
   assemblyTokenList.showDownloadLink();
 
   jQuery("form#button_presign_obj")
+  .on("click", function(){ jQuery(this).attr("disabled", true)})
   .on("ajax:success", function(evt, data, status, xhr) {
     var tokenData = assemblyTokenList.addTokenData(data);
     initAssemblyDialogs(tokenData, assemblyTokenList.getTokenKey(), assemblyTokenList.getTokenTitle());
