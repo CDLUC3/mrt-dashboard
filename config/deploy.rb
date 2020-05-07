@@ -32,6 +32,7 @@ before 'deploy', 'deploy:prompt_for_tag'
 # Update config/atom repo before deployment only
 before 'deploy', 'deploy:update_config'
 before 'deploy', 'deploy:update_atom'
+after 'deploy', 'assets:precompile'
 
 namespace :deploy do
 
@@ -53,7 +54,6 @@ namespace :deploy do
     end
   end
   before 'deploy:start', 'bundle:install'
-  before 'deploy:start', 'assets:precompile'
 
   desc 'Status Puma'
   task :status do
@@ -167,5 +167,4 @@ namespace :assets do
       execute "cd #{current_path} && bundle exec rake assets:precompile"
     end
   end
-
 end
