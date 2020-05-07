@@ -53,6 +53,7 @@ namespace :deploy do
     end
   end
   before 'deploy:start', 'bundle:install'
+  before 'deploy:start', 'assets:precompile'
 
   desc 'Status Puma'
   task :status do
@@ -149,13 +150,22 @@ namespace :deploy do
 
 end
 
-# namespace :bundle do
-#
-#  desc 'run bundle install and ensure all gem requirements are met'
-#  task :install do
-#    on roles(:app) do
-#      execute "cd #{current_path} && bundle install --without=test"
-#    end
-#  end
-#
-# end
+namespace :bundle do
+
+  desc 'run bundle install and ensure all gem requirements are met'
+  task :install do
+    on roles(:app) do
+      execute "cd #{current_path} && bundle install --without=test"
+    end
+  end
+end
+
+namespace :assets do
+  desc 'run asset prep'
+  task :precompile do
+    on roles(:app) do
+      execute "cd #{current_path} && bundle exec rake assets:precompile"
+    end
+  end
+
+end
