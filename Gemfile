@@ -7,6 +7,7 @@ gem 'rails', '~> 4.2.10'
 
 gem 'builder'
 gem 'capistrano', '~> 3.4.1'
+gem 'capistrano-rails'
 gem 'exception_notification', '~> 4.2'
 gem 'httpclient', '~> 2.7.0'
 gem 'jquery-rails'
