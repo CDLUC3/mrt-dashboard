@@ -149,13 +149,13 @@ namespace :deploy do
 
 end
 
-namespace :bundle do
-
-  desc 'run bundle install and ensure all gem requirements are met'
-  task :install do
-    on roles(:app) do
-      execute "cd #{current_path} && bundle install --without=test"
-    end
-  end
-
-end
+# namespace :bundle do
+#
+#  desc 'run bundle install and ensure all gem requirements are met'
+#  task :install do
+#    on roles(:app) do
+#      execute "cd #{current_path} && bundle install --without=test"
+#    end
+#  end
+#
+# end
