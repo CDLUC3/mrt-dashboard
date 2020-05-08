@@ -52,8 +52,8 @@ namespace :deploy do
       end
     end
   end
-  before 'deploy:start', 'bundle:install'
-  after 'bundle:install', 'bundle:prep_assets'
+  before 'deploy:start', 'bundle:prep_assets'
+  before 'bundle:prep_assets', 'bundle:install'
 
   desc 'Status Puma'
   task :status do
