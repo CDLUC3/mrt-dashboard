@@ -129,13 +129,13 @@ class ApplicationController < ActionController::Base
   # rubocop:enable all
 
   def presign_obj_by_token
-    do_presign_obj_by_token(params[:token], params[:no_redirect])
+    do_presign_obj_by_token(params[:token], params[:filename], params[:no_redirect])
   end
 
-  def do_presign_obj_by_token(token, no_redirect = nil)
+  def do_presign_obj_by_token(token, filename = 'object.zip', no_redirect = nil)
     r = HTTPClient.new.get(
       File.join(APP_CONFIG['storage_presign_token'], token),
-      {},
+      { contentDisposition: "attachment; filename=#{filename}"},
       {},
       follow_redirect: true
     )

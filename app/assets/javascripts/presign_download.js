@@ -28,6 +28,7 @@ var AssemblyTokenList = function() {
     jQuery("<td/>").appendTo(tr).text(this.formatTime(this.getTime(), data['available']));
     jQuery("<td/>").appendTo(tr).text(this.formatTime(this.getTime(), data['expires']));
     jQuery("<td/>").appendTo(tr).text(data['size']);
+    jQuery("<td/>").appendTo(tr).text(data['checkCount']);
     return tr;
   }
 
@@ -91,13 +92,14 @@ var AssemblyTokenList = function() {
     var now = new Date();
     var d = new Date(available);
 
-    data = {
+    var data = {
       name: key,
       token: token,
       title: title,
       available: d.getTime(),
       expires: d.getTime() + 60 * 60000,
-      size: size
+      size: size,
+      checkCount: 0
     }
     localStorage[token] = JSON.stringify(data);
     this.showDownloadLink();
@@ -105,12 +107,21 @@ var AssemblyTokenList = function() {
     return data;
   }
 
+  this.setCheckCount = function(token, count) {
+    var d = localStorage[token];
+    if (d) {
+      var data = JSON.parse(d);
+      data['checkCount'] = count;
+      localStorage[token] = JSON.stringify(data);
+    }
+  }
+
   this.showDownloadLink = function() {
     this.checkNoActiveToken();
     jQuery("#downloads")
       .on("click", function(){
         if (objectAssembler) {
-          objectAssembler.createDialogs()
+          objectAssembler.createDialogs(true);
         }
       });
     this.setDownloadIcon();
@@ -122,8 +133,15 @@ var AssemblyTokenList = function() {
   }
 
   this.setDownloadIcon = function() {
-    var text = this.checkNoActiveToken() ? "Downloads: None" : "Downloads: Pending";
+    var b = this.checkNoActiveToken();
+    var text = b ? "Downloads: None" : "Downloads: Pending";
     jQuery("#downloads").text(text);
+    if (!b) {
+      if (objectAssembler) {
+        objectAssembler.assemblyProgress.progressInit();
+        objectAssembler.createDialogs(false);
+      }
+    }
   }
 
   this.setActiveToken = function(token) {
@@ -145,7 +163,7 @@ var AssemblyTokenList = function() {
       return true;
     }
     var token = localStorage['active'];
-    data = this.getTokenData(token);
+    var data = this.getTokenData(token);
     if (!data) {
       return true;
     }
@@ -159,6 +177,8 @@ var AssemblyTokenList = function() {
     if (this.checkNoActiveToken()) {
       return true;
     }
+    var token = localStorage['active'];
+    var data = this.getTokenData(token);
     var p1 = jQuery("<p>Your previous download </p>")
       .append(jQuery("<span class='presign-title'>").text(data['title']))
       .append(jQuery("<span> is still in progress. </span>"))
@@ -173,15 +193,17 @@ var AssemblyTokenList = function() {
       autoOpen : true,
       height : 350,
       width : 600,
+      maxWidth: jQuery(document).width(),
       modal : true,
       buttons : [
         {
           click: function() {
             jQuery("form#button_presign_obj").attr("disabled", false);
             jQuery(this).dialog("close");
-            objectAssembler.createDialogs();
+            objectAssembler.createDialogs(true);
           },
-          text: 'Continue Previous Download'
+          text: 'Continue Previous Download',
+          class: 'previous-download'
         },
         {
           click: function() {
@@ -190,7 +212,8 @@ var AssemblyTokenList = function() {
             jQuery(this).dialog("close");
             jQuery("#button_presign_obj").submit();
           },
-          text: 'Download Current Object'
+          text: 'Download Current Object',
+          class: 'current-download'
         }
       ]
     });
@@ -198,7 +221,7 @@ var AssemblyTokenList = function() {
   }
 
   this.getTokenKey = function() {
-    return jQuery('h2 span.key').text();
+    return jQuery('h2 span.key').text().trim();
   }
 
   this.getTokenTitle = function() {
@@ -222,6 +245,7 @@ var AssemblyProgress = function(assembler) {
   this.durationNotReady = 1000;
   this.assembler = assembler;
   this.counter = 0;
+  this.checkCounter = 0;
 
   this.makeProgressBar = function(){
     return jQuery( "div#progressbar" ).progressbar({
@@ -240,7 +264,8 @@ var AssemblyProgress = function(assembler) {
           .empty()
           .append(jQuery("<p>Your download is available at the following URL:</p>"))
           .append(
-            jQuery("<a onclick='assemblyTokenList.clearToken()'>Download</a>")
+            jQuery("<a onclick='assemblyTokenList.clearToken()'/>")
+              .text("Download " + self.assembler.getDownloadFilename())
               .attr("href", self.assembler.presignedUrl)
           );
       }
@@ -255,33 +280,50 @@ var AssemblyProgress = function(assembler) {
     if (self.counter != self.assembler.counter) {
       return;
     }
-    var val = this.assembler.getPercent();
-    if (this.assembler.presignedUrl != "") {
-      val = 100;
+
+    var val = self.progressbar.progressbar( "value");
+    if (!val) {
+      val = self.assembler.getPercent();
+      if (val == 90) {
+        val = 100;
+      }
+      self.progressbar.progressbar( "value", val );
     }
-    self.progressbar.progressbar( "value", val );
-    if ( val == 100 ) {
-      return;
-    } else if ( val < 90 ) {
+    if (val < 90) {
+      val = self.assembler.getPercent();
+      self.progressbar.progressbar( "value", val );
       self.progressTimer = setTimeout( function(){ self.progress() }, self.duration );
       return;
     }
-    jQuery.ajax({
-      url: "/api/presign-obj-by-token/"+data['token'],
-      data: { no_redirect: 1 },
-      success: function(data, status, xhr){
-        if (xhr.status == 200) {
-          self.assembler.presignedUrl = data['url'];
-          self.assembler.progressTimer = setTimeout( function(){ self.progress() }, 50 );
-        } else {
-          self.assembler.progressTimer = setTimeout( function(){ self.progress() }, self.durationNotReady );
-        }
-      },
-      error: function(xhr, status, err){
-        this.assembler.makeErrorDialog("Error in object assembly: " + err);
-      },
-      dataType: "json",
-    });
+    if (val >= 100) {
+      return;
+    }
+    if (val == 90) {
+      self.checkCounter++;
+      jQuery.ajax({
+        url: "/api/presign-obj-by-token/" + self.assembler.tokenData['token'],
+        data: { no_redirect: 1, filename: self.assembler.getDownloadFilename() },
+        success: function(data, status, xhr){
+          if (xhr.status == 200) {
+            self.assembler.presignedUrl = data['url'];
+            self.progressbar.progressbar( "value", val + 2);
+            assemblyTokenList.setCheckCount(self.assembler.tokenData['token'], self.checkCounter);
+            self.assembler.progressTimer = setTimeout( function(){ self.progress() }, 50 );
+          } else {
+            self.assembler.progressTimer = setTimeout( function(){ self.progress() }, self.durationNotReady );
+          }
+        },
+        error: function(xhr, status, err){
+          this.assembler.makeErrorDialog("Error in object assembly: " + err);
+        },
+        dataType: "json",
+      });
+      return;
+    }
+
+    val += 2;
+    self.progressbar.progressbar( "value", val );
+    self.assembler.progressTimer = setTimeout( function(){ self.progress() }, 50 );
   }
 
 }
@@ -315,10 +357,20 @@ var ObjectAssembler = function(data, key, title) {
     self.assemblyProgress.counter = self.counter;
     self.assemblyProgress.progressInit();
   }
+  this.getDownloadFilename = function() {
+    var fname = "object";
+    if ('name' in this.tokenData) {
+      fname = this.tokenData['name'].replace(/[^A-Za-z0-9]+/g, '_');
+    }
+    return fname + ".zip";
+  }
 
   this.getPercent = function() {
+    //Storage service presumes 20 sec assembly minimum
+    //var OFFSET = 20000;
+    var OFFSET = 0;
     var d = new Date().getTime();
-    var r = this.ready.getTime();
+    var r = this.ready.getTime() - OFFSET;
     var s = this.start.getTime();
     if (d >= r) {
       return 90;
@@ -341,7 +393,7 @@ var ObjectAssembler = function(data, key, title) {
       .append(jQuery("</p>").text(msg)).dialog();
   }
 
-  this.createDialogs = function() {
+  this.createDialogs = function(show) {
     if (!this.tokenData['token']) {
       this.makeErrorDialog("No download assembly is in progress.")
       return;
@@ -351,6 +403,7 @@ var ObjectAssembler = function(data, key, title) {
       autoOpen : false,
       height : 320,
       width : 600,
+      maxWidth: jQuery(document).width(),
       modal : true,
       buttons : [
         {
@@ -364,7 +417,9 @@ var ObjectAssembler = function(data, key, title) {
       ]
     });
     jQuery("button.presign").show();
-    this.dialog.dialog("open");
+    if (show) {
+      this.dialog.dialog("open");
+    }
     this.startTimer();
   }
 }

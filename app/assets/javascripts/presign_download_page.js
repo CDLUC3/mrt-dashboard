@@ -5,7 +5,7 @@ var assemblyTokenList = new AssemblyTokenList();
 
 function initAssemblyDialogs(data, key, title) {
   objectAssembler = new ObjectAssembler(data, key, title);
-  objectAssembler.createDialogs();
+  objectAssembler.createDialogs(true);
 }
 
 jQuery(document).ready(function(){

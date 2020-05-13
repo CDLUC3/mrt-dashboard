@@ -41,3 +41,25 @@ div.assemble-ark {
 span.presign-title {
   font-style: italic;
 }
+
+li#downloads {
+  padding: 0.2em .5em;
+  border: 3px solid #FFFFFF;
+  border-radius: 10px;
+  margin-right:30px;
+  margin-bottom: 5px;
+  background-color: #77913B;
+}
+
+li#downloads:hover {
+  background-color: #F28D1E;
+}
+
+button.previous-download, button.current-download {
+  border: thin solid  #F28D1E;
+}
+
+button.previous-download {
+  position: absolute;
+  left: 20px;
+}
