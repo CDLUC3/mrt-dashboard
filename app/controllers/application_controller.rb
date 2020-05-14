@@ -135,7 +135,7 @@ class ApplicationController < ActionController::Base
   def do_presign_obj_by_token(token, filename = 'object.zip', no_redirect = nil)
     r = HTTPClient.new.get(
       File.join(APP_CONFIG['storage_presign_token'], token),
-      { contentDisposition: "attachment; filename=#{filename}"},
+      { contentDisposition: "attachment; filename=#{filename}" },
       {},
       follow_redirect: true
     )

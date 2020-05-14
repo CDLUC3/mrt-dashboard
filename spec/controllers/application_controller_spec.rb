@@ -360,7 +360,7 @@ describe ApplicationController do
           }
         )
       )
-      get(:presign_obj_by_token, { token: token, filename: filename  })
+      get(:presign_obj_by_token, { token: token, filename: filename })
       expect(response.status).to eq(202)
     end
 
@@ -379,7 +379,7 @@ describe ApplicationController do
           'Object not found'
         )
       )
-      get(:presign_obj_by_token, { token: token, filename: filename  })
+      get(:presign_obj_by_token, { token: token, filename: filename })
       expect(response.status).to eq(404)
     end
 
@@ -398,7 +398,7 @@ describe ApplicationController do
           'error message'
         )
       )
-      get(:presign_obj_by_token, { token: token, filename: filename  })
+      get(:presign_obj_by_token, { token: token, filename: filename })
       expect(response.status).to eq(500)
     end
   end
