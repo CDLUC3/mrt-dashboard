@@ -9,9 +9,6 @@ function initAssemblyDialogs(data, key, title) {
 }
 
 jQuery(document).ready(function(){
-  if (document.location.pathname.match("^/downloads.*")) {
-    assemblyTokenList.showTable();
-  }
   assemblyTokenList.showDownloadLink();
 
   jQuery("form#button_presign_obj")

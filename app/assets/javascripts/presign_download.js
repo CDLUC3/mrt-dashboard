@@ -11,25 +11,6 @@ var AssemblyTokenList = function() {
 
   this.clearData = function() {
     localStorage.tokens = "";
-    this.showTable();
-  }
-
-  this.createRow = function(token, data) {
-    var t = this.getTime();
-    var tr = jQuery("<tr/>");
-    var href = "/downloads/get/"+token;
-    if (data['ready']) {
-      href += "?available=true";
-    }
-    var name = data['name'] == "" ? "No Name" : data['name'];
-    var link = jQuery("<a/>").attr("href", href).text(name)
-    jQuery("<th/>").appendTo(tr).append(link);
-    jQuery("<td/>").appendTo(tr).text(data['title']);
-    jQuery("<td/>").appendTo(tr).text(this.formatTime(this.getTime(), data['available']));
-    jQuery("<td/>").appendTo(tr).text(this.formatTime(this.getTime(), data['expires']));
-    jQuery("<td/>").appendTo(tr).text(data['size']);
-    jQuery("<td/>").appendTo(tr).text(data['checkCount']);
-    return tr;
   }
 
   this.getTokenData = function(token) {
@@ -47,21 +28,6 @@ var AssemblyTokenList = function() {
     }
     data['ready'] = (data['available'] <= t);
     return data;
-  }
-
-  this.showTable = function() {
-    jQuery("table.merritt_downloads tbody tr").remove();
-    var tokens = this.getTokenList();
-    var activeTokens = [];
-    for (var i=0; i<tokens.length; i++) {
-      var token = tokens[i];
-      var data = this.getTokenData(token);
-      if (data) {
-        activeTokens.push(token)
-        jQuery("table.merritt_downloads tbody")
-          .append(this.createRow(token, data));
-      }
-    }
   }
 
   this.getTokenList = function(){
@@ -135,7 +101,7 @@ var AssemblyTokenList = function() {
   this.setDownloadIcon = function() {
     var b = this.checkNoActiveToken();
     var text = b ? "Downloads: None" : "Downloads: Pending";
-    jQuery("#downloads").text(text);
+    jQuery("#downloads").text(text).attr("aria-label", text);
     if (!b) {
       if (objectAssembler) {
         objectAssembler.assemblyProgress.progressInit();
@@ -179,6 +145,7 @@ var AssemblyTokenList = function() {
     }
     var token = localStorage['active'];
     var data = this.getTokenData(token);
+
     var p1 = jQuery("<p>Your previous download </p>")
       .append(jQuery("<span class='presign-title'>").text(data['title']))
       .append(jQuery("<span> is still in progress. </span>"))
@@ -186,15 +153,18 @@ var AssemblyTokenList = function() {
     var p2 = jQuery("<p>Do you want to download this current object (and cancel the previous download)</p>")
       .append(jQuery("<span> or continue the previous download?</span>"));
     jQuery("<div/>")
+      .append(jQuery("<h1 class='h-title'>Download in Progress</h1>"))
       .append(p1)
       .append(p2)
       .dialog({
       title: "Download In Progress",
       autoOpen : true,
       height : 350,
-      width : 600,
-      maxWidth: jQuery(document).width(),
+      width : jQuery(document).width() < 600 ? jQuery(document).width() * .9 : 600,
       modal : true,
+      classes: {
+        "ui-dialog": "highlight download-in-progress"
+      },
       buttons : [
         {
           click: function() {
@@ -252,14 +222,17 @@ var AssemblyProgress = function(assembler) {
       value: false,
       change: function() {
         var msg = jQuery( "div#progressbar" ).progressbar( "value" ) + "%";
-        jQuery( ".progress-label" ).text( msg );
-        jQuery("#downloads").text("Downloads: " + msg);
+        jQuery( ".progress-label" ).text( msg ).attr("aria-label", msg);
+        var tmsg = "Downloads: " + msg;
+        jQuery("#downloads").text(tmsg).attr("aria-label", tmsg);
       },
       complete: function() {
         self.assembler.dialog.dialog({title: "Download Available"});
         jQuery("button.presign-cancel").hide();
-        jQuery( ".progress-label" ).text( "100%" );
-        jQuery("#downloads").text("Downloads: 100%");
+        var msg = "100%";
+        jQuery( ".progress-label" ).text(msg).attr("aria-label", msg);
+        var tmsg = "Downloads: 100%";
+        jQuery("#downloads").text(tmsg).attr("aria-label", tmsg);
         jQuery( "div#assemble-message" )
           .empty()
           .append(jQuery("<p>Your download is available at the following URL:</p>"))
@@ -281,7 +254,7 @@ var AssemblyProgress = function(assembler) {
       return;
     }
 
-    var val = self.progressbar.progressbar( "value");
+    var val = self.progressbar ? self.progressbar.progressbar( "value") : null;
     if (!val) {
       val = self.assembler.getPercent();
       if (val == 90) {
@@ -337,7 +310,7 @@ var ObjectAssembler = function(data, key, title) {
       .append(jQuery("<p>Merritt needs time to prepare your download. Your requested object will automatically download when it is ready.</p>"))
       .append(jQuery("<p>Closing this window will not cancel your download.</p>"));
     return jQuery("<div id='assembly-dialog'/>")
-      .append(jQuery("<h2/>").text("Title: " + title))
+      .append(jQuery("<h1 class='h-title'/>").text("Title: " + title))
       //.append(jQuery("<div class='assemble-ark'/>").text(key))
       .append(jQuery(msg))
       .append(jQuery("<div id='progressbar'/>"))
@@ -402,8 +375,7 @@ var ObjectAssembler = function(data, key, title) {
       title: "Preparing Download",
       autoOpen : false,
       height : 320,
-      width : 600,
-      maxWidth: jQuery(document).width(),
+      width : jQuery(document).width() < 600 ? jQuery(document).width() * .9 : 600,
       modal : true,
       buttons : [
         {
