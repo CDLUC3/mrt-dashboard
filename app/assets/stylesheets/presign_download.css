@@ -32,16 +32,13 @@ span.presign-title {
 }
 
 li#downloads {
-  padding: 0.2em .5em;
-  border: 3px solid #FFFFFF;
-  border-radius: 10px;
-  margin-right:30px;
-  margin-bottom: 5px;
-  background-color: #77913B;
+  padding: 6px 12px;
+  border-left: 2px solid #FFFFFF;
+  border-right: 2px solid #FFFFFF;
 }
 
 li#downloads:hover {
-  background-color: #F28D1E;
+  background-color: #F2F2F2;
 }
 
 div.download-in-progress div.ui-dialog-buttonset {
