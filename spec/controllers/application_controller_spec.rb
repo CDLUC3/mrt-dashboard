@@ -292,9 +292,10 @@ describe ApplicationController do
     it 'presign_obj_by_token 200' do
       token = SecureRandom.uuid
       presign = 'https://presign.example'
+      filename = 'object.zip'
       expect(@client).to receive(:get).with(
         File.join(APP_CONFIG['storage_presign_token'], token),
-        {},
+        { contentDisposition: "attachment; filename=#{filename}" },
         {},
         follow_redirect: true
       ).and_return(
@@ -308,7 +309,7 @@ describe ApplicationController do
           }
         )
       )
-      get(:presign_obj_by_token, { token: token })
+      get(:presign_obj_by_token, { token: token, filename: filename })
       expect(response.status).to eq(303)
       expect(response.headers['Location']).to eq(presign)
     end
@@ -316,9 +317,10 @@ describe ApplicationController do
     it 'presign_obj_by_token with no_redirect 200' do
       token = SecureRandom.uuid
       presign = 'https://presign.example'
+      filename = 'object.zip'
       expect(@client).to receive(:get).with(
         File.join(APP_CONFIG['storage_presign_token'], token),
-        {},
+        { contentDisposition: "attachment; filename=#{filename}" },
         {},
         follow_redirect: true
       ).and_return(
@@ -332,7 +334,7 @@ describe ApplicationController do
           }
         )
       )
-      get(:presign_obj_by_token, { token: token, no_redirect: 1 })
+      get(:presign_obj_by_token, { token: token, filename: filename, no_redirect: 1 })
       expect(response.status).to eq(200)
       json = JSON.parse(response.body)
       expect(json['url']).to eq(presign)
@@ -341,9 +343,10 @@ describe ApplicationController do
     # This test illustrates the return object, it does not perform any meaningful check since the mock constructs the return object
     it 'presign_obj_by_token 202' do
       token = SecureRandom.uuid
+      filename = 'object.zip'
       expect(@client).to receive(:get).with(
         File.join(APP_CONFIG['storage_presign_token'], token),
-        {},
+        { contentDisposition: "attachment; filename=#{filename}" },
         {},
         follow_redirect: true
       ).and_return(
@@ -357,16 +360,17 @@ describe ApplicationController do
           }
         )
       )
-      get(:presign_obj_by_token, { token: token })
+      get(:presign_obj_by_token, { token: token, filename: filename  })
       expect(response.status).to eq(202)
     end
 
     # This test illustrates the return object, it does not perform any meaningful check since the mock constructs the return object
     it 'presign_obj_by_token 404' do
       token = SecureRandom.uuid
+      filename = 'object.zip'
       expect(@client).to receive(:get).with(
         File.join(APP_CONFIG['storage_presign_token'], token),
-        {},
+        { contentDisposition: "attachment; filename=#{filename}" },
         {},
         follow_redirect: true
       ).and_return(
@@ -375,16 +379,17 @@ describe ApplicationController do
           'Object not found'
         )
       )
-      get(:presign_obj_by_token, { token: token })
+      get(:presign_obj_by_token, { token: token, filename: filename  })
       expect(response.status).to eq(404)
     end
 
     # This test illustrates the return object, it does not perform any meaningful check since the mock constructs the return object
     it 'presign_obj_by_token 500' do
       token = SecureRandom.uuid
+      filename = 'object.zip'
       expect(@client).to receive(:get).with(
         File.join(APP_CONFIG['storage_presign_token'], token),
-        {},
+        { contentDisposition: "attachment; filename=#{filename}" },
         {},
         follow_redirect: true
       ).and_return(
@@ -393,7 +398,7 @@ describe ApplicationController do
           'error message'
         )
       )
-      get(:presign_obj_by_token, { token: token })
+      get(:presign_obj_by_token, { token: token, filename: filename  })
       expect(response.status).to eq(500)
     end
   end
