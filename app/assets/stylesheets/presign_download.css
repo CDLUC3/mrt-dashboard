@@ -32,9 +32,11 @@ span.presign-title {
 }
 
 li#downloads {
-  padding: 6px 12px;
-  border-left: 2px solid #FFFFFF;
-  border-right: 2px solid #FFFFFF;
+  padding: 5px 12px 6px 12px;
+  border-left: 1px solid #999999;
+  border-right: 1px solid #999999;
+  border-bottom: 1px solid #cacaca;
+  border-top: 2px solid #d9d9d9;
 }
 
 li#downloads:hover {

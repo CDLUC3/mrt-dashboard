@@ -1,6 +1,7 @@
 jQuery.noConflict();
 
 var objectAssembler;
+var presignDialogs;
 var assemblyTokenList = new AssemblyTokenList();
 
 function initAssemblyDialogs(data, key, title) {
@@ -9,6 +10,7 @@ function initAssemblyDialogs(data, key, title) {
 }
 
 jQuery(document).ready(function(){
+  presignDialogs = new PresignDialogs();
   assemblyTokenList.showDownloadLink();
 
   jQuery("form#button_presign_obj")
@@ -22,6 +24,6 @@ jQuery(document).ready(function(){
     if (xhr.status == 404) {
       message = "Requested object could not be assembled."
     }
-    objectAssembler.makeErrorDialog(message);
+    presignDialogs.makeErrorDialog("Object Assembly Error", message);
   })
 });
