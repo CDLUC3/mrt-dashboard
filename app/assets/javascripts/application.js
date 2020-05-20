@@ -9,5 +9,8 @@
 //= require effects
 //= require controls
 
-//= require presign_download
+//= require presign_dialog
+//= require presign_token_list
+//= require presign_progress
+//= require presign_assembly
 //= require presign_download_page

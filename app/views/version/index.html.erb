@@ -59,7 +59,7 @@
           </p>
         <% else %>
           <%= form_tag({action: :presign, :object => @version.inv_object, :version => @version}, remote: true, method: 'GET', id: 'button_presign_obj', dataType: 'json') do %>
-            <%= submit_tag "Download version", onClick: "return assemblyTokenList.checkToken()" %>
+            <%= submit_tag "Download version", onClick: "return presignDialogs.assemblyTokenList.checkToken()" %>
           <% end %>
         <% end %>
       <% else %>
