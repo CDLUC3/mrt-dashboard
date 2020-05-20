@@ -49,7 +49,7 @@ div.download-in-progress div.ui-dialog-buttonset {
   float: none!important;
 }
 
-.h-title {
+.h-title, .h-check-title {
   font-size: 1.3em;
   overflow: hidden;
   text-overflow: ellipsis;

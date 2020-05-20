@@ -112,7 +112,7 @@ var AssemblyProgress = function(assembler, pDialogs) {
           if (xhr.status == 200) {
             // Start animation to update the progress from 90% to 100%
             self.assemblyTokenList.markReady(data['token'], data['url']);
-            self.assembler.presignedUrl = data['url'];
+            self.assembler.markReady(data['url']);
             self.setProgressVal(val + 2);
             setTimeout( function(){ self.progress() }, 50 );
           } else {

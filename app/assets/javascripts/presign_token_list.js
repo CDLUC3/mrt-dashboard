@@ -189,7 +189,7 @@ var AssemblyTokenList = function(pDialogs) {
     var data = this.getTokenData(token);
 
     // Presetn dialog box to user to see if they want to resume current assembly or continue with request
-    this.pDialogs.showCurrentOrContinue(data);
+    this.pDialogs.showCurrentOrContinue(data, this.getTokenTitle());
     return false;
   }
 
@@ -200,7 +200,12 @@ var AssemblyTokenList = function(pDialogs) {
 
   // Get the title for an object/version assembly using jQuery selectors
   this.getTokenTitle = function() {
-    return jQuery('h3.object-title span.title').text();
+    var title = jQuery('h3.object-title span.title').text();
+    var vtitle = jQuery('td.version-label').text();
+    if (vtitle != '') {
+      title += " (version " + vtitle + ")";
+    }
+    return title;
   }
 
   // Convert the return JSON data from the storage service into a token data record.

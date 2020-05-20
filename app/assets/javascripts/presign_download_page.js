@@ -17,20 +17,22 @@ var presignDialogs;
       - this is relevant on a page reload when an assembly is in progress.
     form#button_presign_obj - button to initiate a new object assembly.
 
-  Progress Timer - this is the trickies part of this code.  The timer is initiated in the following ways:
+  Progress Timer - this is the trickies part of this code.
+    The timer is initiated in the following ways:
+    - When a new download assembly is initiated
+    - On page load when a previous assembly is still in progress.
 */
 jQuery(document).ready(function(){
   presignDialogs = new PresignDialogs();
+  // Update the "downloads" button at the top of the page to show the status of
+  // any outstanding downloads
   presignDialogs.assemblyTokenList.showDownloadLink();
 
   jQuery("form#button_presign_obj")
   .on("click", function(){ jQuery(this).attr("disabled", true)})
   .on("ajax:success", function(evt, data, status, xhr) {
-    var tokenData = presignDialogs.assemblyTokenList.addTokenData(data);
-    var key = presignDialogs.assemblyTokenList.getTokenKey();
-    var title = presignDialogs.assemblyTokenList.getTokenTitle();
-    presignDialogs.objectAssembler.initData(tokenData, key, title);
-    presignDialogs.objectAssembler.createDialogs(true);
+    // Display the assembly progress window and start a timer to count down until the object is ready
+    presignDialogs.showTokenAssemblyProgress(data);
   })
   .on("ajax:error", function( event, xhr, status, error ) {
     var message = error;

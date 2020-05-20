@@ -7,6 +7,7 @@
 var PresignDialogs = function() {
   self = this;
 
+  // Create assembly dialog box html
   jQuery("<div id='assembly-dialog'/>")
     .append(
       jQuery("<h1 class='h-title'/>").text("Title: ")
@@ -24,9 +25,10 @@ var PresignDialogs = function() {
     .hide()
     .appendTo("body");
 
+  // Create Assembly already in progress dialog box html
   jQuery("<div id='download-in-progress'/>")
     .append(
-      jQuery("<h1 class='h-title'>Download in Progress</h1>")
+      jQuery("<h1 class='h-check-title'>Download in Progress</h1>")
     )
     .append(
       jQuery("<p>Your previous download </p>")
@@ -49,6 +51,7 @@ var PresignDialogs = function() {
     .hide()
     .appendTo("body");
 
+    // Reset the progress bar text to indicate that an assebly has been initiated.
     this.resetProgressStatus = function() {
       jQuery("div#assemble-message")
         .empty()
@@ -60,18 +63,7 @@ var PresignDialogs = function() {
         )
     }
 
-    this.setProgressDownloadedByUser = function() {
-      jQuery( "div#assemble-message" )
-        .empty()
-        .append(
-          jQuery("<p/>").text("Downloading " + self.objectAssembler.getDownloadFilename() + ".")
-        )
-        .append(
-          jQuery("<p/>").text("Check your browser download folder. ")
-        );
-
-    }
-
+    // Set the status message to indicate that the current assembly is ready for download
     this.setProgressAssemblyComplete = function() {
       jQuery( "div#assemble-message" )
         .empty()
@@ -86,6 +78,20 @@ var PresignDialogs = function() {
         );
     }
 
+    // Reset the progress bar text to indicate that the user downloaded an object.
+    // This will clear the active assembly token.
+    this.setProgressDownloadedByUser = function() {
+      jQuery( "div#assemble-message" )
+        .empty()
+        .append(
+          jQuery("<p/>").text("Downloading " + self.objectAssembler.getDownloadFilename() + ".")
+        )
+        .append(
+          jQuery("<p/>").text("Check your browser download folder. ")
+        );
+    }
+
+    // Clear the progress bar text and label
     this.clearProgress = function() {
       if (this.objectAssembler) {
         if (this.objectAssembler.tokenData) {
@@ -98,6 +104,10 @@ var PresignDialogs = function() {
       }
     }
 
+    // Initialize the download button at the top of the screen
+    //   - indicate if an assembly is in progress
+    //   - indicate if an assembly is complete
+    //   - Activate the button to bring up the Assmbly Dialog on button click
     this.initializeDownloadLink = function() {
       jQuery("#downloads")
         .on("click", function(){
@@ -117,6 +127,8 @@ var PresignDialogs = function() {
       }
     }
 
+    // Update the progress bar (if initialized)
+    // Otherwise, just update the status in the download button
     this.updateProgress = function() {
       if (this.objectAssembler) {
         if (this.objectAssembler.tokenData) {
@@ -128,6 +140,7 @@ var PresignDialogs = function() {
       }
     }
 
+    // Initialize the assembly window from data saved with the assembly token
     this.initAssemblyFromTokenData = function(data) {
       if (this.objectAssembler) {
         if (!this.objectAssembler.tokenData) {
@@ -137,8 +150,11 @@ var PresignDialogs = function() {
       }
     }
 
-    this.showCurrentOrContinue = function(data) {
+    // When a download assembly is already in progress or available, prompt the user
+    // to confirm that they want to replace the prior assembly with a new assembly.
+    this.showCurrentOrContinue = function(data, newTitle) {
       jQuery("span.presign-title").text(data['title']);
+      jQuery("h1.h-check-title").text("Title: " + newTitle);
       jQuery("div#download-in-progress")
         .dialog({
         title: "Download In Progress",
@@ -173,9 +189,23 @@ var PresignDialogs = function() {
       });
     }
 
+    // Show the assembly window for a new token returned from the storage service
+    this.showTokenAssemblyProgress = function(data) {
+      var tokenData = this.assemblyTokenList.addTokenData(data);
+      var key = this.assemblyTokenList.getTokenKey();
+      var title = this.assemblyTokenList.getTokenTitle();
+      this.objectAssembler.initData(tokenData, key, title);
+      this.objectAssembler.createDialogs(true);
+    }
+
+    // Singleton objects used to present UI components to the user
     this.assemblyTokenList = new AssemblyTokenList(this);
+    // Clear any expired tokens from localStorage
+    // Note that this class contains some code that could support multiple downloads in the UI
     this.assemblyTokenList.reviewTokenList();
     this.objectAssembler = new ObjectAssembler(this);
+
+    // Utility method to generate an error dialog
     this.makeErrorDialog = function(title, msg) {
       return jQuery("<div id='dialog'/>")
         .attr("title", title)
