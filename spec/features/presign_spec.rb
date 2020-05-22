@@ -2,7 +2,7 @@ require 'features_helper'
 require 'support/presigned'
 
 # TODO: refactor this to separate logged-in-with-permissions tests from others
-describe 'versions', js: true do
+describe 'presigned objects and versions', js: true do
   attr_reader :user_id
   attr_reader :password
   attr_reader :obj
@@ -67,12 +67,14 @@ describe 'versions', js: true do
 
   it 'click download button - no mock', js: true do
     click_button('Download version')
-    within('#error-dialog') do
+    # this is a real (not mocked) ajax call
+    wait_for_ajax!
+    within('div.ui-dialog') do
       expect(page).to have_content('Internal Server Error') # async
     end
   end
 
-  it 'click download button - has mock', js: true do
+  it 'click download button - has mock' do
     mock_assembly(
       @obj.node_number,
       ApplicationController.encode_storage_key(@obj.ark, @version.number),
@@ -85,6 +87,36 @@ describe 'versions', js: true do
     within('#assembly-dialog h3.h-title') do
       expect(page).to have_content('Object 1 (version 1)') #
     end
+  end
+
+  skip it 'test close dialog and look at uppoer downloads button' do
+  end
+
+  skip it 'test close/reopen dialog from upper downloads button' do
+  end
+
+  skip it 'test close/reopen dialog from new download button' do
+  end
+
+  skip it 'test 200 result' do
+  end
+
+  skip it 'test 200 result plus download click' do
+  end
+
+  skip it 'test 202 result' do
+  end
+
+  skip it 'test close/new page, test downloads button' do
+  end
+
+  skip it 'test close/logout, test downloads button' do
+  end
+
+  skip it 'test start new download - continue' do
+  end
+
+  skip it 'test start new download - resume previous' do
   end
 
 end
