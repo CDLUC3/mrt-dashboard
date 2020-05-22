@@ -69,7 +69,7 @@ describe 'presigned objects and versions', js: true do
     click_button('Download version')
     # this is a real (not mocked) ajax call
     sleep 1
-    find("div.ui-dialog")
+    find('div.ui-dialog')
     within('div.ui-dialog') do
       expect(page).to have_content('Internal Server Error') # async
     end
@@ -83,7 +83,7 @@ describe 'presigned objects and versions', js: true do
     )
     click_button('Download version')
     sleep 1
-    find("div.ui-dialog")
+    find('div.ui-dialog')
     within('.ui-dialog-title') do
       expect(page).to have_content('Preparing Object for Download')
     end
