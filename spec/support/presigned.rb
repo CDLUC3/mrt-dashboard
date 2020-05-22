@@ -26,7 +26,7 @@ def response_assembly_200(token = SecureRandom.uuid)
     status: 200,
     token: token,
     'cloud-content-byte': 12_345,
-    'anticipated-availability-time': time.strftime("%Y-%m-%dT%H:%M:%S"),
+    'anticipated-availability-time': time.strftime('%Y-%m-%dT%H:%M:%S'),
     message: 'Request queued, use token to check status'
   }
 end

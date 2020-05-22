@@ -60,7 +60,7 @@ describe 'presigned objects and versions', js: true do
 
   after(:each) do
     within('div.ui-dialog div.ui-dialog-titlebar') do
-      click_button("Close")
+      click_button('Close')
     end
     log_out!
   end
@@ -68,24 +68,27 @@ describe 'presigned objects and versions', js: true do
   it 'click download button - no mock', js: true do
     click_button('Download version')
     # this is a real (not mocked) ajax call
-    wait_for_ajax!
+    sleep 1
+    find("div.ui-dialog")
     within('div.ui-dialog') do
       expect(page).to have_content('Internal Server Error') # async
     end
   end
 
-  it 'click download button - has mock' do
+  it 'click download button - has mock', js: true do
     mock_assembly(
       @obj.node_number,
       ApplicationController.encode_storage_key(@obj.ark, @version.number),
       response_assembly_200('aaa')
     )
     click_button('Download version')
+    sleep 1
+    find("div.ui-dialog")
     within('.ui-dialog-title') do
       expect(page).to have_content('Preparing Object for Download')
     end
     within('#assembly-dialog h3.h-title') do
-      expect(page).to have_content('Object 1 (version 1)') #
+      expect(page).to have_content('Object 1 (version 1)')
     end
   end
 
