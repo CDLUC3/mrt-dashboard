@@ -147,32 +147,6 @@ describe 'versions', js: true do
     expect(URI(download_action).path).to eq(URI(expected_uri).path)
   end
 
-  describe 'with modal dialogs', js: true do
-
-    after(:each) do
-      click_button('Close', { class: 'ui-dialog-titlebar-close' })
-    end
-
-    it 'click download button - no mock', js: true do
-      click_button('Download version')
-      within('#error-dialog') do
-        expect(page).to have_content('Internal Server Error') # async
-      end
-    end
-
-    it 'click download button - has mock', js: true do
-      mock_assembly(
-        @obj.node_number,
-        ApplicationController.encode_storage_key(@obj.ark, @version.number),
-        response_assembly_200('aaa')
-      )
-      click_button('Download version')
-      within('#assembly-dialog') do
-        expect(page).to have_content('Title: Object 1') # async
-      end
-    end
-  end
-
   it 'should not display a download button w/o download permission' do
     user_id = mock_user(name: 'Rachel Roe', password: password)
     mock_permissions_view_only(user_id, collection_1_id)

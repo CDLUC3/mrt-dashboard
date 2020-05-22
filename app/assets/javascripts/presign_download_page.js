@@ -40,5 +40,10 @@ jQuery(document).ready(function(){
       message = "Requested object could not be assembled."
     }
     presignDialogs.makeErrorDialog("Object Assembly Error", message);
+  });
+
+  jQuery("li.logout a").on("click", function(){
+    presignDialogs.assemblyTokenList.clearData();
+    return true;
   })
 });

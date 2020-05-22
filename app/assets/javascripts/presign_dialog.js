@@ -8,47 +8,53 @@ var PresignDialogs = function() {
   self = this;
 
   // Create assembly dialog box html
-  jQuery("<div id='assembly-dialog'/>")
+  jQuery("<div id='assembly-dialog-container'/>")
     .append(
-      jQuery("<h3 class='h-title'/>").text("Title: ")
+      jQuery("<div id='assembly-dialog'/>")
+        .append(
+          jQuery("<h3 class='h-title'/>").text("Title: ")
+        )
+        //.append(jQuery("<div class='assemble-ark'/>").text(key))
+        .append(
+          jQuery("<div id='assemble-message'/>")
+        )
+        .append(
+          jQuery("<div id='progressbar'/>")
+        )
+        .append(
+          jQuery("<label class='progress-label' for='progressbar'/>")
+        )
+        .hide()
     )
-    //.append(jQuery("<div class='assemble-ark'/>").text(key))
-    .append(
-      jQuery("<div id='assemble-message'/>")
-    )
-    .append(
-      jQuery("<div id='progressbar'/>")
-    )
-    .append(
-      jQuery("<label class='progress-label' for='progressbar'/>")
-    )
-    .hide()
     .appendTo("body");
 
   // Create Assembly already in progress dialog box html
-  jQuery("<div id='download-in-progress'/>")
+  jQuery("<div id='download-in-progress-container'/>")
     .append(
-      jQuery("<h3 class='h-check-title'>An object is already being prepared for download</h3>")
+      jQuery("<div id='download-in-progress'/>")
+        .append(
+          jQuery("<h3 class='h-check-title'>An object is already being prepared for download</h3>")
+        )
+        .append(
+          jQuery("<p>Your previous download </p>")
+            .append(
+              jQuery("<span class='presign-title'>")
+            )
+            .append(
+              jQuery("<span> is still in progress. </span>")
+            )
+            .append(
+              jQuery("<span>You may only download one object at a time.</span>")
+            )
+        )
+        .append(
+          jQuery("<p>Do you want to download this current object (and cancel the previous download)</p>")
+            .append(
+              jQuery("<span> or continue the previous download?</span>")
+            )
+        )
+        .hide()
     )
-    .append(
-      jQuery("<p>Your previous download </p>")
-        .append(
-          jQuery("<span class='presign-title'>")
-        )
-        .append(
-          jQuery("<span> is still in progress. </span>")
-        )
-        .append(
-          jQuery("<span>You may only download one object at a time.</span>")
-        )
-    )
-    .append(
-      jQuery("<p>Do you want to download this current object (and cancel the previous download)</p>")
-        .append(
-          jQuery("<span> or continue the previous download?</span>")
-        )
-    )
-    .hide()
     .appendTo("body");
 
     // Reset the progress bar text to indicate that an assebly has been initiated.

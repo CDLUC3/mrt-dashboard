@@ -23,6 +23,10 @@ var AssemblyTokenList = function(pDialogs) {
 
   // Clear all tokens in localStorage
   this.clearData = function() {
+    var tokens = this.getTokenList();
+    for(var i=0; i<tokens.length; i++) {
+      localStorage.removeItem(tokens[i]);
+    }
     localStorage.setItem('tokens', "");
   }
 

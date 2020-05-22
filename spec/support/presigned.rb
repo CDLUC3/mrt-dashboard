@@ -20,11 +20,13 @@ def mock_response(status = 200, message = '', json = {})
 end
 
 def response_assembly_200(token = SecureRandom.uuid)
+  # set expiration to 20 sec in the future
+  time = Time.new.gmtime + 20
   {
     status: 200,
     token: token,
     'cloud-content-byte': 12_345,
-    'anticipated-availability-time': '2019-11-05T08:15:30-08:00',
+    'anticipated-availability-time': time.strftime("%Y-%m-%dT%H:%M:%S"),
     message: 'Request queued, use token to check status'
   }
 end

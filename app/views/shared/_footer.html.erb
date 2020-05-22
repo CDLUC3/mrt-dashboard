@@ -2,7 +2,7 @@
   <nav>
     <ul>
       <% if user_logged_in? %>
-        <li><%= link_to('Logout', :controller => 'user_sessions', :action => 'logout') %></li>
+        <li class='logout'><%= link_to('Logout', :controller => 'user_sessions', :action => 'logout') %></li>
       <% else %>
         <li><%= link_to('Login', :controller => 'user_sessions', :action => 'login') %></li>
       <% end %>
