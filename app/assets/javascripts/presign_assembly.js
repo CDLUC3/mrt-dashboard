@@ -3,7 +3,7 @@ var ObjectAssembler = function(pDialogs) {
 
   // Set the title field for the Assembly Dialog
   this.setDialogTitleKey = function(key, title) {
-    jQuery("h1.h-title").text("Title: " + title);
+    jQuery("h3.h-title").text("Title: " + title);
   }
 
   // Unique counter to prevent the assembly dialog from responding to obsolete timer events

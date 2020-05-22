@@ -189,7 +189,7 @@ var AssemblyTokenList = function(pDialogs) {
     var data = this.getTokenData(token);
 
     // Presetn dialog box to user to see if they want to resume current assembly or continue with request
-    this.pDialogs.showCurrentOrContinue(data, this.getTokenTitle());
+    this.pDialogs.showCurrentOrContinue(data, this.getTokenTitle(), this.getTokenKey());
     return false;
   }
 

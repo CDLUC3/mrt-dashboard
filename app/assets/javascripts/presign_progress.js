@@ -22,7 +22,7 @@ var AssemblyProgress = function(assembler, pDialogs) {
     });
   }
   this.makeProgressBar();
-  pDialogs.resetProgressStatus();
+  //pDialogs.resetProgressStatus();
 
   // Update progress bar to reflect that the assembly has been downloaded by the user
   this.clearActiveTokenFromDialog = function() {
@@ -48,7 +48,7 @@ var AssemblyProgress = function(assembler, pDialogs) {
     var msg = this.formatProgressLabel(v);
     jQuery( ".progress-label" ).text( msg ).attr("aria-label", msg);
     var tmsg = "Downloads: " + msg;
-    jQuery("#downloads").text(tmsg).attr("aria-label", tmsg);
+    jQuery("#downloads a").text(tmsg).attr("aria-label", tmsg);
   }
 
   // formgat progress label percent
@@ -71,7 +71,7 @@ var AssemblyProgress = function(assembler, pDialogs) {
     jQuery( "div#progressbar" ).progressbar( "value", v )
     if (!jQuery( ".progress-label:visible" ).is()){
       var tmsg = "Downloads: " + this.formatProgressLabel(v);
-      jQuery("#downloads").text(tmsg).attr("aria-label", tmsg);
+      jQuery("#downloads a").text(tmsg).attr("aria-label", tmsg);
     }
   }
 

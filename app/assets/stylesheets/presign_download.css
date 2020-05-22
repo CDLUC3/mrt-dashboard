@@ -16,6 +16,7 @@
   text-shadow: 1px 1px 0 #fff;
   text-align: center;
   color: black;
+  display: block;
 }
 
 #assemble-message a {

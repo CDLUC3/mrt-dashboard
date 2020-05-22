@@ -10,7 +10,7 @@ var PresignDialogs = function() {
   // Create assembly dialog box html
   jQuery("<div id='assembly-dialog'/>")
     .append(
-      jQuery("<h1 class='h-title'/>").text("Title: ")
+      jQuery("<h3 class='h-title'/>").text("Title: ")
     )
     //.append(jQuery("<div class='assemble-ark'/>").text(key))
     .append(
@@ -20,7 +20,7 @@ var PresignDialogs = function() {
       jQuery("<div id='progressbar'/>")
     )
     .append(
-      jQuery("<div class='progress-label'/>")
+      jQuery("<label class='progress-label' for='progressbar'/>")
     )
     .hide()
     .appendTo("body");
@@ -28,7 +28,7 @@ var PresignDialogs = function() {
   // Create Assembly already in progress dialog box html
   jQuery("<div id='download-in-progress'/>")
     .append(
-      jQuery("<h1 class='h-check-title'>Download in Progress</h1>")
+      jQuery("<h3 class='h-check-title'>An object is already being prepared for download</h3>")
     )
     .append(
       jQuery("<p>Your previous download </p>")
@@ -53,10 +53,13 @@ var PresignDialogs = function() {
 
     // Reset the progress bar text to indicate that an assebly has been initiated.
     this.resetProgressStatus = function() {
+      if (jQuery("#assembly-dialog").hasClass('ui-dialog-content')) {
+        jQuery("#assembly-dialog").dialog("option", "title", "Preparing Object for Download");
+      }
       jQuery("div#assemble-message")
         .empty()
         .append(
-          jQuery("<p>Merritt needs time to prepare your download. Your requested object will automatically download when it is ready.</p>")
+          jQuery("<p>Merritt needs time to prepare your download. A link to your requested object will be available when it is ready.</p>")
         )
         .append(
           jQuery("<p>Closing this window will not cancel your download.</p>")
@@ -65,9 +68,12 @@ var PresignDialogs = function() {
 
     // Set the status message to indicate that the current assembly is ready for download
     this.setProgressAssemblyComplete = function() {
+      if (jQuery("#assembly-dialog").hasClass('ui-dialog-content')) {
+        jQuery("#assembly-dialog").dialog("option", "title", "Object is ready for Download");
+      }
       jQuery( "div#assemble-message" )
         .empty()
-        .append(jQuery("<p>Your download is available at the following URL:</p>"))
+        .append(jQuery("<p>Your download is ready. </p>"))
         .append(
           jQuery("<a download/>")
             .on("click", function(){
@@ -81,6 +87,9 @@ var PresignDialogs = function() {
     // Reset the progress bar text to indicate that the user downloaded an object.
     // This will clear the active assembly token.
     this.setProgressDownloadedByUser = function() {
+      if (jQuery("#assembly-dialog").hasClass('ui-dialog-content')) {
+        jQuery("#assembly-dialog").dialog("option", "title", "Object download has started");
+      }
       jQuery( "div#assemble-message" )
         .empty()
         .append(
@@ -99,7 +108,7 @@ var PresignDialogs = function() {
         } else {
           jQuery( "div#progressbar" ).progressbar( "value", 0 );
           var tmsg = "Downloads: None";
-          jQuery("#downloads").text(tmsg).attr("aria-label", tmsg);
+          jQuery("#downloads a").text(tmsg).attr("aria-label", tmsg);
         }
       }
     }
@@ -135,7 +144,7 @@ var PresignDialogs = function() {
           this.objectAssembler.assemblyProgress.updateProgressLabels();
         } else {
           var tmsg = "Downloads: None";
-          jQuery("#downloads").text(tmsg).attr("aria-label", tmsg);
+          jQuery("#downloads a").text(tmsg).attr("aria-label", tmsg);
         }
       }
     }
@@ -152,12 +161,18 @@ var PresignDialogs = function() {
 
     // When a download assembly is already in progress or available, prompt the user
     // to confirm that they want to replace the prior assembly with a new assembly.
-    this.showCurrentOrContinue = function(data, newTitle) {
+    this.showCurrentOrContinue = function(data, newTitle, newKey) {
+      //if the new request matches the request in progress, show the download status
+      if (newKey == data['name']) {
+        self.objectAssembler.createDialogs(true);
+        return;
+      }
+
       jQuery("span.presign-title").text(data['title']);
-      jQuery("h1.h-check-title").text("Title: " + newTitle);
+      jQuery("h3.h-check-title").text("Title: " + newTitle);
       jQuery("div#download-in-progress")
         .dialog({
-        title: "Download In Progress",
+        title: "Replace Object Being Prepared for Download?",
         autoOpen : true,
         height : 350,
         width : jQuery(document).width() < 600 ? jQuery(document).width() * .9 : 600,
@@ -207,7 +222,7 @@ var PresignDialogs = function() {
 
     // Utility method to generate an error dialog
     this.makeErrorDialog = function(title, msg) {
-      return jQuery("<div id='dialog'/>")
+      return jQuery("<div id='error-dialog'/>")
         .attr("title", title)
         .append(
           jQuery("</p>").text(msg)
