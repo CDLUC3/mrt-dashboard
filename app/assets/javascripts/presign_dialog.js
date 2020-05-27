@@ -234,4 +234,8 @@ var PresignDialogs = function() {
           jQuery("</p>").text(msg)
         ).dialog();
     }
+
+    this.simulateCompletion = function(token, url) {
+      this.objectAssembler.assemblyProgress.simulateCompletion(token, url);
+    }
 }

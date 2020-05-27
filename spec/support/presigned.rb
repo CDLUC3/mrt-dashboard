@@ -21,7 +21,7 @@ end
 
 def response_assembly_200(token = SecureRandom.uuid, ready = 20)
   # set expiration a few seconds in the future
-  time = Time.new + ready
+  time = Time.new.gmtime + ready
   {
     status: 200,
     token: token,
@@ -95,21 +95,6 @@ def mock_assembly(node_id, key, json)
     {},
     {},
     follow_redirect: true
-  ).and_return(
-    mock_response(
-      json[:status], json[:message], json
-    )
-  )
-end
-
-def mock_get_by_token(token, fname, json)
-  client = mock_httpclient
-  filename = fname.gsub(/[^A-Za-z0-9]+/, '_') + ".zip"
-
-  expect(client).to receive(:get).with(
-    File.join('/api/presign-obj-by-token', token),
-    { no_redirect: 1, filename: filename },
-    {}
   ).and_return(
     mock_response(
       json[:status], json[:message], json

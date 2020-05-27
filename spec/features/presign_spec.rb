@@ -122,48 +122,25 @@ describe 'presigned objects and versions', js: true do
     within('#downloads') do
       expect(page).to have_content('Downloads: None')
     end
-    client = mock_assembly(
+    mock_assembly(
       @obj.node_number,
       ApplicationController.encode_storage_key(@obj.ark, @version.number),
-      response_assembly_200(@token, 15)
+      response_assembly_200(@token, 10)
     )
 
-    fname = "#{@obj.ark} Version #{@version.number}"
-
-    mock_get_by_token(
-      @token,
-      fname,
-      response_token_200(@token)
-    )
     click_button('Download version')
-    sleep 50
-    within('div.ui-dialog div.ui-dialog-titlebar') do
-      click_button('Close')
-    end
-    within('#downloads') do
-      expect(page.text).to eq('Downloads: Available')
-    end
-  end
 
-  skip it 'test close dialog and look at upper downloads button (ready)', js: true do
-    within('#downloads') do
-      expect(page).to have_content('Downloads: None')
-    end
-    client = mock_assembly(
-      @obj.node_number,
-      ApplicationController.encode_storage_key(@obj.ark, @version.number),
-      response_assembly_200(@token, 5)
-    )
-
-    fname = "#{@obj.ark} Version #{@version.number}"
-
-    mock_get_by_token(
-      @token,
-      fname,
-      response_token_200(@token)
-    )
-    click_button('Download version')
     sleep 2
+    within('div.ui-dialog .ui-dialog-title') do
+      expect(page.text).to eq('Preparing Object for Download')
+    end
+
+    page.execute_script("presignDialogs.simulateCompletion('#{@token}', '#pretend-link')")
+    sleep 2
+
+    within('div.ui-dialog .ui-dialog-title') do
+      expect(page.text).to eq('Object is ready for Download')
+    end
     within('div.ui-dialog div.ui-dialog-titlebar') do
       click_button('Close')
     end
@@ -172,31 +149,150 @@ describe 'presigned objects and versions', js: true do
     end
   end
 
-  skip it 'test close/reopen dialog from upper downloads button' do
+  it 'test close/reopen dialog from upper downloads button' do
+    mock_assembly(
+      @obj.node_number,
+      ApplicationController.encode_storage_key(@obj.ark, @version.number),
+      response_assembly_200(@token, 10)
+    )
+
+    fname = "#{@obj.ark} Version #{@version.number}"
+    filename = fname.gsub(/[^A-Za-z0-9]+/, '_') + '.zip'
+
+    click_button('Download version')
+
+    sleep 2
+
+    page.execute_script("presignDialogs.simulateCompletion('#{@token}', '#pretend-link')")
+
+    sleep 2
+
+    within('div.ui-dialog div.ui-dialog-titlebar') do
+      click_button('Close')
+    end
+    within('#downloads') do
+      expect(page.text).to eq('Downloads: Available')
+    end
+
+    click_link('Downloads: Available')
+
+    within('div.ui-dialog .ui-dialog-title') do
+      expect(page.text).to eq('Object is ready for Download')
+    end
+
+    click_link(filename)
+
+    within('#downloads') do
+      expect(page.text).to eq('Downloads: None')
+    end
   end
 
-  skip it 'test close/reopen dialog from new download button' do
+  it 'test no downloads' do
+    click_link('Downloads: None')
+    find('div.ui-dialog')
+    within('div.ui-dialog') do
+      expect(page).to have_content('No download assembly is in progress.') # async
+    end
   end
 
-  skip it 'test 200 result' do
+  it 'test close/reopen dialog from new download button (same object)' do
+    mock_assembly(
+      @obj.node_number,
+      ApplicationController.encode_storage_key(@obj.ark, @version.number),
+      response_assembly_200(@token, 10)
+    )
+
+    click_button('Download version')
+
+    sleep 2
+
+    within('div.ui-dialog div.ui-dialog-titlebar') do
+      click_button('Close')
+    end
+
+    click_button('Download version')
+
+    within('div.ui-dialog .ui-dialog-title') do
+      expect(page.text).to eq('Preparing Object for Download')
+    end
   end
 
-  skip it 'test 200 result plus download click' do
-  end
+  it 'test close/reopen dialog from new download button (different object)' do
+    mock_assembly(
+      @obj.node_number,
+      ApplicationController.encode_storage_key(@obj.ark, @version.number),
+      response_assembly_200(@token, 10)
+    )
 
-  skip it 'test 202 result' do
-  end
+    click_button('Download version')
 
-  skip it 'test close/new page, test downloads button' do
-  end
+    sleep 2
 
-  skip it 'test close/logout, test downloads button' do
-  end
+    within('div.ui-dialog div.ui-dialog-titlebar') do
+      click_button('Close')
+    end
 
-  skip it 'test start new download - continue' do
-  end
+    click_link(obj.ark)
 
-  skip it 'test start new download - resume previous' do
+    click_button('Download object')
+
+    sleep 1
+
+    within('div.ui-dialog .ui-dialog-title') do
+      expect(page.text).to eq('Replace Object Being Prepared for Download?')
+    end
+
+    within('#download-in-progress') do
+      within('.presign-title') do
+        expect(page.text).to eq('Object 1; Object 1 (version 1)')
+      end
+
+      within('h3.h-check-title') do
+        expect(page.text).to eq('Title: Object 1; Object 1')
+      end
+    end
+
+    click_button('Continue Previous Download')
+
+    sleep 1
+
+    within('#assembly-dialog h3.h-title') do
+      expect(page.text).to eq('Title: Object 1; Object 1 (version 1)')
+    end
+
+    within('div.ui-dialog div.ui-dialog-titlebar') do
+      click_button('Close')
+    end
+
+    click_button('Download object')
+
+    sleep 1
+
+    within('div.ui-dialog .ui-dialog-title') do
+      expect(page.text).to eq('Replace Object Being Prepared for Download?')
+    end
+
+    within('#download-in-progress') do
+      within('h3.h-check-title') do
+        expect(page.text).to eq('Title: Object 1; Object 1')
+      end
+    end
+
+    click_button('Download Current Object')
+
+    sleep 1
+
+    # Note: cannot successfully mock the download initiated from javascript
+
+    # mock_assembly(
+    #   @obj.node_number,
+    #   ApplicationController.encode_storage_key(@obj.ark),
+    #   response_assembly_200
+    # )
+
+    # within('#assembly-dialog h3.h-title') do
+    #   expect(page.text).to eq('Title: Object 1; Object 1 (version 1)')
+    # end
   end
 
 end

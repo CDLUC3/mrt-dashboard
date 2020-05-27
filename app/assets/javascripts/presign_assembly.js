@@ -121,7 +121,7 @@ var ObjectAssembler = function(pDialogs) {
     }
     self.assemblyProgress.makeProgressBar();
     jQuery("div#assembly-dialog").dialog({
-      title: "Preparing Download",
+      title: "Preparing Object for Download",
       autoOpen : false,
       height : 320,
       width : jQuery(document).width() < 600 ? jQuery(document).width() * .9 : 600,

@@ -135,4 +135,9 @@ var AssemblyProgress = function(assembler, pDialogs) {
     setTimeout( function(){ self.progress() }, 50 );
   }
 
+  this.simulateCompletion = function(token, url) {
+    self.assemblyTokenList.markReady(token, url);
+    self.assembler.markReady(url);
+    self.setProgressVal(100);
+  }
 }
