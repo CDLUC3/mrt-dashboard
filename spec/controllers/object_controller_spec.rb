@@ -271,55 +271,25 @@ RSpec.describe ObjectController, type: :controller do
 
     it 'request async assembly of an object' do
       mock_permissions_all(user_id, collection_id)
-
-      nk = {
-        node_id: @object.node_number,
-        key: ApplicationController.encode_storage_key(@object.ark)
-      }
-      expect(client).to receive(:post).with(
-        ApplicationController.get_storage_presign_url(nk, false),
-        {},
-        {},
-        follow_redirect: true
-      ).and_return(mock_response(200, 'succ', { token: 'aaa' }))
+      mock_assembly(
+        @object.node_number,
+        ApplicationController.encode_storage_key(@object.ark),
+        response_assembly_200('aaa')
+      )
 
       get(:presign, params, { uid: user_id })
-      expect(response.status).to eq(302)
-      expect(response.headers['Location']).to include('/downloads/add/aaa')
-    end
-
-    it 'assembly object - token not returned - list downloads (error coverage)' do
-      mock_permissions_all(user_id, collection_id)
-
-      nk = {
-        node_id: @object.node_number,
-        key: ApplicationController.encode_storage_key(@object.ark)
-      }
-      expect(client).to receive(:post).with(
-        ApplicationController.get_storage_presign_url(nk, false),
-        {},
-        {},
-        follow_redirect: true
-      ).and_return(mock_response(200, 'succ', {}))
-
-      get(:presign, params, { uid: user_id })
-      expect(response.status).to eq(302)
-      expect(response.headers['Location']).to match('.*/downloads$')
+      expect(response.status).to eq(200)
+      json = JSON.parse(response.body)
+      expect(json['token']).to eq('aaa')
     end
 
     it 'simulate 403 (object on glacier) from storage servcie' do
       mock_permissions_all(user_id, collection_id)
-
-      nk = {
-        node_id: @object.node_number,
-        key: ApplicationController.encode_storage_key(@object.ark)
-      }
-      expect(client).to receive(:post).with(
-        ApplicationController.get_storage_presign_url(nk, false),
-        {},
-        {},
-        follow_redirect: true
-      ).and_return(mock_response(403, 'Not supported'))
+      mock_assembly(
+        @object.node_number,
+        ApplicationController.encode_storage_key(@object.ark),
+        general_response_403
+      )
 
       get(:presign, params, { uid: user_id })
       expect(response.status).to eq(403)
@@ -327,17 +297,11 @@ RSpec.describe ObjectController, type: :controller do
 
     it 'simulate 404 from the storage service' do
       mock_permissions_all(user_id, collection_id)
-
-      nk = {
-        node_id: @object.node_number,
-        key: ApplicationController.encode_storage_key(@object.ark)
-      }
-      expect(client).to receive(:post).with(
-        ApplicationController.get_storage_presign_url(nk, false),
-        {},
-        {},
-        follow_redirect: true
-      ).and_return(mock_response(404, 'Not found'))
+      mock_assembly(
+        @object.node_number,
+        ApplicationController.encode_storage_key(@object.ark),
+        general_response_404
+      )
 
       get(:presign, params, { uid: user_id })
       expect(response.status).to eq(404)
@@ -346,16 +310,11 @@ RSpec.describe ObjectController, type: :controller do
     it 'simulate 500 from the storage service' do
       mock_permissions_all(user_id, collection_id)
 
-      nk = {
-        node_id: @object.node_number,
-        key: ApplicationController.encode_storage_key(@object.ark)
-      }
-      expect(client).to receive(:post).with(
-        ApplicationController.get_storage_presign_url(nk, false),
-        {},
-        {},
-        follow_redirect: true
-      ).and_return(mock_response(500, 'Not supported'))
+      mock_assembly(
+        @object.node_number,
+        ApplicationController.encode_storage_key(@object.ark),
+        general_response_500
+      )
 
       get(:presign, params, { uid: user_id })
       expect(response.status).to eq(500)

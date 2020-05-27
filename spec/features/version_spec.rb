@@ -1,4 +1,5 @@
 require 'features_helper'
+require 'support/presigned'
 
 # TODO: refactor this to separate logged-in-with-permissions tests from others
 describe 'versions', js: true do

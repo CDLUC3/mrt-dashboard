@@ -123,39 +123,29 @@ RSpec.describe VersionController, type: :controller do
       mock_permissions_all(user_id, collection_id)
 
       params[:version] = 2
-      nk = {
-        node_id: @object.node_number,
-        key: ApplicationController.encode_storage_key(@object.ark, params[:version])
-      }
-      expect(client).to receive(:post).with(
-        ApplicationController.get_storage_presign_url(nk, false),
-        {},
-        {},
-        follow_redirect: true
-      ).and_return(mock_response(200, 'succ', { token: 'aaa' }))
+      mock_assembly(
+        @object.node_number,
+        ApplicationController.encode_storage_key(@object.ark, params[:version]),
+        response_assembly_200('aaa')
+      )
 
       get(:presign, params, { uid: user_id })
-      expect(response.status).to eq(302)
-      expect(response.headers['Location']).to include('/downloads/add/aaa')
+      json = JSON.parse(response.body)
+      expect(json['token']).to eq('aaa')
     end
 
     it 'request async assembly of a past version of an object' do
       mock_permissions_all(user_id, collection_id)
       params[:version] = 1
-      nk = {
-        node_id: @object.node_number,
-        key: ApplicationController.encode_storage_key(@object.ark, params[:version])
-      }
-      expect(client).to receive(:post).with(
-        ApplicationController.get_storage_presign_url(nk, false),
-        {},
-        {},
-        follow_redirect: true
-      ).and_return(mock_response(200, 'succ', { token: 'aaa' }))
+      mock_assembly(
+        @object.node_number,
+        ApplicationController.encode_storage_key(@object.ark, params[:version]),
+        response_assembly_200('aaa')
+      )
 
       get(:presign, params, { uid: user_id })
-      expect(response.status).to eq(302)
-      expect(response.headers['Location']).to include('/downloads/add/aaa')
+      json = JSON.parse(response.body)
+      expect(json['token']).to eq('aaa')
     end
 
     it 'request async assembly of a non-existing version of an object' do

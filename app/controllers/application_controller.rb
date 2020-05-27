@@ -115,21 +115,9 @@ class ApplicationController < ActionController::Base
 
   # rubocop:disable all
   def eval_presign_obj_by_node_key(r, key)
-    if r.status == 200
+    if r.status.in?([ 200, 202 ])
       resp = JSON.parse(r.content)
-      if resp.key?('token')
-        redirect_to(
-          controller: :downloads,
-          action: :add,
-          key:key,
-          token: resp['token'],
-          size: resp['cloud-content-bytes'],
-          available: resp['anticipated-availability-time']
-         )
-      else
-        redirect_to(controller: :downloads)
-      end
-      return
+      render status: r.status , json: resp
     elsif r.status == 403
       render file: "#{Rails.root}/public/403.html", status: 403, layout: nil
     elsif r.status == 404
@@ -141,13 +129,13 @@ class ApplicationController < ActionController::Base
   # rubocop:enable all
 
   def presign_obj_by_token
-    do_presign_obj_by_token(params[:token], params[:no_redirect])
+    do_presign_obj_by_token(params[:token], params[:filename], params[:no_redirect])
   end
 
-  def do_presign_obj_by_token(token, no_redirect = nil)
+  def do_presign_obj_by_token(token, filename = 'object.zip', no_redirect = nil)
     r = HTTPClient.new.get(
       File.join(APP_CONFIG['storage_presign_token'], token),
-      {},
+      { contentDisposition: "attachment; filename=#{filename}" },
       {},
       follow_redirect: true
     )
