@@ -19,19 +19,19 @@ def mock_response(status = 200, message = '', json = {})
   mockresp
 end
 
-def response_assembly_200(token = SecureRandom.uuid)
-  # set expiration to 20 sec in the future
-  time = Time.new.gmtime + 20
+def response_assembly_200(token = SecureRandom.uuid, ready = 20)
+  # set expiration a few seconds in the future
+  time = Time.new + ready
   {
     status: 200,
     token: token,
     'cloud-content-byte': 12_345,
-    'anticipated-availability-time': time.strftime('%Y-%m-%dT%H:%M:%S'),
+    'anticipated-availability-time': time.strftime('%Y-%m-%dT%H:%M:%S%z'),
     message: 'Request queued, use token to check status'
   }
 end
 
-def response_token_200(token = 'uuid', url = 'url')
+def response_token_200(token = 'uuid', url = 'http://cdl.org/demo.zip')
   {
     status: 200,
     message: 'Payload contains token info',
@@ -95,6 +95,21 @@ def mock_assembly(node_id, key, json)
     {},
     {},
     follow_redirect: true
+  ).and_return(
+    mock_response(
+      json[:status], json[:message], json
+    )
+  )
+end
+
+def mock_get_by_token(token, fname, json)
+  client = mock_httpclient
+  filename = fname.gsub(/[^A-Za-z0-9]+/, '_') + ".zip"
+
+  expect(client).to receive(:get).with(
+    File.join('/api/presign-obj-by-token', token),
+    { no_redirect: 1, filename: filename },
+    {}
   ).and_return(
     mock_response(
       json[:status], json[:message], json

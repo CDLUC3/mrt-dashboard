@@ -30,6 +30,9 @@ end
 
 group :development, :test do
   gem 'byebug'
+  gem 'pry'
+  gem 'pry-rails'
+  gem 'pry-remote', require: 'pry-remote'
   gem 'colorize', '~> 0.8'
   gem 'launchy'
   gem 'rspec-rails', '~> 3.0'

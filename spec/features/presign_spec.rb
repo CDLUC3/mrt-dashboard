@@ -12,6 +12,7 @@ describe 'presigned objects and versions', js: true do
 
   attr_reader :producer_files
   attr_reader :system_files
+  attr_reader :token
 
   before(:each) do
     @password = 'correcthorsebatterystaple'
@@ -58,14 +59,20 @@ describe 'presigned objects and versions', js: true do
     click_link(version_str)
   end
 
+  before(:each) do
+    @token = SecureRandom.uuid
+  end
+
   after(:each) do
-    within('div.ui-dialog div.ui-dialog-titlebar') do
-      click_button('Close')
+    if has_css?('div.ui-dialog')
+      within('div.ui-dialog div.ui-dialog-titlebar') do
+        click_button('Close')
+      end
     end
     log_out!
   end
 
-  it 'click download button - no mock', js: true do
+  it 'click download button - no mock storage service available', js: true do
     click_button('Download version')
     # this is a real (not mocked) ajax call
     sleep 1
@@ -75,11 +82,11 @@ describe 'presigned objects and versions', js: true do
     end
   end
 
-  it 'click download button - has mock', js: true do
+  it 'click download button - mocked call to the storage service', js: true do
     mock_assembly(
       @obj.node_number,
       ApplicationController.encode_storage_key(@obj.ark, @version.number),
-      response_assembly_200('aaa')
+      response_assembly_200(@token)
     )
     click_button('Download version')
     sleep 1
@@ -92,7 +99,77 @@ describe 'presigned objects and versions', js: true do
     end
   end
 
-  skip it 'test close dialog and look at uppoer downloads button' do
+  it 'test close dialog and look at upper downloads button (not ready)' do
+    within('#downloads') do
+      expect(page).to have_content('Downloads: None')
+    end
+    mock_assembly(
+      @obj.node_number,
+      ApplicationController.encode_storage_key(@obj.ark, @version.number),
+      response_assembly_200(@token)
+    )
+    click_button('Download version')
+    sleep 5
+    within('div.ui-dialog div.ui-dialog-titlebar') do
+      click_button('Close')
+    end
+    within('#downloads') do
+      expect(page.text).to match(/Downloads: [0-9]+%*/)
+    end
+  end
+
+  it 'test close dialog and look at upper downloads button (ready)', js: true do
+    within('#downloads') do
+      expect(page).to have_content('Downloads: None')
+    end
+    client = mock_assembly(
+      @obj.node_number,
+      ApplicationController.encode_storage_key(@obj.ark, @version.number),
+      response_assembly_200(@token, 15)
+    )
+
+    fname = "#{@obj.ark} Version #{@version.number}"
+
+    mock_get_by_token(
+      @token,
+      fname,
+      response_token_200(@token)
+    )
+    click_button('Download version')
+    sleep 50
+    within('div.ui-dialog div.ui-dialog-titlebar') do
+      click_button('Close')
+    end
+    within('#downloads') do
+      expect(page.text).to eq('Downloads: Available')
+    end
+  end
+
+  skip it 'test close dialog and look at upper downloads button (ready)', js: true do
+    within('#downloads') do
+      expect(page).to have_content('Downloads: None')
+    end
+    client = mock_assembly(
+      @obj.node_number,
+      ApplicationController.encode_storage_key(@obj.ark, @version.number),
+      response_assembly_200(@token, 5)
+    )
+
+    fname = "#{@obj.ark} Version #{@version.number}"
+
+    mock_get_by_token(
+      @token,
+      fname,
+      response_token_200(@token)
+    )
+    click_button('Download version')
+    sleep 2
+    within('div.ui-dialog div.ui-dialog-titlebar') do
+      click_button('Close')
+    end
+    within('#downloads') do
+      expect(page.text).to eq('Downloads: Available')
+    end
   end
 
   skip it 'test close/reopen dialog from upper downloads button' do
