@@ -307,11 +307,11 @@ RSpec.describe ObjectController, type: :controller do
       mock_permissions_all(user_id, collection_id)
 
       params[:content] = 'bogus'
-      params[:format]  = 'bogus'
-      params[:extra]  = 'bogus'
+      params[:format] = 'bogus'
+      params[:extra] = 'bogus'
 
       # params above will be sanitized
-      reqparam = { }
+      reqparam = {}
 
       mock_assembly(
         @object.node_number,

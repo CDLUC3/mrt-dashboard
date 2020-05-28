@@ -93,6 +93,12 @@ class ApplicationController < ActionController::Base
     Encoder.urlencode(key)
   end
 
+  def self.add_params_to_path(path, params)
+    uri = URI.parse(path)
+    uri.query = params.to_query unless params.empty?
+    uri.to_s
+  end
+
   def self.get_storage_presign_url(nodekey, has_file = true, params = {})
     base = has_file ? APP_CONFIG['storage_presign_file'] : APP_CONFIG['storage_presign_obj']
     path = File.join(base, 'not-applicable')
@@ -103,28 +109,26 @@ class ApplicationController < ActionController::Base
         nodekey[:key]
       )
     end
-    uri = URI.parse(path)
-    if !params.empty?
-      uri.query = params.to_query
-    end
-    uri.to_s
+    ApplicationController.add_params_to_path(path, params)
+  end
+
+  def add_valid_param(dest, source, key, vals)
+    return unless source.key?(key)
+    return unless source[key].in?(vals)
+    dest[key] = source[key]
+  end
+
+  def sanitize_presign_params(params)
+    sparams = {}
+    add_valid_param(sparams, params, 'content', %w[producer full])
+    add_valid_param(sparams, params, 'format', %w[zip tar targz])
+    sparams
   end
 
   def presign_get_obj_by_node_key(nodekey, params)
-    sparams = {}
-    if params.key?('content')
-      if params['content'].in?(['producer', 'full'])
-        sparams['content'] = params['content']
-      end
-    end
-    if params.key?('format')
-      if params['format'].in?(['zip', 'tar', 'targz'])
-        sparams['format'] = params['format']
-      end
-    end
-
+    sparams = sanitize_presign_params(params)
     r = HTTPClient.new.post(
-      ApplicationController.get_storage_presign_url(nodekey, has_file = false, sparams),
+      ApplicationController.get_storage_presign_url(nodekey, false, sparams),
       follow_redirect: true
     )
     eval_presign_obj_by_node_key(r, nodekey[:key])
