@@ -283,6 +283,49 @@ RSpec.describe ObjectController, type: :controller do
       expect(json['token']).to eq('aaa')
     end
 
+    it 'request async assembly of an object with content and format' do
+      mock_permissions_all(user_id, collection_id)
+
+      reqparam = { content: 'producer', format: 'tar' }
+      params[:content] = reqparam[:content]
+      params[:format]  = reqparam[:format]
+
+      mock_assembly(
+        @object.node_number,
+        ApplicationController.encode_storage_key(@object.ark),
+        response_assembly_200('aaa'),
+        reqparam
+      )
+
+      get(:presign, params, { uid: user_id })
+      expect(response.status).to eq(200)
+      json = JSON.parse(response.body)
+      expect(json['token']).to eq('aaa')
+    end
+
+    it 'request async assembly of an object with content and format sanitized' do
+      mock_permissions_all(user_id, collection_id)
+
+      params[:content] = 'bogus'
+      params[:format]  = 'bogus'
+      params[:extra]  = 'bogus'
+
+      # params above will be sanitized
+      reqparam = { }
+
+      mock_assembly(
+        @object.node_number,
+        ApplicationController.encode_storage_key(@object.ark),
+        response_assembly_200('aaa'),
+        reqparam
+      )
+
+      get(:presign, params, { uid: user_id })
+      expect(response.status).to eq(200)
+      json = JSON.parse(response.body)
+      expect(json['token']).to eq('aaa')
+    end
+
     it 'simulate 403 (object on glacier) from storage servcie' do
       mock_permissions_all(user_id, collection_id)
       mock_assembly(

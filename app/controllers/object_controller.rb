@@ -113,7 +113,7 @@ class ObjectController < ApplicationController
       node_id: @object.node_number,
       key: ApplicationController.encode_storage_key(@object.ark)
     }
-    presign_get_obj_by_node_key(nk)
+    presign_get_obj_by_node_key(nk, params)
   end
 
   private

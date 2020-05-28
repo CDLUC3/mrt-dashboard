@@ -93,21 +93,38 @@ class ApplicationController < ActionController::Base
     Encoder.urlencode(key)
   end
 
-  def self.get_storage_presign_url(nodekey, has_file = true)
+  def self.get_storage_presign_url(nodekey, has_file = true, params = {})
     base = has_file ? APP_CONFIG['storage_presign_file'] : APP_CONFIG['storage_presign_obj']
-    return File.join(base, 'not-applicable') unless nodekey.key?(:node_id) && nodekey.key?(:key)
-    File.join(
-      base,
-      nodekey[:node_id].to_s,
-      nodekey[:key]
-    )
+    path = File.join(base, 'not-applicable')
+    if nodekey.key?(:node_id) && nodekey.key?(:key)
+      path = File.join(
+        base,
+        nodekey[:node_id].to_s,
+        nodekey[:key]
+      )
+    end
+    uri = URI.parse(path)
+    if !params.empty?
+      uri.query = params.to_query
+    end
+    uri.to_s
   end
 
-  def presign_get_obj_by_node_key(nodekey)
+  def presign_get_obj_by_node_key(nodekey, params)
+    sparams = {}
+    if params.key?('content')
+      if params['content'].in?(['producer', 'full'])
+        sparams['content'] = params['content']
+      end
+    end
+    if params.key?('format')
+      if params['format'].in?(['zip', 'tar', 'targz'])
+        sparams['format'] = params['format']
+      end
+    end
+
     r = HTTPClient.new.post(
-      ApplicationController.get_storage_presign_url(nodekey, false),
-      {},
-      {},
+      ApplicationController.get_storage_presign_url(nodekey, has_file = false, sparams),
       follow_redirect: true
     )
     eval_presign_obj_by_node_key(r, nodekey[:key])

@@ -73,7 +73,7 @@ class VersionController < ApplicationController
       node_id: obj.node_number,
       key: ApplicationController.encode_storage_key(obj.ark, @version.number)
     }
-    presign_get_obj_by_node_key(nk)
+    presign_get_obj_by_node_key(nk, params)
   end
 
 end

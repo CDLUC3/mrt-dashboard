@@ -84,16 +84,14 @@ def general_response_500
   }
 end
 
-def mock_assembly(node_id, key, json)
+def mock_assembly(node_id, key, json, params = {})
   client = mock_httpclient
   nk = {
     node_id: node_id,
     key: key
   }
   expect(client).to receive(:post).with(
-    ApplicationController.get_storage_presign_url(nk, false),
-    {},
-    {},
+    ApplicationController.get_storage_presign_url(nk, false, params),
     follow_redirect: true
   ).and_return(
     mock_response(
