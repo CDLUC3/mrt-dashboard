@@ -17,10 +17,7 @@
       <tr>
         <th>
           <% if can_download_object %>
-            <%# not using link_to speeds this up %>
-            <a href="/api/presign-file/<%= object_id %>/<%= version_id %>/<%= file.to_param %>">
-              <%= file_basename %>
-            </a>
+            <%= link_to(file_basename, "/api/presign-file/#{object_id}/#{version_id}/#{file.to_param}") %>
           <% else %>
             <%= file_basename %>
           <% end %>
@@ -28,7 +25,7 @@
         <td>
           <%= clean_mime_type(file.mime_type) %>
         </td>
-        <td style="width: 100%;">
+        <td style="width: 60%;">
           <%= number_to_storage_size(file.full_size) %>
         </td>
       </tr>

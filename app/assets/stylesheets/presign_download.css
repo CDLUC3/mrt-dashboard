@@ -1,0 +1,62 @@
+#download_wrap {
+  border: thin solid black;
+  padding: 0px 10px 20px 10px;
+}
+
+#progressbar {
+  margin-top: 20px;
+  width: 100%;
+  color: navy;
+  height: 4px;
+}
+
+.progress-label {
+  font-weight: bold;
+  font-style: italic;
+  text-shadow: 1px 1px 0 #fff;
+  text-align: center;
+  color: black;
+  display: block;
+}
+
+#assemble-message a {
+  color: blue;
+  margin-top: 10px;
+}
+
+div.assemble-ark {
+  font-style: italic;
+}
+
+span.presign-title {
+  font-style: italic;
+}
+
+li#downloads {
+  padding: 5px 12px 6px 12px;
+  border-left: 1px solid #999999;
+  border-right: 1px solid #999999;
+  border-bottom: 1px solid #cacaca;
+  border-top: 2px solid #d9d9d9;
+}
+
+li#downloads:hover {
+  background-color: #F2F2F2;
+}
+
+div.download-in-progress div.ui-dialog-buttonset {
+  display: flex;
+  justify-content: space-between;
+  float: none!important;
+}
+
+.h-title, .h-check-title {
+  font-size: 1.3em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ui-dialog button:focus {
+  border: thin solid blue;
+}

@@ -1,6 +1,6 @@
 require 'features_helper'
 
-describe 'profile' do
+describe 'profile', js: true do
   attr_reader :user_id
   attr_reader :tzregion
   attr_reader :telephonenumber

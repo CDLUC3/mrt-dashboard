@@ -1,4 +1,6 @@
 require 'rails_helper'
+require 'securerandom'
+require 'support/presigned'
 
 describe ApplicationController do
 
@@ -186,13 +188,6 @@ describe ApplicationController do
       # For testing purposes, simulate APP_CONFIG['proto_force'] == 'https'
       expect(controller.send(:url_string_with_proto, http_req, true)).to eq(https_req), 'Location should start with https'
     end
-
-    it 'catch encoding error in url' do
-      host = 'foo.bar'
-      https_req = "https://#{host}/api/presign-file/ark:/13030/m5sf7w9f/1/producer/Peuß%20Dryad%20raw%20data.xlsx?no_redirect=true"
-      expect(Rails.logger).to receive(:error).with(/Url format error.*/)
-      expect(controller.send(:url_string_with_proto, https_req, true)).not_to eq(https_req), 'Expect encoding error for URL'
-    end
   end
 
   describe ':stream_response' do
@@ -232,5 +227,179 @@ describe ApplicationController do
     end
   end
 
+  describe 'assemble / presign url construction' do
+    before(:each) do
+      @ark = 'ark:/99999/abc'
+      @arkenc = 'ark%3A%2F99999%2Fabc'
+      @ver = 2
+      @path = 'foo bar.doc'
+      @client = mock_httpclient
+    end
+
+    def mock_httpclient
+      client = instance_double(HTTPClient)
+      allow(client).to receive(:follow_redirect_count).and_return(10)
+      %i[receive_timeout= send_timeout= connect_timeout= keep_alive_timeout=].each do |m|
+        allow(client).to receive(m)
+      end
+      allow(HTTPClient).to receive(:new).and_return(client)
+      client
+    end
+
+    it 'build_storage_key(ark, version, file)' do
+      key = ApplicationController.build_storage_key(@ark, @ver, @path)
+      expect(key).to eq("#{@ark}|#{@ver}|#{@path}")
+    end
+
+    it 'build_storage_key(ark, version)' do
+      key = ApplicationController.build_storage_key(@ark, @ver)
+      expect(key).to eq("#{@ark}|#{@ver}")
+    end
+
+    it 'build_storage_key(ark)' do
+      key = ApplicationController.build_storage_key(@ark)
+      expect(key).to eq(@ark)
+    end
+
+    it 'encode_storage_key' do
+      enckey = ApplicationController.encode_storage_key(@ark)
+      expect(enckey).to eq(@arkenc)
+    end
+
+    it 'get_storage_presign_url does not contain //' do
+      nk = { node_id: 9999, key: @arkenc }
+      url = ApplicationController.get_storage_presign_url(nk)
+      expect(url).not_to match('https?://.*//.*')
+    end
+
+    it 'get_storage_presign_url(nodekey, has_file = true)' do
+      key = ApplicationController.build_storage_key(@ark, @ver, @path)
+      enckey = ApplicationController.encode_storage_key(key)
+      nk = { node_id: 9999, key: enckey }
+      url = ApplicationController.get_storage_presign_url(nk, true)
+      expect(url).to match('.*/presign-file/.*')
+    end
+
+    it 'get_storage_presign_url(nodekey, has_file = false)' do
+      key = ApplicationController.build_storage_key(@ark, @ver)
+      enckey = ApplicationController.encode_storage_key(key)
+      nk = { node_id: 9999, key: enckey }
+      url = ApplicationController.get_storage_presign_url(nk, false)
+      expect(url).to match(".*/assemble-obj/9999/#{enckey}")
+    end
+
+    # This test illustrates the return object, it does not perform any meaningful check since the mock constructs the return object
+    it 'presign_obj_by_token 200' do
+      token = SecureRandom.uuid
+      presign = 'https://presign.example'
+      filename = 'object.zip'
+      expect(@client).to receive(:get).with(
+        File.join(APP_CONFIG['storage_presign_token'], token),
+        { contentDisposition: "attachment; filename=#{filename}" },
+        {},
+        follow_redirect: true
+      ).and_return(
+        mock_response(
+          200,
+          'Object is available',
+          {
+            token: token,
+            'anticipated-size': 12_345,
+            url: presign
+          }
+        )
+      )
+      get(:presign_obj_by_token, { token: token, filename: filename })
+      expect(response.status).to eq(303)
+      expect(response.headers['Location']).to eq(presign)
+    end
+
+    it 'presign_obj_by_token with no_redirect 200' do
+      token = SecureRandom.uuid
+      presign = 'https://presign.example'
+      filename = 'object.zip'
+      expect(@client).to receive(:get).with(
+        File.join(APP_CONFIG['storage_presign_token'], token),
+        { contentDisposition: "attachment; filename=#{filename}" },
+        {},
+        follow_redirect: true
+      ).and_return(
+        mock_response(
+          200,
+          'Object is available',
+          {
+            token: token,
+            'anticipated-size': 12_345,
+            url: presign
+          }
+        )
+      )
+      get(:presign_obj_by_token, { token: token, filename: filename, no_redirect: 1 })
+      expect(response.status).to eq(200)
+      json = JSON.parse(response.body)
+      expect(json['url']).to eq(presign)
+    end
+
+    # This test illustrates the return object, it does not perform any meaningful check since the mock constructs the return object
+    it 'presign_obj_by_token 202' do
+      token = SecureRandom.uuid
+      filename = 'object.zip'
+      expect(@client).to receive(:get).with(
+        File.join(APP_CONFIG['storage_presign_token'], token),
+        { contentDisposition: "attachment; filename=#{filename}" },
+        {},
+        follow_redirect: true
+      ).and_return(
+        mock_response(
+          202,
+          'Object is not ready',
+          {
+            token: token,
+            'anticipated-size': 12_345,
+            'anticipated-availability-time': '2009-06-15T13:45:30'
+          }
+        )
+      )
+      get(:presign_obj_by_token, { token: token, filename: filename })
+      expect(response.status).to eq(202)
+    end
+
+    # This test illustrates the return object, it does not perform any meaningful check since the mock constructs the return object
+    it 'presign_obj_by_token 404' do
+      token = SecureRandom.uuid
+      filename = 'object.zip'
+      expect(@client).to receive(:get).with(
+        File.join(APP_CONFIG['storage_presign_token'], token),
+        { contentDisposition: "attachment; filename=#{filename}" },
+        {},
+        follow_redirect: true
+      ).and_return(
+        mock_response(
+          404,
+          'Object not found'
+        )
+      )
+      get(:presign_obj_by_token, { token: token, filename: filename })
+      expect(response.status).to eq(404)
+    end
+
+    # This test illustrates the return object, it does not perform any meaningful check since the mock constructs the return object
+    it 'presign_obj_by_token 500' do
+      token = SecureRandom.uuid
+      filename = 'object.zip'
+      expect(@client).to receive(:get).with(
+        File.join(APP_CONFIG['storage_presign_token'], token),
+        { contentDisposition: "attachment; filename=#{filename}" },
+        {},
+        follow_redirect: true
+      ).and_return(
+        mock_response(
+          500,
+          'error message'
+        )
+      )
+      get(:presign_obj_by_token, { token: token, filename: filename })
+      expect(response.status).to eq(500)
+    end
+  end
 end
-# NOTE:

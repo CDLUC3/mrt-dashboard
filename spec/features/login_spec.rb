@@ -1,6 +1,6 @@
 require 'features_helper'
 
-describe 'login' do
+describe 'login', js: true do
   attr_reader :user_id
   attr_reader :user_name
   attr_reader :password

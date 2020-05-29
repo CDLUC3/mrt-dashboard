@@ -1,6 +1,11 @@
 ##################################################
 # Custom ignores
 
+public/assets/*.js
+public/assets/*.css
+public/assets/*.gz
+public/assets/.sprockets*
+
 .config-secret
 
 .idea
@@ -166,3 +171,4 @@ Network Trash Folder
 Temporary Items
 .apdisk
 .byebug_history
+1.html

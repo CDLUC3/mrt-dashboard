@@ -26,10 +26,12 @@ docker: &docker
   mint_service:         "http://merritt-dev.cdlib.org:33121/request-identifier"
   ingest_service:       "http://ingest:8080/ingest/poster/submit/"
   ingest_service_update: "http://ingest:8080/ingest/poster/update/"
-  uri_1: "http://store:8080/store/content/"
-  uri_2: "http://store:8080/store/producer/"
-  uri_3: "http://store:8080/store/manifest/"
+  uri_1:                "http://store:8080/store/content/"
+  uri_2:                "http://store:8080/store/producer/"
+  uri_3:                "http://store:8080/store/manifest/"
   storage_presign_file: "http://store:8080/store/presign-file/"
+  storage_presign_obj:  "http://store:8080/store/assemble-obj/"
+  storage_presign_token: "http://store:8080/store/presign-obj-by-token/"
 
 development:
   <<: *docker
@@ -49,6 +51,8 @@ stage:
   uri_2:                "http://store-aws-stg.cdlib.org:35121/producer/"
   uri_3:                "http://store-aws-stg.cdlib.org:35121/manifest/"
   storage_presign_file: "http://store-aws-stg.cdlib.org:35121/presign-file/"
+  storage_presign_obj:  "http://store-aws-stg.cdlib.org:35121/assemble-obj/"
+  storage_presign_token: "http://store-aws-stg.cdlib.org:35121/presign-obj-by-token/"
   proto_force:          "https"
 
 production:
@@ -66,6 +70,8 @@ production:
   uri_2:                "http://store-aws.cdlib.org:35121/producer/"
   uri_3:                "http://store-aws.cdlib.org:35121/manifest/"
   storage_presign_file: "http://store-aws.cdlib.org:35121/presign-file/"
+  storage_presign_obj:  "http://store-aws.cdlib.org:35121/assemble-obj/"
+  storage_presign_token: "http://store-aws.cdlib.org:35121/presign-obj-by-token/"
   proto_force:          "https"
 
 

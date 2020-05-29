@@ -1,7 +1,8 @@
 require 'features_helper'
+require 'support/presigned'
 
 # TODO: refactor this to separate logged-in-with-permissions tests from others
-describe 'versions' do
+describe 'versions', js: true do
   attr_reader :user_id
   attr_reader :password
   attr_reader :obj
@@ -139,7 +140,7 @@ describe 'versions' do
 
     expected_uri = url_for(
       controller: :version,
-      action: :download,
+      action: :presign,
       object: obj,
       version: version
     )

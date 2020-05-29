@@ -78,7 +78,113 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  # Construct a storage key from component parts
+  def self.build_storage_key(ark, version = '', file = '')
+    key = ark
+    key += "|#{version}" unless version == ''
+    key += "|#{file}" unless file == ''
+    key
+  end
+
+  # Encode a storage key constructed from component parts
+  def self.encode_storage_key(ark, version = '', file = '')
+    return "#{Encoder.urlencode(ark)}/#{version}" if version != '' && file == ''
+    key = ApplicationController.build_storage_key(ark, version, file)
+    Encoder.urlencode(key)
+  end
+
+  def self.add_params_to_path(path, params)
+    uri = URI.parse(path)
+    uri.query = params.to_query unless params.empty?
+    uri.to_s
+  end
+
+  def self.get_storage_presign_url(nodekey, has_file = true, params = {})
+    base = has_file ? APP_CONFIG['storage_presign_file'] : APP_CONFIG['storage_presign_obj']
+    path = File.join(base, 'not-applicable')
+    if nodekey.key?(:node_id) && nodekey.key?(:key)
+      path = File.join(
+        base,
+        nodekey[:node_id].to_s,
+        nodekey[:key]
+      )
+    end
+    ApplicationController.add_params_to_path(path, params)
+  end
+
+  def add_valid_param(dest, source, key, vals)
+    return unless source.key?(key)
+    return unless source[key].in?(vals)
+    dest[key] = source[key]
+  end
+
+  def sanitize_presign_params(params)
+    sparams = {}
+    add_valid_param(sparams, params, 'content', %w[producer full])
+    add_valid_param(sparams, params, 'format', %w[zip tar targz])
+    sparams
+  end
+
+  def presign_get_obj_by_node_key(nodekey, params)
+    sparams = sanitize_presign_params(params)
+    r = HTTPClient.new.post(
+      ApplicationController.get_storage_presign_url(nodekey, false, sparams),
+      follow_redirect: true
+    )
+    eval_presign_obj_by_node_key(r, nodekey[:key])
+  end
+
+  # rubocop:disable all
+  def eval_presign_obj_by_node_key(r, key)
+    if r.status.in?([ 200, 202 ])
+      resp = JSON.parse(r.content)
+      render status: r.status , json: resp
+    elsif r.status == 403
+      render file: "#{Rails.root}/public/403.html", status: 403, layout: nil
+    elsif r.status == 404
+      render file: "#{Rails.root}/public/404.html", status: 404, layout: nil
+    else
+      render file: "#{Rails.root}/public/500.html", status: r.status, layout: nil
+    end
+  end
+  # rubocop:enable all
+
+  def presign_obj_by_token
+    do_presign_obj_by_token(params[:token], params[:filename], params[:no_redirect])
+  end
+
+  def do_presign_obj_by_token(token, filename = 'object.zip', no_redirect = nil)
+    r = HTTPClient.new.get(
+      File.join(APP_CONFIG['storage_presign_token'], token),
+      { contentDisposition: "attachment; filename=#{filename}" },
+      {},
+      follow_redirect: true
+    )
+    eval_presign_obj_by_token(r, no_redirect)
+  end
+
   private
+
+  # rubocop:disable all
+  def eval_presign_obj_by_token(r, no_redirect = nil)
+    if r.status == 200
+      resp = JSON.parse(r.content)
+      if no_redirect != nil
+        render status: 200, json: r.content
+        return
+      end
+      url = resp['url']
+      response.headers['Location'] = url
+      render status: 303, text: ''
+    elsif r.status == 202
+      render status: r.status, json: r.content
+    elsif r.status == 404
+      render file: "#{Rails.root}/public/404.html", status: 404, layout: nil
+    else
+      render file: "#{Rails.root}/public/500.html", status: r.status, layout: nil
+    end
+  end
+  # rubocop:enable all
 
   # Return the current user. Uses either the session user OR if the
   # user supplied HTTP basic auth info, uses that. Returns nil if
@@ -157,22 +263,10 @@ class ApplicationController < ActionController::Base
     url_for(opts)
   end
 
-  def log_error(message, exception = nil)
-    msg = message
-    msg << ": #{exception}" if exception
-
-    (log = Rails.logger) && log.error(msg)
-    warn(msg)
-  end
-
   def url_string_with_proto(url, force_https = false)
     return url unless force_https || APP_CONFIG['proto_force'] == 'https'
-    begin
-      uri = URI.parse(url)
-      uri.scheme = 'https'
-      uri.to_s
-    rescue StandardError => e
-      log_error("Url format error caught: #{url}", e)
-    end
+    uri = URI.parse(url)
+    uri.scheme = 'https'
+    uri.to_s
   end
 end

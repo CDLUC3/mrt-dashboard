@@ -16,7 +16,7 @@
         <li class="dropdown" id="user-dropdown">
           <span class="login-message">Logged in as <%= current_user_displayname %></span>
           <ul>
-            <li><%= link_to('Logout', controller: 'user_sessions', action: 'logout') %></li>
+            <li  class='logout'><%= link_to('Logout', controller: 'user_sessions', action: 'logout') %></li>
             <%#  do not display Profile link for Guest user %>
             <% unless guest_logged_in? %>
               <li><%= link_to('Profile', params.merge(controller: 'user', action: 'update')) %></li>
@@ -40,6 +40,7 @@
             </ul>
           <% end %>
         </li>
+        <li id='downloads'><a aria-role='button' href='#'>Downloads</a></li>
       </ul>
     </nav>
   <% else %>

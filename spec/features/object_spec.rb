@@ -1,6 +1,6 @@
 require 'features_helper'
 
-describe 'objects' do
+describe 'objects', js: true do
   attr_reader :user_id
   attr_reader :password
   attr_reader :obj
@@ -135,7 +135,7 @@ describe 'objects' do
 
     expected_uri = url_for(
       controller: :object,
-      action: :download,
+      action: :presign,
       object: obj
     )
     expect(URI(download_action).path).to eq(URI(expected_uri).path)
@@ -206,11 +206,11 @@ describe 'objects' do
     end
 
     describe 'download button' do
-      it 'should display the large object email form' do
+      it 'presign object no longer displays the large object email form' do
         download_button = find_button('Download object')
         download_button.click
 
-        expect(page.title).to include('Large Object')
+        expect(page.title).not_to include('Large Object')
       end
     end
 

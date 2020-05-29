@@ -155,6 +155,7 @@ namespace :bundle do
   task :install do
     on roles(:app) do
       execute "cd #{current_path} && bundle install --without=test"
+      execute "cd #{current_path} && bundle exec rake assets:precompile"
     end
   end
 

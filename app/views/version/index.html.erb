@@ -5,8 +5,7 @@
 <main>
   <section>
     <h2>
-      <%= @version.inv_object.ark %> —
-      Version <%= @version.number %>:
+      <span class='key'><%= @version.inv_object.ark %> — Version <%= @version.number %></span>:
       <span class="timestamp"><%= merritt_time(@version.created) %></span>
     </h2>
 
@@ -38,12 +37,16 @@
       <tbody>
       <tr>
         <th class="table-section-header" colspan="3"><h3>User Files</h3></th>
-        <%= render :partial => '/version/files', :locals => {:files => @version.producer_files.quickload_files} %>
       </tr>
+      <%= render :partial => '/version/files', :locals => {:files => @version.producer_files.quickload_files} %>
+      </tbody>
+    </table>
+    <table class="properties">
+      <tbody>
       <tr>
         <th class="table-section-header" colspan="3"><h3>System Files</h3></th>
-        <%= render :partial => '/version/files', :locals => {:files => @version.system_files.quickload_files} %>
       </tr>
+      <%= render :partial => '/version/files', :locals => {:files => @version.system_files.quickload_files} %>
       </tbody>
     </table>
 
@@ -55,9 +58,9 @@
             Versions and individual files below that size can still be downloaded.
           </p>
         <% else %>
-          <form action="<%= url_for(:action => :download, :object => @version.inv_object, :version => @version) %>">
-            <input type="submit" value="Download version">
-          </form>
+          <%= form_tag({action: :presign, :object => @version.inv_object, :version => @version}, remote: true, method: 'GET', id: 'button_presign_obj', dataType: 'json') do %>
+            <%= submit_tag "Download version", onClick: "return presignDialogs.assemblyTokenList.checkToken()" %>
+          <% end %>
         <% end %>
       <% else %>
         <p>

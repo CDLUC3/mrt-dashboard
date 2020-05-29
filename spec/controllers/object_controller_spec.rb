@@ -1,6 +1,7 @@
 require 'rails_helper'
+require 'support/presigned'
 
-describe ObjectController do
+RSpec.describe ObjectController, type: :controller do
 
   attr_reader :user_id
 
@@ -13,16 +14,6 @@ describe ObjectController do
 
   attr_reader :file
   attr_reader :client
-
-  def mock_httpclient
-    client = instance_double(HTTPClient)
-    allow(client).to receive(:follow_redirect_count).and_return(10)
-    %i[receive_timeout= send_timeout= connect_timeout= keep_alive_timeout=].each do |m|
-      allow(client).to receive(m)
-    end
-    allow(HTTPClient).to receive(:new).and_return(client)
-    client
-  end
 
   before(:each) do
     @user_id = mock_user(name: 'Jane Doe', password: 'correcthorsebatterystaple')
@@ -256,6 +247,127 @@ describe ObjectController do
       expected_headers.each do |header, value|
         expect(response_headers[header]).to eq(value)
       end
+    end
+  end
+
+  describe ':presign' do
+    attr_reader :params
+
+    before(:each) do
+      @params = { object: object_ark }
+    end
+
+    it 'requires a login' do
+
+      get(:presign, params, { uid: nil })
+      expect(response.status).to eq(302)
+      expect(response.headers['Location']).to include('guest_login')
+    end
+
+    it 'prevents presign without permissions' do
+      get(:presign, params, { uid: user_id })
+      expect(response.status).to eq(401)
+    end
+
+    it 'request async assembly of an object' do
+      mock_permissions_all(user_id, collection_id)
+      mock_assembly(
+        @object.node_number,
+        ApplicationController.encode_storage_key(@object.ark),
+        response_assembly_200('aaa')
+      )
+
+      get(:presign, params, { uid: user_id })
+      expect(response.status).to eq(200)
+      json = JSON.parse(response.body)
+      expect(json['token']).to eq('aaa')
+    end
+
+    it 'request async assembly of an object with content and format' do
+      mock_permissions_all(user_id, collection_id)
+
+      reqparam = { content: 'producer', format: 'tar' }
+      params[:content] = reqparam[:content]
+      params[:format]  = reqparam[:format]
+
+      mock_assembly(
+        @object.node_number,
+        ApplicationController.encode_storage_key(@object.ark),
+        response_assembly_200('aaa'),
+        reqparam
+      )
+
+      get(:presign, params, { uid: user_id })
+      expect(response.status).to eq(200)
+      json = JSON.parse(response.body)
+      expect(json['token']).to eq('aaa')
+    end
+
+    it 'request async assembly of an object with content and format sanitized' do
+      mock_permissions_all(user_id, collection_id)
+
+      params[:content] = 'bogus'
+      params[:format] = 'bogus'
+      params[:extra] = 'bogus'
+
+      # params above will be sanitized
+      reqparam = {}
+
+      mock_assembly(
+        @object.node_number,
+        ApplicationController.encode_storage_key(@object.ark),
+        response_assembly_200('aaa'),
+        reqparam
+      )
+
+      get(:presign, params, { uid: user_id })
+      expect(response.status).to eq(200)
+      json = JSON.parse(response.body)
+      expect(json['token']).to eq('aaa')
+    end
+
+    it 'simulate 403 (object on glacier) from storage servcie' do
+      mock_permissions_all(user_id, collection_id)
+      mock_assembly(
+        @object.node_number,
+        ApplicationController.encode_storage_key(@object.ark),
+        general_response_403
+      )
+
+      get(:presign, params, { uid: user_id })
+      expect(response.status).to eq(403)
+    end
+
+    it 'simulate 404 from the storage service' do
+      mock_permissions_all(user_id, collection_id)
+      mock_assembly(
+        @object.node_number,
+        ApplicationController.encode_storage_key(@object.ark),
+        general_response_404
+      )
+
+      get(:presign, params, { uid: user_id })
+      expect(response.status).to eq(404)
+    end
+
+    it 'simulate 500 from the storage service' do
+      mock_permissions_all(user_id, collection_id)
+
+      mock_assembly(
+        @object.node_number,
+        ApplicationController.encode_storage_key(@object.ark),
+        general_response_500
+      )
+
+      get(:presign, params, { uid: user_id })
+      expect(response.status).to eq(500)
+    end
+
+    it 'request async assembly of a non-existent object' do
+      mock_permissions_all(user_id, collection_id)
+      params[:object] = object_ark + '_non_exist'
+      get(:presign, params, { uid: user_id })
+      expect(response.status).to eq(404)
     end
   end
 
