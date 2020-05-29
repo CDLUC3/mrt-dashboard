@@ -69,7 +69,8 @@ var PresignDialogs = function() {
         )
         .append(
           jQuery("<p>Closing this window will not cancel your download.</p>")
-        )
+        );
+      jQuery(".ui-dialog .ui-button:last").focus();
     }
 
     // Set the status message to indicate that the current assembly is ready for download
@@ -81,13 +82,14 @@ var PresignDialogs = function() {
         .empty()
         .append(jQuery("<p>Your download is ready. </p>"))
         .append(
-          jQuery("<a download/>")
+          jQuery("<a class='obj_download' download/>")
             .on("click", function(){
               self.objectAssembler.assemblyProgress.clearActiveTokenFromDialog();
             })
             .text("Download " + self.objectAssembler.getDownloadFilename())
             .attr("href", self.objectAssembler.presignedUrl)
         );
+      jQuery(".ui-dialog .ui-button:last").focus();
     }
 
     // Reset the progress bar text to indicate that the user downloaded an object.
@@ -104,6 +106,7 @@ var PresignDialogs = function() {
         .append(
           jQuery("<p/>").text("Check your browser download folder. ")
         );
+      jQuery(".ui-dialog .ui-button:last").focus();
     }
 
     // Clear the progress bar text and label

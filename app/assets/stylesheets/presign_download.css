@@ -56,3 +56,7 @@ div.download-in-progress div.ui-dialog-buttonset {
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+
+.ui-dialog button:focus {
+  border: thin solid blue;
+}

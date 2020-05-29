@@ -139,6 +139,7 @@ var ObjectAssembler = function(pDialogs) {
     jQuery("button.presign").show();
     if (show) {
       jQuery("div#assembly-dialog").dialog("open");
+      jQuery(".ui-dialog .ui-button:last").focus();
     }
     self.startTimer();
   }
