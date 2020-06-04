@@ -265,8 +265,12 @@ class ApplicationController < ActionController::Base
 
   def url_string_with_proto(url, force_https = false)
     return url unless force_https || APP_CONFIG['proto_force'] == 'https'
-    uri = URI.parse(url)
-    uri.scheme = 'https'
-    uri.to_s
+    begin
+      uri = URI.parse(url)
+      uri.scheme = 'https'
+      uri.to_s
+    rescue StandardError => e
+      Rails.logger.error("Url format error caught: #{url}", e)
+    end
   end
 end
