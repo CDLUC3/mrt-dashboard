@@ -410,5 +410,20 @@ describe ApplicationController do
       get(:presign_obj_by_token, { token: token, filename: filename })
       expect(response.status).to eq(500)
     end
+
+    it 'presign_obj_by_token simulate timeout - returns 202' do
+      token = SecureRandom.uuid
+      filename = 'object.zip'
+      expect(@client).to receive(:get).with(
+        File.join(APP_CONFIG['storage_presign_token'], token),
+        { contentDisposition: "attachment; filename=#{filename}" },
+        {},
+        follow_redirect: true
+      ).and_raise(
+        HTTPClient::ReceiveTimeoutError
+      )
+      get(:presign_obj_by_token, { token: token, filename: filename })
+      expect(response.status).to eq(202)
+    end
   end
 end

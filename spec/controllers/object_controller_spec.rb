@@ -363,6 +363,25 @@ RSpec.describe ObjectController, type: :controller do
       expect(response.status).to eq(500)
     end
 
+    it 'simulate timeout from the storage service - returns 408' do
+      mock_permissions_all(user_id, collection_id)
+
+      client = mock_httpclient
+      nk = {
+        node_id: @object.node_number,
+        key: ApplicationController.encode_storage_key(@object.ark)
+      }
+      expect(client).to receive(:post).with(
+        ApplicationController.get_storage_presign_url(nk, false, {}),
+        follow_redirect: true
+      ).and_raise(
+        HTTPClient::ReceiveTimeoutError
+      )
+
+      get(:presign, params, { uid: user_id })
+      expect(response.status).to eq(408)
+    end
+
     it 'request async assembly of a non-existent object' do
       mock_permissions_all(user_id, collection_id)
       params[:object] = object_ark + '_non_exist'

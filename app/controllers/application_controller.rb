@@ -125,13 +125,23 @@ class ApplicationController < ActionController::Base
     sparams
   end
 
+  def create_http_cli
+    cli = HTTPClient.new
+    # cli.connect_timeout = 10
+    # cli.send_timeout = 10
+    # cli.receive_timeout = 10
+    cli
+  end
+
   def presign_get_obj_by_node_key(nodekey, params)
     sparams = sanitize_presign_params(params)
-    r = HTTPClient.new.post(
+    r = create_http_cli.post(
       ApplicationController.get_storage_presign_url(nodekey, false, sparams),
       follow_redirect: true
     )
     eval_presign_obj_by_node_key(r, nodekey[:key])
+  rescue HTTPClient::ReceiveTimeoutError
+    render status: 408, text: 'Please try your request again later'
   end
 
   # rubocop:disable all
@@ -154,13 +164,15 @@ class ApplicationController < ActionController::Base
   end
 
   def do_presign_obj_by_token(token, filename = 'object.zip', no_redirect = nil)
-    r = HTTPClient.new.get(
+    r = create_http_cli.get(
       File.join(APP_CONFIG['storage_presign_token'], token),
       { contentDisposition: "attachment; filename=#{filename}" },
       {},
       follow_redirect: true
     )
     eval_presign_obj_by_token(r, no_redirect)
+  rescue HTTPClient::ReceiveTimeoutError
+    render status: 202, text: 'Timeout on request'
   end
 
   private
