@@ -125,17 +125,17 @@ class ApplicationController < ActionController::Base
     sparams
   end
 
-  def create_http_cli
+  def create_http_cli(send: 120, connect: 60, receive: 60 )
     cli = HTTPClient.new
-    # cli.connect_timeout = 10
-    # cli.send_timeout = 10
-    # cli.receive_timeout = 10
+    cli.connect_timeout = connect
+    cli.send_timeout = send
+    cli.receive_timeout = receive
     cli
   end
 
   def presign_get_obj_by_node_key(nodekey, params)
     sparams = sanitize_presign_params(params)
-    r = create_http_cli.post(
+    r = create_http_cli(connect: 30, receive: 30, send: 30).post(
       ApplicationController.get_storage_presign_url(nodekey, false, sparams),
       follow_redirect: true
     )
@@ -164,7 +164,7 @@ class ApplicationController < ActionController::Base
   end
 
   def do_presign_obj_by_token(token, filename = 'object.zip', no_redirect = nil)
-    r = create_http_cli.get(
+    r = create_http_cli(connect: 5, receive: 5, send: 5).get(
       File.join(APP_CONFIG['storage_presign_token'], token),
       { contentDisposition: "attachment; filename=#{filename}" },
       {},
