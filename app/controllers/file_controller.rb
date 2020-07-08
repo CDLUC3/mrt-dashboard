@@ -165,9 +165,7 @@ class FileController < ApplicationController
     p[:contentDisposition] = params[:contentDisposition] if params.key?(:contentDisposition)
     r = create_http_cli(connect: 15, receive: 15, send: 15).get(
       ApplicationController.get_storage_presign_url(nodekey, true),
-      p,
-      {},
-      follow_redirect: true
+      p, {}, follow_redirect: true
     )
     eval_presign_get_by_node_key(r)
   rescue HTTPClient::ReceiveTimeoutError

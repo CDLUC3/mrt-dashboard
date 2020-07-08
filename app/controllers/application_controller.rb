@@ -125,7 +125,7 @@ class ApplicationController < ActionController::Base
     sparams
   end
 
-  def create_http_cli(send: 120, connect: 60, receive: 60 )
+  def create_http_cli(send: 120, connect: 60, receive: 60)
     cli = HTTPClient.new
     cli.connect_timeout = connect
     cli.send_timeout = send
