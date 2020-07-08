@@ -295,6 +295,22 @@ RSpec.describe FileController, type: :controller do
       expect(response.status).to eq(500)
     end
 
+    it 'returns 408 if presign timeout' do
+      mock_permissions_all(user_id, collection_id)
+
+      expect(client).to receive(:get).with(
+        FileController.get_storage_presign_url(my_node_key_params(params), true),
+        { contentType: inv_file.mime_type },
+        {},
+        follow_redirect: true
+      ).and_raise(
+        HTTPClient::ReceiveTimeoutError
+      )
+
+      get(:presign, params, { uid: user_id })
+      expect(response.status).to eq(408)
+    end
+
     it 'redirects to download url when presign is unsupported' do
       mock_permissions_all(user_id, collection_id)
 
