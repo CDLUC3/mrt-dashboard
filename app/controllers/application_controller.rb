@@ -135,7 +135,7 @@ class ApplicationController < ActionController::Base
 
   def presign_get_obj_by_node_key(nodekey, params)
     sparams = sanitize_presign_params(params)
-    r = create_http_cli(connect: 30, receive: 30, send: 30).post(
+    r = create_http_cli(connect: 20, receive: 20, send: 20).post(
       ApplicationController.get_storage_presign_url(nodekey, false, sparams),
       follow_redirect: true
     )
