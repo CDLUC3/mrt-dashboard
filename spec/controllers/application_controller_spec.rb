@@ -188,6 +188,15 @@ describe ApplicationController do
       # For testing purposes, simulate APP_CONFIG['proto_force'] == 'https'
       expect(controller.send(:url_string_with_proto, http_req, true)).to eq(https_req), 'Location should start with https'
     end
+
+    it 'catch encoding error in url' do
+      host = 'foo.bar'
+      https_req = "https://#{host}/api/presign-file/ark:/13030/m5sf7w9f/1/producer/Peuß%20Dryad%20raw%20data.xlsx?no_redirect=true"
+      err = "Url format error caught: #{https_req}"
+
+      expect(Rails.logger).to receive(:error).with(err, anything)
+      expect(controller.send(:url_string_with_proto, https_req, true)).not_to eq(https_req), 'Expect encoding error for URL'
+    end
   end
 
   describe ':stream_response' do
@@ -400,6 +409,21 @@ describe ApplicationController do
       )
       get(:presign_obj_by_token, { token: token, filename: filename })
       expect(response.status).to eq(500)
+    end
+
+    it 'presign_obj_by_token simulate timeout - returns 202' do
+      token = SecureRandom.uuid
+      filename = 'object.zip'
+      expect(@client).to receive(:get).with(
+        File.join(APP_CONFIG['storage_presign_token'], token),
+        { contentDisposition: "attachment; filename=#{filename}" },
+        {},
+        follow_redirect: true
+      ).and_raise(
+        HTTPClient::ReceiveTimeoutError
+      )
+      get(:presign_obj_by_token, { token: token, filename: filename })
+      expect(response.status).to eq(202)
     end
   end
 end

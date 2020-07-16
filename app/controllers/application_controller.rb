@@ -125,13 +125,23 @@ class ApplicationController < ActionController::Base
     sparams
   end
 
+  def create_http_cli(send: 120, connect: 60, receive: 60)
+    cli = HTTPClient.new
+    cli.connect_timeout = connect
+    cli.send_timeout = send
+    cli.receive_timeout = receive
+    cli
+  end
+
   def presign_get_obj_by_node_key(nodekey, params)
     sparams = sanitize_presign_params(params)
-    r = HTTPClient.new.post(
+    r = create_http_cli(connect: 20, receive: 20, send: 20).post(
       ApplicationController.get_storage_presign_url(nodekey, false, sparams),
       follow_redirect: true
     )
     eval_presign_obj_by_node_key(r, nodekey[:key])
+  rescue HTTPClient::ReceiveTimeoutError
+    render status: 408, text: 'Please try your request again later'
   end
 
   # rubocop:disable all
@@ -154,13 +164,15 @@ class ApplicationController < ActionController::Base
   end
 
   def do_presign_obj_by_token(token, filename = 'object.zip', no_redirect = nil)
-    r = HTTPClient.new.get(
+    r = create_http_cli(connect: 5, receive: 5, send: 5).get(
       File.join(APP_CONFIG['storage_presign_token'], token),
       { contentDisposition: "attachment; filename=#{filename}" },
       {},
       follow_redirect: true
     )
     eval_presign_obj_by_token(r, no_redirect)
+  rescue HTTPClient::ReceiveTimeoutError
+    render status: 202, text: 'Timeout on request'
   end
 
   private
@@ -265,8 +277,12 @@ class ApplicationController < ActionController::Base
 
   def url_string_with_proto(url, force_https = false)
     return url unless force_https || APP_CONFIG['proto_force'] == 'https'
-    uri = URI.parse(url)
-    uri.scheme = 'https'
-    uri.to_s
+    begin
+      uri = URI.parse(url)
+      uri.scheme = 'https'
+      uri.to_s
+    rescue StandardError => e
+      Rails.logger.error("Url format error caught: #{url}", e)
+    end
   end
 end

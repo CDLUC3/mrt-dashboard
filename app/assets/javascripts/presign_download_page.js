@@ -38,6 +38,8 @@ jQuery(document).ready(function(){
     var message = error;
     if (xhr.status == 404) {
       message = "Requested object could not be assembled."
+    } else if (xhr.status == 408) {
+      message = "Request timed out.  Please try your request again later."
     }
     presignDialogs.makeErrorDialog("Object Assembly Error", message);
   });
