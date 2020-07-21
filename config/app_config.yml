@@ -66,12 +66,12 @@ production:
   mint_service:         "http://merritt.cdlib.org:33121/ingest/request-identifier"
   ingest_service:       "http://merritt.cdlib.org:33121/poster/submit/"
   ingest_service_update: "http://merritt.cdlib.org:33121/poster/update/"
-  uri_1:                "http://storage.cdlib.org:35121/content/"
-  uri_2:                "http://storage.cdlib.org:35121/producer/"
-  uri_3:                "http://storage.cdlib.org:35121/manifest/"
-  storage_presign_file: "http://storage.cdlib.org:35121/presign-file/"
-  storage_presign_obj:  "http://storage.cdlib.org:35121/assemble-obj/"
-  storage_presign_token: "http://storage.cdlib.org:35121/presign-obj-by-token/"
+  uri_1:                "http://store-do.cdlib.org:35121/content/"
+  uri_2:                "http://store-do.cdlib.org:35121/producer/"
+  uri_3:                "http://store-do.cdlib.org:35121/manifest/"
+  storage_presign_file: "http://store-do.cdlib.org:35121/presign-file/"
+  storage_presign_obj:  "http://store-do.cdlib.org:35121/assemble-obj/"
+  storage_presign_token: "http://store-do.cdlib.org:35121/presign-obj-by-token/"
   proto_force:          "https"
 
 
