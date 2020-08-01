@@ -17,7 +17,7 @@
       <tr>
         <th>
           <% if can_download_object %>
-            <%= link_to(file_basename, "/api/presign-file/#{object_id}/#{version_id}/#{file.to_param}") %>
+            <%= link_to(file_basename, "/api/presign-file/#{object_id}/#{version_id}/#{Encoder.urlencode(file.to_param)}") %>
           <% else %>
             <%= file_basename %>
           <% end %>
