@@ -3,7 +3,7 @@ source 'http://rubygems.org'
 gem 'activeresource'
 gem 'multi_json'
 gem 'mysql2', '~> 0.4.0' # TODO: update to 0.5 once we're on a Rails that supports it
-gem 'rails', '~> 4.2.10'
+gem 'rails', '~> 4.2.11'
 
 gem 'builder'
 gem 'capistrano', '~> 3.4.1'
@@ -23,6 +23,10 @@ gem 'thin'
 gem 'unicode'
 gem 'uuidtools'
 gem 'will_paginate'
+
+source "https://rubygems.pkg.github.com/cdluc3" do
+  gem "uc3-ssm", "0.1.1"
+end
 
 group :development do
   gem 'web-console', '~> 2.0'
