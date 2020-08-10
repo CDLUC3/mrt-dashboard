@@ -5,6 +5,7 @@ gem 'multi_json'
 gem 'mysql2', '~> 0.4.0' # TODO: update to 0.5 once we're on a Rails that supports it
 gem 'rails', '~> 4.2.11'
 
+gem 'aws-sdk-ssm'
 gem 'builder'
 gem 'capistrano', '~> 3.4.1'
 gem 'capistrano-rails'
@@ -20,12 +21,11 @@ gem 'rack-cache'
 gem 'rest-client', '~> 2.0'
 gem 'sprockets', '~> 3.7.2'
 gem 'thin'
+gem 'uc3-ssm', git: 'https://github.com/CDLUC3/uc3-ssm', branch: 'main'
 gem 'unicode'
 gem 'uuidtools'
 gem 'will_paginate'
-gem 'aws-sdk-ssm'
 
-gem 'uc3-ssm', git: 'https://github.com/CDLUC3/uc3-ssm', branch: 'main'
 
 #source "https://rubygems.pkg.github.com/cdluc3" do
 #  gem "uc3-ssm", "0.1.1"
