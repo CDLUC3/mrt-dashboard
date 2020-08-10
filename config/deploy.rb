@@ -30,7 +30,7 @@ set :keep_releases, 5
 # Prompt for TAG before deployment only
 before 'deploy', 'deploy:prompt_for_tag'
 # Update config/atom repo before deployment only
-# before 'deploy', 'deploy:update_config'
+before 'deploy', 'deploy:update_config'
 before 'deploy', 'deploy:update_atom'
 
 namespace :deploy do
@@ -94,8 +94,8 @@ namespace :deploy do
         execute "mv #{config_dir} #{config_dir}.old" if test("[ -d #{config_dir} ]")
         within shared_dir do
           # clone config repo and link it as config directory
-          execute 'git', 'clone', "git@github.com:cdlib/#{config_repo}"
-          execute 'ln', '-s', config_repo, 'config'
+          # execute 'git', 'clone', "git@github.com:cdlib/#{config_repo}"
+          # execute 'ln', '-s', config_repo, 'config'
         end
       end
 
