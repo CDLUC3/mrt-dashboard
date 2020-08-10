@@ -1,0 +1,11 @@
+default: &default
+  credentials: pretend-credentials
+
+stage:
+  <<: *default
+
+production:
+  <<: *default
+
+test:
+  credentials: merritt:1212555
