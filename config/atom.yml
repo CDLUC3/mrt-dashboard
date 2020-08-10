@@ -1,5 +1,5 @@
 default: &default
-  credentials: pretend-credentials
+  credentials: {!SSM: ui/atom-credential}
 
 stage:
   <<: *default

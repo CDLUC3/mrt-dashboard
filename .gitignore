@@ -27,7 +27,6 @@ console
 help/*
 sqlite/*
 config/ldap.yml
-config/database.yml
 db/schema.rb
 .DS_Store
 .project
