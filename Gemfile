@@ -23,6 +23,7 @@ gem 'thin'
 gem 'unicode'
 gem 'uuidtools'
 gem 'will_paginate'
+gem 'aws-sdk-ssm'
 
 gem 'uc3-ssm', git: 'https://github.com/CDLUC3/uc3-ssm', branch: 'main'
 
