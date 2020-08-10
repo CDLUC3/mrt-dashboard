@@ -12,7 +12,8 @@ set :stages, ['local', 'mrt-ui-dev', 'stage', 'production']
 set :default_env, { path: '/dpr2/local/bin:$PATH' }
 
 # persistent dirs
-set :linked_files, %w[config/database.yml config/ldap.yml config/atom.yml]
+# set :linked_files, %w[config/database.yml config/ldap.yml config/atom.yml]
+set :linked_files, %w[config/database.yml config/ldap.yml]
 set :linked_dirs, %w[log pid]
 
 # Default value for :format is :pretty
@@ -94,8 +95,8 @@ namespace :deploy do
         execute "mv #{config_dir} #{config_dir}.old" if test("[ -d #{config_dir} ]")
         within shared_dir do
           # clone config repo and link it as config directory
-          # execute 'git', 'clone', "git@github.com:cdlib/#{config_repo}"
-          # execute 'ln', '-s', config_repo, 'config'
+          execute 'git', 'clone', "git@github.com:cdlib/#{config_repo}"
+          execute 'ln', '-s', config_repo, 'config'
         end
       end
 
