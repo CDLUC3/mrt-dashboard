@@ -1,6 +1,12 @@
+GIT
+  remote: https://github.com/CDLUC3/uc3-ssm
+  revision: 1e591e1f812a170601da02d6ea9d6ae46a3ab475
+  branch: main
+  specs:
+    uc3-ssm (0.1.1)
+
 GEM
   remote: http://rubygems.org/
-  remote: https://rubygems.pkg.github.com/cdluc3/
   specs:
     actionmailer (4.2.11.3)
       actionpack (= 4.2.11.3)
@@ -258,7 +264,6 @@ GEM
     thread_safe (0.3.6)
     tzinfo (1.2.7)
       thread_safe (~> 0.1)
-    uc3-ssm (0.1.1)
     unf (0.1.4)
       unf_ext
     unf_ext (0.0.7.7)
@@ -322,7 +327,7 @@ DEPENDENCIES
   simplecov-console (~> 0.4)
   sprockets (~> 3.7.2)
   thin
-  uc3-ssm (= 0.1.1)!
+  uc3-ssm!
   unicode
   uuidtools
   web-console (~> 2.0)
