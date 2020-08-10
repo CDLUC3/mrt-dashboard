@@ -58,6 +58,9 @@ GEM
       aws-partitions (~> 1, >= 1.239.0)
       aws-sigv4 (~> 1.1)
       jmespath (~> 1.0)
+    aws-sdk-ec2 (1.184.0)
+      aws-sdk-core (~> 3, >= 3.99.0)
+      aws-sigv4 (~> 1.1)
     aws-sdk-ssm (1.86.0)
       aws-sdk-core (~> 3, >= 3.99.0)
       aws-sigv4 (~> 1.1)
@@ -305,6 +308,7 @@ PLATFORMS
 
 DEPENDENCIES
   activeresource
+  aws-sdk-ec2
   aws-sdk-ssm
   builder
   byebug

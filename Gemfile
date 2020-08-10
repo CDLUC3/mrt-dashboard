@@ -5,6 +5,7 @@ gem 'multi_json'
 gem 'mysql2', '~> 0.4.0' # TODO: update to 0.5 once we're on a Rails that supports it
 gem 'rails', '~> 4.2.11'
 
+gem 'aws-sdk-ec2'
 gem 'aws-sdk-ssm'
 gem 'builder'
 gem 'capistrano', '~> 3.4.1'
