@@ -1,11 +1,10 @@
 require 'uc3-ssm'
 
 def load_config(name)
+  ENV['AWS_REGION']='us-west-2'
   path = File.join(Rails.root, 'config', name)
   conf = Uc3Ssm::ConfigResolver.new.resolve_file_values(path)
-  puts conf
   conf_env = conf[Rails.env]
-  puts conf_env
   conf_env.class == String ? conf[conf_env] : conf_env
 end
 
