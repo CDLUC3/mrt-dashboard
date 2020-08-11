@@ -7,6 +7,7 @@ require 'action_mailer/railtie'
 require 'active_resource/railtie'
 require 'rails/test_unit/railtie'
 require 'yaml'
+require 'uc3-ssm'
 
 # If you have a Gemfile, require the gems listed there, including any gems
 # you've limited to :test, :development, or :production.
@@ -63,5 +64,10 @@ module MrtDashboard
 
     config.assets.enabled = false
 
+    def config.database_configuration
+      myconfig = super
+      myconfig = Uc3Ssm::ConfigResolver.new.resolve_hash_values(myconfig)
+      myconfig
+    end
   end
 end
