@@ -1,4 +1,4 @@
-# Tests shouldn't actually talk to LDAP
+# This is a simple file to test SSM resolution
 test: &test
   user: "{!ENV: USER}"
   rb: "{!ENV: SSM_ROOT_PATH}"

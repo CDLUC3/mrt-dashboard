@@ -13,7 +13,7 @@ set :default_env, { path: '/dpr2/local/bin:$PATH' }
 
 # persistent dirs
 # set :linked_files, %w[config/database.yml config/ldap.yml config/atom.yml]
-set :linked_files, %w[config/database.yml config/ldap.yml]
+set :linked_files, %w[]
 set :linked_dirs, %w[log pid]
 
 # Default value for :format is :pretty
