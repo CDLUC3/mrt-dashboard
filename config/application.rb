@@ -65,7 +65,6 @@ module MrtDashboard
     config.assets.enabled = false
 
     def config.database_configuration
-      ENV['SSM_ROOT_PATH'] = '/uc3/mrt/stg/'
       myconfig = super
       myconfig = Uc3Ssm::ConfigResolver.new.resolve_hash_values(myconfig)
       myconfig
