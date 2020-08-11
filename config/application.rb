@@ -66,6 +66,7 @@ module MrtDashboard
 
     def config.database_configuration
       ENV['AWS_REGION']='us-west-2'
+      ENV['SSM_ROOT_PATH']='/uc3/mrt/stg/'
       myconfig = super
       myconfig = Uc3Ssm::ConfigResolver.new.resolve_hash_values(myconfig)
       myconfig
