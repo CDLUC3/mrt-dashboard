@@ -12,16 +12,16 @@ test:
   connect_timeout:	60
 
 default: &default
-  admin_password: "{!SSM: ldap/admin/password}"
-  admin_user:     "{!SSM: ldap/admin/user}"
+  admin_password: "{!SSM: ldap/accounts/admin/password}"
+  admin_user:     "{!SSM: ldap/accounts/admin/user}"
   group_base:     "{!SSM: ldap/group_base}"
   host:           "{!SSM: ldap/host}"
   port:           "{!SSM: ldap/port}"
   user_base:      "{!SSM: ldap/user_base}"
   inst_base:      "{!SSM: ldap/inst_base}"
   ark_minter_url: "{!SSM: ldap/ark_minter_url}"
-  guest_password: "{!SSM: ldap/guest/password}"
-  guest_user:     "{!SSM: ldap/user/password}"
+  guest_password: "{!SSM: ldap/accounts/guest/password}"
+  guest_user:     "{!SSM: ldap/accounts/guest/user}"
   connect_timeout:      60
 
 stage:
