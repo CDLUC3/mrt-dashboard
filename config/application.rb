@@ -65,10 +65,8 @@ module MrtDashboard
     config.assets.enabled = false
 
     def config.database_configuration
-      ENV['AWS_REGION']='us-west-2'
-      ENV['SSM_ROOT_PATH']='/uc3/mrt/stg/'
       myconfig = super
-      myconfig = Uc3Ssm::ConfigResolver.new.resolve_hash_values(myconfig)
+      myconfig = Uc3Ssm::ConfigResolver.new("NOT_APPLICABLE", "us-west-2", "/uc3/mrt/stg/").resolve_hash_values(myconfig)
       myconfig
     end
   end

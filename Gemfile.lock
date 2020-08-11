@@ -1,9 +1,9 @@
 GIT
   remote: https://github.com/CDLUC3/uc3-ssm
-  revision: 1e591e1f812a170601da02d6ea9d6ae46a3ab475
+  revision: 4d1385eadd98a21a5b102933534f31f97c7b7d49
   branch: main
   specs:
-    uc3-ssm (0.1.1)
+    uc3-ssm (0.1.2)
 
 GEM
   remote: http://rubygems.org/
