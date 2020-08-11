@@ -1,0 +1,8 @@
+# Tests shouldn't actually talk to LDAP
+test: &test
+  user: {!ENV: USER}
+  rb: {!ENV: SSM_ROOT_PATH}
+  foo: bar
+
+stage:
+  << *test

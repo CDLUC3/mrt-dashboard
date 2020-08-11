@@ -10,3 +10,6 @@ end
 LDAP_CONFIG = load_config('ldap.yml')
 ATOM_CONFIG = load_config('atom.yml')
 APP_CONFIG = load_config('app_config.yml')
+SSM_ENV = load_config('ssm-env.yml')
+
+puts SSM_ENV
