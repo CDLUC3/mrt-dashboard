@@ -26,7 +26,6 @@ mrt-dashboard_production
 console
 help/*
 sqlite/*
-config/ldap.yml
 db/schema.rb
 .DS_Store
 .project

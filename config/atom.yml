@@ -9,3 +9,6 @@ production:
 
 test:
   credentials: merritt:1212555
+
+docker:
+  credentials: pretend-credentials

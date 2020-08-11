@@ -1,11 +1,11 @@
-default: &default
+test:
   host: localhost
   adapter: mysql2
   database: mrt_dashboard_test
   username: travis
   encoding: utf8   # schema won't load if it's utf8mb4
 
-stage:
+default: &default
   adapter: mysql2
   encoding: utf8
   host: {!SSM: inv/db-host}
@@ -14,16 +14,18 @@ stage:
   port: 3360
   username: {!SSM: inv/readwrite/db-user}
   password: {!SSM: inv/readwrite/db-password}
+
+stage:
+  <<: *default
 
 production:
-  adapter: mysql2
-  encoding: utf8
-  host: {!SSM: inv/db-host}
-  database: {!SSM: inv/db-name}
-  pool: 5
-  port: 3360
-  username: {!SSM: inv/readwrite/db-user}
-  password: {!SSM: inv/readwrite/db-password}
-
-test:
   <<: *default
+
+docker: &docker
+  host: localhost
+  adapter: mysql2
+  host: db-container
+  database: db-name
+  username: user
+  password: password
+  encoding: utf8   # schema won't load if it's utf8mb4
