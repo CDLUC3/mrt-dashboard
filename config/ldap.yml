@@ -12,16 +12,16 @@ test:
   connect_timeout:	60
 
 default: &default
-  admin_password: {!SSM: ldap/admin/password}
-  admin_user:     {!SSM: ldap/admin/user}
-  group_base:     {!SSM: ldap/group_base}
-  host:           {!SSM: ldap/host}
-  port:           {!SSM: ldap/port}
-  user_base:      {!SSM: ldap/user_base}
-  inst_base:      {!SSM: ldap/inst_base}
-  ark_minter_url: {!SSM: ldap/ark_minter_url}
-  guest_password: {!SSM: ldap/guest/password}
-  guest_user:     {!SSM: ldap/user/password}
+  admin_password: "{!SSM: ldap/admin/password}"
+  admin_user:     "{!SSM: ldap/admin/user}"
+  group_base:     "{!SSM: ldap/group_base}"
+  host:           "{!SSM: ldap/host}"
+  port:           "{!SSM: ldap/port}"
+  user_base:      "{!SSM: ldap/user_base}"
+  inst_base:      "{!SSM: ldap/inst_base}"
+  ark_minter_url: "{!SSM: ldap/ark_minter_url}"
+  guest_password: "{!SSM: ldap/guest/password}"
+  guest_user:     "{!SSM: ldap/user/password}"
   connect_timeout:      60
 
 stage:
@@ -31,10 +31,10 @@ production:
   <<: *default
 
 docker:
-  admin_password: {!ENV: LDAP_ADMIN_PASSWORD}
+  admin_password: "{!ENV: LDAP_ADMIN_PASSWORD}"
   admin_user:     cn=Directory Manager
   group_base:     ou=mrt-classes,ou=uc3,dc=cdlib,dc=org
-  host:           {!ENV: LDAP_HOST}
+  host:           "{!ENV: LDAP_HOST}"
   port:           1636
   user_base:      ou=People,ou=uc3,dc=cdlib,dc=org
   inst_base:      o=institutions,ou=uc3,dc=cdlib,dc=org

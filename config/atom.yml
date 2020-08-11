@@ -1,5 +1,5 @@
 default: &default
-  credentials: {!SSM: ui/atom-credential}
+  credentials: "{!SSM: ui/atom-credential}"
 
 stage:
   <<: *default

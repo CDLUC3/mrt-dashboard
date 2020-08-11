@@ -8,12 +8,12 @@ test:
 default: &default
   adapter: mysql2
   encoding: utf8
-  host: {!SSM: inv/db-host}
-  database: {!SSM: inv/db-name}
+  host: "{!SSM: inv/db-host}"
+  database: "{!SSM: inv/db-name}"
   pool: 5
   port: 3360
-  username: {!SSM: inv/readwrite/db-user}
-  password: {!SSM: inv/readwrite/db-password}
+  username: "{!SSM: inv/readwrite/db-user}"
+  password: "{!SSM: inv/readwrite/db-password}"
 
 stage:
   <<: *default

@@ -1,8 +1,12 @@
 # Tests shouldn't actually talk to LDAP
 test: &test
-  user: {!ENV: USER}
-  rb: {!ENV: SSM_ROOT_PATH}
+  user: "{!ENV: USER}"
+  rb: "{!ENV: SSM_ROOT_PATH}"
+  host: "{!SSM: inv/db-host !DEFAULT: ZZZ}"
   foo: bar
 
 stage:
-  << *test
+  <<: *test
+
+development:
+  <<: *test
