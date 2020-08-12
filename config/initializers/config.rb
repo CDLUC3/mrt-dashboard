@@ -10,10 +10,7 @@ end
 LDAP_CONFIG = load_config('ldap.yml')
 ATOM_CONFIG = load_config('atom.yml')
 APP_CONFIG = load_config('app_config.yml')
-SSM_ENV = load_config('ssm-env.yml')
+#SSM_ENV = load_config('ssm-env.yml')
 
-puts "TBTB ***"
-puts SSM_ENV
-puts LDAP_CONFIG
-puts ATOM_CONFIG
-puts load_config('database.yml')
+#puts "TBTB ***"
+#puts SSM_ENV
