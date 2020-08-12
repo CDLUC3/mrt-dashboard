@@ -10,11 +10,10 @@ end
 LDAP_CONFIG = load_config('ldap.yml')
 ATOM_CONFIG = load_config('atom.yml')
 APP_CONFIG = load_config('app_config.yml')
+dbc = load_config('database.yml')
 puts "TBTB ***"
+puts dbc
 
-path = File.join(Rails.root, 'config', 'database.yml')
-conf = Uc3Ssm::ConfigResolver.new("NOT_APPLICABLE", "us-west-2", "/uc3/mrt/stg/").resolve_file_values(path)
-dbc = conf[Rails.env]
 ENV['DATABASE_URL']="#{dbc['adapter']}://#{dbc['username']}:#{dbc['password']}@#{dbc['host']}:#{dbc['port']}/#{dbc['database']}"
 puts ENV['DATABASE_URL']
 
