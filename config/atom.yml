@@ -1,6 +1,9 @@
 default: &default
   credentials: "{!SSM: ui/atom-credential}"
 
+development:
+  <<: *default
+
 stage:
   <<: *default
 

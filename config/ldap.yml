@@ -24,6 +24,9 @@ default: &default
   guest_user:     "{!SSM: ldap/accounts/guest/user}"
   connect_timeout:      60
 
+development:
+  <<: *default
+
 stage:
   <<: *default
 

@@ -18,6 +18,9 @@ default: &default
 stage:
   <<: *default
 
+development:
+  <<: *default
+
 production:
   <<: *default
 

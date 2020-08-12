@@ -33,10 +33,7 @@ docker: &docker
   storage_presign_obj:  "http://store:8080/store/assemble-obj/"
   storage_presign_token: "http://store:8080/store/presign-obj-by-token/"
 
-development:
-  <<: *docker
-
-stage:
+stage: &stage
   <<: *defaults
   dua_email_to:         [marisa.strong@ucop.edu, eric.lopatin@ucop.edu]
   lostorage_email_to:   [marisa.strong@ucop.edu, eric.lopatin@ucop.edu]
@@ -54,6 +51,9 @@ stage:
   storage_presign_obj:  "http://store-stage.cdlib.org:35121/assemble-obj/"
   storage_presign_token: "http://store-stage.cdlib.org:35121/presign-obj-by-token/"
   proto_force:          "https"
+
+development:
+  <<: *stage
 
 production:
   <<: *defaults
