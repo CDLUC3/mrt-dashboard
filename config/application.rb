@@ -65,7 +65,7 @@ module MrtDashboard
     config.assets.enabled = false
 
     def config.database_configuration
-      Uc3Ssm::ConfigResolver.new("NOT_APPLICABLE", "us-west-2", "/uc3/mrt/stg/").resolve_has_values(super)
+      Uc3Ssm::ConfigResolver.new("NOT_APPLICABLE", "us-west-2", "/uc3/mrt/stg/").resolve_hash_values(super)
     end
   end
 end
