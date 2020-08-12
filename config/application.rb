@@ -64,10 +64,11 @@ module MrtDashboard
 
     config.assets.enabled = false
 
-    #def config.database_configuration
-    #  myconfig = super
-    #  myconfig = Uc3Ssm::ConfigResolver.new("NOT_APPLICABLE", "us-west-2", "/uc3/mrt/stg/").resolve_hash_values(myconfig)
-    #  myconfig
-    #end
+    def config.database_configuration
+      path = File.join(Rails.root, 'config', 'database.yml')
+      conf = Uc3Ssm::ConfigResolver.new("NOT_APPLICABLE", "us-west-2", "/uc3/mrt/stg/").resolve_file_values(path)
+      conf_env = conf[Rails.env]
+      conf_env.class == String ? conf[conf_env] : conf_env
+    end
   end
 end
