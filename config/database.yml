@@ -11,7 +11,7 @@ default: &default
   host: "{!SSM: inv/db-host}"
   database: "{!SSM: inv/db-name}"
   pool: 5
-  port: 3360
+  port: 3306
   username: "{!SSM: inv/readwrite/db-user}"
   password: "{!SSM: inv/readwrite/db-password}"
 
