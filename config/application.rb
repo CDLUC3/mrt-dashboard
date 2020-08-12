@@ -65,7 +65,7 @@ module MrtDashboard
     config.assets.enabled = false
 
     def config.database_configuration
-      load_uc3_config('database.yml', Rails.env)
+      load_uc3_config('database.yml')
     end
   end
 end
