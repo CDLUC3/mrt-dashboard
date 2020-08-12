@@ -11,10 +11,9 @@ LDAP_CONFIG = load_config('ldap.yml')
 ATOM_CONFIG = load_config('atom.yml')
 APP_CONFIG = load_config('app_config.yml')
 dbc = load_config('database.yml')
-puts "TBTB *** #{Rails.env} -- #{ENV['RAILS_ENV']}"
 
+# Ensure that the SSM credentials are used for the database rather than reading in application.rb
 ENV['DATABASE_URL']="#{dbc['adapter']}://#{dbc['username']}:#{dbc['password']}@#{dbc['host']}:#{dbc['port']}/#{dbc['database']}"
-puts ENV['DATABASE_URL']
 
 #SSM_ENV = load_config('ssm-env.yml')
 
