@@ -12,7 +12,7 @@ LDAP_CONFIG = load_config('ldap.yml')
 ATOM_CONFIG = load_config('atom.yml')
 APP_CONFIG = load_config('app_config.yml')
 dbc = load_config('database.yml')
-puts "TBTB *** #{Rails.env}"
+puts "TBTB *** #{Rails.env} #{ENV['RAILS_ENV']}"
 puts dbc
 
 ENV['DATABASE_URL']="#{dbc['adapter']}://#{dbc['username']}:#{dbc['password']}@#{dbc['host']}:#{dbc['port']}/#{dbc['database']}"
