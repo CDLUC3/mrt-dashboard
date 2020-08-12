@@ -65,10 +65,14 @@ module MrtDashboard
     config.assets.enabled = false
 
     def config.database_configuration
+      puts "TBTB ***"
+
       path = File.join(Rails.root, 'config', 'database.yml')
-      conf = Uc3Ssm::ConfigResolver.new("NOT_APPLICABLE", "us-west-2", "/uc3/mrt/stg/").resolve_has_values(super)
-      conf_env = conf[Rails.env]
+      conf = Uc3Ssm::ConfigResolver.new("NOT_APPLICABLE", "us-west-2", "/uc3/mrt/stg/").resolve_file_values(path)
+      DB_CONFIG = conf[Rails.env]
       ENV['DATABASE_URL']="#{DB_CONFIG['adapter']}://#{DB_CONFIG['username']}:#{DB_CONFIG['password']}@#{DB_CONFIG['host']}:#{DB_CONFIG['port']}/#{DB_CONFIG['database']}"
+      puts ENV['DATABASE_URL']
+
       super
     end
   end
