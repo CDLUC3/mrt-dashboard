@@ -66,9 +66,7 @@ module MrtDashboard
 
     def config.database_configuration
       # The entire config must be returned, but only the Rails.env will be processed
-      conf = load_uc3_config({ name: 'app_config.yml', resolve_key: Rails.env })
-      puts conf
-      conf
+      load_uc3_config({ name: 'database.yml', resolve_key: Rails.env })
     end
   end
 end
