@@ -14,3 +14,6 @@ SSM_ENV = load_config('ssm-env.yml')
 
 puts "TBTB ***"
 puts SSM_ENV
+puts LDAP_CONFIG
+puts ATOM_CONFIG
+puts load_config('database.yml')
