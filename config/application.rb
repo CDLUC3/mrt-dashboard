@@ -64,10 +64,10 @@ module MrtDashboard
 
     config.assets.enabled = false
 
-    def config.database_configuration
-      myconfig = super
-      myconfig = Uc3Ssm::ConfigResolver.new("NOT_APPLICABLE", "us-west-2", "/uc3/mrt/stg/").resolve_hash_values(myconfig)
-      myconfig
-    end
+    #def config.database_configuration
+    #  myconfig = super
+    #  myconfig = Uc3Ssm::ConfigResolver.new("NOT_APPLICABLE", "us-west-2", "/uc3/mrt/stg/").resolve_hash_values(myconfig)
+    #  myconfig
+    #end
   end
 end
