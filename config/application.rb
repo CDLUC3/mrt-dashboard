@@ -64,5 +64,12 @@ module MrtDashboard
 
     config.assets.enabled = false
 
+    def config.database_configuration
+      path = File.join(Rails.root, 'config', 'database.yml')
+      conf = Uc3Ssm::ConfigResolver.new("NOT_APPLICABLE", "us-west-2", "/uc3/mrt/stg/").resolve_has_values(super)
+      conf_env = conf[Rails.env]
+      ENV['DATABASE_URL']="#{DB_CONFIG['adapter']}://#{DB_CONFIG['username']}:#{DB_CONFIG['password']}@#{DB_CONFIG['host']}:#{DB_CONFIG['port']}/#{DB_CONFIG['database']}"
+      super
+    end
   end
 end
