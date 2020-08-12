@@ -65,7 +65,8 @@ module MrtDashboard
     config.assets.enabled = false
 
     def config.database_configuration
-      load_uc3_config('database.yml')
+      # The entire config must be returned, but only the Rails.env will be processed
+      load_uc3_config({ name: 'app_config.yml', reslove_key: Rails.env })
     end
   end
 end
