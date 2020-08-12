@@ -65,6 +65,7 @@ module MrtDashboard
     config.assets.enabled = false
 
     def config.database_configuration
+      puts "TBTB !!!! #{ENV['DATABASE_URL']}"
       {}
     end
   end
