@@ -69,8 +69,8 @@ module MrtDashboard
 
       path = File.join(Rails.root, 'config', 'database.yml')
       conf = Uc3Ssm::ConfigResolver.new("NOT_APPLICABLE", "us-west-2", "/uc3/mrt/stg/").resolve_file_values(path)
-      DB_CONFIG = conf[Rails.env]
-      ENV['DATABASE_URL']="#{DB_CONFIG['adapter']}://#{DB_CONFIG['username']}:#{DB_CONFIG['password']}@#{DB_CONFIG['host']}:#{DB_CONFIG['port']}/#{DB_CONFIG['database']}"
+      dbc = conf[Rails.env]
+      ENV['DATABASE_URL']="#{dbc['adapter']}://#{dbc['username']}:#{dbc['password']}@#{dbc['host']}:#{dbc['port']}/#{dbc['database']}"
       puts ENV['DATABASE_URL']
 
       super
