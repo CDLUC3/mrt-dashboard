@@ -65,8 +65,7 @@ module MrtDashboard
     config.assets.enabled = false
 
     def config.database_configuration
-      puts "TBTB !!!! #{ENV['DATABASE_URL']}"
-      {}
+      load_uc3_config('database.yml', Rails.env)
     end
   end
 end
