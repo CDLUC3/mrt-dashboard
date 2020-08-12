@@ -12,7 +12,7 @@ ATOM_CONFIG = load_config('atom.yml')
 APP_CONFIG = load_config('app_config.yml')
 DB_CONFIG = load_config('database.yml')
 
-ENV['DATABASE_URL']="#{DB_CONFIG['adapter']}:#{DB_CONFIG['username']}:#{DB_CONFIG['password']}@#{DB_CONFIG['host']}:#{DB_CONFIG['port']}/#{DB_CONFIG['database']}"
+ENV['DATABASE_URL']="#{DB_CONFIG['adapter']}://#{DB_CONFIG['username']}:#{DB_CONFIG['password']}@#{DB_CONFIG['host']}:#{DB_CONFIG['port']}/#{DB_CONFIG['database']}"
 
 #SSM_ENV = load_config('ssm-env.yml')
 
