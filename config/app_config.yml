@@ -52,9 +52,6 @@ stage: &stage
   storage_presign_token: "http://store-stage.cdlib.org:35121/presign-obj-by-token/"
   proto_force:          "https"
 
-development:
-  <<: *stage
-
 production:
   <<: *defaults
   dua_email_to:         [uc3@ucop.edu]
