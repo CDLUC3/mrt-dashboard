@@ -12,7 +12,8 @@ set :stages, ['local', 'mrt-ui-dev', 'stage', 'production']
 set :default_env, { path: '/dpr2/local/bin:$PATH' }
 
 # persistent dirs
-set :linked_files, %w[config/database.yml config/ldap.yml config/atom.yml]
+# set :linked_files, %w[config/database.yml config/ldap.yml config/atom.yml]
+set :linked_files, %w[]
 set :linked_dirs, %w[log pid]
 
 # Default value for :format is :pretty
@@ -30,7 +31,7 @@ set :keep_releases, 5
 # Prompt for TAG before deployment only
 before 'deploy', 'deploy:prompt_for_tag'
 # Update config/atom repo before deployment only
-# before 'deploy', 'deploy:update_config'
+before 'deploy', 'deploy:update_config'
 before 'deploy', 'deploy:update_atom'
 
 namespace :deploy do

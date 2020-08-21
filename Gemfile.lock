@@ -1,9 +1,9 @@
 GIT
   remote: https://github.com/CDLUC3/uc3-ssm
-  revision: 1e591e1f812a170601da02d6ea9d6ae46a3ab475
+  revision: d92e779c0687542a16c56756a4bfdd75435ca527
   branch: main
   specs:
-    uc3-ssm (0.1.1)
+    uc3-ssm (0.1.4)
 
 GEM
   remote: http://rubygems.org/
@@ -58,6 +58,9 @@ GEM
       aws-partitions (~> 1, >= 1.239.0)
       aws-sigv4 (~> 1.1)
       jmespath (~> 1.0)
+    aws-sdk-ec2 (1.184.0)
+      aws-sdk-core (~> 3, >= 3.99.0)
+      aws-sigv4 (~> 1.1)
     aws-sdk-ssm (1.86.0)
       aws-sdk-core (~> 3, >= 3.99.0)
       aws-sigv4 (~> 1.1)
@@ -305,6 +308,7 @@ PLATFORMS
 
 DEPENDENCIES
   activeresource
+  aws-sdk-ec2
   aws-sdk-ssm
   builder
   byebug

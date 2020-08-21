@@ -1,13 +1,20 @@
-def load_config(name)
-  path = File.join(Rails.root, 'config', name)
-  raise Exception, "Config file #{name} not found!" unless File.exist?(path)
-  raise Exception, "Config file #{name} is empty!" if File.size(path) == 0
+require 'uc3-ssm'
 
-  conf     = YAML.load_file(path)
-  conf_env = conf[Rails.env]
-  conf_env.class == String ? conf[conf_env] : conf_env
+# name - config file to process
+# resolve_key - partially process config file using this as a root key - use this to prevent unnecessary lookups
+# return_key - return values for a specific hash key - use this to filter the return object
+def load_uc3_config(name:, resolve_key: nil, return_key: nil)
+  resolver = Uc3Ssm::ConfigResolver.new(
+    {
+      def_value: 'NOT_APPLICABLE',
+      region: ENV.key?('AWS_REGION') ? ENV['AWS_REGION'] : 'us-west-2',
+      ssm_root_path: ENV.key?('SSM_ROOT_PATH') ? ENV['SSM_ROOT_PATH'] : '/uc3/mrt/stg/'
+    }
+  )
+  path = File.join(Rails.root, 'config', name)
+  resolver.resolve_file_values(file: path, resolve_key: resolve_key, return_key: return_key)
 end
 
-LDAP_CONFIG = load_config('ldap.yml')
-ATOM_CONFIG = load_config('atom.yml')
-APP_CONFIG = load_config('app_config.yml')
+LDAP_CONFIG = load_uc3_config(name: 'ldap.yml', resolve_key: Rails.env, return_key: Rails.env)
+ATOM_CONFIG = load_uc3_config(name: 'atom.yml', resolve_key: Rails.env, return_key: Rails.env)
+APP_CONFIG = load_uc3_config(name: 'app_config.yml', resolve_key: Rails.env, return_key: Rails.env)

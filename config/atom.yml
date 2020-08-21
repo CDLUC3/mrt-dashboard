@@ -1,0 +1,14 @@
+default: &default
+  credentials: "{!SSM: ui/atom-credential}"
+
+stage:
+  <<: *default
+
+production:
+  <<: *default
+
+test:
+  credentials: merritt:1212555
+
+docker:
+  credentials: pretend-credentials
