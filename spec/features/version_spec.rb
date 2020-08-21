@@ -205,12 +205,12 @@ describe 'versions', js: true do
         expected_uri = url_for(
           controller: :file,
           action: :presign,
-          object: ERB::Util.url_encode(obj.ark), # TODO: figure out why this needs to be double-encoded, then stop doing it
-          version: obj.version_number.to_s,
-          file: ERB::Util.url_encode(f.pathname) # TODO: should we really encode this, or just escape the '/'?
+          object: obj, # TODO: figure out why this needs to be double-encoded, then stop doing it
+          version: version,
+          file: f # TODO: should we really encode this, or just escape the '/'?
         )
         # TODO: figure out why this is only half-double-encoded, unlike the object page
-        expected_uri = CGI.unescape(expected_uri)
+        # expected_uri = CGI.unescape(expected_uri)
 
         expect(page).to have_link(basename)
         download_link = find_link(basename)
