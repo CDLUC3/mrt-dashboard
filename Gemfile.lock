@@ -1,9 +1,12 @@
 GIT
   remote: https://github.com/CDLUC3/uc3-ssm
-  revision: d92e779c0687542a16c56756a4bfdd75435ca527
+  revision: c7a6a28515def7dc7c1fe21c38680d2e642a7136
   branch: main
   specs:
-    uc3-ssm (0.1.4)
+    uc3-ssm (0.1.7)
+      aws-sdk-ssm (~> 1.84)
+      logger (~> 1.4)
+      yaml (~> 0.1)
 
 GEM
   remote: http://rubygems.org/
@@ -137,6 +140,7 @@ GEM
     json (2.3.1)
     launchy (2.5.0)
       addressable (~> 2.7)
+    logger (1.4.2)
     loofah (2.6.0)
       crass (~> 1.0.2)
       nokogiri (>= 1.5.9)
@@ -302,6 +306,7 @@ GEM
     will_paginate (3.3.0)
     xpath (3.2.0)
       nokogiri (~> 1.8)
+    yaml (0.1.0)
 
 PLATFORMS
   ruby
