@@ -144,16 +144,23 @@ class FileController < ApplicationController
   end
   # rubocop:enable all
 
+  def validate_ark(ark)
+    m =~ %r{^ark:\/\d+\/[a-z0-9]+$}.match(ark)
+    !m.nil?
+  end
+
   def fix_params
     object_ark = params_u(:object)
-    return if /^ark:\/\d+\/[a-z0-9]+$/.match(object_ark)
-    combine="#{object_ark}/#{params[:version]}/#{params_u(:file)}"
-    m = /^(ark:\/\d+\/[a-z0-9_]+)\/(\d+)\/(.*)$/.match(combine)
-    if (m)
-      params[:object]=m[1]
-      params[:version]=m[2]
-      params[:file]=m[3]
-    end
+    validate_ark(object_ark)
+    combine = "#{object_ark}/#{params[:version]}/#{params_u(:file)}"
+    m =~ %r{^(ark:\/\d+\/[a-z0-9_]+)\/(\d+)\/(.*)$}.match(combine)
+    replace_params(m) if m
+  end
+
+  def replace_params(m)
+    params[:object] = m[1]
+    params[:version] = m[2]
+    params[:file] = m[3]
   end
 
   def load_file
