@@ -148,7 +148,7 @@ class FileController < ApplicationController
     object_ark = params_u(:object)
     return if /^ark:\/\d+\/[a-z0-9]+$/.match(object_ark)
     combine="#{object_ark}/#{params[:version]}/#{params_u(:file)}"
-    m = /^(ark:\/\d+\/[a-z0-9]+)\/(\d+)\/(.*)$/.match(combine)
+    m = /^(ark:\/\d+\/[a-z0-9_]+)\/(\d+)\/(.*)$/.match(combine)
     if (m)
       params[:object]=m[1]
       params[:version]=m[2]
