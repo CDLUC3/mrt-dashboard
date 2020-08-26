@@ -145,15 +145,14 @@ class FileController < ApplicationController
   # rubocop:enable all
 
   def validate_ark(ark)
-    m =~ %r{^ark:\/\d+\/[a-z0-9]+$}.match(ark)
-    !m.nil?
+    ark =~ %r{^ark:\/\d+\/[a-z0-9]+$}
   end
 
   def fix_params
     object_ark = params_u(:object)
     validate_ark(object_ark)
     combine = "#{object_ark}/#{params[:version]}/#{params_u(:file)}"
-    m =~ %r{^(ark:\/\d+\/[a-z0-9_]+)\/(\d+)\/(.*)$}.match(combine)
+    m = %r{^(ark:\/\d+\/[a-z0-9_]+)\/(\d+)\/(.*)$}.match(combine)
     replace_params(m) if m
   end
 
