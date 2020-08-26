@@ -4,6 +4,8 @@ require 'json'
 class FileController < ApplicationController
   before_filter :require_user
 
+  before_filter :fix_params, except: %i[storage_key]
+
   # Do not force redirect to latest version for key lookup
   before_filter :redirect_to_latest_version, except: %i[storage_key]
 
@@ -141,6 +143,18 @@ class FileController < ApplicationController
     ret.with_indifferent_access
   end
   # rubocop:enable all
+
+  def fix_params
+    object_ark = params_u(:object)
+    return if /^ark:\/\d+\/[a-z0-9]+$/.match(object_ark)
+    combine="#{object_ark}/#{params[:version]}/#{params_u(:file)}"
+    m = /^(ark:\/\d+\/[a-z0-9]+)\/(\d+)\/(.*)$/.match(combine)
+    if (m)
+      params[:object]=m[1]
+      params[:version]=m[2]
+      params[:file]=m[3]
+    end
+  end
 
   def load_file
     filename = params_u(:file)
