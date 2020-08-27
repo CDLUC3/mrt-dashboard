@@ -33,6 +33,10 @@ class CollectionController < ApplicationController
     render partial: 'total_size'
   end
 
+  def billable_size
+    render partial: 'billable_size'
+  end
+
   def index
     set_session_group(@request_group) unless params[:group] == session[:group_id]
     @recent_objects = find_all(@request_group.ark_id)
