@@ -76,7 +76,7 @@ class ApplicationController < ActionController::Base
         .sort_by { |g| g.description.downcase }
         .map { |g| { id: g.id, description: g.description, user_permissions: g.user_permissions(current_user.login) } }
     # :nocov:
-    rescue Exception => ex
+    rescue StandardError
       []
     end
     # :nocov:

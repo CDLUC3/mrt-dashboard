@@ -128,6 +128,7 @@ class Group
     SQL
     InvFile.connection.select_all(query)[0]['billable_size'].to_i
   end
+
   # TODO: figure out whether we still need this & get rid of it if not
   # :nocov:
   # get all groups and email addresses of members, this is a stopgap for our own use
