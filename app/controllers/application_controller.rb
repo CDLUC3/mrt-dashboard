@@ -75,6 +75,8 @@ class ApplicationController < ActionController::Base
       current_user.groups
         .sort_by { |g| g.description.downcase }
         .map { |g| { id: g.id, description: g.description, user_permissions: g.user_permissions(current_user.login) } }
+    rescue Exception => ex
+      []
     end
   end
 
