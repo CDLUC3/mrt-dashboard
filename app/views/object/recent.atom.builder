@@ -45,7 +45,7 @@ xml.tag!('feed', :xmlns => 'http://www.w3.org/2005/Atom',
                'rel'  => 'alternate',
                'type' => 'application/zip',
                'href' => url_for(controller: 'object',
-                                 action: 'download',
+                                 action: 'presign',
                                  object: obj))
       xml.tag!('dct:extent', obj.size.to_s)
       obj.all_local_ids.each do |local_id|
@@ -66,7 +66,7 @@ xml.tag!('feed', :xmlns => 'http://www.w3.org/2005/Atom',
       current_version.inv_files.each do |file|
         xml.tag!('link',
                  'href' => url_for(controller: 'file',
-                                   action: :download,
+                                   action: :presign,
                                    object: obj,
                                    version: current_version,
                                    file: file),

@@ -212,6 +212,23 @@ RSpec.describe FileController, type: :controller do
       end
     end
 
+    it 'test ark encoding recovery' do
+      mock_permissions_all(user_id, collection_id)
+
+      expect(client).to receive(:get).with(
+        FileController.get_storage_presign_url(my_node_key_params(params), true),
+        { contentType: inv_file.mime_type },
+        {},
+        follow_redirect: true
+      ).and_return(mock_response(200, '', my_presign_wrapper))
+
+      m = %r{^(ark:)\/(\d+)\/([a-z0-9_]+)$}.match(object_ark)
+      params2 = { object: m[1], file: "#{m[3]}/#{params[:version]}/#{params[:file]}", version: m[2].to_i }
+      get(:presign, params2, { uid: user_id })
+      expect(response.status).to eq(303)
+      expect(response.body).to eq('')
+    end
+
     it 'returns presign url for the file (no_redirect)' do
       mock_permissions_all(user_id, collection_id)
 

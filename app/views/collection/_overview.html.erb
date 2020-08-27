@@ -19,6 +19,10 @@
       <th>total size:</th>
       <td id="total_size" class="value">calculating</td>
     </tr>
+    <tr>
+      <th>billable size:</th>
+      <td id="billable_size" class="value">calculating</td>
+    </tr>
     </tbody>
   </table>
 
@@ -30,6 +34,8 @@
     new Ajax.Updater({success : 'file_count'}, '/collection/file_count?group=<%= @request_group.id %>', { method: 'get'
     });
     new Ajax.Updater({success : 'total_size'}, '/collection/total_size?group=<%= @request_group.id %>', { method: 'get'
+    });
+    new Ajax.Updater({success : 'billable_size'}, '/collection/billable_size?group=<%= @request_group.id %>', { method: 'get'
     });
   <% end %>
 </section>
