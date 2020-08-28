@@ -73,7 +73,8 @@ xml.tag!('feed', :xmlns => 'http://www.w3.org/2005/Atom',
                  'rel'  => 'http://purl.org/dc/terms/hasPart',
                  'title' => file.pathname,
                  'length' => file.full_size,
-                 'type' => file.mime_type)
+                 'type' => file.mime_type,
+                 'digest' => file.digest_value)
       end
     end
   end

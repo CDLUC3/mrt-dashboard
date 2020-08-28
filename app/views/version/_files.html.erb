@@ -34,6 +34,9 @@
         <td style="width: 60%;">
           <%= number_to_storage_size(file.full_size) %>
         </td>
+        <td>
+          <span title='file checksum: <%= file.digest_value %>' class='digest'><%= file.digest_value %></span>
+        </td>
       </tr>
     <%
       end
