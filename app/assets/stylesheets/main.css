@@ -1152,3 +1152,22 @@ div.form-submit {
   margin-top: 24px;
   padding-top: 12px;
 }
+
+span.digest {
+  width: 100px;
+  font-style: italic;
+  display: inline-flex;
+}
+
+span.digest div {
+  text-overflow: ellipsis;
+  overflow-x: hidden;
+}
+
+.pointer {
+  cursor: pointer;
+}
+
+table.properties td, table.properties th {
+    width: 20%;
+}
