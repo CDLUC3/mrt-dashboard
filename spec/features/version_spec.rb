@@ -210,7 +210,7 @@ describe 'versions', js: true do
           file: f # TODO: should we really encode this, or just escape the '/'?
         )
         # TODO: figure out why this is only half-double-encoded, unlike the object page
-        expected_uri = CGI.unescape(expected_uri)
+        # expected_uri = CGI.unescape(expected_uri)
 
         expect(page).to have_link(basename)
         download_link = find_link(basename)

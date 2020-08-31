@@ -1156,11 +1156,18 @@ div.form-submit {
 span.digest {
   width: 100px;
   font-style: italic;
+  display: inline-flex;
+}
+
+span.digest div {
   text-overflow: ellipsis;
-  display: inline-block;
   overflow-x: hidden;
 }
 
 .pointer {
-  cursor: pointer;  
+  cursor: pointer;
+}
+
+table.properties td, table.properties th {
+    width: 20%;
 }
