@@ -48,4 +48,19 @@ jQuery(document).ready(function(){
     presignDialogs.assemblyTokenList.clearData();
     return true;
   })
+  jQuery("header nav li.dropdown a.expandable, header nav li.dropdown span.expandable")
+    .on('keypress', function(e) {
+    if (e.which == 32) {
+        jQuery(this).parent("li").toggleClass("menuopen");
+        return false;
+    }
+  });
+  jQuery("header nav img.expandable")
+    .on('keypress', function(e) {
+    if (e.which == 32) {
+        jQuery("nav.menu > ul").toggle();
+        return false;
+    }
+  });
+
 });

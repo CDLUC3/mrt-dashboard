@@ -348,6 +348,8 @@
   header nav ul li {
     padding: 6px 12px;
   }
+
+  header nav ul li.menuopen,
   header nav ul li:hover {
     background: #f2f2f2;
   }
@@ -375,9 +377,12 @@
   header nav.menu li.dropdown a {
     white-space: nowrap;
   }
+  header nav.menu li.dropdown.menuopen,
   header nav.menu li.dropdown:hover {
     border-right: 2px solid #f2f2f2;
   }
+
+  header nav.menu li.dropdown.menuopen ul,
   header nav.menu li.dropdown:hover ul {
     border: 1px solid #d8d8d9;
     display: block;
@@ -391,6 +396,7 @@
     position: absolute;
     right: 0;
   }
+  header nav.menu li#user-dropdown:not(:focus-within),
   header nav.menu li#user-dropdown:not(:hover) {
     border-right: 2px solid transparent;
   }
@@ -872,6 +878,7 @@ header nav.login ul li {
   height: 30px;
 }
 
+header nav.login ul li:focus-within,
 header nav.login ul li:hover {
   background-color: #f28d1e;
 }
@@ -1170,4 +1177,19 @@ span.digest div {
 
 table.properties td, table.properties th {
     width: 20%;
+}
+
+#skip a {
+  position:absolute;
+  left:-10000px;
+  top:auto;
+  width:1px;
+  height:1px;
+  overflow:hidden;
+}
+
+#skip a:focus {
+  position:static;
+  width:auto;
+  height:auto;
 }

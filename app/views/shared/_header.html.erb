@@ -1,7 +1,9 @@
 <% unless env_str.blank? %>
   <p class="environment"><%= env_str %></p>
 <% end %>
-
+<div id="skip">
+  <a class="skipnav" href="#maincontent">Skip to main content</a>
+</div>
 <header>
   <div class="masthead">
     <img class="ucop-logo" src="/images/logos/ucop-logo.svg" alt="University of California"/>
@@ -10,11 +12,11 @@
   </div>
   <% if user_logged_in? %>
     <nav class="menu">
-      <input type="checkbox" id="nav-menu"/>
-      <label class="nav-menu-label" for="nav-menu"><img src="/images/nav-menu.svg" alt="Menu"/></label>
+      <input type="checkbox" id="nav-menu" />
+      <label class="nav-menu-label" for="nav-menu"><img tabindex='0' class="expandable" src="/images/nav-menu.svg" alt="Menu"/></label>
       <ul>
         <li class="dropdown" id="user-dropdown">
-          <span class="login-message">Logged in as <%= current_user_displayname %></span>
+          <span tabindex='0' class="login-message expandable">Logged in as <%= current_user_displayname %></span>
           <ul>
             <li  class='logout'><%= link_to('Logout', controller: 'user_sessions', action: 'logout') %></li>
             <%#  do not display Profile link for Guest user %>
@@ -31,7 +33,7 @@
         <% end %>
         <li class="dropdown">
           <% choose_collection_text = session[:group_id] ? 'Change collection' : 'Home' %>
-          <%= link_to(choose_collection_text, controller: 'home', action: 'choose_collection', group: session[:group_id]) %>
+          <%= link_to(choose_collection_text, { controller: 'home', action: 'choose_collection', group: session[:group_id] }, class: 'expandable') %>
           <% unless available_groups.empty? %>
             <ul>
               <% available_groups.each do |grp| %>
