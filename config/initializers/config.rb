@@ -5,7 +5,7 @@ require 'socket'
 # resolve_key - partially process config file using this as a root key - use this to prevent unnecessary lookups
 # return_key - return values for a specific hash key - use this to filter the return object
 def load_uc3_config(name:, resolve_key: nil, return_key: nil)
-  myenv = Socket.gethostname.gsub(/uc3-.*-/, '')
+  myenv = Socket.gethostname.match?(/uc3-.*-/) ? Socket.gethostname.gsub(/uc3-.*-/, '') : 'stg'
   resolver = Uc3Ssm::ConfigResolver.new(
     {
       def_value: 'NOT_APPLICABLE',
