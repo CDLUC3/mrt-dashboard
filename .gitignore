@@ -5,6 +5,7 @@ public/assets/*.js
 public/assets/*.css
 public/assets/*.gz
 public/assets/.sprockets*
+public/assets/wztip
 
 .config-secret
 
@@ -26,9 +27,6 @@ mrt-dashboard_production
 console
 help/*
 sqlite/*
-config/atom.yml
-config/ldap.yml
-config/database.yml
 db/schema.rb
 .DS_Store
 .project

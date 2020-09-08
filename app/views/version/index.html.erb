@@ -2,7 +2,7 @@
   UC3 Merritt: Version — <%= @version.inv_object.ark %>, Version <%= @version.number %>
 <% end %>
 
-<main>
+<main id="maincontent">
   <section>
     <h2>
       <span class='key'><%= @version.inv_object.ark %> — Version <%= @version.number %></span>:
@@ -36,7 +36,7 @@
     <table class="properties">
       <tbody>
       <tr>
-        <th class="table-section-header" colspan="3"><h3>User Files</h3></th>
+        <th class="table-section-header" colspan="4"><h3>User Files</h3></th>
       </tr>
       <%= render :partial => '/version/files', :locals => {:files => @version.producer_files.quickload_files} %>
       </tbody>
@@ -44,7 +44,7 @@
     <table class="properties">
       <tbody>
       <tr>
-        <th class="table-section-header" colspan="3"><h3>System Files</h3></th>
+        <th class="table-section-header" colspan="4"><h3>System Files</h3></th>
       </tr>
       <%= render :partial => '/version/files', :locals => {:files => @version.system_files.quickload_files} %>
       </tbody>

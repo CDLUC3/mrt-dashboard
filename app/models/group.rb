@@ -117,6 +117,18 @@ class Group
     InvFile.connection.select_all(query)[0]['total_size'].to_i
   end
 
+  def billable_size
+    return 0 unless inv_collection_id
+    query = <<~SQL
+      SELECT SUM(billable_size) AS billable_size
+        FROM inv_files
+             INNER JOIN inv_collections_inv_objects
+                     ON inv_collections_inv_objects.inv_object_id = inv_files.inv_object_id
+       WHERE (inv_collections_inv_objects.inv_collection_id = #{inv_collection_id})
+    SQL
+    InvFile.connection.select_all(query)[0]['billable_size'].to_i
+  end
+
   # TODO: figure out whether we still need this & get rid of it if not
   # :nocov:
   # get all groups and email addresses of members, this is a stopgap for our own use

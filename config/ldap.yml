@@ -1,0 +1,44 @@
+# Tests shouldn't actually talk to LDAP
+test:
+  admin_user:     cn=Directory Manager
+  group_base:     ou=mrt-classes,ou=uc3,dc=cdlib,dc=org
+  host:           ldap.example.org
+  port:           1636
+  user_base:      ou=People,ou=uc3,dc=cdlib,dc=org
+  inst_base:      o=institutions,ou=uc3,dc=cdlib,dc=org
+  ark_minter_url: http://noid.cdlib.org/nd/noidu_p9
+  guest_password: guest
+  guest_user:     anonymous
+  connect_timeout:	60
+
+default: &default
+  admin_password: "{!SSM: ldap/accounts/admin/password}"
+  admin_user:     "{!SSM: ldap/accounts/admin/user}"
+  group_base:     "{!SSM: ldap/group_base}"
+  host:           "{!SSM: ldap/host}"
+  port:           "{!SSM: ldap/port}"
+  user_base:      "{!SSM: ldap/user-base}"
+  inst_base:      "{!SSM: ldap/inst-base}"
+  ark_minter_url: "{!SSM: ldap/ark_minter_url}"
+  guest_password: "{!SSM: ldap/accounts/guest/password}"
+  guest_user:     "{!SSM: ldap/accounts/guest/user}"
+  connect_timeout:      60
+
+stage:
+  <<: *default
+
+production:
+  <<: *default
+
+docker:
+  admin_password: "{!ENV: LDAP_ADMIN_PASSWORD}"
+  admin_user:     cn=Directory Manager
+  group_base:     ou=mrt-classes,ou=uc3,dc=cdlib,dc=org
+  host:           "{!ENV: LDAP_HOST}"
+  port:           1636
+  user_base:      ou=People,ou=uc3,dc=cdlib,dc=org
+  inst_base:      o=institutions,ou=uc3,dc=cdlib,dc=org
+  ark_minter_url: http://noid.cdlib.org/nd/noidu_p9
+  guest_password: guest
+  guest_user:     anonymous
+  connect_timeout:      60
