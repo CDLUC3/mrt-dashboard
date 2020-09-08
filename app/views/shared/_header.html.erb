@@ -15,16 +15,6 @@
       <input type="checkbox" id="nav-menu" />
       <label class="nav-menu-label" for="nav-menu"><img tabindex='0' class="expandable" src="/images/nav-menu.svg" alt="Menu"/></label>
       <ul>
-        <li class="dropdown" id="user-dropdown">
-          <span tabindex='0' class="login-message expandable">Logged in as <%= current_user_displayname %></span>
-          <ul>
-            <li  class='logout'><%= link_to('Logout', controller: 'user_sessions', action: 'logout') %></li>
-            <%#  do not display Profile link for Guest user %>
-            <% unless guest_logged_in? %>
-              <li><%= link_to('Profile', params.merge(controller: 'user', action: 'update')) %></li>
-            <% end %>
-          </ul>
-        </li>
         <% if session[:group_id] %>
           <li><%= link_to('Collection home', controller: 'collection', action: 'index', group: session[:group_id]) %></li>
           <% if current_user_can_write_to_collection? %>
@@ -43,6 +33,16 @@
           <% end %>
         </li>
         <li id='downloads'><a aria-role='button' href='#'>Downloads</a></li>
+        <li class="dropdown" id="user-dropdown">
+          <span tabindex='0' class="login-message expandable">Logged in as <%= current_user_displayname %></span>
+          <ul>
+            <li  class='logout'><%= link_to('Logout', controller: 'user_sessions', action: 'logout') %></li>
+            <%#  do not display Profile link for Guest user %>
+            <% unless guest_logged_in? %>
+              <li><%= link_to('Profile', params.merge(controller: 'user', action: 'update')) %></li>
+            <% end %>
+          </ul>
+        </li>
       </ul>
     </nav>
   <% else %>
