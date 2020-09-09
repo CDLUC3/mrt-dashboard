@@ -458,7 +458,7 @@
     max-height: 76.5px;
     max-width: 204px;
   }
-  main.home h1 img.merritt-logo {
+  main.home img.merritt-logo {
     height: auto;
     width: 204px;
   }
@@ -475,7 +475,7 @@
   main.home section.related-services ul {
     grid-template-columns: repeat(3, 1fr);
   }
-  main.home h1 img.merritt-logo {
+  main.home img.merritt-logo {
     height: 60px;
   }
   main.home img.service-logo {
@@ -533,14 +533,6 @@ main.home section.intro {
 
 main.home section.intro section {
   padding: 0;
-}
-
-main.home section.intro section h1 {
-  margin-top: 0;
-}
-
-main.home section.intro section h2 {
-  margin-bottom: 0;
 }
 
 main.home section.intro aside {
@@ -997,13 +989,13 @@ nav.menu label.nav-menu-label {
   display: none;
 }
 
-h2 {
+h1 {
   line-height: 1.2em;
   margin-bottom: 0;
   margin-top: 0;
 }
 
-h3 {
+h2, h3 {
   border-bottom: 1px solid #d8d8d9;
   font-size: 1em;
   line-height: 1.2em;

@@ -4,7 +4,7 @@
 
 <main id="maincontent">
   <section>
-    <h2>Object: <span class='key'><%= @object.ark %></span></h2>
+    <h1>Object: <span class='key'><%= @object.ark %></span></h1>
     <div class="breadcrumbs">
       <%= link_to('Merritt', :controller => 'home', :action => 'index') %> &gt;
       <%= link_to("Collection: #{@object.group.description}", :controller => 'collection', :action => 'index', :group => @object.group) %> &gt;
@@ -13,9 +13,9 @@
 
     <%= render :partial => '/shared/flash_show' %>
 
-    <h3 class="object-title">
+    <h2 class="object-title">
       <%= render :partial => "/object/short_bib_display", :object => @object %>
-    </h3>
+    </h2>
 
     <%= render :partial => 'details_display', :object => @object %>
 
