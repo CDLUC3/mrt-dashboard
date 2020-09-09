@@ -117,7 +117,7 @@ var PresignDialogs = function() {
         } else {
           jQuery( "div#progressbar" ).progressbar( "value", 0 );
           var tmsg = "Downloads: None";
-          jQuery("#downloads a").text(tmsg).attr("aria-label", tmsg);
+          jQuery("#downloads button").text(tmsg).attr("aria-label", tmsg);
         }
       }
     }
@@ -153,7 +153,7 @@ var PresignDialogs = function() {
           this.objectAssembler.assemblyProgress.updateProgressLabels();
         } else {
           var tmsg = "Downloads: None";
-          jQuery("#downloads a").text(tmsg).attr("aria-label", tmsg);
+          jQuery("#downloads button").text(tmsg).attr("aria-label", tmsg);
         }
       }
     }

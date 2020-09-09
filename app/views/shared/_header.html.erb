@@ -32,7 +32,7 @@
             <li><%= link_to('Add object', controller: 'object', action: 'add', group: session[:group_id]) %></li>
           <% end %>
         <% end %>
-        <li id='downloads'><a aria-role='button' href='#'>Downloads</a></li>
+        <li id='downloads'><button>Downloads</button></li>
         <li class="dropdown" id="user-dropdown">
           <span tabindex='0' class="login-message expandable">Logged in as <%= current_user_displayname %></span>
           <ul>

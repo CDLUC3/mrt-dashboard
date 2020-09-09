@@ -1006,7 +1006,7 @@ h3:first-child {
   margin-top: 0;
 }
 
-h3.object-title {
+h2.object-title {
   font-weight: normal;
 }
 
@@ -1184,4 +1184,12 @@ table.properties td, table.properties th {
   position:static;
   width:auto;
   height:auto;
+}
+
+#download button {
+  background: none!important;
+  border: none;
+  padding: 0!important;
+  font-family: arial, sans-serif;
+  font-weight: bold;
 }

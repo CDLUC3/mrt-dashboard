@@ -48,7 +48,7 @@ var AssemblyProgress = function(assembler, pDialogs) {
     var msg = this.formatProgressLabel(v);
     jQuery( ".progress-label" ).text( msg ).attr("aria-label", msg);
     var tmsg = "Downloads: " + msg;
-    jQuery("#downloads a").text(tmsg).attr("aria-label", tmsg);
+    jQuery("#downloads button").text(tmsg).attr("aria-label", tmsg);
   }
 
   // formgat progress label percent
@@ -71,7 +71,7 @@ var AssemblyProgress = function(assembler, pDialogs) {
     jQuery( "div#progressbar" ).progressbar( "value", v )
     if (!jQuery( ".progress-label:visible" ).is()){
       var tmsg = "Downloads: " + this.formatProgressLabel(v);
-      jQuery("#downloads a").text(tmsg).attr("aria-label", tmsg);
+      jQuery("#downloads button").text(tmsg).attr("aria-label", tmsg);
     }
   }
 

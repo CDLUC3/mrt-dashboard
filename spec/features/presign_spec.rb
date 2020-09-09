@@ -188,7 +188,7 @@ describe 'presigned objects and versions', js: true do
   end
 
   it 'test no downloads' do
-    click_link('Downloads: None')
+    click_button('Downloads: None')
     find('div.ui-dialog')
     within('div.ui-dialog') do
       expect(page).to have_content('No download assembly is in progress.') # async
