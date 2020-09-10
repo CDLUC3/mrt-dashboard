@@ -16,7 +16,7 @@
       <label class="nav-menu-label" for="nav-menu"><img tabindex='0' class="expandable" src="/images/nav-menu.svg" alt="Menu"/></label>
       <ul>
         <li class="dropdown">
-          <% choose_collection_text = session[:group_id] ? 'Change collection' : 'Home' %>
+          <% choose_collection_text = session[:group_id] ? 'Change collection' : 'Choose collection' %>
           <%= link_to(choose_collection_text, { controller: 'home', action: 'choose_collection', group: session[:group_id] }, class: 'expandable') %>
           <% unless available_groups.empty? %>
             <ul>

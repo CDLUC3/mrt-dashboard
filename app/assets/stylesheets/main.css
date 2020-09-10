@@ -344,6 +344,22 @@
   }
 }
 
+@media (min-width: 708px, max-width: 912px) {
+  main {
+    grid-auto-flow: column;
+    grid-template-columns: 1fr auto;
+    width: 708px;
+  }
+}
+
+@media (min-width: 912px) {
+  main {
+    grid-auto-flow: column;
+    grid-template-columns: 1fr auto;
+    width: 912px;
+  }
+}
+
 @media (min-width: 708px) {
   header nav ul li {
     padding: 6px 12px;
@@ -409,11 +425,6 @@
     grid-column-end: 2;
     grid-column-start: 1;
   }
-  main {
-    grid-auto-flow: column;
-    grid-template-columns: 1fr auto;
-    width: 912px;
-  }
   footer {
     text-align: center;
   }
@@ -461,6 +472,11 @@
   main.home img.merritt-logo {
     height: auto;
     width: 204px;
+  }
+
+  header nav.menu li.dropdown ul {
+    overflow-x: scroll;
+    width: 300px;
   }
 }
 
@@ -1192,4 +1208,14 @@ table.properties td, table.properties th {
   padding: 0!important;
   font-family: arial, sans-serif;
   font-weight: bold;
+}
+
+#downloads:hover {
+  border-color: transparent;
+}
+
+.pwlogin label {
+    display: inline-flex;
+    width: 100px;
+    font-weight: bold;
 }
