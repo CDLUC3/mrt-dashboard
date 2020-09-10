@@ -174,7 +174,7 @@ describe 'presigned objects and versions', js: true do
       expect(page.text).to eq('Downloads: Available')
     end
 
-    click_link('Downloads: Available')
+    click_button('Downloads: Available')
 
     within('div.ui-dialog .ui-dialog-title') do
       expect(page.text).to eq('Object is ready for Download')
