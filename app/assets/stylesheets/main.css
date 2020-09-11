@@ -1220,7 +1220,7 @@ table.properties td, table.properties th {
     font-weight: bold;
 }
 
-nav.pagination {
+div.pagination {
   width: 100%;
   text-align: right;
 }
