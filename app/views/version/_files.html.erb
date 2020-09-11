@@ -15,7 +15,7 @@
         file_basename = File.basename(file.pathname)
     %>
       <tr>
-        <th>
+        <th title='<%= file_basename %>'>
           <% if can_download_object %>
             <%= link_to file_basename,
               :controller       => :file,

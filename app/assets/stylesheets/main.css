@@ -1224,3 +1224,15 @@ div.pagination {
   width: 100%;
   text-align: right;
 }
+
+table.properties th {
+  width: 200px;
+  max-width: 200px;
+  overflow-x: hidden;
+  text-overflow: ellipsis;
+}
+
+table.properties td {
+  width: 100px;
+  max-width: 100px;
+}
