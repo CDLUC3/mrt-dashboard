@@ -33,19 +33,15 @@
     </h2>
     <%= render :partial => '/version/details_display', :object => @version %>
 
+    <h3>User Files</h3>
     <table class="properties">
       <tbody>
-      <tr>
-        <th class="table-section-header" colspan="4"><h3>User Files</h3></th>
-      </tr>
       <%= render :partial => '/version/files', :locals => {:files => @version.producer_files.quickload_files} %>
       </tbody>
     </table>
+    <h3>System Files</h3>
     <table class="properties">
       <tbody>
-      <tr>
-        <th class="table-section-header" colspan="4"><h3>System Files</h3></th>
-      </tr>
       <%= render :partial => '/version/files', :locals => {:files => @version.system_files.quickload_files} %>
       </tbody>
     </table>

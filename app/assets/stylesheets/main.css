@@ -1219,3 +1219,8 @@ table.properties td, table.properties th {
     width: 100px;
     font-weight: bold;
 }
+
+nav.pagination {
+  width: 100%;
+  text-align: right;
+}
