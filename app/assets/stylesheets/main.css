@@ -1082,7 +1082,7 @@ table.main tr:not(:last-child) th {
   border-bottom: 1px solid #d8d8d9;
 }
 
-table.main tr:not(:last-child) td {
+table.main tr:not(:last-child) td, table.main tr:not(:last-child) th {
   border-bottom: 1px solid #7c7e7f;
 }
 
