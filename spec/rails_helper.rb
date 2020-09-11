@@ -60,7 +60,7 @@ RSpec.configure do |config|
     begin
       DatabaseCleaner.clean
     rescue StandardError => e
-      Rails.logger.error(to_msg(e))
+      Rails.logger.error(e.to_s)
     end
   end
 end
