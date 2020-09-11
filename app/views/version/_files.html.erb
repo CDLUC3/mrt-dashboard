@@ -15,7 +15,7 @@
         file_basename = File.basename(file.pathname)
     %>
       <tr>
-        <th title='<%= file_basename %>'>
+        <th class="files" title='<%= file_basename %>'>
           <% if can_download_object %>
             <%= link_to file_basename,
               :controller       => :file,
@@ -28,13 +28,13 @@
             <%= file_basename %>
           <% end %>
         </th>
-        <td>
+        <td class="files">
           <%= clean_mime_type(file.mime_type) %>
         </td>
-        <td>
+        <td class="files">
           <span><%= number_to_storage_size(file.full_size) %></span>
         </td>
-        <td>
+        <td class="files">
           <span title='file checksum: <%= file.digest_value %>' class='digest'>
             <div>
               <%= file.digest_value %>

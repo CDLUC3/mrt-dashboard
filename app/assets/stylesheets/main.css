@@ -1225,14 +1225,14 @@ div.pagination {
   text-align: right;
 }
 
-table.properties th {
+table.properties tr th.files {
   width: 200px;
   max-width: 200px;
   overflow-x: hidden;
   text-overflow: ellipsis;
 }
 
-table.properties td {
+table.properties tr td.files {
   width: 100px;
   max-width: 100px;
 }
