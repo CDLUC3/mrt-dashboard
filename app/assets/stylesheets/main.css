@@ -1236,3 +1236,11 @@ table.properties tr td.files {
   width: 100px;
   max-width: 100px;
 }
+
+th.ark-header {
+  width: 30%;
+}
+
+td.ark-data {
+  width: 68%;
+}
