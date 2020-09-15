@@ -1,11 +1,11 @@
 <tr>
-  <td>
-    <%= link_to table_row.ark, 
-                :controller => "object", 
-                :action     => "index", 
+  <th class="ark-header">
+    <%= link_to table_row.ark,
+                :controller => "object",
+                :action     => "index",
                 :object     => table_row %>
-  </td>
-  <td colspan="2">
+  </th>
+  <td class="ark-data">
     <%= render :partial => "/object/short_bib_display", :object => table_row %>
   </td>
 </tr>

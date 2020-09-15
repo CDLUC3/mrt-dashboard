@@ -285,8 +285,8 @@ class ApplicationController < ActionController::Base
       uri = URI.parse(url)
       uri.scheme = 'https'
       uri.to_s
-    rescue StandardError => e
-      Rails.logger.error("Url format error caught: #{url}", e)
+    rescue StandardError
+      Rails.logger.error("Url format error caught: #{url}")
     end
   end
 end

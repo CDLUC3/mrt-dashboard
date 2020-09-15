@@ -194,7 +194,7 @@ describe ApplicationController do
       https_req = "https://#{host}/api/presign-file/ark:/13030/m5sf7w9f/1/producer/Peuß%20Dryad%20raw%20data.xlsx?no_redirect=true"
       err = "Url format error caught: #{https_req}"
 
-      expect(Rails.logger).to receive(:error).with(err, anything)
+      expect(Rails.logger).to receive(:error).with(err)
       expect(controller.send(:url_string_with_proto, https_req, true)).not_to eq(https_req), 'Expect encoding error for URL'
     end
   end

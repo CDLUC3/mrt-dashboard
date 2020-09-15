@@ -174,7 +174,7 @@ describe 'presigned objects and versions', js: true do
       expect(page.text).to eq('Downloads: Available')
     end
 
-    click_link('Downloads: Available')
+    click_button('Downloads: Available')
 
     within('div.ui-dialog .ui-dialog-title') do
       expect(page.text).to eq('Object is ready for Download')
@@ -188,7 +188,7 @@ describe 'presigned objects and versions', js: true do
   end
 
   it 'test no downloads' do
-    click_link('Downloads: None')
+    click_button('Downloads: None')
     find('div.ui-dialog')
     within('div.ui-dialog') do
       expect(page).to have_content('No download assembly is in progress.') # async

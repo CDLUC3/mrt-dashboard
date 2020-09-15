@@ -4,10 +4,10 @@
 
 <main id="maincontent">
   <section>
-    <h2>
+    <h1>
       <span class='key'><%= @version.inv_object.ark %> — Version <%= @version.number %></span>:
       <span class="timestamp"><%= merritt_time(@version.created) %></span>
-    </h2>
+    </h1>
 
     <div class="breadcrumbs">
       <%= link_to('Merritt', controller: 'home', action: 'index') %> &gt;
@@ -28,24 +28,20 @@
 
     <%= render :partial => '/shared/flash_show' %>
 
-    <h3 class="object-title">
+    <h2 class="object-title">
       <%= render :partial => "/object/short_bib_display", :object => @version.inv_object %>
-    </h3>
+    </h2>
     <%= render :partial => '/version/details_display', :object => @version %>
 
+    <h3>User Files</h3>
     <table class="properties">
       <tbody>
-      <tr>
-        <th class="table-section-header" colspan="4"><h3>User Files</h3></th>
-      </tr>
       <%= render :partial => '/version/files', :locals => {:files => @version.producer_files.quickload_files} %>
       </tbody>
     </table>
+    <h3>System Files</h3>
     <table class="properties">
       <tbody>
-      <tr>
-        <th class="table-section-header" colspan="4"><h3>System Files</h3></th>
-      </tr>
       <%= render :partial => '/version/files', :locals => {:files => @version.system_files.quickload_files} %>
       </tbody>
     </table>

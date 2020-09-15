@@ -29,10 +29,10 @@
       <tbody>
       <% available_groups.each do |grp| %>
         <tr>
-          <td><%= link_to(grp[:description],
+          <th><%= link_to(grp[:description],
                           :controller => :collection,
                           :action => :index,
-                          :group => grp[:id]) %></td>
+                          :group => grp[:id]) %></th>
           <td><%= permissions(grp[:user_permissions]) %></td>
         </tr>
       <% end %>

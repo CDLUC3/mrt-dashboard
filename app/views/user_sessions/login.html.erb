@@ -4,7 +4,7 @@ UC3 Merritt Login
 
 <main id="maincontent">
   <section>
-    <h2>Login</h2>
+    <h1>Login</h1>
 
     <%= render :partial => '/shared/flash_show' %>
 
@@ -12,10 +12,10 @@ UC3 Merritt Login
       <tbody>
       <%= form_tag({action: 'guest_login'}) do %>
       <tr>
-        <th class="table-section-header" colspan="3"><h3>Guest login</h3></th>
+        <th class="table-section-header" colspan="2"><h3>Guest login</h3></th>
       </tr>
       <tr>
-        <td colspan="2">Login as guest for read-only access</td>
+        <td>Login as guest for read-only access</td>
         <td><%= submit_tag('Guest') %></td>
       </tr>
       <% end %>
@@ -24,15 +24,19 @@ UC3 Merritt Login
         <tr>
           <th class="table-section-header" colspan="3"><h3>User login</h3></th>
         </tr>
-      <tr>
-        <th><label for="login">Username</label></th>
-        <td><%= text_field_tag('login', params[:login]) %></td>
-        <td><a href="http://www.cdlib.org/services/uc3/contact.html">Request a User Account</a></td>
-      </tr>
         <tr>
-          <th><label for="password">Password</label></th>
-          <td><%= password_field_tag('password', params[:password]) %></td>
-          <td><%= submit_tag('Login', {id: 'submit_login'}) %></td>
+          <td class="pwlogin">
+            <label for="login">Username</label>
+            <%= text_field_tag('login', params[:login]) %>
+            <br/>
+            <label for="password">Password</label>
+            <%= password_field_tag('password', params[:password]) %>
+          </td>
+          <td>
+            <a href="http://www.cdlib.org/services/uc3/contact.html">Request a User Account</a>
+            <br/>
+            <%= submit_tag('Login', {id: 'submit_login'}) %>
+          </td>
         </tr>
       <% end %>
       </tbody>

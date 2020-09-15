@@ -199,12 +199,12 @@ var AssemblyTokenList = function(pDialogs) {
 
   // Get the key (ark/version) for an object/version assembly using jQuery selectors
   this.getTokenKey = function() {
-    return jQuery('h2 span.key').text().trim();
+    return jQuery('h1 span.key').text().trim();
   }
 
   // Get the title for an object/version assembly using jQuery selectors
   this.getTokenTitle = function() {
-    var title = jQuery('h3.object-title span.title').text();
+    var title = jQuery('h2.object-title span.title').text();
     var vtitle = jQuery('td.version-label').text();
     if (vtitle != '') {
       title += " (version " + vtitle + ")";

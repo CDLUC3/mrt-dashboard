@@ -344,6 +344,22 @@
   }
 }
 
+@media (min-width: 708px, max-width: 912px) {
+  main {
+    grid-auto-flow: column;
+    grid-template-columns: 1fr auto;
+    width: 708px;
+  }
+}
+
+@media (min-width: 912px) {
+  main {
+    grid-auto-flow: column;
+    grid-template-columns: 1fr auto;
+    width: 912px;
+  }
+}
+
 @media (min-width: 708px) {
   header nav ul li {
     padding: 6px 12px;
@@ -409,11 +425,6 @@
     grid-column-end: 2;
     grid-column-start: 1;
   }
-  main {
-    grid-auto-flow: column;
-    grid-template-columns: 1fr auto;
-    width: 912px;
-  }
   footer {
     text-align: center;
   }
@@ -458,9 +469,14 @@
     max-height: 76.5px;
     max-width: 204px;
   }
-  main.home h1 img.merritt-logo {
+  main.home img.merritt-logo {
     height: auto;
     width: 204px;
+  }
+
+  header nav.menu li.dropdown ul {
+    overflow-x: scroll;
+    width: 300px;
   }
 }
 
@@ -475,7 +491,7 @@
   main.home section.related-services ul {
     grid-template-columns: repeat(3, 1fr);
   }
-  main.home h1 img.merritt-logo {
+  main.home img.merritt-logo {
     height: 60px;
   }
   main.home img.service-logo {
@@ -533,14 +549,6 @@ main.home section.intro {
 
 main.home section.intro section {
   padding: 0;
-}
-
-main.home section.intro section h1 {
-  margin-top: 0;
-}
-
-main.home section.intro section h2 {
-  margin-bottom: 0;
 }
 
 main.home section.intro aside {
@@ -997,13 +1005,13 @@ nav.menu label.nav-menu-label {
   display: none;
 }
 
-h2 {
+h1 {
   line-height: 1.2em;
   margin-bottom: 0;
   margin-top: 0;
 }
 
-h3 {
+h2, h3 {
   border-bottom: 1px solid #d8d8d9;
   font-size: 1em;
   line-height: 1.2em;
@@ -1014,7 +1022,7 @@ h3:first-child {
   margin-top: 0;
 }
 
-h3.object-title {
+h2.object-title {
   font-weight: normal;
 }
 
@@ -1074,7 +1082,7 @@ table.main tr:not(:last-child) th {
   border-bottom: 1px solid #d8d8d9;
 }
 
-table.main tr:not(:last-child) td {
+table.main tr:not(:last-child) td, table.main tr:not(:last-child) th {
   border-bottom: 1px solid #7c7e7f;
 }
 
@@ -1192,4 +1200,47 @@ table.properties td, table.properties th {
   position:static;
   width:auto;
   height:auto;
+}
+
+#downloads button {
+  background: none!important;
+  border: none;
+  padding: 0!important;
+  font-family: arial, sans-serif;
+  font-weight: bold;
+}
+
+#downloads:hover {
+  border-color: transparent;
+}
+
+.pwlogin label {
+    display: inline-flex;
+    width: 100px;
+    font-weight: bold;
+}
+
+div.pagination {
+  width: 100%;
+  text-align: right;
+}
+
+table.properties tr th.files {
+  width: 200px;
+  max-width: 200px;
+  overflow-x: hidden;
+  text-overflow: ellipsis;
+}
+
+table.properties tr td.files {
+  width: 100px;
+  max-width: 100px;
+}
+
+th.ark-header {
+  width: 30%;
+}
+
+td.ark-data {
+  width: 68%;
 }

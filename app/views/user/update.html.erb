@@ -4,7 +4,7 @@
 
 <main id="maincontent">
   <section>
-    <h2>Update profile for <%= current_user.displayname %></h2>
+    <h1>Update profile for <%= current_user.displayname %></h1>
 
     <div class="breadcrumbs">
       <%= link_to('Merritt', controller: 'home', action: 'index') %> &gt;
@@ -70,4 +70,3 @@
     <%= render(partial: '/shared/side_lookup') %>
   </aside>
 </main>
-

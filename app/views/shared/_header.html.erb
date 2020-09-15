@@ -15,6 +15,24 @@
       <input type="checkbox" id="nav-menu" />
       <label class="nav-menu-label" for="nav-menu"><img tabindex='0' class="expandable" src="/images/nav-menu.svg" alt="Menu"/></label>
       <ul>
+        <li class="dropdown">
+          <% choose_collection_text = session[:group_id] ? 'Change collection' : 'Choose collection' %>
+          <%= link_to(choose_collection_text, { controller: 'home', action: 'choose_collection', group: session[:group_id] }, class: 'expandable') %>
+          <% unless available_groups.empty? %>
+            <ul>
+              <% available_groups.each do |grp| %>
+                <li><%= link_to(grp[:description], controller: 'collection', action: 'index', group: grp[:id]) %></li>
+              <% end %>
+            </ul>
+          <% end %>
+        </li>
+        <% if session[:group_id] %>
+          <li><%= link_to('Collection home', controller: 'collection', action: 'index', group: session[:group_id]) %></li>
+          <% if current_user_can_write_to_collection? %>
+            <li><%= link_to('Add object', controller: 'object', action: 'add', group: session[:group_id]) %></li>
+          <% end %>
+        <% end %>
+        <li id='downloads'><button>Downloads</button></li>
         <li class="dropdown" id="user-dropdown">
           <span tabindex='0' class="login-message expandable">Logged in as <%= current_user_displayname %></span>
           <ul>
@@ -25,24 +43,6 @@
             <% end %>
           </ul>
         </li>
-        <% if session[:group_id] %>
-          <li><%= link_to('Collection home', controller: 'collection', action: 'index', group: session[:group_id]) %></li>
-          <% if current_user_can_write_to_collection? %>
-            <li><%= link_to('Add object', controller: 'object', action: 'add', group: session[:group_id]) %></li>
-          <% end %>
-        <% end %>
-        <li class="dropdown">
-          <% choose_collection_text = session[:group_id] ? 'Change collection' : 'Home' %>
-          <%= link_to(choose_collection_text, { controller: 'home', action: 'choose_collection', group: session[:group_id] }, class: 'expandable') %>
-          <% unless available_groups.empty? %>
-            <ul>
-              <% available_groups.each do |grp| %>
-                <li><%= link_to(grp[:description], controller: 'collection', action: 'index', group: grp[:id]) %></li>
-              <% end %>
-            </ul>
-          <% end %>
-        </li>
-        <li id='downloads'><a aria-role='button' href='#'>Downloads</a></li>
       </ul>
     </nav>
   <% else %>
