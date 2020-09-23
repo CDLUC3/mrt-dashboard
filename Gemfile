@@ -27,10 +27,6 @@ gem 'unicode'
 gem 'uuidtools'
 gem 'will_paginate'
 
-# source "https://rubygems.pkg.github.com/cdluc3" do
-#   gem "uc3-ssm", "0.1.1"
-# end
-
 group :development do
   gem 'web-console', '~> 2.0'
 end
