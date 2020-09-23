@@ -29,3 +29,7 @@ docker: &docker
   username: user
   password: password
   encoding: utf8   # schema won't load if it's utf8mb4
+
+development:
+  <<: *docker
+  
