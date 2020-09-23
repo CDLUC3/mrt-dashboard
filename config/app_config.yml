@@ -84,4 +84,7 @@ test:
 local:
   <<: *docker
 
+development:
+  <<: *docker
+
 # TODO: rename uri_[1-3] to [content, producer, manifest]_uri or similar
