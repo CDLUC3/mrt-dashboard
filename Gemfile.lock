@@ -133,6 +133,7 @@ GEM
     httpclient (2.8.3)
     i18n (0.9.5)
       concurrent-ruby (~> 1.0)
+    jaro_winkler (1.5.4)
     jmespath (1.4.0)
     jquery-rails (4.4.0)
       rails-dom-testing (>= 1, < 3)
@@ -171,6 +172,7 @@ GEM
     parallel (1.19.2)
     parser (2.7.1.5)
       ast (~> 2.4.1)
+    powerpack (0.1.2)
     pry (0.13.1)
       coderay (~> 1.1)
       method_source (~> 1.0)
@@ -223,7 +225,6 @@ GEM
       http-cookie (>= 1.0.2, < 2.0)
       mime-types (>= 1.16, < 4.0)
       netrc (~> 0.8)
-    rexml (3.2.4)
     rspec-core (3.9.2)
       rspec-support (~> 3.9.3)
     rspec-expectations (3.9.2)
@@ -232,27 +233,24 @@ GEM
     rspec-mocks (3.9.1)
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.9.0)
-    rspec-rails (4.0.1)
-      actionpack (>= 4.2)
-      activesupport (>= 4.2)
-      railties (>= 4.2)
-      rspec-core (~> 3.9)
-      rspec-expectations (~> 3.9)
-      rspec-mocks (~> 3.9)
-      rspec-support (~> 3.9)
+    rspec-rails (3.9.1)
+      actionpack (>= 3.0)
+      activesupport (>= 3.0)
+      railties (>= 3.0)
+      rspec-core (~> 3.9.0)
+      rspec-expectations (~> 3.9.0)
+      rspec-mocks (~> 3.9.0)
+      rspec-support (~> 3.9.0)
     rspec-support (3.9.3)
-    rubocop (0.92.0)
+    rubocop (0.58.1)
+      jaro_winkler (~> 1.5.1)
       parallel (~> 1.10)
-      parser (>= 2.7.1.5)
+      parser (>= 2.5, != 2.5.1.1)
+      powerpack (~> 0.1)
       rainbow (>= 2.2.2, < 4.0)
-      regexp_parser (>= 1.7)
-      rexml
-      rubocop-ast (>= 0.5.0)
       ruby-progressbar (~> 1.7)
-      unicode-display_width (>= 1.4.0, < 2.0)
-    rubocop-ast (0.7.1)
-      parser (>= 2.7.1.5)
-    ruby-prof (1.4.1)
+      unicode-display_width (~> 1.0, >= 1.0.1)
+    ruby-prof (0.18.0)
     ruby-progressbar (1.10.1)
     rubyzip (1.3.0)
     selenium-webdriver (3.142.7)
@@ -324,7 +322,7 @@ DEPENDENCIES
   capistrano-rails
   capybara
   capybara-webmock
-  colorize
+  colorize (~> 0.8)
   database_cleaner (~> 1.5)
   diffy (~> 3.1)
   equivalent-xml (~> 0.6.0)
@@ -346,9 +344,9 @@ DEPENDENCIES
   rack-cache
   rails (~> 4.2.11)
   rest-client
-  rspec-rails
-  rubocop
-  ruby-prof
+  rspec-rails (~> 3.0)
+  rubocop (= 0.58.1)
+  ruby-prof (~> 0.17)
   simplecov (~> 0.14)
   simplecov-console (~> 0.4)
   sprockets
