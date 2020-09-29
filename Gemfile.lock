@@ -155,7 +155,7 @@ GEM
     mini_mime (1.0.2)
     mini_portile2 (2.4.0)
     minitest (5.14.2)
-    mrt-ingest (0.0.4)
+    mrt-ingest (0.0.5)
       json (~> 2.0)
       rest-client (~> 2.0)
     multi_json (1.15.0)
@@ -331,11 +331,11 @@ DEPENDENCIES
   httpclient
   jquery-rails
   launchy
-  mrt-ingest (= 0.0.4)
+  mrt-ingest
   multi_json
   mysql2 (~> 0.4.0)
-  net-ldap (~> 0.16)
-  nokogiri (~> 1.10)
+  net-ldap
+  nokogiri
   orchard
   pry
   pry-rails
@@ -343,13 +343,13 @@ DEPENDENCIES
   puma
   rack-cache
   rails (~> 4.2.11)
-  rest-client (~> 2.0)
+  rest-client
   rspec-rails (~> 3.0)
   rubocop (= 0.58.1)
   ruby-prof (~> 0.17)
   simplecov (~> 0.14)
   simplecov-console (~> 0.4)
-  sprockets (~> 3.7.2)
+  sprockets
   thin
   uc3-ssm!
   unicode
