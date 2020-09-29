@@ -157,7 +157,7 @@ describe 'presigned objects and versions', js: true do
     )
 
     fname = "#{@obj.ark} Version #{@version.number}"
-    filename = fname.gsub(/[^A-Za-z0-9]+/, '_') + '.zip'
+    filename = "#{fname.gsub(/[^A-Za-z0-9]+/, '_')}.zip"
 
     click_button('Download version')
 

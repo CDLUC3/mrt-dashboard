@@ -1,9 +1,9 @@
 # Load the rails application
 require File.expand_path('application', __dir__)
 
-Dir[File.dirname(__FILE__) + '/../vendor/*'].each do |path|
+Dir["#{File.dirname(__FILE__)}/../vendor/*"].each do |path|
   gem_name = File.basename(path.gsub(/-\d+.\d+.\d+$/, ''))
-  gem_path = path + '/lib/' + gem_name + '.rb'
+  gem_path = "#{path}/lib/#{gem_name}.rb"
   require gem_path if File.exist? gem_path
 end
 

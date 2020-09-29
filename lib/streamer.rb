@@ -5,11 +5,9 @@ class Streamer
     @url = ensure_uri(url)
   end
 
-  def each
+  def each(&block)
     client = mk_httpclient
-    client.get_content(@url) do |chunk|
-      yield chunk
-    end
+    client.get_content(@url, &block)
   end
 
   private

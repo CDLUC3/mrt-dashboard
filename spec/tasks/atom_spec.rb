@@ -58,10 +58,10 @@ describe 'atom', type: :task do
       invoke_task('atom:update', starting_point, submitter, profile, collection_ark, feeddatefile)
     end
 
-    def add_file
+    def add_file(&block)
       tmpfile = Tempfile.new('', tmp_home)
       @tempfiles << tmpfile
-      File.open(tmpfile, 'w+') { |f| yield f }
+      File.open(tmpfile, 'w+', &block)
       ["http://ingest.example.edu/#{File.basename(tmpfile)}", tmpfile]
     end
 

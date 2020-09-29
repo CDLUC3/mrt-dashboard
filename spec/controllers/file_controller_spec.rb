@@ -140,7 +140,7 @@ RSpec.describe FileController, type: :controller do
 
     # Simulated presign url
     def my_presign
-      inv_file.bytestream_uri.to_s + '?presign=pretend'
+      "#{inv_file.bytestream_uri}?presign=pretend"
     end
 
     # Simulated response from the storage service presign file request

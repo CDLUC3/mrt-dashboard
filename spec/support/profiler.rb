@@ -155,7 +155,7 @@ class Profiler
   def output_dir
     @output_dir ||= begin
       project_root_path = Pathname.new(File.expand_path('../..', __dir__))
-      profile_path = project_root_path + 'profile'
+      profile_path = "#{project_root_path}profile"
       FileUtils.mkdir_p(profile_path.to_s)
       profile_path
     end
@@ -170,7 +170,7 @@ class Profiler
   end
 
   def html_output_path
-    @html_output_path ||= output_dir.realpath + 'index.html'
+    @html_output_path ||= "#{output_dir.realpath}index.html"
   end
 
   def desc(n10n)

@@ -385,7 +385,7 @@ RSpec.describe ObjectController, type: :controller do
 
     it 'request async assembly of a non-existent object' do
       mock_permissions_all(user_id, collection_id)
-      params[:object] = object_ark + '_non_exist'
+      params[:object] = "#{object_ark}_non_exist"
       get(:presign, params, { uid: user_id })
       expect(response.status).to eq(404)
     end

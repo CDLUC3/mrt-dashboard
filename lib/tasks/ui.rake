@@ -26,7 +26,7 @@ class UIDemo
     raise "Can’t locate UI library #{ui_library_path}" unless ui_library_path.exist?
 
     puts "Processing source files from #{ui_library_path}"
-    puts "                   to target #{project_root_path + 'public'}\n\n"
+    puts "                   to target #{"#{project_root_path}public"}\n\n"
     sass_lint
     process_production_source!
   end
@@ -43,7 +43,7 @@ class UIDemo
 
   def process_production_source!
     puts 'Processing files'
-    production_path_str = (project_root_path + 'public').to_s
+    production_path_str = "#{project_root_path}public".to_s
     Dir.glob("#{ui_library_path}/**/*").each do |infile|
       next if File.basename(infile).ends_with?('.html')
 
@@ -60,11 +60,11 @@ class UIDemo
   end
 
   def ui_library_path
-    @ui_library_path ||= project_root_path + 'ui-library'
+    @ui_library_path ||= "#{project_root_path}ui-library"
   end
 
   def demo_path
-    @demo_path ||= project_root_path + 'public/demo'
+    @demo_path ||= "#{project_root_path}public/demo"
   end
 
   def sass_lint
