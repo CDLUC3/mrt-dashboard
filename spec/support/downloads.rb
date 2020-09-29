@@ -19,6 +19,7 @@ class Downloads
 
     def complete?
       return if in_progress?
+
       any?
     end
 
@@ -55,6 +56,7 @@ class Downloads
 
     def clear!
       return unless @dir && File.exist?(dir)
+
       files_to_remove = Dir.glob("#{dir}/*")
       puts "removing #{files_to_remove}"
       FileUtils.rm_rf(files_to_remove, secure: true)

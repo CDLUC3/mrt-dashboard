@@ -52,6 +52,7 @@ class ApplicationController < ActionController::Base
 
   def redirect_to_latest_version
     return unless params[:version].to_i == 0
+
     ark = InvObject.find_by_ark(params_u(:object))
     latest_version = ark && ark.current_version.number
     # letter = request.path.match(/^\/(.)\//)[1]
@@ -93,6 +94,7 @@ class ApplicationController < ActionController::Base
   # Encode a storage key constructed from component parts
   def self.encode_storage_key(ark, version = '', file = '')
     return "#{Encoder.urlencode(ark)}/#{version}" if version != '' && file == ''
+
     key = ApplicationController.build_storage_key(ark, version, file)
     Encoder.urlencode(key)
   end
@@ -119,6 +121,7 @@ class ApplicationController < ActionController::Base
   def add_valid_param(dest, source, key, vals)
     return unless source.key?(key)
     return unless source[key].in?(vals)
+
     dest[key] = source[key]
   end
 
@@ -226,6 +229,7 @@ class ApplicationController < ActionController::Base
   # login with their own credentials - mstrong 4/12/12
   def require_user
     return if current_uid
+
     store_location
     flash[:notice] = 'You must be logged in to access the page you requested'
     ret = url_for_with_proto({ controller: 'user_sessions', action: 'guest_login' })
@@ -281,6 +285,7 @@ class ApplicationController < ActionController::Base
 
   def url_string_with_proto(url, force_https = false)
     return url unless force_https || APP_CONFIG['proto_force'] == 'https'
+
     begin
       uri = URI.parse(url)
       uri.scheme = 'https'

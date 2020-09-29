@@ -16,6 +16,7 @@ class Streamer
 
   def ensure_uri(url)
     return url if url.is_a?(URI::Generic)
+
     URI.parse(url)
   end
 end

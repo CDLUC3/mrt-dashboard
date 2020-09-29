@@ -13,6 +13,7 @@ class UIDemo
   def compile_demo!
     raise 'Can’t process SCSS without sass or sassc' unless sass_cmd
     raise "Can’t locate UI library #{ui_library_path}" unless ui_library_path.exist?
+
     puts "Processing source files from #{ui_library_path}"
     puts "                   to target #{demo_path}\n\n"
     sass_lint
@@ -23,6 +24,7 @@ class UIDemo
   def compile_to_production!
     raise 'Can’t process SCSS without sass or sassc' unless sass_cmd
     raise "Can’t locate UI library #{ui_library_path}" unless ui_library_path.exist?
+
     puts "Processing source files from #{ui_library_path}"
     puts "                   to target #{project_root_path + 'public'}\n\n"
     sass_lint
@@ -44,6 +46,7 @@ class UIDemo
     production_path_str = (project_root_path + 'public').to_s
     Dir.glob("#{ui_library_path}/**/*").each do |infile|
       next if File.basename(infile).ends_with?('.html')
+
       process_file(infile, production_path_str, 'stylesheets') unless skip?(infile)
     end
   end
@@ -100,18 +103,19 @@ class UIDemo
     return true if File.directory?(infile)
     return true if File.basename(infile) == '.sass-config.yml'
     return true if File.basename(infile) == 'README.md'
+
     false
   end
 
   def process_file(infile, target_path_str, stylesheets_dir)
     if infile.end_with?('.scss')
       return if File.basename(infile).start_with?('_')
+
       return compile_scss(infile, target_path_str, stylesheets_dir)
     end
     copy(infile, target_path_str)
   end
 
-  # rubocop:disable Metrics/AbcSize
   def compile_scss(infile, target_path_str, stylesheets_dir)
     outfile = infile.sub(ui_library_path.to_s, target_path_str).sub('.scss', '.css')
     outfile = outfile.sub('/scss/', "/#{stylesheets_dir}/")
@@ -121,7 +125,6 @@ class UIDemo
     output, status = run_ext("#{sass_cmd} '#{infile}' > '#{outfile}'")
     (warn(output); raise) unless status == 0
   end
-  # rubocop:enable Metrics/AbcSize
 
   def copy(infile, target_path_str)
     outfile = infile.sub(ui_library_path.to_s, target_path_str)

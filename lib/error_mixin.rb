@@ -5,6 +5,7 @@ module ErrorMixin
       backtrace.each { |line| msg << "\n" << line }
     end
     return msg unless (cause = (error.respond_to?(:cause) && error.cause))
+
     msg << "\nCaused by: " << to_msg(cause)
   end
 end

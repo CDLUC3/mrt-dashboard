@@ -44,6 +44,7 @@ module LdapMixin
 
   def delete_record(id)
     raise LdapException, 'id does not exist' unless record_exists?(id)
+
     true_or_exception(admin_ldap.delete(dn: ns_dn(id)))
   end
 
@@ -62,6 +63,7 @@ module LdapMixin
 
   def delete_attribute(id, attribute)
     return if fetch(id)[attribute].blank? # LDAP doesn't like deleting things that don't exist
+
     true_or_exception(admin_ldap.delete_attribute(ns_dn(id), attribute))
   end
 
@@ -90,6 +92,7 @@ module LdapMixin
     results = admin_ldap.search(base: @base, filter: obj_filter(id))
     raise LdapException, 'id does not exist' if results.empty?
     raise LdapException, 'ambiguous results, duplicate ids' if results.length > 1
+
     results[0]
   end
 
@@ -99,12 +102,14 @@ module LdapMixin
                                 scope: Net::LDAP::SearchScope_SingleLevel)
     raise LdapException, 'id does not exist' if results.empty?
     raise LdapException, 'ambiguous results, duplicate ids' if results.length > 1
+
     results[0]
   end
 
   def fetch_attribute(id, attribute)
     r = fetch(id)
     raise LdapException, 'attribute does not exist for that id' if r[attribute].nil? || r[attribute].empty?
+
     r[attribute]
   end
 
@@ -117,6 +122,7 @@ module LdapMixin
 
   def true_or_exception(result)
     return true if result
+
     raise LdapException, admin_ldap.get_operation_result.message
   end
 end

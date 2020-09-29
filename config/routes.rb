@@ -6,14 +6,14 @@ MrtDashboard::Application.routes.draw do
   get('show/view/*id' => 'show#view')
   get('show/*id'      => 'show#show')
   root(to: 'home#index')
-  get('login'         => 'user_sessions#login',
-      :as             => :login,
-      :constraints    => { method: 'GET' })
-  post('login'         => 'user_sessions#login_post',
-       :as             => :login_post,
-       :constraints    => { method: 'POST' })
-  get('logout'        => 'user_sessions#logout',
-      :as             => :logout)
+  get('login' => 'user_sessions#login',
+      :as => :login,
+      :constraints => { method: 'GET' })
+  post('login' => 'user_sessions#login_post',
+       :as => :login_post,
+       :constraints => { method: 'POST' })
+  get('logout' => 'user_sessions#logout',
+      :as => :logout)
   match('guest_login' => 'user_sessions#guest_login',
         :as => :guest_login,
         via: %i[get post])

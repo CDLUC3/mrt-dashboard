@@ -10,19 +10,19 @@ module GroupLdap
 
     def find_all
       results = admin_ldap.search(
-        base:   @base,
+        base: @base,
         filter: (Net::LDAP::Filter.eq('objectclass', 'organizationalUnit') &
           Net::LDAP::Filter.eq('objectclass', 'merrittClass')),
-        scope:  Net::LDAP::SearchScope_SingleLevel
+        scope: Net::LDAP::SearchScope_SingleLevel
       )
       results.sort_by { |g| g['ou'][0].downcase }
     end
 
     def find_users(grp_id)
       results = admin_ldap.search(
-        base:   "ou=#{grp_id},#{@base}",
+        base: "ou=#{grp_id},#{@base}",
         filter: Net::LDAP::Filter.eq('objectclass', 'groupOfUniqueNames'),
-        scope:  Net::LDAP::SearchScope_WholeSubtree
+        scope: Net::LDAP::SearchScope_WholeSubtree
       )
       results
         .map { |g| g[:uniquemember] }
@@ -48,6 +48,7 @@ module GroupLdap
       user_ns_dn = user_ldap.ns_dn(userid)
       check = sub_fetch(groupid, permission)
       return true if check[:uniquemember].include?(user_ns_dn)
+
       true_or_exception(admin_ldap.add_attribute(sub_ns_dn(groupid, permission), 'uniqueMember', user_ns_dn))
     end
 
@@ -55,6 +56,7 @@ module GroupLdap
       user_ns_dn = user_ldap.ns_dn(userid)
       check = sub_fetch(groupid, permission)
       return true unless check[:uniquemember].include?(user_ns_dn)
+
       members = check[:uniquemember]
       members.delete(user_ns_dn)
       admin_ldap.replace_attribute(sub_ns_dn(groupid, permission), :uniquemember, members)
@@ -99,6 +101,7 @@ module GroupLdap
       results = admin_ldap.search(base: ns_dn(group_id), filter: Net::LDAP::Filter.eq('cn', sub_id))
       raise LdapException, 'id does not exist' if results.empty?
       raise LdapException, 'ambiguous results, duplicate ids' if results.length > 1
+
       results[0]
     end
 

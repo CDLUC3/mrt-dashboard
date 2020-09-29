@@ -459,7 +459,7 @@ describe 'atom', type: :task do
       write_feeddate(previous_update)
 
       collection = create(:private_collection, ark: @collection_ark, name: 'Collection 1', mnemonic: 'collection_1')
-      local_ids = ['494672cf-2937-4975-8b33-90bf80b4c8a6', '365579cc-a369-45e7-8977-047bda3f7ed1']
+      local_ids = %w[494672cf-2937-4975-8b33-90bf80b4c8a6 365579cc-a369-45e7-8977-047bda3f7ed1]
       local_ids.each_with_index do |id, i|
         collection.inv_objects << create(
           :inv_object,
@@ -483,7 +483,7 @@ describe 'atom', type: :task do
       write_feeddate(feed_updated - 1) # -1 day
 
       collection = create(:private_collection, ark: @collection_ark, name: 'Collection 1', mnemonic: 'collection_1')
-      local_ids = ['494672cf-2937-4975-8b33-90bf80b4c8a6', '365579cc-a369-45e7-8977-047bda3f7ed1']
+      local_ids = %w[494672cf-2937-4975-8b33-90bf80b4c8a6 365579cc-a369-45e7-8977-047bda3f7ed1]
       local_ids.each_with_index do |id, i|
         obj = create(:inv_object, erc_where: id, erc_who: 'Doe, Jane', erc_what: "Object #{i}", erc_when: '2018-01-01')
         collection.inv_objects << obj
@@ -634,7 +634,7 @@ describe 'atom', type: :task do
         write_feeddate(previous_update)
 
         collection = create(:private_collection, ark: @collection_ark, name: 'Collection 1', mnemonic: 'collection_1')
-        local_ids = ['c9c0834e-d22b-40a1-a35d-811dc40f20ed', '5875b691-e05f-4036-ab0a-8e37cc32a8a3']
+        local_ids = %w[c9c0834e-d22b-40a1-a35d-811dc40f20ed 5875b691-e05f-4036-ab0a-8e37cc32a8a3]
         local_ids.each_with_index do |id, i|
           collection.inv_objects << create(:inv_object,
                                            erc_where: id,
@@ -656,7 +656,7 @@ describe 'atom', type: :task do
         write_feeddate(feed_updated - 1) # -1 day
 
         collection = create(:private_collection, ark: @collection_ark, name: 'Collection 1', mnemonic: 'collection_1')
-        local_ids = ['c9c0834e-d22b-40a1-a35d-811dc40f20ed', '5875b691-e05f-4036-ab0a-8e37cc32a8a3']
+        local_ids = %w[c9c0834e-d22b-40a1-a35d-811dc40f20ed 5875b691-e05f-4036-ab0a-8e37cc32a8a3]
         local_ids.each_with_index do |id, i|
           obj = create(:inv_object, erc_where: id, erc_who: 'Doe, Jane', erc_what: "Object #{i}", erc_when: '2018-01-01')
           collection.inv_objects << obj

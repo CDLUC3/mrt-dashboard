@@ -51,6 +51,7 @@ describe ApplicationController do
     attr_reader :user_id
     attr_reader :password
     attr_reader :user
+
     before(:each) do
       @user_id = 'jdoe'
       @password = 'correcthorsebatterystaple'

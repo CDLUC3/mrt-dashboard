@@ -7,8 +7,7 @@ module Merritt
 
       FUTURE = Time.utc(9999)
 
-      attr_reader :atom_xml
-      attr_reader :harvester
+      attr_reader :atom_xml, :harvester
 
       def initialize(atom_xml:, harvester:)
         @atom_xml = atom_xml
@@ -20,12 +19,14 @@ module Merritt
       def process_xml!
         verify_collection_id!
         return if feed_up_to_date
+
         batches = atom_xml.xpath('//atom:entry', NS).each_slice(harvester.batch_size)
         batches.each_with_index do |batch, i|
           log_info("Processing batch #{i} of #{batches.size} (#{batch.size} entries)")
           any_up_to_date = process_batch(batch)
           no_more_batches = batches.size <= i + 1
           next if any_up_to_date || no_more_batches
+
           sleep(harvester.delay)
         end
         PageResult.new(atom_updated: atom_updated, next_page: next_page)
@@ -54,6 +55,7 @@ module Merritt
       def verify_collection_id!
         expected_id = harvester.collection_ark
         return if expected_id == merritt_collection_id
+
         msg = <<~MSG
           Merritt Collection ID from feed XML does not match collection ARK passed to Rake task;
           expected '#{expected_id}', was #{"'#{merritt_collection_id}'" || 'nil'}

@@ -13,8 +13,8 @@ module Merritt
         merritt_collection_ark
         merritt_collection_name
       ].freeze
-      ARK_QUALIFIER_REGEXP = %r{(?<=/)[^/]+$}
-      REGISTRY_ID_REGEXP = /(?<=_)[0-9]+(?=\.atom$)/
+      ARK_QUALIFIER_REGEXP = %r{(?<=/)[^/]+$}.freeze
+      REGISTRY_ID_REGEXP = /(?<=_)[0-9]+(?=\.atom$)/.freeze
 
       CSH_TEMPLATE = <<~ERB.freeze
         setenv RAILS_ENV <%= environment %>
@@ -54,15 +54,7 @@ module Merritt
         exit
       ERB
 
-      attr_reader :collection_ark_qualifier
-      attr_reader :registry_id
-
-      attr_reader :environment
-      attr_reader :nuxeo_collection_name
-      attr_reader :feed_url
-      attr_reader :merritt_collection_mnemonic
-      attr_reader :merritt_collection_ark
-      attr_reader :merritt_collection_name
+      attr_reader :collection_ark_qualifier, :registry_id, :environment, :nuxeo_collection_name, :feed_url, :merritt_collection_mnemonic, :merritt_collection_ark, :merritt_collection_name
 
       # rubocop:disable Metrics/ParameterLists
       def initialize(environment:, nuxeo_collection_name:, feed_url:, merritt_collection_mnemonic:, merritt_collection_ark:, merritt_collection_name:)
@@ -91,6 +83,7 @@ module Merritt
       def validate(arg, name:)
         raise ArgumentError, "#{name} argument not found" unless arg
         raise ArgumentError, "#{name} argument '#{arg}' cannot be blank" if arg.strip == ''
+
         arg
       end
 
@@ -118,11 +111,12 @@ module Merritt
           name.gsub(/[^A-Za-z0-9]+/, '-').gsub(/-+%/, '').gsub(/([a-z])-s/, '\\1s')
         end
 
-        # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
+        # rubocop:disable Metrics/MethodLength
         def from_csv(csv_data:, to_dir:)
           count = 0
           CSV.parse(csv_data).each do |row|
             next if row.compact == []
+
             environment, nuxeo_collection_name, feed_url, collection_mnemonic, collection_ark, merritt_collection_name = row[0...6]
             generator = CSHGenerator.new(
               environment: environment,
@@ -137,7 +131,7 @@ module Merritt
           end
           count
         end
-        # rubocop:enable Metrics/MethodLength, Metrics/AbcSize
+        # rubocop:enable Metrics/MethodLength
 
       end
     end

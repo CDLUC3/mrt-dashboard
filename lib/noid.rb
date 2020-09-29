@@ -31,6 +31,7 @@ module Noid
       request  = Net::HTTP::Get.new(@url.path + '?mint+' + @n_at_once.to_s)
       response = Net::HTTP.start(@url.host, @url.port) { |http| http.request(request) }
       raise MintException, 'Got error response from server.' unless response.code == '200'
+
       extract_ids(response.body)
     end
 

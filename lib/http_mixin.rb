@@ -21,6 +21,7 @@ module HttpMixin
       resp = client.post(url, *args, &block)
       return resp unless post_redirect?(resp)
       raise retry_count_exceeded(resp) if (retry_number += 1) > client.follow_redirect_count
+
       rewind_any_files(args)
       url = redirect_url_from(resp)
     end
@@ -34,6 +35,7 @@ module HttpMixin
     redirect_url = resp.headers['Location']
     redirect_url = redirect_url[0] if redirect_url.is_a?(Enumerable)
     return redirect_url if redirect_url
+
     raise missing_location(resp)
   end
 
@@ -50,6 +52,7 @@ module HttpMixin
   def rewind_any_files(arg)
     return arg.rewind if arg.respond_to?(:rewind)
     return arg.each_value { |v| rewind_any_files(v) } if arg.respond_to?(:each_value)
+
     arg.each { |v| rewind_any_files(v) } if arg.respond_to?(:each)
   end
 

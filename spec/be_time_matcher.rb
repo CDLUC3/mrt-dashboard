@@ -14,6 +14,7 @@ RSpec::Matchers.define :be_time do |expected|
   match do |actual|
     return actual.nil? unless expected
     raise "Expected value #{expected} is not a Time" unless expected.is_a?(Time)
+
     same_offset(actual, expected) && within(expected, actual, 0.5)
   end
 

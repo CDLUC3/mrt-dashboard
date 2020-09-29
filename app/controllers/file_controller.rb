@@ -34,6 +34,7 @@ class FileController < ApplicationController
     nk = storage_key_do
     presigned = presign_get_by_node_key(nk, params)
     return unless response.status == 200
+
     if params.key?(:no_redirect)
       render status: 200, json: presigned.to_json
       return
@@ -53,6 +54,7 @@ class FileController < ApplicationController
 
   def check_download
     return if current_user_can_download?(@file.inv_version.inv_object)
+
     flash[:error] = 'You do not have download permissions.'
     render file: "#{Rails.root}/public/401.html", status: 401, layout: false
   end
@@ -145,14 +147,14 @@ class FileController < ApplicationController
   # rubocop:enable all
 
   def validate_ark(ark)
-    ark =~ %r{^ark:\/\d+\/[a-z0-9]+$}
+    ark =~ %r{^ark:/\d+/[a-z0-9]+$}
   end
 
   def fix_params
     object_ark = params_u(:object)
     validate_ark(object_ark)
     combine = "#{object_ark}/#{params[:version]}/#{params_u(:file)}"
-    m = %r{^(ark:\/\d+\/[a-z0-9_]+)\/(\d+)\/(.*)$}.match(combine)
+    m = %r{^(ark:/\d+/[a-z0-9_]+)/(\d+)/(.*)$}.match(combine)
     replace_params(m) if m
   end
 

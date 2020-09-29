@@ -5,6 +5,7 @@ require 'diffy'
 module BeXmlMatcher
   def self.to_nokogiri(xml)
     return nil unless xml
+
     case xml
     when Nokogiri::XML::Element
       xml
@@ -19,6 +20,7 @@ module BeXmlMatcher
 
   def self.to_pretty(nokogiri)
     return nil unless nokogiri
+
     out          = StringIO.new
     save_options = Nokogiri::XML::Node::SaveOptions::FORMAT | Nokogiri::XML::Node::SaveOptions::NO_DECLARATION
     nokogiri.write_xml_to(out, encoding: 'UTF-8', indent: 2, save_with: save_options)

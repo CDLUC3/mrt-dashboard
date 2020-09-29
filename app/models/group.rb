@@ -32,12 +32,13 @@ class Group
 
   def self.find(id)
     return unless id
+
     # fetch by groupid, but otherwise, fall back to arkid
     ldap_group = begin
-                   Group::LDAP.fetch(id)
-                 rescue LdapMixin::LdapException
-                   Group::LDAP.fetch_by_ark_id(id)
-                 end
+      Group::LDAP.fetch(id)
+    rescue LdapMixin::LdapException
+      Group::LDAP.fetch_by_ark_id(id)
+    end
     make_from_ldap(ldap_group)
   end
 
@@ -70,6 +71,7 @@ class Group
 
   def object_count
     return 0 unless inv_collection_id
+
     query = <<~SQL
       SELECT COUNT(DISTINCT(inv_objects.id)) AS count
         FROM inv_objects
@@ -82,6 +84,7 @@ class Group
 
   def version_count
     return 0 unless inv_collection_id
+
     query = <<~SQL
       SELECT COUNT(DISTINCT(inv_versions.id)) AS count
         FROM inv_versions
@@ -94,6 +97,7 @@ class Group
 
   def file_count
     return 0 unless inv_collection_id
+
     query = <<~SQL
       SELECT COUNT(DISTINCT(inv_files.id)) AS count
         FROM inv_files
@@ -107,6 +111,7 @@ class Group
 
   def total_size
     return 0 unless inv_collection_id
+
     query = <<~SQL
       SELECT SUM(full_size) AS total_size
         FROM inv_files
@@ -119,6 +124,7 @@ class Group
 
   def billable_size
     return 0 unless inv_collection_id
+
     query = <<~SQL
       SELECT SUM(billable_size) AS billable_size
         FROM inv_files
@@ -159,6 +165,7 @@ class Group
   # this may belong to some ldap base class at some point
   def self.simplify_single_value(record, field)
     return nil if record[field].nil? || record[field][0].nil? || record[field][0].empty?
+
     record[field][0]
   end
 
@@ -166,6 +173,7 @@ class Group
   # :nocov:
   def self.simplify_multiple_value(record, field)
     return [] if record[field].nil? || record[field][0].nil? || record[field][0].empty?
+
     record[field]
   end
   # :nocov:

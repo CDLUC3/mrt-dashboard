@@ -222,7 +222,7 @@ RSpec.describe FileController, type: :controller do
         follow_redirect: true
       ).and_return(mock_response(200, '', my_presign_wrapper))
 
-      m = %r{^(ark:)\/(\d+)\/([a-z0-9_]+)$}.match(object_ark)
+      m = %r{^(ark:)/(\d+)/([a-z0-9_]+)$}.match(object_ark)
       params2 = { object: m[1], file: "#{m[3]}/#{params[:version]}/#{params[:file]}", version: m[2].to_i }
       get(:presign, params2, { uid: user_id })
       expect(response.status).to eq(303)

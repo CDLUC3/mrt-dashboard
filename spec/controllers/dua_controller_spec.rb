@@ -18,6 +18,7 @@ describe DuaController do
         def open(*_rest)
           io = StringIO.new(@data, 'r')
           return io unless block_given?
+
           yield io
         end
       end

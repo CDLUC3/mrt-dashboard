@@ -4,26 +4,26 @@ xml.tag!('feed', :xmlns => 'http://www.w3.org/2005/Atom',
                  'xmlns:dct' => 'http://purl.org/dc/terms/') do
   xml.tag!('link',
            'href' => "/object/recent.atom?collection=#{@collection_ark}&page=#{@objects.current_page}",
-           'rel'  => 'self',
+           'rel' => 'self',
            'type' => 'application/atom+xml')
   xml.tag!('link',
            'href' => "/object/recent.atom?collection=#{@collection_ark}&page=1",
-           'rel'  => 'first',
+           'rel' => 'first',
            'type' => 'application/atom+xml')
   xml.tag!('link',
            'href' => "/object/recent.atom?collection=#{@collection_ark}&page=#{@objects.total_pages}",
-           'rel'  => 'last',
+           'rel' => 'last',
            'type' => 'application/atom+xml')
   if @objects.next_page
     xml.tag!('link',
              'href' => "/object/recent.atom?collection=#{@collection_ark}&page=#{@objects.next_page}",
-             'rel'  => 'next',
+             'rel' => 'next',
              'type' => 'application/atom+xml')
   end
   if @objects.previous_page
     xml.tag!('link',
              'href' => "/object/recent.atom?collection=#{@collection_ark}&page=#{@objects.previous_page}",
-             'rel'  => 'previous',
+             'rel' => 'previous',
              'type' => 'application/atom+xml')
   end
   xml.tag!('id', 'urn:uuid:8dd71209-616a-4723-bfc1-b46572499932')
@@ -42,7 +42,7 @@ xml.tag!('feed', :xmlns => 'http://www.w3.org/2005/Atom',
     xml.tag!('entry') do
       xml.tag!('id', obj.permalink)
       xml.tag!('link',
-               'rel'  => 'alternate',
+               'rel' => 'alternate',
                'type' => 'application/zip',
                'href' => url_for(controller: 'object',
                                  action: 'presign',
@@ -50,8 +50,9 @@ xml.tag!('feed', :xmlns => 'http://www.w3.org/2005/Atom',
       xml.tag!('dct:extent', obj.size.to_s)
       obj.all_local_ids.each do |local_id|
         next unless local_id && local_id.match(/^http/)
+
         xml.tag!('link',
-                 'rel'  => 'alternate',
+                 'rel' => 'alternate',
                  'href' => local_id)
       end
       xml.tag!('title', dc_nice(obj.current_version.dk_what))
@@ -70,7 +71,7 @@ xml.tag!('feed', :xmlns => 'http://www.w3.org/2005/Atom',
                                    object: obj,
                                    version: current_version,
                                    file: file),
-                 'rel'  => 'http://purl.org/dc/terms/hasPart',
+                 'rel' => 'http://purl.org/dc/terms/hasPart',
                  'title' => file.pathname,
                  'length' => file.full_size,
                  'type' => file.mime_type,

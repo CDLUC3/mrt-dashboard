@@ -28,19 +28,19 @@ gem 'uuidtools'
 gem 'will_paginate'
 
 group :development do
-  gem 'web-console', '~> 2.0'
+  gem 'web-console'
 end
 
 group :development, :test do
   gem 'byebug'
-  gem 'colorize', '~> 0.8'
+  gem 'colorize'
   gem 'launchy'
   gem 'pry'
   gem 'pry-rails'
   gem 'pry-remote', require: 'pry-remote'
   gem 'rspec-rails', '~> 3.0'
-  gem 'rubocop', '0.58.1'
-  gem 'ruby-prof', '~> 0.17'
+  gem 'rubocop'
+  gem 'ruby-prof'
 end
 
 group :test do

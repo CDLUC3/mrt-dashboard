@@ -2,11 +2,11 @@ class UserController < ApplicationController
   before_filter :require_user
 
   REQUIRED = {
-    'givenname'          => 'First name',
-    'sn'                 => 'Last name',
-    'userpassword'       => 'Password',
+    'givenname' => 'First name',
+    'sn' => 'Last name',
+    'userpassword' => 'Password',
     'repeatuserpassword' => 'Repeat Password',
-    'mail'               => 'Email'
+    'mail' => 'Email'
   }.freeze
 
   PASSWORD_MISMATCH_MSG = 'Your password and repeated password do not match.'.freeze

@@ -141,6 +141,7 @@ RSpec.describe ObjectController, type: :controller do
 
   describe ':mint' do
     attr_reader :params
+
     before(:each) do
       @params = {
         profile: "#{collection_id}_profile",

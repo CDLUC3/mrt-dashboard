@@ -38,6 +38,7 @@ namespace :atom do
 
   def throttler(extras)
     return extras if extras.any?
+
     [Merritt::Atom::DEFAULT_DELAY, Merritt::Atom::DEFAULT_BATCH_SIZE]
   end
 end

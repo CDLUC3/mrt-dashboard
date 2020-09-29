@@ -35,11 +35,13 @@ class ObjectController < ApplicationController
 
   def ingest
     render(status: 400, text: "Bad file parameter.\n") && return unless params[:file].respond_to? :tempfile
+
     do_post(APP_CONFIG['ingest_service'], ingest_params_from(params, current_user))
   end
 
   def update
     render(status: 400, text: "Bad file parameter.\n") && return unless params[:file].respond_to? :tempfile
+
     do_post(APP_CONFIG['ingest_service_update'], update_params_from(params, current_user))
   end
 
@@ -90,8 +92,8 @@ class ObjectController < ApplicationController
     end
     begin
       post_upload
-    rescue Exception => ex # TODO: should this be StandardError?
-      render_upload_error(ex)
+    rescue Exception => e # TODO: should this be StandardError?
+      render_upload_error(e)
     end
   end
   # rubocop:enable Lint/RescueException

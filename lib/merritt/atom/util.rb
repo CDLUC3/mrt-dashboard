@@ -54,6 +54,7 @@ module Merritt
       def xpath_content(node, query)
         match = node.at_xpath(query, NS)
         return unless match
+
         match.content
       end
 
@@ -62,6 +63,7 @@ module Merritt
       def append_backtrace(msg, exception)
         backtrace = (exception.respond_to?(:backtrace) && exception.backtrace)
         return unless backtrace
+
         backtrace.each do |line|
           msg << "\n"
           msg << line

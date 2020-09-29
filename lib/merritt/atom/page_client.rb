@@ -8,8 +8,7 @@ module Merritt
     class PageClient
       include Merritt::Atom::Util
 
-      attr_reader :page_url
-      attr_reader :harvester
+      attr_reader :page_url, :harvester
 
       def initialize(page_url:, harvester:)
         @page_url = page_url
@@ -19,6 +18,7 @@ module Merritt
       # @return [PageResult] the `<atom:updated/>` date from the feed and the URL of the next page, if any
       def process_page!
         return unless (atom_xml = parse_xml)
+
         feed_processor = FeedProcessor.new(atom_xml: atom_xml, harvester: harvester)
         feed_processor.process_xml!
       end

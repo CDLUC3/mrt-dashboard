@@ -119,6 +119,7 @@ class InvObject < ActiveRecord::Base
 
   def in_embargo?
     return false unless inv_embargo
+
     inv_embargo.in_embargo?
   end
 

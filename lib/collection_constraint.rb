@@ -5,9 +5,9 @@ class CollectionConstraint
     return true unless group_param.match?(/^ark/)
 
     begin
-      return Group.find(group_param) ? true : false
+      Group.find(group_param) ? true : false
     rescue LdapMixin::LdapException
-      return false
+      false
     end
   end
 end

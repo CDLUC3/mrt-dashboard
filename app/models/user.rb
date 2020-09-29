@@ -13,11 +13,11 @@ class User
   )
 
   AUTHLOGIC_MAP =
-    { 'login'         => 'uid',
-      'lastname'      => 'sn',
-      'firstname'     => 'givenname',
-      'email'         => 'mail',
-      'tz_region'     => 'tzregion' }.freeze
+    { 'login' => 'uid',
+      'lastname' => 'sn',
+      'firstname' => 'givenname',
+      'email' => 'mail',
+      'tz_region' => 'tzregion' }.freeze
 
   # ############################################################
   # Initializer
@@ -29,14 +29,13 @@ class User
   # ############################################################
   # Instance methods
 
-  # rubocop:disable Style/MethodMissingSuper
   def method_missing(meth, *_args)
     # simple code to read user information with methods that resemble activerecord slightly
     authlogic_key = AUTHLOGIC_MAP[meth.to_s]
     return array_to_value(@user[authlogic_key]) if authlogic_key
+
     array_to_value(@user[meth.to_s])
   end
-  # rubocop:enable Style/MethodMissingSuper
 
   def respond_to_missing?(*_args)
     true
@@ -56,6 +55,7 @@ class User
 
   def self.find_by_id(user_id)
     return unless user_id
+
     User.new(LDAP.fetch(user_id))
   end
 
@@ -79,8 +79,10 @@ class User
 
   def self.from_auth_header(auth_header)
     return unless (match_data = auth_header && auth_header.match(/Basic (.*)/))
+
     (user_id, password) = Base64.decode64(match_data[1]).split(':')
     return unless User.valid_ldap_credentials?(user_id, password)
+
     find_by_id(user_id)
   end
 
@@ -103,6 +105,7 @@ class User
   def array_to_value(arr)
     return arr unless arr.is_a?(Array)
     return arr[0] if arr.length == 1
+
     arr
   end
 end

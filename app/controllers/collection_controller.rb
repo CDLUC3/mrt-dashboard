@@ -12,6 +12,7 @@ class CollectionController < ApplicationController
   def require_request_group
     group = Group.find(params[:group])
     raise ActiveRecord::RecordNotFound unless group
+
     @request_group = group
   rescue LdapMixin::LdapException
     raise ActiveRecord::RecordNotFound
