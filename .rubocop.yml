@@ -32,8 +32,12 @@ Layout/MultilineOperationIndentation:
   Enabled: false
 
 # Reasonable line-length check; it's too easy for the cure to be worse than the disease
-Metrics/LineLength:
+Layout/LineLength:
   Max: 150
+
+Naming/FileName:
+  Exclude:
+    - 'config/deploy/*'
 
 # Just because something looks like an accessor doesn't mean it is one
 Naming/PredicateName:

@@ -93,7 +93,7 @@ module Merritt
           @template ||= ERB.new(CSH_TEMPLATE)
         end
 
-        # rubocop:disable Metrics/ParameterLists, Metrics/LineLength
+        # rubocop:disable Metrics/ParameterLists, Layout/LineLength
         def generate_csh(environment:, nuxeo_collection_name:, feed_url:, merritt_collection_mnemonic:, merritt_collection_ark:, merritt_collection_name:)
           generator = CSHGenerator.new(
             environment: environment,
@@ -105,7 +105,7 @@ module Merritt
           )
           generator.generate_csh
         end
-        # rubocop:enable Metrics/ParameterLists, Metrics/LineLength
+        # rubocop:enable Metrics/ParameterLists, Layout/LineLength
 
         def sanitize_name(name)
           name.gsub(/[^A-Za-z0-9]+/, '-').gsub(/-+%/, '').gsub(/([a-z])-s/, '\\1s')
