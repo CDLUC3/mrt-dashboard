@@ -140,7 +140,7 @@ class FileController < ApplicationController
     end
 
     # For debugging, show url in thre return object
-    url = ApplicationController.get_storage_presign_url(ret.with_indifferent_access, true)
+    url = ApplicationController.get_storage_presign_url(ret.with_indifferent_access, has_file: true)
     ret[:url] = url unless url.nil?
     ret.with_indifferent_access
   end
@@ -158,10 +158,10 @@ class FileController < ApplicationController
     replace_params(m) if m
   end
 
-  def replace_params(m)
-    params[:object] = m[1]
-    params[:version] = m[2]
-    params[:file] = m[3]
+  def replace_params(match)
+    params[:object] = match[1]
+    params[:version] = match[2]
+    params[:file] = match[3]
   end
 
   def load_file
@@ -186,7 +186,7 @@ class FileController < ApplicationController
     p = { contentType: @file.mime_type }
     p[:contentDisposition] = params[:contentDisposition] if params.key?(:contentDisposition)
     r = create_http_cli(connect: 15, receive: 15, send: 15).get(
-      ApplicationController.get_storage_presign_url(nodekey, true),
+      ApplicationController.get_storage_presign_url(nodekey, has_file: true),
       p, {}, follow_redirect: true
     )
     eval_presign_get_by_node_key(r)

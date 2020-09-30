@@ -54,12 +54,9 @@ class ObjectController < ApplicationController
   end
 
   def download
-    if @object.exceeds_download_size?
-      render(file: "#{Rails.root}/public/403.html", status: 403, layout: false) && return
-    elsif @object.exceeds_sync_size?
-      # if size is > max_archive_size, redirect to have user enter email for asynch compression (skipping streaming)
-      redirect_to(controller: 'lostorage', action: 'index', object: @object) && return
-    end
+    render(file: "#{Rails.root}/public/403.html", status: 403, layout: false) && return if @object.exceeds_download_size?
+    # if size is > max_archive_size, redirect to have user enter email for asynch compression (skipping streaming)
+    redirect_to(controller: 'lostorage', action: 'index', object: @object) && return if @object.exceeds_sync_size?
 
     stream_response("#{@object.bytestream_uri}?t=zip", 'attachment', "#{pairtree_encode(@object.ark)}_object.zip", 'application/zip')
   end

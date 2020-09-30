@@ -1,10 +1,10 @@
 module ApplicationHelper
   # from http://codesnippets.joyent.com/posts/show/1812
-  def formatted_int(i)
-    return '0' if i.nil?
-    return i.to_s if i.abs < 1000
+  def formatted_int(ival)
+    return '0' if ival.nil?
+    return ival.to_s if ival.abs < 1000
 
-    i.to_s.gsub!(/(\d)(?=(\d\d\d)+(?!\d))/, '\\1,')
+    ival.to_s.gsub!(/(\d)(?=(\d\d\d)+(?!\d))/, '\\1,')
   end
 
   def permissions(array)
@@ -14,15 +14,15 @@ module ApplicationHelper
     array.join('/')
   end
 
-  def merritt_time(t)
+  def merritt_time(time)
     # TODO: Figure out where we use this and whether DateTime is really best here
-    t = DateTime.parse(t.to_s) if t.class != DateTime
-    t = t.utc unless t.utc?
-    t.strftime('%Y-%m-%d %I:%M %p UTC')
+    time = DateTime.parse(time.to_s) if time.class != DateTime
+    time = time.utc unless time.utc?
+    time.strftime('%Y-%m-%d %I:%M %p UTC')
   end
 
-  def clean_mime_type(mt)
-    mt.gsub(/;.*$/, '')
+  def clean_mime_type(mimetype)
+    mimetype.gsub(/;.*$/, '')
   end
 
   # Format kernel metadata lists

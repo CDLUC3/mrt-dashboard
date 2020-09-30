@@ -39,6 +39,7 @@ RSpec.configure do |config|
   end
 
   config.before(:each, type: :feature, js: true) do
+    Webdrivers.cache_time = 0
     Capybara.current_driver = :selenium_chrome_headless
     # Capybara.current_driver = :selenium_chrome
   end

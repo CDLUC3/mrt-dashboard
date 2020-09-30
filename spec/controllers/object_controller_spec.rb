@@ -373,7 +373,7 @@ RSpec.describe ObjectController, type: :controller do
         key: ApplicationController.encode_storage_key(@object.ark)
       }
       expect(client).to receive(:post).with(
-        ApplicationController.get_storage_presign_url(nk, false, {}),
+        ApplicationController.get_storage_presign_url(nk, has_file: false, params: {}),
         follow_redirect: true
       ).and_raise(
         HTTPClient::ReceiveTimeoutError

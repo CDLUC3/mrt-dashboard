@@ -23,7 +23,7 @@ describe 'collections' do
     log_out!
   end
 
-  describe 'index' do
+  describe 'index', js: true do
     attr_reader :inv_objects
 
     before(:each) do
@@ -40,6 +40,7 @@ describe 'collections' do
     end
 
     after(:each) do
+      wait_for_ajax!
       expect(page).not_to have_content('calculating') # indicates ajax count failure
     end
 

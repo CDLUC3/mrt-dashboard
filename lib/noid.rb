@@ -5,7 +5,7 @@ module Noid
   class MintException < RuntimeError; end
 
   class Minter
-    def initialize(url_string, n_at_once = 1, preserve_naan = false)
+    def initialize(url_string, n_at_once = 1, preserve_naan: false)
       @url           = URI.parse(url_string)
       @n_at_once     = n_at_once
       @preserve_naan = preserve_naan

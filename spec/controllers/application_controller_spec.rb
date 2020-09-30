@@ -187,7 +187,7 @@ describe ApplicationController do
       http_req = "http://#{host}"
       https_req = "https://#{host}"
       # For testing purposes, simulate APP_CONFIG['proto_force'] == 'https'
-      expect(controller.send(:url_string_with_proto, http_req, true)).to eq(https_req), 'Location should start with https'
+      expect(controller.send(:url_string_with_proto, http_req, force_https: true)).to eq(https_req), 'Location should start with https'
     end
 
     it 'catch encoding error in url' do
@@ -196,7 +196,7 @@ describe ApplicationController do
       err = "Url format error caught: #{https_req}"
 
       expect(Rails.logger).to receive(:error).with(err)
-      expect(controller.send(:url_string_with_proto, https_req, true)).not_to eq(https_req), 'Expect encoding error for URL'
+      expect(controller.send(:url_string_with_proto, https_req, force_https: true)).not_to eq(https_req), 'Expect encoding error for URL'
     end
   end
 
@@ -282,19 +282,19 @@ describe ApplicationController do
       expect(url).not_to match('https?://.*//.*')
     end
 
-    it 'get_storage_presign_url(nodekey, has_file = true)' do
+    it 'get_storage_presign_url(nodekey, has_file: true)' do
       key = ApplicationController.build_storage_key(@ark, @ver, @path)
       enckey = ApplicationController.encode_storage_key(key)
       nk = { node_id: 9999, key: enckey }
-      url = ApplicationController.get_storage_presign_url(nk, true)
+      url = ApplicationController.get_storage_presign_url(nk, has_file: true)
       expect(url).to match('.*/presign-file/.*')
     end
 
-    it 'get_storage_presign_url(nodekey, has_file = false)' do
+    it 'get_storage_presign_url(nodekey, has_file: false)' do
       key = ApplicationController.build_storage_key(@ark, @ver)
       enckey = ApplicationController.encode_storage_key(key)
       nk = { node_id: 9999, key: enckey }
-      url = ApplicationController.get_storage_presign_url(nk, false)
+      url = ApplicationController.get_storage_presign_url(nk, has_file: false)
       expect(url).to match(".*/assemble-obj/9999/#{enckey}")
     end
 

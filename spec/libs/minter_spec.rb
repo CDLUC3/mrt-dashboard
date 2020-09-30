@@ -40,7 +40,7 @@ module Noid
       body = noids.map { |noid| "id: #{noid}" }.join("\n")
       stub_request(:get, "#{noid_url}?mint+#{count}").to_return(body: body)
 
-      minter = Minter.new(noid_url, count, true)
+      minter = Minter.new(noid_url, count, preserve_naan: true)
       noids.each do |expected|
         actual = minter.mint
         expect(actual).to eq(expected)

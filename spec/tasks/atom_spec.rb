@@ -4,12 +4,13 @@ require 'webmock/rspec'
 require 'fileutils'
 
 describe 'atom', type: :task do
-
-  ATOM_NS = { 'atom' => 'http://www.w3.org/2005/Atom' }.freeze
-  EXPECTED_MANIFESTS = (0..1).map { |i| File.read("spec/data/ucldc_collection_5551212-manifest-#{i}.checkm").freeze }.freeze
-  EXPECTED_ERC_CHECKSUMS = ['664d879f4609ef03f043dae7e4353959'.freeze, '0a10eaecc019131f17de4da54c32085b'.freeze].freeze
+  attr_reader :expected_manifests
+  attr_reader :expected_erc_checksums
 
   before(:each) do
+    { 'atom' => 'http://www.w3.org/2005/Atom' }.freeze
+    @expected_manifests = (0..1).map { |i| File.read("spec/data/ucldc_collection_5551212-manifest-#{i}.checkm").freeze }.freeze
+    @expected_erc_checksums = ['664d879f4609ef03f043dae7e4353959'.freeze, '0a10eaecc019131f17de4da54c32085b'.freeze].freeze
     WebMock.disable_net_connect!
   end
 
@@ -71,7 +72,7 @@ describe 'atom', type: :task do
         .sort_by { |f| File.ctime("#{tmp_home}/#{f}") }
     end
 
-    def validate_request!(request_args, erc_checksums = EXPECTED_ERC_CHECKSUMS)
+    def validate_request!(request_args, erc_checksums = @expected_erc_checksums)
       expect(request_args.size).to eq(2)
       files = request_args.map { |ra| ra['file'] }
 
@@ -100,7 +101,7 @@ describe 'atom', type: :task do
       erc_filenames = actual_erc_filenames
       files.each_with_index do |f, i|
         actual_manifest_lines = f.read.strip.split("\n").map(&:strip)
-        expected_manifest_lines = EXPECTED_MANIFESTS[i]
+        expected_manifest_lines = @expected_manifests[i]
           .sub('ACTUAL_ERC_FILENAME', "http://ingest.example.edu/#{erc_filenames[i]}")
           .sub('EXPECTED_ERC_CHECKSUM', erc_checksums[i])
           .strip.split("\n").map(&:strip)

@@ -105,7 +105,7 @@ class ApplicationController < ActionController::Base
     uri.to_s
   end
 
-  def self.get_storage_presign_url(nodekey, has_file = true, params = {})
+  def self.get_storage_presign_url(nodekey, has_file: true, params: {})
     base = has_file ? APP_CONFIG['storage_presign_file'] : APP_CONFIG['storage_presign_obj']
     path = File.join(base, 'not-applicable')
     if nodekey.key?(:node_id) && nodekey.key?(:key)
@@ -143,7 +143,7 @@ class ApplicationController < ActionController::Base
   def presign_get_obj_by_node_key(nodekey, params)
     sparams = sanitize_presign_params(params)
     r = create_http_cli(connect: 20, receive: 20, send: 20).post(
-      ApplicationController.get_storage_presign_url(nodekey, false, sparams),
+      ApplicationController.get_storage_presign_url(nodekey, has_file: false, params: sparams),
       follow_redirect: true
     )
     eval_presign_obj_by_node_key(r, nodekey[:key])
@@ -283,7 +283,7 @@ class ApplicationController < ActionController::Base
     url_for(opts)
   end
 
-  def url_string_with_proto(url, force_https = false)
+  def url_string_with_proto(url, force_https: false)
     return url unless force_https || APP_CONFIG['proto_force'] == 'https'
 
     begin

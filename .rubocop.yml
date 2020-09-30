@@ -35,6 +35,10 @@ Layout/MultilineOperationIndentation:
 Layout/LineLength:
   Max: 150
 
+Metrics/AbcSize:
+  Exclude:
+    - 'app/controllers/application_controller.rb'
+
 Naming/FileName:
   Exclude:
     - 'config/deploy/*'

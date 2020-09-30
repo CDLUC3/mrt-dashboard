@@ -102,10 +102,10 @@ module IngestMixin
     @obj_count    = @doc.xpath('//bat:batchState/bat:jobStates').length
   end
 
-  def render_upload_error(ex)
-    raise unless ex.respond_to?(:response)
+  def render_upload_error(exobj)
+    raise unless exobj.respond_to?(:response)
 
-    @doc = Nokogiri::XML(ex.response) { |config| config.strict.noent.noblanks }
+    @doc = Nokogiri::XML(exobj.response) { |config| config.strict.noent.noblanks }
     @description = "ingest: #{@doc.xpath('//exc:statusDescription')[0].child.text}"
     @error       = "ingest: #{@doc.xpath('//exc:error')[0].child.text}"
     render action: 'upload_error'

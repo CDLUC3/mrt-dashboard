@@ -54,7 +54,8 @@ module Merritt
         exit
       ERB
 
-      attr_reader :collection_ark_qualifier, :registry_id, :environment, :nuxeo_collection_name, :feed_url, :merritt_collection_mnemonic, :merritt_collection_ark, :merritt_collection_name
+      attr_reader :collection_ark_qualifier, :registry_id, :environment, :nuxeo_collection_name,
+                  :feed_url, :merritt_collection_mnemonic, :merritt_collection_ark, :merritt_collection_name
 
       # rubocop:disable Metrics/ParameterLists
       def initialize(environment:, nuxeo_collection_name:, feed_url:, merritt_collection_mnemonic:, merritt_collection_ark:, merritt_collection_name:)
