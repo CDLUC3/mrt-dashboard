@@ -346,8 +346,8 @@ DEPENDENCIES
   rspec-rails
   rubocop
   ruby-prof
-  simplecov (~> 0.14)
-  simplecov-console (~> 0.4)
+  simplecov
+  simplecov-console
   sprockets
   thin
   uc3-ssm!

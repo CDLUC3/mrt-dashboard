@@ -49,9 +49,10 @@ group :test do
   gem 'database_cleaner'
   gem 'diffy'
   gem 'equivalent-xml'
+  # rails 4.2, do not unpeg the following line
   gem 'factory_bot_rails', '~> 4.11'
-  gem 'simplecov', '~> 0.14'
-  gem 'simplecov-console', '~> 0.4'
+  gem 'simplecov'
+  gem 'simplecov-console'
 
   # Run Selenium tests more easily with automatic installation and updates
   # for all supported webdrivers.
