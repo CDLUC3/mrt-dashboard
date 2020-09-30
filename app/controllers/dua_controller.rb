@@ -1,6 +1,6 @@
 # TODO: remove this, then remove it from exclude list in top-level .rubocop.yml
 class DuaController < ApplicationController
-  before_filter :require_user
+  before_action :require_user
 
   #:nocov:
   def index

@@ -1,5 +1,5 @@
 class UserController < ApplicationController
-  before_filter :require_user
+  before_action :require_user
 
   REQUIRED = {
     'givenname' => 'First name',

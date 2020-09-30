@@ -4,21 +4,21 @@ class ObjectController < ApplicationController
   include MintMixin
   include IngestMixin
 
-  before_filter :require_user, except: %i[jupload_add recent ingest mint update]
-  before_filter :load_object, only: %i[index download download_user download_manifest async presign]
+  before_action :require_user, except: %i[jupload_add recent ingest mint update]
+  before_action :load_object, only: %i[index download download_user download_manifest async presign]
 
-  before_filter(only: %i[download download_user download_manifest async presign]) do
+  before_action(only: %i[download download_user download_manifest async presign]) do
     unless current_user_can_download?(@object)
       flash[:error] = 'You do not have download permissions.'
       render file: "#{Rails.root}/public/401.html", status: 401, layout: false
     end
   end
 
-  before_filter(only: %i[download download_user]) do
+  before_action(only: %i[download download_user]) do
     check_dua(@object, { object: @object })
   end
 
-  before_filter(only: %i[ingest mint update]) do
+  before_action(only: %i[ingest mint update]) do
     if current_user
       render(status: 404, text: '') unless current_user.groups('write').any? { |g| g.submission_profile == params[:profile] }
     else

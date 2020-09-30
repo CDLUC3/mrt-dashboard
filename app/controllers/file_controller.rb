@@ -2,19 +2,19 @@ require 'httpclient'
 require 'json'
 
 class FileController < ApplicationController
-  before_filter :require_user
+  before_action :require_user
 
-  before_filter :fix_params, except: %i[storage_key]
+  before_action :fix_params, except: %i[storage_key]
 
   # Do not force redirect to latest version for key lookup
-  before_filter :redirect_to_latest_version, except: %i[storage_key]
+  before_action :redirect_to_latest_version, except: %i[storage_key]
 
   # Do not force load of file for key lookup
-  before_filter :load_file, except: %i[storage_key]
+  before_action :load_file, except: %i[storage_key]
 
-  before_filter :check_download, except: %i[storage_key]
+  before_action :check_download, except: %i[storage_key]
 
-  before_filter :check_version, only: %i[download presign]
+  before_action :check_version, only: %i[download presign]
 
   def download
     if @file.exceeds_download_size?
@@ -41,7 +41,7 @@ class FileController < ApplicationController
     end
     url = presigned['url']
     response.headers['Location'] = url
-    render status: 303, text: ''
+    render status: 303, plain: ''
   end
 
   # API to return the node id and key for a file within the storage service.

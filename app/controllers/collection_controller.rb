@@ -1,10 +1,10 @@
 class CollectionController < ApplicationController
   NO_ACCESS = 'You do not have access to that collection'.freeze
 
-  before_filter :require_user
-  before_filter :require_request_group
+  before_action :require_user
+  before_action :require_request_group
 
-  before_filter do
+  before_action do
     raise(ActiveResource::UnauthorizedAccess, NO_ACCESS) unless @request_group.user_has_read_permission?(current_uid)
   end
 

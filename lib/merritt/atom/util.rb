@@ -40,7 +40,7 @@ module Merritt
         # TODO: why do we do this?
         # Original comment says 'Found spaces in Riverside feed' but surely we could just fix the spaces?
         # https://github.com/CDLUC3/mrt-dashboard/commit/52cb31b9f326c3fdfee952e09575392f703c1170
-        double_encoded = URI.escape(url)
+        double_encoded = URI.encode_www_form_component(url)
         URI.parse(double_encoded)
       rescue URI::InvalidURIError
         # UCR feed has URLs with square brackets in them, could be one of those

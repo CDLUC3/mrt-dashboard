@@ -2,7 +2,7 @@ require 'net/http'
 require 'tempfile'
 
 class LostorageController < ApplicationController
-  before_filter :require_user
+  before_action :require_user
 
   EMAIL_INVALID_MSG = 'You must fill in a valid return email address.'.freeze
   EMAIL_BLANK_MSG = 'Please enter the required fields'.freeze

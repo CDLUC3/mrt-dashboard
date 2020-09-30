@@ -1,5 +1,5 @@
 class UserSessionsController < ApplicationController
-  before_filter :require_user, only: [:logout]
+  before_action :require_user, only: [:logout]
 
   def login
     reset_session

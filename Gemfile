@@ -2,8 +2,8 @@ source 'http://rubygems.org'
 
 gem 'activeresource'
 gem 'multi_json'
-gem 'mysql2', '~> 0.4.0' # TODO: update to 0.5 once we're on a Rails that supports it
-gem 'rails', '~> 4.2.11'
+gem 'mysql2'
+gem 'rails', '~> 5.0'
 
 gem 'aws-sdk-ec2'
 gem 'aws-sdk-ssm'
@@ -50,7 +50,7 @@ group :test do
   gem 'diffy'
   gem 'equivalent-xml'
   # rails 4.2, do not unpeg the following line
-  gem 'factory_bot_rails', '~> 4.11'
+  gem 'factory_bot_rails'
   gem 'simplecov'
   gem 'simplecov-console'
 

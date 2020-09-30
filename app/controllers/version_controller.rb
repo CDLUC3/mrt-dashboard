@@ -1,21 +1,21 @@
 class VersionController < ApplicationController
-  before_filter :require_user
-  before_filter :redirect_to_latest_version
-  before_filter :load_version
+  before_action :require_user
+  before_action :redirect_to_latest_version
+  before_action :load_version
 
-  before_filter(only: %i[download download_user async presign]) do
+  before_action(only: %i[download download_user async presign]) do
     unless current_user_can_download?(@version.inv_object)
       flash[:error] = 'You do not have download permissions.'
       render file: "#{Rails.root}/public/401.html", status: 401, layout: false
     end
   end
 
-  before_filter(only: %i[download download_user presign]) do
+  before_action(only: %i[download download_user presign]) do
     obj = @version.inv_object
     check_dua(obj, { object: obj, version: @version })
   end
 
-  before_filter(only: %i[download download_user]) do
+  before_action(only: %i[download download_user]) do
     if @version.exceeds_download_size?
       render file: "#{Rails.root}/public/403.html", status: 403, layout: false
     elsif @version.exceeds_sync_size?
