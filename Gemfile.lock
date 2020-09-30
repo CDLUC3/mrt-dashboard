@@ -322,9 +322,9 @@ DEPENDENCIES
   capybara
   capybara-webmock
   colorize
-  database_cleaner (~> 1.5)
-  diffy (~> 3.1)
-  equivalent-xml (~> 0.6.0)
+  database_cleaner
+  diffy
+  equivalent-xml
   exception_notification
   factory_bot_rails (~> 4.11)
   httpclient
