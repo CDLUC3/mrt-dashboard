@@ -38,7 +38,7 @@ group :development, :test do
   gem 'pry'
   gem 'pry-rails'
   gem 'pry-remote', require: 'pry-remote'
-  gem 'rspec-rails', '~> 3.0'
+  gem 'rspec-rails'
   gem 'rubocop'
   gem 'ruby-prof'
 end
@@ -46,12 +46,10 @@ end
 group :test do
   gem 'capybara'
   gem 'capybara-webmock'
-  # gem 'chromedriver-helper', '~> 2.0'
   gem 'database_cleaner', '~> 1.5'
   gem 'diffy', '~> 3.1'
   gem 'equivalent-xml', '~> 0.6.0'
   gem 'factory_bot_rails', '~> 4.11'
-  # gem 'selenium-webdriver', '~> 3.7'
   gem 'simplecov', '~> 0.14'
   gem 'simplecov-console', '~> 0.4'
 
