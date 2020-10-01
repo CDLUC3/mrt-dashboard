@@ -209,7 +209,7 @@ describe ApplicationController do
       url = 'http://store01-aws.cdlib.org:35221/content/5001/ark:%2F13030%2Fm5kh22mg/2/producer%2FCaltrans EHE Tests.pdf'
       expect do
         controller.send(:stream_response, url, 'inline', 'Caltrans EHE Tests.pdf', 'text/pdf', 5_354_848)
-      end.to raise_error(URI::InvalidURIError, "bad URI(is not URI?): #{url}")
+      end.to raise_error(URI::InvalidURIError, /bad URI\(is not URI\?\)/)
     end
 
     after(:each) do
@@ -319,7 +319,7 @@ describe ApplicationController do
           }
         )
       )
-      get(:presign_obj_by_token, { token: token, filename: filename })
+      get(:presign_obj_by_token, params: { token: token, filename: filename })
       expect(response.status).to eq(303)
       expect(response.headers['Location']).to eq(presign)
     end
@@ -344,7 +344,7 @@ describe ApplicationController do
           }
         )
       )
-      get(:presign_obj_by_token, { token: token, filename: filename, no_redirect: 1 })
+      get(:presign_obj_by_token, params: { token: token, filename: filename, no_redirect: 1 })
       expect(response.status).to eq(200)
       json = JSON.parse(response.body)
       expect(json['url']).to eq(presign)
@@ -370,7 +370,7 @@ describe ApplicationController do
           }
         )
       )
-      get(:presign_obj_by_token, { token: token, filename: filename })
+      get(:presign_obj_by_token, params: { token: token, filename: filename })
       expect(response.status).to eq(202)
     end
 
@@ -389,7 +389,7 @@ describe ApplicationController do
           'Object not found'
         )
       )
-      get(:presign_obj_by_token, { token: token, filename: filename })
+      get(:presign_obj_by_token, params: { token: token, filename: filename })
       expect(response.status).to eq(404)
     end
 
@@ -408,7 +408,7 @@ describe ApplicationController do
           'error message'
         )
       )
-      get(:presign_obj_by_token, { token: token, filename: filename })
+      get(:presign_obj_by_token, params: { token: token, filename: filename })
       expect(response.status).to eq(500)
     end
 
@@ -423,7 +423,7 @@ describe ApplicationController do
       ).and_raise(
         HTTPClient::ReceiveTimeoutError
       )
-      get(:presign_obj_by_token, { token: token, filename: filename })
+      get(:presign_obj_by_token, params: { token: token, filename: filename })
       expect(response.status).to eq(202)
     end
   end

@@ -43,13 +43,13 @@ class VersionController < ApplicationController
 
   def async
     if @version.exceeds_download_size?
-      render nothing: true, status: 403
+      render body: nil, status: 403
     elsif @version.exceeds_sync_size?
       # Async Supported
-      render nothing: true, status: 200
+      render body: nil, status: 200
     else
       # Async Not Acceptable
-      render nothing: true, status: 406
+      render body: nil, status: 406
     end
   end
 

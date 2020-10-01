@@ -54,20 +54,23 @@ RSpec.describe ObjectController, type: :controller do
       describe 'restrictions' do
         it 'returns 401 when user not logged in' do
           @request.headers['HTTP_AUTHORIZATION'] = nil
-          post(method, params, { uid: nil })
+          request.session.merge!({ uid: nil })
+          post(method, params: params)
           expect(response.status).to eq(401)
         end
 
         it "returns 400 if file is not an #{ActionDispatch::Http::UploadedFile} or similar" do
           mock_permissions_all(user_id, collection_id)
           params[:file] = 'example.tmp'
-          post(method, params, { uid: user_id })
+          request.session.merge!({ uid: user_id })
+          post(method, params: params)
           expect(response.status).to eq(400)
         end
 
         it 'returns 404 when user doesn\'t have write permission' do
           mock_permissions_read_only(user_id, collection_id)
-          post(method, params, { uid: user_id })
+          request.session.merge!({ uid: user_id })
+          post(method, params: params)
           expect(response.status).to eq(404)
         end
       end
@@ -96,10 +99,11 @@ RSpec.describe ObjectController, type: :controller do
 
         it 'posts the argument to the ingest service as a multipart form' do
           expect(client).to receive(:post).with(
-            APP_CONFIG[url_config_key], expected_params, { 'Content-Type' => 'multipart/form-data' }
+            APP_CONFIG[url_config_key], params: expected_params, headers: { 'Content-Type' => 'multipart/form-data' }
           ).and_return(ingest_response)
 
-          post(method, params, { uid: user_id })
+          request.session.merge!({ uid: user_id })
+          post(method, params: params)
         end
 
         it 'forwards the status, content-type, and body from the ingest response' do
@@ -107,7 +111,8 @@ RSpec.describe ObjectController, type: :controller do
             APP_CONFIG[url_config_key], expected_params, { 'Content-Type' => 'multipart/form-data' }
           ).and_return(ingest_response)
 
-          post(method, params, { uid: user_id })
+          request.session.merge!({ uid: user_id })
+          post(method, params: params)
 
           expect(response.status).to eq(ingest_response.status)
           expect(response.content_type).to eq(ingest_response.headers[:content_type])
@@ -121,7 +126,8 @@ RSpec.describe ObjectController, type: :controller do
             APP_CONFIG[url_config_key], expected_params, { 'Content-Type' => 'multipart/form-data' }
           ).and_return(ingest_response)
 
-          post(method, params, { uid: user_id })
+          request.session.merge!({ uid: user_id })
+          post(method, params: params)
         end
 
         if method == :ingest
@@ -132,7 +138,8 @@ RSpec.describe ObjectController, type: :controller do
               APP_CONFIG[url_config_key], expected_params, { 'Content-Type' => 'multipart/form-data' }
             ).and_return(ingest_response)
 
-            post(method, params, { uid: user_id })
+            request.session.merge!({ uid: user_id })
+            post(method, params: params)
           end
         end
       end
@@ -152,13 +159,15 @@ RSpec.describe ObjectController, type: :controller do
 
     it 'requires a user' do
       @request.headers['HTTP_AUTHORIZATION'] = nil
-      post(:mint, params, { uid: nil })
+      request.session.merge!({ uid: nil })
+      post(:mint, params: params)
       expect(response.status).to eq(401)
     end
 
     it 'requires the user to have write permissions on the current submission profile' do
       mock_permissions_read_only(user_id, collection_id)
-      post(:mint, params, { uid: user_id })
+      request.session.merge!({ uid: user_id })
+      post(:mint, params: params)
       expect(response.status).to eq(404)
     end
 
@@ -184,7 +193,8 @@ RSpec.describe ObjectController, type: :controller do
         { 'Content-Type' => 'multipart/form-data' }
       ).and_return(mint_response)
 
-      post(:mint, params, { uid: user_id })
+      request.session.merge!({ uid: user_id })
+      post(:mint, params: params)
 
       expect(response.status).to eq(mint_response.status)
       expect(response.content_type).to eq(mint_response.headers[:content_type])
@@ -194,14 +204,16 @@ RSpec.describe ObjectController, type: :controller do
 
   describe ':index' do
     it 'prevents index view without read permission' do
-      get(:index, { object: object_ark }, { uid: user_id })
+      request.session.merge!({ uid: user_id })
+      get(:index, params: { object: object_ark })
       expect(response.status).to eq(401)
     end
   end
 
   describe ':download' do
     it 'requires a login' do
-      get(:download, { object: object_ark }, { uid: nil })
+      request.session.merge!({ uid: nil })
+      get(:download, params: { object: object_ark })
       expect(response.status).to eq(302)
       expect(response.headers['Location']).to include('guest_login')
     end
@@ -215,7 +227,8 @@ RSpec.describe ObjectController, type: :controller do
       mock_permissions_all(user_id, collection_id)
       size_too_large = 1 + APP_CONFIG['max_download_size']
       allow_any_instance_of(InvObject).to receive(:total_actual_size).and_return(size_too_large)
-      get(:download, { object: object_ark }, { uid: user_id })
+      request.session.merge!({ uid: user_id })
+      get(:download, params: { object: object_ark })
       expect(response.status).to eq(403)
     end
 
@@ -223,7 +236,8 @@ RSpec.describe ObjectController, type: :controller do
       mock_permissions_all(user_id, collection_id)
       size_too_large = 1 + APP_CONFIG['max_archive_size']
       allow_any_instance_of(InvObject).to receive(:total_actual_size).and_return(size_too_large)
-      get(:download, { object: object_ark }, { uid: user_id })
+      request.session.merge!({ uid: user_id })
+      get(:download, params: { object: object_ark })
       expect(response.status).to eq(302)
       expect(response.headers['Location']).to include('lostorage')
     end
@@ -235,7 +249,8 @@ RSpec.describe ObjectController, type: :controller do
       expected_url = "#{object.bytestream_uri}?t=zip"
       allow(Streamer).to receive(:new).with(expected_url).and_return(streamer)
 
-      get(:download, { object: object_ark }, { uid: user_id })
+      request.session.merge!({ uid: user_id })
+      get(:download, params: { object: object_ark })
 
       expect(response.status).to eq(200)
 
@@ -260,13 +275,15 @@ RSpec.describe ObjectController, type: :controller do
 
     it 'requires a login' do
 
-      get(:presign, params, { uid: nil })
+      request.session.merge!({ uid: nil })
+      get(:presign, params: params)
       expect(response.status).to eq(302)
       expect(response.headers['Location']).to include('guest_login')
     end
 
     it 'prevents presign without permissions' do
-      get(:presign, params, { uid: user_id })
+      request.session.merge!({ uid: user_id })
+      get(:presign, params: params)
       expect(response.status).to eq(401)
     end
 
@@ -278,7 +295,8 @@ RSpec.describe ObjectController, type: :controller do
         response_assembly_200('aaa')
       )
 
-      get(:presign, params, { uid: user_id })
+      request.session.merge!({ uid: user_id })
+      get(:presign, params: params)
       expect(response.status).to eq(200)
       json = JSON.parse(response.body)
       expect(json['token']).to eq('aaa')
@@ -298,7 +316,8 @@ RSpec.describe ObjectController, type: :controller do
         reqparam
       )
 
-      get(:presign, params, { uid: user_id })
+      request.session.merge!({ uid: user_id })
+      get(:presign, params: params)
       expect(response.status).to eq(200)
       json = JSON.parse(response.body)
       expect(json['token']).to eq('aaa')
@@ -321,7 +340,8 @@ RSpec.describe ObjectController, type: :controller do
         reqparam
       )
 
-      get(:presign, params, { uid: user_id })
+      request.session.merge!({ uid: user_id })
+      get(:presign, params: params)
       expect(response.status).to eq(200)
       json = JSON.parse(response.body)
       expect(json['token']).to eq('aaa')
@@ -335,7 +355,8 @@ RSpec.describe ObjectController, type: :controller do
         general_response_403
       )
 
-      get(:presign, params, { uid: user_id })
+      request.session.merge!({ uid: user_id })
+      get(:presign, params: params)
       expect(response.status).to eq(403)
     end
 
@@ -347,7 +368,8 @@ RSpec.describe ObjectController, type: :controller do
         general_response_404
       )
 
-      get(:presign, params, { uid: user_id })
+      request.session.merge!({ uid: user_id })
+      get(:presign, params: params)
       expect(response.status).to eq(404)
     end
 
@@ -360,7 +382,8 @@ RSpec.describe ObjectController, type: :controller do
         general_response_500
       )
 
-      get(:presign, params, { uid: user_id })
+      request.session.merge!({ uid: user_id })
+      get(:presign, params: params)
       expect(response.status).to eq(500)
     end
 
@@ -379,27 +402,31 @@ RSpec.describe ObjectController, type: :controller do
         HTTPClient::ReceiveTimeoutError
       )
 
-      get(:presign, params, { uid: user_id })
+      request.session.merge!({ uid: user_id })
+      get(:presign, params: params)
       expect(response.status).to eq(408)
     end
 
     it 'request async assembly of a non-existent object' do
       mock_permissions_all(user_id, collection_id)
       params[:object] = "#{object_ark}_non_exist"
-      get(:presign, params, { uid: user_id })
+      request.session.merge!({ uid: user_id })
+      get(:presign, params: params)
       expect(response.status).to eq(404)
     end
   end
 
   describe ':download_user' do
     it 'requires a login' do
-      get(:download_user, { object: object_ark }, { uid: nil })
+      request.session.merge!({ uid: nil })
+      get(:download_user, params: { object: object_ark })
       expect(response.status).to eq(302)
       expect(response.headers['Location']).to include('guest_login')
     end
 
     it 'prevents download without permissions' do
-      get(:download_user, { object: object_ark }, { uid: user_id })
+      request.session.merge!({ uid: user_id })
+      get(:download_user, params: { object: object_ark })
       expect(response.status).to eq(401)
     end
 
@@ -410,7 +437,8 @@ RSpec.describe ObjectController, type: :controller do
       expected_url = "#{object.bytestream_uri2}?t=zip"
       allow(Streamer).to receive(:new).with(expected_url).and_return(streamer)
 
-      get(:download_user, { object: object_ark }, { uid: user_id })
+      request.session.merge!({ uid: user_id })
+      get(:download_user, params: { object: object_ark })
 
       expect(response.status).to eq(200)
 
@@ -428,13 +456,15 @@ RSpec.describe ObjectController, type: :controller do
 
   describe ':download_manifest' do
     it 'requires a login' do
-      get(:download_user, { object: object_ark }, { uid: nil })
+      request.session.merge!({ uid: nil })
+      get(:download_user, params: { object: object_ark })
       expect(response.status).to eq(302)
       expect(response.headers['Location']).to include('guest_login')
     end
 
     it 'prevents download without permissions' do
-      get(:download_user, { object: object_ark }, { uid: user_id })
+      request.session.merge!({ uid: user_id })
+      get(:download_user, params: { object: object_ark })
       expect(response.status).to eq(401)
     end
 
@@ -445,7 +475,8 @@ RSpec.describe ObjectController, type: :controller do
       expected_url = object.bytestream_uri3.to_s
       allow(Streamer).to receive(:new).with(expected_url).and_return(streamer)
 
-      get(:download_manifest, { object: object_ark }, { uid: user_id })
+      request.session.merge!({ uid: user_id })
+      get(:download_manifest, params: { object: object_ark })
 
       expect(response.status).to eq(200)
 
@@ -463,7 +494,8 @@ RSpec.describe ObjectController, type: :controller do
 
   describe ':async' do
     it 'requires a login' do
-      get(:async, { object: object_ark }, { uid: nil })
+      request.session.merge!({ uid: nil })
+      get(:async, params: { object: object_ark })
       expect(response.status).to eq(302)
       expect(response.headers['Location']).to include('guest_login')
     end
@@ -471,21 +503,24 @@ RSpec.describe ObjectController, type: :controller do
     it 'fails when object is too big for any download' do
       mock_permissions_all(user_id, collection_id)
       allow_any_instance_of(InvObject).to receive(:total_actual_size).and_return(1 + APP_CONFIG['max_download_size'])
-      get(:async, { object: object_ark }, { uid: user_id })
+      request.session.merge!({ uid: user_id })
+      get(:async, params: { object: object_ark })
       expect(response.status).to eq(403)
     end
 
     it 'fails when object is too small for asynchronous download' do
       mock_permissions_all(user_id, collection_id)
       allow_any_instance_of(InvObject).to receive(:total_actual_size).and_return(APP_CONFIG['max_archive_size'] - 1)
-      get(:async, { object: object_ark }, { uid: user_id })
+      request.session.merge!({ uid: user_id })
+      get(:async, params: { object: object_ark })
       expect(response.status).to eq(406)
     end
 
     it 'succeeds when object is the right size for synchronous download' do
       mock_permissions_all(user_id, collection_id)
       allow_any_instance_of(InvObject).to receive(:total_actual_size).and_return(1 + APP_CONFIG['max_archive_size'])
-      get(:async, { object: object_ark }, { uid: user_id })
+      request.session.merge!({ uid: user_id })
+      get(:async, params: { object: object_ark })
       expect(response.status).to eq(200)
     end
   end
@@ -509,7 +544,8 @@ RSpec.describe ObjectController, type: :controller do
     end
 
     it 'requires a login' do
-      post(:upload, params, { uid: nil })
+      request.session.merge!({ uid: nil })
+      post(:upload, params: params)
       expect(response.status).to eq(302)
       expect(response.headers['Location']).to include('guest_login')
     end
@@ -522,7 +558,8 @@ RSpec.describe ObjectController, type: :controller do
 
     it 'redirects and displays an error when no file provided' do
       params.delete(:file)
-      post(:upload, params, session)
+      request.session.merge!(session)
+      post(:upload, params: params)
       expect(response.status).to eq(302)
       expect(response.headers['Location']).to end_with("/a/#{collection_id}")
     end
@@ -559,7 +596,8 @@ RSpec.describe ObjectController, type: :controller do
 
       expect(client).to receive(:post).with(APP_CONFIG['ingest_service_update'], expected_params).and_return(ingest_response)
 
-      post(:upload, params, session)
+      request.session.merge!(session)
+      post(:upload, params: params)
 
       expect(response.status).to eq(200)
       expect(controller.instance_variable_get('@batch_id')).to eq(batch_id)
@@ -584,7 +622,8 @@ RSpec.describe ObjectController, type: :controller do
 
       expect(client).to receive(:post).with(APP_CONFIG['ingest_service_update'], anything).and_raise(ex)
 
-      post(:upload, params, session)
+      request.session.merge!(session)
+      post(:upload, params: params)
 
       expect(controller.instance_variable_get(:@description)).to eq("ingest: #{status_desc}")
       expect(controller.instance_variable_get(:@error)).to eq("ingest: #{error}")
@@ -596,13 +635,13 @@ RSpec.describe ObjectController, type: :controller do
 
     it '404s cleanly when collection does not exist' do
       bad_ark = ArkHelper.next_ark
-      get(:recent, { collection: bad_ark })
+      get(:recent, params: { collection: bad_ark })
       expect(response.status).to eq(404)
     end
 
     it 'gets the list of objects' do
       request.accept = 'application/atom+xml'
-      get(:recent, { collection: collection.ark })
+      get(:recent, params: { collection: collection.ark })
       expect(response.status).to eq(200)
       expect(response.content_type).to eq('application/atom+xml')
 

@@ -180,7 +180,7 @@ class ApplicationController < ActionController::Base
     )
     eval_presign_obj_by_token(r, no_redirect)
   rescue HTTPClient::ReceiveTimeoutError
-    render status: 202, text: 'Timeout on request'
+    render status: 202, plain: 'Timeout on request'
   end
 
   private
@@ -195,7 +195,7 @@ class ApplicationController < ActionController::Base
       end
       url = resp['url']
       response.headers['Location'] = url
-      render status: 303, text: ''
+      render status: 303, plain: ''
     elsif r.status == 202
       render status: r.status, json: r.content
     elsif r.status == 404

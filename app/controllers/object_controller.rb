@@ -20,9 +20,9 @@ class ObjectController < ApplicationController
 
   before_action(only: %i[ingest mint update]) do
     if current_user
-      render(status: 404, text: '') unless current_user.groups('write').any? { |g| g.submission_profile == params[:profile] }
+      render(status: 404, plain: '') unless current_user.groups('write').any? { |g| g.submission_profile == params[:profile] }
     else
-      render(status: 401, text: '')
+      render(status: 401, plain: '')
     end
   end
 
@@ -34,13 +34,13 @@ class ObjectController < ApplicationController
   end
 
   def ingest
-    render(status: 400, text: "Bad file parameter.\n") && return unless params[:file].respond_to? :tempfile
+    render(status: 400, plain: "Bad file parameter.\n") && return unless params[:file].respond_to? :tempfile
 
     do_post(APP_CONFIG['ingest_service'], ingest_params_from(params, current_user))
   end
 
   def update
-    render(status: 400, text: "Bad file parameter.\n") && return unless params[:file].respond_to? :tempfile
+    render(status: 400, plain: "Bad file parameter.\n") && return unless params[:file].respond_to? :tempfile
 
     do_post(APP_CONFIG['ingest_service_update'], update_params_from(params, current_user))
   end
@@ -71,13 +71,13 @@ class ObjectController < ApplicationController
 
   def async # TODO: rename to request_async_download or something
     if @object.exceeds_download_size?
-      render nothing: true, status: 403
+      render body: nil, status: 403
     elsif @object.exceeds_sync_size?
       # Async Supported
-      render nothing: true, status: 200
+      render body: nil, status: 200
     else
       # Async Not Acceptable
-      render nothing: true, status: 406
+      render body: nil, status: 406
     end
   end
 
@@ -98,7 +98,7 @@ class ObjectController < ApplicationController
   def recent
     @collection_ark = params[:collection]
     collection = InvCollection.where(ark: @collection_ark).first
-    render(status: 404, text: '404 Not Found') && return if collection.nil? || collection.to_s == ''
+    render(status: 404, plain: '404 Not Found') && return if collection.nil? || collection.to_s == ''
 
     @objects = collection.recent_objects.paginate(paginate_args)
     respond_to do |format|
