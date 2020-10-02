@@ -42,7 +42,8 @@ describe LostorageController do
 
     it 'requires a user' do
       @request.headers['HTTP_AUTHORIZATION'] = nil
-      post(:index, params, { uid: nil })
+      request.session.merge!({ uid: nil })
+      post(:index, params: params)
       expect(response.code.to_i).to eq(302)
       expect(response.headers['Location']).to include('guest_login')
     end
@@ -50,14 +51,16 @@ describe LostorageController do
     it 'requires an email address' do
       expect(client).not_to receive(:post)
       params.delete(:user_agent_email)
-      post(:index, params, { uid: user_id })
+      request.session.merge!({ uid: user_id })
+      post(:index, params: params)
       expect(flash[:message]).to be_present
     end
 
     it 'requires a valid-ish address' do
       expect(client).not_to receive(:post)
       params[:user_agent_email] = params[:user_agent_email].tr('@', '%')
-      post(:index, params, { uid: user_id })
+      request.session.merge!({ uid: user_id })
+      post(:index, params: params)
       expect(flash[:message]).to be_present
     end
 
@@ -66,14 +69,16 @@ describe LostorageController do
       allow(post_email_response).to receive(:status).and_return(500)
       allow(client).to receive(:post).and_return(post_email_response)
 
-      post(:index, params, { uid: user_id })
+      request.session.merge!({ uid: user_id })
+      post(:index, params: params)
       expect(flash[:error]).to include('uc3@ucop.edu')
     end
 
     it 'can be canceled' do
       params[:commit] = 'Cancel'
       expect(client).not_to receive(:post)
-      post(:index, params, { uid: user_id })
+      request.session.merge!({ uid: user_id })
+      post(:index, params: params)
       expect(flash[:message]).not_to be_present
     end
 
@@ -101,12 +106,14 @@ describe LostorageController do
           async_url = object.bytestream_uri.to_s.gsub(/content/, 'async') # TODO: maybe just put this on the object?
           expect(url).to eq(async_url)
 
-          email_xml_file = post_params['email']
+          email_xml_file = post_params[:params]['email']
           expect(email_xml_file).not_to be_nil
           email_xml = email_xml_file.read
           expect(email_xml).to be_xml(expected_xml)
         end.and_return(post_email_response)
-        post(:index, params, { uid: user_id })
+        request.headers.merge!({ 'Content-Type' => 'multipart/form-data' })
+        request.session.merge!({ uid: user_id })
+        post(:index, params: params)
       end
 
       it 'allows a custom from address' do
@@ -126,12 +133,14 @@ describe LostorageController do
           async_url = object.bytestream_uri.to_s.gsub(/content/, 'async') # TODO: maybe just put this on the object?
           expect(url).to eq(async_url)
 
-          email_xml_file = post_params['email']
+          email_xml_file = post_params[:params]['email']
           expect(email_xml_file).not_to be_nil
           email_xml = email_xml_file.read
           expect(email_xml).to be_xml(expected_xml)
         end.and_return(post_email_response)
-        post(:index, params, { uid: user_id })
+        request.headers.merge!({ 'Content-Type' => 'multipart/form-data' })
+        request.session.merge!({ uid: user_id })
+        post(:index, params: params)
       end
 
       it 'allows a custom message body' do
@@ -151,12 +160,14 @@ describe LostorageController do
           async_url = object.bytestream_uri.to_s.gsub(/content/, 'async') # TODO: maybe just put this on the object?
           expect(url).to eq(async_url)
 
-          email_xml_file = post_params['email']
+          email_xml_file = post_params[:params]['email']
           expect(email_xml_file).not_to be_nil
           email_xml = email_xml_file.read
           expect(email_xml).to be_xml(expected_xml)
         end.and_return(post_email_response)
-        post(:index, params, { uid: user_id })
+        request.headers.merge!({ 'Content-Type' => 'multipart/form-data' })
+        request.session.merge!({ uid: user_id })
+        post(:index, params: params)
       end
 
       it 'sets the subject differently for full objects' do
@@ -176,12 +187,14 @@ describe LostorageController do
           async_url = object.bytestream_uri.to_s.gsub(/content/, 'async') # TODO: maybe just put this on the object?
           expect(url).to eq(async_url)
 
-          email_xml_file = post_params['email']
+          email_xml_file = post_params[:params]['email']
           expect(email_xml_file).not_to be_nil
           email_xml = email_xml_file.read
           expect(email_xml).to be_xml(expected_xml)
         end.and_return(post_email_response)
-        post(:index, params, { uid: user_id })
+        request.headers.merge!({ 'Content-Type' => 'multipart/form-data' })
+        request.session.merge!({ uid: user_id })
+        post(:index, params: params)
       end
 
       it 'allows a custom subject' do
@@ -201,16 +214,19 @@ describe LostorageController do
           async_url = object.bytestream_uri.to_s.gsub(/content/, 'async') # TODO: maybe just put this on the object?
           expect(url).to eq(async_url)
 
-          email_xml_file = post_params['email']
+          email_xml_file = post_params[:params]['email']
           expect(email_xml_file).not_to be_nil
           email_xml = email_xml_file.read
           expect(email_xml).to be_xml(expected_xml)
         end.and_return(post_email_response)
-        post(:index, params, { uid: user_id })
+        request.headers.merge!({ 'Content-Type' => 'multipart/form-data' })
+        request.session.merge!({ uid: user_id })
+        post(:index, params: params)
       end
 
       it 'redirects back to the object' do
-        post(:index, params, { uid: user_id })
+        request.session.merge!({ uid: user_id })
+        post(:index, params: params)
         expect(response.code.to_i).to eq(302)
         expect(response.headers['Location']).to end_with(object_page_url)
       end
@@ -232,12 +248,14 @@ describe LostorageController do
           async_url = object.bytestream_uri2.to_s.gsub(/producer/, 'producerasync') # TODO: maybe just put this on the object?
           expect(url).to eq(async_url)
 
-          email_xml_file = post_params['email']
+          email_xml_file = post_params[:params]['email']
           expect(email_xml_file).not_to be_nil
           email_xml = email_xml_file.read
           expect(email_xml).to be_xml(expected_xml)
         end.and_return(post_email_response)
-        post(:index, params, { uid: user_id })
+        request.headers.merge!({ 'Content-Type' => 'multipart/form-data' })
+        request.session.merge!({ uid: user_id })
+        post(:index, params: params)
       end
     end
 
@@ -251,14 +269,16 @@ describe LostorageController do
     it 'requires an email address' do
       expect(client).not_to receive(:post)
       params.delete(:user_agent_email)
-      post(:direct, params, { uid: user_id })
+      request.session.merge!({ uid: user_id })
+      post(:direct, params: params)
       expect(response.status).to eq(406)
     end
 
     it 'requires a valid-ish address' do
       expect(client).not_to receive(:post)
       params[:user_agent_email] = params[:user_agent_email].tr('@', '%')
-      post(:direct, params, { uid: user_id })
+      request.session.merge!({ uid: user_id })
+      post(:direct, params: params)
       expect(response.status).to eq(400)
     end
 
@@ -266,7 +286,8 @@ describe LostorageController do
       @post_email_response = instance_double(HTTP::Message)
       allow(post_email_response).to receive(:status).and_return(500)
       allow(client).to receive(:post).and_return(post_email_response)
-      post(:direct, params, { uid: user_id })
+      request.session.merge!({ uid: user_id })
+      post(:direct, params: params)
       expect(response.status).to eq(503)
     end
 
@@ -280,10 +301,12 @@ describe LostorageController do
         expect(client).to receive(:post) do |url, post_params|
           async_url = object.bytestream_uri.to_s.gsub(/content/, 'async') # TODO: maybe just put this on the object?
           expect(url).to eq(async_url)
-          email_xml = post_params['email']
+          email_xml = post_params[:params]['email']
           expect(email_xml).not_to be_nil # TODO: rewrite post_los_email so we don't pass live file pointers around & can actually test
         end.and_return(post_email_response)
-        post(:direct, params, { uid: user_id })
+        request.headers.merge!({ 'Content-Type' => 'multipart/form-data' })
+        request.session.merge!({ uid: user_id })
+        post(:direct, params: params)
         expect(response.status).to eq(200)
       end
 
@@ -292,10 +315,12 @@ describe LostorageController do
         expect(client).to receive(:post) do |url, post_params|
           async_url = object.bytestream_uri2.to_s.gsub(/producer/, 'producerasync') # TODO: maybe just put this on the object?
           expect(url).to eq(async_url)
-          email_xml = post_params['email']
+          email_xml = post_params[:params]['email']
           expect(email_xml).not_to be_nil # TODO: rewrite post_los_email so we don't pass live file pointers around & can actually test
         end.and_return(post_email_response)
-        post(:direct, params, { uid: user_id })
+        request.headers.merge!({ 'Content-Type' => 'multipart/form-data' })
+        request.session.merge!({ uid: user_id })
+        post(:direct, params: params)
         expect(response.status).to eq(200)
       end
 
@@ -304,10 +329,12 @@ describe LostorageController do
         expect(client).to receive(:post) do |url, post_params|
           async_url = object.bytestream_uri2.to_s.gsub(/producer/, 'producerasync') # TODO: maybe just put this on the object?
           expect(url).to eq(async_url)
-          email_xml = post_params['email']
+          email_xml = post_params[:params]['email']
           expect(email_xml).not_to be_nil # TODO: rewrite post_los_email so we don't pass live file pointers around & can actually test
         end.and_return(post_email_response)
-        post(:direct, params, { uid: user_id })
+        request.headers.merge!({ 'Content-Type' => 'multipart/form-data' })
+        request.session.merge!({ uid: user_id })
+        post(:direct, params: params)
         expect(response.status).to eq(200)
       end
     end

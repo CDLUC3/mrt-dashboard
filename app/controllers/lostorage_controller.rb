@@ -19,14 +19,14 @@ class LostorageController < ApplicationController
 
   def direct
     user_agent_email = params[:user_agent_email]
-    render(nothing: true, status: 406) && return if user_agent_email.blank?
-    render(nothing: true, status: 400) && return unless user_agent_email.match?(/^.+@.+$/)
+    render(body: nil, status: 406) && return if user_agent_email.blank?
+    render(body: nil, status: 400) && return unless user_agent_email.match?(/^.+@.+$/)
 
     if post_los_request(user_agent_email, user_friendly?(params))
       # success
-      render nothing: true, status: 200
+      render body: nil, status: 200
     else
-      render nothing: true, status: 503
+      render body: nil, status: 503
     end
   end
 
@@ -103,6 +103,7 @@ class LostorageController < ApplicationController
     build_email_xml(email_xml_file, @los_from, to_addr, @los_subject, @los_body)
     email_xml_file.rewind
     params = { 'email' => email_xml_file, 'responseForm' => 'xml', 'containerForm' => 'targz', 'name' => unique_name }
+    request.headers.merge!({ 'Content-Type' => 'multipart/form-data' })
     http_post(storage_url_for(@object, user_friendly), params)
   end
 

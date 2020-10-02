@@ -22,7 +22,7 @@ module HttpMixin
       return resp unless post_redirect?(resp)
       raise retry_count_exceeded(resp) if (retry_number += 1) > client.follow_redirect_count
 
-      rewind_any_files(args)
+      rewind_any_files(params)
       url = redirect_url_from(resp)
     end
   end
