@@ -34,13 +34,13 @@ class ObjectController < ApplicationController
   end
 
   def ingest
-    render(status: 400, plain: "Bad file parameter.\n") && return unless params[:file].respond_to? :tempfile
+    render(status: 400, plain: "Bad file parameter.\n") && return unless params[:file].respond_to?(:tempfile)
 
     do_post(APP_CONFIG['ingest_service'], ingest_params_from(params, current_user))
   end
 
   def update
-    render(status: 400, plain: "Bad file parameter.\n") && return unless params[:file].respond_to? :tempfile
+    render(status: 400, plain: "Bad file parameter.\n") && return unless params[:file].respond_to?(:tempfile)
 
     do_post(APP_CONFIG['ingest_service_update'], update_params_from(params, current_user))
   end
@@ -122,8 +122,8 @@ class ObjectController < ApplicationController
   end
 
   def do_post(post_url, post_params)
-    resp = http_post(post_url, post_params, { 'Content-Type' => 'multipart/form-data' })
-    render(status: resp.status, content_type: resp.headers[:content_type], text: resp.body)
+    resp = http_post(post_url, post_params)
+    render(status: resp.status, content_type: resp.headers[:content_type], body: resp.body)
   end
 
 end

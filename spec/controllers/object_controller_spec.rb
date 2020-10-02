@@ -99,18 +99,20 @@ RSpec.describe ObjectController, type: :controller do
 
         it 'posts the argument to the ingest service as a multipart form' do
           expect(client).to receive(:post).with(
-            APP_CONFIG[url_config_key], params: expected_params, headers: { 'Content-Type' => 'multipart/form-data' }
+            APP_CONFIG[url_config_key], params: expected_params
           ).and_return(ingest_response)
 
+          request.headers.merge!({ 'Content-Type' => 'multipart/form-data' })
           request.session.merge!({ uid: user_id })
           post(method, params: params)
         end
 
         it 'forwards the status, content-type, and body from the ingest response' do
-          allow(client).to receive(:post).with(
-            APP_CONFIG[url_config_key], expected_params, { 'Content-Type' => 'multipart/form-data' }
+          expect(client).to receive(:post).with(
+            APP_CONFIG[url_config_key], params: expected_params
           ).and_return(ingest_response)
 
+          request.headers.merge!({ 'Content-Type' => 'multipart/form-data' })
           request.session.merge!({ uid: user_id })
           post(method, params: params)
 
@@ -123,9 +125,10 @@ RSpec.describe ObjectController, type: :controller do
           params[:filename] = 'not-the-original-filename.bin'
           expected_params['filename'] = params[:filename]
           expect(client).to receive(:post).with(
-            APP_CONFIG[url_config_key], expected_params, { 'Content-Type' => 'multipart/form-data' }
+            APP_CONFIG[url_config_key], params: expected_params
           ).and_return(ingest_response)
 
+          request.headers.merge!({ 'Content-Type' => 'multipart/form-data' })
           request.session.merge!({ uid: user_id })
           post(method, params: params)
         end
@@ -135,9 +138,10 @@ RSpec.describe ObjectController, type: :controller do
             params['submitter'] = 'Rachel Roe'
             expected_params['submitter'] = params['submitter']
             expect(client).to receive(:post).with(
-              APP_CONFIG[url_config_key], expected_params, { 'Content-Type' => 'multipart/form-data' }
+              APP_CONFIG[url_config_key], params: expected_params
             ).and_return(ingest_response)
 
+            request.headers.merge!({ 'Content-Type' => 'multipart/form-data' })
             request.session.merge!({ uid: user_id })
             post(method, params: params)
           end
@@ -159,6 +163,7 @@ RSpec.describe ObjectController, type: :controller do
 
     it 'requires a user' do
       @request.headers['HTTP_AUTHORIZATION'] = nil
+      request.headers.merge!({ 'Content-Type' => 'multipart/form-data' })
       request.session.merge!({ uid: nil })
       post(:mint, params: params)
       expect(response.status).to eq(401)
@@ -166,6 +171,7 @@ RSpec.describe ObjectController, type: :controller do
 
     it 'requires the user to have write permissions on the current submission profile' do
       mock_permissions_read_only(user_id, collection_id)
+      request.headers.merge!({ 'Content-Type' => 'multipart/form-data' })
       request.session.merge!({ uid: user_id })
       post(:mint, params: params)
       expect(response.status).to eq(404)
@@ -189,10 +195,10 @@ RSpec.describe ObjectController, type: :controller do
       }
       expect(client).to receive(:post).with(
         APP_CONFIG['mint_service'],
-        hash_including(expected_params),
-        { 'Content-Type' => 'multipart/form-data' }
+        params: hash_including(expected_params)
       ).and_return(mint_response)
 
+      request.headers.merge!({ 'Content-Type' => 'multipart/form-data' })
       request.session.merge!({ uid: user_id })
       post(:mint, params: params)
 
@@ -219,7 +225,8 @@ RSpec.describe ObjectController, type: :controller do
     end
 
     it 'prevents download without permissions' do
-      get(:download, { object: object_ark }, { uid: user_id })
+      request.session.merge!({ uid: user_id })
+      get(:download, params: { object: object_ark })
       expect(response.status).to eq(401)
     end
 
@@ -544,6 +551,7 @@ RSpec.describe ObjectController, type: :controller do
     end
 
     it 'requires a login' do
+      request.headers.merge!({ 'Content-Type' => 'multipart/form-data' })
       request.session.merge!({ uid: nil })
       post(:upload, params: params)
       expect(response.status).to eq(302)
@@ -558,6 +566,7 @@ RSpec.describe ObjectController, type: :controller do
 
     it 'redirects and displays an error when no file provided' do
       params.delete(:file)
+      request.headers.merge!({ 'Content-Type' => 'multipart/form-data' })
       request.session.merge!(session)
       post(:upload, params: params)
       expect(response.status).to eq(302)
@@ -594,8 +603,11 @@ RSpec.describe ObjectController, type: :controller do
       allow(ingest_response).to receive(:status).and_return(200)
       allow(ingest_response).to receive(:content).and_return(xml)
 
-      expect(client).to receive(:post).with(APP_CONFIG['ingest_service_update'], expected_params).and_return(ingest_response)
+      expect(client).to receive(:post).with(
+        APP_CONFIG['ingest_service_update'], params: expected_params
+      ).and_return(ingest_response)
 
+      request.headers.merge!({ 'Content-Type' => 'multipart/form-data' })
       request.session.merge!(session)
       post(:upload, params: params)
 
@@ -622,6 +634,7 @@ RSpec.describe ObjectController, type: :controller do
 
       expect(client).to receive(:post).with(APP_CONFIG['ingest_service_update'], anything).and_raise(ex)
 
+      request.headers.merge!({ 'Content-Type' => 'multipart/form-data' })
       request.session.merge!(session)
       post(:upload, params: params)
 

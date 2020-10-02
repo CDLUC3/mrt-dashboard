@@ -149,7 +149,7 @@ class ApplicationController < ActionController::Base
     )
     eval_presign_obj_by_node_key(r, nodekey[:key])
   rescue HTTPClient::ReceiveTimeoutError
-    render status: 408, text: 'Please try your request again later'
+    render status: 408, plain: 'Please try your request again later'
   end
 
   # rubocop:disable all
@@ -240,7 +240,7 @@ class ApplicationController < ActionController::Base
   # :nocov:
   # TODO: this doesn't seem to be used anywhere; can we delete it?
   def require_user_or_401
-    render(status: 401, text: '') && return unless current_user
+    render(status: 401, plain: '') && return unless current_user
   end
 
   # :nocov:
