@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 13.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 14948)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" id="Layer_1" xmlns:xl="http://www.w3.org/1999/xlink" xmlns:dc="http://purl.org/dc/elements/1.1/"
+	 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="60px" height="60px"
+	 viewBox="0 0 60 60" enable-background="new 0 0 60 60" xml:space="preserve">
+<defs>
+	
+	
+		<font-face  descent="-350.0007" ascent="900.0018" slope="0" font-size="42" underline-thickness="50" font-family="League Spartan" cap-height="825" units-per-em="1000" x-height="513" font-weight="700" panose-1="0 0 8 0 0 0 0 0 0 0" underline-position="-75">
+		<font-face-src>
+			<font-face-name  name="LeagueSpartan-Bold"></font-face-name>
+		</font-face-src>
+	</font-face>
+</defs>
+<g id="Canvas_1">
+	<title>Canvas 1</title>
+	<g id="Canvas_x5F_1:_Layer_1">
+		<title>Layer 1</title>
+		<g id="Graphic_2">
+			<circle fill="#005581" cx="30" cy="30" r="29"/>
+		</g>
+		<g id="Graphic_3">
+			<circle fill="#72CDF4" cx="30" cy="30" r="25"/>
+		</g>
+	</g>
+	<g id="Canvas_x5F_1:_Layer_2">
+		<title>Layer 2</title>
+		<g id="Graphic_5">
+			<g enable-background="new    ">
+				<path fill="#005581" d="M18.411,19.653c0-0.21,1.806-7.939,11.174-7.939c6.301,0,11.93,4.116,11.93,10.04
+					c0,4.116-3.066,6.637-7.099,8.359c-1.429,0.63-1.471,1.806-1.471,3.192v2.353h-6.932v-4.579c0-1.849,0.084-3.36,1.975-4.579
+					c2.562-1.638,4.957-1.764,4.957-4.746c0-2.017-1.513-3.445-3.403-3.445c-3.024,0-4.495,2.521-4.957,4.327L18.411,19.653z
+					 M34.289,42.841c0,2.646-2.143,4.789-4.831,4.789c-2.646,0-4.789-2.143-4.789-4.789c0-2.688,2.143-4.83,4.789-4.83
+					C32.146,38.011,34.289,40.152,34.289,42.841z"/>
+			</g>
+		</g>
+	</g>
+</g>
+</svg>
