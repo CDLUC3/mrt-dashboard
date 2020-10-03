@@ -7,11 +7,9 @@ require 'socket'
 def load_uc3_config(name:, resolve_key: nil, return_key: nil)
   myenv = Socket.gethostname.match?(/uc3-.*-/) ? Socket.gethostname.gsub(/uc3-.*-/, '') : 'stg'
   resolver = Uc3Ssm::ConfigResolver.new(
-    {
-      def_value: 'NOT_APPLICABLE',
-      region: ENV.key?('AWS_REGION') ? ENV['AWS_REGION'] : 'us-west-2',
-      ssm_root_path: ENV.key?('SSM_ROOT_PATH') ? ENV['SSM_ROOT_PATH'] : "/uc3/mrt/#{myenv}/"
-    }
+    def_value: 'NOT_APPLICABLE',
+    region: ENV.key?('AWS_REGION') ? ENV['AWS_REGION'] : 'us-west-2',
+    ssm_root_path: ENV.key?('SSM_ROOT_PATH') ? ENV['SSM_ROOT_PATH'] : "/uc3/mrt/#{myenv}/"
   )
   path = File.join(Rails.root, 'config', name)
   resolver.resolve_file_values(file: path, resolve_key: resolve_key, return_key: return_key)
