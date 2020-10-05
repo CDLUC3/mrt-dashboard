@@ -36,7 +36,8 @@ describe Streamer do
 
     it 'disallows spaces in URLs' do
       url = 'http://store01-aws.cdlib.org:35221/content/5001/ark:%2F13030%2Fm5kh22mg/2/producer%2FCaltrans EHE Tests.pdf'
-      expect { Streamer.new(url) }.to raise_error(URI::InvalidURIError, "bad URI(is not URI?): #{url}")
+      # expect { Streamer.new(url) }.to raise_error(URI::InvalidURIError, "bad URI(is not URI?): #{url}")
+      expect { Streamer.new(url) }.to raise_error(URI::InvalidURIError)
     end
 
     after(:each) do

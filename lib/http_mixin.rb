@@ -14,7 +14,7 @@ module HttpMixin
     client
   end
 
-  def http_post(url, params, &block)
+  def http_post(url, params = {}, &block)
     client = mk_httpclient
     retry_number = 0
     loop do

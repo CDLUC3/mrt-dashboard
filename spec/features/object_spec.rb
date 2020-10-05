@@ -179,9 +179,9 @@ describe 'objects', js: true do
         expected_uri = url_for(
           controller: :file,
           action: :presign,
-          object: ERB::Util.url_encode(obj.ark), # TODO: figure out why this needs to be double-encoded, then stop doing it
+          object: Encoder.urlencode(obj.ark), # TODO: figure out why this needs to be double-encoded, then stop doing it
           version: obj.version_number.to_s,
-          file: ERB::Util.url_encode(f.pathname) # TODO: should we really encode this, or just escape the '/'?
+          file: Encoder.urlencode(f.pathname) # TODO: should we really encode this, or just escape the '/'?
         )
 
         download_link = find_link(basename)

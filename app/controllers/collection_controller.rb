@@ -78,7 +78,7 @@ class CollectionController < ApplicationController
       .includes(:inv_versions, :inv_dublinkernels)
       .quickloadhack
       .limit(10)
-      .uniq
+      .distinct
       .paginate(paginate_args)
   end
 
