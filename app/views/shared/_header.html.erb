@@ -6,14 +6,18 @@
 </div>
 <header>
   <div class="masthead">
-    <img class="ucop-logo" src="/images/logos/ucop-logo.svg" alt="University of California"/>
-    <img class="ucop-logo-divider" src="/images/logos/ucop-logo-divider.svg" alt="|"/>
-    <a href="/"><img class="merritt-logo" src="/images/logos/merritt-logo.svg" alt="Merritt Logo"/></a>
+    <%= image_tag 'logos/ucop-logo.svg', class: 'ucop-logo', alt: 'University of California' %>
+    <%= image_tag 'logos/ucop-logo-divider.svg', class: 'ucop-logo-divider', alt: '|' %>
+    <a href="/">
+      <%= image_tag 'logos/merritt-logo.svg', class: 'merritt-logo', alt: 'Merritt Logo' %>
+    </a>
   </div>
-  <% if user_logged_in? %>
+  <% if user_logged_in? %> 
     <nav class="menu">
       <input type="checkbox" id="nav-menu" />
-      <label class="nav-menu-label" for="nav-menu"><img tabindex='0' class="expandable" src="/images/nav-menu.svg" alt="Menu"/></label>
+      <label class="nav-menu-label" for="nav-menu">
+        <%= image_tag 'nav-menu.svg', class: 'expandable', alt: 'Menu', tabindex: '0' %>
+      </label>
       <ul>
         <li class="dropdown">
           <% choose_collection_text = session[:group_id] ? 'Change collection' : 'Choose collection' %>
