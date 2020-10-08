@@ -14,7 +14,7 @@ class ApplicationController < ActionController::Base
   include NumberMixin
   include PaginationMixin
   include HttpMixin
-  require 'streamer.rb'
+  require 'streamer'
 
   helper_method(
     :available_groups,

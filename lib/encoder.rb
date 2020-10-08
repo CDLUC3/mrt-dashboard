@@ -1,4 +1,3 @@
-# rubocop:disable Lint/UriEscapeUnescape
 module Encoder
 
   def self.urlencode(item)
@@ -10,4 +9,3 @@ module Encoder
     URI.decode_www_form_component(item)
   end
 end
-# rubocop:enable Lint/UriEscapeUnescape

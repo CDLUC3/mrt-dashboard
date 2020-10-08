@@ -35,7 +35,6 @@ module Merritt
         default
       end
 
-      # rubocop:disable Lint/UriEscapeUnescape
       def to_uri(url)
         # TODO: why do we do this?
         # Original comment says 'Found spaces in Riverside feed' but surely we could just fix the spaces?
@@ -49,7 +48,6 @@ module Merritt
         # if that doesn't solve it, we'll go ahead and raise
         URI.parse(escaped)
       end
-      # rubocop:enable Lint/UriEscapeUnescape
 
       def xpath_content(node, query)
         match = node.at_xpath(query, NS)
