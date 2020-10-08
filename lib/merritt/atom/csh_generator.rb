@@ -70,7 +70,7 @@ module Merritt
       end
       # rubocop:enable Metrics/ParameterLists
 
-      def generate_csh
+      def generate_csh(task_args = {})
         CSHGenerator.template.result(binding)
       end
 

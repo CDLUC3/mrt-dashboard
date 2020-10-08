@@ -53,6 +53,25 @@ MrtDashboard::Application.routes.draw do
 
   # This is a legacy wild controller route that's not recommended for RESTful applications.
   # Note: This route will make all actions in every controller accessible via GET requests.
-  match ':controller(/:action(/:id(.:format)))', via: %i[get post]
+  # match ':controller(/:action(/:id(.:format)))', via: %i[get post]
 
+  get('application/render_unavailable' => 'application#render_unavailable')
+  post('object/ingest' => 'object#ingest')
+  post('object/update' => 'object#update')
+  post('object/mint' => 'object#mint')
+  post('object/upload' => 'object#upload')
+  
+  get('home/choose_collection' => 'home#choose_collection')
+  post('user/update' => 'user#update')
+  get('user/update' => 'user#update')
+  get('collection/object_count' => 'collection#object_count')
+  get('collection/version_count' => 'collection#version_count')
+  get('collection/file_count' => 'collection#file_count')
+  get('collection/total_size' => 'collection#total_size')
+  get('collection/billable_size' => 'collection#billable_size')
+  get('collection/search_results' => 'collection#search_results')
+  get('version/index' => 'version#index')
+
+  # lostorage... deprecate
+  post('lostorage/index' => 'lostorage#index')
 end

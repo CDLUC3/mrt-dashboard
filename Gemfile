@@ -3,7 +3,7 @@ source 'http://rubygems.org'
 gem 'activeresource'
 gem 'multi_json'
 gem 'mysql2'
-gem 'rails', '~> 5.0'
+gem 'rails', '~> 5.2'
 
 gem 'aws-sdk-ec2'
 gem 'aws-sdk-ssm'
