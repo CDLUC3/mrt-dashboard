@@ -31,22 +31,14 @@ module Merritt
       def parse_time(time_str, default: NEVER)
         Time.parse(time_str)
       rescue ArgumentError => e
-        log_error("Unable to parse #{time_str}", e)
+        log_error("Unable to parse #{time_str}")
         default
       end
 
       def to_uri(url)
-        # TODO: why do we do this?
-        # Original comment says 'Found spaces in Riverside feed' but surely we could just fix the spaces?
-        # https://github.com/CDLUC3/mrt-dashboard/commit/52cb31b9f326c3fdfee952e09575392f703c1170
+        # Prior to using Addresable::URI, we had special code for square bracket encoding
         double_encoded = Addressable::URI.escape(url)
         URI.parse(double_encoded)
-      rescue URI::InvalidURIError
-        # UCR feed has URLs with square brackets in them, could be one of those
-        # https://github.com/CDLUC3/mrt-dashboard/commit/ec9ef6451668d423147e8e3a64b737235429854a
-        escaped = { '[' => '%5B', ']' => '%5D' }.reduce(double_encoded) { |u, (k, v)| u.gsub(k, v) }
-        # if that doesn't solve it, we'll go ahead and raise
-        URI.parse(escaped)
       end
 
       def xpath_content(node, query)
