@@ -30,7 +30,7 @@ stage:
 production:
   <<: *default
 
-docker:
+docker: &docker
   admin_password: password
   admin_user:     cn=Directory Manager
   group_base:     ou=mrt-classes,ou=uc3,dc=cdlib,dc=org
@@ -42,3 +42,6 @@ docker:
   guest_password: guest
   guest_user:     anonymous
   connect_timeout: 60
+
+development:
+  <<: *docker

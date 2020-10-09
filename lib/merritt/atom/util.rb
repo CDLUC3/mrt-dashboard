@@ -30,7 +30,7 @@ module Merritt
 
       def parse_time(time_str, default: NEVER)
         Time.parse(time_str)
-      rescue ArgumentError => e
+      rescue ArgumentError
         log_error("Unable to parse #{time_str}")
         default
       end
