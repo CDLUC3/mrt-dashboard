@@ -108,10 +108,13 @@ module Merritt
       def process_from(page_url)
         return unless page_url
 
+        # :nocov:
         while File.exist?(pause_file_path)
           log_info("Pausing processing #{profile} for #{delay} seconds")
           sleep(delay)
         end
+        # :nocov:
+        
         page_client = PageClient.new(page_url: page_url, harvester: self)
         return unless (result = page_client.process_page!)
 
