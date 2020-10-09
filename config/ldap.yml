@@ -9,7 +9,7 @@ test:
   ark_minter_url: http://noid.cdlib.org/nd/noidu_p9
   guest_password: guest
   guest_user:     anonymous
-  connect_timeout:	60
+  connect_timeout: 60
 
 default: &default
   admin_password: "{!SSM: ldap/accounts/admin/password}"
@@ -22,7 +22,7 @@ default: &default
   ark_minter_url: "{!SSM: ldap/ark_minter_url}"
   guest_password: "{!SSM: ldap/accounts/guest/password}"
   guest_user:     "{!SSM: ldap/accounts/guest/user}"
-  connect_timeout:      60
+  connect_timeout: 60
 
 stage:
   <<: *default
@@ -31,14 +31,14 @@ production:
   <<: *default
 
 docker:
-  admin_password: "{!ENV: LDAP_ADMIN_PASSWORD}"
+  admin_password: password
   admin_user:     cn=Directory Manager
   group_base:     ou=mrt-classes,ou=uc3,dc=cdlib,dc=org
-  host:           "{!ENV: LDAP_HOST}"
+  host:           ldap
   port:           1636
   user_base:      ou=People,ou=uc3,dc=cdlib,dc=org
   inst_base:      o=institutions,ou=uc3,dc=cdlib,dc=org
   ark_minter_url: http://noid.cdlib.org/nd/noidu_p9
   guest_password: guest
   guest_user:     anonymous
-  connect_timeout:      60
+  connect_timeout: 60
