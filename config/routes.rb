@@ -60,7 +60,7 @@ MrtDashboard::Application.routes.draw do
   post('object/update' => 'object#update')
   post('object/mint' => 'object#mint')
   post('object/upload' => 'object#upload')
-  
+
   get('home/choose_collection' => 'home#choose_collection')
   post('user/update' => 'user#update')
   get('user/update' => 'user#update')

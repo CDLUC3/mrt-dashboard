@@ -114,7 +114,6 @@ module Merritt
           sleep(delay)
         end
         # :nocov:
-        
         page_client = PageClient.new(page_url: page_url, harvester: self)
         return unless (result = page_client.process_page!)
 

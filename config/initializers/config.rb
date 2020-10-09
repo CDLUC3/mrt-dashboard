@@ -11,7 +11,7 @@ def load_uc3_config(name:, return_key: nil)
     ssm_root_path: ENV.key?('SSM_ROOT_PATH') ? ENV['SSM_ROOT_PATH'] : "/uc3/mrt/#{myenv}/"
   )
   path = File.join(Rails.root, 'config', name)
-  config = resolver.resolve_file_values(file: path, return_key: return_key)
+  resolver.resolve_file_values(file: path, return_key: return_key)
 end
 
 LDAP_CONFIG = load_uc3_config(name: 'ldap.yml', return_key: Rails.env)
