@@ -14,11 +14,11 @@ module HttpMixin
     client
   end
 
-  def http_post(url, params = {}, &block)
+  def http_post(url, params = {})
     client = mk_httpclient
     retry_number = 0
     loop do
-      resp = client.post(url, params: params, &block)
+      resp = client.post(url, params)
       return resp unless post_redirect?(resp)
       raise retry_count_exceeded(resp) if (retry_number += 1) > client.follow_redirect_count
 
