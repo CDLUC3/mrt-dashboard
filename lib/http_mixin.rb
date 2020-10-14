@@ -22,7 +22,8 @@ module HttpMixin
       return resp unless post_redirect?(resp)
       raise retry_count_exceeded(resp) if (retry_number += 1) > client.follow_redirect_count
 
-      rewind_any_files(params)
+      # Rails5 - seems to be obsolete
+      # rewind_any_files(params)
       url = redirect_url_from(resp)
     end
   end
@@ -49,11 +50,11 @@ module HttpMixin
     HTTPClient::BadResponseError.new('Missing Location header for redirect', resp)
   end
 
-  def rewind_any_files(arg)
-    return arg.rewind if arg.respond_to?(:rewind)
-    return arg.each_value { |v| rewind_any_files(v) } if arg.respond_to?(:each_value)
-
-    arg.each { |v| rewind_any_files(v) } if arg.respond_to?(:each)
-  end
+  # def rewind_any_files(arg)
+  #  return arg.rewind if arg.respond_to?(:rewind)
+  #  return arg.each_value { |v| rewind_any_files(v) } if arg.respond_to?(:each_value)
+  #
+  #  arg.each { |v| rewind_any_files(v) } if arg.respond_to?(:each)
+  # end
 
 end

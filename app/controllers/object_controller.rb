@@ -5,9 +5,9 @@ class ObjectController < ApplicationController
   include IngestMixin
 
   before_action :require_user, except: %i[jupload_add recent ingest mint update]
-  before_action :load_object, only: %i[index download download_user download_manifest async presign]
+  before_action :load_object, only: %i[index download download_user download_manifest presign]
 
-  before_action(only: %i[download download_user download_manifest async presign]) do
+  before_action(only: %i[download download_user download_manifest presign]) do
     unless current_user_can_download?(@object)
       flash[:error] = 'You do not have download permissions.'
       render file: "#{Rails.root}/public/401.html", status: 401, layout: false
@@ -67,18 +67,6 @@ class ObjectController < ApplicationController
 
   def download_manifest
     stream_response(@object.bytestream_uri3.to_s, 'attachment', pairtree_encode(@object.ark), 'text/xml')
-  end
-
-  def async # TODO: rename to request_async_download or something
-    if @object.exceeds_download_size?
-      render body: nil, status: 403
-    elsif @object.exceeds_sync_size?
-      # Async Supported
-      render body: nil, status: 200
-    else
-      # Async Not Acceptable
-      render body: nil, status: 406
-    end
   end
 
   # rubocop:disable Lint/RescueException

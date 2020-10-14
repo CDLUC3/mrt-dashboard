@@ -45,11 +45,12 @@ class ApplicationController < ActionController::Base
   helper :all
 
   # Makes a url of the form /m/ark.../1/file with optionally blank versions and files
-  def mk_merritt_url(letter, object, version = nil, file = nil)
-    object = Encoder.urlencode(Encoder.urlunencode(object))
-    file = file.blank? ? nil : Encoder.urlencode(Encoder.urlunencode(file))
-    "/#{letter}/" + [object, version, file].reject(&:blank?).join('/')
-  end
+  # Rails5 - seems to be obsolete
+  # def mk_merritt_url(letter, object, version = nil, file = nil)
+  #  object = Encoder.urlencode(Encoder.urlunencode(object))
+  #  file = file.blank? ? nil : Encoder.urlencode(Encoder.urlunencode(file))
+  #  "/#{letter}/" + [object, version, file].reject(&:blank?).join('/')
+  # end
 
   def redirect_to_latest_version
     return unless params[:version].to_i == 0

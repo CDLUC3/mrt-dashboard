@@ -498,39 +498,6 @@ RSpec.describe ObjectController, type: :controller do
     end
   end
 
-  describe ':async' do
-    it 'requires a login' do
-      request.session.merge!({ uid: nil })
-      get(:async, params: { object: object_ark })
-      expect(response.status).to eq(302)
-      expect(response.headers['Location']).to include('guest_login')
-    end
-
-    it 'fails when object is too big for any download' do
-      mock_permissions_all(user_id, collection_id)
-      allow_any_instance_of(InvObject).to receive(:total_actual_size).and_return(1 + APP_CONFIG['max_download_size'])
-      request.session.merge!({ uid: user_id })
-      get(:async, params: { object: object_ark })
-      expect(response.status).to eq(403)
-    end
-
-    it 'fails when object is too small for asynchronous download' do
-      mock_permissions_all(user_id, collection_id)
-      allow_any_instance_of(InvObject).to receive(:total_actual_size).and_return(APP_CONFIG['max_archive_size'] - 1)
-      request.session.merge!({ uid: user_id })
-      get(:async, params: { object: object_ark })
-      expect(response.status).to eq(406)
-    end
-
-    it 'succeeds when object is the right size for synchronous download' do
-      mock_permissions_all(user_id, collection_id)
-      allow_any_instance_of(InvObject).to receive(:total_actual_size).and_return(1 + APP_CONFIG['max_archive_size'])
-      request.session.merge!({ uid: user_id })
-      get(:async, params: { object: object_ark })
-      expect(response.status).to eq(200)
-    end
-  end
-
   describe ':upload' do
     attr_reader :params
     attr_reader :session

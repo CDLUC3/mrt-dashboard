@@ -3,7 +3,7 @@ class VersionController < ApplicationController
   before_action :redirect_to_latest_version
   before_action :load_version
 
-  before_action(only: %i[download download_user async presign]) do
+  before_action(only: %i[download download_user presign]) do
     unless current_user_can_download?(@version.inv_object)
       flash[:error] = 'You do not have download permissions.'
       render file: "#{Rails.root}/public/401.html", status: 401, layout: false
@@ -36,18 +36,6 @@ class VersionController < ApplicationController
 
   def index
     render(file: "#{Rails.root}/public/401.html", status: 401, layout: false) unless @version.inv_object.user_has_read_permission?(current_uid)
-  end
-
-  def async
-    if @version.exceeds_download_size?
-      render body: nil, status: 403
-    elsif @version.exceeds_sync_size?
-      # Async Supported
-      render body: nil, status: 200
-    else
-      # Async Not Acceptable
-      render body: nil, status: 406
-    end
   end
 
   def download
