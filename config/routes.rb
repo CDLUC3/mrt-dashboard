@@ -33,8 +33,6 @@ MrtDashboard::Application.routes.draw do
   get('s/:group' => 'collection#search_results')
   get('async/:object' => 'object#async')
   get('async/:object/:version' => 'version#async')
-  get('asyncd/:object' => 'lostorage#direct')
-  get('asyncd/:object/:version' => 'lostorage#direct')
   get('m/:object' => 'object#index')
   get('m/:object/:version' => 'version#index')
   get('d/:object' => 'object#download')
@@ -72,6 +70,4 @@ MrtDashboard::Application.routes.draw do
   get('collection/search_results' => 'collection#search_results')
   get('version/index' => 'version#index')
 
-  # lostorage... deprecate
-  post('lostorage/index' => 'lostorage#index')
 end

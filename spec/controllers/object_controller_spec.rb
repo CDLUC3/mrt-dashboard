@@ -239,14 +239,13 @@ RSpec.describe ObjectController, type: :controller do
       expect(response.status).to eq(403)
     end
 
-    it "redirects to #{LostorageController} when sync download size exceeded" do
+    it "returns 413 when sync download size exceeded" do
       mock_permissions_all(user_id, collection_id)
       size_too_large = 1 + APP_CONFIG['max_archive_size']
       allow_any_instance_of(InvObject).to receive(:total_actual_size).and_return(size_too_large)
       request.session.merge!({ uid: user_id })
       get(:download, params: { object: object_ark })
-      expect(response.status).to eq(302)
-      expect(response.headers['Location']).to include('lostorage')
+      expect(response.status).to eq(413)
     end
 
     it 'streams the object as a zipfile' do

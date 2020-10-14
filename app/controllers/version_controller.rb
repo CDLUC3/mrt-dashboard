@@ -19,12 +19,9 @@ class VersionController < ApplicationController
     if @version.exceeds_download_size?
       render file: "#{Rails.root}/public/403.html", status: 403, layout: false
     elsif @version.exceeds_sync_size?
-      # if size is > max_archive_size, redirect to have user enter email for asynch
-      # compression (skipping streaming)
-      redirect_to(controller: 'lostorage',
-                  action: 'index',
-                  object: @version.inv_object,
-                  version: @version)
+      # if size is > max_archive_size, return 413
+      # this process used to trigger the large object email which has become obsolete with presigned urls
+      render file: "#{Rails.root}/public/413.html", status: 413, layout: false
     end
   end
 
