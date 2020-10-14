@@ -106,7 +106,7 @@ describe LostorageController do
           async_url = object.bytestream_uri.to_s.gsub(/content/, 'async') # TODO: maybe just put this on the object?
           expect(url).to eq(async_url)
 
-          email_xml_file = post_params[:params]['email']
+          email_xml_file = post_params['email']
           expect(email_xml_file).not_to be_nil
           email_xml = email_xml_file.read
           expect(email_xml).to be_xml(expected_xml)
@@ -133,7 +133,7 @@ describe LostorageController do
           async_url = object.bytestream_uri.to_s.gsub(/content/, 'async') # TODO: maybe just put this on the object?
           expect(url).to eq(async_url)
 
-          email_xml_file = post_params[:params]['email']
+          email_xml_file = post_params['email']
           expect(email_xml_file).not_to be_nil
           email_xml = email_xml_file.read
           expect(email_xml).to be_xml(expected_xml)
@@ -160,7 +160,7 @@ describe LostorageController do
           async_url = object.bytestream_uri.to_s.gsub(/content/, 'async') # TODO: maybe just put this on the object?
           expect(url).to eq(async_url)
 
-          email_xml_file = post_params[:params]['email']
+          email_xml_file = post_params['email']
           expect(email_xml_file).not_to be_nil
           email_xml = email_xml_file.read
           expect(email_xml).to be_xml(expected_xml)
@@ -187,7 +187,7 @@ describe LostorageController do
           async_url = object.bytestream_uri.to_s.gsub(/content/, 'async') # TODO: maybe just put this on the object?
           expect(url).to eq(async_url)
 
-          email_xml_file = post_params[:params]['email']
+          email_xml_file = post_params['email']
           expect(email_xml_file).not_to be_nil
           email_xml = email_xml_file.read
           expect(email_xml).to be_xml(expected_xml)
@@ -214,7 +214,7 @@ describe LostorageController do
           async_url = object.bytestream_uri.to_s.gsub(/content/, 'async') # TODO: maybe just put this on the object?
           expect(url).to eq(async_url)
 
-          email_xml_file = post_params[:params]['email']
+          email_xml_file = post_params['email']
           expect(email_xml_file).not_to be_nil
           email_xml = email_xml_file.read
           expect(email_xml).to be_xml(expected_xml)
@@ -248,7 +248,7 @@ describe LostorageController do
           async_url = object.bytestream_uri2.to_s.gsub(/producer/, 'producerasync') # TODO: maybe just put this on the object?
           expect(url).to eq(async_url)
 
-          email_xml_file = post_params[:params]['email']
+          email_xml_file = post_params['email']
           expect(email_xml_file).not_to be_nil
           email_xml = email_xml_file.read
           expect(email_xml).to be_xml(expected_xml)
@@ -301,7 +301,7 @@ describe LostorageController do
         expect(client).to receive(:post) do |url, post_params|
           async_url = object.bytestream_uri.to_s.gsub(/content/, 'async') # TODO: maybe just put this on the object?
           expect(url).to eq(async_url)
-          email_xml = post_params[:params]['email']
+          email_xml = post_params['email']
           expect(email_xml).not_to be_nil # TODO: rewrite post_los_email so we don't pass live file pointers around & can actually test
         end.and_return(post_email_response)
         request.headers.merge!({ 'Content-Type' => 'multipart/form-data' })
@@ -315,7 +315,7 @@ describe LostorageController do
         expect(client).to receive(:post) do |url, post_params|
           async_url = object.bytestream_uri2.to_s.gsub(/producer/, 'producerasync') # TODO: maybe just put this on the object?
           expect(url).to eq(async_url)
-          email_xml = post_params[:params]['email']
+          email_xml = post_params['email']
           expect(email_xml).not_to be_nil # TODO: rewrite post_los_email so we don't pass live file pointers around & can actually test
         end.and_return(post_email_response)
         request.headers.merge!({ 'Content-Type' => 'multipart/form-data' })
@@ -329,7 +329,7 @@ describe LostorageController do
         expect(client).to receive(:post) do |url, post_params|
           async_url = object.bytestream_uri2.to_s.gsub(/producer/, 'producerasync') # TODO: maybe just put this on the object?
           expect(url).to eq(async_url)
-          email_xml = post_params[:params]['email']
+          email_xml = post_params['email']
           expect(email_xml).not_to be_nil # TODO: rewrite post_los_email so we don't pass live file pointers around & can actually test
         end.and_return(post_email_response)
         request.headers.merge!({ 'Content-Type' => 'multipart/form-data' })

@@ -99,7 +99,7 @@ RSpec.describe ObjectController, type: :controller do
 
         it 'posts the argument to the ingest service as a multipart form' do
           expect(client).to receive(:post).with(
-            APP_CONFIG[url_config_key], params: expected_params
+            APP_CONFIG[url_config_key], expected_params
           ).and_return(ingest_response)
 
           request.headers.merge!({ 'Content-Type' => 'multipart/form-data' })
@@ -109,7 +109,7 @@ RSpec.describe ObjectController, type: :controller do
 
         it 'forwards the status, content-type, and body from the ingest response' do
           expect(client).to receive(:post).with(
-            APP_CONFIG[url_config_key], params: expected_params
+            APP_CONFIG[url_config_key], expected_params
           ).and_return(ingest_response)
 
           request.headers.merge!({ 'Content-Type' => 'multipart/form-data' })
@@ -125,7 +125,7 @@ RSpec.describe ObjectController, type: :controller do
           params[:filename] = 'not-the-original-filename.bin'
           expected_params['filename'] = params[:filename]
           expect(client).to receive(:post).with(
-            APP_CONFIG[url_config_key], params: expected_params
+            APP_CONFIG[url_config_key], expected_params
           ).and_return(ingest_response)
 
           request.headers.merge!({ 'Content-Type' => 'multipart/form-data' })
@@ -138,7 +138,7 @@ RSpec.describe ObjectController, type: :controller do
             params['submitter'] = 'Rachel Roe'
             expected_params['submitter'] = params['submitter']
             expect(client).to receive(:post).with(
-              APP_CONFIG[url_config_key], params: expected_params
+              APP_CONFIG[url_config_key], expected_params
             ).and_return(ingest_response)
 
             request.headers.merge!({ 'Content-Type' => 'multipart/form-data' })
@@ -195,7 +195,7 @@ RSpec.describe ObjectController, type: :controller do
       }
       expect(client).to receive(:post).with(
         APP_CONFIG['mint_service'],
-        params: hash_including(expected_params)
+        hash_including(expected_params)
       ).and_return(mint_response)
 
       request.headers.merge!({ 'Content-Type' => 'multipart/form-data' })
@@ -604,7 +604,7 @@ RSpec.describe ObjectController, type: :controller do
       allow(ingest_response).to receive(:content).and_return(xml)
 
       expect(client).to receive(:post).with(
-        APP_CONFIG['ingest_service_update'], params: expected_params
+        APP_CONFIG['ingest_service_update'], expected_params
       ).and_return(ingest_response)
 
       request.headers.merge!({ 'Content-Type' => 'multipart/form-data' })
