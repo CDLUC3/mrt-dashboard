@@ -1,11 +1,7 @@
 ##################################################
 # Custom ignores
 
-public/assets/*.js
-public/assets/*.css
-public/assets/*.gz
-public/assets/.sprockets*
-public/assets/wztip
+public/assets/**
 
 .config-secret
 

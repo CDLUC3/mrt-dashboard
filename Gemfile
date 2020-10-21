@@ -34,6 +34,7 @@ end
 
 group :development, :test do
   gem 'byebug'
+  gem 'listen'
   gem 'colorize'
   gem 'launchy'
   gem 'pry'
