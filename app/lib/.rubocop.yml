@@ -1,0 +1,13 @@
+inherit_from: ../.rubocop.yml
+
+Metrics/ModuleLength:
+  Exclude:
+    - 'ingest_mixin.rb'
+
+Metrics/MethodLength:
+  Exclude:
+    - 'ingest_mixin.rb'
+
+Metrics/AbcSize:
+  Exclude:
+    - 'ingest_mixin.rb'
