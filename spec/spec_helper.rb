@@ -14,6 +14,7 @@ end
 # Rspec configuration
 
 RSpec.configure do |config|
+  ENV['SSM_SKIP_RESOLUTION'] = 'Y'
   config.color = true
   config.tty = true
   config.formatter = :documentation

@@ -26,7 +26,7 @@ MrtDashboard::Application.routes.draw do
   # m: metadata (landing page)
   # s: search
 
-  # m/ark... can route to either collection or object depending on the constraint  
+  # m/ark... can route to either collection or object depending on the constraint
   get('m/:group' => 'collection#index',
       :constraints => CollectionConstraint.new)
   get('s/:group' => 'collection#search_results')

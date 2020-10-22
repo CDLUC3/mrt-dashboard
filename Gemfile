@@ -7,8 +7,8 @@ gem 'rails', '~> 5.2'
 
 gem 'aws-sdk-ec2'
 gem 'aws-sdk-ssm'
-gem 'builder'
 gem 'bootsnap'
+gem 'builder'
 gem 'capistrano'
 gem 'capistrano-rails'
 gem 'exception_notification'
@@ -34,9 +34,9 @@ end
 
 group :development, :test do
   gem 'byebug'
-  gem 'listen'
   gem 'colorize'
   gem 'launchy'
+  gem 'listen'
   gem 'pry'
   gem 'pry-rails'
   gem 'pry-remote', require: 'pry-remote'

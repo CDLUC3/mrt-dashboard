@@ -1,4 +1,5 @@
 require 'features_helper'
+require 'support/presigned'
 
 describe 'objects', js: true do
   attr_reader :user_id
@@ -207,8 +208,19 @@ describe 'objects', js: true do
 
     describe 'download button' do
       it 'presign object no longer displays the large object email form' do
+        mock_assembly(
+          obj.node_number,
+          ApplicationController.encode_storage_key(obj.ark),
+          response_assembly_200('aaa')
+        )
         download_button = find_button('Download object')
         download_button.click
+
+        sleep 2
+
+        within('div.ui-dialog div.ui-dialog-titlebar') do
+          click_button('Close')
+        end
 
         expect(page.title).not_to include('Large Object')
       end
