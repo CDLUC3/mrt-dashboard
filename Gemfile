@@ -35,6 +35,7 @@ end
 group :development, :test do
   gem 'byebug'
   gem 'colorize'
+  gem 'debase'
   gem 'launchy'
   gem 'listen'
   gem 'pry'
@@ -42,9 +43,8 @@ group :development, :test do
   gem 'pry-remote', require: 'pry-remote'
   gem 'rspec-rails'
   gem 'rubocop'
-  gem 'ruby-prof'
   gem 'ruby-debug-ide'
-  gem 'debase'
+  gem 'ruby-prof'
 end
 
 group :test do
