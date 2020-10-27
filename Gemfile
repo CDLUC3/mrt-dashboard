@@ -43,6 +43,8 @@ group :development, :test do
   gem 'rspec-rails'
   gem 'rubocop'
   gem 'ruby-prof'
+  gem 'ruby-debug-ide'
+  gem 'debase'
 end
 
 group :test do
