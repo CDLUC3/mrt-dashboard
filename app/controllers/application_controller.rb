@@ -27,7 +27,7 @@ class ApplicationController < ActionController::Base
     :max_download_size_pretty,
     :number_to_storage_size
   )
-  protect_from_forgery
+  protect_from_forgery with: :exception, prepend: true
 
   def render_unavailable
     render file: "#{Rails.root}/public/unavailable.html", status: 500
