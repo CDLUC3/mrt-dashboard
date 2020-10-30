@@ -15,5 +15,11 @@ module MrtDashboard
     # Application configuration can go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded after loading
     # the framework and any gems in your application.
+
+    def config.database_configuration
+      # The entire config must be returned, but only the Rails.env will be processed
+      load_uc3_config({ name: 'database.yml', resolve_key: Rails.env })
+    end
+
   end
 end
