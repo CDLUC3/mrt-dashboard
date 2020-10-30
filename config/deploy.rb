@@ -155,7 +155,7 @@ namespace :bundle do
   desc 'run bundle install and ensure all gem requirements are met'
   task :install do
     on roles(:app) do
-      execute "cd #{current_path} && bundle install --without=test"
+      execute "cd #{current_path} && bundle install --path /dpr2/.gems --without=test"
       execute "cd #{current_path} && bundle exec rake assets:precompile"
     end
   end
