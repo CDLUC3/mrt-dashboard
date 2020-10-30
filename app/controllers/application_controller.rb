@@ -27,7 +27,7 @@ class ApplicationController < ActionController::Base
     :max_download_size_pretty,
     :number_to_storage_size
   )
-  protect_from_forgery with: :exception, prepend: true
+  # protect_from_forgery
 
   def render_unavailable
     render file: "#{Rails.root}/public/unavailable.html", status: 500
@@ -230,10 +230,8 @@ class ApplicationController < ActionController::Base
   # if the object is not public then the user will need to navigate to the login page and
   # login with their own credentials - mstrong 4/12/12
   def require_user
-    puts("TBTB2222 #{current_uid}")
     return if current_uid
 
-    puts("TBTB3333")
     store_location
     flash[:notice] = 'You must be logged in to access the page you requested'
     ret = url_for_with_proto({ controller: 'user_sessions', action: 'guest_login' })

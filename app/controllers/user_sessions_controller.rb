@@ -25,9 +25,6 @@ class UserSessionsController < ApplicationController
     session[:expiry_time] = Time.now
     if User.valid_ldap_credentials?(user_id, password)
       session[:uid] = user_id
-      puts("TBTB1111")
-      puts(session[:uid])
-      puts(url_for_with_proto({ controller: 'home', action: 'choose_collection' }))
       redirect_back_or_default url_for_with_proto({ controller: 'home', action: 'choose_collection' })
     else
       flash[:notice] = 'Login unsuccessful'
