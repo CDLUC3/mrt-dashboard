@@ -1,11 +1,11 @@
 # config valid only for Capistrano 3.1
-lock '3.4.1'
+lock '3.14.1'
 
 set :application, 'merritt-ui'
 set :repo_url, 'https://github.com/CDLUC3/mrt-dashboard'
 
 set :deploy_to, '/dpr2/apps/ui'
-set :scm, :git
+# set :scm, :git
 
 set :stages, %w[local mrt-ui-dev stage production]
 

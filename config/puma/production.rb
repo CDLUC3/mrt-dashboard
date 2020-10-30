@@ -26,7 +26,7 @@ environment ENV['RAILS_ENV'] || 'production'
 #
 # The default is "false".
 #
-daemonize true
+# daemonize true
 
 # Store the pid of the server in the file at "path".
 #
