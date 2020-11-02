@@ -115,13 +115,13 @@ class FileController < ApplicationController
     sql2 += " ORDER BY v.number DESC limit 1"
 
     if version == 0
-      results = ActiveRecord::Base
+      results = ApplicationRecord
         .connection
         .raw_connection
         .prepare(sql)
         .execute(ark, pathname)
     else
-      results = ActiveRecord::Base
+      results = ApplicationRecord
         .connection
         .raw_connection
         .prepare(sql2)

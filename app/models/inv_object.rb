@@ -1,4 +1,4 @@
-class InvObject < ActiveRecord::Base
+class InvObject < ApplicationRecord
   belongs_to :inv_owner
 
   has_many :inv_versions, inverse_of: :inv_object

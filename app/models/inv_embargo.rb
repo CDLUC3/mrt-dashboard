@@ -1,4 +1,4 @@
-class InvEmbargo < ActiveRecord::Base
+class InvEmbargo < ApplicationRecord
   self.table_name = 'inv_embargoes'
   belongs_to :inv_object
 

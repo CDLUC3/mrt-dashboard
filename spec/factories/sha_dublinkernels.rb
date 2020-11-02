@@ -6,6 +6,6 @@ FactoryBot.define do
   # # noinspection RubyArgCount
   # after(:create) do |_|
   #   # rebuild fulltext index
-  #   ActiveRecord::Base.connection.execute('OPTIMIZE TABLE sha_dublinkernels')
+  #   ApplicationRecord.connection.execute('OPTIMIZE TABLE sha_dublinkernels')
   # end
 end
