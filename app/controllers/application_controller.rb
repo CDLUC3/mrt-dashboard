@@ -27,7 +27,7 @@ class ApplicationController < ActionController::Base
     :max_download_size_pretty,
     :number_to_storage_size
   )
-  # protect_from_forgery
+  protect_from_forgery with: :exception
 
   def render_unavailable
     render file: "#{Rails.root}/public/unavailable.html", status: 500
@@ -211,9 +211,15 @@ class ApplicationController < ActionController::Base
   # user supplied HTTP basic auth info, uses that. Returns nil if
   # there is no session user and HTTP basic auth did not succeed
   def current_user
+    puts(11111)
+    puts("22222 #{session[:uid]}")
+    puts("33333 #{User.find_by_id(session[:uid])}")
+    puts("44444 #{User.from_auth_header(request.headers['HTTP_AUTHORIZATION'])}")
     @current_user ||= begin
       User.find_by_id(session[:uid]) || User.from_auth_header(request.headers['HTTP_AUTHORIZATION'])
     end
+    puts("55555 #{@current_user.login}")
+    @current_user
   end
 
   # either return the uid from the session OR get the user id from
