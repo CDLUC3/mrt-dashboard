@@ -21,6 +21,9 @@ stage:
 production:
   <<: *default
 
+development:
+  <<: *default
+
 docker: &docker
   host: localhost
   adapter: mysql2
@@ -30,6 +33,4 @@ docker: &docker
   password: password
   encoding: utf8   # schema won't load if it's utf8mb4
 
-development:
-  <<: *docker
   
