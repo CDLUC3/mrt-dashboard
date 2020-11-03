@@ -33,42 +33,34 @@ before 'deploy', 'deploy:prompt_for_tag'
 # Update config/atom repo before deployment only
 before 'deploy', 'deploy:update_config'
 before 'deploy', 'deploy:update_atom'
+after  'deploy', 'bundle:install'
 
 namespace :deploy do
-
   desc 'Stop Puma'
   task :stop do
     on roles(:app) do
-      execute "cd #{deploy_to}/current; kill -15 `cat #{fetch(:puma_pid)}`" if test("[ -f #{fetch(:puma_pid)} ]")
+      execute "echo Capistrano stop has been deprecated. Use systemctl: \$ sudo systemctl stop puma"
     end
   end
 
   desc 'Start Puma'
   task :start do
     on roles(:app) do
-      within current_path do
-        with rails_env: fetch(:rails_env) do
-          execute "cd #{deploy_to}/current; bundle exec puma -C config/puma/#{fetch(:rails_env)}.rb -e #{fetch(:rails_env)}"
-        end
-      end
-    end
-  end
-  before 'deploy:start', 'bundle:install'
-
-  desc 'Status Puma'
-  task :status do
-    on roles(:app) do
-      if test("[ -f #{fetch(:puma_pid)} ]")
-        # check pid
-        execute "cd #{deploy_to}/current; cat #{fetch(:puma_pid)} | xargs ps -lp"
-      end
+      execute "echo Capistrano start has been deprecated. Use systemctl: \$ sudo systemctl start puma"
     end
   end
 
   desc 'Restart Puma'
   task :restart do
-    on roles(:app), wait: 5 do
-      # do not implement, use stop/start instead
+    on roles(:app) do
+      execute "echo Capistrano restart has been deprecated. Use systemctl: \$ sudo systemctl restart puma"
+    end
+  end
+
+  desc 'Status Puma'
+  task :status do
+    on roles(:app) do
+      execute "echo Capistrano status has been deprecated. Use systemctl: \$ sudo systemctl status puma"
     end
   end
 
