@@ -1,9 +1,9 @@
 GIT
   remote: https://github.com/CDLUC3/uc3-ssm
-  revision: 163dc6df2093adda5cf1d95e9f59d2724eafe077
+  revision: ffc02554c5856905d59876671cb991fb71e0df7e
   branch: main
   specs:
-    uc3-ssm (0.1.10)
+    uc3-ssm (0.1.11)
       aws-sdk-ssm (~> 1.84)
       logger (~> 1.4)
       yaml (~> 0.1)
