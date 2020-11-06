@@ -166,3 +166,6 @@ Temporary Items
 .apdisk
 .byebug_history
 1.html
+
+# Ignore master key for decrypting credentials and more.
+/config/master.key
