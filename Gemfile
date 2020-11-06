@@ -33,7 +33,7 @@ group :development do
   gem 'web-console'
 end
 
-group :development, :test do
+group :development, :test, :docker do
   gem 'byebug'
   gem 'colorize'
   gem 'debase'
