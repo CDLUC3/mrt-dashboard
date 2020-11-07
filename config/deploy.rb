@@ -34,6 +34,7 @@ before 'deploy', 'deploy:prompt_for_tag'
 before 'deploy', 'deploy:update_config'
 before 'deploy', 'deploy:update_atom'
 after  'deploy', 'bundle:install'
+after  'deploy', 'deploy:update_env'
 
 namespace :deploy do
   desc 'Stop Puma'
@@ -110,6 +111,15 @@ namespace :deploy do
     end
   end
 
+  desc 'Setup ENV variables'
+  task :update_env do
+    on roles(:app), wait: 1 do
+      master_key = capture ('source /dpr2/.profile.d/uc3-aws-util.sh && get_ssm_value_by_name ui/master_key')
+      target = "#{release_path}/config/credentials/#{fetch(:rails_env)}.key"
+      execute ("mkdir #{release_path}/config/credentials && echo #{master_key} > #{target}")
+    end
+  end
+  
   desc 'Update Atom scripts'
   task :update_atom do
     on roles(:app) do
@@ -139,17 +149,15 @@ namespace :deploy do
       end
     end
   end
-
 end
 
 namespace :bundle do
-
   desc 'run bundle install and ensure all gem requirements are met'
   task :install do
     on roles(:app) do
-      execute "cd #{current_path} && bundle install --path /dpr2/.gems --without=test"
+      execute "cd #{current_path} && bundle config set path /dpr2/.gem"
+      execute "cd #{current_path} && bundle install --without=test"
       execute "cd #{current_path} && bundle exec rake assets:precompile"
     end
   end
-
 end
