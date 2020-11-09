@@ -263,7 +263,9 @@ class ApplicationController < ActionController::Base
     if session
       redirect_to(session[:return_to] || default)
     else
+      # :nocov:
       redirect_to(default)
+      # :nocov:
     end
     session[:return_to] = nil
   end
