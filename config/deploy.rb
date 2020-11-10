@@ -116,7 +116,7 @@ namespace :deploy do
     on roles(:app), wait: 1 do
       master_key = capture('source /dpr2/.profile.d/uc3-aws-util.sh && get_ssm_value_by_name ui/master_key')
       target = "#{release_path}/config/master.key"
-      execute("mkdir #{release_path}/config/credentials && echo #{master_key} > #{target}")
+      execute("echo #{master_key} > #{target}")
     end
   end
 
