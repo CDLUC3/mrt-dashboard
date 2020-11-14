@@ -30,6 +30,7 @@ db/schema.rb
 .rvmrc.06.20.2013-10:03:30
 nbproject
 
+
 ##################################################
 # Generated ignores
 
@@ -169,3 +170,7 @@ Temporary Items
 
 # Ignore master key for decrypting credentials and more.
 /config/master.key
+
+# other dependencies
+node_modules/
+vendor/
