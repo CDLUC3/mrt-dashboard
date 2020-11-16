@@ -4,6 +4,7 @@ require_relative '../../app/lib/encoder.rb'
 require_relative '../../app/models/application_record.rb'
 require_relative '../../app/models/inv_collection.rb'
 
+#:nocov:
 class Terry
   def hello
     # Dir.glob("#{Rails.root}/app/models/*.rb").each { |file| require file }
@@ -32,3 +33,4 @@ namespace :terry do
     end
   end
 end
+#:nocov:
