@@ -11,8 +11,10 @@ class Terry
     puts "hello from Terry #{Rails.root}"
     coll = InvCollection.where(mnemonic: 'ucsb_lib_etd').first
     puts coll.name
-    coll.recent_objects.each_with_index do |obj, i| 
-      puts "#{i}\t#{obj.ark}\t#{obj.modified}\t#{obj.current_version.dk_who}\t#{obj.current_version.dk_what}"
+    File.open('out.csv', 'w') do |file| 
+      coll.recent_objects.each_with_index do |obj, i| 
+        file.write("#{i}\t#{obj.ark}\t#{obj.modified}\t#{obj.current_version.dk_who}\t#{obj.current_version.dk_what}\n")
+      end
     end
   end
 end

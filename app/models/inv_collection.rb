@@ -15,7 +15,7 @@ class InvCollection < ApplicationRecord
   def recent_objects
     inv_objects
       .quickloadhack
-      .order('inv_objects.modified desc')
+      .order('inv_objects.modified desc, inv_objects.id')
       .includes(:inv_versions, :inv_dublinkernels)
   end
 end
