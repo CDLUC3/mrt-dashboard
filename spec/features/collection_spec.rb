@@ -93,15 +93,11 @@ describe 'collections' do
           expect(page.title).to include('Add Object')
           find('input#title').set('sample file')
           find('input#author').set('sample author')
-          puts find('form#upload')['action']
-          page.execute_script("document.getElementById('upload').setAttribute('action', '/object/debug')")
-          puts find('form#upload')['action']
           page.attach_file('File', File.join(Rails.root, 'README.md'))
+          page.execute_script("document.getElementById('upload').setAttribute('action', '/object/debug')")
           find_button('Submit').click
-          puts page.body
-          json = JSON.parse(page.body)
-          puts json['original_filename']
-          sleep 15
+          sleep 40
+          expect(find('div#original_filename')).to have_content('README.md')
         end
       end 
 
