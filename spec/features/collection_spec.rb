@@ -69,12 +69,41 @@ describe 'collections' do
         expect(page).to have_content("Object: #{obj.ark}")
       end
 
-      it 'should display an "Add Object" link' do
-        add_obj_link = find_link('Add object')
-        expect(add_obj_link).not_to be_nil
-        add_obj_link.click
-        expect(page.title).to include('Add Object')
-      end
+      describe 'add_object', js: true do
+        before(:each) do
+          add_obj_link = find_link('Add object')
+          expect(add_obj_link).not_to be_nil
+          add_obj_link.click
+        end
+
+        it 'should display an "Add Object" link' do
+          expect(page.title).to include('Add Object')
+        end
+
+        it 'Add object without attaching a file' do
+          expect(page.title).to include('Add Object')
+          find('input#title').set('sample file')
+          find('input#author').set('sample author')
+          find_button('Submit').click
+          expect(page.title).to include('Add Object')
+          expect(find('p.error-message')).to have_content('You must choose a filename to submit.')
+        end
+
+        it 'Add README.md file' do
+          expect(page.title).to include('Add Object')
+          find('input#title').set('sample file')
+          find('input#author').set('sample author')
+          puts find('form#upload')['action']
+          page.execute_script("document.getElementById('upload').setAttribute('action', '/object/debug')")
+          puts find('form#upload')['action']
+          page.attach_file('File', File.join(Rails.root, 'README.md'))
+          find_button('Submit').click
+          puts page.body
+          json = JSON.parse(page.body)
+          puts json['original_filename']
+          sleep 15
+        end
+      end 
 
       describe 'search' do
         it 'finds by author keywords' do
@@ -154,4 +183,5 @@ describe 'collections' do
     end
 
   end
+
 end

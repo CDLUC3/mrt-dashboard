@@ -72,6 +72,8 @@ MrtDashboard::Application.routes.draw do
   post('object/update' => 'object#update')
   post('object/mint' => 'object#mint')
   post('object/upload' => 'object#upload')
+  post('object/debug' => 'object#debug')
+  get('object/debug' => 'object#debug')
   post('user/update' => 'user#update')
 
   # Deprecate the following actions

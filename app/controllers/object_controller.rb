@@ -75,6 +75,7 @@ class ObjectController < ApplicationController
       flash[:error] = 'You must choose a filename to submit.'
       redirect_to(controller: 'object', action: 'add', group: current_group) && return
     end
+
     begin
       post_upload
     rescue Exception => e # TODO: should this be StandardError?
@@ -82,6 +83,10 @@ class ObjectController < ApplicationController
     end
   end
   # rubocop:enable Lint/RescueException
+
+  def debug
+    render status: 200, json: params.to_json
+  end
 
   def recent
     @collection_ark = params[:collection]
