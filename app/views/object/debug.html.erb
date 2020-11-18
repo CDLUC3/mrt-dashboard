@@ -4,11 +4,24 @@
 <h1>Parameter Debug -- for Rspec support</h1>
 <main id="maincontent">
   <section>
-  <% params.each do |k, v| %>
+  <% 
+  params.each do |k, v| 
+    if k == 'file'
+  %>
+    <div>
+      <h2><%=original_filename%></h2>
+      <div id='<%=original_filename%>'><%=params[:file].original_filename%></div>
+    </div>
+  <% 
+    else
+  %>
     <div>
       <h2><%=k%></h2>
       <div id='<%=k%>'><%=v%></div>
     </div>
-  <% end %>
+  <% 
+    end 
+  end
+  %>
   </section>
 </main>
