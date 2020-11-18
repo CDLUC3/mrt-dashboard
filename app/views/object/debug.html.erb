@@ -1,0 +1,14 @@
+<% content_for :title do %>
+  Parameter Debug -- for Rspec support
+<% end %>
+<h1>Parameter Debug -- for Rspec support</h1>
+<main id="maincontent">
+  <section>
+  <% params.each do |k, v| %>
+    <div>
+      <h2><%=k%></h2>
+      <div id='<%=k%>'><%=v%></div>
+    </div>
+  <% end %>
+  </section>
+</main>

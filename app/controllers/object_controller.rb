@@ -84,10 +84,6 @@ class ObjectController < ApplicationController
   end
   # rubocop:enable Lint/RescueException
 
-  def debug
-    render status: 200, json: params.to_json
-  end
-
   def recent
     @collection_ark = params[:collection]
     collection = InvCollection.where(ark: @collection_ark).first
