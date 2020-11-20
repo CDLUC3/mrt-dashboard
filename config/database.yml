@@ -1,5 +1,7 @@
 test:
-  host: localhost
+  # host: localhost
+  host: 127.0.0.1
+  port: 3306
   adapter: mysql2
   database: mrt_dashboard_test
   username: travis
