@@ -9,8 +9,12 @@
     if k == 'file'
   %>
     <div>
-      <h2><%=original_filename%></h2>
-      <div id='<%=original_filename%>'><%=params[:file].original_filename%></div>
+      <h2>params[:file].original_filename</h2>
+      <div id='original_filename'><%=params[:file].original_filename%></div>
+    </div>
+    <div>
+      <h2>params[:file].headers</h2>
+      <div id='headers'><%=params[:file].headers%></div>
     </div>
   <% 
     else
