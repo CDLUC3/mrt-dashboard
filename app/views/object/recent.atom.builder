@@ -66,11 +66,7 @@ xml.tag!('feed', :xmlns => 'http://www.w3.org/2005/Atom',
       current_version = obj.current_version
       current_version.inv_files.each do |file|
         xml.tag!('link',
-                 'href' => url_for(controller: 'file',
-                                   action: :presign,
-                                   object: obj,
-                                   version: current_version,
-                                   file: file),
+                 'href' => presigned_link_uri(obj, current_version, file),
                  'rel' => 'http://purl.org/dc/terms/hasPart',
                  'title' => file.pathname,
                  'length' => file.full_size,
