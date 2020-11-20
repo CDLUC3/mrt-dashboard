@@ -66,4 +66,25 @@ module ApplicationHelper
   def group_choosen?
     !current_group.nil?
   end
+
+  def presigned_link_uri(object, version, file)
+    fileurl = url_for :controller       => :file,
+      :action           => :presign,
+      :object           => object,
+      :version          => version,
+      :file             => file
+    
+    begin
+      # special logic to determine if percent encoding should be fixed in a display link
+      x = fileurl
+      x = Encoder.urlunencode(x)
+      x = Encoder.urlunencode(x)
+      x = Encoder.urlunencode(x)
+      x =~ /.*/
+    rescue
+      fileurl = fileurl.gsub('%2525', '%252525')
+    end
+    fileurl
+  end
+
 end
