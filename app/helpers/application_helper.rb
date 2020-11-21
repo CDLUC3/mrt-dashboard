@@ -71,19 +71,18 @@ module ApplicationHelper
   # This code triple unencodes a presigned file link and then runs a regex expression upon it.
   # If the link appears to be an improper utf8 string, the link will be modified to escape and escaped percent sign
   def presigned_link_uri(object, version, file)
-    fileurl = url_for :controller       => :file,
-      :action           => :presign,
-      :object           => object,
-      :version          => version,
-      :file             => file
-    
+    url_for controller: :file,
+            action: :presign,
+            object: object,
+            version: version,
+            file: file
+
     # special logic to determine if percent encoding should be fixed in a display link
-    x = fileurl
-    x = Encoder.urlunencode(x)
-    x = Encoder.urlunencode(x)
-    x = Encoder.urlunencode(x)
-    fileurl.gsub('%2525', '%252525') unless x.valid_encoding?
-    fileurl
+    # x = fileurl
+    # x = Encoder.urlunencode(x)
+    # x = Encoder.urlunencode(x)
+    # x = Encoder.urlunencode(x)
+    # fileurl.gsub('%2525', '%252525') unless x.valid_encoding?
   end
 
 end

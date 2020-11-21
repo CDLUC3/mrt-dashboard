@@ -148,17 +148,25 @@ class FileController < ApplicationController
 
   def fix_params
     object_ark = params_u(:object)
+    ver = params[:version]
     fname = params_u(:file)
-    combine = "#{object_ark}/#{params[:version]}/#{fname}"
-    if combine.valid_encoding?
-      m = %r{^(ark:/\d+/[a-z0-9_]+)/(\d+)/(.*)$}.match(combine)
-      replace_params(m) if m
-    else
-      fname = Encoder.urlunencode(params[:file].gsub('%', '%2525'))
-      combine = "#{object_ark}/#{params[:version]}/#{fname}"
-      m = %r{^(ark:/\d+/[a-z0-9_]+)/(\d+)/(.*)$}.match(combine)
-      replace_params(m) if m
+    combine = "#{object_ark}/#{ver}/#{fname}"
+
+    # if the combined URL cannot be safely unencoded, look for a % in the original filename
+    if combine.valid_encoding? && Encoder.urlunencode(combine).valid_encoding?
+      match_params(combine)
+      return
     end
+
+    fname = Encoder.urlunencode(params[:file]).gsub('%', '%25')
+    match_params("#{object_ark}/#{ver}/#{fname}")
+  end
+
+  def match_params(combine)
+    return unless combine.valid_encoding?
+
+    m = %r{^(ark:/\d+/[a-z0-9_]+)/(\d+)/(.*)$}.match(combine)
+    replace_params(m) if m
   end
 
   def replace_params(match)
@@ -173,9 +181,7 @@ class FileController < ApplicationController
     # determine if user is retrieving a system file; otherwise assume
     # they are obtaining a producer file which needs to prepended to
     # the filename
-    if filename.valid_encoding?
-      filename = "producer/#{filename}" unless filename =~ /^(producer|system)/
-    end
+    filename = "producer/#{filename}" if filename.valid_encoding? && filename !~ /^(producer|system)/
 
     @file = InvFile.joins(:inv_version, :inv_object)
       .where('inv_objects.ark = ?', params_u(:object))

@@ -6,6 +6,6 @@ module Encoder
   end
 
   def self.urlunencode(item)
-    URI.unescape(item)
+    CGI.unescape(item)
   end
 end

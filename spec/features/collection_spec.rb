@@ -89,7 +89,7 @@ describe 'collections' do
           expect(find('p.error-message')).to have_content('You must choose a filename to submit.')
         end
 
-      end 
+      end
 
       describe 'search' do
         it 'finds by author keywords' do
