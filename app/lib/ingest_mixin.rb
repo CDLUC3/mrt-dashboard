@@ -79,11 +79,18 @@ module IngestMixin
   end
 
   def upload_params_from(params, current_user, current_group)
+    filename = params[:file].original_filename
+    # We found a case in which % in the original filename triggers an encoding error
+    # Pull the filename from the POST header using a pattern match
+    if !filename.valid_encoding?
+      m = %r{filename=\"([^\"]+)\"}.match(params[:file].headers)
+      filename = m[1] if m
+    end
     {
       'file' => params[:file].tempfile,
       'type' => params[:object_type],
       'submitter' => "#{current_user.login}/#{current_user.displayname}",
-      'filename' => params[:file].original_filename,
+      'filename' => filename,
       'profile' => current_group.submission_profile,
       'creator' => params[:author],
       'title' => params[:title],
