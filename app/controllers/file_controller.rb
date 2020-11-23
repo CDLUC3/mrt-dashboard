@@ -77,7 +77,7 @@ class FileController < ApplicationController
   def storage_key_do
     version = params_u(:version).to_i
     ark = params_u(:object)
-    pathname = params_u(:file)
+    pathname = get_filename
 
     sql = %{
       SELECT
@@ -146,19 +146,17 @@ class FileController < ApplicationController
   end
   # rubocop:enable all
 
+  def get_filename
+    # if the filename cannot be safely unencoded, look for a % in the original filename
+    fname = params_u(:file)
+    fname = Encoder.urlunencode(params[:file].gsub('%', '%25')) unless fname.valid_encoding?
+    fname
+  end
+
   def fix_params
     object_ark = params_u(:object)
     ver = params[:version]
-    fname = params_u(:file)
-    combine = "#{object_ark}/#{ver}/#{fname}"
-
-    # if the combined URL cannot be safely unencoded, look for a % in the original filename
-    if combine.valid_encoding? && Encoder.urlunencode(combine).valid_encoding?
-      match_params(combine)
-      return
-    end
-
-    fname = Encoder.urlunencode(params[:file]).gsub('%', '%25')
+    fname = get_filename
     match_params("#{object_ark}/#{ver}/#{fname}")
   end
 
@@ -176,7 +174,7 @@ class FileController < ApplicationController
   end
 
   def load_file
-    filename = params_u(:file)
+    filename = get_filename
 
     # determine if user is retrieving a system file; otherwise assume
     # they are obtaining a producer file which needs to prepended to
