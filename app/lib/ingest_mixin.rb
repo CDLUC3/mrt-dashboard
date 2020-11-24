@@ -8,8 +8,10 @@ module IngestMixin
       begin
         m = /filename="([^"]+)"/.match(params[:file].headers)
         filename = m[1] if m
-      rescue StandardError
+      rescue 
+        #:nocov:
         filename = filename.encode('UTF-8', invalid: :replace, undef: :replace)
+        #:nocov:
       end
     end
     {
@@ -58,8 +60,10 @@ module IngestMixin
       begin
         m = /filename="([^"]+)"/.match(params[:file].headers)
         filename = m[1] if m
-      rescue StandardError
+      rescue 
+        #:nocov:
         filename = filename.encode('UTF-8', invalid: :replace, undef: :replace)
+        #:nocov:
       end
     end
     {
@@ -108,8 +112,10 @@ module IngestMixin
       begin
         m = /filename="([^"]+)"/.match(params[:file].headers)
         filename = m[1] if m
-      rescue StandardError
+      rescue 
+        #:nocov:
         filename = filename.encode('UTF-8', invalid: :replace, undef: :replace)
+        #:nocov:
       end
     end
     {
