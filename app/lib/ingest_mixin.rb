@@ -16,7 +16,7 @@ module IngestMixin
       end
     end
     filename
-   end
+  end
 
   def ingest_params_from(params, current_user)
     filename = ingest_filename
