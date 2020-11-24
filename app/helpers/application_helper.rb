@@ -76,13 +76,6 @@ module ApplicationHelper
             object: object,
             version: version,
             file: file
-
-    # special logic to determine if percent encoding should be fixed in a display link
-    # x = fileurl
-    # x = Encoder.urlunencode(x)
-    # x = Encoder.urlunencode(x)
-    # x = Encoder.urlunencode(x)
-    # fileurl.gsub('%2525', '%252525') unless x.valid_encoding?
   end
 
 end
