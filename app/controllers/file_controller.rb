@@ -146,7 +146,7 @@ class FileController < ApplicationController
   end
   # rubocop:enable all
 
-  def get_filename
+  def fix_filename
     # if the filename cannot be safely unencoded, look for a % in the original filename
     fname = params_u(:file)
     fname = Encoder.urlunencode(params[:file].gsub('%', '%25')) unless fname.valid_encoding?
