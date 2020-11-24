@@ -69,11 +69,26 @@ describe 'collections' do
         expect(page).to have_content("Object: #{obj.ark}")
       end
 
-      it 'should display an "Add Object" link' do
-        add_obj_link = find_link('Add object')
-        expect(add_obj_link).not_to be_nil
-        add_obj_link.click
-        expect(page.title).to include('Add Object')
+      describe 'add_object', js: true do
+        before(:each) do
+          add_obj_link = find_link('Add object')
+          expect(add_obj_link).not_to be_nil
+          add_obj_link.click
+        end
+
+        it 'should display an "Add Object" link' do
+          expect(page.title).to include('Add Object')
+        end
+
+        it 'Add object without attaching a file' do
+          expect(page.title).to include('Add Object')
+          find('input#title').set('sample file')
+          find('input#author').set('sample author')
+          find_button('Submit').click
+          expect(page.title).to include('Add Object')
+          expect(find('p.error-message')).to have_content('You must choose a filename to submit.')
+        end
+
       end
 
       describe 'search' do
@@ -154,4 +169,5 @@ describe 'collections' do
     end
 
   end
+
 end

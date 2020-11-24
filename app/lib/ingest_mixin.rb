@@ -1,13 +1,26 @@
 module IngestMixin
   include HttpMixin
   def ingest_params_from(params, current_user)
+    filename = (params[:filename] || params[:file].original_filename)
+    # We found a case in which % in the original filename triggers an encoding error
+    # Pull the filename from the POST header using a pattern match
+    unless filename.valid_encoding?
+      begin
+        m = /filename="([^"]+)"/.match(params[:file].headers)
+        filename = m[1] if m
+      rescue StandardError
+        #:nocov:
+        filename = filename.encode('UTF-8', invalid: :replace, undef: :replace)
+        #:nocov:
+      end
+    end
     {
       'creator' => params[:creator],
       'date' => params[:date],
       'digestType' => params[:digestType],
       'digestValue' => params[:digestValue],
       'file' => params[:file].tempfile,
-      'filename' => (params[:filename] || params[:file].original_filename),
+      'filename' => filename,
       'localIdentifier' => params[:localIdentifier],
       'notification' => params[:notification],
       'notificationFormat' => params[:notificationFormat],
@@ -40,13 +53,26 @@ module IngestMixin
   end
 
   def update_params_from(params, current_user)
+    filename = (params[:filename] || params[:file].original_filename)
+    # We found a case in which % in the original filename triggers an encoding error
+    # Pull the filename from the POST header using a pattern match
+    unless filename.valid_encoding?
+      begin
+        m = /filename="([^"]+)"/.match(params[:file].headers)
+        filename = m[1] if m
+      rescue StandardError
+        #:nocov:
+        filename = filename.encode('UTF-8', invalid: :replace, undef: :replace)
+        #:nocov:
+      end
+    end
     {
       'creator' => params[:creator],
       'date' => params[:date],
       'digestType' => params[:digestType],
       'digestValue' => params[:digestValue],
       'file' => params[:file].tempfile,
-      'filename' => (params[:filename] || params[:file].original_filename),
+      'filename' => filename,
       'localIdentifier' => params[:localIdentifier],
       'notification' => params[:notification],
       'notificationFormat' => params[:notificationFormat],
@@ -79,11 +105,24 @@ module IngestMixin
   end
 
   def upload_params_from(params, current_user, current_group)
+    filename = params[:file].original_filename
+    # We found a case in which % in the original filename triggers an encoding error
+    # Pull the filename from the POST header using a pattern match
+    unless filename.valid_encoding?
+      begin
+        m = /filename="([^"]+)"/.match(params[:file].headers)
+        filename = m[1] if m
+      rescue StandardError
+        #:nocov:
+        filename = filename.encode('UTF-8', invalid: :replace, undef: :replace)
+        #:nocov:
+      end
+    end
     {
       'file' => params[:file].tempfile,
       'type' => params[:object_type],
       'submitter' => "#{current_user.login}/#{current_user.displayname}",
-      'filename' => params[:file].original_filename,
+      'filename' => filename,
       'profile' => current_group.submission_profile,
       'creator' => params[:author],
       'title' => params[:title],

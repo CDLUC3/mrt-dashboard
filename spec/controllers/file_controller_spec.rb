@@ -121,6 +121,26 @@ RSpec.describe FileController, type: :controller do
       expect(response.status).to eq(200)
     end
 
+    # Note that percent signs in filenames will generate invalid download links
+    skip it 'handles filenames with percent sign' do
+      pathname = 'producer/Test %25BF.pdf'
+      mock_permissions_all(user_id, collection_id)
+
+      size_ok = APP_CONFIG['max_download_size'] - 1
+      inv_file.full_size = size_ok
+      inv_file.pathname = pathname
+      inv_file.save!
+
+      streamer = double(Streamer)
+      expected_url = inv_file.bytestream_uri
+      allow(Streamer).to receive(:new).with(expected_url).and_return(streamer)
+
+      params[:file] = pathname
+      request.session.merge!({ uid: user_id })
+      get(:download, params: params)
+      expect(response.status).to eq(200)
+    end
+
     it 'handles filenames with spaces and pipes' do
       pathname = 'producer/AIP/Subseries 1.1/Objects/Evolution book/Tate Collection |landscape2'
       mock_permissions_all(user_id, collection_id)
@@ -243,6 +263,58 @@ RSpec.describe FileController, type: :controller do
     it 'returns presign url for the file (no_redirect)' do
       mock_permissions_all(user_id, collection_id)
 
+      params[:no_redirect] = true
+      expect(client).to receive(:get).with(
+        FileController.get_storage_presign_url(my_node_key_params(params), has_file: true),
+        { contentType: inv_file.mime_type },
+        {},
+        follow_redirect: true
+      ).and_return(mock_response(200, '', my_presign_wrapper))
+
+      request.session.merge!({ uid: user_id })
+      get(:presign, params: params)
+      expect(response.status).to eq(200)
+      json = JSON.parse(response.body)
+      expect(json['url']).to eq(my_presign)
+    end
+
+    it 'returns presign url for the file - space in filename' do
+      pathname = 'producer/Caltrans EHE Tests.pdf'
+      mock_permissions_all(user_id, collection_id)
+
+      size_ok = APP_CONFIG['max_download_size'] - 1
+      inv_file.full_size = size_ok
+      inv_file.pathname = pathname
+      inv_file.save!
+
+      params[:file] = pathname
+      params[:no_redirect] = true
+      expect(client).to receive(:get).with(
+        FileController.get_storage_presign_url(my_node_key_params(params), has_file: true),
+        { contentType: inv_file.mime_type },
+        {},
+        follow_redirect: true
+      ).and_return(mock_response(200, '', my_presign_wrapper))
+
+      request.session.merge!({ uid: user_id })
+      get(:presign, params: params)
+      expect(response.status).to eq(200)
+      json = JSON.parse(response.body)
+      expect(json['url']).to eq(my_presign)
+    end
+
+    # The percent sign in a filename will fail... the UI must repair links before generating them
+    it 'returns presign url for the file - percent in filename' do
+      pathname = 'producer/Test %BF.pdf'
+
+      mock_permissions_all(user_id, collection_id)
+
+      size_ok = APP_CONFIG['max_download_size'] - 1
+      inv_file.full_size = size_ok
+      inv_file.pathname = pathname
+      inv_file.save!
+
+      params[:file] = pathname
       params[:no_redirect] = true
       expect(client).to receive(:get).with(
         FileController.get_storage_presign_url(my_node_key_params(params), has_file: true),

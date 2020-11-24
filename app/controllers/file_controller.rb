@@ -4,7 +4,7 @@ require 'json'
 class FileController < ApplicationController
   before_action :require_user
 
-  before_action :fix_params, except: %i[storage_key]
+  before_action :fix_params
 
   # Do not force redirect to latest version for key lookup
   before_action :redirect_to_latest_version, except: %i[storage_key]
@@ -77,7 +77,7 @@ class FileController < ApplicationController
   def storage_key_do
     version = params_u(:version).to_i
     ark = params_u(:object)
-    pathname = params_u(:file)
+    pathname = fix_filename
 
     sql = %{
       SELECT
@@ -146,14 +146,23 @@ class FileController < ApplicationController
   end
   # rubocop:enable all
 
-  def validate_ark(ark)
-    ark =~ %r{^ark:/\d+/[a-z0-9]+$}
+  def fix_filename
+    # if the filename cannot be safely unencoded, look for a % in the original filename
+    fname = params_u(:file)
+    fname = Encoder.urlunencode(params[:file].gsub('%', '%25')) unless fname.valid_encoding?
+    fname
   end
 
   def fix_params
     object_ark = params_u(:object)
-    validate_ark(object_ark)
-    combine = "#{object_ark}/#{params[:version]}/#{params_u(:file)}"
+    ver = params[:version]
+    fname = fix_filename
+    match_params("#{object_ark}/#{ver}/#{fname}")
+  end
+
+  def match_params(combine)
+    return unless combine.valid_encoding?
+
     m = %r{^(ark:/\d+/[a-z0-9_]+)/(\d+)/(.*)$}.match(combine)
     replace_params(m) if m
   end
@@ -165,12 +174,12 @@ class FileController < ApplicationController
   end
 
   def load_file
-    filename = params_u(:file)
+    filename = fix_filename
 
     # determine if user is retrieving a system file; otherwise assume
     # they are obtaining a producer file which needs to prepended to
     # the filename
-    filename = "producer/#{filename}" unless filename =~ /^(producer|system)/
+    filename = "producer/#{filename}" if filename.valid_encoding? && filename !~ /^(producer|system)/
 
     @file = InvFile.joins(:inv_version, :inv_object)
       .where('inv_objects.ark = ?', params_u(:object))

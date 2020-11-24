@@ -75,6 +75,7 @@ class ObjectController < ApplicationController
       flash[:error] = 'You must choose a filename to submit.'
       redirect_to(controller: 'object', action: 'add', group: current_group) && return
     end
+
     begin
       post_upload
     rescue Exception => e # TODO: should this be StandardError?
