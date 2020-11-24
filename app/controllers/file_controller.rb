@@ -77,7 +77,7 @@ class FileController < ApplicationController
   def storage_key_do
     version = params_u(:version).to_i
     ark = params_u(:object)
-    pathname = get_filename
+    pathname = fix_filename
 
     sql = %{
       SELECT
@@ -156,7 +156,7 @@ class FileController < ApplicationController
   def fix_params
     object_ark = params_u(:object)
     ver = params[:version]
-    fname = get_filename
+    fname = fix_filename
     match_params("#{object_ark}/#{ver}/#{fname}")
   end
 
@@ -174,7 +174,7 @@ class FileController < ApplicationController
   end
 
   def load_file
-    filename = get_filename
+    filename = fix_filename
 
     # determine if user is retrieving a system file; otherwise assume
     # they are obtaining a producer file which needs to prepended to
