@@ -27,7 +27,6 @@ development:
   <<: *default
 
 docker: &docker
-  host: localhost
   adapter: mysql2
   host: db-container
   database: db-name
