@@ -28,7 +28,7 @@ MrtDashboard::Application.configure do
   config.eager_load = true
 
   config.active_support.deprecation = :log
-  config.cache_store = :mem_cache_store
+  config.cache_store = :memory_store, { size: 64.megabytes }
 
 end
 
