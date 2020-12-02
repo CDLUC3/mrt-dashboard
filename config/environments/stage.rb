@@ -28,6 +28,7 @@ MrtDashboard::Application.configure do
   config.eager_load = true
 
   config.active_support.deprecation = :log
+  config.cache_store = :mem_cache_store
 
 end
 
