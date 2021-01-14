@@ -1,15 +1,25 @@
-# config valid only for Capistrano 3.1
-lock '3.14.1'
+require 'uc3-ssm'
+
+# Config valid for current version and patch releases of Capistrano
+lock '~> 3.14.1'
 
 set :application, 'merritt-ui'
-set :repo_url, 'https://github.com/CDLUC3/mrt-dashboard'
+set :user         ENV['USER']            || 'dpr2'
+set :home         ENV['HOME']            || '/dpr2'
+set :rails_env,   ENV['RAILS_ENV']       || 'production'
+set :branch,      ENV['CAP_BRANCH']      || 'master'
+set :repo_url,    ENV['CAP_REPO']        || 'https://github.com/cdluc3/mrt-dashboard.git'
+set :deploy_to,   ENV['CAP_DEPLOY_TO']   || '/dpr2/apps/ui'
 
-set :deploy_to, '/dpr2/apps/ui'
+set :puma_pid, "#{deploy_to}/shared/pid/puma.pid"
+set :puma_log, "#{deploy_to}/shared/log/puma.log"
+set :puma_port, '26181'
+
 # set :scm, :git
 
 set :stages, %w[local mrt-ui-dev stage production]
 
-set :default_env, { path: '/dpr2/local/bin:$PATH' }
+set :default_env, { path: '$HOME/local/bin:$PATH' }
 
 # persistent dirs
 # set :linked_files, %w[config/database.yml config/ldap.yml config/atom.yml]
@@ -114,7 +124,7 @@ namespace :deploy do
   desc 'Setup ENV variables'
   task :update_env do
     on roles(:app), wait: 1 do
-      master_key = capture('source /dpr2/.profile.d/uc3-aws-util.sh && get_ssm_value_by_name ui/master_key')
+      master_key = capture('source $HOME/.profile.d/uc3-aws-util.sh && get_ssm_value_by_name ui/master_key')
       target = "#{release_path}/config/master.key"
       execute("echo #{master_key} > #{target}")
     end
@@ -155,7 +165,7 @@ namespace :bundle do
   desc 'run bundle install and ensure all gem requirements are met'
   task :install do
     on roles(:app) do
-      execute "cd #{current_path} && bundle config set path /dpr2/.gem"
+      execute "cd #{current_path} && bundle config set path $HOME/.gem"
       execute "cd #{current_path} && bundle install --without=test"
       execute "cd #{current_path} && bundle exec rake assets:precompile"
     end
