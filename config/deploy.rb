@@ -1,5 +1,3 @@
-require 'uc3-ssm'
-
 # Config valid for current version and patch releases of Capistrano
 lock '~> 3.14.1'
 
