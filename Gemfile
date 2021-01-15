@@ -9,8 +9,9 @@ gem 'aws-sdk-ec2'
 gem 'aws-sdk-ssm'
 gem 'bootsnap'
 gem 'builder'
-gem 'capistrano', '~> 3.14', require: false
-gem 'capistrano-rails', '~> 1.6', require: false
+gem 'capistrano', '3.14.1'
+gem 'capistrano-rails'
+#gem 'capistrano-rails', '~> 1.6'
 
 gem 'exception_notification'
 gem 'httpclient'
