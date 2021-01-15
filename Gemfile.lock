@@ -359,8 +359,8 @@ DEPENDENCIES
   bootsnap
   builder
   byebug
-  capistrano
-  capistrano-rails
+  capistrano (~> 3.14)
+  capistrano-rails (~> 1.6)
   capybara
   capybara-webmock
   colorize

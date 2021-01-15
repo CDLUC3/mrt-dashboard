@@ -2,8 +2,8 @@
 lock '~> 3.14.1'
 
 set :application, 'merritt-ui'
-set :user         ENV['USER']            || 'dpr2'
-set :home         ENV['HOME']            || '/dpr2'
+set :user,        ENV['USER']            || 'dpr2'
+set :home,        ENV['HOME']            || '/dpr2'
 set :rails_env,   ENV['RAILS_ENV']       || 'production'
 set :branch,      ENV['CAP_BRANCH']      || 'master'
 set :repo_url,    ENV['CAP_REPO']        || 'https://github.com/cdluc3/mrt-dashboard.git'
@@ -73,15 +73,15 @@ namespace :deploy do
     end
   end
 
-  desc 'Prompt for branch'
-  task :prompt_for_tag do
-    on roles(:app) do
-      puts 'Usage: [CONF_TAG=<config repo tag>] TAG=<UI repo tag> cap mrt-ui-dev deploy'
-      ask :branch, 'master' unless ENV['TAG']
-      set :branch, ENV['TAG'] if ENV['TAG']
-      puts "Setting branch to: #{fetch(:branch)}"
-    end
-  end
+  #desc 'Prompt for branch'
+  #task :prompt_for_tag do
+  #  on roles(:app) do
+  #    puts 'Usage: [CONF_TAG=<config repo tag>] TAG=<UI repo tag> cap mrt-ui-dev deploy'
+  #    ask :branch, 'master' unless ENV['TAG']
+  #    set :branch, ENV['TAG'] if ENV['TAG']
+  #    puts "Setting branch to: #{fetch(:branch)}"
+  #  end
+  #end
 
   desc 'Update configuration'
   task :update_config do
