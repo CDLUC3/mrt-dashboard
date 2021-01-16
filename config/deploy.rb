@@ -10,7 +10,7 @@ set :deploy_to,        ENV['CAP_DEPLOY_TO']   || '/dpr2/apps/ui'
 set :rails_env,        ENV['RAILS_ENV']       || 'production'
 set :repo_url,         ENV['APP_REPO']        || 'https://github.com/cdluc3/mrt-dashboard.git'
 set :branch,           ENV['APP_BRANCH']      || 'master'
-set :config_repo_url,  ENV['CONFIG_REPO']     || 'https://github.com/CDLUC3/mrt-dashboard-config'
+set :config_repo_url,  ENV['CONFIG_REPO']     || 'git@github.com:cdlib/mrt-dashboard-config.git'
 set :config_tag,       ENV['CONFIG_TAG']      || 'master'
 set :config_repo_name, 'mrt-dashboard-config'
 set :puma_pid,         "#{fetch(:deploy_to)}/shared/pid/puma.pid"
@@ -65,24 +65,27 @@ namespace :deploy do
   task :update_config do
     on roles(:app) do
       shared_dir = "#{fetch(:deploy_to)}/shared"
+      repo_name = "#{fetch(:config_repo_name)}"
+      repo_url = "#{fetch(:config_repo_url)}"
+      rev = "#{fetch(:config_tag)}"
 
       # make sure config repo is checked out & symlinked
-      unless test("[ -d #{shared_dir}/#{fetch(:config_repo_name)} ]")
+      unless test("[ -d #{shared_dir}/#{repo_name} ]")
         # move hard-coded config directory out of the way if needed
         config_dir = "#{shared_dir}/config"
         execute "mv #{config_dir} #{config_dir}.old" if test("[ -d #{config_dir} ]")
         within shared_dir do
           # clone config repo and link it as config directory
-          execute 'git', 'clone', "#{fetch(:config_repo_url)}", "#{fetch(:config_repo_name)}"
-          execute 'ln', '-s', "#{fetch(:config_repo_name)}", 'config'
+          execute 'git', 'clone', "#{repo_url}", "#{repo_name}"
+          execute 'ln', '-s', "#{repo_name}", 'config'
         end
       end
 
       # update config repo
-      within "#{shared_dir}/#{fetch(:config_repo_url}" do
-        puts "Updating #{fetch(:config_repo_url} to #{fetch(:config_tag)}"
+      within "#{shared_dir}/#{repo_name}" do
+        puts "Updating #{repo_url} to #{rev}"
         execute 'git', 'fetch', '--all', '--tags'
-        execute 'git', 'reset', '--hard', "origin/#{fetch(:config_tag:}"
+        execute 'git', 'reset', '--hard', "origin/#{rev}"
       end
     end
   end
