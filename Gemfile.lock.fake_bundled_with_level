@@ -354,7 +354,7 @@ DEPENDENCIES
   bootsnap
   builder
   byebug
-  capistrano (= 3.14.1)
+  capistrano
   capistrano-rails
   capybara
   capybara-webmock
