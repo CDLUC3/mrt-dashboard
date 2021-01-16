@@ -17,11 +17,8 @@ set :puma_pid,         "#{fetch(:deploy_to)}/shared/pid/puma.pid"
 set :puma_log,         "#{fetch(:deploy_to)}/shared/log/puma.log"
 set :puma_port,        '26181'
 
-# set :scm, :git
-
 set :stages, %w[local mrt-ui-dev stage production]
-
-set :default_env, { path: '$HOME/local/bin:$PATH' }
+set :default_env, { path: '$PATH' }
 
 # persistent dirs
 # set :linked_files, %w[config/database.yml config/ldap.yml config/atom.yml]
@@ -40,26 +37,12 @@ set :linked_dirs, %w[log pid]
 # Default value for keep_releases is 5
 set :keep_releases, 5
 
-# Prompt for TAG before deployment only
-#before 'deploy', 'deploy:prompt_for_tag'
 # Update config/atom repo before deployment only
 before 'deploy', 'deploy:update_config'
 before 'deploy', 'deploy:update_atom'
-#after  'deploy', 'bundle:install'
-#after  'deploy', 'deploy:update_env'
 
 namespace :deploy do
   before :compile_assets, :env_setup
-
-  #desc 'Prompt for branch'
-  #task :prompt_for_tag do
-  #  on roles(:app) do
-  #    puts 'Usage: [CONF_TAG=<config repo tag>] TAG=<UI repo tag> cap mrt-ui-dev deploy'
-  #    ask :branch, 'master' unless ENV['TAG']
-  #    set :branch, ENV['TAG'] if ENV['TAG']
-  #    puts "Setting branch to: #{fetch(:branch)}"
-  #  end
-  #end
 
   desc 'Update configuration'
   task :update_config do
@@ -102,15 +85,6 @@ namespace :deploy do
     end
   end
 
-  #desc 'Setup ENV variables'
-  #task :update_env do
-  #  on roles(:app), wait: 1 do
-  #    master_key = capture('source $HOME/.profile.d/uc3-aws-util.sh && get_ssm_value_by_name ui/master_key')
-  #    target = "#{release_path}/config/master.key"
-  #    execute("echo #{master_key} > #{target}")
-  #    execute("ls -l #{target}")
-  #  end
-  #end
 
   desc 'Update Atom scripts'
   task :update_atom do
