@@ -30,6 +30,7 @@ gem 'uglifier'
 gem 'unicode'
 gem 'uuidtools'
 gem 'will_paginate'
+gem 'yui'
 
 group :development do
   gem 'web-console'
