@@ -38,10 +38,10 @@ before 'deploy', 'deploy:update_config'
 before 'deploy', 'deploy:update_atom'
 after  'deploy', 'bundle:install'
 after  'deploy', 'deploy:update_env'
-after  'deploy', "git:version"
+after  'deploy', 'git:version'
 
 namespace :git do
-  desc "Add the version file so that we can display the git version in the footer"
+  desc 'Add the version file so that we can display the git version in the footer'
   task :version do
     on roles(:app), wait: 1 do
       execute "touch #{release_path}/.version"
