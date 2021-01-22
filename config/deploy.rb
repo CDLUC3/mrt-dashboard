@@ -9,7 +9,7 @@ set :home,             ENV['HOME']            || '/dpr2'
 set :deploy_to,        ENV['DEPLOY_TO']       || '/dpr2/apps/ui'
 set :rails_env,        ENV['RAILS_ENV']       || 'production'
 set :repo_url,         ENV['REPO_URL']        || 'https://github.com/cdluc3/mrt-dashboard.git'
-set :branch,           ENV['APP_BRANCH']      || 'master'
+set :branch,           ENV['BRANCH']          || 'master'
 
 set :config_dir,       'mrt-dashboard-config'
 set :config_repo_url,  ENV['CONFIG_REPO']     || 'git@github.com:cdlib/mrt-dashboard-config.git'
