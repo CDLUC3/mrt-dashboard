@@ -249,9 +249,8 @@ Test your change and then deploy it to the puppet master as described in
 This project is deployed with [Capistrano](https://capistranorb.com), as
 controlled by the [`config/deploy.rb`](config/deploy.rb) file. Note that the
 "environments" for Capistrano purposes are the individual service environment
-(fqsn), as defined in the `cap_environment` files under
-[`config/deploy`](config/deploy) directory.  See usage notes at the head of
-each file.
+files in the [`config/deploy`](config/deploy) directory.  See usage notes at
+the head of each file.
 
 Example:
 
@@ -266,10 +265,10 @@ $ head -5 config/deploy/uc3-mrt-ui-stg.rb
 $ bundle exec cap uc3-mrt-ui-stg deploy BRANCH=v1.0.4
 ```
 
-**IMPORTANT: You must disable puppet automation in order to perform manual
-deployment, or your deployment will be rolled back by puppet.**  Do this by
-setting `auto_deploy: flase` in the `uc3_mrt_ui::config` stanza in the
-appropriate hiera data file.
+> **!** **You must disable puppet automation in order to perform manual
+> deployment, or your deployment will be rolled back by puppet.**  Do this by
+> setting `auto_deploy: flase` in the `uc3_mrt_ui::config` stanza in the
+> appropriate hiera data file.
 
 
 ### Restarting Puma Service after Manual Deployment
@@ -309,25 +308,20 @@ The configuration directory is are deployed by default as part of the
 
 - To redeploy a change to the config files without redeploying the code,
   you can use `cap <ENV> deploy:update_config` in the `mrt-dashboard`
-  project. (You'll probably then also want to run `cap <ENV> deploy:stop;
-  cap <ENV> deploy:start`, so that the application will pick up the
-  changes.)
 - To deploy a specific tag (not branch!) of this config repository, you
-  can use the `$CONF_TAG` environment variable, either in a standalone
+  can use the `$CONFIG_BRANCH` environment variable, either in a standalone
   config deployment:
 
   ```
-  CONF_TAG=<config tag> cap <ENV> deploy:update_config
+  bundle exec cap ENV> deploy:update_config CONFIG_BRANCH=development
   ```
 
   or in a deployment of the code:
 
   ```
-  CONF_TAG=<config tag> [TAG=<code tag>] cap <ENV> deploy
+  bundle exec cap ENV> deploy:update_config CONFIG_BRANCH=development BRANCH=v1.0.4
   ````
 
-  Note that you can separately specify the tag for the code itself with
-  `$TAG`.
 
 ## Notes
-test
+
