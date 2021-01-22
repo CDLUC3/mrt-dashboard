@@ -22,6 +22,5 @@ if File.exists?(".version")
   # Get .version file created by Cap deployment
   APP_VERSION = File.read(".version")
 else
-  # Get current branch https://stackoverflow.com/questions/6245570/how-to-get-the-current-branch-name-in-git
-  APP_VERSION = `git rev-parse --abbrev-ref HEAD||echo non-branch`
+  APP_VERSION = 'no-deploy-tag'
 end
