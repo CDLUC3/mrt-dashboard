@@ -177,6 +177,7 @@ tests afterwards. Most RuboCop auto-fixes are smart enough not to change any
 semantics, but occasionally it does make a mistake.)
 
 > **⚠️ All style checks must pass for the continuous integration build to succeed.**
+> **⚠️ All style checks must pass for the continuous integration build to succeed.**
 
 ## Rake tasks and other commands
 
@@ -265,7 +266,7 @@ $ head -5 config/deploy/uc3-mrt-ui-stg.rb
 $ bundle exec cap uc3-mrt-ui-stg deploy BRANCH=v1.0.4
 ```
 
-> **!** **You must disable puppet automation in order to perform manual
+> **⚠️  You must disable puppet automation in order to perform manual
 > deployment, or your deployment will be rolled back by puppet.**  Do this by
 > setting `auto_deploy: flase` in the `uc3_mrt_ui::config` stanza in the
 > appropriate hiera data file.
