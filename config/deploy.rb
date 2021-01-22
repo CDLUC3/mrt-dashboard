@@ -28,6 +28,9 @@ set :linked_dirs, %w[log pid]
 # Default value for keep_releases is 5
 set :keep_releases, 5
 
+# Gets the current Git tag and revision
+set :version_number, `git describe --tags`
+
 # Prompt for TAG before deployment only
 before 'deploy', 'deploy:prompt_for_tag'
 # Update config/atom repo before deployment only
@@ -35,6 +38,17 @@ before 'deploy', 'deploy:update_config'
 before 'deploy', 'deploy:update_atom'
 after  'deploy', 'bundle:install'
 after  'deploy', 'deploy:update_env'
+after  'deploy', 'git:version'
+
+namespace :git do
+  desc 'Add the version file so that we can display the git version in the footer'
+  task :version do
+    on roles(:app), wait: 1 do
+      execute "touch #{release_path}/.version"
+      execute "echo '#{fetch :version_number}' >> #{release_path}/.version"
+    end
+  end
+end
 
 namespace :deploy do
   desc 'Stop Puma'
