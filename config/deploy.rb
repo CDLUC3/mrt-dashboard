@@ -37,12 +37,26 @@ set :linked_dirs, %w[log pid]
 # Default value for keep_releases is 5
 set :keep_releases, 5
 
+# Gets the current Git tag and revision
+set :version_number, `git describe --tags`
+
 # Update config/atom repo before deployment only
 before 'deploy', 'deploy:update_config'
 before 'deploy', 'deploy:update_atom'
+after  'deploy', 'git:version'
+
+namespace :git do
+  desc 'Add the version file so that we can display the git version in the footer'
+  task :version do
+    on roles(:app), wait: 1 do
+      execute "touch #{release_path}/.version"
+      execute "echo '#{fetch :version_number}' >> #{release_path}/.version"
+    end
+  end
+end
 
 namespace :deploy do
-  before :compile_assets, :env_setup
+  before :compile_assets, :ssm_param
 
   desc 'Update configuration'
   task :update_config do
@@ -74,8 +88,8 @@ namespace :deploy do
   end
 
 
-  desc 'Setup ENV Variables'
-  task :env_setup do
+  desc 'Set master.key from SSM ParameterStore'
+  task :ssm_param do
     on roles(:app), wait: 1 do
       ssm = Uc3Ssm::ConfigResolver.new
       master_key = ssm.parameter_for_key('ui/master_key')
