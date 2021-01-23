@@ -18,9 +18,4 @@ LDAP_CONFIG = load_uc3_config(name: 'ldap.yml', return_key: Rails.env)
 ATOM_CONFIG = load_uc3_config(name: 'atom.yml', return_key: Rails.env)
 APP_CONFIG = load_uc3_config(name: 'app_config.yml', return_key: Rails.env)
 
-APP_VERSION = if File.exist?('.version')
-                # Get .version file created by Cap deployment
-                File.read('.version')
-              else
-                'no-deploy-tag'
-              end
+APP_VERSION = File.exist?('.version') ? File.read('.version').chop.chomp(";") : 'no-deploy-tag'
