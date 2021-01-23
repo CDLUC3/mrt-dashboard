@@ -18,4 +18,4 @@ LDAP_CONFIG = load_uc3_config(name: 'ldap.yml', return_key: Rails.env)
 ATOM_CONFIG = load_uc3_config(name: 'atom.yml', return_key: Rails.env)
 APP_CONFIG = load_uc3_config(name: 'app_config.yml', return_key: Rails.env)
 
-APP_VERSION = File.exist?('.version') ? File.read('.version').chop.chomp(";") : 'no-deploy-tag'
+APP_VERSION = File.exist?('.version') ? File.read('.version').chop.chomp(';') : 'no-deploy-tag'
