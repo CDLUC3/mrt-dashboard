@@ -62,9 +62,9 @@ namespace :deploy do
   task :update_config do
     on roles(:app) do
       shared_dir = "#{fetch(:deploy_to)}/shared"
-      config_dir = "#{fetch(:config_dir)}"
-      repo_url = "#{fetch(:config_repo_url)}"
-      ref = "#{fetch(:config_branch)}"
+      config_dir = fetch(:config_dir).to_s
+      repo_url = fetch(:config_repo_url).to_s
+      ref = fetch(:config_branch).to_s
 
       # make sure config repo is checked out & symlinked
       unless test("[ -d #{shared_dir}/#{config_dir} ]")
@@ -73,8 +73,8 @@ namespace :deploy do
         execute "mv #{config_dir} #{config_dir}.old" if test("[ -d #{config_dir} ]")
         within shared_dir do
           # clone config repo and link it as config directory
-          execute 'git', 'clone', "#{repo_url}", "#{config_dir}"
-          execute 'ln', '-s', "#{config_dir}", 'config'
+          execute 'git', 'clone', repo_url.to_s, config_dir.to_s
+          execute 'ln', '-s', config_dir.to_s, 'config'
         end
       end
 
@@ -87,7 +87,6 @@ namespace :deploy do
     end
   end
 
-
   desc 'Set master.key from SSM ParameterStore'
   task :ssm_param do
     on roles(:app), wait: 1 do
@@ -98,7 +97,6 @@ namespace :deploy do
       f.close
     end
   end
-
 
   desc 'Update Atom scripts'
   task :update_atom do
@@ -131,7 +129,7 @@ namespace :deploy do
   end
 end
 
-#namespace :bundle do
+# namespace :bundle do
 #  desc 'run bundle install and ensure all gem requirements are met'
 #  task :install do
 #    on roles(:app) do
@@ -140,4 +138,4 @@ end
 #      execute "cd #{current_path} && bundle exec rake assets:precompile"
 #    end
 #  end
-#end
+# end

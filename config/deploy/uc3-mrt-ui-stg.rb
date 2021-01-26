@@ -3,10 +3,10 @@
 #
 # Usage:
 #   bundle exec cap uc3-mrt-ui-stg deploy BRANCH=<git-ref>
-# 
+#
 set :rails_env, 'stage'
 ENV['SSM_ROOT_PATH'] = '/uc3/mrt/stg/'
-raise "Environment var 'BRANCH' not defined" unless ENV['BRANCH'] 
+raise "Environment var 'BRANCH' not defined" unless ENV['BRANCH']
 
 puts "Deploying cap_environment 'uc3-mrt-ui-stg':"
 puts "  branch: #{fetch(:branch)}"
