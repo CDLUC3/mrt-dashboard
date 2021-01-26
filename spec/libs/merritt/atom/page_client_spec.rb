@@ -78,10 +78,10 @@ module Merritt
         @try = 0
         stub_request(:get, page1_url).to_return do |_|
           @try += 1
-          if @try != 3
-            { status: 500, body: 'Oops, try again!', headers: {} }
-          else
+          if @try == 3
             { status: 200, body: File.new(page1_path), headers: {} }
+          else
+            { status: 500, body: 'Oops, try again!', headers: {} }
           end
         end
 

@@ -70,7 +70,7 @@ class CollectionController < ApplicationController
 
   def find_by_full_text(collection_ark, terms)
     # new, more efficient full text query (thanks Debra)
-    where_clause = "(MATCH (sha_dublinkernels.value) AGAINST (\"#{terms.map { |_t| '? ' }.join('')}\"))"
+    where_clause = "(MATCH (sha_dublinkernels.value) AGAINST (\"#{terms.map { |_t| '? ' }.join}\"))"
     InvObject
       .joins(:inv_collections, inv_dublinkernels: :sha_dublinkernel)
       .where('inv_collections.ark = ?', collection_ark)

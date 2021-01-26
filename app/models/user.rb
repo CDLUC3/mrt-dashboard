@@ -29,7 +29,6 @@ class User
   # ############################################################
   # Instance methods
 
-  # rubocop:disable Lint/MissingSuper
   def method_missing(meth, *_args)
     # simple code to read user information with methods that resemble activerecord slightly
     authlogic_key = AUTHLOGIC_MAP[meth.to_s]
@@ -41,7 +40,6 @@ class User
   def respond_to_missing?(*_args)
     true
   end
-  # rubocop:enable Lint/MissingSuper
 
   def groups(permission = nil)
     grp_ids = Group::LDAP.find_groups_for_user(login, User::LDAP, permission)

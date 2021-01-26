@@ -293,7 +293,7 @@ describe 'presigned objects and versions', js: true do
 
     sleep 1
 
-    # Note: cannot successfully mock the download initiated from javascript
+    # NOTE: cannot successfully mock the download initiated from javascript
 
     # mock_assembly(
     #   @obj.node_number,

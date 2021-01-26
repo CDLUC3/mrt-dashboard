@@ -234,10 +234,10 @@ describe 'atom', type: :task do
       @try = 0
       stub_request(:get, starting_point).to_return do |_|
         @try += 1
-        if @try != 3
-          { status: 500, body: 'Oops, try again!', headers: {} }
-        else
+        if @try == 3
           { status: 200, body: feed_xml_str, headers: {} }
+        else
+          { status: 500, body: 'Oops, try again!', headers: {} }
         end
       end
       expect(server).to receive(:add_file).exactly(2).times

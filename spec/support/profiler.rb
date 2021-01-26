@@ -118,7 +118,7 @@ class Profiler
   end
 
   def parent_of(mod)
-    parent_name = mod.name =~ /::[^:]+\Z/ ? $`.freeze : nil
+    parent_name = mod.name =~ /::[^:]+\Z/ ? Regexp.last_match.pre_match.freeze : nil
     Object.const_get(parent_name) if parent_name
   end
 

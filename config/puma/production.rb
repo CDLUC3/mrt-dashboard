@@ -1,4 +1,4 @@
-# Note: Define most command line vaiables here. This is a switch
+# NOTE: Define most command line vaiables here. This is a switch
 #       from the old style incorporated in Unicorn.
 #  - mreyes -
 
