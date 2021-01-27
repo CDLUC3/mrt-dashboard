@@ -10,10 +10,10 @@ raise ' *** SSM_ROOT_PATH is empty' if ENV.fetch('SSM_ROOT_PATH', '').empty? && 
 
 # when running in dev/docker, provide a default resolution value for any SSM values that will not be used
 LDAP_CONFIG = Uc3Ssm::ConfigResolver.new({ def_value: 'NOT_APPLICABLE' })
-                                    .resolve_file_values({ file: 'config/ldap.yml', return_key: Rails.env })
+  .resolve_file_values({ file: 'config/ldap.yml', return_key: Rails.env })
 # when running in dev/docker, provide a default resolution value for any SSM values that will not be used
 ATOM_CONFIG = Uc3Ssm::ConfigResolver.new({ def_value: 'NOT_APPLICABLE' })
-                                    .resolve_file_values({ file: 'config/atom.yml', return_key: Rails.env })
-# app_config.yml does not have any SSM values                                    
+  .resolve_file_values({ file: 'config/atom.yml', return_key: Rails.env })
+# app_config.yml does not have any SSM values
 APP_CONFIG = Uc3Ssm::ConfigResolver.new
-                                    .resolve_file_values({ file: 'config/app_config.yml', return_key: Rails.env })
+  .resolve_file_values({ file: 'config/app_config.yml', return_key: Rails.env })
