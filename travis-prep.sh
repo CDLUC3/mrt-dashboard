@@ -46,5 +46,4 @@ done
 # ############################################################
 # Load database schema
 
-export SSM_SKIP_RESOLUTION=Y
 RAILS_ENV=test bundle exec rake db:schema:load

@@ -20,12 +20,13 @@ addons:
 language: ruby
 
 rvm:
-  - 2.7.0
+  - 2.6.6
 
 cache:
   bundler: true
 
 before_install:
+  - export SSM_SKIP_RESOLUTION=Y
   # start mysql
   - sudo systemctl start mysql
   # wait for mysql service to respond
