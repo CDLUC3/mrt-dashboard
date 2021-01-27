@@ -14,6 +14,10 @@ def load_uc3_config(name:, return_key: nil)
   resolver.resolve_file_values(file: path, return_key: return_key)
 end
 
+puts "TBTB2"
+puts ENV
+puts "TBTB2"
+
 LDAP_CONFIG = load_uc3_config(name: 'ldap.yml', return_key: Rails.env)
 ATOM_CONFIG = load_uc3_config(name: 'atom.yml', return_key: Rails.env)
 APP_CONFIG = load_uc3_config(name: 'app_config.yml', return_key: Rails.env)
