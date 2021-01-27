@@ -5,7 +5,7 @@
 #   bundle exec cap uc3-mrt-ui-prd deploy BRANCH=<git-ref>
 #
 set :rails_env, 'production'
-ENV['SSM_ROOT_PATH'] = '/uc3/mrt/prd/'
+echo 'export SSM_ROOT_PATH=/uc3/mrt/prd/' >> /etc/environment
 raise "Environment var 'BRANCH' not defined" unless ENV['BRANCH']
 
 puts "Deploying cap_environment 'uc3-mrt-ui-prd':"
