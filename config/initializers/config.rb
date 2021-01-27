@@ -1,7 +1,7 @@
-APP_VERSION = File.exist?('.version') ? File.read('.version').chop.chomp(';') : 'no-deploy-tag'
+APP_VERSION = File.exist?('.version') ? File.read('.version').chop.chop.chomp(";") : 'no-deploy-tag'
 
 if ENV.fetch('SSM_ROOT_PATH', '').empty?
-  puts " *** SSM_ROOT_PATH is empty"
+  puts " *** SSM_ROOT_PATH is empty, will set based on Rails.env"
   if Rails.env == 'production'
     ENV['SSM_ROOT_PATH'] = '/uc3/mrt/prd/'
   elsif Rails.env == 'stage'
