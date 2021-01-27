@@ -4,6 +4,8 @@ require 'uc3-ssm'
 # return_key - return values for a specific hash key - use this to filter the return object
 def load_uc3_config(name:, return_key: nil)
   # NOTE: ENV does not seemed to be initialized at this time
+  puts "***"
+  puts `echo $SSM_ROOT_PATH`.chomp
   resolver = Uc3Ssm::ConfigResolver.new(
     def_value: 'NOT_APPLICABLE',
     ssm_root_path: `echo $SSM_ROOT_PATH`.chomp
