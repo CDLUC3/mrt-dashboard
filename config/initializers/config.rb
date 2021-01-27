@@ -3,7 +3,7 @@ APP_VERSION = File.exist?('.version') ? File.read('.version').chop.chop.chomp(';
 # When running outside of a local/docker environment, the SSM_ROOT_PATH must be set
 # - For Capistrano, this is set in ~/.bashrc
 # - For Systemd, this is set in 'Environment'
-# - For docker deployments, this can be passed in via docker-compose. 
+# - For docker deployments, this can be passed in via docker-compose.
 #   - SSM_SKIP_RESOLUTION indicates that all values will be resolved from the EVN
 raise ' *** SSM_ROOT_PATH is empty' if ENV.fetch('SSM_ROOT_PATH', '').empty? && ENV.fetch('SSM_SKIP_RESOLUTION', '').empty?
 
