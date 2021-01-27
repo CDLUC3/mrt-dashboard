@@ -19,7 +19,7 @@ module MrtDashboard
 
     def config.database_configuration
       # The entire config must be returned, but only the Rails.env will be processed
-      Uc3Ssm::ConfigResolver.new.resolve_file_values({ name: 'config/database.yml' })
+      Uc3Ssm::ConfigResolver.new.resolve_file_values({ file: 'config/database.yml' })
     end
 
   end
