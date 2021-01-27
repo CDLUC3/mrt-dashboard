@@ -19,7 +19,11 @@ module MrtDashboard
 
     def config.database_configuration
       # The entire config must be returned, but only the Rails.env will be processed
-      Uc3Ssm::ConfigResolver.new.resolve_file_values({ file: 'config/database.yml' })
+      if ENV.fetch('SSM_ROOT_PATH', '').empty? && ENV.fetch('SSM_SKIP_RESOLUTION', '').empty?
+        {}
+      else
+        Uc3Ssm::ConfigResolver.new.resolve_file_values({ file: 'config/database.yml' })
+      end
     end
 
   end
