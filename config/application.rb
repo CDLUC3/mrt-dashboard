@@ -1,6 +1,7 @@
 require_relative 'boot'
 
 require 'rails/all'
+require 'uc3-ssm'
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
@@ -18,7 +19,7 @@ module MrtDashboard
 
     def config.database_configuration
       # The entire config must be returned, but only the Rails.env will be processed
-      load_uc3_config({ name: 'database.yml' })
+      Uc3Ssm::ConfigResolver.new.resolve_file_values({ name: 'config/database.yml' })
     end
 
   end
