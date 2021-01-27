@@ -1,6 +1,6 @@
 APP_VERSION = File.exist?('.version') ? File.read('.version').chop.chomp(';') : 'no-deploy-tag'
 
-if ENV.empty?
+if ENV.empty? || ENV.nil?
   puts "default: #{ENV}"
   LDAP_CONFIG = {}
   ATOM_CONFIG = {}
