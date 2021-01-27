@@ -7,7 +7,9 @@ require 'uc3-ssm'
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
 
-LDAP_CONFIG = Uc3Ssm::ConfigResolver.new.resolve_file_values({file: 'config/ldap.yml', return_key: Rails.env, def_value: 'NOT_APPLICABLE'})
+puts "**** #{ENV}"
+
+LDAP_CONFIG = Uc3Ssm::ConfigResolver.new({def_value: 'NOT_APPLICABLE'}).resolve_file_values({file: 'config/ldap.yml', return_key: Rails.env})
 ATOM_CONFIG = Uc3Ssm::ConfigResolver.new.resolve_file_values({file: 'config/atom.yml', return_key: Rails.env})
 APP_CONFIG = Uc3Ssm::ConfigResolver.new.resolve_file_values({file: 'config/app_config.yml', return_key: Rails.env})
 
