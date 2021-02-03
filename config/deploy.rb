@@ -11,7 +11,7 @@ set :rails_env,        ENV['RAILS_ENV']       || 'production'
 set :repo_url,         ENV['REPO_URL']        || 'https://github.com/cdluc3/mrt-dashboard.git'
 set :branch,           ENV['BRANCH']          || 'master'
 
-set :config_dir,       'mrt-dashboard-config'
+set :config_name,      'mrt-dashboard-config'
 set :config_repo_url,  ENV['CONFIG_REPO']     || 'git@github.com:cdlib/mrt-dashboard-config.git'
 set :config_branch,    ENV['CONFIG_BRANCH']   || 'master'
 
@@ -62,24 +62,26 @@ namespace :deploy do
   task :update_config do
     on roles(:app) do
       shared_dir = "#{fetch(:deploy_to)}/shared"
-      config_dir = fetch(:config_dir).to_s
+      config_dir = "#{shared_dir}/#{fetch(:config_name)}"
+      puts "config_dir: #{config_dir}"
       repo_url = fetch(:config_repo_url).to_s
       ref = fetch(:config_branch).to_s
 
       # make sure config repo is checked out & symlinked
-      unless test("[ -d #{shared_dir}/#{config_dir} ]")
+      unless test("[ -d #{config_dir} ]")
         # move hard-coded config directory out of the way if needed
-        config_dir = "#{shared_dir}/config"
-        execute "mv #{config_dir} #{config_dir}.old" if test("[ -d #{config_dir} ]")
+        config_link = "#{shared_dir}/config"
+        puts "config_link: #{config_link}"
+        execute "mv #{config_link} #{config_link}.old" if test("[ -d #{config_link} ]")
         within shared_dir do
           # clone config repo and link it as config directory
-          execute 'git', 'clone', repo_url.to_s, config_dir.to_s
-          execute 'ln', '-s', config_dir.to_s, 'config'
+          execute 'git', 'clone', repo_url.to_s, fetch(:config_name).to_s
+          execute 'ln', '-s', fetch(:config_name).to_s, 'config'
         end
       end
 
       # update config repo
-      within "#{shared_dir}/#{config_dir}" do
+      within config_dir.to_s do
         puts "Updating #{repo_url} to #{ref}"
         execute 'git', 'fetch', '--all', '--tags'
         execute 'git', 'reset', '--hard', "origin/#{ref}"
@@ -104,7 +106,7 @@ namespace :deploy do
       puts 'Updating links to Atom scripts if necessary'
       shared_dir = "#{fetch(:deploy_to)}/shared"
       atom_dir = "#{fetch(:deploy_to)}/atom"
-      atom_repo = "#{fetch(:config_dir)}/atom"
+      atom_repo = "#{fetch(:config_name)}/atom"
 
       # make sure atom dirs are present
       execute 'mkdir', atom_dir unless test("[ -d #{atom_dir} ]")
