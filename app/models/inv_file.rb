@@ -1,4 +1,4 @@
-class InvFile < ActiveRecord::Base
+class InvFile < ApplicationRecord
   belongs_to :inv_version, inverse_of: :inv_files
   belongs_to :inv_object
   scope :system_files, -> { where("pathname LIKE 'system/%'") }

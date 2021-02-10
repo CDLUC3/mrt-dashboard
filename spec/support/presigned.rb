@@ -91,7 +91,7 @@ def mock_assembly(node_id, key, json, params = {})
     key: key
   }
   expect(client).to receive(:post).with(
-    ApplicationController.get_storage_presign_url(nk, false, params),
+    ApplicationController.get_storage_presign_url(nk, has_file: false, params: params),
     follow_redirect: true
   ).and_return(
     mock_response(

@@ -3,7 +3,7 @@ MrtDashboard::Application.configure do
   config.action_controller.perform_caching   = true
   config.cache_classes                       = false
 
-  config.autoload_paths                     += %W[#{config.root}/lib]
+  # config.autoload_paths                     += %W[#{config.root}/lib]
   config.consider_all_requests_local         = true
   config.active_support.deprecation          = :log
 
@@ -20,5 +20,5 @@ MrtDashboard::Application.configure do
 
   config.log_tags = %i[uuid remote_ip]
 
-  config.eager_load = false
+  config.eager_load = true
 end

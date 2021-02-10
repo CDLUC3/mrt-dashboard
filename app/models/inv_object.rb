@@ -1,4 +1,4 @@
-class InvObject < ActiveRecord::Base
+class InvObject < ApplicationRecord
   belongs_to :inv_owner
 
   has_many :inv_versions, inverse_of: :inv_object
@@ -45,17 +45,9 @@ class InvObject < ActiveRecord::Base
     URI.parse("#{APP_CONFIG['uri_1']}#{node_number}/#{to_param}")
   end
 
-  def bytestream_uri_async
-    bytestream_uri.to_s.gsub(/content/, 'async')
-  end
-
   # producer
   def bytestream_uri2
     URI.parse("#{APP_CONFIG['uri_2']}#{node_number}/#{to_param}")
-  end
-
-  def bytestream_uri2_async
-    bytestream_uri2.to_s.gsub(/producer/, 'producerasync')
   end
 
   # manifest
@@ -119,6 +111,7 @@ class InvObject < ActiveRecord::Base
 
   def in_embargo?
     return false unless inv_embargo
+
     inv_embargo.in_embargo?
   end
 

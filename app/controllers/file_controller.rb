@@ -2,19 +2,19 @@ require 'httpclient'
 require 'json'
 
 class FileController < ApplicationController
-  before_filter :require_user
+  before_action :require_user
 
-  before_filter :fix_params, except: %i[storage_key]
+  before_action :fix_params
 
   # Do not force redirect to latest version for key lookup
-  before_filter :redirect_to_latest_version, except: %i[storage_key]
+  before_action :redirect_to_latest_version, except: %i[storage_key]
 
   # Do not force load of file for key lookup
-  before_filter :load_file, except: %i[storage_key]
+  before_action :load_file, except: %i[storage_key]
 
-  before_filter :check_download, except: %i[storage_key]
+  before_action :check_download, except: %i[storage_key]
 
-  before_filter :check_version, only: %i[download presign]
+  before_action :check_version, only: %i[download presign]
 
   def download
     if @file.exceeds_download_size?
@@ -34,13 +34,14 @@ class FileController < ApplicationController
     nk = storage_key_do
     presigned = presign_get_by_node_key(nk, params)
     return unless response.status == 200
+
     if params.key?(:no_redirect)
       render status: 200, json: presigned.to_json
       return
     end
     url = presigned['url']
     response.headers['Location'] = url
-    render status: 303, text: ''
+    render status: 303, plain: ''
   end
 
   # API to return the node id and key for a file within the storage service.
@@ -53,6 +54,7 @@ class FileController < ApplicationController
 
   def check_download
     return if current_user_can_download?(@file.inv_version.inv_object)
+
     flash[:error] = 'You do not have download permissions.'
     render file: "#{Rails.root}/public/401.html", status: 401, layout: false
   end
@@ -75,7 +77,7 @@ class FileController < ApplicationController
   def storage_key_do
     version = params_u(:version).to_i
     ark = params_u(:object)
-    pathname = params_u(:file)
+    pathname = fix_filename
 
     sql = %{
       SELECT
@@ -113,13 +115,13 @@ class FileController < ApplicationController
     sql2 += " ORDER BY v.number DESC limit 1"
 
     if version == 0
-      results = ActiveRecord::Base
+      results = ApplicationRecord
         .connection
         .raw_connection
         .prepare(sql)
         .execute(ark, pathname)
     else
-      results = ActiveRecord::Base
+      results = ApplicationRecord
         .connection
         .raw_connection
         .prepare(sql2)
@@ -138,37 +140,46 @@ class FileController < ApplicationController
     end
 
     # For debugging, show url in thre return object
-    url = ApplicationController.get_storage_presign_url(ret.with_indifferent_access, true)
+    url = ApplicationController.get_storage_presign_url(ret.with_indifferent_access, has_file: true)
     ret[:url] = url unless url.nil?
     ret.with_indifferent_access
   end
   # rubocop:enable all
 
-  def validate_ark(ark)
-    ark =~ %r{^ark:\/\d+\/[a-z0-9]+$}
+  def fix_filename
+    # if the filename cannot be safely unencoded, look for a % in the original filename
+    fname = params_u(:file)
+    fname = Encoder.urlunencode(params[:file].gsub('%', '%25')) unless fname.valid_encoding?
+    fname
   end
 
   def fix_params
     object_ark = params_u(:object)
-    validate_ark(object_ark)
-    combine = "#{object_ark}/#{params[:version]}/#{params_u(:file)}"
-    m = %r{^(ark:\/\d+\/[a-z0-9_]+)\/(\d+)\/(.*)$}.match(combine)
+    ver = params[:version]
+    fname = fix_filename
+    match_params("#{object_ark}/#{ver}/#{fname}")
+  end
+
+  def match_params(combine)
+    return unless combine.valid_encoding?
+
+    m = %r{^(ark:/\d+/[a-z0-9_]+)/(\d+)/(.*)$}.match(combine)
     replace_params(m) if m
   end
 
-  def replace_params(m)
-    params[:object] = m[1]
-    params[:version] = m[2]
-    params[:file] = m[3]
+  def replace_params(match)
+    params[:object] = match[1]
+    params[:version] = match[2]
+    params[:file] = match[3]
   end
 
   def load_file
-    filename = params_u(:file)
+    filename = fix_filename
 
     # determine if user is retrieving a system file; otherwise assume
     # they are obtaining a producer file which needs to prepended to
     # the filename
-    filename = "producer/#{filename}" unless filename =~ /^(producer|system)/
+    filename = "producer/#{filename}" if filename.valid_encoding? && filename !~ /^(producer|system)/
 
     @file = InvFile.joins(:inv_version, :inv_object)
       .where('inv_objects.ark = ?', params_u(:object))
@@ -184,7 +195,7 @@ class FileController < ApplicationController
     p = { contentType: @file.mime_type }
     p[:contentDisposition] = params[:contentDisposition] if params.key?(:contentDisposition)
     r = create_http_cli(connect: 15, receive: 15, send: 15).get(
-      ApplicationController.get_storage_presign_url(nodekey, true),
+      ApplicationController.get_storage_presign_url(nodekey, has_file: true),
       p, {}, follow_redirect: true
     )
     eval_presign_get_by_node_key(r)

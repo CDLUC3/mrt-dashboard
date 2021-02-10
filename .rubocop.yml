@@ -1,4 +1,5 @@
 AllCops:
+  NewCops: enable
   # Suppress complaints about post-2.0 syntax
   TargetRubyVersion: 2.4
   # Exclude generated files
@@ -31,8 +32,16 @@ Layout/MultilineOperationIndentation:
   Enabled: false
 
 # Reasonable line-length check; it's too easy for the cure to be worse than the disease
-Metrics/LineLength:
+Layout/LineLength:
   Max: 150
+
+Metrics/AbcSize:
+  Exclude:
+    - 'app/controllers/application_controller.rb'
+
+Naming/FileName:
+  Exclude:
+    - 'config/deploy/*'
 
 # Just because something looks like an accessor doesn't mean it is one
 Naming/PredicateName:
@@ -47,10 +56,6 @@ Naming/VariableNumber:
 Naming/MemoizedInstanceVariableName:
   Enabled: False
 
-# It works in context, trust us
-Naming/UncommunicativeMethodParamName:
-  Enabled: False
-
 # Do what's readable in the context you're in
 Style/AccessModifierDeclarations:
   Enabled: false
@@ -58,10 +63,6 @@ Style/AccessModifierDeclarations:
 # 👎 to cultural imperialism
 Style/AsciiComments:
   Enabled: false
-
-# Sometimes we want to distinguish hash parameters from keyword arguments
-Style/BracesAroundHashParameters:
-  Enabled: False
 
 # Seriously?
 Style/CommentedKeyword:

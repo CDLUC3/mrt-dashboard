@@ -6,15 +6,7 @@ module Merritt
 
       ARG_KEYS = %i[starting_point submitter profile collection_ark feed_update_file].freeze
 
-      attr_reader :starting_point
-      attr_reader :submitter
-      attr_reader :profile
-      attr_reader :collection_ark
-      attr_reader :feed_update_file
-      attr_reader :delay
-      attr_reader :batch_size
-
-      attr_reader :atom_updated
+      attr_reader :starting_point, :submitter, :profile, :collection_ark, :feed_update_file, :delay, :batch_size, :atom_updated
 
       # rubocop:disable Metrics/ParameterLists
       def initialize(starting_point:, submitter:, profile:, collection_ark:, feed_update_file:, delay:, batch_size:)
@@ -48,6 +40,7 @@ module Merritt
 
       def update_feed_update_file!
         return unless atom_updated
+
         File.open(feed_update_file, 'w') { |f| f.puts(atom_updated) }
       end
 
@@ -76,6 +69,7 @@ module Merritt
       def add_credentials!(uri)
         # TODO: allow customization based on feed URL (?)
         return unless uri.host.include?('nuxeo.cdlib.org')
+
         uri.user, uri.password = credentials
       end
 
@@ -113,10 +107,13 @@ module Merritt
 
       def process_from(page_url)
         return unless page_url
+
+        # :nocov:
         while File.exist?(pause_file_path)
           log_info("Pausing processing #{profile} for #{delay} seconds")
           sleep(delay)
         end
+        # :nocov:
         page_client = PageClient.new(page_url: page_url, harvester: self)
         return unless (result = page_client.process_page!)
 

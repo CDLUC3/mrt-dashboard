@@ -2,6 +2,7 @@ require 'features_helper'
 
 describe 'guest' do
   attr_reader :collections
+
   before :each do
     @collections = Array.new(3) do |i|
       db_collection = create(:inv_collection, name: "Collection #{i}", mnemonic: "collection_#{i}")

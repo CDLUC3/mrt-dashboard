@@ -21,6 +21,8 @@ documentation on Merritt's other components, please see the
 - [Style checks](#style-checks)
 - [Rake tasks and other commands](#rake-tasks-and-other-commands)
 - [Continuous integration](#continuous-integration)
+- [Puppet Automation](#puppet-automation)
+- [Manual Deployment](#manual-deployment)
 
 ## Requirements
 
@@ -175,6 +177,7 @@ tests afterwards. Most RuboCop auto-fixes are smart enough not to change any
 semantics, but occasionally it does make a mistake.)
 
 > **⚠️ All style checks must pass for the continuous integration build to succeed.**
+> **⚠️ All style checks must pass for the continuous integration build to succeed.**
 
 ## Rake tasks and other commands
 
@@ -204,12 +207,97 @@ It's a simple build, using the [`travis-prep.sh`](travis-prep.sh) script to
 set up the test database and test configuration files, and then running
 `bundle exec rake` -- the Travis default for a Ruby project.
 
-## Deployment
 
-This project is deployed with [Capistrano](https://capistranorb.com), as controlled
-by the [`config/deploy.rb`](config/deploy.rb) file. Note that the "environments"
-for Capistrano purposes are the individual servers, as defined in the
-[`config/deploy`](config/deploy) directory.
+
+## Puppet Automation
+
+For 'stage' and 'production' rails environments, application deployment is
+managed by puppet.  For full information on how to update a puppet managed
+environment see the following:
+
+- https://confluence.ucop.edu/display/UC3/Working+with+Puppet+Code
+- `ias-puppet2-ops:/apps/puppet/environments/uc3/modules/uc3_mrt_ui/README.md`
+
+### Updating Puppet Hiera Configs
+
+Within your local clone of the uc3-data repository edit the appropriate `fqsn`
+hiera data file for the particular service environment you are planning to
+re-deploy.  Change the `revision` parameter in the `uc3_mrt_ui::config` stanza.
+
+Example:
+
+```
+agould@uc3-aws2-ops:~/my_puppet_workspace/hiera-data/uc3-data> vi fqsn/uc3-mrt-ui-stg.yaml
+agould@uc3-aws2-ops:~/my_puppet_workspace/hiera-data/uc3-data> git diff
+diff --git a/fqsn/uc3-mrt-ui-stg.yaml b/fqsn/uc3-mrt-ui-stg.yaml
+index 1feec25..c2ef712 100644
+--- a/fqsn/uc3-mrt-ui-stg.yaml
++++ b/fqsn/uc3-mrt-ui-stg.yaml
+@@ -6,7 +6,7 @@
+ uc3_mrt_ui::config:
+   stage:
+     git_repo: https://github.com/CDLUC3/mrt-dashboard
+-    revision: v1.0.3
++    revision: v1.0.4
+```
+
+Test your change and then deploy it to the puppet master as described in 
+[Working with Puppet Code](https://confluence.ucop.edu/display/UC3/Working+with+Puppet+Code).
+
+
+## Manual Deployment
+
+This project is deployed with [Capistrano](https://capistranorb.com), as
+controlled by the [`config/deploy.rb`](config/deploy.rb) file. Note that the
+"environments" for Capistrano purposes are the individual service environment
+files in the [`config/deploy`](config/deploy) directory.  See usage notes at
+the head of each file.
+
+Example:
+
+```
+$ head -5 config/deploy/uc3-mrt-ui-stg.rb
+# For manually deploying to nodes in fqsn 'uc3-mrt-ui-stg'.
+# We will always be deploying to localhost.
+#
+# Usage:
+#   bundle exec cap uc3-mrt-ui-stg deploy BRANCH=<git-ref>
+
+$ bundle exec cap uc3-mrt-ui-stg deploy BRANCH=v1.0.4
+```
+
+> **⚠️  You must disable puppet automation in order to perform manual
+> deployment, or your deployment will be rolled back by puppet.**  Do this by
+> setting `auto_deploy: flase` in the `uc3_mrt_ui::config` stanza in the
+> appropriate hiera data file.
+
+
+### Restarting Puma Service after Manual Deployment
+
+Capistrano does not manage restarts of the puma service.  After deployment, you 
+must restart puma manually.
+
+For 'stage' and 'production' rails environments, use `systemctl` with `sudo`:
+
+```
+sudo systemctl reload puma
+```
+
+also useful:
+
+```
+sudo systemctl status puma
+sudo systemctl start puma
+sudo systemctl stop puma
+sudo systemctl restart puma
+```
+
+For 'local' deployments, use `pumactl` with `bundle exec`:
+
+```
+/bin/bundle exec pumactl -F config/puma.rb phased-restart
+```
+
 
 ### Configuration
 
@@ -221,25 +309,20 @@ The configuration directory is are deployed by default as part of the
 
 - To redeploy a change to the config files without redeploying the code,
   you can use `cap <ENV> deploy:update_config` in the `mrt-dashboard`
-  project. (You'll probably then also want to run `cap <ENV> deploy:stop;
-  cap <ENV> deploy:start`, so that the application will pick up the
-  changes.)
 - To deploy a specific tag (not branch!) of this config repository, you
-  can use the `$CONF_TAG` environment variable, either in a standalone
+  can use the `$CONFIG_BRANCH` environment variable, either in a standalone
   config deployment:
 
   ```
-  CONF_TAG=<config tag> cap <ENV> deploy:update_config
+  bundle exec cap ENV> deploy:update_config CONFIG_BRANCH=development
   ```
 
   or in a deployment of the code:
 
   ```
-  CONF_TAG=<config tag> [TAG=<code tag>] cap <ENV> deploy
+  bundle exec cap ENV> deploy:update_config CONFIG_BRANCH=development BRANCH=v1.0.4
   ````
 
-  Note that you can separately specify the tag for the code itself with
-  `$TAG`.
 
 ## Notes
-test
+

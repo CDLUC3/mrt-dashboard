@@ -4,12 +4,13 @@ require 'webmock/rspec'
 require 'fileutils'
 
 describe 'atom', type: :task do
-
-  ATOM_NS = { 'atom' => 'http://www.w3.org/2005/Atom' }.freeze
-  EXPECTED_MANIFESTS = (0..1).map { |i| File.read("spec/data/ucldc_collection_5551212-manifest-#{i}.checkm").freeze }.freeze
-  EXPECTED_ERC_CHECKSUMS = ['664d879f4609ef03f043dae7e4353959'.freeze, '0a10eaecc019131f17de4da54c32085b'.freeze].freeze
+  attr_reader :expected_manifests
+  attr_reader :expected_erc_checksums
 
   before(:each) do
+    { 'atom' => 'http://www.w3.org/2005/Atom' }.freeze
+    @expected_manifests = (0..1).map { |i| File.read("spec/data/ucldc_collection_5551212-manifest-#{i}.checkm").freeze }.freeze
+    @expected_erc_checksums = ['664d879f4609ef03f043dae7e4353959'.freeze, '0a10eaecc019131f17de4da54c32085b'.freeze].freeze
     WebMock.disable_net_connect!
   end
 
@@ -58,10 +59,10 @@ describe 'atom', type: :task do
       invoke_task('atom:update', starting_point, submitter, profile, collection_ark, feeddatefile)
     end
 
-    def add_file
+    def add_file(&block)
       tmpfile = Tempfile.new('', tmp_home)
       @tempfiles << tmpfile
-      File.open(tmpfile, 'w+') { |f| yield f }
+      File.open(tmpfile, 'w+', &block)
       ["http://ingest.example.edu/#{File.basename(tmpfile)}", tmpfile]
     end
 
@@ -71,7 +72,7 @@ describe 'atom', type: :task do
         .sort_by { |f| File.ctime("#{tmp_home}/#{f}") }
     end
 
-    def validate_request!(request_args, erc_checksums = EXPECTED_ERC_CHECKSUMS)
+    def validate_request!(request_args, erc_checksums = @expected_erc_checksums)
       expect(request_args.size).to eq(2)
       files = request_args.map { |ra| ra['file'] }
 
@@ -100,7 +101,7 @@ describe 'atom', type: :task do
       erc_filenames = actual_erc_filenames
       files.each_with_index do |f, i|
         actual_manifest_lines = f.read.strip.split("\n").map(&:strip)
-        expected_manifest_lines = EXPECTED_MANIFESTS[i]
+        expected_manifest_lines = @expected_manifests[i]
           .sub('ACTUAL_ERC_FILENAME', "http://ingest.example.edu/#{erc_filenames[i]}")
           .sub('EXPECTED_ERC_CHECKSUM', erc_checksums[i])
           .strip.split("\n").map(&:strip)
@@ -233,10 +234,10 @@ describe 'atom', type: :task do
       @try = 0
       stub_request(:get, starting_point).to_return do |_|
         @try += 1
-        if @try != 3
-          { status: 500, body: 'Oops, try again!', headers: {} }
-        else
+        if @try == 3
           { status: 200, body: feed_xml_str, headers: {} }
+        else
+          { status: 500, body: 'Oops, try again!', headers: {} }
         end
       end
       expect(server).to receive(:add_file).exactly(2).times
@@ -459,7 +460,7 @@ describe 'atom', type: :task do
       write_feeddate(previous_update)
 
       collection = create(:private_collection, ark: @collection_ark, name: 'Collection 1', mnemonic: 'collection_1')
-      local_ids = ['494672cf-2937-4975-8b33-90bf80b4c8a6', '365579cc-a369-45e7-8977-047bda3f7ed1']
+      local_ids = %w[494672cf-2937-4975-8b33-90bf80b4c8a6 365579cc-a369-45e7-8977-047bda3f7ed1]
       local_ids.each_with_index do |id, i|
         collection.inv_objects << create(
           :inv_object,
@@ -483,7 +484,7 @@ describe 'atom', type: :task do
       write_feeddate(feed_updated - 1) # -1 day
 
       collection = create(:private_collection, ark: @collection_ark, name: 'Collection 1', mnemonic: 'collection_1')
-      local_ids = ['494672cf-2937-4975-8b33-90bf80b4c8a6', '365579cc-a369-45e7-8977-047bda3f7ed1']
+      local_ids = %w[494672cf-2937-4975-8b33-90bf80b4c8a6 365579cc-a369-45e7-8977-047bda3f7ed1]
       local_ids.each_with_index do |id, i|
         obj = create(:inv_object, erc_where: id, erc_who: 'Doe, Jane', erc_what: "Object #{i}", erc_when: '2018-01-01')
         collection.inv_objects << obj
@@ -634,7 +635,7 @@ describe 'atom', type: :task do
         write_feeddate(previous_update)
 
         collection = create(:private_collection, ark: @collection_ark, name: 'Collection 1', mnemonic: 'collection_1')
-        local_ids = ['c9c0834e-d22b-40a1-a35d-811dc40f20ed', '5875b691-e05f-4036-ab0a-8e37cc32a8a3']
+        local_ids = %w[c9c0834e-d22b-40a1-a35d-811dc40f20ed 5875b691-e05f-4036-ab0a-8e37cc32a8a3]
         local_ids.each_with_index do |id, i|
           collection.inv_objects << create(:inv_object,
                                            erc_where: id,
@@ -656,7 +657,7 @@ describe 'atom', type: :task do
         write_feeddate(feed_updated - 1) # -1 day
 
         collection = create(:private_collection, ark: @collection_ark, name: 'Collection 1', mnemonic: 'collection_1')
-        local_ids = ['c9c0834e-d22b-40a1-a35d-811dc40f20ed', '5875b691-e05f-4036-ab0a-8e37cc32a8a3']
+        local_ids = %w[c9c0834e-d22b-40a1-a35d-811dc40f20ed 5875b691-e05f-4036-ab0a-8e37cc32a8a3]
         local_ids.each_with_index do |id, i|
           obj = create(:inv_object, erc_where: id, erc_who: 'Doe, Jane', erc_what: "Object #{i}", erc_when: '2018-01-01')
           collection.inv_objects << obj

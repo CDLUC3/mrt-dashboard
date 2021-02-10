@@ -1,5 +1,18 @@
 require 'rails_helper'
 
+class Openable
+  def initialize(data)
+    @data = data
+  end
+
+  def open(*_rest)
+    io = StringIO.new(@data, 'r')
+    return io unless block_given?
+
+    yield io
+  end
+end
+
 describe DuaController do
   describe ':with_fetched_tempfile' do
     attr_reader :data
@@ -10,18 +23,6 @@ describe DuaController do
     end
 
     it 'copies an arbitrary openable to a tempfile' do
-      class Openable
-        def initialize(data)
-          @data = data
-        end
-
-        def open(*_rest)
-          io = StringIO.new(@data, 'r')
-          return io unless block_given?
-          yield io
-        end
-      end
-
       contents = nil
       controller.send(:with_fetched_tempfile, Openable.new(data)) do |tmp_file|
         contents = tmp_file.read

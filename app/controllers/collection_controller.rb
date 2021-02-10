@@ -1,10 +1,10 @@
 class CollectionController < ApplicationController
   NO_ACCESS = 'You do not have access to that collection'.freeze
 
-  before_filter :require_user
-  before_filter :require_request_group
+  before_action :require_user
+  before_action :require_request_group
 
-  before_filter do
+  before_action do
     raise(ActiveResource::UnauthorizedAccess, NO_ACCESS) unless @request_group.user_has_read_permission?(current_uid)
   end
 
@@ -12,6 +12,7 @@ class CollectionController < ApplicationController
   def require_request_group
     group = Group.find(params[:group])
     raise ActiveRecord::RecordNotFound unless group
+
     @request_group = group
   rescue LdapMixin::LdapException
     raise ActiveRecord::RecordNotFound
@@ -69,7 +70,7 @@ class CollectionController < ApplicationController
 
   def find_by_full_text(collection_ark, terms)
     # new, more efficient full text query (thanks Debra)
-    where_clause = "(MATCH (sha_dublinkernels.value) AGAINST (\"#{terms.map { |_t| '? ' }.join('')}\"))"
+    where_clause = "(MATCH (sha_dublinkernels.value) AGAINST (\"#{terms.map { |_t| '? ' }.join}\"))"
     InvObject
       .joins(:inv_collections, inv_dublinkernels: :sha_dublinkernel)
       .where('inv_collections.ark = ?', collection_ark)
@@ -77,7 +78,7 @@ class CollectionController < ApplicationController
       .includes(:inv_versions, :inv_dublinkernels)
       .quickloadhack
       .limit(10)
-      .uniq
+      .distinct
       .paginate(paginate_args)
   end
 

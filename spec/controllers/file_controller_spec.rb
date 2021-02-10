@@ -51,13 +51,15 @@ RSpec.describe FileController, type: :controller do
     end
 
     it 'requires a login' do
-      get(:download, params, { uid: nil })
+      request.session.merge!({ uid: nil })
+      get(:download, params: params)
       expect(response.status).to eq(302)
       expect(response.headers['Location']).to include('guest_login')
     end
 
     it 'prevents download without permissions' do
-      get(:download, params, { uid: user_id })
+      request.session.merge!({ uid: user_id })
+      get(:download, params: params)
       expect(response.status).to eq(401)
     end
 
@@ -68,7 +70,8 @@ RSpec.describe FileController, type: :controller do
       inv_file.full_size = size_too_large
       inv_file.save!
 
-      get(:download, params, { uid: user_id })
+      request.session.merge!({ uid: user_id })
+      get(:download, params: params)
       expect(response.status).to eq(403)
     end
 
@@ -83,7 +86,8 @@ RSpec.describe FileController, type: :controller do
       expected_url = inv_file.bytestream_uri
       allow(Streamer).to receive(:new).with(expected_url).and_return(streamer)
 
-      get(:download, params, { uid: user_id })
+      request.session.merge!({ uid: user_id })
+      get(:download, params: params)
 
       expect(response.status).to eq(200)
 
@@ -112,7 +116,28 @@ RSpec.describe FileController, type: :controller do
       allow(Streamer).to receive(:new).with(expected_url).and_return(streamer)
 
       params[:file] = pathname
-      get(:download, params, { uid: user_id })
+      request.session.merge!({ uid: user_id })
+      get(:download, params: params)
+      expect(response.status).to eq(200)
+    end
+
+    # Note that percent signs in filenames will generate invalid download links
+    skip it 'handles filenames with percent sign' do
+      pathname = 'producer/Test %25BF.pdf'
+      mock_permissions_all(user_id, collection_id)
+
+      size_ok = APP_CONFIG['max_download_size'] - 1
+      inv_file.full_size = size_ok
+      inv_file.pathname = pathname
+      inv_file.save!
+
+      streamer = double(Streamer)
+      expected_url = inv_file.bytestream_uri
+      allow(Streamer).to receive(:new).with(expected_url).and_return(streamer)
+
+      params[:file] = pathname
+      request.session.merge!({ uid: user_id })
+      get(:download, params: params)
       expect(response.status).to eq(200)
     end
 
@@ -130,7 +155,8 @@ RSpec.describe FileController, type: :controller do
       allow(Streamer).to receive(:new).with(expected_url).and_return(streamer)
 
       params[:file] = pathname
-      get(:download, params, { uid: user_id })
+      request.session.merge!({ uid: user_id })
+      get(:download, params: params)
       expect(response.status).to eq(200)
     end
   end
@@ -140,12 +166,13 @@ RSpec.describe FileController, type: :controller do
 
     # Simulated presign url
     def my_presign
-      inv_file.bytestream_uri.to_s + '?presign=pretend'
+      "#{inv_file.bytestream_uri}?presign=pretend"
     end
 
     # Simulated response from the storage service presign file request
     def my_node_key_params(params)
-      r = get(:storage_key, params, { uid: user_id })
+      request.session.merge!({ uid: user_id })
+      r = get(:storage_key, params: params)
       json = JSON.parse(r.body)
       {
         node_id: json['node_id'],
@@ -169,18 +196,20 @@ RSpec.describe FileController, type: :controller do
     end
 
     it 'requires a login' do
-      get(:presign, params, { uid: nil })
+      request.session.merge!({ uid: nil })
+      get(:presign, params: params)
       expect(response.status).to eq(302)
       expect(response.headers['Location']).to include('guest_login')
     end
 
     it 'prevents presign without permissions' do
-      get(:presign, params, { uid: user_id })
+      request.session.merge!({ uid: user_id })
+      get(:presign, params: params)
       expect(response.status).to eq(401)
     end
 
     it 'verify that presign request does not contain duplicate slashes' do
-      url = FileController.get_storage_presign_url(my_node_key_params(params), true)
+      url = FileController.get_storage_presign_url(my_node_key_params(params), has_file: true)
       expect(url).not_to match('https?://.*//')
     end
 
@@ -193,13 +222,14 @@ RSpec.describe FileController, type: :controller do
       mock_permissions_all(user_id, collection_id)
 
       expect(client).to receive(:get).with(
-        FileController.get_storage_presign_url(my_node_key_params(params), true),
+        FileController.get_storage_presign_url(my_node_key_params(params), has_file: true),
         { contentType: inv_file.mime_type },
         {},
         follow_redirect: true
       ).and_return(mock_response(200, '', my_presign_wrapper))
 
-      get(:presign, params, { uid: user_id })
+      request.session.merge!({ uid: user_id })
+      get(:presign, params: params)
       expect(response.status).to eq(303)
       expect(response.body).to eq('')
 
@@ -216,15 +246,16 @@ RSpec.describe FileController, type: :controller do
       mock_permissions_all(user_id, collection_id)
 
       expect(client).to receive(:get).with(
-        FileController.get_storage_presign_url(my_node_key_params(params), true),
+        FileController.get_storage_presign_url(my_node_key_params(params), has_file: true),
         { contentType: inv_file.mime_type },
         {},
         follow_redirect: true
       ).and_return(mock_response(200, '', my_presign_wrapper))
 
-      m = %r{^(ark:)\/(\d+)\/([a-z0-9_]+)$}.match(object_ark)
+      m = %r{^(ark:)/(\d+)/([a-z0-9_]+)$}.match(object_ark)
       params2 = { object: m[1], file: "#{m[3]}/#{params[:version]}/#{params[:file]}", version: m[2].to_i }
-      get(:presign, params2, { uid: user_id })
+      request.session.merge!({ uid: user_id })
+      get(:presign, params: params2)
       expect(response.status).to eq(303)
       expect(response.body).to eq('')
     end
@@ -234,13 +265,66 @@ RSpec.describe FileController, type: :controller do
 
       params[:no_redirect] = true
       expect(client).to receive(:get).with(
-        FileController.get_storage_presign_url(my_node_key_params(params), true),
+        FileController.get_storage_presign_url(my_node_key_params(params), has_file: true),
         { contentType: inv_file.mime_type },
         {},
         follow_redirect: true
       ).and_return(mock_response(200, '', my_presign_wrapper))
 
-      get(:presign, params, { uid: user_id })
+      request.session.merge!({ uid: user_id })
+      get(:presign, params: params)
+      expect(response.status).to eq(200)
+      json = JSON.parse(response.body)
+      expect(json['url']).to eq(my_presign)
+    end
+
+    it 'returns presign url for the file - space in filename' do
+      pathname = 'producer/Caltrans EHE Tests.pdf'
+      mock_permissions_all(user_id, collection_id)
+
+      size_ok = APP_CONFIG['max_download_size'] - 1
+      inv_file.full_size = size_ok
+      inv_file.pathname = pathname
+      inv_file.save!
+
+      params[:file] = pathname
+      params[:no_redirect] = true
+      expect(client).to receive(:get).with(
+        FileController.get_storage_presign_url(my_node_key_params(params), has_file: true),
+        { contentType: inv_file.mime_type },
+        {},
+        follow_redirect: true
+      ).and_return(mock_response(200, '', my_presign_wrapper))
+
+      request.session.merge!({ uid: user_id })
+      get(:presign, params: params)
+      expect(response.status).to eq(200)
+      json = JSON.parse(response.body)
+      expect(json['url']).to eq(my_presign)
+    end
+
+    # The percent sign in a filename will fail... the UI must repair links before generating them
+    it 'returns presign url for the file - percent in filename' do
+      pathname = 'producer/Test %BF.pdf'
+
+      mock_permissions_all(user_id, collection_id)
+
+      size_ok = APP_CONFIG['max_download_size'] - 1
+      inv_file.full_size = size_ok
+      inv_file.pathname = pathname
+      inv_file.save!
+
+      params[:file] = pathname
+      params[:no_redirect] = true
+      expect(client).to receive(:get).with(
+        FileController.get_storage_presign_url(my_node_key_params(params), has_file: true),
+        { contentType: inv_file.mime_type },
+        {},
+        follow_redirect: true
+      ).and_return(mock_response(200, '', my_presign_wrapper))
+
+      request.session.merge!({ uid: user_id })
+      get(:presign, params: params)
       expect(response.status).to eq(200)
       json = JSON.parse(response.body)
       expect(json['url']).to eq(my_presign)
@@ -251,13 +335,14 @@ RSpec.describe FileController, type: :controller do
 
       params[:contentDisposition] = 'attachment'
       expect(client).to receive(:get).with(
-        FileController.get_storage_presign_url(my_node_key_params(params), true),
+        FileController.get_storage_presign_url(my_node_key_params(params), has_file: true),
         { contentType: inv_file.mime_type, contentDisposition: 'attachment' },
         {},
         follow_redirect: true
       ).and_return(mock_response(200, '', my_presign_wrapper))
 
-      get(:presign, params, { uid: user_id })
+      request.session.merge!({ uid: user_id })
+      get(:presign, params: params)
       expect(response.status).to eq(303)
       expect(response.headers['Location']).to eq(my_presign)
     end
@@ -266,13 +351,14 @@ RSpec.describe FileController, type: :controller do
       mock_permissions_all(user_id, collection_id)
 
       expect(client).to receive(:get).with(
-        FileController.get_storage_presign_url(my_node_key_params(params), true),
+        FileController.get_storage_presign_url(my_node_key_params(params), has_file: true),
         { contentType: inv_file.mime_type },
         {},
         follow_redirect: true
       ).and_return(mock_response(404, 'File not found'))
 
-      get(:presign, params, { uid: user_id })
+      request.session.merge!({ uid: user_id })
+      get(:presign, params: params)
       expect(response.status).to eq(404)
     end
 
@@ -280,7 +366,8 @@ RSpec.describe FileController, type: :controller do
       mock_permissions_all(user_id, collection_id)
 
       params[:file] = 'non-existent.path'
-      get(:presign, params, { uid: user_id })
+      request.session.merge!({ uid: user_id })
+      get(:presign, params: params)
       expect(response.status).to eq(404)
     end
 
@@ -288,13 +375,14 @@ RSpec.describe FileController, type: :controller do
       mock_permissions_all(user_id, collection_id)
 
       expect(client).to receive(:get).with(
-        FileController.get_storage_presign_url(my_node_key_params(params), true),
+        FileController.get_storage_presign_url(my_node_key_params(params), has_file: true),
         { contentType: inv_file.mime_type },
         {},
         follow_redirect: true
       ).and_return(mock_response(403, 'File is in offline storage, request is not supported'))
 
-      get(:presign, params, { uid: user_id })
+      request.session.merge!({ uid: user_id })
+      get(:presign, params: params)
       expect(response.status).to eq(403)
     end
 
@@ -302,13 +390,14 @@ RSpec.describe FileController, type: :controller do
       mock_permissions_all(user_id, collection_id)
 
       expect(client).to receive(:get).with(
-        FileController.get_storage_presign_url(my_node_key_params(params), true),
+        FileController.get_storage_presign_url(my_node_key_params(params), has_file: true),
         { contentType: inv_file.mime_type },
         {},
         follow_redirect: true
       ).and_return(mock_response(500, 'System Error'))
 
-      get(:presign, params, { uid: user_id })
+      request.session.merge!({ uid: user_id })
+      get(:presign, params: params)
       expect(response.status).to eq(500)
     end
 
@@ -316,7 +405,7 @@ RSpec.describe FileController, type: :controller do
       mock_permissions_all(user_id, collection_id)
 
       expect(client).to receive(:get).with(
-        FileController.get_storage_presign_url(my_node_key_params(params), true),
+        FileController.get_storage_presign_url(my_node_key_params(params), has_file: true),
         { contentType: inv_file.mime_type },
         {},
         follow_redirect: true
@@ -324,7 +413,8 @@ RSpec.describe FileController, type: :controller do
         HTTPClient::ReceiveTimeoutError
       )
 
-      get(:presign, params, { uid: user_id })
+      request.session.merge!({ uid: user_id })
+      get(:presign, params: params)
       expect(response.status).to eq(408)
     end
 
@@ -332,13 +422,14 @@ RSpec.describe FileController, type: :controller do
       mock_permissions_all(user_id, collection_id)
 
       expect(client).to receive(:get).with(
-        FileController.get_storage_presign_url(my_node_key_params(params), true),
+        FileController.get_storage_presign_url(my_node_key_params(params), has_file: true),
         { contentType: inv_file.mime_type },
         {},
         follow_redirect: true
       ).and_return(mock_response(409, 'Redirecting to download URL', my_presign_wrapper))
 
-      get(:presign, params, { uid: user_id })
+      request.session.merge!({ uid: user_id })
+      get(:presign, params: params)
       expect(response.status).to eq(303)
       expect(response.body).to eq('')
 
@@ -364,10 +455,10 @@ RSpec.describe FileController, type: :controller do
       mock_permissions_all(user_id, collection_id)
 
       @params[:version] = object.current_version.number
+      request.session.merge!({ uid: user_id })
       get(
         :storage_key,
-        @params,
-        { uid: user_id }
+        params: @params
       )
       expect(response.status).to eq(200)
       json = JSON.parse(response.body)
@@ -379,10 +470,10 @@ RSpec.describe FileController, type: :controller do
       mock_permissions_all(user_id, collection_id)
 
       @params[:version] = 0
+      request.session.merge!({ uid: user_id })
       get(
         :storage_key,
-        @params,
-        { uid: user_id }
+        params: @params
       )
       expect(response.status).to eq(200)
       json = JSON.parse(response.body)
@@ -410,10 +501,10 @@ RSpec.describe FileController, type: :controller do
       mock_permissions_all(user_id, collection_id)
 
       @params[:version] = object.current_version.number + 1
+      request.session.merge!({ uid: user_id })
       get(
         :storage_key,
-        @params,
-        { uid: user_id }
+        params: @params
       )
       expect(response.status).to eq(200)
       json = JSON.parse(response.body)
@@ -425,10 +516,10 @@ RSpec.describe FileController, type: :controller do
       mock_permissions_all(user_id, collection_id)
 
       @params[:version] = 3
+      request.session.merge!({ uid: user_id })
       get(
         :storage_key,
-        @params,
-        { uid: user_id }
+        params: @params
       )
       expect(response.status).to eq(404)
     end
@@ -438,10 +529,10 @@ RSpec.describe FileController, type: :controller do
 
       @params[:object] = 'ark:does-not-exist'
       @params[:version] = 1
+      request.session.merge!({ uid: user_id })
       get(
         :storage_key,
-        @params,
-        { uid: user_id }
+        params: @params
       )
       expect(response.status).to eq(404)
     end

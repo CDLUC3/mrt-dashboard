@@ -381,7 +381,7 @@ module GroupLdap
         expect(admin_ldap).to receive(:search).with(
           base: LDAP_CONFIG['group_base'], filter: expected_filter
         ).and_return([
-                       # note that the LDAP filter uses the passed permission, but the find method
+                       # NOTE: that the LDAP filter uses the passed permission, but the find method
                        # itself only checks the LDAP results for cn=(read|write|download)
                        { dn: [group_ldap.sub_ns_dn('foo', 'bar')] },
                        { dn: [group_ldap.sub_ns_dn('bar', 'read')] },

@@ -1,30 +1,27 @@
 class VersionController < ApplicationController
-  before_filter :require_user
-  before_filter :redirect_to_latest_version
-  before_filter :load_version
+  before_action :require_user
+  before_action :redirect_to_latest_version
+  before_action :load_version
 
-  before_filter(only: %i[download download_user async presign]) do
+  before_action(only: %i[download download_user presign]) do
     unless current_user_can_download?(@version.inv_object)
       flash[:error] = 'You do not have download permissions.'
       render file: "#{Rails.root}/public/401.html", status: 401, layout: false
     end
   end
 
-  before_filter(only: %i[download download_user presign]) do
+  before_action(only: %i[download download_user presign]) do
     obj = @version.inv_object
     check_dua(obj, { object: obj, version: @version })
   end
 
-  before_filter(only: %i[download download_user]) do
+  before_action(only: %i[download download_user]) do
     if @version.exceeds_download_size?
       render file: "#{Rails.root}/public/403.html", status: 403, layout: false
     elsif @version.exceeds_sync_size?
-      # if size is > max_archive_size, redirect to have user enter email for asynch
-      # compression (skipping streaming)
-      redirect_to(controller: 'lostorage',
-                  action: 'index',
-                  object: @version.inv_object,
-                  version: @version)
+      # if size is > max_archive_size, return 413
+      # this process used to trigger the large object email which has become obsolete with presigned urls
+      render file: "#{Rails.root}/public/413.html", status: 413, layout: false
     end
   end
 
@@ -39,18 +36,6 @@ class VersionController < ApplicationController
 
   def index
     render(file: "#{Rails.root}/public/401.html", status: 401, layout: false) unless @version.inv_object.user_has_read_permission?(current_uid)
-  end
-
-  def async
-    if @version.exceeds_download_size?
-      render nothing: true, status: 403
-    elsif @version.exceeds_sync_size?
-      # Async Supported
-      render nothing: true, status: 200
-    else
-      # Async Not Acceptable
-      render nothing: true, status: 406
-    end
   end
 
   def download

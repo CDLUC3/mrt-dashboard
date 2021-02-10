@@ -31,11 +31,7 @@ end
 
 # rubocop:disable Metrics/ClassLength
 class Profiler
-  attr_reader :report_format
-  attr_reader :times_started
-  attr_reader :times_elapsed
-  attr_reader :time_stopped
-  attr_reader :rp_result
+  attr_reader :report_format, :times_started, :times_elapsed, :time_stopped, :rp_result
 
   def initialize(report_format)
     @report_format = report_format
@@ -45,6 +41,7 @@ class Profiler
 
   def start(_n10n)
     return unless use_rubyprof?
+
     puts 'Starting RubyProf'
     profile.start
   end
@@ -121,7 +118,7 @@ class Profiler
   end
 
   def parent_of(mod)
-    parent_name = mod.name =~ /::[^:]+\Z/ ? $`.freeze : nil
+    parent_name = mod.name =~ /::[^:]+\Z/ ? Regexp.last_match.pre_match.freeze : nil
     Object.const_get(parent_name) if parent_name
   end
 
@@ -132,13 +129,11 @@ class Profiler
       .flat_map { |m| all_modules(m) }
   end
 
-  # rubocop:disable Lint/HandleExceptions
   def to_const(parent, const_name)
     parent.const_get(const_name)
   rescue LoadError
     # we're loading everything unconditionally, & sometimes it doesn't work
   end
-  # rubocop:enable Lint/HandleExceptions
 
   def print_report_calltree!
     print "\nWriting calltree/cachegrind profile report to #{calltree_output_path}..."
@@ -160,7 +155,7 @@ class Profiler
   def output_dir
     @output_dir ||= begin
       project_root_path = Pathname.new(File.expand_path('../..', __dir__))
-      profile_path = project_root_path + 'profile'
+      profile_path = "#{project_root_path}profile"
       FileUtils.mkdir_p(profile_path.to_s)
       profile_path
     end
@@ -175,7 +170,7 @@ class Profiler
   end
 
   def html_output_path
-    @html_output_path ||= output_dir.realpath + 'index.html'
+    @html_output_path ||= "#{output_dir.realpath}index.html"
   end
 
   def desc(n10n)

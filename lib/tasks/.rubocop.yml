@@ -8,7 +8,7 @@ Metrics/ClassLength:
   Exclude:
     - 'ui.rake'
 
-Metrics/LineLength:
+Layout/LineLength:
   Exclude:
     - 'atom.rake'
 

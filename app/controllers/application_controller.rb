@@ -14,6 +14,7 @@ class ApplicationController < ActionController::Base
   include NumberMixin
   include PaginationMixin
   include HttpMixin
+  require 'streamer'
 
   helper_method(
     :available_groups,
@@ -26,7 +27,7 @@ class ApplicationController < ActionController::Base
     :max_download_size_pretty,
     :number_to_storage_size
   )
-  protect_from_forgery
+  protect_from_forgery with: :exception
 
   def render_unavailable
     render file: "#{Rails.root}/public/unavailable.html", status: 500
@@ -44,14 +45,16 @@ class ApplicationController < ActionController::Base
   helper :all
 
   # Makes a url of the form /m/ark.../1/file with optionally blank versions and files
-  def mk_merritt_url(letter, object, version = nil, file = nil)
-    object = Encoder.urlencode(Encoder.urlunencode(object))
-    file = file.blank? ? nil : Encoder.urlencode(Encoder.urlunencode(file))
-    "/#{letter}/" + [object, version, file].reject(&:blank?).join('/')
-  end
+  # Rails5 - seems to be obsolete
+  # def mk_merritt_url(letter, object, version = nil, file = nil)
+  #  object = Encoder.urlencode(Encoder.urlunencode(object))
+  #  file = file.blank? ? nil : Encoder.urlencode(Encoder.urlunencode(file))
+  #  "/#{letter}/" + [object, version, file].reject(&:blank?).join('/')
+  # end
 
   def redirect_to_latest_version
     return unless params[:version].to_i == 0
+
     ark = InvObject.find_by_ark(params_u(:object))
     latest_version = ark && ark.current_version.number
     # letter = request.path.match(/^\/(.)\//)[1]
@@ -93,6 +96,7 @@ class ApplicationController < ActionController::Base
   # Encode a storage key constructed from component parts
   def self.encode_storage_key(ark, version = '', file = '')
     return "#{Encoder.urlencode(ark)}/#{version}" if version != '' && file == ''
+
     key = ApplicationController.build_storage_key(ark, version, file)
     Encoder.urlencode(key)
   end
@@ -103,10 +107,10 @@ class ApplicationController < ActionController::Base
     uri.to_s
   end
 
-  def self.get_storage_presign_url(nodekey, has_file = true, params = {})
+  def self.get_storage_presign_url(nodekey, has_file: true, params: {})
     base = has_file ? APP_CONFIG['storage_presign_file'] : APP_CONFIG['storage_presign_obj']
     path = File.join(base, 'not-applicable')
-    if nodekey.key?(:node_id) && nodekey.key?(:key)
+    if nodekey.key?(:node_id) && nodekey.key?(:key) && nodekey[:node_id] && nodekey[:key]
       path = File.join(
         base,
         nodekey[:node_id].to_s,
@@ -119,6 +123,7 @@ class ApplicationController < ActionController::Base
   def add_valid_param(dest, source, key, vals)
     return unless source.key?(key)
     return unless source[key].in?(vals)
+
     dest[key] = source[key]
   end
 
@@ -140,12 +145,12 @@ class ApplicationController < ActionController::Base
   def presign_get_obj_by_node_key(nodekey, params)
     sparams = sanitize_presign_params(params)
     r = create_http_cli(connect: 20, receive: 20, send: 20).post(
-      ApplicationController.get_storage_presign_url(nodekey, false, sparams),
+      ApplicationController.get_storage_presign_url(nodekey, has_file: false, params: sparams),
       follow_redirect: true
     )
     eval_presign_obj_by_node_key(r, nodekey[:key])
   rescue HTTPClient::ReceiveTimeoutError
-    render status: 408, text: 'Please try your request again later'
+    render status: 408, plain: 'Please try your request again later'
   end
 
   # rubocop:disable all
@@ -176,7 +181,7 @@ class ApplicationController < ActionController::Base
     )
     eval_presign_obj_by_token(r, no_redirect)
   rescue HTTPClient::ReceiveTimeoutError
-    render status: 202, text: 'Timeout on request'
+    render status: 202, plain: 'Timeout on request'
   end
 
   private
@@ -191,7 +196,7 @@ class ApplicationController < ActionController::Base
       end
       url = resp['url']
       response.headers['Location'] = url
-      render status: 303, text: ''
+      render status: 303, plain: ''
     elsif r.status == 202
       render status: r.status, json: r.content
     elsif r.status == 404
@@ -209,6 +214,7 @@ class ApplicationController < ActionController::Base
     @current_user ||= begin
       User.find_by_id(session[:uid]) || User.from_auth_header(request.headers['HTTP_AUTHORIZATION'])
     end
+    @current_user
   end
 
   # either return the uid from the session OR get the user id from
@@ -226,6 +232,7 @@ class ApplicationController < ActionController::Base
   # login with their own credentials - mstrong 4/12/12
   def require_user
     return if current_uid
+
     store_location
     flash[:notice] = 'You must be logged in to access the page you requested'
     ret = url_for_with_proto({ controller: 'user_sessions', action: 'guest_login' })
@@ -235,7 +242,7 @@ class ApplicationController < ActionController::Base
   # :nocov:
   # TODO: this doesn't seem to be used anywhere; can we delete it?
   def require_user_or_401
-    render(status: 401, text: '') && return unless current_user
+    render(status: 401, plain: '') && return unless current_user
   end
 
   # :nocov:
@@ -253,7 +260,13 @@ class ApplicationController < ActionController::Base
   end
 
   def redirect_back_or_default(default)
-    redirect_to(session[:return_to] || default)
+    if session
+      redirect_to(session[:return_to] || default)
+    else
+      # :nocov:
+      redirect_to(default)
+      # :nocov:
+    end
     session[:return_to] = nil
   end
 
@@ -279,8 +292,9 @@ class ApplicationController < ActionController::Base
     url_for(opts)
   end
 
-  def url_string_with_proto(url, force_https = false)
+  def url_string_with_proto(url, force_https: false)
     return url unless force_https || APP_CONFIG['proto_force'] == 'https'
+
     begin
       uri = URI.parse(url)
       uri.scheme = 'https'

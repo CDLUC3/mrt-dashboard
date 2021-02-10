@@ -38,13 +38,15 @@ RSpec.describe VersionController, type: :controller do
     end
 
     it 'requires a login' do
-      get(:download, params, { uid: nil })
+      request.session.merge!({ uid: nil })
+      get(:download, params: params)
       expect(response.status).to eq(302)
       expect(response.headers['Location']).to include('guest_login')
     end
 
     it 'prevents download without permissions' do
-      get(:download, params, { uid: user_id })
+      request.session.merge!({ uid: user_id })
+      get(:download, params: params)
       expect(response.status).to eq(401)
     end
 
@@ -53,17 +55,18 @@ RSpec.describe VersionController, type: :controller do
 
       size_too_large = 1 + APP_CONFIG['max_download_size']
       allow_any_instance_of(InvVersion).to receive(:total_actual_size).and_return(size_too_large)
-      get(:download, params, { uid: user_id })
+      request.session.merge!({ uid: user_id })
+      get(:download, params: params)
       expect(response.status).to eq(403)
     end
 
-    it "redirects to #{LostorageController} when sync download size exceeded" do
+    it 'returns 413 when sync download size exceeded' do
       mock_permissions_all(user_id, collection_id)
       size_too_large = 1 + APP_CONFIG['max_archive_size']
       allow_any_instance_of(InvVersion).to receive(:total_actual_size).and_return(size_too_large)
-      get(:download, params, { uid: user_id })
-      expect(response.status).to eq(302)
-      expect(response.headers['Location']).to include('lostorage')
+      request.session.merge!({ uid: user_id })
+      get(:download, params: params)
+      expect(response.status).to eq(413)
     end
 
     it 'streams the version as a zipfile' do
@@ -76,7 +79,8 @@ RSpec.describe VersionController, type: :controller do
       expected_url = "#{version.bytestream_uri}?t=zip"
       allow(Streamer).to receive(:new).with(expected_url).and_return(streamer)
 
-      get(:download, params, { uid: user_id })
+      request.session.merge!({ uid: user_id })
+      get(:download, params: params)
 
       expect(response.status).to eq(200)
 
@@ -109,13 +113,15 @@ RSpec.describe VersionController, type: :controller do
     end
 
     it 'requires a login' do
-      get(:presign, params, { uid: nil })
+      request.session.merge!({ uid: nil })
+      get(:presign, params: params)
       expect(response.status).to eq(302)
       expect(response.headers['Location']).to include('guest_login')
     end
 
     it 'prevents download without permissions' do
-      get(:presign, params, { uid: user_id })
+      request.session.merge!({ uid: user_id })
+      get(:presign, params: params)
       expect(response.status).to eq(401)
     end
 
@@ -129,7 +135,8 @@ RSpec.describe VersionController, type: :controller do
         response_assembly_200('aaa')
       )
 
-      get(:presign, params, { uid: user_id })
+      request.session.merge!({ uid: user_id })
+      get(:presign, params: params)
       json = JSON.parse(response.body)
       expect(json['token']).to eq('aaa')
     end
@@ -143,7 +150,8 @@ RSpec.describe VersionController, type: :controller do
         response_assembly_200('aaa')
       )
 
-      get(:presign, params, { uid: user_id })
+      request.session.merge!({ uid: user_id })
+      get(:presign, params: params)
       json = JSON.parse(response.body)
       expect(json['token']).to eq('aaa')
     end
@@ -151,7 +159,8 @@ RSpec.describe VersionController, type: :controller do
     it 'request async assembly of a non-existing version of an object' do
       mock_permissions_all(user_id, collection_id)
       params[:version] = 3
-      get(:presign, params, { uid: user_id })
+      request.session.merge!({ uid: user_id })
+      get(:presign, params: params)
       expect(response.status).to eq(404)
     end
   end
@@ -164,13 +173,15 @@ RSpec.describe VersionController, type: :controller do
     end
 
     it 'requires a login' do
-      get(:download_user, params, { uid: nil })
+      request.session.merge!({ uid: nil })
+      get(:download_user, params: params)
       expect(response.status).to eq(302)
       expect(response.headers['Location']).to include('guest_login')
     end
 
     it 'prevents download without permissions' do
-      get(:download_user, params, { uid: user_id })
+      request.session.merge!({ uid: user_id })
+      get(:download_user, params: params)
       expect(response.status).to eq(401)
     end
 
@@ -179,17 +190,18 @@ RSpec.describe VersionController, type: :controller do
 
       size_too_large = 1 + APP_CONFIG['max_download_size']
       allow_any_instance_of(InvVersion).to receive(:total_actual_size).and_return(size_too_large)
-      get(:download_user, params, { uid: user_id })
+      request.session.merge!({ uid: user_id })
+      get(:download_user, params: params)
       expect(response.status).to eq(403)
     end
 
-    it "redirects to #{LostorageController} when sync download size exceeded" do
+    it 'returns 413 when sync download size exceeded' do
       mock_permissions_all(user_id, collection_id)
       size_too_large = 1 + APP_CONFIG['max_archive_size']
       allow_any_instance_of(InvVersion).to receive(:total_actual_size).and_return(size_too_large)
-      get(:download_user, params, { uid: user_id })
-      expect(response.status).to eq(302)
-      expect(response.headers['Location']).to include('lostorage')
+      request.session.merge!({ uid: user_id })
+      get(:download_user, params: params)
+      expect(response.status).to eq(413)
     end
 
     it 'streams the version as a zipfile' do
@@ -202,7 +214,8 @@ RSpec.describe VersionController, type: :controller do
       expected_url = "#{version.bytestream_uri2}?t=zip"
       allow(Streamer).to receive(:new).with(expected_url).and_return(streamer)
 
-      get(:download_user, params, { uid: user_id })
+      request.session.merge!({ uid: user_id })
+      get(:download_user, params: params)
 
       expect(response.status).to eq(200)
 
@@ -217,40 +230,4 @@ RSpec.describe VersionController, type: :controller do
       end
     end
   end
-
-  describe ':async' do
-    attr_reader :params
-
-    before(:each) do
-      @params = { object: object_ark, version: version.number }
-    end
-
-    it 'requires a login' do
-      get(:async, params, { uid: nil })
-      expect(response.status).to eq(302)
-      expect(response.headers['Location']).to include('guest_login')
-    end
-
-    it 'fails when object is too big for any download' do
-      mock_permissions_all(user_id, collection_id)
-      allow_any_instance_of(InvVersion).to receive(:total_actual_size).and_return(1 + APP_CONFIG['max_download_size'])
-      get(:async, params, { uid: user_id })
-      expect(response.status).to eq(403)
-    end
-
-    it 'fails when object is too small for asynchronous download' do
-      mock_permissions_all(user_id, collection_id)
-      allow_any_instance_of(InvVersion).to receive(:total_actual_size).and_return(APP_CONFIG['max_archive_size'] - 1)
-      get(:async, params, { uid: user_id })
-      expect(response.status).to eq(406)
-    end
-
-    it 'succeeds when object is the right size for synchronous download' do
-      mock_permissions_all(user_id, collection_id)
-      allow_any_instance_of(InvVersion).to receive(:total_actual_size).and_return(1 + APP_CONFIG['max_archive_size'])
-      get(:async, params, { uid: user_id })
-      expect(response.status).to eq(200)
-    end
-  end
-
 end

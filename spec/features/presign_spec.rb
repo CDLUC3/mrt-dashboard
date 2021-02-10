@@ -73,6 +73,11 @@ describe 'presigned objects and versions', js: true do
   end
 
   it 'click download button - no mock storage service available', js: true do
+    mock_assembly(
+      @obj.node_number,
+      ApplicationController.encode_storage_key(@obj.ark, @version.number),
+      general_response_500
+    )
     click_button('Download version')
     # this is a real (not mocked) ajax call
     sleep 1
@@ -157,7 +162,7 @@ describe 'presigned objects and versions', js: true do
     )
 
     fname = "#{@obj.ark} Version #{@version.number}"
-    filename = fname.gsub(/[^A-Za-z0-9]+/, '_') + '.zip'
+    filename = "#{fname.gsub(/[^A-Za-z0-9]+/, '_')}.zip"
 
     click_button('Download version')
 
@@ -219,9 +224,9 @@ describe 'presigned objects and versions', js: true do
 
   it 'test close/reopen dialog from new download button (different object)' do
     mock_assembly(
-      @obj.node_number,
-      ApplicationController.encode_storage_key(@obj.ark, @version.number),
-      response_assembly_200(@token, 10)
+      obj.node_number,
+      ApplicationController.encode_storage_key(obj.ark, version.number),
+      response_assembly_200(token, 10)
     )
 
     click_button('Download version')
@@ -233,6 +238,12 @@ describe 'presigned objects and versions', js: true do
     end
 
     click_link(obj.ark)
+
+    mock_assembly(
+      obj.node_number,
+      ApplicationController.encode_storage_key(obj.ark),
+      response_assembly_200(token, 10)
+    )
 
     click_button('Download object')
 
@@ -282,7 +293,7 @@ describe 'presigned objects and versions', js: true do
 
     sleep 1
 
-    # Note: cannot successfully mock the download initiated from javascript
+    # NOTE: cannot successfully mock the download initiated from javascript
 
     # mock_assembly(
     #   @obj.node_number,

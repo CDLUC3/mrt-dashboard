@@ -9,8 +9,7 @@ module Merritt
       # https://github.com/CDLUC3/mrt-dashboard/blob/3793a10252b964cb861ca15ff676ccc6c637898d/lib/tasks/atom.rake#L144-#L145
       PREFETCH_OPTIONS = { 'Accept' => 'text/html, */*' }.freeze
 
-      attr_reader :entry
-      attr_reader :harvester
+      attr_reader :entry, :harvester
 
       def initialize(entry:, harvester:)
         @entry = entry
@@ -19,6 +18,7 @@ module Merritt
 
       def process_entry!
         return if already_up_to_date?
+
         obj = new_ingest_object
         log_info("Ready to submit id: #{@local_id}")
         links.each { |link| add_component(obj, link) }
@@ -85,6 +85,7 @@ module Merritt
 
       def to_digest(checksum)
         return if checksum.blank? # includes nil, at least in Rails
+
         Mrt::Ingest::MessageDigest::MD5.new(checksum)
       end
 

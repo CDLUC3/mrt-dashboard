@@ -8,5 +8,8 @@ default: &default
 development:
   <<: *default
 
+docker:
+  <<: *default
+
 test:
   <<: *default

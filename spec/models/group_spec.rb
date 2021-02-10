@@ -77,11 +77,11 @@ describe Group do
         v2 = create(:inv_version, inv_object: obj, number: 2)
         create(
           :inv_file,
-          inv_object:  obj,
+          inv_object: obj,
           inv_version: v2,
-          pathname:    "producer/file-#{i}.bin",
-          source:      'producer',
-          role:        'data'
+          pathname: "producer/file-#{i}.bin",
+          source: 'producer',
+          role: 'data'
         )
         obj.version_number = 2
         obj.save!

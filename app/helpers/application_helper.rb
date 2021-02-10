@@ -1,33 +1,34 @@
 module ApplicationHelper
   # from http://codesnippets.joyent.com/posts/show/1812
-  def formatted_int(i)
-    return '0' if i.nil?
-    return i.to_s if i.abs < 1000
-    i.to_s.gsub!(/(\d)(?=(\d\d\d)+(?!\d))/, '\\1,')
+  def formatted_int(ival)
+    return '0' if ival.nil?
+    return ival.to_s if ival.abs < 1000
+
+    ival.to_s.gsub!(/(\d)(?=(\d\d\d)+(?!\d))/, '\\1,')
   end
 
   def permissions(array)
     return 'none' if array.empty?
     return "#{array[0]} only" if array.length == 1
+
     array.join('/')
   end
 
-  # rubocop:disable Style/DateTime
-  def merritt_time(t)
+  def merritt_time(time)
     # TODO: Figure out where we use this and whether DateTime is really best here
-    t = DateTime.parse(t.to_s) if t.class != DateTime
-    t = t.utc unless t.utc?
-    t.strftime('%Y-%m-%d %I:%M %p UTC')
+    time = DateTime.parse(time.to_s) if time.class != DateTime
+    time = time.utc unless time.utc?
+    time.strftime('%Y-%m-%d %I:%M %p UTC')
   end
-  # rubocop:enable Style/DateTime
 
-  def clean_mime_type(mt)
-    mt.gsub(/;.*$/, '')
+  def clean_mime_type(mimetype)
+    mimetype.gsub(/;.*$/, '')
   end
 
   # Format kernel metadata lists
   def dc_nice(vals)
     return '' if vals.nil? || vals.empty?
+
     vals.join('; ')
   end
 
@@ -37,7 +38,7 @@ module ApplicationHelper
     escaped_tooltip = html_escape(the_text).gsub("'", "\\'")
     tooltip_tag = <<~HTML
       <a href="#" onmouseover="Tip('#{escaped_tooltip}')">
-        <img class="tip-icon" src="/images/tip_icon.svg" alt="(?)"/>
+        <img class="tip-icon" src="#{image_path('tip_icon.svg')}" alt="(?)"/>
       </a>
     HTML
     tooltip_tag.html_safe
@@ -65,4 +66,16 @@ module ApplicationHelper
   def group_choosen?
     !current_group.nil?
   end
+
+  # We discovered that filenames containing strings like " %BF " were being improperly decoded.
+  # This code triple unencodes a presigned file link and then runs a regex expression upon it.
+  # If the link appears to be an improper utf8 string, the link will be modified to escape and escaped percent sign
+  def presigned_link_uri(object, version, file)
+    url_for controller: :file,
+            action: :presign,
+            object: object,
+            version: version,
+            file: file
+  end
+
 end

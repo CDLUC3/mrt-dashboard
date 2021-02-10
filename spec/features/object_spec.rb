@@ -1,4 +1,5 @@
 require 'features_helper'
+require 'support/presigned'
 
 describe 'objects', js: true do
   attr_reader :user_id
@@ -179,9 +180,9 @@ describe 'objects', js: true do
         expected_uri = url_for(
           controller: :file,
           action: :presign,
-          object: ERB::Util.url_encode(obj.ark), # TODO: figure out why this needs to be double-encoded, then stop doing it
+          object: Encoder.urlencode(obj.ark), # TODO: figure out why this needs to be double-encoded, then stop doing it
           version: obj.version_number.to_s,
-          file: ERB::Util.url_encode(f.pathname) # TODO: should we really encode this, or just escape the '/'?
+          file: Encoder.urlencode(f.pathname) # TODO: should we really encode this, or just escape the '/'?
         )
 
         download_link = find_link(basename)
@@ -207,8 +208,19 @@ describe 'objects', js: true do
 
     describe 'download button' do
       it 'presign object no longer displays the large object email form' do
+        mock_assembly(
+          obj.node_number,
+          ApplicationController.encode_storage_key(obj.ark),
+          response_assembly_200('aaa')
+        )
         download_button = find_button('Download object')
         download_button.click
+
+        sleep 2
+
+        within('div.ui-dialog div.ui-dialog-titlebar') do
+          click_button('Close')
+        end
 
         expect(page.title).not_to include('Large Object')
       end

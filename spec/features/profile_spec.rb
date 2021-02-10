@@ -77,7 +77,7 @@ describe 'profile', js: true do
     end
 
     it 'should not allow the user to clear required fields' do
-      UserController::REQUIRED.keys.each { |field| fill_in(field, with: '') }
+      UserController::REQUIRED.each_key { |field| fill_in(field, with: '') }
       expect(User::LDAP).not_to receive(:replace_attribute)
       click_button 'Save changes'
       expect(page).to have_content(UserController::REQUIRED.values.join(', '))

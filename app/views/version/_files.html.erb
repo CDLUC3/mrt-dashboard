@@ -17,13 +17,7 @@
       <tr>
         <th class="files" title='<%= file_basename %>'>
           <% if can_download_object %>
-            <%= link_to file_basename,
-              :controller       => :file,
-              :action           => :presign,
-              :object           => object,
-              :version          => version,
-              :file             => file
-            %>
+            <%= link_to file_basename, presigned_link_uri(object, version, file) %>
           <% else %>
             <%= file_basename %>
           <% end %>

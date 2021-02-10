@@ -115,6 +115,7 @@ module Merritt
             index = 0
             CSV.parse(csv_data) do |row|
               next if row.compact == []
+
               environment, nuxeo_collection_name, feed_url, collection_mnemonic, collection_ark, merritt_collection_name = row[0...6]
               expected_file = File.join(tmpdir, expected_files[index])
               expect(files).to include(expected_file)

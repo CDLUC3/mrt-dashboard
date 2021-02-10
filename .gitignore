@@ -1,11 +1,7 @@
 ##################################################
 # Custom ignores
 
-public/assets/*.js
-public/assets/*.css
-public/assets/*.gz
-public/assets/.sprockets*
-public/assets/wztip
+public/assets/**
 
 .config-secret
 
@@ -33,6 +29,8 @@ db/schema.rb
 .rvmrc
 .rvmrc.06.20.2013-10:03:30
 nbproject
+ruby/
+*.swp
 
 ##################################################
 # Generated ignores
@@ -170,3 +168,11 @@ Temporary Items
 .apdisk
 .byebug_history
 1.html
+
+# Ignore master key for decrypting credentials and more.
+/config/master.key
+
+# other dependencies
+node_modules/
+vendor/
+.vscode/

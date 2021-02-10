@@ -27,7 +27,7 @@
       posted on a web server.
     </p>
 
-    <%= form_tag({action: :upload}, multipart: true) do %>
+    <%= form_tag({action: :upload}, id: 'upload', multipart: true) do %>
       <h2>Object info</h2>
 
       <table class="properties">
