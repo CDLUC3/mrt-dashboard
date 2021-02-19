@@ -149,6 +149,7 @@ class FileController < ApplicationController
   def fix_filename
     # if the filename cannot be safely unencoded, look for a % in the original filename
     fname = params_u(:file)
+    puts("111 #{params[:file]}")
     puts("111 #{fname}")
     fname = Encoder.urlunencode(params[:file].gsub('%', '%25')) unless fname.valid_encoding?
     puts("112 #{fname}")
@@ -159,8 +160,10 @@ class FileController < ApplicationController
     object_ark = params_u(:object)
     ver = params[:version]
     fname = fix_filename
+    puts("113 #{params[:file]}")
     puts("113 #{fname}")
     match_params("#{object_ark}/#{ver}/#{fname}")
+    puts("114 #{params[:file]}")
     puts("114 #{fname}")
   end
 
@@ -175,7 +178,7 @@ class FileController < ApplicationController
     puts("115 #{params[:file]}")
     params[:object] = match[1]
     params[:version] = match[2]
-    params[:file] = match[3].gsub('+', '%2B')
+    params[:file] = match[3]
     puts("116 #{params[:file]}")
   end
 

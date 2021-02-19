@@ -6,6 +6,7 @@ module Encoder
   end
 
   def self.urlunencode(item)
+    item = item.gsub('+', '%2B')
     CGI.unescape(item)
   end
 end
