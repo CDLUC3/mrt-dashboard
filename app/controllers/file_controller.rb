@@ -170,7 +170,7 @@ class FileController < ApplicationController
   def replace_params(match)
     params[:object] = match[1]
     params[:version] = match[2]
-    params[:file] = match[3]
+    params[:file] = match[3].gsub('+', '%2B')
   end
 
   def load_file
