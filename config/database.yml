@@ -10,7 +10,7 @@ test:
 
 default: &default
   adapter: mysql2
-  encoding: utf8
+  encoding: utf8mb4
   host: "{!SSM: inv/db-host}"
   database: "{!SSM: inv/db-name}"
   pool: 5
@@ -33,6 +33,6 @@ docker: &docker
   database: db-name
   username: user
   password: password
-  encoding: utf8   # schema won't load if it's utf8mb4
+  encoding: utf8mb4   # schema won't load if it's utf8mb4
 
   
