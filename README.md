@@ -1,6 +1,42 @@
-# Merritt Dashboard
+# Merritt Dashboard (Merritt UI)
 
 [![Build Status](https://travis-ci.org/CDLUC3/mrt-dashboard.svg?branch=master)](https://travis-ci.org/CDLUC3/mrt-dashboard)
+
+This microservice is part of the [Merritt Preservation System](https://github.com/CDLUC3/mrt-doc).
+
+## Purpose
+
+This microservice provides the User Interface for the Merritt Perservation System.
+
+This microservice provides API functionality for the [Dryad](https://datadryad.org/)
+and for the harvesting of Nuxeo content feeds for ingest into Merrit. 
+
+## Component Diagram
+![Flowchart](https://github.com/CDLUC3/mrt-doc/raw/master/diagrams/ui.mmd.svg)
+
+## Dependencies
+
+This code depends on the following Merritt Libraries.
+- [UC3 SSM Gem](https://github.com/CDLUC3/uc3-ssm)
+- [Merritt Ingest Gem](https://github.com/CDLUC3/mrt-ingest-ruby)
+
+## For external audiences
+This code is not intended to be run apart from the Merritt Preservation System.
+
+See [Merritt Docker](https://github.com/CDLUC3/merritt-docker) for a description of how to build a test instnce of Merritt.
+
+## Build instructions
+Ruby bundler is used to build this application.
+
+## Test instructions
+Travis.com is use to test this application.
+
+RSpec and Capybara tests exist for this application.
+
+## Internal Links
+
+
+## Legacy README
 
 This is the main UI application for the
 [Merritt](https://merritt.cdlib.org/) repository service. For technical
