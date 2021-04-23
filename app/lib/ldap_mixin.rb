@@ -37,9 +37,7 @@ module LdapMixin
   # rubocop:enable Metrics/ParameterLists
 
   def admin_ldap
-    @admin_ldap ||= begin
-      Net::LDAP.new(@ldap_connect)
-    end
+    @admin_ldap ||= Net::LDAP.new(@ldap_connect)
   end
 
   def delete_record(id)

@@ -211,9 +211,8 @@ class ApplicationController < ActionController::Base
   # user supplied HTTP basic auth info, uses that. Returns nil if
   # there is no session user and HTTP basic auth did not succeed
   def current_user
-    @current_user ||= begin
-      User.find_by_id(session[:uid]) || User.from_auth_header(request.headers['HTTP_AUTHORIZATION'])
-    end
+    @current_user ||= User.find_by_id(session[:uid]) || User.from_auth_header(request.headers['HTTP_AUTHORIZATION'])
+
     @current_user
   end
 

@@ -10,7 +10,7 @@ class Dua
           a << $LAST_MATCH_INFO.captures.map(&:strip) # clean up the entries
         end
       end
-      Hash[a]
+      a.to_h
     end
   end
   #:nocov:
