@@ -63,7 +63,7 @@ class CollectionController < ApplicationController
   def parse_terms(terms_param)
     terms = Unicode.downcase(terms_param)
       .split(/\s+/)
-      .map { |t| is_ark?(t) ? t[11..-1] : t } # special ark handling
+      .map { |t| is_ark?(t) ? t[11..] : t } # special ark handling
       .delete_if { |t| (t.blank? || t.size < 4) }
     terms[0..50] # we can't have more than 60 terms, so just drop > 50
   end
