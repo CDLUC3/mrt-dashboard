@@ -90,7 +90,7 @@ docker: &docker
   storage_presign_obj:  "http://store:8080/store/assemble-obj/"
   storage_presign_token: "http://store:8080/store/presign-obj-by-token/"
   redirects:
-    cdl_dryaddev: "http://cdlib.org"
+    escholarship: "http://cdlib.org"
 
 # local and development are currently identical utilizing only resources defined in docker volumes
 # eventually, the "development" stack will run on ec2 with access to RDS and cloud storage
