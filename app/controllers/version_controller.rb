@@ -37,9 +37,7 @@ class VersionController < ApplicationController
   def index
     return if @version.inv_object.user_has_read_permission?(current_uid)
 
-    unless check_ark_redirects(@version.inv_object.group)
-      render(file: "#{Rails.root}/public/401.html", status: 401, layout: false) 
-    end
+    render(file: "#{Rails.root}/public/401.html", status: 401, layout: false) unless check_ark_redirects(@version.inv_object.group)
   end
 
   def download

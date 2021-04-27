@@ -34,8 +34,9 @@ class ApplicationController < ActionController::Base
     return if group.nil?
     return if group.inv_collection.nil?
 
-    url = APP_CONFIG.fetch("redirects", {}).fetch(group.inv_collection.mnemonic, "")
+    url = APP_CONFIG.fetch('redirects', {}).fetch(group.inv_collection.mnemonic, '')
     return if url.empty?
+
     redirect_to url and return true
   end
 

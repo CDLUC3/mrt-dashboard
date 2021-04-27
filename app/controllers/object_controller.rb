@@ -51,10 +51,8 @@ class ObjectController < ApplicationController
 
   def index
     return if @object.user_has_read_permission?(current_uid)
-      
-    unless check_ark_redirects(@object.group)
-      render(file: "#{Rails.root}/public/401.html", status: 401, layout: false)
-    end
+
+    render(file: "#{Rails.root}/public/401.html", status: 401, layout: false) unless check_ark_redirects(@object.group)
   end
 
   def download
