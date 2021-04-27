@@ -29,12 +29,18 @@ class ApplicationController < ActionController::Base
   )
   protect_from_forgery with: :exception
 
+  def check_ark_redirects
+    puts("401... check redirects")
+    puts(request.keys)
+  end
+
   def render_unavailable
     render file: "#{Rails.root}/public/unavailable.html", status: 500
   end
 
   # there are supposed to be handled by Rails, but 401 is not.
   rescue_from ActiveResource::UnauthorizedAccess do |_ex|
+    check_ark_redirects
     render file: "#{Rails.root}/public/401.html", status: 401, layout: nil
   end
 

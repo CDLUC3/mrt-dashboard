@@ -9,6 +9,7 @@ class ObjectController < ApplicationController
 
   before_action(only: %i[download download_user download_manifest presign]) do
     unless current_user_can_download?(@object)
+      check_ark_redirects
       flash[:error] = 'You do not have download permissions.'
       render file: "#{Rails.root}/public/401.html", status: 401, layout: false
     end
@@ -50,7 +51,10 @@ class ObjectController < ApplicationController
   end
 
   def index
-    render(file: "#{Rails.root}/public/401.html", status: 401, layout: false) unless @object.user_has_read_permission?(current_uid)
+    return if @object.user_has_read_permission?(current_uid)
+      
+    check_ark_redirects
+    render(file: "#{Rails.root}/public/401.html", status: 401, layout: false) 
   end
 
   def download
