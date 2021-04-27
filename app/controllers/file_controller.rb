@@ -150,8 +150,8 @@ class FileController < ApplicationController
     # if the filename cannot be safely unencoded, look for a % in the original filename
     fname = params_u(:file)
     return fname if fname.valid_encoding?
-    fname = Encoder.urlunencode(params[:file].gsub('%', '%25')) 
-    fname
+
+    Encoder.urlunencode(params[:file].gsub('%', '%25'))
   end
 
   def fix_params
