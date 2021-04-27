@@ -151,8 +151,6 @@ class FileController < ApplicationController
     fname = params_u(:file)
     return fname if fname.valid_encoding?
     fname = Encoder.urlunencode(params[:file].gsub('%', '%25')) 
-    return fname if fname.valid_encoding?
-    fname = Encoder.urlunencode(params[:file].gsub('%', '%25')) 
     fname
   end
 
