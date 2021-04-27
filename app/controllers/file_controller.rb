@@ -55,7 +55,6 @@ class FileController < ApplicationController
   def check_download
     return if current_user_can_download?(@file.inv_version.inv_object)
 
-    check_ark_redirects
     flash[:error] = 'You do not have download permissions.'
     render file: "#{Rails.root}/public/401.html", status: 401, layout: false
   end

@@ -29,9 +29,14 @@ class ApplicationController < ActionController::Base
   )
   protect_from_forgery with: :exception
 
-  def check_ark_redirects
-    puts("401... check redirects")
-    puts(request.keys)
+  def check_ark_redirects(group)
+    return unless current_uid == LDAP_CONFIG['guest_user']
+    return if group.nil?
+    return if group.inv_collection.nil?
+
+    url = APP_CONFIG.fetch("redirects", {}).fetch(group.inv_collection.mnemonic, "")
+    return if url.empty?
+    redirect_to url and return true
   end
 
   def render_unavailable
@@ -40,7 +45,6 @@ class ApplicationController < ActionController::Base
 
   # there are supposed to be handled by Rails, but 401 is not.
   rescue_from ActiveResource::UnauthorizedAccess do |_ex|
-    check_ark_redirects
     render file: "#{Rails.root}/public/401.html", status: 401, layout: nil
   end
 

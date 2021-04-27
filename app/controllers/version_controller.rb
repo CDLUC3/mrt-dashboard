@@ -5,7 +5,6 @@ class VersionController < ApplicationController
 
   before_action(only: %i[download download_user presign]) do
     unless current_user_can_download?(@version.inv_object)
-      check_ark_redirects
       flash[:error] = 'You do not have download permissions.'
       render file: "#{Rails.root}/public/401.html", status: 401, layout: false
     end
@@ -38,8 +37,9 @@ class VersionController < ApplicationController
   def index
     return if @version.inv_object.user_has_read_permission?(current_uid)
 
-    check_ark_redirects
-    render(file: "#{Rails.root}/public/401.html", status: 401, layout: false) 
+    unless check_ark_redirects(@version.inv_object.group)
+      render(file: "#{Rails.root}/public/401.html", status: 401, layout: false) 
+    end
   end
 
   def download
