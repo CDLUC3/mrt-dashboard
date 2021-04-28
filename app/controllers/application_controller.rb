@@ -32,10 +32,10 @@ class ApplicationController < ActionController::Base
   def check_ark_redirects(group)
     return unless current_uid == LDAP_CONFIG['guest_user']
     return if group.nil?
-    return if group.inv_collection.nil?
+    return if group.submission_profile.nil?
 
     # :nocov:
-    url = APP_CONFIG.fetch('redirects', {}).fetch(group.inv_collection.mnemonic, '')
+    url = APP_CONFIG.fetch('redirects', {}).fetch(group.submission_profile, '')
     return if url.empty?
 
     redirect_to url and return true

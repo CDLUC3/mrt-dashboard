@@ -8,7 +8,7 @@ def: &def
   get_storage_key_file: "/api/get-storage-key-file"
   proto_force: ""
   redirects:
-    ucsc_lib_hollzahawi: "http://www.holl-lab.com/tropical-forests.html"
+    ucsc_lib_hollzahawi_content: "http://www.holl-lab.com/tropical-forests.html"
 
 # Merritt Stage settings
 stage: &stage
@@ -67,6 +67,8 @@ test:
   storage_presign_file: "http://store.merritt.example.edu/presign-file/"
   storage_presign_obj: "http://store.merritt.example.edu/assemble-obj/"
   storage_presign_token: "http://store.merritt.example.edu/presign-obj-by-token/"
+  redirects:
+    mock_profile: "http://cdlib.org"
 
 # Docker configuration defaults
 docker: &docker
@@ -90,7 +92,7 @@ docker: &docker
   storage_presign_obj:  "http://store:8080/store/assemble-obj/"
   storage_presign_token: "http://store:8080/store/presign-obj-by-token/"
   redirects:
-    escholarship: "http://cdlib.org"
+    escholarship_content: "http://cdlib.org"
 
 # local and development are currently identical utilizing only resources defined in docker volumes
 # eventually, the "development" stack will run on ec2 with access to RDS and cloud storage
