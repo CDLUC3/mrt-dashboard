@@ -58,10 +58,10 @@ RSpec.configure do |config|
   end
 
   config.after(:each) do
-    begin
-      DatabaseCleaner.clean
-    rescue StandardError => e
-      Rails.logger.error(e.to_s)
-    end
+
+    DatabaseCleaner.clean
+  rescue StandardError => e
+    Rails.logger.error(e.to_s)
+
   end
 end

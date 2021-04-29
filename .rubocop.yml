@@ -1,7 +1,7 @@
 AllCops:
   NewCops: enable
   # Suppress complaints about post-2.0 syntax
-  TargetRubyVersion: 2.4
+  TargetRubyVersion: 2.6
   # Exclude generated files
   Exclude:
     - 'bin/**/*'

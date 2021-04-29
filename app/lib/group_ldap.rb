@@ -27,7 +27,7 @@ module GroupLdap
       results
         .map { |g| g[:uniquemember] }
         .flatten.uniq.compact
-        .map { |i| i[/^uid=[^,]+/][4..-1] }
+        .map { |i| i[/^uid=[^,]+/][4..] }
     end
 
     def add(groupid, description, permissions = %w[read write], extra_classes = ['merrittClass'])
