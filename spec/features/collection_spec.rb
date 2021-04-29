@@ -154,6 +154,13 @@ describe 'collections' do
       expect(page).to have_content('Not authorized')
     end
 
+    it 'guest login redirect' do
+      log_in_with(LDAP_CONFIG['guest_user'], LDAP_CONFIG['guest_password'])
+      allow(APP_CONFIG['redirects']).to receive(:fetch).with('collection_1_profile', '').and_return('https://cdlib.org/')
+      visit(index_path)
+      expect(current_url).to eq('https://cdlib.org/')
+    end
+
     it 'requires read permissions', js: true do
       log_in_with(user_id, password)
       visit(index_path)
