@@ -155,8 +155,8 @@ describe 'collections' do
     end
 
     it 'guest login redirect' do
-      APP_CONFIG['redirects']['collection_1_profile'] = 'https://cdlib.org/'
       log_in_with(LDAP_CONFIG['guest_user'], LDAP_CONFIG['guest_password'])
+      allow(APP_CONFIG['redirects']).to receive(:fetch).with('collection_1_profile', '').and_return('https://cdlib.org/')
       visit(index_path)
       expect(current_url).to eq('https://cdlib.org/')
     end
