@@ -36,7 +36,7 @@ class ApplicationController < ActionController::Base
 
     url = APP_CONFIG.fetch('redirects', {}).fetch(group.submission_profile, '')
     return if url.empty?
-  
+
     redirect_to url and return true
   end
 
