@@ -12,7 +12,7 @@ This microservice provides API functionality for the [Dryad](https://datadryad.o
 and for the harvesting of Nuxeo content feeds for ingest into Merrit. 
 
 ## Component Diagram
-![Flowchart](https://github.com/CDLUC3/mrt-doc/raw/main/diagrams/ui.mmd.svg)
+[![Flowchart](https://github.com/CDLUC3/mrt-doc/raw/main/diagrams/ui.mmd.svg)](https://cdluc3.github.io/mrt-doc/diagrams/ui)
 
 ## Dependencies
 
