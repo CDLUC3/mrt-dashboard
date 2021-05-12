@@ -8,7 +8,7 @@ def: &def
   get_storage_key_file: "/api/get-storage-key-file"
   proto_force: ""
   redirects:
-    ucsc_lib_hollzahawi_content: "http://www.holl-lab.com/tropical-forests.html"
+    ucsc_lib_hollzahawi_content: "http://www.holl-lab.com/islas-project.html"
 
 # Merritt Stage settings
 stage: &stage
