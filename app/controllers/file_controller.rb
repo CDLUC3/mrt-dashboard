@@ -147,10 +147,15 @@ class FileController < ApplicationController
   # rubocop:enable all
 
   def fix_filename
-    # if the filename cannot be safely unencoded, look for a % in the original filename
+    # determine if the filename has already been decoded (by looking for the slash after producer or system)
+    fname = params[:file]
+    return fname if fname.match(/(producer|system)\//) 
+
+    # retrieve decoded version of the parameter
     fname = params_u(:file)
     return fname if fname.valid_encoding?
 
+    # if the filename cannot be safely unencoded, look for a % in the original filename
     Encoder.urlunencode(params[:file].gsub('%', '%25'))
   end
 
