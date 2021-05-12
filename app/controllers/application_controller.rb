@@ -29,6 +29,17 @@ class ApplicationController < ActionController::Base
   )
   protect_from_forgery with: :exception
 
+  def check_ark_redirects(group)
+    return unless current_uid == LDAP_CONFIG['guest_user']
+    return if group.nil?
+    return if group.submission_profile.nil?
+
+    url = APP_CONFIG.fetch('redirects', {}).fetch(group.submission_profile, '')
+    return if url.empty?
+
+    redirect_to url and return true
+  end
+
   def render_unavailable
     render file: "#{Rails.root}/public/unavailable.html", status: 500
   end

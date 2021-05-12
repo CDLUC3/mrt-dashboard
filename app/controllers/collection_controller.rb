@@ -5,7 +5,9 @@ class CollectionController < ApplicationController
   before_action :require_request_group
 
   before_action do
-    raise(ActiveResource::UnauthorizedAccess, NO_ACCESS) unless @request_group.user_has_read_permission?(current_uid)
+    if !@request_group.user_has_read_permission?(current_uid) && !check_ark_redirects(@request_group)
+      raise(ActiveResource::UnauthorizedAccess, NO_ACCESS)
+    end
   end
 
   # Load the group specified in the params[:group]
