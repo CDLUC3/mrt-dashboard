@@ -156,6 +156,7 @@ class FileController < ApplicationController
     return fname if fname.valid_encoding?
 
     # if the filename cannot be safely unencoded, look for a % in the original filename
+    # This fix preceeded the Regex check above.  This is likely obsolete.
     Encoder.urlunencode(params[:file].gsub('%', '%25'))
   end
 
