@@ -460,7 +460,7 @@ paths:
                 properties:
                   url:
                     type: string
-                    example: https://some.really.long.presigned.url
+                    example: https://some.really.long.presigned.url/file.txt
         "303":
           description: presigned url returned as redirect
           headers:
@@ -501,16 +501,22 @@ paths:
         required: true
       responses:
         "200":
-          description: presigned url returned as redirect
-          headers:
-            node_id:
+          description: return key for accessing content in storage
+          content:
+            application/json:
               schema:
-                type: integer
-              description: storage node identifer
-            key:
-              schema:
-                type: string
-              description: key for retrieving content
+                type: object
+                properties:
+                  node_id:
+                    schema:
+                      type: integer
+                    description: storage node identifer
+                    example: 4444
+                  key:
+                    schema:
+                      type: string
+                    description: key for retrieving content
+                    example: producer/README.txt
   /api/assemble-version/{ark}/{version}:
     get:
       summary: Start async assembly of object version
@@ -542,7 +548,33 @@ paths:
         description: zip|tar|targz
       responses:
         "200":
-          description: TBD
+          description: return token to use in /api/presign-obj-by-token/ request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    schema:
+                      type: string
+                    description: token value to use for /api/presign-obj-by-token/ request
+                    example: 1111-a1a1a1-2222
+                  cloud-content-byte:
+                    schema:
+                      type: integer
+                    description: uncompressed size of object to be retrieved
+                    example: 12345
+                  anticipated-availability-time:
+                    schema:
+                      type: string
+                    description: Anticipated date/time that object assembly is expected to be complete.  This should be used as a hint of when to call /api/presign-obj-by-token/.
+                    example: '2009-06-15T13:45:30'
+        "403":
+          description: object exists, content cannot be processed
+        "404":
+          description: object does not exist
+        "500":
+          description: processing error
   /api/assemble-obj/{ark}:
     get:
       summary: Start async assembly of object 
@@ -574,7 +606,33 @@ paths:
         required: false
       responses:
         "200":
-          description: TBD
+          description: return token to use in /api/presign-obj-by-token/ request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    schema:
+                      type: string
+                    description: token value to use for /api/presign-obj-by-token/ request
+                    example: 1111-a1a1a1-2222
+                  cloud-content-byte:
+                    schema:
+                      type: integer
+                    description: uncompressed size of object to be retrieved
+                    example: 12345
+                  anticipated-availability-time:
+                    schema:
+                      type: string
+                    description: Anticipated date/time that object assembly is expected to be complete.  This should be used as a hint of when to call /api/presign-obj-by-token/.
+                    example: '2009-06-15T13:45:30'
+        "403":
+          description: object exists, content cannot be processed
+        "404":
+          description: object does not exist
+        "500":
+          description: processing error
   /api/presign-obj-by-token/{token}:
     get:
       summary: Retrive assembled object/version by presigned url
@@ -599,8 +657,94 @@ paths:
         required: false
         description: name to assign to download file, defaults to object.zip
       responses:
+        "303":
+          description: presigned url returned as redirect
+          headers:
+            location:
+              schema:
+                type: string
+              description: contains presigned url, browser should redirect automatically
         "200":
-          description: TBD
+          description: presigned url available in payload (when no_redirect is specified)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    schema:
+                      type: string
+                    example: Payload contains token info
+                  url:
+                    schema:
+                      type: string
+                    description: presigned url to object/version container file
+                    example: https://some.really.long.presigned.url/container.zip
+                  cloud-content-byte:
+                    schema:
+                      type: integer
+                    description: uncompressed size of object to be retrieved
+                    example: 12345
+                  token:
+                    schema:
+                      type: string
+                    description: token value to use for /api/presign-obj-by-token/ request
+                    example: 1111-a1a1a1-2222
+        "202":
+          description: Object assembly is not yet ready.  Pause and repeat request at anticipated-availability-time.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    schema:
+                      type: string
+                    example: object is not ready
+                  anticipated-availability-time:
+                    schema:
+                      type: string
+                    description: Anticipated date/time that object assembly is expected to be complete.  This should be used as a hint of when to call /api/presign-obj-by-token/.
+                    example: '2009-06-15T13:45:30'
+                  cloud-content-byte:
+                    schema:
+                      type: integer
+                    description: uncompressed size of object to be retrieved
+                    example: 12345
+                  token:
+                    schema:
+                      type: string
+                    description: token value to use for /api/presign-obj-by-token/ request
+                    example: 1111-a1a1a1-2222
+        "410":
+          description: Object is no longer available.  Restart assembly request.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    schema:
+                      type: string
+                    example: signed url has expired
+                  expiration-time:
+                    schema:
+                      type: string
+                    example: '2009-06-15T13:45:30'
+                  cloud-content-byte:
+                    schema:
+                      type: integer
+                    description: uncompressed size of object to be retrieved
+                    example: 12345
+                  token:
+                    schema:
+                      type: string
+                    description: token value to use for /api/presign-obj-by-token/ request
+                    example: 1111-a1a1a1-2222
+        "404":
+          description: object does not exist
+        "500":
+          description: processing error
   /object/upload:
     post:
       summary: Start object ingest (tbd differentiate ingest vs upload)
