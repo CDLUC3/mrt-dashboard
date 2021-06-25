@@ -672,22 +672,18 @@ paths:
                 type: object
                 properties:
                   message:
-                    schema:
-                      type: string
+                    type: string
                     example: Payload contains token info
                   url:
-                    schema:
-                      type: string
+                    type: string
                     description: presigned url to object/version container file
                     example: https://some.really.long.presigned.url/container.zip
                   cloud-content-byte:
-                    schema:
-                      type: integer
+                    type: integer
                     description: uncompressed size of object to be retrieved
                     example: 12345
                   token:
-                    schema:
-                      type: string
+                    type: string
                     description: token value to use for /api/presign-obj-by-token/ request
                     example: 1111-a1a1a1-2222
         "202":
@@ -698,22 +694,18 @@ paths:
                 type: object
                 properties:
                   message:
-                    schema:
-                      type: string
+                    type: string
                     example: object is not ready
                   anticipated-availability-time:
-                    schema:
-                      type: string
+                    type: string
                     description: Anticipated date/time that object assembly is expected to be complete.  This should be used as a hint of when to call /api/presign-obj-by-token/.
                     example: '2009-06-15T13:45:30'
                   cloud-content-byte:
-                    schema:
-                      type: integer
+                    type: integer
                     description: uncompressed size of object to be retrieved
                     example: 12345
                   token:
-                    schema:
-                      type: string
+                    type: string
                     description: token value to use for /api/presign-obj-by-token/ request
                     example: 1111-a1a1a1-2222
         "410":
@@ -724,21 +716,17 @@ paths:
                 type: object
                 properties:
                   message:
-                    schema:
-                      type: string
+                    type: string
                     example: signed url has expired
                   expiration-time:
-                    schema:
-                      type: string
+                    type: string
                     example: '2009-06-15T13:45:30'
                   cloud-content-byte:
-                    schema:
-                      type: integer
+                    type: integer
                     description: uncompressed size of object to be retrieved
                     example: 12345
                   token:
-                    schema:
-                      type: string
+                    type: string
                     description: token value to use for /api/presign-obj-by-token/ request
                     example: 1111-a1a1a1-2222
         "404":
