@@ -11,6 +11,246 @@ tags:
   description: Merritt API
 - name: internal-use
   description: Internal use within the UI app
+components:
+  parameters:
+    arkParam:
+      in: path
+      name: ark
+      schema: 
+        type: string
+      required: true
+    versionParam:
+      in: path
+      name: version
+      schema: 
+        type: integer
+      required: true
+    fileParam:
+      in: path
+      name: file
+      schema: 
+        type: string
+      description: url-encoded path to file within an object
+      required: true
+    groupParam:
+      in: query
+      name: group
+      schema: 
+        type: string
+      required: false
+      description: LDAP Group or collection ark. Required unless in session['group_id']
+    contentParam:
+      in: query
+      name: content
+      schema: 
+        type: string
+      enum:
+      - producer
+      - full
+      required: false
+    formatParam:
+      in: query
+      name: format
+      schema: 
+        type: string
+      required: false
+      enum:
+      - zip
+      - tar
+      - targz
+    in_file:
+      in: query
+      name: file
+      schema: 
+        type: object
+      required: true
+      description: file upload
+    in_creator:
+      in: query
+      name: creator
+      schema: 
+        type: string
+      required: false
+    in_date:
+      in: query
+      name: date
+      schema: 
+        type: string
+      required: false
+    in_digestType:
+      in: query
+      name: digestType
+      schema: 
+        type: string
+      required: false
+    in_digestValue:
+      in: query
+      name: digestValue
+      schema: 
+        type: string
+      required: false
+    in_localIdentifier:
+      in: query
+      name: localIdentifier
+      schema: 
+        type: string
+      required: false
+    in_notification:
+      in: query
+      name: notification
+      schema: 
+        type: string
+      required: false
+    in_notificationFormat:
+      in: query
+      name: notificationFormat
+      schema: 
+        type: string
+      required: false
+    in_primaryIdentifier:
+      in: query
+      name: primaryIdentifier
+      schema: 
+        type: string
+      required: false
+    in_profile:
+      in: query
+      name: profile
+      schema: 
+        type: string
+      required: false
+    in_note:
+      in: query
+      name: note
+      schema: 
+        type: string
+      required: false
+    in_responseForm:
+      in: query
+      name: responseForm
+      schema: 
+        type: string
+      required: false
+    in_datacite:
+      in: query
+      name: DataCite.resourceType
+      schema: 
+        type: string
+      required: false
+    in_dc_contributor:
+      in: query
+      name: DC.contributor
+      schema: 
+        type: string
+      required: false
+    in_dc_coverage:
+      in: query
+      name: DC.coverage
+      schema: 
+        type: string
+      required: false
+    in_dc_creator:
+      in: query
+      name: DC.creator
+      schema: 
+        type: string
+      required: false
+    in_dc_date:
+      in: query
+      name: DC.date
+      schema: 
+        type: string
+      required: false
+    in_dc_description:
+      in: query
+      name: DC.description
+      schema: 
+        type: string
+      required: false
+    in_dc_format:
+      in: query
+      name: DC.format
+      schema: 
+        type: string
+      required: false
+    in_dc_identifier:
+      in: query
+      name: 'DC.identifier'
+      schema: 
+        type: string
+      required: false
+    in_dc_language:
+      in: query
+      name: DC.language
+      schema: 
+        type: string
+      required: false
+    in_dc_publisher:
+      in: query
+      name: DC.publisher
+      schema: 
+        type: string
+      required: false
+    in_dc_relation:
+      in: query
+      name: DC.relation
+      schema: 
+        type: string
+      required: false
+    in_dc_rights:
+      in: query
+      name: DC.rights
+      schema: 
+        type: string
+      required: false
+    in_dc_source:
+      in: query
+      name: DC.source
+      schema: 
+        type: string
+      required: false
+    in_dc_subject:
+      in: query
+      name: DC.subject
+      schema: 
+        type: string
+      required: false
+    in_dc_title:
+      in: query
+      name: DC.title
+      schema: 
+        type: string
+      required: false
+    in_submitter:
+      in: query
+      name: submitter
+      schema: 
+        type: string
+      required: false
+    in_title:
+      in: query
+      name: title
+      schema: 
+        type: string
+      required: false
+    in_synchronousMode:
+      in: query
+      name: synchronousMode
+      schema: 
+        type: string
+      required: false
+    in_retainTargetURL:
+      in: query
+      name: retainTargetURL
+      schema: 
+        type: string
+      required: false
+    in_type:
+      in: query
+      name: type
+      schema: 
+        type: string
+      required: false
 paths:
   /login:
     get:
@@ -67,11 +307,7 @@ paths:
       tags:
       - ui
       parameters: 
-      - in: path
-        name: ark
-        schema: 
-          type: string
-        required: true
+      - $ref: '#/components/parameters/arkParam'
       responses:
         "200":
           description: display resource
@@ -83,16 +319,8 @@ paths:
       tags:
       - ui
       parameters: 
-      - in: path
-        name: ark
-        schema: 
-          type: string
-        required: true
-      - in: path
-        name: version
-        schema: 
-          type: integer
-        required: true
+      - $ref: '#/components/parameters/arkParam'
+      - $ref: '#/components/parameters/versionParam'
       responses:
         "200":
           description: display resource
@@ -169,11 +397,7 @@ paths:
       tags:
       - ui
       parameters: 
-      - in: path
-        name: ark
-        schema: 
-          type: string
-        required: true
+      - $ref: '#/components/parameters/arkParam'
       responses:
         "200":
           description: display resource
@@ -185,12 +409,7 @@ paths:
       tags:
       - ui
       parameters: 
-      - in: query
-        name: group
-        schema: 
-          type: string
-        required: false
-        description: required unless in session['group_id']
+      - $ref: '#/components/parameters/groupParam'
       responses:
         "200":
           description: return count as text
@@ -200,12 +419,7 @@ paths:
       tags:
       - ui
       parameters: 
-      - in: query
-        name: group
-        schema: 
-          type: string
-        required: false
-        description: required unless in session['group_id']
+      - $ref: '#/components/parameters/groupParam'
       responses:
         "200":
           description: return count as text
@@ -215,12 +429,7 @@ paths:
       tags:
       - ui
       parameters: 
-      - in: query
-        name: group
-        schema: 
-          type: string
-        required: false
-        description: required unless in session['group_id']
+      - $ref: '#/components/parameters/groupParam'
       responses:
         "200":
           description: return count as text
@@ -230,12 +439,7 @@ paths:
       tags:
       - ui
       parameters: 
-      - in: query
-        name: group
-        schema: 
-          type: string
-        required: false
-        description: required unless in session['group_id']
+      - $ref: '#/components/parameters/groupParam'
       responses:
         "200":
           description: return size as text
@@ -245,12 +449,7 @@ paths:
       tags:
       - ui
       parameters: 
-      - in: query
-        name: group
-        schema: 
-          type: string
-        required: false
-        description: required unless in session['group_id']
+      - $ref: '#/components/parameters/groupParam'
       responses:
         "200":
           description: return size as text
@@ -262,21 +461,9 @@ paths:
       tags:
       - api
       parameters: 
-      - in: path
-        name: ark
-        schema: 
-          type: string
-        required: true
-      - in: path
-        name: version
-        schema: 
-          type: integer
-        required: true
-      - in: path
-        name: file
-        schema: 
-          type: string
-        required: true
+      - $ref: '#/components/parameters/arkParam'
+      - $ref: '#/components/parameters/versionParam'
+      - $ref: '#/components/parameters/fileParam'
       responses:
         "200":
           description: display resource
@@ -290,16 +477,8 @@ paths:
       tags:
       - api
       parameters: 
-      - in: path
-        name: ark
-        schema: 
-          type: string
-        required: true
-      - in: path
-        name: version
-        schema: 
-          type: integer
-        required: true
+      - $ref: '#/components/parameters/arkParam'
+      - $ref: '#/components/parameters/versionParam'
       responses:
         "200":
           description: display resource
@@ -313,11 +492,7 @@ paths:
       tags:
       - api
       parameters: 
-      - in: path
-        name: ark
-        schema: 
-          type: string
-        required: true
+      - $ref: '#/components/parameters/arkParam'
       responses:
         "200":
           description: display resource
@@ -331,16 +506,8 @@ paths:
       tags:
       - api
       parameters: 
-      - in: path
-        name: ark
-        schema: 
-          type: string
-        required: true
-      - in: path
-        name: version
-        schema: 
-          type: integer
-        required: true
+      - $ref: '#/components/parameters/arkParam'
+      - $ref: '#/components/parameters/versionParam'
       responses:
         "200":
           description: display resource
@@ -354,11 +521,7 @@ paths:
       tags:
       - api
       parameters: 
-      - in: path
-        name: ark
-        schema: 
-          type: string
-        required: true
+      - $ref: '#/components/parameters/arkParam'
       responses:
         "200":
           description: display resource
@@ -370,11 +533,7 @@ paths:
       tags:
       - api
       parameters: 
-      - in: path
-        name: ark
-        schema: 
-          type: string
-        required: true
+      - $ref: '#/components/parameters/arkParam'
       responses:
         "200":
           description: display resource
@@ -419,23 +578,9 @@ paths:
       tags:
       - api
       parameters: 
-      - in: path
-        name: ark
-        schema: 
-          type: string
-        required: true
-        description: ark should be url-encoded
-      - in: path
-        name: version
-        schema: 
-          type: integer
-        required: true
-      - in: path
-        name: file
-        schema: 
-          type: string
-        required: true
-        description: path should be url-encoded
+      - $ref: '#/components/parameters/arkParam'
+      - $ref: '#/components/parameters/versionParam'
+      - $ref: '#/components/parameters/fileParam'
       - in: query
         name: no_redirect
         schema: 
@@ -484,21 +629,9 @@ paths:
       tags:
       - internal-use
       parameters: 
-      - in: path
-        name: ark
-        schema: 
-          type: string
-        required: true
-      - in: path
-        name: version
-        schema: 
-          type: integer
-        required: true
-      - in: path
-        name: file
-        schema: 
-          type: string
-        required: true
+      - $ref: '#/components/parameters/arkParam'
+      - $ref: '#/components/parameters/versionParam'
+      - $ref: '#/components/parameters/fileParam'
       responses:
         "200":
           description: return key for accessing content in storage
@@ -521,29 +654,10 @@ paths:
       tags:
       - api
       parameters: 
-      - in: path
-        name: ark
-        schema: 
-          type: string
-        required: true
-        description: ark should be url-encoded
-      - in: path
-        name: version
-        schema: 
-          type: integer
-        required: true
-      - in: query
-        name: content
-        schema: 
-          type: integer
-        required: false
-        description: producer|full
-      - in: query
-        name: format
-        schema: 
-          type: string
-        required: false
-        description: zip|tar|targz
+      - $ref: '#/components/parameters/arkParam'
+      - $ref: '#/components/parameters/versionParam'
+      - $ref: '#/components/parameters/contentParam'
+      - $ref: '#/components/parameters/formatParam'
       responses:
         "200":
           description: return token to use in /api/presign-obj-by-token/ request
@@ -576,29 +690,9 @@ paths:
       tags:
       - api
       parameters: 
-      - in: path
-        name: ark
-        schema: 
-          type: string
-        required: true
-        description: ark should be url-encoded
-      - in: query
-        name: content
-        schema: 
-          type: string
-          enum:
-          - producer
-          - full
-        required: false
-      - in: query
-        name: format
-        schema: 
-          type: string
-          enum:
-          - zip
-          - tag
-          - targz
-        required: false
+      - $ref: '#/components/parameters/arkParam'
+      - $ref: '#/components/parameters/contentParam'
+      - $ref: '#/components/parameters/formatParam'
       responses:
         "200":
           description: return token to use in /api/presign-obj-by-token/ request
@@ -731,53 +825,16 @@ paths:
       tags:
       - ui
       - api
-      parameters: &ingestparamup
-      - in: query
-        name: file
-        schema: 
-          type: object
-        required: true
-        description: file upload
-      - in: query
-        name: creator
-        schema: 
-          type: string
-        required: false
-      - in: query
-        name: date
-        schema: 
-          type: string
-        required: false
-      - in: query
-        name: localIdentifier
-        schema: 
-          type: string
-        required: false
-      - in: query
-        name: primaryIdentifier
-        schema: 
-          type: string
-        required: false
-      - in: query
-        name: profile
-        schema: 
-          type: string
-        required: false
-      - in: query
-        name: responseForm
-        schema: 
-          type: string
-        required: false
-      - in: query
-        name: title
-        schema: 
-          type: string
-        required: false
-      - in: query
-        name: type
-        schema: 
-          type: string
-        required: false
+      parameters: 
+      - $ref: '#/components/parameters/in_file'
+      - $ref: '#/components/parameters/in_creator'
+      - $ref: '#/components/parameters/in_date'
+      - $ref: '#/components/parameters/in_localIdentifier'
+      - $ref: '#/components/parameters/in_primaryIdentifier'
+      - $ref: '#/components/parameters/in_profile'
+      - $ref: '#/components/parameters/in_responseForm'
+      - $ref: '#/components/parameters/in_title'
+      - $ref: '#/components/parameters/in_type'
       responses:
         "200":
           description: TBD
@@ -787,168 +844,39 @@ paths:
       tags:
       - ui
       - api
-      parameters: &ingestparamfull
-      - in: query
-        name: file
-        schema: 
-          type: object
-        required: true
-        description: file upload
-      - in: query
-        name: creator
-        schema: 
-          type: string
-        required: false
-      - in: query
-        name: date
-        schema: 
-          type: string
-        required: false
-      - in: query
-        name: digestType
-        schema: 
-          type: string
-        required: false
-      - in: query
-        name: digestValue
-        schema: 
-          type: string
-        required: false
-      - in: query
-        name: localIdentifier
-        schema: 
-          type: string
-        required: false
-      - in: query
-        name: notification
-        schema: 
-          type: string
-        required: false
-      - in: query
-        name: notificationFormat
-        schema: 
-          type: string
-        required: false
-      - in: query
-        name: primaryIdentifier
-        schema: 
-          type: string
-        required: false
-      - in: query
-        name: profile
-        schema: 
-          type: string
-        required: false
-      - in: query
-        name: note
-        schema: 
-          type: string
-        required: false
-      - in: query
-        name: responseForm
-        schema: 
-          type: string
-        required: false
-      - in: query
-        name: DataCite.resourceType
-        schema: 
-          type: string
-        required: false
-      - in: query
-        name: DC.contributor
-        schema: 
-          type: string
-        required: false
-      - in: query
-        name: DC.coverage
-        schema: 
-          type: string
-        required: false
-      - in: query
-        name: DC.reator
-        schema: 
-          type: string
-        required: false
-      - in: query
-        name: DC.date
-        schema: 
-          type: string
-        required: false
-      - in: query
-        name: DC.description
-        schema: 
-          type: string
-        required: false
-      - in: query
-        name: DC.format
-        schema: 
-          type: string
-        required: false
-      - in: query
-        name: 'DC.identifier'
-        schema: 
-          type: string
-        required: false
-      - in: query
-        name: DC.language
-        schema: 
-          type: string
-        required: false
-      - in: query
-        name: DC.publisher
-        schema: 
-          type: string
-        required: false
-      - in: query
-        name: DC.relation
-        schema: 
-          type: string
-        required: false
-      - in: query
-        name: DC.rights
-        schema: 
-          type: string
-        required: false
-      - in: query
-        name: DC.source
-        schema: 
-          type: string
-        required: false
-      - in: query
-        name: DC.subject
-        schema: 
-          type: string
-        required: false
-      - in: query
-        name: DC.title
-        schema: 
-          type: string
-        required: false
-      - in: query
-        name: submitter
-        schema: 
-          type: string
-        required: false
-      - in: query
-        name: title
-        schema: 
-          type: string
-        required: false
-      - in: query
-        name: synchronousMode
-        schema: 
-          type: string
-        required: false
-      - in: query
-        name: retainTargetURL
-        schema: 
-          type: string
-        required: false
-      - in: query
-        name: type
-        schema: 
-          type: string
-        required: false
+      parameters: 
+      - $ref: '#/components/parameters/in_file'
+      - $ref: '#/components/parameters/in_creator'
+      - $ref: '#/components/parameters/in_date'
+      - $ref: '#/components/parameters/in_digestType'
+      - $ref: '#/components/parameters/in_digestValue'
+      - $ref: '#/components/parameters/in_localIdentifier'
+      - $ref: '#/components/parameters/in_notification'
+      - $ref: '#/components/parameters/in_notificationFormat'
+      - $ref: '#/components/parameters/in_primaryIdentifier'
+      - $ref: '#/components/parameters/in_profile'
+      - $ref: '#/components/parameters/in_note'
+      - $ref: '#/components/parameters/in_responseForm'
+      - $ref: '#/components/parameters/in_datacite'
+      - $ref: '#/components/parameters/in_dc_contributor'
+      - $ref: '#/components/parameters/in_dc_coverage'
+      - $ref: '#/components/parameters/in_dc_creator'
+      - $ref: '#/components/parameters/in_dc_date'
+      - $ref: '#/components/parameters/in_dc_description'
+      - $ref: '#/components/parameters/in_dc_format'
+      - $ref: '#/components/parameters/in_dc_identifier'
+      - $ref: '#/components/parameters/in_dc_language'
+      - $ref: '#/components/parameters/in_dc_publisher'
+      - $ref: '#/components/parameters/in_dc_relation'
+      - $ref: '#/components/parameters/in_dc_rights'
+      - $ref: '#/components/parameters/in_dc_source'
+      - $ref: '#/components/parameters/in_dc_subject'
+      - $ref: '#/components/parameters/in_dc_title'
+      - $ref: '#/components/parameters/in_submitter'
+      - $ref: '#/components/parameters/in_title'
+      - $ref: '#/components/parameters/in_synchronousMode'
+      - $ref: '#/components/parameters/in_retainTargetURL'
+      - $ref: '#/components/parameters/in_type'
       responses:
         "200":
           description: TBD
@@ -959,7 +887,38 @@ paths:
       - ui
       - api
       parameters:
-      <<: *ingestparamfull
+      - $ref: '#/components/parameters/in_file'
+      - $ref: '#/components/parameters/in_creator'
+      - $ref: '#/components/parameters/in_date'
+      - $ref: '#/components/parameters/in_digestType'
+      - $ref: '#/components/parameters/in_digestValue'
+      - $ref: '#/components/parameters/in_localIdentifier'
+      - $ref: '#/components/parameters/in_notification'
+      - $ref: '#/components/parameters/in_notificationFormat'
+      - $ref: '#/components/parameters/in_primaryIdentifier'
+      - $ref: '#/components/parameters/in_profile'
+      - $ref: '#/components/parameters/in_note'
+      - $ref: '#/components/parameters/in_responseForm'
+      - $ref: '#/components/parameters/in_datacite'
+      - $ref: '#/components/parameters/in_dc_contributor'
+      - $ref: '#/components/parameters/in_dc_coverage'
+      - $ref: '#/components/parameters/in_dc_creator'
+      - $ref: '#/components/parameters/in_dc_date'
+      - $ref: '#/components/parameters/in_dc_description'
+      - $ref: '#/components/parameters/in_dc_format'
+      - $ref: '#/components/parameters/in_dc_identifier'
+      - $ref: '#/components/parameters/in_dc_language'
+      - $ref: '#/components/parameters/in_dc_publisher'
+      - $ref: '#/components/parameters/in_dc_relation'
+      - $ref: '#/components/parameters/in_dc_rights'
+      - $ref: '#/components/parameters/in_dc_source'
+      - $ref: '#/components/parameters/in_dc_subject'
+      - $ref: '#/components/parameters/in_dc_title'
+      - $ref: '#/components/parameters/in_submitter'
+      - $ref: '#/components/parameters/in_title'
+      - $ref: '#/components/parameters/in_synchronousMode'
+      - $ref: '#/components/parameters/in_retainTargetURL'
+      - $ref: '#/components/parameters/in_type'
       responses:
         "200":
           description: TBD
