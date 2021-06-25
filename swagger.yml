@@ -251,6 +251,33 @@ components:
       schema: 
         type: string
       required: false
+  responses:
+    presigned303:
+      description: presigned url returned as redirect
+      headers:
+        location:
+          schema:
+            type: string
+          description: contains presigned url, browser should redirect automatically
+    token:
+      description: return token to use in /api/presign-obj-by-token/ request
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              token:
+                type: string
+                description: token value to use for /api/presign-obj-by-token/ request
+                example: 1111-a1a1a1-2222
+              cloud-content-byte:
+                type: integer
+                description: uncompressed size of object to be retrieved
+                example: 12345
+              anticipated-availability-time:
+                type: string
+                description: Anticipated date/time that object assembly is expected to be complete.  This should be used as a hint of when to call /api/presign-obj-by-token/.
+                example: '2009-06-15T13:45:30'
 paths:
   /login:
     get:
@@ -606,13 +633,8 @@ paths:
                   url:
                     type: string
                     example: https://some.really.long.presigned.url/file.txt
-        "303":
-          description: presigned url returned as redirect
-          headers:
-            location:
-              schema:
-                type: string
-              description: contains presigned url, browser should redirect automatically
+        "303": 
+          $ref: '#/components/responses/presigned303'
         "401":
           description: access not authorized
         "403":
@@ -660,24 +682,7 @@ paths:
       - $ref: '#/components/parameters/formatParam'
       responses:
         "200":
-          description: return token to use in /api/presign-obj-by-token/ request
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  token:
-                    type: string
-                    description: token value to use for /api/presign-obj-by-token/ request
-                    example: 1111-a1a1a1-2222
-                  cloud-content-byte:
-                    type: integer
-                    description: uncompressed size of object to be retrieved
-                    example: 12345
-                  anticipated-availability-time:
-                    type: string
-                    description: Anticipated date/time that object assembly is expected to be complete.  This should be used as a hint of when to call /api/presign-obj-by-token/.
-                    example: '2009-06-15T13:45:30'
+          $ref: '#/components/responses/token'
         "403":
           description: object exists, content cannot be processed
         "404":
@@ -695,24 +700,7 @@ paths:
       - $ref: '#/components/parameters/formatParam'
       responses:
         "200":
-          description: return token to use in /api/presign-obj-by-token/ request
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  token:
-                    type: string
-                    description: token value to use for /api/presign-obj-by-token/ request
-                    example: 1111-a1a1a1-2222
-                  cloud-content-byte:
-                    type: integer
-                    description: uncompressed size of object to be retrieved
-                    example: 12345
-                  anticipated-availability-time:
-                    type: string
-                    description: Anticipated date/time that object assembly is expected to be complete.  This should be used as a hint of when to call /api/presign-obj-by-token/.
-                    example: '2009-06-15T13:45:30'
+          $ref: '#/components/responses/token'
         "403":
           description: object exists, content cannot be processed
         "404":
