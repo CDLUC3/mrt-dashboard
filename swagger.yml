@@ -1,11 +1,9 @@
 ---
-swagger: "3.0"
+openapi: 3.0.0
 info:
   description: Merritt User Interface API
   version: 1.0.0
   title: Merritt User Interface API
-host: merritt.cdlib.org
-basePath: /terrywbrady/Merritt/1.0.0
 tags:
 - name: ui
   description: Merritt UI
@@ -13,8 +11,6 @@ tags:
   description: Merritt API
 - name: internal-use
   description: Internal use within the UI app
-schemes:
-- https
 paths:
   /login:
     get:
@@ -31,12 +27,14 @@ paths:
       parameters: 
       - in: query
         name: login
-        type: string
         required: true
+        schema: 
+          type: string
       - in: query
         name: password
-        type: string
         required: true
+        schema: 
+          type: string
       responses:
         "200":
           description: display Merritt home with active user session or redirect to login page
@@ -71,7 +69,8 @@ paths:
       parameters: 
       - in: path
         name: ark
-        type: string
+        schema: 
+          type: string
         required: true
       responses:
         "200":
@@ -86,11 +85,13 @@ paths:
       parameters: 
       - in: path
         name: ark
-        type: string
+        schema: 
+          type: string
         required: true
       - in: path
         name: version
-        type: integer
+        schema: 
+          type: integer
         required: true
       responses:
         "200":
@@ -113,24 +114,29 @@ paths:
       parameters: 
       - in: query
         name: givenname
-        type: string
+        schema: 
+          type: string
         required: true
       - in: query
         name: sn
-        type: string
+        schema: 
+          type: string
         required: true
         description: lastname
       - in: query
         name: userpassword
-        type: string
+        schema: 
+          type: string
         required: true
       - in: query
         name: repeatuserpassword
-        type: string
+        schema: 
+          type: string
         required: true
       - in: query
         name: mail
-        type: string
+        schema: 
+          type: string
         required: true
       responses:
         "200":
@@ -165,7 +171,8 @@ paths:
       parameters: 
       - in: path
         name: ark
-        type: string
+        schema: 
+          type: string
         required: true
       responses:
         "200":
@@ -180,13 +187,10 @@ paths:
       parameters: 
       - in: query
         name: group
-        type: string
+        schema: 
+          type: string
         required: false
-        description: required unless in session
-      - in: cookie
-        name: group_id
-        type: string
-        required: false
+        description: required unless in session['group_id']
       responses:
         "200":
           description: return count as text
@@ -198,13 +202,10 @@ paths:
       parameters: 
       - in: query
         name: group
-        type: string
+        schema: 
+          type: string
         required: false
-        description: required unless in session
-      - in: cookie
-        name: group_id
-        type: string
-        required: false
+        description: required unless in session['group_id']
       responses:
         "200":
           description: return count as text
@@ -216,13 +217,10 @@ paths:
       parameters: 
       - in: query
         name: group
-        type: string
+        schema: 
+          type: string
         required: false
-        description: required unless in session
-      - in: cookie
-        name: group_id
-        type: string
-        required: false
+        description: required unless in session['group_id']
       responses:
         "200":
           description: return count as text
@@ -234,13 +232,10 @@ paths:
       parameters: 
       - in: query
         name: group
-        type: string
+        schema: 
+          type: string
         required: false
-        description: required unless in session
-      - in: cookie
-        name: group_id
-        type: string
-        required: false
+        description: required unless in session['group_id']
       responses:
         "200":
           description: return size as text
@@ -252,13 +247,10 @@ paths:
       parameters: 
       - in: query
         name: group
-        type: string
+        schema: 
+          type: string
         required: false
-        description: required unless in session
-      - in: cookie
-        name: group_id
-        type: string
-        required: false
+        description: required unless in session['group_id']
       responses:
         "200":
           description: return size as text
@@ -272,15 +264,18 @@ paths:
       parameters: 
       - in: path
         name: ark
-        type: string
+        schema: 
+          type: string
         required: true
       - in: path
         name: version
-        type: integer
+        schema: 
+          type: integer
         required: true
       - in: path
         name: file
-        type: string
+        schema: 
+          type: string
         required: true
       responses:
         "200":
@@ -297,11 +292,13 @@ paths:
       parameters: 
       - in: path
         name: ark
-        type: string
+        schema: 
+          type: string
         required: true
       - in: path
         name: version
-        type: integer
+        schema: 
+          type: integer
         required: true
       responses:
         "200":
@@ -318,7 +315,8 @@ paths:
       parameters: 
       - in: path
         name: ark
-        type: string
+        schema: 
+          type: string
         required: true
       responses:
         "200":
@@ -335,11 +333,13 @@ paths:
       parameters: 
       - in: path
         name: ark
-        type: string
+        schema: 
+          type: string
         required: true
       - in: path
         name: version
-        type: integer
+        schema: 
+          type: integer
         required: true
       responses:
         "200":
@@ -356,7 +356,8 @@ paths:
       parameters: 
       - in: path
         name: ark
-        type: string
+        schema: 
+          type: string
         required: true
       responses:
         "200":
@@ -371,7 +372,8 @@ paths:
       parameters: 
       - in: path
         name: ark
-        type: string
+        schema: 
+          type: string
         required: true
       responses:
         "200":
@@ -386,7 +388,8 @@ paths:
       parameters: 
       - in: query
         name: collection
-        type: string
+        schema: 
+          type: string
         required: true
       responses:
         "200":
@@ -401,7 +404,8 @@ paths:
       parameters: 
       - in: path
         name: feedtype
-        type: string
+        schema: 
+          type: string
         required: true
         description: feed type should be atom
       responses:
@@ -417,28 +421,33 @@ paths:
       parameters: 
       - in: path
         name: ark
-        type: string
+        schema: 
+          type: string
         required: true
         description: ark should be url-encoded
       - in: path
         name: version
-        type: integer
+        schema: 
+          type: integer
         required: true
       - in: path
         name: file
-        type: string
+        schema: 
+          type: string
         required: true
         description: path should be url-encoded
       - in: query
         name: no_redirect
-        type: boolean
+        schema: 
+          type: boolean
         required: false
         description: if set, presigned url will be sent in payload
       - in: query
         name: contentDisposition
-        type: string
-        enum:
-        - attachment
+        schema: 
+          type: string
+          enum:
+          - attachment
         required: false
         description: if set, the presigned Url will download as an attachment (rather than displaying in a browser) regardless of the contentType for the file
       responses:
@@ -456,6 +465,8 @@ paths:
           description: presigned url returned as redirect
           headers:
             location:
+              schema:
+                type: string
               description: contains presigned url, browser should redirect automatically
         "401":
           description: access not authorized
@@ -468,21 +479,38 @@ paths:
   /api/get-storage-key-file/{ark}/{version}/{file}:
     get:
       summary: Create key to send to storage service
+      deprecated: true
+      description: Deprecated?  This is called in unit tests, but is probably not called internally
       tags:
       - internal-use
       parameters: 
       - in: path
         name: ark
-        type: string
+        schema: 
+          type: string
         required: true
       - in: path
         name: version
-        type: integer
+        schema: 
+          type: integer
         required: true
       - in: path
         name: file
-        type: string
+        schema: 
+          type: string
         required: true
+      responses:
+        "200":
+          description: presigned url returned as redirect
+          headers:
+            node_id:
+              schema:
+                type: integer
+              description: storage node identifer
+            key:
+              schema:
+                type: string
+              description: key for retrieving content
   /api/assemble-version/{ark}/{version}:
     get:
       summary: Start async assembly of object version
@@ -491,23 +519,30 @@ paths:
       parameters: 
       - in: path
         name: ark
-        type: string
+        schema: 
+          type: string
         required: true
         description: ark should be url-encoded
       - in: path
         name: version
-        type: integer
+        schema: 
+          type: integer
         required: true
       - in: query
         name: content
-        type: string
+        schema: 
+          type: integer
         required: false
         description: producer|full
       - in: query
         name: format
-        type: string
+        schema: 
+          type: string
         required: false
         description: zip|tar|targz
+      responses:
+        "200":
+          description: TBD
   /api/assemble-obj/{ark}:
     get:
       summary: Start async assembly of object 
@@ -516,19 +551,30 @@ paths:
       parameters: 
       - in: path
         name: ark
-        type: string
+        schema: 
+          type: string
         required: true
         description: ark should be url-encoded
       - in: query
         name: content
-        type: string
+        schema: 
+          type: string
+          enum:
+          - producer
+          - full
         required: false
-        description: producer|full
       - in: query
         name: format
-        type: string
+        schema: 
+          type: string
+          enum:
+          - zip
+          - tag
+          - targz
         required: false
-        description: zip|tar|targz
+      responses:
+        "200":
+          description: TBD
   /api/presign-obj-by-token/{token}:
     get:
       summary: Retrive assembled object/version by presigned url
@@ -537,18 +583,24 @@ paths:
       parameters: 
       - in: path
         name: token
-        type: string
+        schema: 
+          type: string
         required: true
       - in: query
         name: no_redirect
-        type: boolean
+        schema: 
+          type: boolean
         required: false
         description: if set, presigned url will be sent in payload
       - in: query
         name: filename
-        type: string
+        schema: 
+          type: string
         required: false
         description: name to assign to download file, defaults to object.zip
+      responses:
+        "200":
+          description: TBD
   /object/upload:
     post:
       summary: Start object ingest (tbd differentiate ingest vs upload)
@@ -558,49 +610,53 @@ paths:
       parameters: &ingestparamup
       - in: query
         name: file
-        type: file
+        schema: 
+          type: object
         required: true
         description: file upload
       - in: query
         name: creator
-        type: string
+        schema: 
+          type: string
         required: false
-        description: 
       - in: query
         name: date
-        type: string
+        schema: 
+          type: string
         required: false
-        description: 
       - in: query
         name: localIdentifier
-        type: string
+        schema: 
+          type: string
         required: false
-        description: 
       - in: query
         name: primaryIdentifier
-        type: string
+        schema: 
+          type: string
         required: false
-        description: 
       - in: query
         name: profile
-        type: string
+        schema: 
+          type: string
         required: false
-        description: 
       - in: query
         name: responseForm
-        type: string
+        schema: 
+          type: string
         required: false
-        description: 
       - in: query
         name: title
-        type: string
+        schema: 
+          type: string
         required: false
-        description: 
       - in: query
         name: type
-        type: string
+        schema: 
+          type: string
         required: false
-        description: 
+      responses:
+        "200":
+          description: TBD
   /object/ingest:
     post:
       summary: Start object ingest (tbd differentiate ingest vs upload)
@@ -610,164 +666,168 @@ paths:
       parameters: &ingestparamfull
       - in: query
         name: file
-        type: file
+        schema: 
+          type: object
         required: true
         description: file upload
       - in: query
         name: creator
-        type: string
+        schema: 
+          type: string
         required: false
-        description: 
       - in: query
         name: date
-        type: string
+        schema: 
+          type: string
         required: false
-        description: 
       - in: query
         name: digestType
-        type: string
+        schema: 
+          type: string
         required: false
-        description: 
       - in: query
         name: digestValue
-        type: string
+        schema: 
+          type: string
         required: false
-        description: 
       - in: query
         name: localIdentifier
-        type: string
+        schema: 
+          type: string
         required: false
-        description: 
       - in: query
         name: notification
-        type: string
+        schema: 
+          type: string
         required: false
-        description: 
       - in: query
         name: notificationFormat
-        type: string
+        schema: 
+          type: string
         required: false
-        description: 
       - in: query
         name: primaryIdentifier
-        type: string
+        schema: 
+          type: string
         required: false
-        description: 
       - in: query
         name: profile
-        type: string
+        schema: 
+          type: string
         required: false
-        description: 
       - in: query
         name: note
-        type: string
+        schema: 
+          type: string
         required: false
-        description: 
       - in: query
         name: responseForm
-        type: string
+        schema: 
+          type: string
         required: false
-        description: 
       - in: query
         name: DataCite.resourceType
-        type: string
+        schema: 
+          type: string
         required: false
-        description: 
       - in: query
         name: DC.contributor
-        type: string
+        schema: 
+          type: string
         required: false
-        description: 
       - in: query
         name: DC.coverage
-        type: string
+        schema: 
+          type: string
         required: false
-        description: 
       - in: query
         name: DC.reator
-        type: string
+        schema: 
+          type: string
         required: false
-        description: 
       - in: query
         name: DC.date
-        type: string
+        schema: 
+          type: string
         required: false
-        description: 
       - in: query
         name: DC.description
-        type: string
+        schema: 
+          type: string
         required: false
-        description: 
       - in: query
         name: DC.format
-        type: string
+        schema: 
+          type: string
         required: false
-        description: 
       - in: query
         name: 'DC.identifier'
-        type: string
+        schema: 
+          type: string
         required: false
-        description: 
       - in: query
         name: DC.language
-        type: string
+        schema: 
+          type: string
         required: false
-        description: 
       - in: query
         name: DC.publisher
-        type: string
+        schema: 
+          type: string
         required: false
-        description: 
       - in: query
         name: DC.relation
-        type: string
+        schema: 
+          type: string
         required: false
-        description: 
       - in: query
         name: DC.rights
-        type: string
+        schema: 
+          type: string
         required: false
-        description: 
       - in: query
         name: DC.source
-        type: string
+        schema: 
+          type: string
         required: false
-        description: 
       - in: query
         name: DC.subject
-        type: string
+        schema: 
+          type: string
         required: false
-        description: 
       - in: query
         name: DC.title
-        type: string
+        schema: 
+          type: string
         required: false
-        description: 
       - in: query
         name: submitter
-        type: string
+        schema: 
+          type: string
         required: false
-        description: 
       - in: query
         name: title
-        type: string
+        schema: 
+          type: string
         required: false
-        description: 
       - in: query
         name: synchronousMode
-        type: string
+        schema: 
+          type: string
         required: false
-        description: 
       - in: query
         name: retainTargetURL
-        type: string
+        schema: 
+          type: string
         required: false
-        description: 
       - in: query
         name: type
-        type: string
+        schema: 
+          type: string
         required: false
-        description: 
+      responses:
+        "200":
+          description: TBD
   /object/update:
     post:
       summary: Start new version ingest for an object
@@ -776,6 +836,9 @@ paths:
       - api
       parameters:
       <<: *ingestparamfull
+      responses:
+        "200":
+          description: TBD
   /object/mint:
     post:
       summary: Mint an id for a new object
@@ -784,16 +847,20 @@ paths:
       parameters:
       - in: query
         name: profile
-        type: string
+        schema: 
+          type: string
         required: true
-        description: 
       - in: query
         name: responseForm
-        type: string
+        schema: 
+          type: string
         required: true
-        description: 
       - in: query
         name: erc
-        type: string
+        schema: 
+          type: string
         required: true
-        description: 
+      responses:
+        "200":
+          description: TBD
+
