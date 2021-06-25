@@ -411,13 +411,65 @@ paths:
         type: string
         required: false
         description: name to assign to download file, defaults to object.zip
+  /object/upload:
+    post:
+      summary: Start object ingest (tbd differentiate ingest vs upload)
+      tags:
+      - ui
+      - api
+      parameters: &ingestparamup
+      - in: query
+        name: file
+        type: file
+        required: true
+        description: file upload
+      - in: query
+        name: creator
+        type: string
+        required: false
+        description: 
+      - in: query
+        name: date
+        type: string
+        required: false
+        description: 
+      - in: query
+        name: localIdentifier
+        type: string
+        required: false
+        description: 
+      - in: query
+        name: primaryIdentifier
+        type: string
+        required: false
+        description: 
+      - in: query
+        name: profile
+        type: string
+        required: false
+        description: 
+      - in: query
+        name: responseForm
+        type: string
+        required: false
+        description: 
+      - in: query
+        name: title
+        type: string
+        required: false
+        description: 
+      - in: query
+        name: type
+        type: string
+        required: false
+        description: 
   /object/ingest:
     post:
       summary: Start object ingest (tbd differentiate ingest vs upload)
       tags:
       - ui
       - api
-      parameters:
+      parameters: &ingestparamfull
       - in: query
         name: file
         type: file
@@ -440,11 +492,6 @@ paths:
         description: 
       - in: query
         name: digestValue
-        type: string
-        required: false
-        description: 
-      - in: query
-        name: filename
         type: string
         required: false
         description: 
@@ -589,15 +636,27 @@ paths:
       tags:
       - ui
       - api
+      parameters:
+      <<: *ingestparamfull
   /object/mint:
     post:
       summary: Mint an id for a new object
       tags:
       - ui
       - internal-use
-  /object/upload:
-    post:
-      summary: Start object ingest (tbd differentiate ingest vs upload)
-      tags:
-      - ui
-      - api
+      parameters:
+      - in: query
+        name: profile
+        type: string
+        required: true
+        description: 
+      - in: query
+        name: responseForm
+        type: string
+        required: true
+        description: 
+      - in: query
+        name: erc
+        type: string
+        required: true
+        description: 
