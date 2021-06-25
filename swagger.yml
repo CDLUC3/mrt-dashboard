@@ -62,7 +62,7 @@ components:
       in: query
       name: file
       schema: 
-        type: object
+        type: string
       required: true
       description: file upload
     in_creator:
