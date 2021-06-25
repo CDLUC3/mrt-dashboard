@@ -44,20 +44,20 @@ components:
       name: content
       schema: 
         type: string
-      enum:
-      - producer
-      - full
+        enum:
+        - producer
+        - full
       required: false
     formatParam:
       in: query
       name: format
       schema: 
         type: string
+        enum:
+        - zip
+        - tar
+        - targz
       required: false
-      enum:
-      - zip
-      - tar
-      - targz
     in_file:
       in: query
       name: file
