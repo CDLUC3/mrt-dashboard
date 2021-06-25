@@ -14,6 +14,9 @@ and for the harvesting of Nuxeo content feeds for ingest into Merrit.
 ## Component Diagram
 [![Flowchart](https://github.com/CDLUC3/mrt-doc/raw/main/diagrams/ui.mmd.svg)](https://cdluc3.github.io/mrt-doc/diagrams/ui)
 
+## API Summary
+[Swagger Documentation](https://petstore.swagger.io/?url=https://raw.githubusercontent.com/CDLUC3/mrt-dashboard/main/swagger.yml)
+
 ## Dependencies
 
 This code depends on the following Merritt Libraries.
