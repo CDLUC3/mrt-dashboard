@@ -21,6 +21,9 @@ paths:
       summary: Display login page
       tags:
       - ui
+      responses:
+        "200":
+          description: return login page
     post:
       summary: Send user login credentials
       tags:
@@ -34,20 +37,32 @@ paths:
         name: password
         type: string
         required: true
+      responses:
+        "200":
+          description: display Merritt home with active user session or redirect to login page
   /guest_login:
     get:
       summary: Redirect to guest login
       tags:
       - ui
+      responses:
+        "200":
+          description: display Merritt home with active guest user session
     post:
       summary: Send guest login credentials
       tags:
       - ui
+      responses:
+        "200":
+          description: display Merritt home with active guest user session
   /logout:
     get:
       summary: User logout
       tags:
       - ui
+      responses:
+        "200":
+          description: display Merritt home with no active session
   /m/{ark}:
     get:
       summary: Display collection or object page
@@ -58,6 +73,11 @@ paths:
         name: ark
         type: string
         required: true
+      responses:
+        "200":
+          description: display resource
+        "401":
+          description: access not authorized
   /m/{ark}/{version}:
     get:
       summary: Display object version page
@@ -72,11 +92,19 @@ paths:
         name: version
         type: integer
         required: true
+      responses:
+        "200":
+          description: display resource
+        "401":
+          description: access not authorized
   /home/choose_collection:
     get:
       summary: Select collection for user session
       tags:
       - ui
+      responses:
+        "200":
+          description: display resource
   /user/update:
     post:
       summary: Update user profile
@@ -104,19 +132,34 @@ paths:
         name: mail
         type: string
         required: true
+      responses:
+        "200":
+          description: display updated profile
+        "401":
+          description: access not authorized
   /collection/search_results:
     get:
       summary: Display collection search results
       tags:
       - ui
+      responses:
+        "200":
+          description: display resource
+        "401":
+          description: access not authorized
   /version/index:
     get:
       summary: Access version page
       tags:
-      - internal-use
+      - ui
+      responses:
+        "200":
+          description: display resource
+        "401":
+          description: access not authorized
   /a/{ark}:
     get:
-      summary: Add object to collection
+      summary: Dsiplay add object page
       tags:
       - ui
       parameters: 
@@ -124,6 +167,11 @@ paths:
         name: ark
         type: string
         required: true
+      responses:
+        "200":
+          description: display resource
+        "401":
+          description: access not authorized
   /collection/object_count:
     get:
       summary: Get object count for collection
@@ -139,6 +187,9 @@ paths:
         name: group_id
         type: string
         required: false
+      responses:
+        "200":
+          description: return count as text
   /collection/version_count:
     get:
       summary: Get version count for collection
@@ -154,6 +205,9 @@ paths:
         name: group_id
         type: string
         required: false
+      responses:
+        "200":
+          description: return count as text
   /collection/file_count:
     get:
       summary: Get file count for collection
@@ -169,6 +223,9 @@ paths:
         name: group_id
         type: string
         required: false
+      responses:
+        "200":
+          description: return count as text
   /collection/total_size:
     get:
       summary: Get total byte size for collection (all versions)
@@ -184,6 +241,9 @@ paths:
         name: group_id
         type: string
         required: false
+      responses:
+        "200":
+          description: return size as text
   /collection/billable_size:
     get:
       summary: Get total billable byte size for collection
@@ -199,9 +259,13 @@ paths:
         name: group_id
         type: string
         required: false
+      responses:
+        "200":
+          description: return size as text
   /d/{ark}/{version}/{file}:
     get:
       summary: Download file (stream bytes)
+      description: Deprecated. See /api/presign-file/
       deprecated: true
       tags:
       - api
@@ -218,10 +282,16 @@ paths:
         name: file
         type: string
         required: true
+      responses:
+        "200":
+          description: display resource
+        "401":
+          description: access not authorized
   /d/{ark}/{version}:
     get:
       summary: Download assembled object version (stream bytes)
       deprecated: true
+      description: Deprecated. See /api/assemble-version/
       tags:
       - api
       parameters: 
@@ -233,10 +303,16 @@ paths:
         name: version
         type: integer
         required: true
+      responses:
+        "200":
+          description: display resource
+        "401":
+          description: access not authorized
   /d/{ark}:
     get:
       summary: Download assembled object (stream bytes)
       deprecated: true
+      description: Deprecated. See /api/assemble-object/
       tags:
       - api
       parameters: 
@@ -244,10 +320,16 @@ paths:
         name: ark
         type: string
         required: true
+      responses:
+        "200":
+          description: display resource
+        "401":
+          description: access not authorized
   /u/{ark}/{version}:
     get:
       summary: Download assembled object version (stream bytes) including only producer files
       deprecated: true
+      description: Deprecated. See /api/assemble-version/
       tags:
       - api
       parameters: 
@@ -259,10 +341,16 @@ paths:
         name: version
         type: integer
         required: true
+      responses:
+        "200":
+          description: display resource
+        "401":
+          description: access not authorized
   /u/{ark}:
     get:
       summary: Download assembled object (stream bytes) including only producer files
       deprecated: true
+      description: Deprecated. See /api/assemble-object/
       tags:
       - api
       parameters: 
@@ -270,10 +358,14 @@ paths:
         name: ark
         type: string
         required: true
+      responses:
+        "200":
+          description: display resource
+        "401":
+          description: access not authorized
   /dm/{ark}:
     get:
       summary: Download object manifest (stream bytes)
-      deprecated: true
       tags:
       - api
       parameters: 
@@ -281,6 +373,11 @@ paths:
         name: ark
         type: string
         required: true
+      responses:
+        "200":
+          description: display resource
+        "401":
+          description: access not authorized
   /feeds/recent:
     get:
       summary: get recent items
@@ -291,6 +388,11 @@ paths:
         name: collection
         type: string
         required: true
+      responses:
+        "200":
+          description: display resource
+        "401":
+          description: access not authorized
   /object/recent.{feedtype}:
     get:
       summary: Generate atom feed - what other formats do we support?
@@ -302,6 +404,11 @@ paths:
         type: string
         required: true
         description: feed type should be atom
+      responses:
+        "200":
+          description: display resource
+        "401":
+          description: access not authorized
   /api/presign-file/{ark}/{version}/{file}:
     get:
       summary: Retrieve file by presigned url
@@ -327,6 +434,36 @@ paths:
         type: boolean
         required: false
         description: if set, presigned url will be sent in payload
+      - in: query
+        name: contentDisposition
+        type: string
+        enum:
+        - attachment
+        required: false
+        description: if set, the presigned Url will download as an attachment (rather than displaying in a browser) regardless of the contentType for the file
+      responses:
+        "200":
+          description: presigned url in payload
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  url:
+                    type: string
+        "303":
+          description: presigned url returned as redirect
+          headers:
+            location:
+              description: contains presigned url, browser should redirect automatically
+        "401":
+          description: access not authorized
+        "403":
+          description: object exists, content cannot be processed
+        "404":
+          description: object does not exist
+        "500":
+          description: processing error
   /api/get-storage-key-file/{ark}/{version}/{file}:
     get:
       summary: Create key to send to storage service
@@ -642,7 +779,6 @@ paths:
     post:
       summary: Mint an id for a new object
       tags:
-      - ui
       - internal-use
       parameters:
       - in: query
