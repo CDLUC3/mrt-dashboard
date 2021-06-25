@@ -451,6 +451,7 @@ paths:
                 properties:
                   url:
                     type: string
+                    example: https://some.really.long.presigned.url
         "303":
           description: presigned url returned as redirect
           headers:
