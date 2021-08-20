@@ -32,3 +32,18 @@ services:
 
     # Use "forwardPorts" in **devcontainer.json** to forward an app port locally. 
     # (Adding the "ports" property to this file will not forward from a Codespace.)
+  mysql-rspec:
+    container_name: mysql-rspec
+    image: cdluc3/mrt-database
+    build:
+      context: mysql
+      dockerfile: Dockerfile
+    environment:
+      MYSQL_DATABASE: 'mrt_dashboard_test'
+      MYSQL_USER: 'travis'
+      MYSQL_PASSWORD: 'password'
+      MYSQL_ROOT_PASSWORD: ''
+      MYSQL_ALLOW_EMPTY_PASSWORD: Y
+    ports:
+    - published: 3306
+      target: 3306

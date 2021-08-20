@@ -30,7 +30,7 @@ ActiveRecord::Migration.maintain_test_schema!
 def check_connection_config!
   db_config = ActiveRecord::Base.connection_config
   host = db_config[:host]
-  raise("Can't run destructive tests against non-local database #{host || 'nil'}") unless ['localhost', '127.0.0.1'].include?(host)
+  raise("Can't run destructive tests against non-local database #{host || 'nil'}") unless ['localhost', '127.0.0.1', 'mysql-rspec'].include?(host)
 
   msg = "Using database #{db_config[:database]} on host #{host} with username #{db_config[:username]}"
   puts msg.colorize(:yellow)
