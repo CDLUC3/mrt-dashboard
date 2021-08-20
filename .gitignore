@@ -173,7 +173,5 @@ Temporary Items
 /config/master.key
 
 # other dependencies
-node_modules/
 vendor/
 .vscode/
-node_modules/.yarn-integrity
