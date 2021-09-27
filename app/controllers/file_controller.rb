@@ -17,15 +17,17 @@ class FileController < ApplicationController
   before_action :check_version, only: %i[download presign]
 
   def download
-    if @file.exceeds_download_size?
-      render file: "#{Rails.root}/public/403.html", status: 403, layout: false
-    else
-      stream_response(@file.bytestream_uri,
-                      'inline',
-                      File.basename(@file.pathname),
-                      @file.mime_type,
-                      @file.full_size)
-    end
+    # deprecate file download in favor of presigned retrievalß
+    render file: "#{Rails.root}/public/403.html", status: 403, layout: false
+    # if @file.exceeds_download_size?
+    #   render file: "#{Rails.root}/public/403.html", status: 403, layout: false
+    # else
+    #   stream_response(@file.bytestream_uri,
+    #                   'inline',
+    #                   File.basename(@file.pathname),
+    #                   @file.mime_type,
+    #                   @file.full_size)
+    # end
   end
 
   # API Call to redirect to presign URL for a file.
@@ -149,14 +151,16 @@ class FileController < ApplicationController
   def fix_filename
     # determine if the filename has already been decoded (by looking for the slash after producer or system)
     fname = params[:file]
-    return fname if fname.match(/(producer|system)\//) 
+    return fname if fname.match(%r{(producer|system)/})
 
     # retrieve decoded version of the parameter
     fname = params_u(:file)
     return fname if fname.valid_encoding?
 
+    # :nocov:
     log.warn("invalid encoding for filname #{fname}")
     fname
+    # :nocov:
   end
 
   def fix_params

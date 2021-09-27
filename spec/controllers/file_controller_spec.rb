@@ -75,7 +75,7 @@ RSpec.describe FileController, type: :controller do
       expect(response.status).to eq(403)
     end
 
-    it 'streams the file' do
+    skip it 'streams the file' do
       mock_permissions_all(user_id, collection_id)
 
       size_ok = APP_CONFIG['max_download_size'] - 1
@@ -102,7 +102,7 @@ RSpec.describe FileController, type: :controller do
       end
     end
 
-    it 'handles filenames with spaces' do
+    skip it 'handles filenames with spaces' do
       pathname = 'producer/Caltrans EHE Tests.pdf'
       mock_permissions_all(user_id, collection_id)
 
@@ -141,7 +141,7 @@ RSpec.describe FileController, type: :controller do
       expect(response.status).to eq(200)
     end
 
-    it 'handles filenames with spaces and pipes' do
+    skip it 'handles filenames with spaces and pipes' do
       pathname = 'producer/AIP/Subseries 1.1/Objects/Evolution book/Tate Collection |landscape2'
       mock_permissions_all(user_id, collection_id)
 
