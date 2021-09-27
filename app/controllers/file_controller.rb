@@ -17,17 +17,10 @@ class FileController < ApplicationController
   before_action :check_version, only: %i[download presign]
 
   def download
-    # deprecate file download in favor of presigned retrievalß
-    render file: "#{Rails.root}/public/403.html", status: 403, layout: false
-    # if @file.exceeds_download_size?
-    #   render file: "#{Rails.root}/public/403.html", status: 403, layout: false
-    # else
-    #   stream_response(@file.bytestream_uri,
-    #                   'inline',
-    #                   File.basename(@file.pathname),
-    #                   @file.mime_type,
-    #                   @file.full_size)
-    # end
+    # deprecate file download in favor of presigned retrieval
+    url = request.url.gsub(%r[/d/], "/api/presign-file/")
+    response.headers['Location'] = url
+    render status: 308, plain: ''
   end
 
   # API Call to redirect to presign URL for a file.

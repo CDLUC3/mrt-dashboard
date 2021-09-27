@@ -63,102 +63,15 @@ RSpec.describe FileController, type: :controller do
       expect(response.status).to eq(401)
     end
 
-    it 'prevents download when download size exceeded' do
+    it 'download file deprecated' do
       mock_permissions_all(user_id, collection_id)
-
-      size_too_large = 1 + APP_CONFIG['max_download_size']
-      inv_file.full_size = size_too_large
-      inv_file.save!
-
       request.session.merge!({ uid: user_id })
       get(:download, params: params)
-      expect(response.status).to eq(403)
+      expect(response.status).to eq(308)
+      expect(response.body).to eq('')
+      expect(response.headers).to have_key('Location')
     end
 
-    skip it 'streams the file' do
-      mock_permissions_all(user_id, collection_id)
-
-      size_ok = APP_CONFIG['max_download_size'] - 1
-      inv_file.full_size = size_ok
-      inv_file.save!
-
-      streamer = double(Streamer)
-      expected_url = inv_file.bytestream_uri
-      allow(Streamer).to receive(:new).with(expected_url).and_return(streamer)
-
-      request.session.merge!({ uid: user_id })
-      get(:download, params: params)
-
-      expect(response.status).to eq(200)
-
-      expected_headers = {
-        'Content-Type' => inv_file.mime_type,
-        'Content-Disposition' => "inline; filename=\"#{basename}\"",
-        'Content-Length' => inv_file.full_size.to_s
-      }
-      response_headers = response.headers
-      expected_headers.each do |header, value|
-        expect(response_headers[header]).to eq(value)
-      end
-    end
-
-    skip it 'handles filenames with spaces' do
-      pathname = 'producer/Caltrans EHE Tests.pdf'
-      mock_permissions_all(user_id, collection_id)
-
-      size_ok = APP_CONFIG['max_download_size'] - 1
-      inv_file.full_size = size_ok
-      inv_file.pathname = pathname
-      inv_file.save!
-
-      streamer = double(Streamer)
-      expected_url = inv_file.bytestream_uri
-      allow(Streamer).to receive(:new).with(expected_url).and_return(streamer)
-
-      params[:file] = pathname
-      request.session.merge!({ uid: user_id })
-      get(:download, params: params)
-      expect(response.status).to eq(200)
-    end
-
-    # Note that percent signs in filenames will generate invalid download links
-    skip it 'handles filenames with percent sign' do
-      pathname = 'producer/Test %25BF.pdf'
-      mock_permissions_all(user_id, collection_id)
-
-      size_ok = APP_CONFIG['max_download_size'] - 1
-      inv_file.full_size = size_ok
-      inv_file.pathname = pathname
-      inv_file.save!
-
-      streamer = double(Streamer)
-      expected_url = inv_file.bytestream_uri
-      allow(Streamer).to receive(:new).with(expected_url).and_return(streamer)
-
-      params[:file] = pathname
-      request.session.merge!({ uid: user_id })
-      get(:download, params: params)
-      expect(response.status).to eq(200)
-    end
-
-    skip it 'handles filenames with spaces and pipes' do
-      pathname = 'producer/AIP/Subseries 1.1/Objects/Evolution book/Tate Collection |landscape2'
-      mock_permissions_all(user_id, collection_id)
-
-      size_ok = APP_CONFIG['max_download_size'] - 1
-      inv_file.full_size = size_ok
-      inv_file.pathname = pathname
-      inv_file.save!
-
-      streamer = double(Streamer)
-      expected_url = inv_file.bytestream_uri
-      allow(Streamer).to receive(:new).with(expected_url).and_return(streamer)
-
-      params[:file] = pathname
-      request.session.merge!({ uid: user_id })
-      get(:download, params: params)
-      expect(response.status).to eq(200)
-    end
   end
 
   describe ':presign' do
