@@ -13,6 +13,9 @@ require File.expand_path('../config/environment', __dir__)
 require 'rspec/rails'
 require 'database_cleaner'
 
+# Do not allow rack-attack to limit the rate of requests during testing
+Rack::Attack.enabled = false
+
 # Stop Rails enthusiastically blowing away test database
 # https://github.com/rails/rails/issues/18982
 if ENV['RAILS_ENV'] == 'test'

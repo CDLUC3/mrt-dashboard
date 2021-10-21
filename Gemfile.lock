@@ -217,6 +217,8 @@ GEM
       nio4r (~> 2.0)
     racc (1.5.2)
     rack (2.2.3)
+    rack-attack (6.5.0)
+      rack (>= 1.0, < 3)
     rack-cache (1.12.1)
       rack (>= 0.4)
     rack-proxy (0.7.0)
@@ -394,6 +396,7 @@ DEPENDENCIES
   pry-rails
   pry-remote
   puma
+  rack-attack
   rack-cache
   rails (~> 5.2)
   rest-client
