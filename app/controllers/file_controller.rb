@@ -18,7 +18,7 @@ class FileController < ApplicationController
 
   def download
     # deprecate file download in favor of presigned retrieval
-    url = request.url.gsub(%r[/d/], "/api/presign-file/")
+    url = request.url.gsub(%r{/d/}, '/api/presign-file/')
     response.headers['Location'] = url
     render status: 308, plain: ''
   end

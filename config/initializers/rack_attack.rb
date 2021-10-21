@@ -41,7 +41,7 @@ end
 # Baseline throttle all requests by IP
 # But don't return anything for /assets, which are just part of each page and should not be tracked.
 Rack::Attack.throttle('all_requests_by_IP', limit: 100, period: 1.minute) do |req|
-  req.ip unless req.path.start_with?('/assets') 
+  req.ip unless req.path.start_with?('/assets')
 end
 
 # When a client is throttled, return useful information in the response
