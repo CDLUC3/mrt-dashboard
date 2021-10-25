@@ -630,6 +630,32 @@ RSpec.describe ObjectController, type: :controller do
           expect(body).to include(obj.ark)
         end
       end
+
+      it 'gets a list of 2 objects' do
+        request.accept = 'application/atom+xml'
+        get(:recent, params: { collection: collection.ark, per_page: 2 })
+        expect(response.status).to eq(200)
+        expect(response.content_type).to eq('application/atom+xml')
+
+        body = response.body
+        expect(body).to include("per_page=2")
+        expect(body).to include(objects[0].ark)
+        expect(body).to include(objects[1].ark)
+        expect(body).not_to include(objects[2].ark)
+      end
+
+      it 'request 1000, page size set to 500' do
+        request.accept = 'application/atom+xml'
+        get(:recent, params: { collection: collection.ark, per_page: 1000 })
+        expect(response.status).to eq(200)
+        expect(response.content_type).to eq('application/atom+xml')
+
+        body = response.body
+        expect(body).to include("per_page=500")
+        objects.each do |obj|
+          expect(body).to include(obj.ark)
+        end
+      end
     end
 
     describe ':mk_httpclient' do

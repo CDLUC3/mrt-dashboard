@@ -16,7 +16,28 @@ module PaginationMixin
     1
   end
 
+  def max_per_page
+    500
+  end
+
+  def per_page_param
+    begin
+      param = params[:per_page]
+      return 10 unless param
+
+      per_page = Integer(param)
+      return per_page unless per_page > max_per_page
+
+      logger.warn("Can't show #{per_page} per_page; showing #{max_per_page}")
+    rescue StandardError => e
+      # :nocov:
+      logger.error(to_msg(e))
+      # :nocov:
+    end
+    max_per_page
+  end
+
   def paginate_args
-    { page: page_param, per_page: 10 }
+    { page: page_param, per_page: per_page_param }
   end
 end
