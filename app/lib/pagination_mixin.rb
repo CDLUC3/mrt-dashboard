@@ -23,7 +23,7 @@ module PaginationMixin
   def per_page_param
     begin
       param = params[:per_page]
-      return 10 unless param
+      return 500 unless param
 
       per_page = Integer(param)
       return per_page unless per_page > max_per_page
