@@ -20,10 +20,10 @@ module PaginationMixin
     500
   end
 
-  def per_page_param
+  def per_page_param(defcount)
     begin
       param = params[:per_page]
-      return 500 unless param
+      return defcount unless param
 
       per_page = Integer(param)
       return per_page unless per_page > max_per_page
@@ -37,7 +37,7 @@ module PaginationMixin
     max_per_page
   end
 
-  def paginate_args
-    { page: page_param, per_page: per_page_param }
+  def paginate_args(defcount = 10)
+    { page: page_param, per_page: per_page_param(defcount) }
   end
 end
