@@ -21,7 +21,13 @@ RSpec.describe ObjectController, type: :controller do
 
       @collection = create(:private_collection, name: 'Collection 1', mnemonic: 'collection_1')
       @collection_id = mock_ldap_for_collection(collection)
-      @objects = Array.new(3) { |i| create(:inv_object, erc_who: 'Doe, Jane', erc_what: "Object #{i}", erc_when: "2018-01-0#{i}") }
+      @objects = []
+      for i in 0..2
+        @objects.append(
+          create(:inv_object, erc_who: 'Doe, Jane', erc_what: "Object #{i}", erc_when: "2018-01-0#{i}")
+        )
+        sleep 1
+      end
       collection.inv_objects << objects
 
       @object_ark = objects[0].ark
@@ -626,6 +632,32 @@ RSpec.describe ObjectController, type: :controller do
         expect(response.content_type).to eq('application/atom+xml')
 
         body = response.body
+        objects.each do |obj|
+          expect(body).to include(obj.ark)
+        end
+      end
+
+      it 'gets a list of 2 objects' do
+        request.accept = 'application/atom+xml'
+        get(:recent, params: { collection: collection.ark, per_page: 2 })
+        expect(response.status).to eq(200)
+        expect(response.content_type).to eq('application/atom+xml')
+
+        body = response.body
+        expect(body).to include("per_page=2")
+        expect(body).to include(objects[2].ark)
+        expect(body).to include(objects[1].ark)
+        expect(body).not_to include(objects[0].ark)
+      end
+
+      it 'request 1000, page size set to 500' do
+        request.accept = 'application/atom+xml'
+        get(:recent, params: { collection: collection.ark, per_page: 1000 })
+        expect(response.status).to eq(200)
+        expect(response.content_type).to eq('application/atom+xml')
+
+        body = response.body
+        expect(body).to include("per_page=500")
         objects.each do |obj|
           expect(body).to include(obj.ark)
         end

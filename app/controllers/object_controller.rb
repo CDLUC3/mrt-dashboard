@@ -91,7 +91,7 @@ class ObjectController < ApplicationController
     collection = InvCollection.where(ark: @collection_ark).first
     render(status: 404, plain: '404 Not Found') && return if collection.nil? || collection.to_s == ''
 
-    @objects = collection.recent_objects.paginate(paginate_args)
+    @objects = collection.recent_objects.paginate(paginate_args(500))
     respond_to do |format|
       format.html
       format.atom

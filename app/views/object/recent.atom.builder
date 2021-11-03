@@ -3,26 +3,26 @@
 xml.tag!('feed', :xmlns => 'http://www.w3.org/2005/Atom',
                  'xmlns:dct' => 'http://purl.org/dc/terms/') do
   xml.tag!('link',
-           'href' => "/object/recent.atom?collection=#{@collection_ark}&page=#{@objects.current_page}",
+           'href' => "/object/recent.atom?collection=#{@collection_ark}&page=#{@objects.current_page}&per_page=#{@objects.per_page}",
            'rel' => 'self',
            'type' => 'application/atom+xml')
   xml.tag!('link',
-           'href' => "/object/recent.atom?collection=#{@collection_ark}&page=1",
+           'href' => "/object/recent.atom?collection=#{@collection_ark}&page=1&per_page=#{@objects.per_page}",
            'rel' => 'first',
            'type' => 'application/atom+xml')
   xml.tag!('link',
-           'href' => "/object/recent.atom?collection=#{@collection_ark}&page=#{@objects.total_pages}",
+           'href' => "/object/recent.atom?collection=#{@collection_ark}&page=#{@objects.total_pages}&per_page=#{@objects.per_page}",
            'rel' => 'last',
            'type' => 'application/atom+xml')
   if @objects.next_page
     xml.tag!('link',
-             'href' => "/object/recent.atom?collection=#{@collection_ark}&page=#{@objects.next_page}",
+             'href' => "/object/recent.atom?collection=#{@collection_ark}&page=#{@objects.next_page}&per_page=#{@objects.per_page}",
              'rel' => 'next',
              'type' => 'application/atom+xml')
   end
   if @objects.previous_page
     xml.tag!('link',
-             'href' => "/object/recent.atom?collection=#{@collection_ark}&page=#{@objects.previous_page}",
+             'href' => "/object/recent.atom?collection=#{@collection_ark}&page=#{@objects.previous_page}&per_page=#{@objects.per_page}",
              'rel' => 'previous',
              'type' => 'application/atom+xml')
   end
