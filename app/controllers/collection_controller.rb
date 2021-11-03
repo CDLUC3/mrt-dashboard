@@ -48,7 +48,12 @@ class CollectionController < ApplicationController
   def search_results
     terms = parse_terms(params[:terms])
     collection_ark = @request_group.ark_id
-    @results = terms.empty? ? find_all(collection_ark) : find_by_full_text(collection_ark, terms)
+    if terms.empty?
+      @results = find_all(collection_ark)
+    else
+      @results = find_by_localid(collection_ark, params[:terms]) 
+      @results = find_by_full_text(collection_ark, terms) if @results.empty?     
+    end
   end
 
   private
@@ -68,6 +73,18 @@ class CollectionController < ApplicationController
       .map { |t| is_ark?(t) ? t[11..] : t } # special ark handling
       .delete_if { |t| (t.blank? || t.size < 4) }
     terms[0..50] # we can't have more than 60 terms, so just drop > 50
+  end
+
+  def find_by_localid(collection_ark, term)
+    InvObject
+      .joins(:inv_collections, :inv_localids)
+      .where('inv_collections.ark = ?', collection_ark)
+      .where('inv_localids.local_id = ?', term)
+      .includes(:inv_versions)
+      .quickloadhack
+      .limit(10)
+      .distinct
+      .paginate(paginate_args)
   end
 
   def find_by_full_text(collection_ark, terms)
