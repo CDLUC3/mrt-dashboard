@@ -13,7 +13,7 @@ default: &default
   encoding: utf8mb4
   host: "{!SSM: inv/db-host}"
   database: "{!SSM: inv/db-name}"
-  pool: 5
+  pool: 20
   port: 3306
   username: "{!SSM: inv/readwrite/db-user}"
   password: "{!SSM: inv/readwrite/db-password}"

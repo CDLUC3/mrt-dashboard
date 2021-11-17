@@ -4,11 +4,13 @@
 # the maximum value specified for Puma. Default is set to 5 threads for minimum
 # and maximum; this matches the default thread size of Active Record.
 #
-threads_count = ENV.fetch('RAILS_MAX_THREADS', 5)
-threads threads_count, threads_count
+# threads_count = ENV.fetch('RAILS_MAX_THREADS', 5)
+# threads threads_count, threads_count
 
-# Cluster mode
-workers 3
+# Cluster
+threads_count = Integer(ENV['RAILS_MAX_THREADS'] || 8)
+threads 0, threads_count
+workers 2
 preload_app!
 
 # Specifies the `port` that Puma will listen on to receive requests; default is 3000.
@@ -39,3 +41,12 @@ pidfile ENV.fetch('PIDFILE') { 'pid/puma.pid' }
 
 # Allow puma to be restarted by `rails restart` command.
 plugin :tmp_restart
+# Code to run in a worker before it starts serving requests.
+#
+# This is called everytime a worker is to be started.
+on_worker_boot do
+  # Worker specific setup for Rails 4.1+
+  # See: https://devcenter.heroku.com/articles/deploying-rails-applications-with-the-puma-web-server#on-worker-boot
+  ActiveRecord::Base.establish_connection
+end
+
