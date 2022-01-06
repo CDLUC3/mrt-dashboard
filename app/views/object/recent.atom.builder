@@ -1,7 +1,8 @@
 # -*- mode: ruby -*-
 
 xml.tag!('feed', :xmlns => 'http://www.w3.org/2005/Atom',
-                 'xmlns:dct' => 'http://purl.org/dc/terms/') do
+                 'xmlns:dct' => 'http://purl.org/dc/terms/',
+                 'xmlns:dc' => 'http://purl.org/dc/elements/1.1/') do
   xml.tag!('link',
            'href' => "/object/recent.atom?collection=#{@collection_ark}&page=#{@objects.current_page}&per_page=#{@objects.per_page}",
            'rel' => 'self',
@@ -49,6 +50,9 @@ xml.tag!('feed', :xmlns => 'http://www.w3.org/2005/Atom',
                                  object: obj))
       xml.tag!('dct:extent', obj.size.to_s)
       obj.all_local_ids.each do |local_id|
+        
+        xml.tag!('dc:identifier', local_id)
+
         next unless local_id && local_id.match(/^http/)
 
         xml.tag!('link',
