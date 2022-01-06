@@ -1,4 +1,4 @@
-# -*- mode: ruby -*-
+# -*- mode: ruby -*- 
 
 xml.tag!('feed', :xmlns => 'http://www.w3.org/2005/Atom',
                  'xmlns:dct' => 'http://purl.org/dc/terms/',
