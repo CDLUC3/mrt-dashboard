@@ -93,6 +93,7 @@ class FileController < ApplicationController
       WHERE
         o.ark = ?
         AND f.pathname = ?
+        AND md5(f.pathname) = md5(?)
     }
     sql2 = sql + %{
       AND v.number <= ?
@@ -114,13 +115,13 @@ class FileController < ApplicationController
         .connection
         .raw_connection
         .prepare(sql)
-        .execute(ark, pathname)
+        .execute(ark, pathname, pathname)
     else
       results = ApplicationRecord
         .connection
         .raw_connection
         .prepare(sql2)
-        .execute(ark, pathname, version, version)
+        .execute(ark, pathname, pathname, version, version)
     end
 
     if results.present?
