@@ -40,8 +40,9 @@ MrtDashboard::Application.routes.draw do
 
   get('m/:object' => 'object#index')
   get('m/:object/:version' => 'version#index')
-
-  get('home/choose_collection' => 'home#choose_collection')
+# https://merritt-stage.cdlib.org/api/cdl_dryadstg/local_id_search/doi%3A10.7959%2Fdryad.44j0zpc8q
+# https://merritt-stage.cdlib.org/api/merritt_demo/local_id_search/2022_03_07_1548_combo
+get('home/choose_collection' => 'home#choose_collection')
   get('user/update' => 'user#update')
   get('collection/search_results' => 'collection#search_results')
   get('api/:group/local_id_search' => 'collection#local_id_search')
