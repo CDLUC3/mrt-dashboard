@@ -56,6 +56,19 @@ class CollectionController < ApplicationController
     end
   end
 
+  def local_id_search
+    terms = parse_terms(params[:terms])
+    collection_ark = @request_group.ark_id
+    if !terms.empty?
+      @results = find_by_localid(collection_ark, params[:terms])
+      if (@results.length == 1) 
+        redirect_to "/api/object_info/#{CGI.escape(@results[0].ark)}"
+        return
+      end
+    end
+    render status: 201, json: {}.to_json
+  end
+
   private
 
   def find_all(collection_ark)

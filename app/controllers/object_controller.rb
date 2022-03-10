@@ -4,8 +4,8 @@ class ObjectController < ApplicationController
   include MintMixin
   include IngestMixin
 
-  before_action :require_user, except: %i[jupload_add recent ingest mint update]
-  before_action :load_object, only: %i[index download download_user download_manifest presign]
+  before_action :require_user, except: %i[jupload_add recent ingest mint update object_info]
+  before_action :load_object, only: %i[index download download_user download_manifest presign object_info]
 
   before_action(only: %i[download download_user download_manifest presign]) do
     unless current_user_can_download?(@object)
@@ -18,7 +18,7 @@ class ObjectController < ApplicationController
     check_dua(@object, { object: @object })
   end
 
-  before_action(only: %i[ingest mint update]) do
+  before_action(only: %i[ingest mint update object_info]) do
     if current_user
       render(status: 404, plain: '') unless current_user.groups('write').any? { |g| g.submission_profile == params[:profile] }
     else
@@ -104,6 +104,43 @@ class ObjectController < ApplicationController
       key: ApplicationController.encode_storage_key(@object.ark)
     }
     presign_get_obj_by_node_key(nk, params)
+  end
+
+  def object_info
+    json = {
+      ark: @object.ark,
+      version_number: @object.version_number,
+      created: @object.created,
+      modified: @object.modified,
+      erc_who: @object.erc_who,
+      erc_what: @object.erc_what,
+      erc_when: @object.erc_when,
+      versions: [],
+      localids: []
+    }
+    @object.inv_localids.each do |loc|
+      json[:localids].push(loc.local_id)
+    end
+    @object.inv_versions.each do |ver|
+      v = {
+        version_number: ver.number,
+        created: ver.created,
+        files: []
+      }
+      ver.inv_files.each do |f|
+        v[:files].push({
+          pathname: f.pathname,
+          full_size: f.full_size,
+          billable_size: f.billable_size,
+          mime_type: f.mime_type,
+          digest_value: f.digest_value,
+          digest_type: f.digest_type
+        })
+      end
+      json[:versions].push(v)
+    end
+
+    render status: 200, json: json.to_json 
   end
 
   private

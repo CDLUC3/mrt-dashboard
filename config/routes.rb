@@ -44,9 +44,10 @@ MrtDashboard::Application.routes.draw do
   get('home/choose_collection' => 'home#choose_collection')
   get('user/update' => 'user#update')
   get('collection/search_results' => 'collection#search_results')
+  get('api/:group/local_id_search/:terms' => 'collection#local_id_search')
   get('version/index' => 'version#index')
 
-  # All downloads shoudl favor the following endpoint
+  # All downloads should favor the following endpoint
   get('api/presign-file/:object/:version/*file' => 'file#presign', :format => false, :as => 'presign_file')
 
   # Presigned object download
@@ -56,6 +57,10 @@ MrtDashboard::Application.routes.draw do
 
   # TODO: clients should not need this endopoint
   get('api/get-storage-key-file/:object/:version/*file' => 'file#storage_key', :format => false, :as => 'storage_key_file')
+
+  # API object info
+  get('api/object_info/:object' => 'object#object_info', :format => false)
+
 
   # General error handling
   get('application/render_unavailable' => 'application#render_unavailable')
