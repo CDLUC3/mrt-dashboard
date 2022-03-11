@@ -13,7 +13,7 @@ set :branch,           ENV['BRANCH']          || 'master'
 
 set :config_name,      'mrt-dashboard-config'
 set :config_repo_url,  ENV['CONFIG_REPO']     || 'git@github.com:cdlib/mrt-dashboard-config.git'
-set :config_branch,    ENV['CONFIG_BRANCH']   || 'master'
+set :config_branch,    ENV['CONFIG_BRANCH']   || 'main'
 
 set :default_env,      { path: '$PATH' }
 set :stages,           %w[local mrt-ui-dev stage production]
