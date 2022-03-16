@@ -2,9 +2,9 @@ name: Ruby
 
 on:
   push:
-    branches: [ ghactions ]
+    #branches: [ ghactions ]
   pull_request:
-    branches: [ ghactions ]
+    #branches: [ ghactions ]
 
 jobs:
   build:
