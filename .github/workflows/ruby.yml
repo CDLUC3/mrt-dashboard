@@ -59,7 +59,7 @@ jobs:
 
     - name: Bundle install
       run: |
-        bundle update sqlite3
+        #bundle update sqlite3
         bundle install --jobs 4 --retry 3
 
     - name: Rubocop checks
