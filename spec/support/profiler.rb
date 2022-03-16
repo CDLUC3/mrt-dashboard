@@ -29,7 +29,6 @@ class ProfilePrinter < RubyProf::CallStackPrinter
   end
 end
 
-# rubocop:disable Metrics/ClassLength
 class Profiler
   attr_reader :report_format, :times_started, :times_elapsed, :time_stopped, :rp_result
 
@@ -182,4 +181,3 @@ class Profiler
   end
 
 end
-# rubocop:enable Metrics/ClassLength

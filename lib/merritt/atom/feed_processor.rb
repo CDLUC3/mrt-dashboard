@@ -15,7 +15,7 @@ module Merritt
       end
 
       # @return [PageResult] the `<atom:updated/>` value from the feed and the URL of the next page, if any
-      # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+      # rubocop:disable Metrics/AbcSize
       def process_xml!
         verify_collection_id!
         return if feed_up_to_date
@@ -31,7 +31,7 @@ module Merritt
         end
         PageResult.new(atom_updated: atom_updated, next_page: next_page)
       end
-      # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
+      # rubocop:enable Metrics/AbcSize
 
       private
 

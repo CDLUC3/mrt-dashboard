@@ -61,7 +61,6 @@ MrtDashboard::Application.routes.draw do
   # API object info
   get('api/object_info/:object' => 'object#object_info', :format => false)
 
-
   # General error handling
   get('application/render_unavailable' => 'application#render_unavailable')
 

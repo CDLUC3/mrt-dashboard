@@ -44,7 +44,7 @@ module Merritt
         File.open(feed_update_file, 'w') { |f| f.puts(atom_updated) }
       end
 
-      # rubocop:disable Metrics/MethodLength, Metrics/ParameterLists
+      # rubocop:disable Metrics/ParameterLists
       def new_ingest_object(local_id:, erc_who:, erc_what:, erc_when:, erc_where:, erc_when_created:, erc_when_modified:)
         Mrt::Ingest::IObject.new(
           erc: {
@@ -60,7 +60,7 @@ module Merritt
           archival_id: erc_where # TODO: find out how archival_id was supposed to work,
         )
       end
-      # rubocop:enable Metrics/MethodLength, Metrics/ParameterLists
+      # rubocop:enable Metrics/ParameterLists
 
       def start_ingest(ingest_object)
         ingest_object.start_ingest(ingest_client, profile, submitter)

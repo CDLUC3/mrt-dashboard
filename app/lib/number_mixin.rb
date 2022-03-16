@@ -1,5 +1,4 @@
 # rubocop:disable Metrics/AbcSize
-# rubocop:disable Metrics/MethodLength
 module NumberMixin
   # Modeled after the rails helper that does all sizes in binary representations
   # but gives sizes in decimal instead with 1kB = 1,000 Bytes, 1 MB = 1,000,000 bytes
@@ -32,4 +31,3 @@ module NumberMixin
   end
 end
 # rubocop:enable Metrics/AbcSize
-# rubocop:enable Metrics/MethodLength
