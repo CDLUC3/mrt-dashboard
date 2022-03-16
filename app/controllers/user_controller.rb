@@ -57,7 +57,7 @@ class UserController < ApplicationController
 
   def attributes_from(params)
     # Basic attributes
-    attributes = %w[givenname sn mail tzregion telephonenumber].map { |k| [k, params[k]] }.to_h
+    attributes = %w[givenname sn mail tzregion telephonenumber].to_h { |k| [k, params[k]] }
 
     # Password
     userpassword = params['userpassword']

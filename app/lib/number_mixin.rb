@@ -1,4 +1,5 @@
 # rubocop:disable Metrics/AbcSize
+# rubocop:disable Metrics/MethodLength
 module NumberMixin
   # Modeled after the rails helper that does all sizes in binary representations
   # but gives sizes in decimal instead with 1kB = 1,000 Bytes, 1 MB = 1,000,000 bytes
@@ -20,13 +21,15 @@ module NumberMixin
     size = Kernel.Float(size)
     if size == 1 then '1 Byte'
     elsif size < 10**3 then format('%d B', size)
-    elsif size < 10**6 then format("%.#{precision}f KB", (size / 10.0**3))
-    elsif size < 10**9 then format("%.#{precision}f MB", (size / 10.0**6))
-    elsif size < 10**12 then format("%.#{precision}f GB", (size / 10.0**9))
-    else format("%.#{precision}f TB", (size / 10.0**12))
+    elsif size < 10**6 then format("%.#{precision}f KB", (size / (10.0**3)))
+    elsif size < 10**9 then format("%.#{precision}f MB", (size / (10.0**6)))
+    elsif size < 10**12 then format("%.#{precision}f GB", (size / (10.0**9)))
+    else
+      format("%.#{precision}f TB", (size / (10.0**12)))
     end.sub('.0', '')
   rescue StandardError
     nil
   end
 end
 # rubocop:enable Metrics/AbcSize
+# rubocop:enable Metrics/MethodLength

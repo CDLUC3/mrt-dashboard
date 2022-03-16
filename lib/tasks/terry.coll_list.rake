@@ -4,7 +4,7 @@ require_relative '../../app/lib/encoder'
 require_relative '../../app/models/application_record'
 require_relative '../../app/models/inv_collection'
 
-#:nocov:
+# :nocov:
 # rubocop:disable Metrics/AbcSize
 class Terry
   def hello
@@ -35,4 +35,4 @@ namespace :terry do
   end
 end
 # rubocop:enable Metrics/AbcSize
-#:nocov:
+# :nocov:

@@ -127,7 +127,7 @@ module Merritt
               merritt_collection_ark: collection_ark,
               merritt_collection_name: merritt_collection_name
             )
-            File.open(File.join(to_dir, generator.filename), 'w') { |f| f.write(generator.generate_csh) }
+            File.write(File.join(to_dir, generator.filename), generator.generate_csh)
             count += 1
           end
           count

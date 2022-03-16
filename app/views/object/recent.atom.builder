@@ -1,4 +1,4 @@
-# -*- mode: ruby -*- 
+# -*- mode: ruby -*-
 
 xml.tag!('feed', :xmlns => 'http://www.w3.org/2005/Atom',
                  'xmlns:dct' => 'http://purl.org/dc/terms/',
@@ -50,7 +50,7 @@ xml.tag!('feed', :xmlns => 'http://www.w3.org/2005/Atom',
                                  object: obj))
       xml.tag!('dct:extent', obj.size.to_s)
       obj.all_local_ids.each do |local_id|
-        
+
         xml.tag!('dc:identifier', local_id)
 
         next unless local_id && local_id.match(/^http/)

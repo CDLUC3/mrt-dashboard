@@ -755,7 +755,7 @@ describe 'atom', type: :task do
       ]
 
       Tempfile.create(%w[atom .csv]) do |csv_file|
-        File.open(csv_file, 'w') { |f| f.write(csv_data) }
+        File.write(csv_file, csv_data)
         Dir.mktmpdir do |tmpdir|
           expected_output = "Wrote #{expected_files.size} CSH scripts to #{File.realpath(tmpdir)}\n"
           expect { invoke_task('atom:csv_to_csh', csv_file.path, tmpdir) }.to output(expected_output).to_stdout

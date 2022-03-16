@@ -51,8 +51,8 @@ class CollectionController < ApplicationController
     if terms.empty?
       @results = find_all(collection_ark)
     else
-      @results = find_by_localid(collection_ark, params[:terms]) 
-      @results = find_by_full_text(collection_ark, terms) if @results.empty?     
+      @results = find_by_localid(collection_ark, params[:terms])
+      @results = find_by_full_text(collection_ark, terms) if @results.empty?
     end
   end
 
