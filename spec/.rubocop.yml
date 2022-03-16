@@ -14,3 +14,6 @@ Metrics/ModuleLength:
 
 Metrics/MethodLength:
   Enabled: false
+
+Style/OpenStructUse:
+  Enabled: false

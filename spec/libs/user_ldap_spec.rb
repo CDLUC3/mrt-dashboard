@@ -147,7 +147,7 @@ module UserLdap
         new_password = 'correcthorsebatterystaple'
         expect(admin_ldap).to receive(:replace_attribute).with(/#{user_id}/, :userPassword, new_password).and_return(false)
 
-        result = Struct.new
+        result = OpenStruct.new
         result.message = 'Unwilling to perform'
         expect(admin_ldap).to receive(:get_operation_result).and_return(result)
         expect { user_ldap.change_password(user_id, new_password) }.to raise_error(LdapMixin::LdapException, result.message)
