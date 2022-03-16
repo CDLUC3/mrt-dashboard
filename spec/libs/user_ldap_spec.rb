@@ -142,7 +142,6 @@ module UserLdap
         expect(user_ldap.change_password(user_id, new_password)).to eq(true)
       end
 
-      # rubocop:disable Style/OpenStructUse
       it 'raises an exception if the change operation fails' do
         user_id = 'jdoe'
         new_password = 'correcthorsebatterystaple'
@@ -153,7 +152,6 @@ module UserLdap
         expect(admin_ldap).to receive(:get_operation_result).and_return(result)
         expect { user_ldap.change_password(user_id, new_password) }.to raise_error(LdapMixin::LdapException, result.message)
       end
-      # rubocop:enable Style/OpenStructUse
     end
   end
 end

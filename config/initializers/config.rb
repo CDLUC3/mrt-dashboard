@@ -1,4 +1,4 @@
-unless (self.class.const_defined?(:APP_VERSION))
+unless self.class.const_defined?(:APP_VERSION)
   APP_VERSION = File.exist?('.version') ? File.read('.version').chop.chop.chomp(';') : 'no-deploy-tag'
 end
 
@@ -11,19 +11,19 @@ end
 raise ' *** SSM_ROOT_PATH is empty' if ENV.fetch('SSM_ROOT_PATH', '').empty? && ENV.fetch('SSM_SKIP_RESOLUTION', '').empty?
 
 # when running in dev/docker, provide a default resolution value for any SSM values that will not be used
-unless (self.class.const_defined?(:LDAP_CONFIG))
+unless self.class.const_defined?(:LDAP_CONFIG)
   LDAP_CONFIG = Uc3Ssm::ConfigResolver.new({ def_value: 'NOT_APPLICABLE' })
     .resolve_file_values({ file: 'config/ldap.yml', return_key: Rails.env })
 end
 
 # when running in dev/docker, provide a default resolution value for any SSM values that will not be used
-unless (self.class.const_defined?(:ATOM_CONFIG))
+unless self.class.const_defined?(:ATOM_CONFIG)
   ATOM_CONFIG = Uc3Ssm::ConfigResolver.new({ def_value: 'NOT_APPLICABLE' })
     .resolve_file_values({ file: 'config/atom.yml', return_key: Rails.env })
 end
 
 # app_config.yml does not have any SSM values
-unless (self.class.const_defined?(:APP_CONFIG))
+unless self.class.const_defined?(:APP_CONFIG)
   APP_CONFIG = Uc3Ssm::ConfigResolver.new
     .resolve_file_values({ file: 'config/app_config.yml', return_key: Rails.env })
 end
