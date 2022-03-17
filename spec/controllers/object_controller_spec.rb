@@ -223,6 +223,63 @@ RSpec.describe ObjectController, type: :controller do
       end
     end
 
+    describe ':object_info' do
+      it 'prevents object_info view without read permission' do
+        request.session.merge!({ uid: user_id })
+        get(:object_info, params: { object: object_ark })
+        expect(response.status).to eq(401)
+      end
+
+      it 'returns object_info as json' do
+        mock_permissions_all(user_id, collection_id)
+        request.session.merge!({ uid: user_id })
+
+        get(:object_info, params: { object: object_ark })
+        expect(response.status).to eq(200)
+        json = JSON.parse(response.body)
+        expect(json['ark']).to eq(object_ark)
+        expect(json['versions'][0]["version_number"]).to eq(1)
+      end
+
+      it 'returns object_info with localid as json' do
+        lid = InvLocalid.new(
+          local_id: "test-localid",
+          inv_object: @objects[0],
+          inv_owner: @objects[0].inv_owner,
+          created: Time.now
+        )
+        lid.save!
+  
+        mock_permissions_all(user_id, collection_id)
+        request.session.merge!({ uid: user_id })
+
+        get(:object_info, params: { object: object_ark })
+        expect(response.status).to eq(200)
+        json = JSON.parse(response.body)
+        expect(json['localids']).to include("test-localid")
+      end
+
+      it 'returns object_info with files as json' do
+        inv_file = create(
+          :inv_file,
+          inv_object: @objects[0],
+          inv_version: @objects[0].current_version,
+          pathname: 'producer/foo.bin',
+          mime_type: 'application/octet-stream',
+          billable_size: 1000
+        )
+        inv_file.save!
+  
+        mock_permissions_all(user_id, collection_id)
+        request.session.merge!({ uid: user_id })
+
+        get(:object_info, params: { object: object_ark })
+        expect(response.status).to eq(200)
+        json = JSON.parse(response.body)
+        expect(json['versions'][0]['files'][0]['pathname']).to eq('producer/foo.bin')
+      end
+    end
+
     describe ':download' do
       it 'requires a login' do
         request.session.merge!({ uid: nil })

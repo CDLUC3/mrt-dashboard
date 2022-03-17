@@ -4,7 +4,7 @@ class ObjectController < ApplicationController
   include MintMixin
   include IngestMixin
 
-  before_action :require_user, except: %i[jupload_add recent ingest mint update object_info]
+  before_action :require_user, except: %i[jupload_add recent ingest mint update]
   before_action :load_object, only: %i[index download download_user download_manifest presign object_info]
 
   before_action(only: %i[download download_user download_manifest presign]) do
@@ -18,7 +18,7 @@ class ObjectController < ApplicationController
     check_dua(@object, { object: @object })
   end
 
-  before_action(only: %i[ingest mint update object_info]) do
+  before_action(only: %i[ingest mint update]) do
     if current_user
       render(status: 404, plain: '') unless current_user.groups('write').any? { |g| g.submission_profile == params[:profile] }
     else
@@ -107,6 +107,10 @@ class ObjectController < ApplicationController
   end
 
   def object_info
+    unless @object.user_has_read_permission?(current_uid)
+      return render status: 401, plain: ''
+    end
+
     json = object_info_json(@object)
     object_info_add_localids(json, @object)
     object_info_add_versions(json, @object)
