@@ -107,9 +107,7 @@ class ObjectController < ApplicationController
   end
 
   def object_info
-    unless @object.user_has_read_permission?(current_uid)
-      return render status: 401, plain: ''
-    end
+    return render status: 401, plain: '' unless @object.user_has_read_permission?(current_uid)
 
     json = object_info_json(@object)
     object_info_add_localids(json, @object)
