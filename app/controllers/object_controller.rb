@@ -109,59 +109,10 @@ class ObjectController < ApplicationController
   def object_info
     return render status: 401, plain: '' unless @object.user_has_read_permission?(current_uid)
 
-    json = object_info_json(@object)
-    object_info_add_localids(json, @object)
-    object_info_add_versions(json, @object)
-
-    render status: 200, json: json.to_json
+    render status: 200, json: @object.object_info.to_json
   end
 
   private
-
-  def object_info_json(object)
-    {
-      ark: object.ark,
-      version_number: object.version_number,
-      created: object.created,
-      modified: object.modified,
-      erc_who: object.erc_who,
-      erc_what: object.erc_what,
-      erc_when: object.erc_when,
-      versions: [],
-      localids: []
-    }
-  end
-
-  def object_info_add_localids(json, object)
-    object.inv_localids.each do |loc|
-      json[:localids].push(loc.local_id)
-    end
-  end
-
-  def object_info_add_versions(json, object)
-    object.inv_versions.each do |ver|
-      v = {
-        version_number: ver.number,
-        created: ver.created,
-        files: []
-      }
-      ver.inv_files.each do |f|
-        v[:files].push(object_info_files(f))
-      end
-      json[:versions].push(v)
-    end
-  end
-
-  def object_info_files(file)
-    {
-      pathname: file.pathname,
-      full_size: file.full_size,
-      billable_size: file.billable_size,
-      mime_type: file.mime_type,
-      digest_value: file.digest_value,
-      digest_type: file.digest_type
-    }
-  end
 
   def pairtree_encode(ark)
     Orchard::Pairtree.encode(ark.to_s)

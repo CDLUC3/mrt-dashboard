@@ -61,15 +61,17 @@ class CollectionController < ApplicationController
     collection_ark = @request_group.ark_id
     unless terms.empty?
       @results = find_by_localid(collection_ark, params[:terms])
-      if @results.length == 1
-        redirect_to "/api/object_info/#{CGI.escape(@results[0].ark)}"
-        return
-      end
+      return render_object_info(@results[0].ark) if @results.length == 1
     end
     render status: 201, json: {}.to_json
   end
 
   private
+
+  def render_object_info(ark)
+    object = InvObject.where('ark = ?', ark).includes(:inv_collections, inv_versions: [:inv_files]).first
+    render json: object.object_info.to_json, status: 200
+  end
 
   def find_all(collection_ark)
     InvObject.joins(:inv_collections)

@@ -17,6 +17,7 @@ RSpec.describe CollectionController, type: :controller do
 
   describe 'default filenames' do
     before(:each) do
+      @testlocalid = 'my-local-id'
       @user_id = mock_user(name: 'Jane Doe', password: 'correcthorsebatterystaple')
 
       @collection = create(:private_collection, name: 'Collection 1', mnemonic: 'collection_1', ark: 'ark:/collection_1')
@@ -33,7 +34,7 @@ RSpec.describe CollectionController, type: :controller do
       @object_ark = objects[0].ark
       @object = objects[0]
       lid = InvLocalid.new(
-        local_id: 'my-local-id',
+        local_id: @testlocalid,
         inv_object: @object,
         inv_owner: @object.inv_owner,
         created: Time.now
@@ -73,9 +74,12 @@ RSpec.describe CollectionController, type: :controller do
       it 'localid search - result found' do
         mock_permissions_all(user_id, collection_id)
         request.session.merge!({ uid: user_id })
-        get(:local_id_search, params: { group: @collection.group, terms: 'my-local-id' })
-        expect(response.status).to eq(302)
-        expect(response.headers['Location']).to match(".*/api/object_info/#{CGI.escape(@object.ark)}")
+        get(:local_id_search, params: { group: @collection.group, terms: @testlocalid })
+        expect(response.status).to eq(200)
+        json = JSON.parse(response.body)
+        expect(json['ark']).to eq(object_ark)
+        expect(json['versions'][0]['version_number']).to eq(1)
+        expect(json['localids'][0]).to include(@testlocalid)
       end
     end
 
