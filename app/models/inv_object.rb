@@ -131,9 +131,10 @@ class InvObject < ApplicationRecord
   end
 
   def object_info
+    maxfile = 1000
     json = object_info_json
     object_info_add_localids(json)
-    filecount = object_info_add_versions(json, 1000)
+    filecount = object_info_add_versions(json, maxfile)
 
     json['total_files'] = filecount
     json['included_files'] = filecount > maxfile ? maxfile : filecount
