@@ -241,6 +241,25 @@ RSpec.describe ObjectController, type: :controller do
         expect(json['versions'][0]['version_number']).to eq(1)
       end
 
+      it 'returns versioned object_info as json' do
+        mock_permissions_all(user_id, collection_id)
+        request.session.merge!({ uid: user_id })
+
+        create(
+          :inv_version,
+          inv_object: object,
+          ark: object_ark,
+          number: object.current_version.number + 1,
+          note: 'Sample Version 2'
+        ).save!
+
+        get(:object_info, params: { object: object_ark })
+        expect(response.status).to eq(200)
+        json = JSON.parse(response.body)
+        expect(json['ark']).to eq(object_ark)
+        expect(json['versions'][0]['version_number']).to eq(2)
+      end
+
       it 'returns object_info with localid as json' do
         lid = InvLocalid.new(
           local_id: 'test-localid',

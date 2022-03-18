@@ -133,7 +133,11 @@ class InvObject < ApplicationRecord
   def object_info
     json = object_info_json
     object_info_add_localids(json)
-    object_info_add_versions(json)
+    filecount = object_info_add_versions(json, 1000)
+
+    json['total_files'] = filecount
+    json['included_files'] = filecount > maxfile ? maxfile : filecount
+
     json
   end
 
@@ -157,18 +161,22 @@ class InvObject < ApplicationRecord
     end
   end
 
-  def object_info_add_versions(json)
+  def object_info_add_versions(json, maxfile)
+    filecount = 0
     inv_versions.each do |ver|
       v = {
         version_number: ver.number,
         created: ver.created,
+        file_count: ver.inv_files.length,
         files: []
       }
       ver.inv_files.each do |f|
-        v[:files].push(object_info_files(f))
+        filecount += 1
+        v[:files].push(object_info_files(f)) unless filecount > maxfile
       end
-      json[:versions].push(v)
+      json[:versions].prepend(v)
     end
+    filecount
   end
 
   def object_info_files(file)
