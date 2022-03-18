@@ -2,9 +2,9 @@ name: Ruby
 
 on:
   push:
-    #branches: [ ghactions ]
-  # pull_request:
-  #  branches: [ ghactions ]
+    branches:
+      # Enable specific branches so that tags will be ignored
+      - "*"
 
 jobs:
   build:
