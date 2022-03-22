@@ -7,13 +7,13 @@ info:
   title: Merritt User Interface API
 tags:
 - name: ui
-  description: Merritt UI
+  description: Merritt UI endpoints.  These should be used for UI usage, not as API endpoints.
 - name: api
-  description: Merritt API
+  description: Merritt API endpoints.  These will eventually be deployed to a new API that is separate from the UI.
 - name: internal-use
   description: Internal use within the UI app
 - name: experimental
-  description: Experimental feature, subject to change.  Feedback encouraged.
+  description: Experimental feature, subject to change.  Feedback encouraged. These will eventually be promoted into the API.
 components:
   parameters:
     arkParam:
