@@ -1,3 +1,4 @@
+#editor.swagger.io 
 ---
 openapi: 3.0.0
 info:
@@ -11,6 +12,8 @@ tags:
   description: Merritt API
 - name: internal-use
   description: Internal use within the UI app
+- name: experimental
+  description: Experimental feature, subject to change.  Feedback encouraged.
 components:
   parameters:
     arkParam:
@@ -19,6 +22,20 @@ components:
       schema: 
         type: string
       required: true
+    termsParam:
+      in: query
+      name: terms
+      schema: 
+        type: string
+      required: true
+      description: url-encoded search term or local_id value
+    terms-localidParam:
+      in: query
+      name: terms
+      schema: 
+        type: string
+      required: true
+      description: url-encoded local_id value
     versionParam:
       in: path
       name: version
@@ -32,13 +49,20 @@ components:
         type: string
       description: url-encoded path to file within an object
       required: true
+    groupPathParam:
+      in: path
+      name: group
+      schema: 
+        type: string
+      required: true
+      description: LDAP Group or collection ark. 
     groupParam:
       in: query
       name: group
       schema: 
         type: string
       required: false
-      description: LDAP Group or collection ark. Required unless in session['group_id']
+      description: LDAP Group or collection ark. 
     contentParam:
       in: query
       name: content
@@ -278,6 +302,82 @@ components:
                 type: string
                 description: Anticipated date/time that object assembly is expected to be complete.  This should be used as a hint of when to call /api/presign-obj-by-token/.
                 example: '2009-06-15T13:45:30'
+    object: 
+      description: display resource
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              ark:
+                type: string
+                example: ark:/99999/fk4349wz9t
+              version_number: 
+                type: integer
+                example: 2
+              created:
+                type: string
+                example: "2019-10-24T16:16:22.000Z"
+              modified:
+                type: string
+                example: "2019-10-24T16:16:22.000Z"
+              erc_who: 
+                type: string
+                example: "Author"
+              erc_what: 
+                type: string
+                example: "Title"
+              erc_when: 
+                type: string
+                example: "2019-10-29"
+              versions: 
+                type: array
+                items:
+                  type: object
+                  properties:
+                    version_number:  
+                      type: integer
+                      example: 1
+                    created: 
+                      type: string
+                      example: "2019-10-29T09:18:11.000Z"
+                    file_count: 
+                      type: integer
+                      example: 17
+                    files:
+                      type: array
+                      items:
+                        type: object
+                        properties: 
+                          pathname: 
+                            type: string
+                            example: "system/mrt-ingest.txt"
+                          full_size: 
+                            type: integer
+                            example: 1615
+                          billable_size: 
+                            type: integer
+                            example: 1615
+                          mime_type: 
+                            type: string
+                            example: "text/plain"
+                          digest_value: 
+                            type: string
+                            example: "017cfb96dacf9e157c9970269c99e4ecb0f7c7a75344475585c5cdfa4d56341b"
+                          digest_type: 
+                            type: string
+                            example: "sha-256"
+              localids: 
+                type: array
+                items:
+                  type: string
+                  example: "my-localid"
+              total_files: 
+                type: integer
+                example: 17
+              included_files: 
+                type: integer
+                example: 17
 paths:
   /login:
     get:
@@ -353,6 +453,18 @@ paths:
           description: display resource
         "401":
           description: access not authorized
+  /api/object_info/{ark}:
+    get:
+      summary: Display json representation of an object
+      tags:
+      - experimental
+      parameters: 
+      - $ref: '#/components/parameters/arkParam'
+      responses:
+        "200":
+          $ref: '#/components/responses/object'
+        "401":
+          description: access not authorized
   /home/choose_collection:
     get:
       summary: Select collection for user session
@@ -398,14 +510,30 @@ paths:
           description: display updated profile
         "401":
           description: access not authorized
-  /collection/search_results:
+  /s/{group}:
     get:
       summary: Display collection search results
       tags:
       - ui
+      parameters: 
+      - $ref: '#/components/parameters/groupPathParam'
+      - $ref: '#/components/parameters/termsParam'
       responses:
         "200":
           description: display resource
+        "401":
+          description: access not authorized
+  /api/{group}/local_id_search:
+    get:
+      summary: Return a json representation of an object within a collection identified by localid
+      tags:
+      - experimental
+      parameters: 
+      - $ref: '#/components/parameters/groupPathParam'
+      - $ref: '#/components/parameters/terms-localidParam'
+      responses:
+        "200":
+          $ref: '#/components/responses/object'
         "401":
           description: access not authorized
   /version/index:
