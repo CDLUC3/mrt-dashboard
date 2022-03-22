@@ -51,12 +51,27 @@ class CollectionController < ApplicationController
     if terms.empty?
       @results = find_all(collection_ark)
     else
-      @results = find_by_localid(collection_ark, params[:terms]) 
-      @results = find_by_full_text(collection_ark, terms) if @results.empty?     
+      @results = find_by_localid(collection_ark, params[:terms])
+      @results = find_by_full_text(collection_ark, terms) if @results.empty?
     end
   end
 
+  def local_id_search
+    terms = parse_terms(params[:terms])
+    collection_ark = @request_group.ark_id
+    unless terms.empty?
+      @results = find_by_localid(collection_ark, params[:terms])
+      return render_object_info(@results[0].ark) if @results.length == 1
+    end
+    render status: 201, json: {}.to_json
+  end
+
   private
+
+  def render_object_info(ark)
+    object = InvObject.where('ark = ?', ark).includes(:inv_collections, inv_versions: [:inv_files]).first
+    render json: object.object_info.to_json, status: 200
+  end
 
   def find_all(collection_ark)
     InvObject.joins(:inv_collections)

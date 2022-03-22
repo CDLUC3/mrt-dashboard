@@ -2,9 +2,9 @@ name: Ruby
 
 on:
   push:
-    #branches: [ ghactions ]
-  pull_request:
-    #branches: [ ghactions ]
+    branches:
+      # Enable specific branches so that tags will be ignored
+      - "*"
 
 jobs:
   build:
@@ -72,11 +72,11 @@ jobs:
 
     - name: Load schema
       run: |
-        bundle exec rake db:schema:load RAILS_ENV=test
+        bundle exec rake db:schema:load RAILS_ENV=test SSM_SKIP_RESOLUTION=Y
 
     - name: Coverage Checks
       run: |
         PROJECT_ROOT=`pwd`
         # Make sure Rails cache directory exists
         mkdir -p "${PROJECT_ROOT}/tmp/cache"
-        bundle exec rake coverage
+        bundle exec rake coverage RAILS_ENV=test SSM_SKIP_RESOLUTION=Y

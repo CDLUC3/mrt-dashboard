@@ -54,8 +54,8 @@ module Merritt
             merritt_collection_name: 'Merced Library Nuxeo collection'
           )
 
-          File.open('tmp/expected.csh', 'w') { |f| f.write(expected_csh) }
-          File.open('tmp/actual.csh', 'w') { |f| f.write(actual_csh) }
+          File.write('tmp/expected.csh', expected_csh)
+          File.write('tmp/actual.csh', actual_csh)
 
           expect(actual_csh).to eq(expected_csh)
         end

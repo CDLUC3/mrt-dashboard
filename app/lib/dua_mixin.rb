@@ -1,16 +1,16 @@
 # TODO: remove this, then remove it from exclude list in top-level .rubocop.yml
 module DuaMixin
 
-  #:nocov:
+  # :nocov:
   # returns the response of the HTTP request for the DUA URI
   def process_dua_request(uri)
     http = Net::HTTP.new(uri.host, uri.port)
     uri_response = http.request(Net::HTTP::Get.new(uri.request_uri))
     uri_response.instance_of?(Net::HTTPOK)
   end
-  #:nocov:
+  # :nocov:
 
-  #:nocov:
+  # :nocov:
   # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
   def check_dua(object, redirect_args)
     # bypass DUA processing for python scripts - indicated by special param
@@ -28,5 +28,5 @@ module DuaMixin
     end
   end
   # rubocop:enable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
-  #:nocov:
+  # :nocov:
 end

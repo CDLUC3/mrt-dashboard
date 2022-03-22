@@ -22,7 +22,7 @@ RSpec.describe ObjectController, type: :controller do
       @collection = create(:private_collection, name: 'Collection 1', mnemonic: 'collection_1')
       @collection_id = mock_ldap_for_collection(collection)
       @objects = []
-      for i in 0..2
+      (0..2).each do |i|
         @objects.append(
           create(:inv_object, erc_who: 'Doe, Jane', erc_what: "Object #{i}", erc_when: "2018-01-0#{i}")
         )
@@ -220,6 +220,82 @@ RSpec.describe ObjectController, type: :controller do
         request.session.merge!({ uid: user_id })
         get(:index, params: { object: object_ark })
         expect(response.status).to eq(401)
+      end
+    end
+
+    describe ':object_info' do
+      it 'prevents object_info view without read permission' do
+        request.session.merge!({ uid: user_id })
+        get(:object_info, params: { object: object_ark })
+        expect(response.status).to eq(401)
+      end
+
+      it 'returns object_info as json' do
+        mock_permissions_all(user_id, collection_id)
+        request.session.merge!({ uid: user_id })
+
+        get(:object_info, params: { object: object_ark })
+        expect(response.status).to eq(200)
+        json = JSON.parse(response.body)
+        expect(json['ark']).to eq(object_ark)
+        expect(json['versions'][0]['version_number']).to eq(1)
+      end
+
+      it 'returns versioned object_info as json' do
+        mock_permissions_all(user_id, collection_id)
+        request.session.merge!({ uid: user_id })
+
+        create(
+          :inv_version,
+          inv_object: object,
+          ark: object_ark,
+          number: object.current_version.number + 1,
+          note: 'Sample Version 2'
+        ).save!
+
+        get(:object_info, params: { object: object_ark })
+        expect(response.status).to eq(200)
+        json = JSON.parse(response.body)
+        expect(json['ark']).to eq(object_ark)
+        expect(json['versions'][0]['version_number']).to eq(2)
+      end
+
+      it 'returns object_info with localid as json' do
+        lid = InvLocalid.new(
+          local_id: 'test-localid',
+          inv_object: @objects[0],
+          inv_owner: @objects[0].inv_owner,
+          created: Time.now
+        )
+        lid.save!
+
+        mock_permissions_all(user_id, collection_id)
+        request.session.merge!({ uid: user_id })
+
+        get(:object_info, params: { object: object_ark })
+        expect(response.status).to eq(200)
+        json = JSON.parse(response.body)
+        expect(json['localids']).to include('test-localid')
+      end
+
+      it 'returns object_info with files as json' do
+        inv_file = create(
+          :inv_file,
+          inv_object: @objects[0],
+          inv_version: @objects[0].current_version,
+          pathname: 'producer/foo.bin',
+          mime_type: 'application/octet-stream',
+          billable_size: 1000
+        )
+        inv_file.save!
+
+        mock_permissions_all(user_id, collection_id)
+        request.session.merge!({ uid: user_id })
+
+        get(:object_info, params: { object: object_ark })
+        expect(response.status).to eq(200)
+        json = JSON.parse(response.body)
+        expect(json['versions'][0]['files'][0]['pathname']).to eq('producer/foo.bin')
       end
     end
 
@@ -644,7 +720,7 @@ RSpec.describe ObjectController, type: :controller do
         expect(response.content_type).to eq('application/atom+xml')
 
         body = response.body
-        expect(body).to include("per_page=2")
+        expect(body).to include('per_page=2')
         expect(body).to include(objects[2].ark)
         expect(body).to include(objects[1].ark)
         expect(body).not_to include(objects[0].ark)
@@ -657,7 +733,7 @@ RSpec.describe ObjectController, type: :controller do
         expect(response.content_type).to eq('application/atom+xml')
 
         body = response.body
-        expect(body).to include("per_page=500")
+        expect(body).to include('per_page=500')
         objects.each do |obj|
           expect(body).to include(obj.ark)
         end

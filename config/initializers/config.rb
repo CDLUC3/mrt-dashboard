@@ -1,4 +1,6 @@
-APP_VERSION = File.exist?('.version') ? File.read('.version').chop.chop.chomp(';') : 'no-deploy-tag'
+unless self.class.const_defined?(:APP_VERSION)
+  APP_VERSION = File.exist?('.version') ? File.read('.version').chop.chop.chomp(';') : 'no-deploy-tag'
+end
 
 # When running outside of a local/docker environment, the SSM_ROOT_PATH must be set
 # - For Capistrano, this is set in ~/.bashrc
@@ -9,11 +11,19 @@ APP_VERSION = File.exist?('.version') ? File.read('.version').chop.chop.chomp(';
 raise ' *** SSM_ROOT_PATH is empty' if ENV.fetch('SSM_ROOT_PATH', '').empty? && ENV.fetch('SSM_SKIP_RESOLUTION', '').empty?
 
 # when running in dev/docker, provide a default resolution value for any SSM values that will not be used
-LDAP_CONFIG = Uc3Ssm::ConfigResolver.new({ def_value: 'NOT_APPLICABLE' })
-  .resolve_file_values({ file: 'config/ldap.yml', return_key: Rails.env })
+unless self.class.const_defined?(:LDAP_CONFIG)
+  LDAP_CONFIG = Uc3Ssm::ConfigResolver.new({ def_value: 'NOT_APPLICABLE' })
+    .resolve_file_values({ file: 'config/ldap.yml', return_key: Rails.env })
+end
+
 # when running in dev/docker, provide a default resolution value for any SSM values that will not be used
-ATOM_CONFIG = Uc3Ssm::ConfigResolver.new({ def_value: 'NOT_APPLICABLE' })
-  .resolve_file_values({ file: 'config/atom.yml', return_key: Rails.env })
+unless self.class.const_defined?(:ATOM_CONFIG)
+  ATOM_CONFIG = Uc3Ssm::ConfigResolver.new({ def_value: 'NOT_APPLICABLE' })
+    .resolve_file_values({ file: 'config/atom.yml', return_key: Rails.env })
+end
+
 # app_config.yml does not have any SSM values
-APP_CONFIG = Uc3Ssm::ConfigResolver.new
-  .resolve_file_values({ file: 'config/app_config.yml', return_key: Rails.env })
+unless self.class.const_defined?(:APP_CONFIG)
+  APP_CONFIG = Uc3Ssm::ConfigResolver.new
+    .resolve_file_values({ file: 'config/app_config.yml', return_key: Rails.env })
+end

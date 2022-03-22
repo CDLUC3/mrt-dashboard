@@ -35,6 +35,12 @@ Layout/MultilineOperationIndentation:
 Layout/LineLength:
   Max: 150
 
+Metrics/ClassLength:
+  Max: 200
+
+Metrics/MethodLength:
+  Max: 15
+
 Metrics/AbcSize:
   Exclude:
     - 'app/controllers/application_controller.rb'

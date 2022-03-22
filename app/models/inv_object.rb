@@ -129,4 +129,66 @@ class InvObject < ApplicationRecord
       permissions.member?('download')
     end
   end
+
+  def object_info
+    maxfile = 1000
+    json = object_info_json
+    object_info_add_localids(json)
+    filecount = object_info_add_versions(json, maxfile)
+
+    json['total_files'] = filecount
+    json['included_files'] = filecount > maxfile ? maxfile : filecount
+
+    json
+  end
+
+  def object_info_json
+    {
+      ark: ark,
+      version_number: version_number,
+      created: created,
+      modified: modified,
+      erc_who: erc_who,
+      erc_what: erc_what,
+      erc_when: erc_when,
+      versions: [],
+      localids: []
+    }
+  end
+
+  def object_info_add_localids(json)
+    inv_localids.each do |loc|
+      json[:localids].push(loc.local_id)
+    end
+  end
+
+  def object_info_add_versions(json, maxfile)
+    filecount = 0
+    inv_versions.each do |ver|
+      v = {
+        version_number: ver.number,
+        created: ver.created,
+        file_count: ver.inv_files.length,
+        files: []
+      }
+      ver.inv_files.each do |f|
+        filecount += 1
+        v[:files].push(object_info_files(f)) unless filecount > maxfile
+      end
+      json[:versions].prepend(v)
+    end
+    filecount
+  end
+
+  def object_info_files(file)
+    {
+      pathname: file.pathname,
+      full_size: file.full_size,
+      billable_size: file.billable_size,
+      mime_type: file.mime_type,
+      digest_value: file.digest_value,
+      digest_type: file.digest_type
+    }
+  end
+
 end
