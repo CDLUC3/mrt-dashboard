@@ -121,7 +121,7 @@ module IngestMixin
     resp          = http_post(APP_CONFIG['ingest_service_update'], ingest_params)
     @doc          = Nokogiri::XML(resp.content) { |config| config.strict.noent.noblanks }
     arr           = @doc.xpath('//bat:batchState/bat:batchID')
-    @batch_id     = arr.length > 0 ? arr[0].child.text : 'n/a'
+    @batch_id     = arr.empty? ? 'n/a' : arr[0].child.text
     @obj_count    = @doc.xpath('//bat:batchState/bat:jobStates').length
   end
 
