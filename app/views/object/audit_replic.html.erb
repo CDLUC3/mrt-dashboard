@@ -1,0 +1,33 @@
+<% content_for(:title) do %>
+  Audit Replic for Object
+<% end %>
+
+
+  <main class="home" id="maincontent">
+    <h1>Audit Replic Status for <%= @object.ark %></h1>
+    <div>
+      <table class="state">
+        <caption>Statistics for <%= @datestr %></caption>
+        <thead>
+        <tr>
+          <th>Title</th>
+          <th>Total</th>
+          <th>Completed</th>
+          <th>Started</th>
+          <th>Error</th>
+        </tr>
+        </thead>
+        <tbody>
+          <% @count_by_status.each do |row| %>
+            <tr>
+              <th><%= row[0] %></th>
+              <th><%= row[1] %></th>
+              <th><%= row[2] %></th>
+              <th><%= row[3] %></th>
+              <th><%= row[4] %></th>
+          </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </main>

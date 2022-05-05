@@ -5,7 +5,7 @@ class ObjectController < ApplicationController
   include IngestMixin
 
   before_action :require_user, except: %i[jupload_add recent ingest mint update]
-  before_action :load_object, only: %i[index download download_user download_manifest presign object_info]
+  before_action :load_object, only: %i[index download download_user download_manifest presign object_info audit_replic]
 
   before_action(only: %i[download download_user download_manifest presign]) do
     unless current_user_can_download?(@object)
@@ -110,6 +110,45 @@ class ObjectController < ApplicationController
     return render status: 401, plain: '' unless @object.user_has_read_permission?(current_uid)
 
     render status: 200, json: @object.object_info.to_json
+  end
+
+  def audit_replic
+    return render status: 401, plain: '' unless @object.user_has_read_permission?(current_uid)
+
+    @datestr = 'INTERVAL -15 MINUTE';
+    sql = %{
+      select
+        'New Versions' as title,
+        (select count(*) from inv_versions where inv_object_id = #{@object.id} and created > date_add(now(), #{@datestr})) as total,
+        (select count(*) from inv_versions where inv_object_id = #{@object.id} and created > date_add(now(), #{@datestr})) as completed,
+        null as started,
+        null as err
+      union
+      select
+        'New Files' as title,
+        (select count(*) from inv_files where inv_object_id = #{@object.id} and created > date_add(now(), #{@datestr})) as total,
+        (select count(*) from inv_files where inv_object_id = #{@object.id} and created > date_add(now(), #{@datestr})) as completed,
+        null as started,
+        null as err
+      union
+      select
+        'Audits' as title,
+        (select count(*) from inv_audits where inv_object_id = #{@object.id} and verified > date_add(now(), #{@datestr})) as total,
+        (select count(*) from inv_audits where inv_object_id = #{@object.id} and verified > date_add(now(), #{@datestr}) and status='verified') as completed,
+        (select count(*) from inv_audits where inv_object_id = #{@object.id} and verified > date_add(now(), #{@datestr}) and status='processing') as started,
+        (select count(*) from inv_audits where inv_object_id = #{@object.id} and verified > date_add(now(), #{@datestr}) and status not in ('processing','verified')) as err
+      union
+      select
+        'Replications' as title,
+        (select count(*) from inv_nodes_inv_objects where inv_object_id = #{@object.id} and replicated > date_add(now(), #{@datestr})) as total,
+        (select count(*) from inv_nodes_inv_objects where inv_object_id = #{@object.id} and replicated > date_add(now(), #{@datestr}) and completion_status='ok') as completed,
+        (select count(*) from inv_nodes_inv_objects where inv_object_id = #{@object.id} and replicated > date_add(now(), #{@datestr}) and completion_status='unknown') as started,
+        (select count(*) from inv_nodes_inv_objects where inv_object_id = #{@object.id} and replicated > date_add(now(), #{@datestr}) and completion_status not in ('ok','unknown')) as err
+      ;
+    }
+    @count_by_status = ActiveRecord::Base.connection.execute(sql).to_a
+
+    render 'audit_replic'
   end
 
   private
