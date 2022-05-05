@@ -1,0 +1,45 @@
+<% content_for(:title) do %>
+  Merritt State
+<% end %>
+
+<% content_for(:extra_head) do %>
+<!-- Merritt monitoring test code. Please do not remove this comment since
+it will cause the monitoring scripts to fail.
+
+ - served at <%= Time.new %>
+
+ - monitoring string SwuV4tac
+
+-->
+<% end %>
+
+<div class="home">
+  <main class="home" id="maincontent">
+    <h1 class="state"><%= APP_VERSION %></h1>
+    <div>
+      <table class="state">
+        <caption>Statistics for <%= @datestr %></caption>
+        <thead>
+        <tr>
+          <th>Title</th>
+          <th>Total</th>
+          <th>Completed</th>
+          <th>Started</th>
+          <th>Error</th>
+        </tr>
+        </thead>
+        <tbody>
+          <% @count_by_status.each do |row| %>
+            <tr>
+              <th><%= row[0] %></th>
+              <th><%= row[1] %></th>
+              <th><%= row[2] %></th>
+              <th><%= row[3] %></th>
+              <th><%= row[4] %></th>
+          </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </main>
+</div>
