@@ -1,14 +1,15 @@
 {
-  version: '<%= APP_VERSION %>',
-  timeframe: '<%= @datestr %>',
-  counts: [
-    <% @count_by_status.each do |r| %>
+  "version": "<%= APP_VERSION %>",
+  "timeframe": "<%= @datestr %>",
+  "counts": [
+    <% @count_by_status.each_with_index do |r, i| %>
+      <% if i > 0 %>,<% end %>
       {
-        title: '<%= r[0] %>',
-        total: <%= r[1] %>,
-        completed: <%= r[2] %>,
-        started: <%= r[3].nil? ? 'null' : r[3] %>,
-        error: <%= r[4].nil? ? 'null' : r[4] %>
+        "title": "<%= r[0] %>",
+        "total": <%= r[1] %>,
+        "completed": <%= r[2] %>,
+        "started": <%= r[3].nil? ? 'null' : r[3] %>,
+        "error": <%= r[4].nil? ? 'null' : r[4] %>
       }
     <% end %>
   ]
