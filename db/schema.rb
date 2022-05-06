@@ -213,6 +213,10 @@ ActiveRecord::Schema.define(version: 0) do
     t.datetime "created", null: false
     t.datetime "replicated"
     t.integer "version_number", limit: 2
+    t.datetime "replic_start", null: true
+    t.bigint "replic_size", null: true
+    t.string "completion_status", null: true
+    t.text "note", null: true
     t.index ["inv_node_id"], name: "id_idx"
     t.index ["inv_object_id", "inv_node_id"], name: "inv_object_id", unique: true
     t.index ["inv_object_id"], name: "id_idx1"

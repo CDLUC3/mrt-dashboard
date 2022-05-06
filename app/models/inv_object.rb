@@ -191,4 +191,79 @@ class InvObject < ApplicationRecord
     }
   end
 
+  def new_version_sql(datestr)
+    %{
+      select
+        'New Versions' as title,
+        (select count(*) from inv_versions where inv_object_id = #{id}
+          and created > date_add(now(), #{datestr})) as total,
+        (select count(*) from inv_versions where inv_object_id = #{id}
+          and created > date_add(now(), #{datestr})) as completed,
+        null as started,
+        null as err
+    }
+  end
+
+  def new_file_sql(datestr)
+    %{
+      select
+        'New Files' as title,
+        (select count(*) from inv_files where inv_object_id = #{id}
+          and created > date_add(now(), #{datestr})) as total,
+        (select count(*) from inv_files where inv_object_id = #{id}
+          and created > date_add(now(), #{datestr})) as completed,
+        null as started,
+        null as err
+    }
+  end
+
+  def audit_sql(datestr)
+    %{
+      select
+        'Audits' as title,
+        (select count(*) from inv_audits where inv_object_id = #{id}
+          and verified > date_add(now(), #{datestr})) as total,
+        (select count(*) from inv_audits where inv_object_id = #{id}
+          and verified > date_add(now(), #{datestr}) and status='verified') as completed,
+        (select count(*) from inv_audits where inv_object_id = #{id}
+          and verified > date_add(now(), #{datestr}) and status='processing') as started,
+        (select count(*) from inv_audits where inv_object_id = #{id}
+          and verified > date_add(now(), #{datestr}) and status not in ('processing','verified')) as err
+    }
+  end
+
+  def replic_sql(datestr)
+    %{
+      select
+        'Replications' as title,
+        (select count(*) from inv_nodes_inv_objects where inv_object_id = #{id}
+          and replicated > date_add(now(), #{datestr})) as total,
+        (select count(*) from inv_nodes_inv_objects where inv_object_id = #{id}
+          and replicated > date_add(now(), #{datestr}) and completion_status='ok') as completed,
+        (select count(*) from inv_nodes_inv_objects where inv_object_id = #{id}
+          and replicated > date_add(now(), #{datestr}) and ifnull(completion_status, 'unknown') = 'unknown') +
+          (select count(*) from inv_nodes_inv_objects where inv_object_id = #{id}
+            and replicated is null and replic_start > date_add(now(), #{datestr}) and ifnull(completion_status, 'unknown') = 'unknown') +
+          (select count(*) from inv_nodes_inv_objects where inv_object_id = #{id}
+            and replicated is null and replic_start is null and created > date_add(now(), #{datestr})
+            and ifnull(completion_status, 'unknown') = 'unknown') as started,
+        (select count(*) from inv_nodes_inv_objects where inv_object_id = #{id}
+          and replicated > date_add(now(), #{datestr}) and completion_status in ('fail','partial')) as err
+    }
+  end
+
+  def audit_replic_stats
+    @datestr = 'INTERVAL -15 MINUTE'
+    sql = %(
+      #{new_version_sql(@datestr)}
+      union
+      #{new_file_sql(@datestr)}
+      union
+      #{audit_sql(@datestr)}
+      union
+      #{replic_sql(@datestr)}
+      ;
+    )
+    ActiveRecord::Base.connection.execute(sql).to_a
+  end
 end

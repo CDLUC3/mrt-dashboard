@@ -230,6 +230,12 @@ RSpec.describe ObjectController, type: :controller do
         expect(response.status).to eq(401)
       end
 
+      it 'prevents audit_replic view without read permission' do
+        request.session.merge!({ uid: user_id })
+        get(:audit_replic, params: { object: object_ark })
+        expect(response.status).to eq(401)
+      end
+
       it 'returns object_info as json' do
         mock_permissions_all(user_id, collection_id)
         request.session.merge!({ uid: user_id })
@@ -239,6 +245,14 @@ RSpec.describe ObjectController, type: :controller do
         json = JSON.parse(response.body)
         expect(json['ark']).to eq(object_ark)
         expect(json['versions'][0]['version_number']).to eq(1)
+      end
+
+      it 'returns audit_replic if user is authorized' do
+        mock_permissions_all(user_id, collection_id)
+        request.session.merge!({ uid: user_id })
+
+        get(:audit_replic, params: { object: object_ark })
+        expect(response.status).to eq(200)
       end
 
       it 'returns versioned object_info as json' do
