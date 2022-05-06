@@ -53,16 +53,15 @@ class Home < ApplicationRecord
     }
   end
 
-  def self.audit_replic_stats
-    @datestr = 'INTERVAL -15 MINUTE'
+  def self.audit_replic_stats(datestr)
     sql = %(
-      #{new_object_sql(@datestr)}
+      #{new_object_sql(datestr)}
       union
-      #{new_version_sql(@datestr)}
+      #{new_version_sql(datestr)}
       union
-      #{audit_sql(@datestr)}
+      #{audit_sql(datestr)}
       union
-      #{replic_sql(@datestr)}
+      #{replic_sql(datestr)}
       ;
     )
     ActiveRecord::Base.connection.execute(sql).to_a

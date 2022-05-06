@@ -252,16 +252,15 @@ class InvObject < ApplicationRecord
     }
   end
 
-  def audit_replic_stats
-    @datestr = 'INTERVAL -15 MINUTE'
+  def audit_replic_stats(datestr)
     sql = %(
-      #{new_version_sql(@datestr)}
+      #{new_version_sql(datestr)}
       union
-      #{new_file_sql(@datestr)}
+      #{new_file_sql(datestr)}
       union
-      #{audit_sql(@datestr)}
+      #{audit_sql(datestr)}
       union
-      #{replic_sql(@datestr)}
+      #{replic_sql(datestr)}
       ;
     )
     ActiveRecord::Base.connection.execute(sql).to_a

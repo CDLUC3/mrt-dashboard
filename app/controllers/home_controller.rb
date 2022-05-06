@@ -10,6 +10,7 @@ class HomeController < ApplicationController
   end
 
   def state
-    @count_by_status = Home.audit_replic_stats
+    @datestr = 'INTERVAL -15 MINUTE'
+    @count_by_status = Home.audit_replic_stats(@datestr)
   end
 end

@@ -83,7 +83,8 @@ describe InvObject do
 
   describe 'audit_replic_stats' do
     it 'test audit_replic_stats' do
-      expect(obj.audit_replic_stats.length).to eq(4)
+      datestr = 'INTERVAL -15 MINUTE'
+      expect(obj.audit_replic_stats(datestr).length).to eq(4)
     end
   end
 end

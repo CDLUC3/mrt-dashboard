@@ -115,7 +115,8 @@ class ObjectController < ApplicationController
   def audit_replic
     return render status: 401, plain: '' unless @object.user_has_read_permission?(current_uid)
 
-    @count_by_status = @object.audit_replic_stats
+    @datestr = 'INTERVAL -15 MINUTE'
+    @count_by_status = @object.audit_replic_stats(@datestr)
   end
 
   private
