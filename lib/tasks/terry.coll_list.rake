@@ -25,9 +25,9 @@ namespace :terry do
   desc 'test task'
   # Load Rails environment
   task hello: :environment do
-    puts "SSM_ROOT_PATH: #{ENV['SSM_ROOT_PATH']}"
+    puts "SSM_ROOT_PATH: #{ENV.fetch('SSM_ROOT_PATH', nil)}"
     puts "RAILS_ENV: #{Rails.env}"
-    if Rails.env && ENV['SSM_ROOT_PATH']
+    if Rails.env && ENV.fetch('SSM_ROOT_PATH', nil)
       Terry.new.hello
     else
       puts 'Please set RAILS_ENV and SSM_ROOT_PATH'

@@ -3,7 +3,7 @@ require 'support/ark'
 require 'support/factory_bot'
 require 'support/ldap'
 
-if (env = ENV['RAILS_ENV'])
+if (env = ENV.fetch('RAILS_ENV', nil))
   abort("Can't run tests in environment #{env}") if env != 'test'
 else
   ENV['RAILS_ENV'] = 'test'
@@ -15,7 +15,7 @@ require 'database_cleaner'
 
 # Stop Rails enthusiastically blowing away test database
 # https://github.com/rails/rails/issues/18982
-if ENV['RAILS_ENV'] == 'test'
+if ENV.fetch('RAILS_ENV', nil) == 'test'
   class ActiveRecord::Migrator
     class << self
       def any_migrations?

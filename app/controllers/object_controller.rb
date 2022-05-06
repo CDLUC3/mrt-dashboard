@@ -112,40 +112,76 @@ class ObjectController < ApplicationController
     render status: 200, json: @object.object_info.to_json
   end
 
+  def new_version_sql(datestr)
+    %{
+      select
+        'New Versions' as title,
+        (select count(*) from inv_versions where inv_object_id = #{@object.id}
+          and created > date_add(now(), #{datestr})) as total,
+        (select count(*) from inv_versions where inv_object_id = #{@object.id}
+          and created > date_add(now(), #{datestr})) as completed,
+        null as started,
+        null as err
+    }
+  end
+
+  def new_file_sql(datestr)
+    %{
+      select
+        'New Files' as title,
+        (select count(*) from inv_files where inv_object_id = #{@object.id}
+          and created > date_add(now(), #{datestr})) as total,
+        (select count(*) from inv_files where inv_object_id = #{@object.id}
+          and created > date_add(now(), #{datestr})) as completed,
+        null as started,
+        null as err
+    }
+  end
+
+  def audit_sql(datestr)
+    %{
+      select
+        'Audits' as title,
+        (select count(*) from inv_audits where inv_object_id = #{@object.id}
+          and verified > date_add(now(), #{datestr})) as total,
+        (select count(*) from inv_audits where inv_object_id = #{@object.id}
+          and verified > date_add(now(), #{datestr}) and status='verified') as completed,
+        (select count(*) from inv_audits where inv_object_id = #{@object.id}
+          and verified > date_add(now(), #{datestr}) and status='processing') as started,
+        (select count(*) from inv_audits where inv_object_id = #{@object.id}
+          and verified > date_add(now(), #{datestr}) and status not in ('processing','verified')) as err
+    }
+  end
+
+  def replic_sql(datestr)
+    %{
+      select
+        'Replications' as title,
+        (select count(*) from inv_nodes_inv_objects where inv_object_id = #{@object.id}
+          and replicated > date_add(now(), #{datestr})) as total,
+        (select count(*) from inv_nodes_inv_objects where inv_object_id = #{@object.id}
+          and replicated > date_add(now(), #{datestr}) and completion_status='ok') as completed,
+        (select count(*) from inv_nodes_inv_objects where inv_object_id = #{@object.id}
+          and replicated > date_add(now(), #{datestr}) and completion_status='unknown') as started,
+        (select count(*) from inv_nodes_inv_objects where inv_object_id = #{@object.id}
+          and replicated > date_add(now(), #{datestr}) and completion_status not in ('ok','unknown')) as err
+    }
+  end
+
   def audit_replic
     return render status: 401, plain: '' unless @object.user_has_read_permission?(current_uid)
 
-    @datestr = 'INTERVAL -15 MINUTE';
-    sql = %{
-      select
-        'New Versions' as title,
-        (select count(*) from inv_versions where inv_object_id = #{@object.id} and created > date_add(now(), #{@datestr})) as total,
-        (select count(*) from inv_versions where inv_object_id = #{@object.id} and created > date_add(now(), #{@datestr})) as completed,
-        null as started,
-        null as err
+    @datestr = 'INTERVAL -15 MINUTE'
+    sql = %(
+      #{new_version_sql(@datestr)}
       union
-      select
-        'New Files' as title,
-        (select count(*) from inv_files where inv_object_id = #{@object.id} and created > date_add(now(), #{@datestr})) as total,
-        (select count(*) from inv_files where inv_object_id = #{@object.id} and created > date_add(now(), #{@datestr})) as completed,
-        null as started,
-        null as err
+      #{new_file_sql(@datestr)}
       union
-      select
-        'Audits' as title,
-        (select count(*) from inv_audits where inv_object_id = #{@object.id} and verified > date_add(now(), #{@datestr})) as total,
-        (select count(*) from inv_audits where inv_object_id = #{@object.id} and verified > date_add(now(), #{@datestr}) and status='verified') as completed,
-        (select count(*) from inv_audits where inv_object_id = #{@object.id} and verified > date_add(now(), #{@datestr}) and status='processing') as started,
-        (select count(*) from inv_audits where inv_object_id = #{@object.id} and verified > date_add(now(), #{@datestr}) and status not in ('processing','verified')) as err
+      #{audit_sql(@datestr)}
       union
-      select
-        'Replications' as title,
-        (select count(*) from inv_nodes_inv_objects where inv_object_id = #{@object.id} and replicated > date_add(now(), #{@datestr})) as total,
-        (select count(*) from inv_nodes_inv_objects where inv_object_id = #{@object.id} and replicated > date_add(now(), #{@datestr}) and completion_status='ok') as completed,
-        (select count(*) from inv_nodes_inv_objects where inv_object_id = #{@object.id} and replicated > date_add(now(), #{@datestr}) and completion_status='unknown') as started,
-        (select count(*) from inv_nodes_inv_objects where inv_object_id = #{@object.id} and replicated > date_add(now(), #{@datestr}) and completion_status not in ('ok','unknown')) as err
+      #{replic_sql(@datestr)}
       ;
-    }
+    )
     @count_by_status = ActiveRecord::Base.connection.execute(sql).to_a
 
     render 'audit_replic'

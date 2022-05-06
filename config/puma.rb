@@ -8,7 +8,7 @@
 # threads threads_count, threads_count
 
 # Cluster
-threads_count = Integer(ENV['RAILS_MAX_THREADS'] || 8)
+threads_count = Integer(ENV.fetch('RAILS_MAX_THREADS', nil) || 8)
 threads 0, threads_count
 workers 2
 preload_app!

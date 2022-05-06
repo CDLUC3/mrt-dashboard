@@ -12,8 +12,6 @@ class Group
 
   attr_accessor :id, :submission_profile, :ark_id, :owner, :description
 
-  def initialize; end
-
   def to_param
     id
   end
