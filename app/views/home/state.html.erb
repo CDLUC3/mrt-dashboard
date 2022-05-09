@@ -30,13 +30,13 @@ it will cause the monitoring scripts to fail.
         </thead>
         <tbody>
           <% @count_by_status.each do |row| %>
-            <tr>
-              <th><%= row[0] %></th>
-              <th><%= row[1] %></th>
-              <th><%= row[2] %></th>
-              <th><%= row[3] %></th>
-              <th><%= row[4] %></th>
-          </tr>
+            <tr class="<%= row[0] %>">
+              <th class="title"><%= row[1] %></th>
+              <td class="total"><%= row[2] %></td>
+              <td class="completed"><%= row[3] %></td>
+              <td class="started"><%= row[4] %></td>
+              <td class="error"><%= row[5] %></td>
+            </tr>
           <% end %>
         </tbody>
       </table>

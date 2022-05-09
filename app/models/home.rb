@@ -2,6 +2,7 @@ class Home < ApplicationRecord
   def self.new_object_sql(datestr)
     %{
       select
+        'objects' as class,
         'New Objects' as title,
         (select count(*) from inv_objects where created > date_add(now(), #{datestr})) as total,
         (select count(*) from inv_objects where created > date_add(now(), #{datestr})) as completed,
@@ -13,6 +14,7 @@ class Home < ApplicationRecord
   def self.new_version_sql(datestr)
     %{
       select
+        'versions' as class,
         'Object Versions' as title,
         (select count(*) from inv_versions where created > date_add(now(), #{datestr})) as total,
         (select count(*) from inv_versions where created > date_add(now(), #{datestr})) as completed,
@@ -24,6 +26,7 @@ class Home < ApplicationRecord
   def self.audit_sql(datestr)
     %{
       select
+        'audits' as class,
         'Audits' as title,
         (select count(*) from inv_audits where verified > date_add(now(), #{datestr})) as total,
         (select count(*) from inv_audits where verified > date_add(now(), #{datestr})
@@ -38,6 +41,7 @@ class Home < ApplicationRecord
   def self.replic_sql(datestr)
     %{
       select
+        'replics' as class,
         'Replications' as title,
         (select count(*) from inv_nodes_inv_objects where replicated > date_add(now(), #{datestr})) as total,
         (select count(*) from inv_nodes_inv_objects where replicated > date_add(now(), #{datestr})

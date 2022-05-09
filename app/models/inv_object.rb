@@ -194,6 +194,7 @@ class InvObject < ApplicationRecord
   def new_version_sql(datestr)
     %{
       select
+        'versions' as class,
         'New Versions' as title,
         (select count(*) from inv_versions where inv_object_id = #{id}
           and created > date_add(now(), #{datestr})) as total,
@@ -207,6 +208,7 @@ class InvObject < ApplicationRecord
   def new_file_sql(datestr)
     %{
       select
+        'files' as class,
         'New Files' as title,
         (select count(*) from inv_files where inv_object_id = #{id}
           and created > date_add(now(), #{datestr})) as total,
@@ -220,6 +222,7 @@ class InvObject < ApplicationRecord
   def audit_sql(datestr)
     %{
       select
+        'audits' as class,
         'Audits' as title,
         (select count(*) from inv_audits where inv_object_id = #{id}
           and verified > date_add(now(), #{datestr})) as total,
@@ -235,6 +238,7 @@ class InvObject < ApplicationRecord
   def replic_sql(datestr)
     %{
       select
+        'replics' as class,
         'Replications' as title,
         (select count(*) from inv_nodes_inv_objects where inv_object_id = #{id}
           and replicated > date_add(now(), #{datestr})) as total,
