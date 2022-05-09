@@ -2,7 +2,7 @@
   "title": "Audit Replic Status for <%= @object.ark %>"
   "timeframe": "<%= @datestr %>",
   "counts": [
-    <% @count_by_status.each_with_index do |i, r| %>
+    <% @count_by_status.each_with_index do |r, i| %>
       <% if i > 0 %>,<% end %>
       {
         "title": "<%= r[1] %>",
