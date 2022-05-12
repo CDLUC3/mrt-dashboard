@@ -23,7 +23,7 @@ RSpec.configure do |config|
   # config.raise_errors_for_deprecations! # TODO: enable this
   config.mock_with :rspec
 
-  if (profile_args_str = ENV['PROFILE'])
+  if (profile_args_str = ENV.fetch('PROFILE', nil))
     require 'support/profiler'
     # rubocop:disable Security/Eval
     profile_args = eval(profile_args_str)
@@ -40,7 +40,7 @@ require 'rspec_custom_matchers'
 # ------------------------------------------------------------
 # Rails
 
-if (env = ENV['RAILS_ENV'])
+if (env = ENV.fetch('RAILS_ENV', nil))
   abort("Can't run tests in environment #{env}") if env != 'test'
 else
   ENV['RAILS_ENV'] = 'test'

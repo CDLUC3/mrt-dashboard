@@ -8,4 +8,9 @@ class HomeController < ApplicationController
                 action: :index,
                 group: available_groups[0][:id])
   end
+
+  def state
+    @datestr = 'INTERVAL -15 MINUTE'
+    @count_by_status = Home.audit_replic_stats(@datestr)
+  end
 end

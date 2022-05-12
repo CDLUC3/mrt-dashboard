@@ -32,7 +32,7 @@ module LdapMixin
       connect_timeout: connect_timeout
     }
 
-    raise LdapException, 'Unable to bind to LDAP server.' unless ENV['RAILS_ENV'] == 'test' || admin_ldap.bind
+    raise LdapException, 'Unable to bind to LDAP server.' unless ENV.fetch('RAILS_ENV', nil) == 'test' || admin_ldap.bind
   end
   # rubocop:enable Metrics/ParameterLists
 

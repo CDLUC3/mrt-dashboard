@@ -4,16 +4,16 @@ require 'uc3-ssm'
 lock '~> 3.14.1'
 
 set :application,      'merritt-ui'
-set :user,             ENV['USER']            || 'dpr2'
-set :home,             ENV['HOME']            || '/dpr2'
-set :deploy_to,        ENV['DEPLOY_TO']       || '/dpr2/apps/ui'
-set :rails_env,        ENV['RAILS_ENV']       || 'production'
-set :repo_url,         ENV['REPO_URL']        || 'https://github.com/cdluc3/mrt-dashboard.git'
-set :branch,           ENV['BRANCH']          || 'master'
+set :user,             ENV.fetch('USER', nil)            || 'dpr2'
+set :home,             ENV.fetch('HOME', nil)            || '/dpr2'
+set :deploy_to,        ENV.fetch('DEPLOY_TO', nil)       || '/dpr2/apps/ui'
+set :rails_env,        ENV.fetch('RAILS_ENV', nil)       || 'production'
+set :repo_url,         ENV.fetch('REPO_URL', nil)        || 'https://github.com/cdluc3/mrt-dashboard.git'
+set :branch,           ENV.fetch('BRANCH', nil)          || 'master'
 
 set :config_name,      'mrt-dashboard-config'
-set :config_repo_url,  ENV['CONFIG_REPO']     || 'git@github.com:cdlib/mrt-dashboard-config.git'
-set :config_branch,    ENV['CONFIG_BRANCH']   || 'main'
+set :config_repo_url,  ENV.fetch('CONFIG_REPO', nil)     || 'git@github.com:cdlib/mrt-dashboard-config.git'
+set :config_branch,    ENV.fetch('CONFIG_BRANCH', nil)   || 'main'
 
 set :default_env,      { path: '$PATH' }
 set :stages,           %w[local mrt-ui-dev stage production]

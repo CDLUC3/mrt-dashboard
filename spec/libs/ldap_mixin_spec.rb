@@ -51,7 +51,7 @@ describe LdapMixin do
   end
 
   it 'tries to bind immediately unless env is test' do
-    old_env = ENV['RAILS_ENV']
+    old_env = ENV.fetch('RAILS_ENV', nil)
     begin
       ENV['RAILS_ENV'] = 'production'
       expect(admin_ldap).to receive(:bind).and_return(false)

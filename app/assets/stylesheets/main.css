@@ -1244,3 +1244,11 @@ th.ark-header {
 td.ark-data {
   width: 68%;
 }
+
+table.state {
+  width: 80%;
+}
+table.state td, table.state th {
+  border: thin solid darkgray !important;
+  padding: 4px;
+}

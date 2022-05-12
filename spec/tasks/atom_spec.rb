@@ -115,7 +115,7 @@ describe 'atom', type: :task do
     end
 
     before(:each) do
-      @original_home = ENV['HOME']
+      @original_home = ENV.fetch('HOME', nil)
       @tmp_home = Dir.mktmpdir
       ENV['HOME'] = @tmp_home
 

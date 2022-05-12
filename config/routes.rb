@@ -41,6 +41,7 @@ MrtDashboard::Application.routes.draw do
   get('m/:object' => 'object#index')
   get('m/:object/:version' => 'version#index')
 
+  get('state' => 'home#state')
   get('home/choose_collection' => 'home#choose_collection')
   get('user/update' => 'user#update')
   get('collection/search_results' => 'collection#search_results')
@@ -60,6 +61,7 @@ MrtDashboard::Application.routes.draw do
 
   # API object info
   get('api/object_info/:object' => 'object#object_info', :format => false)
+  get('state/:object/audit_replic' => 'object#audit_replic')
 
   # General error handling
   get('application/render_unavailable' => 'application#render_unavailable')

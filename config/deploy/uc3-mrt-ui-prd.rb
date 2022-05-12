@@ -11,5 +11,5 @@ raise "Environment var 'BRANCH' not defined" unless ENV['BRANCH']
 puts "Deploying cap_environment 'uc3-mrt-ui-prd':"
 puts "  branch: #{fetch(:branch)}"
 puts "  rails_env: #{fetch(:rails_env)}"
-puts "  SSM_ROOT_PATH: #{ENV['SSM_ROOT_PATH']}"
+puts "  SSM_ROOT_PATH: #{ENV.fetch('SSM_ROOT_PATH', nil)}"
 server 'localhost', user: fetch(:user), roles: %w[web app]

@@ -5,7 +5,7 @@ class ObjectController < ApplicationController
   include IngestMixin
 
   before_action :require_user, except: %i[jupload_add recent ingest mint update]
-  before_action :load_object, only: %i[index download download_user download_manifest presign object_info]
+  before_action :load_object, only: %i[index download download_user download_manifest presign object_info audit_replic]
 
   before_action(only: %i[download download_user download_manifest presign]) do
     unless current_user_can_download?(@object)
@@ -110,6 +110,13 @@ class ObjectController < ApplicationController
     return render status: 401, plain: '' unless @object.user_has_read_permission?(current_uid)
 
     render status: 200, json: @object.object_info.to_json
+  end
+
+  def audit_replic
+    return render status: 401, plain: '' unless @object.user_has_read_permission?(current_uid)
+
+    @datestr = 'INTERVAL -15 MINUTE'
+    @count_by_status = @object.audit_replic_stats(@datestr)
   end
 
   private

@@ -228,4 +228,19 @@ describe 'objects', js: true do
 
   end
 
+  describe 'audit_replic info' do
+    it 'open audit_replic page' do
+      visit "/state/#{CGI.escape(@obj.ark)}/audit_replic.html"
+      expect(page.title).to include('Audit Replic Status for Object')
+      find('table.state')
+      within('table.state') do
+        expect(page).to have_selector('thead tr', count: 1)
+        expect(page).to have_selector('tbody tr', count: 4)
+      end
+    end
+
+    it 'open audit_replic page' do
+      visit "/state/#{CGI.escape(@obj.ark)}/audit_replic.json"
+    end
+  end
 end

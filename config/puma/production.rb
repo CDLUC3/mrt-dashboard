@@ -3,7 +3,7 @@
 #  - mreyes -
 
 # Variables
-application_path = ENV['RAILS_ROOT'] || '/dpr2/apps/ui'
+application_path = ENV.fetch('RAILS_ROOT', nil) || '/dpr2/apps/ui'
 
 # The directory to operate out of.
 #
@@ -19,7 +19,7 @@ rackup      "#{application_path}/current/config.ru"
 #
 # The default is "development".
 #
-environment ENV['RAILS_ENV'] || 'production'
+environment ENV.fetch('RAILS_ENV', nil) || 'production'
 
 # Daemonize the server into the background. Highly suggest that
 # this be combined with "pidfile" and "stdout_redirect".
@@ -48,7 +48,7 @@ stdout_redirect "#{application_path}/shared/log/puma.log", "#{application_path}/
 # requests and "max" the maximum.
 #
 # The default is "0, 16".
-threads_count = Integer(ENV['RAILS_MAX_THREADS'] || 16)
+threads_count = Integer(ENV.fetch('RAILS_MAX_THREADS', nil) || 16)
 threads 0, threads_count
 
 # # Bind the server to "url". "tcp://", "unix://" and "ssl://" are the only
@@ -56,7 +56,7 @@ threads 0, threads_count
 #
 # The default is "tcp://0.0.0.0:9292".
 #
-port ENV['PORT'] || 26_181
+port ENV.fetch('PORT', nil) || 26_181
 # bind tcp://0.0.0.0:26181
 
 # How many worker processes to run.  Typically this is set to
@@ -64,7 +64,7 @@ port ENV['PORT'] || 26_181
 #
 # The default is "0".
 #
-workers Integer(ENV['WEB_CONCURRENCY'] || 2)
+workers Integer(ENV.fetch('WEB_CONCURRENCY', nil) || 2)
 
 # Preload the application before starting the workers; this conflicts with
 # phased restart feature. (off by default)

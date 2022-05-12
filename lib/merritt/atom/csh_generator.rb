@@ -112,7 +112,6 @@ module Merritt
           name.gsub(/[^A-Za-z0-9]+/, '-').gsub(/-+%/, '').gsub(/([a-z])-s/, '\\1s')
         end
 
-        # rubocop:disable Metrics/MethodLength
         def from_csv(csv_data:, to_dir:)
           count = 0
           CSV.parse(csv_data).each do |row|
@@ -132,9 +131,7 @@ module Merritt
           end
           count
         end
-        # rubocop:enable Metrics/MethodLength
-
-      end
+              end
     end
   end
 end
