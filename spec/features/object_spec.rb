@@ -231,7 +231,7 @@ describe 'objects', js: true do
   describe 'audit_replic info' do
     it 'open audit_replic page' do
       visit "/state/#{CGI.escape(@obj.ark)}/audit_replic.html"
-      expect(page.title).to include('Audit Replic for Object')
+      expect(page.title).to include('Audit Replic Status for Object')
       find('table.state')
       within('table.state') do
         expect(page).to have_selector('thead tr', count: 1)
