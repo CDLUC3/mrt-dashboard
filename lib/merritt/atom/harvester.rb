@@ -25,7 +25,6 @@ module Merritt
         process_from(starting_point)
         update_feed_update_file!
       ensure
-        join_server!
       end
 
       def last_feed_update
@@ -55,7 +54,6 @@ module Merritt
             'when/created' => erc_when_created,
             'when/modified' => erc_when_modified
           },
-          server: one_time_server,
           local_identifier: local_id,
           archival_id: erc_where # TODO: find out how archival_id was supposed to work,
         )
@@ -75,14 +73,6 @@ module Merritt
 
       private
 
-      def one_time_server
-        @one_time_server ||= begin
-          server = Mrt::Ingest::OneTimeServer.new
-          server.start_server
-          server
-        end
-      end
-
       def ingest_client
         # TODO: validate config?
         @ingest_client ||= Mrt::Ingest::Client.new(APP_CONFIG['ingest_service'])
@@ -93,12 +83,6 @@ module Merritt
           credentials_str = ATOM_CONFIG['credentials']
           credentials_str ? credentials_str.split(':') : [nil, nil]
         end
-      end
-
-      def join_server!
-        @one_time_server.join_server if @one_time_server
-      rescue StandardError => e
-        log_error('Error joining server', e)
       end
 
       def pause_file_path

@@ -16,7 +16,7 @@ gem 'exception_notification'
 gem 'httpclient'
 gem 'irb'
 gem 'jquery-rails'
-gem 'mrt-ingest'
+gem 'mrt-ingest', "0.0.7", path: "/home/mreyes"
 gem 'net-ldap'
 gem 'nokogiri'
 gem 'orchard'
