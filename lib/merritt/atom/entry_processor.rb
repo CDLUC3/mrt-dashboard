@@ -33,8 +33,7 @@ module Merritt
         @local_id ||= begin
           secondary_local_id = xpath_content(entry, 'nx:identifier')
           if secondary_local_id
-            # Must quote so both IDs are processed
-            "\"#{primary_local_id}; #{secondary_local_id}\""
+            "#{primary_local_id};#{secondary_local_id}"
           else
             primary_local_id
           end
