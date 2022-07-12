@@ -24,7 +24,6 @@ module Merritt
         log_info("Processing with batch size #{batch_size} and delay #{delay} seconds")
         process_from(starting_point)
         update_feed_update_file!
-      ensure
       end
 
       def last_feed_update
