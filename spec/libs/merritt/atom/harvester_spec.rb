@@ -51,11 +51,6 @@ module Merritt
         @page_client = instance_double(PageClient)
         allow(PageClient).to receive(:new).and_return(page_client)
 
-        @one_time_server = instance_double(Mrt::Ingest::OneTimeServer)
-        allow(Mrt::Ingest::OneTimeServer).to receive(:new).and_return(one_time_server)
-        allow(one_time_server).to receive(:start_server)
-        allow(one_time_server).to receive(:join_server)
-
         @ingest_client = instance_double(Mrt::Ingest::Client)
         allow(Mrt::Ingest::Client).to receive(:new).with(APP_CONFIG['ingest_service']).and_return(ingest_client)
         allow(ingest_client).to receive(:ingest)
