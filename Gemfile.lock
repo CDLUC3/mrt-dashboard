@@ -8,11 +8,6 @@ GIT
       logger (~> 1.4)
       yaml (~> 0.1)
 
-PATH
-  remote: /home/mreyes
-  specs:
-    mrt-ingest (0.0.7)
-
 GEM
   remote: http://rubygems.org/
   specs:
@@ -185,6 +180,8 @@ GEM
     mini_mime (1.1.2)
     mini_portile2 (2.8.0)
     minitest (5.15.0)
+    mrt-ingest (0.0.10)
+      rest-client (~> 2.1)
     msgpack (1.5.1)
     multi_json (1.15.0)
     mysql2 (0.5.3)
@@ -384,7 +381,7 @@ DEPENDENCIES
   jquery-rails
   launchy
   listen
-  mrt-ingest (= 0.0.7)!
+  mrt-ingest (= 0.0.10)
   multi_json
   mysql2
   net-ldap
