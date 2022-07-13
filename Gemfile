@@ -16,6 +16,7 @@ gem 'exception_notification'
 gem 'httpclient'
 gem 'irb'
 gem 'jquery-rails'
+# New lib does not use One Time Server
 gem 'mrt-ingest', '0.0.10'
 gem 'net-ldap'
 gem 'nokogiri'
