@@ -27,7 +27,9 @@ module Merritt
           no_more_batches = batches.size <= i + 1
           next if any_up_to_date || no_more_batches
 
+          # :nocov:
           sleep(harvester.delay)
+          # :nocov:
         end
         PageResult.new(atom_updated: atom_updated, next_page: next_page)
       end
@@ -56,11 +58,13 @@ module Merritt
         expected_id = harvester.collection_ark
         return if expected_id == merritt_collection_id
 
+        # :nocov:
         msg = <<~MSG
           Merritt Collection ID from feed XML does not match collection ARK passed to Rake task;
           expected '#{expected_id}', was #{"'#{merritt_collection_id}'" || 'nil'}
         MSG
         raise ArgumentError, msg.strip.tr("\n", ' ')
+        # :nocov:
       end
 
       # noinspection RubyScope
@@ -72,9 +76,11 @@ module Merritt
         entry_processor.process_entry!
         entry_processor.already_up_to_date?
       rescue StandardError => e
+        # :nocov:
         atom_id_str = (defined?(atom_id) && atom_id) || '(unknown)'
         local_id_str = (defined?(local_id) && local_id) || '(unknown)'
         log_error("Error processing entry with Atom ID #{atom_id_str} (local ID: #{local_id_str})", e)
+        # :nocov:
       end
 
       def merritt_collection_id

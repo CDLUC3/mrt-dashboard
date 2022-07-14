@@ -106,6 +106,27 @@ module Merritt
         harvester.process_feed!
       end
 
+      it 'get last_feed_update' do
+        harvester = Harvester.new(args)
+        expect(harvester.last_feed_update).not_to be_nil
+      end
+
+      it 'test harvester.new_ingest_object' do
+        harvester = Harvester.new(args)
+        ingest_object = harvester.new_ingest_object(
+          local_id: "local",
+          erc_who: "who",
+          erc_what: "what",
+          erc_when: "when",
+          erc_where: "where",
+          erc_when_created: "2022-01-01",
+          erc_when_modified: "2022-01-01"
+        )
+        uri = URI.parse("https://nuxeo.cdlib.org/Nuxeo/nxdoc/default/133be0f7-99b2-4e88-8842-d247993d7bac/view_documents")
+        harvester.add_credentials!(uri)
+        harvester.start_ingest(ingest_object)
+      end
     end
+
   end
 end

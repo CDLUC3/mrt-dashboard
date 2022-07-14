@@ -31,8 +31,10 @@ module Merritt
                                 log_info("Reading last update time from #{feed_update_file}")
                                 parse_time(File.read(feed_update_file))
                               else
+                                # :nocov:
                                 log_info("Feed update file #{feed_update_file} not found")
                                 Time.utc(0)
+                                # :nocov:
                               end
       end
 
