@@ -50,15 +50,15 @@
     <title>(Unpublished) Ethnographic Field Notes for the Native American Traditional Cultural Properties Study, Don Pedro Project, FERC No. 2299, in Tuolumne County, California.</title>
     <updated>2016-02-26T23:48:16.110000+00:00</updated>
     <author>UC Libraries Digital Collection</author>
+    <author><name>Moratto, Michael J.</name></author>
     <link href="https://nuxeo.cdlib.org/Merritt/dae7f78e-591f-430d-b574-b3c1b75663e2.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
     <link href="https://s3.example.com/static.ucldc.example.edu/media_json/dae7f78e-591f-430d-b574-b3c1b75663e2-media.json" rel="alternate" title="Deep Harvest metadata for this object" type="application/json"/>
     <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/dae7f78e-591f-430d-b574-b3c1b75663e2/file:content/130416_003.MP3" rel="alternate" title="Main content file">
       <opensearch:checksum algorithm="MD5">da17af952da431459d389bc8cf48010e</opensearch:checksum>
     </link>
-    <dc:creator>Moratto, Michael J.</dc:creator>
-    <dc:title>(Unpublished) Ethnographic Field Notes for the Native American Traditional Cultural Properties Study, Don Pedro Project, FERC No. 2299, in Tuolumne County, California.</dc:title>
+    <!-- for test coverage, remove dc:title and dc:creator and dc:identifier -->
     <dc:date>2012-2014</dc:date>
-    <dc:identifier>dae7f78e-591f-430d-b574-b3c1b75663e2</dc:identifier>
+    <nx:identifier>dae7f78e-591f-430d-b574-b3c1b75663e2</nx:identifier>
     <nx:collection/>
     <link href="https://nuxeo.cdlib.org/Merritt/e50771c7-9fee-4165-a297-dcd950db4910.xml" rel="alternate" title="Full metadata for this object from Nuxeo" type="application/xml"/>
     <link href="https://nuxeo.cdlib.org/Nuxeo/nxfile/default/e50771c7-9fee-4165-a297-dcd950db4910/file:content/130416_004.MP3" rel="alternate" title="Main content file">

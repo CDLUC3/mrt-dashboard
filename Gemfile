@@ -1,6 +1,7 @@
 source 'http://rubygems.org'
 
 gem 'activeresource'
+gem 'json'
 gem 'multi_json'
 gem 'mysql2'
 gem 'rails', '~> 5.2'
