@@ -25,7 +25,7 @@ module Merritt
         @sleep_count = 0
         allow_any_instance_of(Object).to(receive(:sleep).with(DEFAULT_DELAY)) { @sleep_count += 1 }
 
-        @original_home = ENV.fetch('HOME', nil)
+        @original_home = Dir.home
         @tmp_home = Dir.mktmpdir
         ENV['HOME'] = @tmp_home
 
