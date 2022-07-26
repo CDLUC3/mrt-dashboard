@@ -24,8 +24,6 @@ module Merritt
         log_info("Processing with batch size #{batch_size} and delay #{delay} seconds")
         process_from(starting_point)
         update_feed_update_file!
-      ensure
-        join_server!
       end
 
       def last_feed_update
@@ -33,8 +31,10 @@ module Merritt
                                 log_info("Reading last update time from #{feed_update_file}")
                                 parse_time(File.read(feed_update_file))
                               else
+                                # :nocov:
                                 log_info("Feed update file #{feed_update_file} not found")
                                 Time.utc(0)
+                                # :nocov:
                               end
       end
 
@@ -55,7 +55,6 @@ module Merritt
             'when/created' => erc_when_created,
             'when/modified' => erc_when_modified
           },
-          server: one_time_server,
           local_identifier: local_id,
           archival_id: erc_where # TODO: find out how archival_id was supposed to work,
         )
@@ -75,14 +74,6 @@ module Merritt
 
       private
 
-      def one_time_server
-        @one_time_server ||= begin
-          server = Mrt::Ingest::OneTimeServer.new
-          server.start_server
-          server
-        end
-      end
-
       def ingest_client
         # TODO: validate config?
         @ingest_client ||= Mrt::Ingest::Client.new(APP_CONFIG['ingest_service'])
@@ -95,14 +86,8 @@ module Merritt
         end
       end
 
-      def join_server!
-        @one_time_server.join_server if @one_time_server
-      rescue StandardError => e
-        log_error('Error joining server', e)
-      end
-
       def pause_file_path
-        @pause_file_path ||= "#{ENV.fetch('HOME', nil)}/dpr2/apps/ui/atom/PAUSE_ATOM_#{profile}"
+        @pause_file_path ||= "#{Dir.home}/dpr2/apps/ui/atom/PAUSE_ATOM_#{profile}"
       end
 
       def process_from(page_url)

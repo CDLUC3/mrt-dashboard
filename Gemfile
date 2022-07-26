@@ -1,6 +1,7 @@
 source 'http://rubygems.org'
 
 gem 'activeresource'
+gem 'json'
 gem 'multi_json'
 gem 'mysql2'
 gem 'rails', '~> 5.2'
@@ -16,7 +17,8 @@ gem 'exception_notification'
 gem 'httpclient'
 gem 'irb'
 gem 'jquery-rails'
-gem 'mrt-ingest'
+# New lib does not use One Time Server
+gem 'mrt-ingest', '0.0.10'
 gem 'net-ldap'
 gem 'nokogiri'
 gem 'orchard'

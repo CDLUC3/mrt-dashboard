@@ -25,7 +25,7 @@ module Merritt
         @sleep_count = 0
         allow_any_instance_of(Object).to(receive(:sleep).with(DEFAULT_DELAY)) { @sleep_count += 1 }
 
-        @original_home = ENV.fetch('HOME', nil)
+        @original_home = Dir.home
         @tmp_home = Dir.mktmpdir
         ENV['HOME'] = @tmp_home
 
@@ -50,11 +50,6 @@ module Merritt
 
         @page_client = instance_double(PageClient)
         allow(PageClient).to receive(:new).and_return(page_client)
-
-        @one_time_server = instance_double(Mrt::Ingest::OneTimeServer)
-        allow(Mrt::Ingest::OneTimeServer).to receive(:new).and_return(one_time_server)
-        allow(one_time_server).to receive(:start_server)
-        allow(one_time_server).to receive(:join_server)
 
         @ingest_client = instance_double(Mrt::Ingest::Client)
         allow(Mrt::Ingest::Client).to receive(:new).with(APP_CONFIG['ingest_service']).and_return(ingest_client)
@@ -111,31 +106,27 @@ module Merritt
         harvester.process_feed!
       end
 
-      it 'joins the server' do
-        expect(one_time_server).to receive(:join_server)
+      it 'get last_feed_update' do
         harvester = Harvester.new(args)
-        harvester.send(:one_time_server) # make sure it's initialized
-        allow(page_client).to receive(:process_page!).and_return(nil)
-        harvester.process_feed!
+        expect(harvester.last_feed_update).not_to be_nil
       end
 
-      it 'joins the server even in the event of an error' do
-        expect(one_time_server).to receive(:join_server)
+      it 'test harvester.new_ingest_object' do
         harvester = Harvester.new(args)
-        harvester.send(:one_time_server) # make sure it's initialized
-        allow(page_client).to receive(:process_page!).and_raise('Oops')
-        expect { harvester.process_feed! }.to raise_error('Oops')
-      end
-
-      it 'logs an error if server can\'t be joined' do
-        expect(one_time_server).to receive(:join_server).and_raise('Oops')
-        expect(Rails.logger).to receive(:error).with(/Oops/)
-
-        harvester = Harvester.new(args)
-        harvester.send(:one_time_server) # make sure it's initialized
-        allow(page_client).to receive(:process_page!).and_return(nil)
-        harvester.process_feed!
+        ingest_object = harvester.new_ingest_object(
+          local_id: 'local',
+          erc_who: 'who',
+          erc_what: 'what',
+          erc_when: 'when',
+          erc_where: 'where',
+          erc_when_created: '2022-01-01',
+          erc_when_modified: '2022-01-01'
+        )
+        uri = URI.parse('https://nuxeo.cdlib.org/Nuxeo/nxdoc/default/133be0f7-99b2-4e88-8842-d247993d7bac/view_documents')
+        harvester.add_credentials!(uri)
+        harvester.start_ingest(ingest_object)
       end
     end
+
   end
 end
