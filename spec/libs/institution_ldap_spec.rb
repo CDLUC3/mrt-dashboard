@@ -1,4 +1,5 @@
 require 'rails_helper'
+require 'institution_ldap'
 
 module InstitutionLdap
   describe Server do
