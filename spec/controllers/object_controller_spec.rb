@@ -22,7 +22,7 @@ RSpec.describe ObjectController, type: :controller do
       @collection = create(:private_collection, name: 'Collection 1', mnemonic: 'collection_1')
       @collection_id = mock_ldap_for_collection(collection)
       @objects = []
-      (0..2).each do |i|
+      3.times do |i|
         @objects.append(
           create(:inv_object, erc_who: 'Doe, Jane', erc_what: "Object #{i}", erc_when: "2018-01-0#{i}")
         )
