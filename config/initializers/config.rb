@@ -16,12 +16,6 @@ unless self.class.const_defined?(:LDAP_CONFIG)
     .resolve_file_values({ file: 'config/ldap.yml', return_key: Rails.env })
 end
 
-# when running in dev/docker, provide a default resolution value for any SSM values that will not be used
-unless self.class.const_defined?(:ATOM_CONFIG)
-  ATOM_CONFIG = Uc3Ssm::ConfigResolver.new({ def_value: 'NOT_APPLICABLE' })
-    .resolve_file_values({ file: 'config/atom.yml', return_key: Rails.env })
-end
-
 # app_config.yml does not have any SSM values
 unless self.class.const_defined?(:APP_CONFIG)
   APP_CONFIG = Uc3Ssm::ConfigResolver.new
