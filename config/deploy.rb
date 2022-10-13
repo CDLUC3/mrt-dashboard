@@ -37,7 +37,7 @@ set :keep_releases, 5
 set :version_number, `git describe --tags`
 
 # Update config/atom repo before deployment only
-after  'deploy', 'git:version'
+after 'deploy', 'git:version'
 
 namespace :git do
   desc 'Add the version file so that we can display the git version in the footer'
