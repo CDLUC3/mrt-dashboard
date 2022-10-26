@@ -81,6 +81,7 @@ components:
         - zip
         - tar
         - targz
+        - zipunc
       required: false
     in_file:
       in: query

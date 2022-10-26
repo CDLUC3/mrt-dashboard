@@ -141,7 +141,7 @@ class ApplicationController < ActionController::Base
   def sanitize_presign_params(params)
     sparams = {}
     add_valid_param(sparams, params, 'content', %w[producer full])
-    add_valid_param(sparams, params, 'format', %w[zip tar targz])
+    add_valid_param(sparams, params, 'format', %w[zip tar targz zipunc])
     sparams
   end
 
