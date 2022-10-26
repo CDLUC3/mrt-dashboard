@@ -24,7 +24,7 @@ describe DuaController do
 
     skip it 'copies an arbitrary openable to a tempfile' do
       contents = nil
-      
+
       controller.send(:with_fetched_tempfile, Openable.new(data)) do |tmp_file|
         contents = tmp_file.read
       end
