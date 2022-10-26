@@ -22,8 +22,9 @@ describe DuaController do
       @data = SecureRandom.hex(5000).freeze
     end
 
-    it 'copies an arbitrary openable to a tempfile' do
+    skip it 'copies an arbitrary openable to a tempfile' do
       contents = nil
+      
       controller.send(:with_fetched_tempfile, Openable.new(data)) do |tmp_file|
         contents = tmp_file.read
       end
