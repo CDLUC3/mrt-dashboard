@@ -79,4 +79,4 @@ jobs:
         PROJECT_ROOT=`pwd`
         # Make sure Rails cache directory exists
         mkdir -p "${PROJECT_ROOT}/tmp/cache"
-        bundle exec rake coverage RAILS_ENV=test SSM_SKIP_RESOLUTION=Y
+        bundle exec rails coverage RAILS_ENV=test SSM_SKIP_RESOLUTION=Y

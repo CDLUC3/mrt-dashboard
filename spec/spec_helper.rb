@@ -1,18 +1,6 @@
 require 'colorize'
 
 # ------------------------------------------------------------
-# SimpleCov
-
-if ENV['COVERAGE']
-  require 'simplecov'
-  SimpleCov.minimum_coverage 100
-  SimpleCov.start do
-    add_filter '/vendor'
-  end
-  SimpleCov.start 'rails'
-end
-
-# ------------------------------------------------------------
 # Rspec configuration
 
 RSpec.configure do |config|

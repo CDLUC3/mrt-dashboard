@@ -1,4 +1,4 @@
-# require 'rails_helper'
+require 'rails_helper'
 
 describe ApplicationHelper do
   describe ':formatted_int' do
