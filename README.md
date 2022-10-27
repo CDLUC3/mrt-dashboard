@@ -21,7 +21,6 @@ and for the harvesting of Nuxeo content feeds for ingest into Merrit.
 
 This code depends on the following Merritt Libraries.
 - [UC3 SSM Gem](https://github.com/CDLUC3/uc3-ssm)
-- [Merritt Ingest Gem](https://github.com/CDLUC3/mrt-ingest-ruby)
 
 ## For external audiences
 This code is not intended to be run apart from the Merritt Preservation System.

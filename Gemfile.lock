@@ -203,8 +203,6 @@ GEM
     mime-types-data (3.2022.0105)
     mini_mime (1.1.2)
     minitest (5.16.3)
-    mrt-ingest (0.0.10)
-      rest-client (~> 2.1)
     msgpack (1.6.0)
     multi_json (1.15.0)
     mysql2 (0.5.4)
@@ -414,7 +412,6 @@ DEPENDENCIES
   json
   launchy
   listen
-  mrt-ingest (= 0.0.10)
   multi_json
   mysql2
   net-ldap
