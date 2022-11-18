@@ -1,6 +1,7 @@
 require_relative 'boot'
 
 require 'rails/all'
+require 'uc3-ssm'
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
@@ -18,5 +19,10 @@ module MrtDashboard
     #
     # config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")
+
+    def config.database_configuration
+      # The entire config must be returned, but only the Rails.env will be processed
+      Uc3Ssm::ConfigResolver.new.resolve_file_values(file: 'config/database.yml')
+    end
   end
 end
