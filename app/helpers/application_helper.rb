@@ -16,7 +16,7 @@ module ApplicationHelper
 
   def merritt_time(time)
     # System (PT) time is being interpreted as UTC. May need to set ENV TZ
-    "#{time.strftime('%Y-%m-%d %I:%M %p PT')}"
+    time.strftime('%Y-%m-%d %I:%M %p PT').to_s
   end
 
   def clean_mime_type(mimetype)
