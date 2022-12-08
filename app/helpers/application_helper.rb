@@ -15,10 +15,8 @@ module ApplicationHelper
   end
 
   def merritt_time(time)
-    # TODO: Figure out where we use this and whether DateTime is really best here
-    time = DateTime.parse(time.to_s) if time.class != DateTime
-    time = time.utc unless time.utc?
-    time.strftime('%Y-%m-%d %I:%M %p UTC')
+    # System (PT) time is being interpreted as UTC. May need to set ENV TZ
+    time.strftime('%Y-%m-%d %I:%M %p PT').to_s
   end
 
   def clean_mime_type(mimetype)

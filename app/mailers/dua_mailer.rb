@@ -1,7 +1,7 @@
+# :nocov:
 class DuaMailer < ActionMailer::Base
   default from: APP_CONFIG['dua_email_from']
 
-  # :nocov:
   def dua_email(args)
     @to = args[:to]
     @title = args[:title]
@@ -12,5 +12,5 @@ class DuaMailer < ActionMailer::Base
     @terms = args[:terms]
     mail(to: @to, cc: args[:cc], subject: "Merritt DUA acceptance: #{@title}", reply_to: args[:reply_to])
   end
-  # :nocov:
 end
+# :nocov:

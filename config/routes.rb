@@ -1,4 +1,4 @@
-MrtDashboard::Application.routes.draw do
+Rails.application.routes.draw do
   resource 'users', as: 'account'
 
   # User authentication

@@ -19,7 +19,7 @@ set :puma_port,        '26181'
 
 # persistent dirs
 set :linked_files, %w[]
-set :linked_dirs, %w[log pid]
+set :linked_dirs, %w[log pid tmp/pids]
 
 # Default value for :format is :pretty
 # set :format, :pretty

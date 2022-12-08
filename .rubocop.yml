@@ -1,7 +1,7 @@
 AllCops:
   NewCops: enable
   # Suppress complaints about post-2.0 syntax
-  TargetRubyVersion: 2.6
+  TargetRubyVersion: 3.0
   # Exclude generated files
   Exclude:
     - 'bin/**/*'
@@ -37,6 +37,9 @@ Layout/LineLength:
 
 Metrics/ClassLength:
   Max: 200
+
+Metrics/BlockLength:
+  Max: 40
 
 Metrics/MethodLength:
   Max: 20

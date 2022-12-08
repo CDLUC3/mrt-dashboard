@@ -22,7 +22,7 @@ RSpec.describe ObjectController, type: :controller do
       @collection = create(:private_collection, name: 'Collection 1', mnemonic: 'collection_1')
       @collection_id = mock_ldap_for_collection(collection)
       @objects = []
-      (0..2).each do |i|
+      3.times do |i|
         @objects.append(
           create(:inv_object, erc_who: 'Doe, Jane', erc_what: "Object #{i}", erc_when: "2018-01-0#{i}")
         )
@@ -96,7 +96,7 @@ RSpec.describe ObjectController, type: :controller do
             }
 
             ingest_status = 200
-            ingest_headers = { content_type: 'text/plain' }
+            ingest_headers = { content_type: 'text/plain; charset=utf-8' }
             ingest_body = 'this is the body of the response'
             @ingest_response = instance_double(HTTP::Message)
             allow(ingest_response).to receive(:status).and_return(ingest_status)
@@ -188,7 +188,7 @@ RSpec.describe ObjectController, type: :controller do
         mock_permissions_all(user_id, collection_id)
 
         mint_status = 200
-        mint_headers = { content_type: 'text/xml' }
+        mint_headers = { content_type: 'text/xml; charset=utf-8' }
         mint_body = '<xml>12345</xml>'
         mint_response = instance_double(HTTP::Message)
         allow(mint_response).to receive(:status).and_return(mint_status)
@@ -719,7 +719,7 @@ RSpec.describe ObjectController, type: :controller do
         request.accept = 'application/atom+xml'
         get(:recent, params: { collection: collection.ark })
         expect(response.status).to eq(200)
-        expect(response.content_type).to eq('application/atom+xml')
+        expect(response.content_type).to eq('application/atom+xml; charset=utf-8')
 
         body = response.body
         objects.each do |obj|
@@ -731,7 +731,7 @@ RSpec.describe ObjectController, type: :controller do
         request.accept = 'application/atom+xml'
         get(:recent, params: { collection: collection.ark, per_page: 2 })
         expect(response.status).to eq(200)
-        expect(response.content_type).to eq('application/atom+xml')
+        expect(response.content_type).to eq('application/atom+xml; charset=utf-8')
 
         body = response.body
         expect(body).to include('per_page=2')
@@ -744,7 +744,7 @@ RSpec.describe ObjectController, type: :controller do
         request.accept = 'application/atom+xml'
         get(:recent, params: { collection: collection.ark, per_page: 1000 })
         expect(response.status).to eq(200)
-        expect(response.content_type).to eq('application/atom+xml')
+        expect(response.content_type).to eq('application/atom+xml; charset=utf-8')
 
         body = response.body
         expect(body).to include('per_page=500')

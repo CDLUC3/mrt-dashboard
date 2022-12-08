@@ -1,4 +1,5 @@
 require 'rails_helper'
+require 'user_ldap'
 
 module UserLdap
   describe Server do
