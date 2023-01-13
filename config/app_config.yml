@@ -11,9 +11,9 @@ def: &def
     ucsc_lib_hollzahawi_content: "http://www.holl-lab.com/islas-project.html"
 
 ssm: &ssmdef
-  mint_service:         "{!SSM: colladmin/ingest-service}/request-identifier"
-  ingest_service:       "{!SSM: colladmin/ingest-service}/poster/submit/"
-  ingest_service_update: "{!SSM: colladmin/ingest-service}/poster/update/"
+  mint_service:         "{!SSM: colladmin/ingest-service}request-identifier"
+  ingest_service:       "{!SSM: colladmin/ingest-service}poster/submit/"
+  ingest_service_update: "{!SSM: colladmin/ingest-service}poster/update/"
   uri_1:                "{!SSM: colladmin/access-service}/content/"
   uri_2:                "{!SSM: colladmin/access-service}/producer/"
   uri_3:                "{!SSM: colladmin/access-service}/manifest/"
