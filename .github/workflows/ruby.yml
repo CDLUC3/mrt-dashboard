@@ -15,7 +15,8 @@ jobs:
     services:
       # https://medium.com/@ldarren/number-of-ways-to-setup-database-in-github-actions-2cd48df9faae
       mysql-container:
-        image: mysql:5.7
+        #image: mysql:5.7
+        image: mysql:8
         env:
           MYSQL_DATABASE: 'mrt_dashboard_test'
           MYSQL_USER: 'user'
@@ -23,7 +24,8 @@ jobs:
           MYSQL_ROOT_PASSWORD: 'root-password'
         ports:
         - 3306:3306
-        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+        #options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3 -c "exec docker-entrypoint.sh mysqld --default-authentication-plugin=mysql_native_password"
 
     steps:
     - uses: actions/checkout@v2
