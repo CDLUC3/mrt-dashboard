@@ -10,40 +10,33 @@ def: &def
   redirects:
     ucsc_lib_hollzahawi_content: "http://www.holl-lab.com/islas-project.html"
 
+ssm: &ssmdef
+  mint_service:         "{!SSM: colladmin/ingest-service}/request-identifier"
+  ingest_service:       "{!SSM: colladmin/ingest-service}/poster/submit/"
+  ingest_service_update: "{!SSM: colladmin/ingest-service}/poster/update/"
+  uri_1:                "{!SSM: colladmin/access-service}/content/"
+  uri_2:                "{!SSM: colladmin/access-service}/producer/"
+  uri_3:                "{!SSM: colladmin/access-service}/manifest/"
+  storage_presign_file: "{!SSM: colladmin/access-service}/presign-file/"
+  storage_presign_obj:  "{!SSM: colladmin/access-service}/assemble-obj/"
+  storage_presign_token: "{!SSM: colladmin/access-service}/presign-obj-by-token/"
+
 # Merritt Stage settings
 stage: &stage
   <<: *def
+  <<: *ssmdef
   dua_email_to:         [marisa.strong@ucop.edu, eric.lopatin@ucop.edu]
   merritt_server:       "http://merritt-stage.cdlib.org"
-  container_url:        "http://merritt-stage.cdlib.org/cloudcontainer/"
   n2t_uri:              "http://n2t-wf.cdlib.org/"
-  mint_service:         "http://ingest-stg.cdlib.org:33121/request-identifier"
-  ingest_service:       "http://ingest-stg.cdlib.org:33121/poster/submit/"
-  ingest_service_update: "http://ingest-stg.cdlib.org:33121/poster/update/"
-  uri_1:                "http://uc3-mrt-access-stg.cdlib.org:35121/content/"
-  uri_2:                "http://uc3-mrt-access-stg.cdlib.org:35121/producer/"
-  uri_3:                "http://uc3-mrt-access-stg.cdlib.org:35121/manifest/"
-  storage_presign_file: "http://uc3-mrt-access-stg.cdlib.org:35121/presign-file/"
-  storage_presign_obj:  "http://uc3-mrt-access-stg.cdlib.org:35121/assemble-obj/"
-  storage_presign_token: "http://uc3-mrt-access-stg.cdlib.org:35121/presign-obj-by-token/"
   proto_force:          "https"
 
 # Merritt Prod settings
 production:
   <<: *def
+  <<: *ssmdef
   dua_email_to:         [uc3@ucop.edu]
   merritt_server:       "http://merritt.cdlib.org"
-  container_url:        "http://merritt.cdlib.org/cloudcontainer/"
   n2t_uri:              "http://n2t.net/"
-  mint_service:         "http://ingest-prd.cdlib.org:33121/request-identifier"
-  ingest_service:       "http://ingest-prd.cdlib.org:33121/poster/submit/"
-  ingest_service_update: "http://ingest-prd.cdlib.org:33121/poster/update/"
-  uri_1:                "http://store-do.cdlib.org:35121/content/"
-  uri_2:                "http://store-do.cdlib.org:35121/producer/"
-  uri_3:                "http://store-do.cdlib.org:35121/manifest/"
-  storage_presign_file: "http://store-do.cdlib.org:35121/presign-file/"
-  storage_presign_obj:  "http://store-do.cdlib.org:35121/assemble-obj/"
-  storage_presign_token: "http://store-do.cdlib.org:35121/presign-obj-by-token/"
   proto_force:          "https"
 
 # RSpec Test Configuration - External Service Calls are Mocked
@@ -55,7 +48,6 @@ test:
   dua_email_to: [marisa.strong@ucop.edu]
   merritt_server: "http://{!ENV: MRT_DOCKER_HOST !DEFAULT: localhost}:8086"
   # cloudcontainer is obsolete functionality to support large object (email) downloads
-  # container_url: "http://{!ENV: MRT_DOCKER_HOST !DEFAULT: localhost}:8086/cloudcontainer/"
   n2t_uri: "http://n2t-wf.cdlib.org/"
   # Note that the following service is no longer available
   mint_service: "http://merritt-dev.cdlib.org:33121/request-identifier"
@@ -79,7 +71,6 @@ docker: &docker
   dua_email_to:         [marisa.strong@ucop.edu]
   merritt_server:       "http://{!ENV: MRT_DOCKER_HOST !DEFAULT: localhost}:8086"
   # cloudcontainer is obsolete functionality to support large object (email) downloads
-  # container_url:        "http://{!ENV: MRT_DOCKER_HOST !DEFAULT: localhost}:8086/cloudcontainer/"
   n2t_uri:              "http://n2t-wf.cdlib.org/"
   # Note that the following service is no longer available
   mint_service:         "http://merritt-dev.cdlib.org:33121/request-identifier"
