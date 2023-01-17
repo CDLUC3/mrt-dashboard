@@ -196,7 +196,7 @@ class FileController < ApplicationController
   # Call storage service to create a presigned URL for a file
   # https://github.com/CDLUC3/mrt-doc/blob/master/endopoints/storage/presign-file.md
   def presign_get_by_node_key(nodekey, params)
-    p = { contentType: @file.mime_type }
+    p = { contentType: @file.mime_type == 'text/plain' ? 'text/plain; charset=UTF-8' : @file.mime_type }
     p[:contentDisposition] = params[:contentDisposition] if params.key?(:contentDisposition)
     r = create_http_cli(connect: 15, receive: 15, send: 15).get(
       ApplicationController.get_storage_presign_url(nodekey, has_file: true),
