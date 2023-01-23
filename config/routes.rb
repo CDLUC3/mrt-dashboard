@@ -42,6 +42,7 @@ Rails.application.routes.draw do
   get('m/:object/:version' => 'version#index')
 
   get('state' => 'home#state')
+  get('state-audit-replic' => 'home#state_audit_replic')
   get('home/choose_collection' => 'home#choose_collection')
   get('user/update' => 'user#update')
   get('collection/search_results' => 'collection#search_results')

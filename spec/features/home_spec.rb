@@ -52,12 +52,24 @@ describe 'home' do
 
   describe 'audit_replic_stats' do
     it 'html version' do
-      visit '/state.html'
+      visit '/state-audit-replic.html'
       find('table.state')
       within('table.state') do
         expect(page).to have_selector('thead tr', count: 1)
         expect(page).to have_selector('tbody tr', count: 4)
       end
+    end
+
+    it 'json version' do
+      visit '/state-audit-replic.json'
+    end
+  end
+
+  describe 'state page' do
+    it 'html version' do
+      visit '/state.html'
+      find('h1.state')
+      find('h2.state')
     end
 
     it 'json version' do

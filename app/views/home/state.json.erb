@@ -1,16 +1,4 @@
 {
   "version": "<%= APP_VERSION %>",
-  "timeframe": "<%= @datestr %>",
-  "counts": [
-    <% @count_by_status.each_with_index do |r, i| %>
-      <% if i > 0 %>,<% end %>
-      {
-        "title": "<%= r[1] %>",
-        "total": <%= r[2] %>,
-        "completed": <%= r[3] %>,
-        "started": <%= r[4].nil? ? 'null' : r[4] %>,
-        "error": <%= r[5].nil? ? 'null' : r[5] %>
-      }
-    <% end %>
-  ]
+  "start_time": "<%= MrtDashboard::START_TIME.strftime("%Y-%m-%dT%H:%M:%S%z") %>"
 }
