@@ -52,6 +52,7 @@ class CollectionController < ApplicationController
       @results = find_all(collection_ark)
     else
       @results = find_by_localid(collection_ark, params[:terms])
+      @results = find_by_file_name(collection_ark, params[:terms]) if @results.empty?
       @results = find_by_full_text(collection_ark, terms) if @results.empty?
     end
   end
@@ -95,6 +96,18 @@ class CollectionController < ApplicationController
       .joins(:inv_collections, :inv_localids)
       .where('inv_collections.ark = ?', collection_ark)
       .where('inv_localids.local_id = ?', term)
+      .includes(:inv_versions)
+      .quickloadhack
+      .limit(10)
+      .distinct
+      .paginate(paginate_args)
+  end
+
+  def find_by_file_name(collection_ark, term)
+    InvObject
+      .joins(:inv_collections, :inv_file_names)
+      .where('inv_collections.ark = ?', collection_ark)
+      .where('inv_file_names.producer_pathname = ?', term)
       .includes(:inv_versions)
       .quickloadhack
       .limit(10)

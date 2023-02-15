@@ -15,6 +15,7 @@ class InvObject < ApplicationRecord
   has_many :inv_nodes, through: :inv_nodes_inv_objects
 
   has_many(:inv_localids, foreign_key: 'inv_object_ark', primary_key: 'ark')
+  has_many(:inv_file_names, foreign_key: 'inv_object_id', primary_key: 'id')
 
   # work around erc_ tables taking forever to load
   scope :quickloadhack, -> {
