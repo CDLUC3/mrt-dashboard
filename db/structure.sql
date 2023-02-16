@@ -195,7 +195,8 @@ CREATE TABLE `inv_files` (
   KEY `id_idx` (`inv_version_id`) USING BTREE,
   KEY `mime_type` (`mime_type`) USING BTREE,
   KEY `role` (`role`) USING BTREE,
-  KEY `source` (`source`) USING BTREE
+  KEY `pathname` (`pathname`(768)),
+  KEY `source` (`source`) USING BTREE1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `inv_ingests`;
