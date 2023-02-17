@@ -65,6 +65,12 @@ module ApplicationHelper
     !current_group.nil?
   end
 
+  # Return true if user has choosen a group
+  def owner_set?
+    return false if current_owner_name.nil?
+    !current_owner_name.empty?
+  end
+  
   # We discovered that filenames containing strings like " %BF " were being improperly decoded.
   # This code triple unencodes a presigned file link and then runs a regex expression upon it.
   # If the link appears to be an improper utf8 string, the link will be modified to escape and escaped percent sign

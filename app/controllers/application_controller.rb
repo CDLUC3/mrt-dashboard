@@ -19,6 +19,7 @@ class ApplicationController < ActionController::Base
   helper_method(
     :available_groups,
     :current_group,
+    :current_owner_name,
     :current_uid,
     :current_user,
     :current_user_displayname,
@@ -259,6 +260,10 @@ class ApplicationController < ActionController::Base
 
   def current_group
     @_current_group ||= Group.find(session[:group_id])
+  end
+
+  def current_owner_name
+    'UCB Library'
   end
 
   def max_download_size_pretty

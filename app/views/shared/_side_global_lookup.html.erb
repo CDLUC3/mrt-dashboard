@@ -1,0 +1,15 @@
+<section class="lookup">
+<% if owner_set? %>
+  <h3><%= current_owner_name %> Lookup</h3>
+  <%= form_tag({:controller => 'owner', :action => 'search_results'}, :method => :get) do %>
+    <%= text_field_tag 'terms', params[:terms] %>
+    <%= hidden_field_tag 'owner', current_owner_name %>
+    <%= submit_tag('Go') %>
+
+    <p>
+      <label for="terms">Search object author, title, date, file name or identifier.</label>
+      <span title="Search will first attempt to find an exact match on indentifier.&#x0A;&#x0A;If that does not succeed, the search will look for an exact match on file name.&#x0A;&#x0A;If that does not succeed, a text search of metadata (title, author, date) will be performed.">ℹ️</span>
+    </p>
+  <% end %>
+<% end %>
+</section>
