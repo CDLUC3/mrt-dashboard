@@ -263,7 +263,12 @@ class ApplicationController < ActionController::Base
   end
 
   def current_owner_name
-    'UCB Library'
+    puts "TBTB"
+    puts APP_CONFIG
+    puts APP_CONFIG.fetch('global_search', {})
+    puts current_uid
+    puts APP_CONFIG.fetch('global_search', {}).fetch(current_uid, '')
+    APP_CONFIG.fetch('global_search', {}).fetch(current_uid, '')
   end
 
   def max_download_size_pretty

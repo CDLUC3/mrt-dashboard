@@ -19,12 +19,8 @@ class OwnerController < ApplicationController
   # if this solution is generalized, a new LDAP attribute should be set at a user level to enable owner search
   # for the initial implementation, access will be restricted to selected userids
   def has_access
-    puts "TBTB"
     return false if @request_owner.nil?
-    puts "TBTB"
-    puts @request_owner.name
-    puts @request_owner.ark
-    @request_owner.name == 'UCB Library'
+    @request_owner.name == current_owner_name
   end
 
   # Load the group specified in the params[:group]

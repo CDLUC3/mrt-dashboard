@@ -9,6 +9,8 @@ def: &def
   proto_force: ""
   redirects:
     ucsc_lib_hollzahawi_content: "http://www.holl-lab.com/islas-project.html"
+  global_search:
+    merritt-test: "UCB Library"
 
 ssm: &ssmdef
   mint_service:         "{!SSM: colladmin/ingest-service}request-identifier"
