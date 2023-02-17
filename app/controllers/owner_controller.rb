@@ -11,15 +11,14 @@ class OwnerController < ApplicationController
   end
 
   before_action do
-    if !has_access
-      raise(ActiveResource::UnauthorizedAccess, NO_ACCESS)
-    end
+    raise(ActiveResource::UnauthorizedAccess, NO_ACCESS) unless access?
   end
 
   # if this solution is generalized, a new LDAP attribute should be set at a user level to enable owner search
   # for the initial implementation, access will be restricted to selected userids
-  def has_access
+  def access?
     return false if @request_owner.nil?
+
     @request_owner.name == current_owner_name
   end
 
@@ -28,6 +27,7 @@ class OwnerController < ApplicationController
     owner = find(params[:owner])
 
     raise ActiveRecord::RecordNotFound if owner.nil?
+
     @request_owner = owner
     puts @request_owner.ark
   end
