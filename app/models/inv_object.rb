@@ -116,17 +116,25 @@ class InvObject < ApplicationRecord
   end
 
   def user_has_read_permission?(uid)
-    group.user_has_read_permission?(uid)
+    begin
+      group.user_has_read_permission?(uid)
+    rescue LdapMixin::LdapException
+      false
+    end
   end
 
   def user_can_download?(uid)
-    permissions = group.user_permissions(uid)
-    if permissions.member?('admin')
-      true
-    elsif in_embargo?
+    begin
+      permissions = group.user_permissions(uid)
+      if permissions.member?('admin')
+        true
+      elsif in_embargo?
+        false
+      else
+        permissions.member?('download')
+      end
+    rescue LdapMixin::LdapException
       false
-    else
-      permissions.member?('download')
     end
   end
 
