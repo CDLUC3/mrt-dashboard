@@ -36,9 +36,11 @@
             <li><%= link_to('Add object', controller: 'object', action: 'add', group: session[:group_id]) %></li>
           <% end %>
         <% end %>
+        <% if owner_set? %>
         <li>
           <%= link_to("Search #{current_owner_name}", { controller: 'home', action: 'choose_collection', group: session[:group_id] }) %>
         </li>
+        <% end %>
         <li id='downloads'><button>Downloads</button></li>
         <li class="dropdown" id="user-dropdown">
           <span tabindex='0' class="login-message expandable">Logged in as <%= current_user_displayname %></span>
