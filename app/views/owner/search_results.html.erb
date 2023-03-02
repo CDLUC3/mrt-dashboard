@@ -8,7 +8,8 @@
 
     <div class="breadcrumbs">
       <%= link_to('Merritt', :controller => 'home', :action => 'index') %> &gt;
-      Search Results
+      Search <%= current_owner_name %>
+      &gt; Search Results
     </div>
 
     <% if @results && !@results.empty? %>
