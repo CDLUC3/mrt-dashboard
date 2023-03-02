@@ -9,8 +9,6 @@ def: &def
   proto_force: ""
   redirects:
     ucsc_lib_hollzahawi_content: "http://www.holl-lab.com/islas-project.html"
-  global_search:
-    merritt-test: "UCB Library"
 
 ssm: &ssmdef
   mint_service:         "{!SSM: colladmin/ingest-service}request-identifier"
@@ -31,6 +29,8 @@ stage: &stage
   merritt_server:       "http://merritt-stage.cdlib.org"
   n2t_uri:              "http://n2t-wf.cdlib.org/"
   proto_force:          "https"
+  global_search:
+    merritt-test: "UCB Library"
 
 # Merritt Prod settings
 production:
@@ -40,6 +40,8 @@ production:
   merritt_server:       "http://merritt.cdlib.org"
   n2t_uri:              "http://n2t.net/"
   proto_force:          "https"
+  global_search:
+    merritt-test: "UCB Library"
 
 # RSpec Test Configuration - External Service Calls are Mocked
 test:
@@ -63,9 +65,11 @@ test:
   storage_presign_token: "http://store.merritt.example.edu/presign-obj-by-token/"
   redirects:
     mock_profile: "http://cdlib.org"
+  global_search:
+    merritt-test: "UCB Library"
 
 # Docker configuration defaults
-docker: &docker
+dockerdef: &dockerdef
   <<: *def
   max_archive_size:  10000000  # 9999 bytes ~= 99 KiB
   max_download_size: 20000000  # 1048576 bytes = 1 MiB
@@ -87,12 +91,21 @@ docker: &docker
   redirects:
     escholarship_content: "http://cdlib.org"
 
+docker:
+  <<: dockerdef
+  global_search:
+    merritt-test: "UC3 Merritt administrator"
+
 # local and development are currently identical utilizing only resources defined in docker volumes
 # eventually, the "development" stack will run on ec2 with access to RDS and cloud storage
 local:
-  <<: *docker
+  <<: *dockerdef
+  global_search:
+    merritt-test: "UC3 Merritt administrator"
 
 development:
-  <<: *docker
+  <<: *dockerdef
+  global_search:
+    merritt-test: "UCB Library"
 
 # TODO: rename uri_[1-3] to [content, producer, manifest]_uri or similar
