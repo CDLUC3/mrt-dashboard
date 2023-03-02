@@ -453,7 +453,13 @@
   }
   span.timestamp {
     white-space: nowrap;
+    white-space: nowrap;
+    width: 400px;
+    text-overflow: ellipsis;
+    display: inline-block;
+    overflow: hidden;
   }
+
 }
 
 @media (max-width: 708px) {
@@ -934,7 +940,7 @@ footer div.publication-info p {
 aside {
   display: flex;
   flex-direction: column;
-  grid-gap: 24px;
+  grid-gap: 18px;
   width: 232px;
 }
 
@@ -947,10 +953,14 @@ aside section ul li {
 }
 
 aside section:not(:last-child) {
-  margin-bottom: 24px;
+  margin-bottom: 10px;
 }
 
 aside p {
+  font-size: smaller;
+}
+
+aside li {
   font-size: smaller;
 }
 
