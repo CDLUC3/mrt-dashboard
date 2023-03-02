@@ -452,12 +452,7 @@
     white-space: nowrap;
   }
   span.timestamp {
-    white-space: nowrap;
-    white-space: nowrap;
-    width: 400px;
-    text-overflow: ellipsis;
     display: inline-block;
-    overflow: hidden;
   }
 
 }
