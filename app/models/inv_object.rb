@@ -117,8 +117,6 @@ class InvObject < ApplicationRecord
 
   def user_has_read_permission?(uid)
     group.user_has_read_permission?(uid)
-  rescue LdapMixin::LdapException
-    false
   end
 
   def user_can_download?(uid)
@@ -130,8 +128,6 @@ class InvObject < ApplicationRecord
     else
       permissions.member?('download')
     end
-  rescue LdapMixin::LdapException
-    false
   end
 
   def object_info

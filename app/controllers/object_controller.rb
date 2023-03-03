@@ -54,8 +54,6 @@ class ObjectController < ApplicationController
 
     begin
       render(file: "#{Rails.root}/public/401.html", status: 401, layout: false) unless check_ark_redirects(@object.group)
-    rescue LdapMixin::LdapException
-      render(file: "#{Rails.root}/public/401.html", status: 401, layout: false)
     end
   end
 
