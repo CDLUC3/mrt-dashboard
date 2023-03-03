@@ -29,8 +29,8 @@ stage: &stage
   merritt_server:       "http://merritt-stage.cdlib.org"
   n2t_uri:              "http://n2t-wf.cdlib.org/"
   proto_force:          "https"
-  global_search:
-    merritt-test: "UCB Library"
+  global_search_owners:
+    'UCB Library': "{!SSM: ui/global-search/ucb}"
 
 # Merritt Prod settings
 production:
@@ -40,8 +40,8 @@ production:
   merritt_server:       "http://merritt.cdlib.org"
   n2t_uri:              "http://n2t.net/"
   proto_force:          "https"
-  global_search:
-    merritt-test: "UCB Library"
+  global_search_owners:
+    'UCB Library': "{!SSM: ui/global-search/ucb}"
 
 # RSpec Test Configuration - External Service Calls are Mocked
 test:
@@ -65,8 +65,8 @@ test:
   storage_presign_token: "http://store.merritt.example.edu/presign-obj-by-token/"
   redirects:
     mock_profile: "http://cdlib.org"
-  global_search:
-    merritt-test: "UCB Library"
+  global_search_owners:
+    'UCB Library': merritt-test
 
 # Docker configuration defaults
 dockerdef: &dockerdef
@@ -93,19 +93,19 @@ dockerdef: &dockerdef
 
 docker:
   <<: dockerdef
-  global_search:
-    merritt-test: "UC3 Merritt administrator"
+  global_search_owners:
+    "UC3 Merritt administrator": merritt-test
 
 # local and development are currently identical utilizing only resources defined in docker volumes
 # eventually, the "development" stack will run on ec2 with access to RDS and cloud storage
 local:
   <<: *dockerdef
-  global_search:
-    merritt-test: "UC3 Merritt administrator"
+  global_search_owners:
+    "UC3 Merritt administrator": merritt-test
 
 development:
   <<: *dockerdef
-  global_search:
-    merritt-test: "UCB Library"
+  global_search_owners: 
+    'UCB Library': "{!SSM: ui/global-search/ucb}"
 
 # TODO: rename uri_[1-3] to [content, producer, manifest]_uri or similar
