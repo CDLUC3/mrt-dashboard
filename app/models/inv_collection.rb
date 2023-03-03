@@ -10,6 +10,8 @@ class InvCollection < ApplicationRecord
 
   def group
     @_group ||= Group.find(ark)
+  rescue LdapMixin::LdapException
+    @_group
   end
 
   def recent_objects

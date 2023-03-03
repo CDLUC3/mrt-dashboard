@@ -116,10 +116,14 @@ class InvObject < ApplicationRecord
   end
 
   def user_has_read_permission?(uid)
+    return false if group.nil?
+
     group.user_has_read_permission?(uid)
   end
 
   def user_can_download?(uid)
+    return false if group.nil?
+
     permissions = group.user_permissions(uid)
     if permissions.member?('admin')
       true

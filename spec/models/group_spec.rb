@@ -36,6 +36,18 @@ describe Group do
     end
   end
 
+  describe ':missing_ldap_group' do
+
+    it 'missing group' do
+      expect { Group.find(999) }.to raise_error(LdapMixin::LdapException)   
+    end
+
+    it 'bad group id' do
+      collection.ark = 'foo'
+      expect(collection.group).to be_nil   
+    end
+  end
+
   describe ':object_count' do
     attr_reader :objects
 
