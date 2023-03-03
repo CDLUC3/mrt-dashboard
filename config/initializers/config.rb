@@ -22,11 +22,11 @@ unless self.class.const_defined?(:APP_CONFIG)
     .resolve_file_values(file: 'config/app_config.yml', return_key: Rails.env)
 
   # invert key/values from global_search_owners to global_search, this makes it easier to store user names in SSM
-  APP_CONFIG["global_search"] = {}
-  gso = APP_CONFIG.fetch("global_search_owners", {})
-  gso.keys.each do |k| 
-    gso.fetch(k, "").split.each do |u|
-      APP_CONFIG["global_search"][u] = k
+  APP_CONFIG['global_search'] = {}
+  gso = APP_CONFIG.fetch('global_search_owners', {})
+  gso.each_key do |k|
+    gso.fetch(k, '').split.each do |u|
+      APP_CONFIG['global_search'][u] = k
     end
   end
 
