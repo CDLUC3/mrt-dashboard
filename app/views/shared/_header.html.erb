@@ -19,6 +19,9 @@
         <%= image_tag 'nav-menu.svg', class: 'expandable', alt: 'Menu', tabindex: '0' %>
       </label>
       <ul>
+        <li>
+          <%= link_to("My Collections", { controller: 'home', action: 'choose_collection', group: session[:group_id] }) %>
+        </li>
         <li class="dropdown">
           <% choose_collection_text = session[:group_id] ? 'Change collection' : 'Choose collection' %>
           <%= link_to(choose_collection_text, { controller: 'home', action: 'choose_collection', group: session[:group_id] }, class: 'expandable') %>
@@ -35,11 +38,6 @@
           <% if current_user_can_write_to_collection? %>
             <li><%= link_to('Add object', controller: 'object', action: 'add', group: session[:group_id]) %></li>
           <% end %>
-        <% end %>
-        <% if owner_set? %>
-        <li>
-          <%= link_to("Search #{current_owner_name}", { controller: 'home', action: 'choose_collection', group: session[:group_id] }) %>
-        </li>
         <% end %>
         <li id='downloads'><button>Downloads</button></li>
         <li class="dropdown" id="user-dropdown">
