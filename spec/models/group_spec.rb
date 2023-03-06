@@ -39,12 +39,12 @@ describe Group do
   describe ':missing_ldap_group' do
 
     it 'missing group' do
-      expect { Group.find(999) }.to raise_error(LdapMixin::LdapException)   
+      expect { Group.find(999) }.to raise_error(LdapMixin::LdapException)
     end
 
     it 'bad group id' do
       collection.ark = 'foo'
-      expect(collection.group).to be_nil   
+      expect(collection.group).to be_nil
     end
   end
 

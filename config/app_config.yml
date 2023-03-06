@@ -11,15 +11,17 @@ def: &def
     ucsc_lib_hollzahawi_content: "http://www.holl-lab.com/islas-project.html"
 
 ssm: &ssmdef
-  mint_service:         "{!SSM: colladmin/ingest-service}request-identifier"
-  ingest_service:       "{!SSM: colladmin/ingest-service}poster/submit/"
+  mint_service:          "{!SSM: colladmin/ingest-service}request-identifier"
+  ingest_service:        "{!SSM: colladmin/ingest-service}poster/submit/"
   ingest_service_update: "{!SSM: colladmin/ingest-service}poster/update/"
-  uri_1:                "{!SSM: colladmin/access-service}/content/"
-  uri_2:                "{!SSM: colladmin/access-service}/producer/"
-  uri_3:                "{!SSM: colladmin/access-service}/manifest/"
-  storage_presign_file: "{!SSM: colladmin/access-service}/presign-file/"
-  storage_presign_obj:  "{!SSM: colladmin/access-service}/assemble-obj/"
+  uri_1:                 "{!SSM: colladmin/access-service}/content/"
+  uri_2:                 "{!SSM: colladmin/access-service}/producer/"
+  uri_3:                 "{!SSM: colladmin/access-service}/manifest/"
+  storage_presign_file:  "{!SSM: colladmin/access-service}/presign-file/"
+  storage_presign_obj:   "{!SSM: colladmin/access-service}/assemble-obj/"
   storage_presign_token: "{!SSM: colladmin/access-service}/presign-obj-by-token/"
+  upload-limit:          "{!SSM: ui/upload-limit}"
+  upload-limit-message:  "{!SSM: ui/upload-limit-message}"
 
 # Merritt Stage settings
 stage: &stage
@@ -90,6 +92,8 @@ dockerdef: &dockerdef
   storage_presign_token: "http://store:8080/store/presign-obj-by-token/"
   redirects:
     escholarship_content: "http://cdlib.org"
+  upload-limit:          "1000000"
+  upload-limit-message:  "1 MB"
 
 docker:
   <<: dockerdef

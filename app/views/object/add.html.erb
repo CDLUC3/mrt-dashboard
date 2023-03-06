@@ -31,6 +31,8 @@
     <%= form_tag({action: :upload}, id: 'upload', multipart: true) do %>
       <h2>Object info</h2>
 
+      <%= hidden_field_tag('upload-limit', APP_CONFIG.fetch("upload-limit", 1000000000)) %>
+      <%= hidden_field_tag('upload-limit-message', APP_CONFIG.fetch("upload-limit-message", "1 GB")) %>
       <table class="properties">
         <tbody>
         <tr>
