@@ -16,6 +16,8 @@ describe 'objects', js: true do
     @password = 'correcthorsebatterystaple'
     @user_id = mock_user(name: 'Jane Doe', password: password)
 
+    @owner = create(:inv_owner, name: 'Owner', ark: 'ark/owner')
+
     inv_collection_1 = create(:inv_collection, name: 'Collection 1', mnemonic: 'collection_1')
     @collection_1_id = mock_ldap_for_collection(inv_collection_1)
     mock_permissions_all(user_id, collection_1_id)

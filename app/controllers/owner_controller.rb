@@ -29,15 +29,11 @@ class OwnerController < ApplicationController
     raise ActiveRecord::RecordNotFound if owner.nil?
 
     @request_owner = owner
-    puts @request_owner.ark
   end
 
-  def index
-    @recent_objects = find_none
-  end
-
+  # rubocop:disable Metrics/AbcSize
   def search_results
-    terms = parse_terms(params[:terms])
+    terms = parse_terms(params.fetch(:terms, ''))
     if terms.empty?
       @results = find_none
     else
@@ -45,14 +41,11 @@ class OwnerController < ApplicationController
       @results = find_by_file_name(@request_owner, params[:terms]) if @results.empty?
       @results = find_by_full_text(@request_owner, terms) if @results.empty?
     end
+    render status: @results.empty? ? 201 : 200
   end
+  # rubocop:enable Metrics/AbcSize
 
   private
-
-  def render_object_info(ark)
-    object = InvObject.where('ark = ?', ark).includes(:inv_collections, inv_versions: [:inv_files]).first
-    render json: object.object_info.to_json, status: 200
-  end
 
   def parse_terms(terms_param)
     terms = Unicode.downcase(terms_param)

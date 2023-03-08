@@ -9,8 +9,7 @@ jQuery(document).ready(function(){
           f.val("");
           alert(
             "Individual file uploads to Merritt are limited to " + MAXSZ_DISP + 
-            ".\n\nPlease review the Merritt documentation for alternative submission options." +
-            ".\n\nPlease choose a different file."
+            ".\n\nPlease review the Merritt documentation for alternative submission options, or choose a smaller file."
           );
         }
       }      
