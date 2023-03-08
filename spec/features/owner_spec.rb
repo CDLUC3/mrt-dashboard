@@ -132,12 +132,11 @@ describe 'owners' do
       expect(page).to have_content('Not authorized')
     end
 
-    skip it 'requires a valid group', js: true do
+    it 'requires user to be bound to a global owner', js: true do
       mock_permissions_all(user_id, collection_id)
-      allow(Group).to receive(:find).with(collection_id).and_raise(LdapMixin::LdapException)
       log_in_with(user_id, password)
       visit(index_path)
-      expect(page).to have_content("doesn't exist")
+      expect(page).to have_content('Not authorized')
     end
 
   end
