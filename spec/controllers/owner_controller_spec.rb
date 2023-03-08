@@ -49,7 +49,7 @@ RSpec.describe OwnerController, type: :controller do
     def mock_owner_name(name)
       allow_any_instance_of(ApplicationController).to receive(:current_owner_name).and_return(name)
     end
-  
+
     describe ':index' do
 
       it 'prevents localid search without read permission' do

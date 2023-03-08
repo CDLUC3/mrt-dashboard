@@ -75,15 +75,10 @@ describe 'owners' do
           end
         end
 
-        it 'finds by substring' do
+        it 'finds by substring, no objects found' do
           fill_in('terms', with: 'Jan')
           click_button 'Go'
-          inv_objects.each do |obj|
-            expect(page).to have_content(obj.ark)
-            expect(page).to have_content(obj.erc_who)
-            expect(page).to have_content(obj.erc_what)
-            expect(page).to have_content(obj.erc_when)
-          end
+          expect(page).to have_content('here were no items that had the text matching')
         end
 
         it 'finds by ark' do

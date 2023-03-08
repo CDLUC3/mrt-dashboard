@@ -103,7 +103,7 @@ describe 'collections' do
           end
         end
 
-        it 'finds by substring' do
+        it 'finds by substring, defaults to full listing' do
           fill_in('terms', with: 'Jan')
           click_button 'Go'
           inv_objects.each do |obj|
