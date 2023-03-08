@@ -25,8 +25,8 @@ unless self.class.const_defined?(:APP_CONFIG)
   APP_CONFIG['global_search'] = {}
   gso = APP_CONFIG.fetch('global_search_owners', {})
   gso.each_key do |k|
-    gso.fetch(k, '').split.each do |u|
-      APP_CONFIG['global_search'][u] = k
+    gso.fetch(k, '').split(',').each do |u|
+      APP_CONFIG['global_search'][u.strip] = k
     end
   end
 
