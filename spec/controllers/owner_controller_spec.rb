@@ -46,12 +46,10 @@ RSpec.describe OwnerController, type: :controller do
       @client = mock_httpclient
     end
 
-    def mock_owner_name(user, name)
-      r = {}
-      r[user] = name
-      allow(APP_CONFIG).to receive(:fetch).with('global_search', {}).and_return(r)
+    def mock_owner_name(name)
+      allow_any_instance_of(ApplicationController).to receive(:current_owner_name).and_return(name)
     end
-
+  
     describe ':index' do
 
       it 'prevents localid search without read permission' do
@@ -62,7 +60,7 @@ RSpec.describe OwnerController, type: :controller do
 
       it 'localid search no results' do
         mock_permissions_all(user_id, collection_id)
-        mock_owner_name(user_id, @owner.name)
+        mock_owner_name(@owner.name)
         request.session.merge!({ uid: user_id })
         get(:search_results, params: { terms: 'my-local-id-not-found', owner: @owner.name })
         expect(response.status).to eq(201)
@@ -70,7 +68,7 @@ RSpec.describe OwnerController, type: :controller do
 
       it 'empty terms search no results' do
         mock_permissions_all(user_id, collection_id)
-        mock_owner_name(user_id, @owner.name)
+        mock_owner_name(@owner.name)
         request.session.merge!({ uid: user_id })
         get(:search_results, params: { terms: '', owner: @owner.name })
         expect(response.status).to eq(201)
@@ -78,7 +76,7 @@ RSpec.describe OwnerController, type: :controller do
 
       it 'localid search - result found' do
         mock_permissions_all(user_id, collection_id)
-        mock_owner_name(user_id, @owner.name)
+        mock_owner_name(@owner.name)
         request.session.merge!({ uid: user_id })
         get(:search_results, params: { terms: @testlocalid, owner: @owner.name })
         expect(response.status).to eq(200)
