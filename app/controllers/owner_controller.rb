@@ -31,19 +31,18 @@ class OwnerController < ApplicationController
     @request_owner = owner
   end
 
-  # rubocop:disable Metrics/AbcSize
   def search_results
     terms = parse_terms(params.fetch(:terms, ''))
     if terms.empty?
       @results = find_none
     else
-      @results = find_by_localid(@request_owner, params[:terms])
-      @results = find_by_file_name(@request_owner, params[:terms]) if @results.empty?
+      term = params.fetch(:terms, '').strip
+      @results = find_by_localid(@request_owner, term)
+      @results = find_by_file_name(@request_owner, term) if @results.empty?
       @results = find_by_full_text(@request_owner, terms) if @results.empty?
     end
     render status: @results.empty? ? 201 : 200
   end
-  # rubocop:enable Metrics/AbcSize
 
   private
 
