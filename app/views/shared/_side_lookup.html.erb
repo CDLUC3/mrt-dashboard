@@ -7,7 +7,9 @@
     <%= submit_tag('Go') %>
 
     <p>
-      <label for="terms">Search by</label>
+      <label for="terms">Search
+      <% if @object || @version%><strong><%= session[:group_description] %></strong><% end %>
+      by</label>
     </p>
     <ul>
       <li>Identifier (exact match)</li>
