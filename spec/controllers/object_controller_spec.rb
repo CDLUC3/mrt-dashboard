@@ -706,7 +706,23 @@ RSpec.describe ObjectController, type: :controller do
       end
     end
 
-    describe ':recent' do
+    describe ':recent_items_feed_unauthenticated' do
+
+      render_views
+
+      it 'gets the list of objects' do
+        request.accept = 'application/atom+xml'
+        get(:recent, params: { collection: collection.ark })
+        expect(response.status).to eq(401)
+      end
+    end
+
+    describe ':recent_items_feed_authenticated' do
+
+      before(:each) do
+        request.session.merge!({ uid: user_id })
+      end
+
       render_views
 
       it '404s cleanly when collection does not exist' do
