@@ -125,20 +125,6 @@ class Group
     end
   end
 
-  # No longer available on the UI screen, still accessible in the api
-  def total_size
-    return 0 unless inv_collection_id
-
-    query = <<~SQL
-      SELECT SUM(full_size) AS total_size
-        FROM inv_files
-             INNER JOIN inv_collections_inv_objects
-                     ON inv_collections_inv_objects.inv_object_id = inv_files.inv_object_id
-       WHERE (inv_collections_inv_objects.inv_collection_id = #{inv_collection_id})
-    SQL
-    InvFile.connection.select_all(query)[0]['total_size'].to_i
-  end
-
   def billable_size
     return 0 unless inv_collection_id
 

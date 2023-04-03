@@ -32,10 +32,6 @@ class CollectionController < ApplicationController
     render partial: 'file_count'
   end
 
-  def total_size
-    render partial: 'total_size'
-  end
-
   def billable_size
     render partial: 'billable_size'
   end
