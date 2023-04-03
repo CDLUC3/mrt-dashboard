@@ -5,6 +5,7 @@ class ObjectController < ApplicationController
   include IngestMixin
 
   before_action :require_user, except: %i[jupload_add recent ingest mint update]
+  before_action :require_named_user_or_401, only: %i[recent]
   before_action :load_object, only: %i[index download download_user download_manifest presign object_info audit_replic]
 
   before_action(only: %i[download download_user download_manifest presign]) do

@@ -1,3 +1,9 @@
-<% cache("billable_size_#{@request_group.id}",:expires_in => 10.minutes) do %>
-  <%= number_to_storage_size(@request_group.billable_size) %>
+<% if (session[:uid] == (LDAP_CONFIG['guest_user'])) %>
+  <% cache("billable_size_guest_#{@request_group.id}",:expires_in => 10.hours) do %>
+    <%= number_to_storage_size(@request_group.billable_size_guest) %>
+  <% end %>
+<% else %>
+  <% cache("billable_size_#{@request_group.id}",:expires_in => 10.minutes) do %>
+    <%= number_to_storage_size(@request_group.billable_size) %>
+  <% end %>
 <% end %>
