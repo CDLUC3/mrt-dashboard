@@ -96,7 +96,7 @@ dockerdef: &dockerdef
   upload-limit-message:  "1 MB"
 
 docker:
-  <<: dockerdef
+  <<: *dockerdef
   global_search_owners:
     "UC3 Merritt administrator": merritt-test
 

@@ -72,7 +72,6 @@ Rails.application.routes.draw do
   get('collection/object_count' => 'collection#object_count')
   get('collection/version_count' => 'collection#version_count')
   get('collection/file_count' => 'collection#file_count')
-  get('collection/total_size' => 'collection#total_size')
   get('collection/billable_size' => 'collection#billable_size')
 
   # Object modification

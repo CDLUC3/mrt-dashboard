@@ -1,3 +1,9 @@
-<% cache("file_count_#{@request_group.id}", :expires_in => 10.minutes) do %>
-  <%= formatted_int(@request_group.file_count) %>
+<% if (session[:uid] == (LDAP_CONFIG['guest_user'])) %>
+  <% cache("file_count_guest_#{@request_group.id}", :expires_in => 10.hours) do %>
+    <%= formatted_int(@request_group.file_count_guest) %>
+  <% end %>
+<% else %>
+  <% cache("file_count_#{@request_group.id}", :expires_in => 10.minutes) do %>
+    <%= formatted_int(@request_group.file_count) %>
+  <% end %>
 <% end %>

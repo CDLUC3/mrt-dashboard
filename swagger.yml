@@ -593,16 +593,6 @@ paths:
       responses:
         "200":
           description: return count as text
-  /collection/total_size:
-    get:
-      summary: Get total byte size for collection (all versions)
-      tags:
-      - ui
-      parameters: 
-      - $ref: '#/components/parameters/groupParam'
-      responses:
-        "200":
-          description: return size as text
   /collection/billable_size:
     get:
       summary: Get total billable byte size for collection
