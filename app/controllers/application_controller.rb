@@ -19,6 +19,7 @@ class ApplicationController < ActionController::Base
   helper_method(
     :available_groups,
     :current_group,
+    :current_owner_name,
     :current_uid,
     :current_user,
     :current_user_displayname,
@@ -249,16 +250,17 @@ class ApplicationController < ActionController::Base
     redirect_to(ret) && return
   end
 
-  # :nocov:
-  # TODO: this doesn't seem to be used anywhere; can we delete it?
-  def require_user_or_401
-    render(status: 401, plain: '') && return unless current_user
+  def require_named_user_or_401
+    render(status: 401, plain: '401 Not Authorized') && return unless current_uid
+    render(status: 401, plain: '401 Not Authorized') && return if session[:uid] == LDAP_CONFIG['guest_user']
   end
-
-  # :nocov:
 
   def current_group
     @_current_group ||= Group.find(session[:group_id])
+  end
+
+  def current_owner_name
+    APP_CONFIG.fetch('global_search', {}).fetch(current_uid, '')
   end
 
   def max_download_size_pretty

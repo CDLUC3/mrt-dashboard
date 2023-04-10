@@ -1,5 +1,5 @@
 class InvObject < ApplicationRecord
-  belongs_to :inv_owner
+  belongs_to :inv_owner, inverse_of: :inv_objects
 
   has_many :inv_versions, inverse_of: :inv_object
   has_many :inv_files, through: :inv_versions
@@ -116,10 +116,14 @@ class InvObject < ApplicationRecord
   end
 
   def user_has_read_permission?(uid)
+    return false if group.nil?
+
     group.user_has_read_permission?(uid)
   end
 
   def user_can_download?(uid)
+    return false if group.nil?
+
     permissions = group.user_permissions(uid)
     if permissions.member?('admin')
       true

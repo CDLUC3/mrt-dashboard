@@ -1,0 +1,19 @@
+<section class="lookup">
+<% if owner_set? %>
+  <h3><%= current_owner_name %> Lookup</h3>
+  <%= form_tag({:controller => 'owner', :action => 'search_results'}, :method => :get) do %>
+    <%= text_field_tag 'terms', params[:terms] %>
+    <%= hidden_field_tag 'owner', current_owner_name %>
+    <%= submit_tag('Go') %>
+
+    <p>
+      <label for="terms">Search by</label>
+    </p>
+    <ul>
+      <li>Identifier (exact match)</li>
+      <li>File name (exact match)</li>
+      <li>Title, author or date</li>
+    </ul>
+  <% end %>
+<% end %>
+</section>

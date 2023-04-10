@@ -1,24 +1,15 @@
 <% content_for :title do %>
-  UC3 Merritt: Collection — <%= current_group.description %>
-<% end %>
-
-<% content_for :extra_head do %>
-  <link rel="alternate" type="application/atom+xml" href="/object/recent.atom?collection=<%= @request_group.ark_id %>"/>
+  UC3 Merritt: Owner — <%= @request_owner.name %>
 <% end %>
 
 <main id="maincontent">
   <section>
     <h1>
-      Collection: <%= @request_group.description %>
-      <% if (session[:uid] != (LDAP_CONFIG['guest_user'])) %>
-        <a href="/object/recent.atom?collection=<%= @request_group.ark_id %>">
-          <%= image_tag "feed-icon-14x14.png", alt: "atom feed" %>
-        </a>
-      <% end %>
+      Owner: <%= @request_owner.name %>
     </h1>
     <div class="breadcrumbs">
       <%= link_to('Merritt', :controller => 'home', :action => 'index') %> &gt;
-      Collection: <%= @request_group.description %>
+      Owner: <%= @request_owner.name %>
     </div>
 
     <nav>
@@ -38,8 +29,7 @@
   </section>
 
   <aside>
-    <%= render :partial => '/shared/side_lookup' %>
-    <%= render :partial => 'overview' %>
+    <%= render :partial => '/shared/side_global_lookup' %>
     <%= render :partial => 'shared/help_sidebar' %>
   </aside>
 </main>

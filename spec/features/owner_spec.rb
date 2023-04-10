@@ -1,11 +1,13 @@
 require 'features_helper'
 
-describe 'collections' do
+describe 'owners' do
   attr_reader :user_id
   attr_reader :password
 
   attr_reader :collection
   attr_reader :collection_id
+
+  attr_reader :owner
 
   attr_reader :index_path
 
@@ -13,14 +15,22 @@ describe 'collections' do
     @password = 'correcthorsebatterystaple'
     @user_id = mock_user(name: 'Jane Doe', password: password)
 
+    @owner = create(:inv_owner, name: 'Owner', ark: 'ark/owner')
+
     @collection = create(:private_collection, name: 'Collection 1', mnemonic: 'collection_1')
     @collection_id = mock_ldap_for_collection(collection)
 
-    @index_path = url_for(controller: :collection, action: :index, group: collection_id, only_path: true)
+    @choose_path = url_for(controller: :home, action: :choose_collection, only_path: true)
+    @index_path = url_for(controller: :owner, action: :search_results, terms: '', owner: @owner.name, only_path: true)
   end
 
   after(:each) do
     log_out!
+  end
+
+  def mock_owner_name(_user, name)
+    allow_any_instance_of(ApplicationController).to receive(:current_owner_name).and_return(name)
+    allow_any_instance_of(ApplicationController).to receive(:available_groups).and_return([])
   end
 
   describe 'index', js: true do
@@ -33,62 +43,24 @@ describe 'collections' do
           :inv_object,
           erc_who: "Doe, Jane #{init}.",
           erc_what: "Object #{i}",
-          erc_when: "2018-01-0#{i}"
+          erc_when: "2018-01-0#{i}",
+          inv_owner_id: @owner.id
         )
       end
       collection.inv_objects << inv_objects
     end
 
-    after(:each) do
-      wait_for_ajax!
-      expect(page).not_to have_content('calculating') # indicates ajax count failure
-    end
-
     describe 'happy path', js: true do
       before(:each) do
+        mock_owner_name(user_id, @owner.name)
         mock_permissions_all(user_id, collection_id)
         log_in_with(user_id, password)
+        visit(@choose_path)
+        expect(page).to have_content('The collections you have access to are listed below.')
       end
 
-      it 'should display the collection name' do
-        expect(page).to have_content("Collection: #{collection.name}")
-      end
-
-      it 'should list the objects' do
-        inv_objects.each do |obj|
-          expect(page).to have_content(obj.ark)
-          expect(page).to have_content(obj.erc_who)
-          expect(page).to have_content(obj.erc_what)
-          expect(page).to have_content(obj.erc_when)
-        end
-      end
-
-      it 'should let the user navigate to an object' do
-        obj = inv_objects[0]
-        click_link(obj.ark)
-        expect(page).to have_content("Object: #{obj.ark}")
-      end
-
-      describe 'add_object', js: true do
-        before(:each) do
-          add_obj_link = find_link('Add object')
-          expect(add_obj_link).not_to be_nil
-          add_obj_link.click
-        end
-
-        it 'should display an "Add Object" link' do
-          expect(page.title).to include('Add Object')
-        end
-
-        it 'Add object without attaching a file' do
-          expect(page.title).to include('Add Object')
-          find('input#title').set('sample file')
-          find('input#author').set('sample author')
-          find_button('Submit').click
-          expect(page.title).to include('Add Object')
-          expect(find('p.error-message')).to have_content('You must choose a filename to submit.')
-        end
-
+      it 'should display the owner name' do
+        expect(page).to have_content("#{owner.name} Lookup")
       end
 
       describe 'search' do
@@ -103,15 +75,10 @@ describe 'collections' do
           end
         end
 
-        it 'finds by substring, defaults to full listing' do
+        it 'finds by substring, no objects found' do
           fill_in('terms', with: 'Jan')
           click_button 'Go'
-          inv_objects.each do |obj|
-            expect(page).to have_content(obj.ark)
-            expect(page).to have_content(obj.erc_who)
-            expect(page).to have_content(obj.erc_what)
-            expect(page).to have_content(obj.erc_when)
-          end
+          expect(page).to have_content('here were no items that had the text matching')
         end
 
         it 'finds by ark' do
@@ -154,25 +121,17 @@ describe 'collections' do
       expect(page).to have_content('Not authorized')
     end
 
-    it 'guest login redirect' do
-      log_in_with(LDAP_CONFIG['guest_user'], LDAP_CONFIG['guest_password'])
-      allow(APP_CONFIG['redirects']).to receive(:fetch).with('collection_1_profile', '').and_return('https://cdlib.org/')
-      visit(index_path)
-      expect(current_url).to eq('https://cdlib.org/')
-    end
-
     it 'requires read permissions', js: true do
       log_in_with(user_id, password)
       visit(index_path)
       expect(page).to have_content('Not authorized')
     end
 
-    it 'requires a valid group', js: true do
+    it 'requires user to be bound to a global owner', js: true do
       mock_permissions_all(user_id, collection_id)
-      allow(Group).to receive(:find).with(collection_id).and_raise(LdapMixin::LdapException)
       log_in_with(user_id, password)
       visit(index_path)
-      expect(page).to have_content("doesn't exist")
+      expect(page).to have_content('Not authorized')
     end
 
   end

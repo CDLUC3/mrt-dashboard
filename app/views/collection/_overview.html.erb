@@ -16,10 +16,6 @@
       <td id="file_count" class="value">calculating</td>
     </tr>
     <tr>
-      <th>total size (all versions):</th>
-      <td id="total_size" class="value">calculating</td>
-    </tr>
-    <tr>
       <th>total size (excl. duplicates):</th>
       <td id="billable_size" class="value">calculating</td>
     </tr>
@@ -32,8 +28,6 @@
     new Ajax.Updater({success : 'version_count'}, '/collection/version_count?group=<%= @request_group.id %>', { method:
     'get' });
     new Ajax.Updater({success : 'file_count'}, '/collection/file_count?group=<%= @request_group.id %>', { method: 'get'
-    });
-    new Ajax.Updater({success : 'total_size'}, '/collection/total_size?group=<%= @request_group.id %>', { method: 'get'
     });
     new Ajax.Updater({success : 'billable_size'}, '/collection/billable_size?group=<%= @request_group.id %>', { method: 'get'
     });

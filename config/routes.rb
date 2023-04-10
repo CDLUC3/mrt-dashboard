@@ -46,6 +46,7 @@ Rails.application.routes.draw do
   get('home/choose_collection' => 'home#choose_collection')
   get('user/update' => 'user#update')
   get('collection/search_results' => 'collection#search_results')
+  get('owner/search_results' => 'owner#search_results')
   get('api/:group/local_id_search' => 'collection#local_id_search')
   get('version/index' => 'version#index')
 
@@ -71,7 +72,6 @@ Rails.application.routes.draw do
   get('collection/object_count' => 'collection#object_count')
   get('collection/version_count' => 'collection#version_count')
   get('collection/file_count' => 'collection#file_count')
-  get('collection/total_size' => 'collection#total_size')
   get('collection/billable_size' => 'collection#billable_size')
 
   # Object modification

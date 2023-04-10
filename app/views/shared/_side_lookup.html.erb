@@ -6,7 +6,16 @@
     <%= hidden_field_tag 'group', session[:group_id] %>
     <%= submit_tag('Go') %>
 
-    <p><label for="terms">Search object author, title, date or identifier.</label></p>
+    <p>
+      <label for="terms">Search
+      <% if @object || @version%><strong><%= session[:group_description] %></strong><% end %>
+      by</label>
+    </p>
+    <ul>
+      <li>Identifier (exact match)</li>
+      <li>File name (exact match)</li>
+      <li>Title, author or date</li>
+    </ul>
   <% end %>
 <% end %>
 </section>

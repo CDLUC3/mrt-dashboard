@@ -90,6 +90,7 @@ class Group
              INNER JOIN inv_collections_inv_objects ON inv_objects.id = inv_collections_inv_objects.inv_object_id
        WHERE ((inv_collections_inv_objects.inv_collection_id = #{inv_collection_id}))
     SQL
+
     InvObject.connection.select_all(query)[0]['count'].to_i
   end
 
@@ -104,20 +105,24 @@ class Group
              INNER JOIN inv_collections_inv_objects ON inv_objects.id = inv_collections_inv_objects.inv_object_id
        WHERE ((inv_collections_inv_objects.inv_collection_id = #{inv_collection_id}))
     SQL
+
     InvFile.connection.select_all(query)[0]['count'].to_i
   end
 
-  def total_size
+  def file_count_guest
     return 0 unless inv_collection_id
 
     query = <<~SQL
-      SELECT SUM(full_size) AS total_size
-        FROM inv_files
-             INNER JOIN inv_collections_inv_objects
-                     ON inv_collections_inv_objects.inv_object_id = inv_files.inv_object_id
-       WHERE (inv_collections_inv_objects.inv_collection_id = #{inv_collection_id})
+      SELECT sum(count_files) AS count
+      FROM billing.mime_use_details#{' '}
+      WHERE inv_collection_id=#{inv_collection_id}
     SQL
-    InvFile.connection.select_all(query)[0]['total_size'].to_i
+
+    begin
+      InvFile.connection.select_all(query)[0]['count'].to_i
+    rescue StandardError
+      file_count
+    end
   end
 
   def billable_size
@@ -130,7 +135,26 @@ class Group
                      ON inv_collections_inv_objects.inv_object_id = inv_files.inv_object_id
        WHERE (inv_collections_inv_objects.inv_collection_id = #{inv_collection_id})
     SQL
+
     InvFile.connection.select_all(query)[0]['billable_size'].to_i
+  end
+
+  def billable_size_guest
+    return 0 unless inv_collection_id
+
+    query = <<~SQL
+      SELECT billable_size AS billable_size#{' '}
+      FROM billing.daily_billing#{' '}
+      WHERE inv_collection_id=#{inv_collection_id}#{' '}
+      ORDER BY billing_totals_date desc
+      LIMIT 1#{' '}
+    SQL
+
+    begin
+      InvFile.connection.select_all(query)[0]['billable_size'].to_i
+    rescue StandardError
+      billable_size
+    end
   end
 
   # TODO: figure out whether we still need this & get rid of it if not
