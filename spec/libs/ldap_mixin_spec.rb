@@ -37,7 +37,7 @@ describe LdapMixin do
       encryption: {
         method: :simple_tls,
         tls_options: {
-          ssl_version: 'TLSv1_1'
+          ssl_version: LDAP_CONFIG['tls']
         }
       },
       connect_timeout: LDAP_CONFIG['connect_timeout']

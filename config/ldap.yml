@@ -23,6 +23,7 @@ default: &default
   guest_password: "{!SSM: ldap/accounts/guest/password}"
   guest_user:     "{!SSM: ldap/accounts/guest/user}"
   connect_timeout: 60
+  tls:            'TLSv1_2'
 
 stage:
   <<: *default
@@ -42,6 +43,7 @@ docker: &docker
   guest_password: guest
   guest_user:     anonymous
   connect_timeout: 60
+  tls:            'TLSv1_2'
 
 development:
   <<: *docker
