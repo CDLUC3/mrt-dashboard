@@ -94,8 +94,8 @@ class ObjectController < ApplicationController
     render(status: 404, plain: '404 Not Found') && return if collection.nil? || collection.to_s == ''
 
     group = Group.find(params[:collection])
-    render(status: 404, plain: '404 Not Found') unless group
-    render(status: 401, plain: '401 Not Authorized') unless group.user_has_read_permission?(current_uid)
+    render(status: 404, plain: '404 Not Found') && return unless group
+    render(status: 401, plain: '401 Not Authorized') && return unless group.user_has_read_permission?(current_uid)
 
     @objects = collection.recent_objects.paginate(paginate_args(500))
     respond_to do |format|
