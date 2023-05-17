@@ -252,7 +252,7 @@ class ApplicationController < ActionController::Base
 
   def require_named_user_or_401
     render(status: 401, plain: '401 Not Authorized') && return unless current_uid
-    render(status: 401, plain: '401 Not Authorized') && return if session[:uid] == LDAP_CONFIG['guest_user']
+    render(status: 401, plain: '401 Not Authorized') && return if current_uid == LDAP_CONFIG['guest_user']
   end
 
   def current_group
