@@ -744,6 +744,12 @@ RSpec.describe ObjectController, type: :controller do
         end
       end
 
+      it 'gets the list of objects - no collection permissions' do
+        request.accept = 'application/atom+xml'
+        get(:recent, params: { collection: collection.ark })
+        expect(response.status).to eq(401)
+      end
+
       it 'gets a list of 2 objects' do
         mock_permissions_all(user_id, collection_id)
         request.accept = 'application/atom+xml'
