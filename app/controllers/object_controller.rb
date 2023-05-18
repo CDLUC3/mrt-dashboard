@@ -87,15 +87,12 @@ class ObjectController < ApplicationController
   end
   # rubocop:enable Lint/RescueException
 
-  # rubocop:disable Metrics/AbcSize
   def recent
     @collection_ark = params[:collection]
     collection = InvCollection.where(ark: @collection_ark).first
     render(status: 404, plain: '404 Not Found') && return if collection.nil? || collection.to_s == ''
 
-    group = Group.find(params[:collection])
-    render(status: 404, plain: '404 Not Found') && return unless group
-    render(status: 401, plain: '401 Not Authorized') && return unless group.user_has_read_permission?(current_uid)
+    return unless check_atom_group_permissions
 
     @objects = collection.recent_objects.paginate(paginate_args(500))
     respond_to do |format|
@@ -103,7 +100,6 @@ class ObjectController < ApplicationController
       format.atom
     end
   end
-  # rubocop:enable Metrics/AbcSize
 
   def presign
     nk = {
@@ -127,6 +123,19 @@ class ObjectController < ApplicationController
   end
 
   private
+
+  def check_atom_group_permissions
+    group = Group.find(params[:collection])
+    unless group
+      render(status: 404, plain: '404 Not Found')
+      return false
+    end
+    unless group.user_has_read_permission?(current_uid)
+      render(status: 401, plain: '401 Not Authorized')
+      return false
+    end
+    true
+  end
 
   def pairtree_encode(ark)
     Orchard::Pairtree.encode(ark.to_s)
