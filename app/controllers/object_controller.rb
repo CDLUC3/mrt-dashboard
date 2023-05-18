@@ -126,14 +126,8 @@ class ObjectController < ApplicationController
 
   def check_atom_group_permissions
     group = Group.find(params[:collection])
-    unless group
-      render(status: 404, plain: '404 Not Found')
-      return false
-    end
-    unless group.user_has_read_permission?(current_uid)
-      render(status: 401, plain: '401 Not Authorized')
-      return false
-    end
+    render(status: 404, plain: '404 Not Found') && return unless group
+    render(status: 401, plain: '401 Not Authorized') && return unless group.user_has_read_permission?(current_uid)
     true
   end
 
