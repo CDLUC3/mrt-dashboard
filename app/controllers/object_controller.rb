@@ -128,6 +128,7 @@ class ObjectController < ApplicationController
     group = Group.find(params[:collection])
     render(status: 404, plain: '404 Not Found') && return unless group
     render(status: 401, plain: '401 Not Authorized') && return unless group.user_has_read_permission?(current_uid)
+
     true
   end
 
