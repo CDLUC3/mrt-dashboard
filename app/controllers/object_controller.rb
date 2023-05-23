@@ -92,6 +92,8 @@ class ObjectController < ApplicationController
     collection = InvCollection.where(ark: @collection_ark).first
     render(status: 404, plain: '404 Not Found') && return if collection.nil? || collection.to_s == ''
 
+    return unless check_atom_group_permissions
+
     @objects = collection.recent_objects.paginate(paginate_args(500))
     respond_to do |format|
       format.html
@@ -121,6 +123,14 @@ class ObjectController < ApplicationController
   end
 
   private
+
+  def check_atom_group_permissions
+    group = Group.find(params[:collection])
+    render(status: 404, plain: '404 Not Found') && return unless group
+    render(status: 401, plain: '401 Not Authorized') && return unless group.user_has_read_permission?(current_uid)
+
+    true
+  end
 
   def pairtree_encode(ark)
     Orchard::Pairtree.encode(ark.to_s)

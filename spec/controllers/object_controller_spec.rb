@@ -732,6 +732,7 @@ RSpec.describe ObjectController, type: :controller do
       end
 
       it 'gets the list of objects' do
+        mock_permissions_all(user_id, collection_id)
         request.accept = 'application/atom+xml'
         get(:recent, params: { collection: collection.ark })
         expect(response.status).to eq(200)
@@ -743,7 +744,14 @@ RSpec.describe ObjectController, type: :controller do
         end
       end
 
+      it 'gets the list of objects - no collection permissions' do
+        request.accept = 'application/atom+xml'
+        get(:recent, params: { collection: collection.ark })
+        expect(response.status).to eq(401)
+      end
+
       it 'gets a list of 2 objects' do
+        mock_permissions_all(user_id, collection_id)
         request.accept = 'application/atom+xml'
         get(:recent, params: { collection: collection.ark, per_page: 2 })
         expect(response.status).to eq(200)
@@ -757,6 +765,7 @@ RSpec.describe ObjectController, type: :controller do
       end
 
       it 'request 1000, page size set to 500' do
+        mock_permissions_all(user_id, collection_id)
         request.accept = 'application/atom+xml'
         get(:recent, params: { collection: collection.ark, per_page: 1000 })
         expect(response.status).to eq(200)
