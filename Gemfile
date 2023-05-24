@@ -17,6 +17,8 @@ gem 'exception_notification'
 gem 'httpclient'
 gem 'irb'
 gem 'jquery-rails'
+gem 'lograge'
+gem 'logstash-event'
 # New lib does not use One Time Server
 gem 'net-ldap'
 gem 'net-smtp'
