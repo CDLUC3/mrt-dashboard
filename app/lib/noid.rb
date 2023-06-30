@@ -36,7 +36,7 @@ module Noid
     end
 
     def extract_ids(body)
-      body.split(/\n/).map do |s|
+      body.split("\n").map do |s|
         md = s.match(%r{id:\s+([0-9]+/)?([^\s]+)})
         @preserve_naan ? "#{md[1]}#{md[2]}" : md[2]
       end

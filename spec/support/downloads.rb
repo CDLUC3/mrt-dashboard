@@ -18,7 +18,7 @@ class Downloads
     end
 
     def complete?
-      return if in_progress?
+      return false if in_progress?
 
       any?
     end

@@ -141,7 +141,7 @@ class InvObject < ApplicationRecord
     filecount = object_info_add_versions(json, maxfile)
 
     json['total_files'] = filecount
-    json['included_files'] = filecount > maxfile ? maxfile : filecount
+    json['included_files'] = [filecount, maxfile].min
 
     json
   end
