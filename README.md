@@ -1,7 +1,5 @@
 # Merritt Dashboard (Merritt UI)
 
-[![Build Status](https://travis-ci.org/CDLUC3/mrt-dashboard.svg?branch=master)](https://travis-ci.org/CDLUC3/mrt-dashboard)
-
 This microservice is part of the [Merritt Preservation System](https://github.com/CDLUC3/mrt-doc).
 
 ## Purpose
@@ -12,7 +10,46 @@ This microservice provides API functionality for the [Dryad](https://datadryad.o
 and for the harvesting of Nuxeo content feeds for ingest into Merrit. 
 
 ## Component Diagram
-[![Flowchart](https://github.com/CDLUC3/mrt-doc/raw/main/diagrams/ui.mmd.svg)](https://cdluc3.github.io/mrt-doc/diagrams/ui)
+
+```mermaid
+%%{init: {'theme': 'neutral', 'securityLevel': 'loose', 'themeVariables': {'fontFamily': 'arial'}}}%%
+graph TD
+  RDS[(Inventory DB)]
+  UI("Merritt UI")
+  click UI href "https://github.com/CDLUC3/mrt-dashboard" "source code"
+  ING(Ingest)
+  click ING href "https://github.com/CDLUC3/mrt-ingest" "source code"
+  ST(Storage)
+  click ST href "https://github.com/CDLUC3/mrt-store" "source code"
+  LDAP[/LDAP\]
+  NUXEO((Nuxeo DAMS))
+  DRYAD(Dryad UI)
+  click DRYAD href "https://datadryad.org/" "service link"
+  NFEED[[Cron: Nuxeo Harvest]]
+  BROWSER[[Browser]]
+
+  subgraph Merritt
+    BROWSER --> UI
+    RDS --> UI
+    UI --> |"file or manifest"| ING
+    UI --> |authorization| LDAP
+    UI ---> |retrieval req| ST
+    NFEED --> ING
+  end
+  subgraph dryad_browse
+    DRYAD --> |download req| UI
+  end
+  subgraph dams_ingest
+    NUXEO --> NFEED
+  end
+
+  style RDS fill:#F68D2F
+  style LDAP fill:cyan
+  style NUXEO fill:cyan
+  style DRYAD fill:cyan
+  style UI stroke:red,stroke-width:4px
+  style NFEED stroke:red,stroke-width:4px
+```
 
 ## API Summary
 [Swagger Documentation](https://petstore.swagger.io/?url=https://raw.githubusercontent.com/CDLUC3/mrt-dashboard/main/swagger.yml)
