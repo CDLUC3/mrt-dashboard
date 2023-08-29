@@ -67,7 +67,7 @@ group :test do
 
   # Run Selenium tests more easily with automatic installation and updates
   # for all supported webdrivers.
-  # gem 'webdrivers'
+  gem 'webdrivers'
 
   gem 'webmock'
 end
