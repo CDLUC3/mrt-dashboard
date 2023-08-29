@@ -15,7 +15,7 @@ jobs:
     services:
       # https://medium.com/@ldarren/number-of-ways-to-setup-database-in-github-actions-2cd48df9faae
       mysql-container:
-        image: mysql:8
+        image: ubuntu/mysql:8.0-20.04_beta
         env:
           MYSQL_DATABASE: 'mrt_dashboard_test'
           MYSQL_USER: 'user'
