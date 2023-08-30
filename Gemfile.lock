@@ -451,6 +451,7 @@ DEPENDENCIES
   rubocop
   ruby-debug-ide
   ruby-prof
+  selenium-webdriver
   simplecov
   simplecov-console
   sprockets
