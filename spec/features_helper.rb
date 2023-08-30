@@ -41,8 +41,6 @@ RSpec.configure do |config|
   config.before(:each, type: :feature, js: true) do
     Webdrivers.cache_time = 0
     Capybara.current_driver = :selenium_chrome_headless
-    # the following is needed for github actions
-    Webdrivers::Chromedriver.required_version = '118.0.5981.0'
     # Toggle the following when needed during testing
     # Capybara.current_driver = :selenium_chrome
   end
