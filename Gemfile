@@ -26,7 +26,6 @@ gem 'nokogiri'
 gem 'orchard'
 gem 'puma'
 gem 'rack-cache'
-gem 'rdoc'
 gem 'rest-client'
 gem 'sprockets'
 gem 'thin'
@@ -68,7 +67,7 @@ group :test do
 
   # Run Selenium tests more easily with automatic installation and updates
   # for all supported webdrivers.
-  gem 'webdrivers'
-
+  gem 'selenium-webdriver', '~> 4.11'
+  # gem 'webdrivers'
   gem 'webmock'
 end
