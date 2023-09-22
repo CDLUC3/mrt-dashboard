@@ -4,6 +4,8 @@ class ObjectController < ApplicationController
   include MintMixin
   include IngestMixin
 
+  RETRY_LIMIT = 3
+
   before_action :require_user, except: %i[jupload_add recent ingest mint update]
   before_action :require_named_user_or_401, only: %i[recent]
   before_action :load_object, only: %i[index download download_user download_manifest presign object_info audit_replic]
@@ -30,7 +32,17 @@ class ObjectController < ApplicationController
   protect_from_forgery except: %i[ingest mint update]
 
   def load_object
-    @object = InvObject.where('ark = ?', params_u(:object)).includes(:inv_collections, inv_versions: [:inv_files]).first
+
+    retries = 0
+    begin
+      @object = InvObject.where('ark = ?', params_u(:object)).includes(:inv_collections, inv_versions: [:inv_files]).first
+    rescue StandardError => e
+      # :nocov:
+      retries += 1
+      retries > RETRY_LIMIT ? raise(e) : retry
+      # :nocov:
+    end
+    
     raise ActiveRecord::RecordNotFound if @object.nil?
   end
 
