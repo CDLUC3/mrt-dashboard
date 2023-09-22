@@ -32,7 +32,6 @@ class ObjectController < ApplicationController
   protect_from_forgery except: %i[ingest mint update]
 
   def load_object
-
     retries = 0
     begin
       @object = InvObject.where('ark = ?', params_u(:object)).includes(:inv_collections, inv_versions: [:inv_files]).first
@@ -42,7 +41,7 @@ class ObjectController < ApplicationController
       retries > RETRY_LIMIT ? raise(e) : retry
       # :nocov:
     end
-    
+
     raise ActiveRecord::RecordNotFound if @object.nil?
   end
 

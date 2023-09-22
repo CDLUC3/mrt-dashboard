@@ -52,7 +52,7 @@ class FileController < ApplicationController
 
   def check_download
     retries = 0
-    begin 
+    begin
       obj = @file.inv_version.inv_object
       return if current_user_can_download?(obj)
     rescue StandardError => e
@@ -198,7 +198,7 @@ class FileController < ApplicationController
     filename = "producer/#{filename}" if filename.valid_encoding? && filename !~ /^(producer|system)/
 
     retries = 0
-    begin 
+    begin
       @file = InvFile.joins(:inv_version, :inv_object)
         .where('inv_objects.ark = ?', params_u(:object))
         .where('inv_versions.number = ?', params[:version])
