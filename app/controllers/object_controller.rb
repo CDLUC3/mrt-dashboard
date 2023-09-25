@@ -99,6 +99,18 @@ class ObjectController < ApplicationController
   # rubocop:enable Lint/RescueException
 
   def recent
+    retries = 0
+    begin
+      do_recent
+    rescue StandardError => e
+      # :nocov:
+      retries += 1
+      retries > RETRY_LIMIT ? raise(e) : retry
+      # :nocov:
+    end
+  end
+
+  def do_recent
     @collection_ark = params[:collection]
     collection = InvCollection.where(ark: @collection_ark).first
     render(status: 404, plain: '404 Not Found') && return if collection.nil? || collection.to_s == ''
