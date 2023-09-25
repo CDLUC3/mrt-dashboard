@@ -2,6 +2,9 @@ require 'httpclient'
 require 'json'
 
 class FileController < ApplicationController
+
+  RETRY_LIMIT = 3
+
   before_action :require_user
 
   before_action :fix_params
@@ -48,7 +51,16 @@ class FileController < ApplicationController
   private
 
   def check_download
-    return if current_user_can_download?(@file.inv_version.inv_object)
+    retries = 0
+    begin
+      obj = @file.inv_version.inv_object
+      return if current_user_can_download?(obj)
+    rescue StandardError => e
+      # :nocov:
+      retries += 1
+      retries > RETRY_LIMIT ? raise(e) : retry
+      # :nocov:
+    end
 
     flash[:error] = 'You do not have download permissions.'
     render file: "#{Rails.root}/public/401.html", status: 401, layout: false
@@ -185,12 +197,20 @@ class FileController < ApplicationController
     # the filename
     filename = "producer/#{filename}" if filename.valid_encoding? && filename !~ /^(producer|system)/
 
-    @file = InvFile.joins(:inv_version, :inv_object)
-      .where('inv_objects.ark = ?', params_u(:object))
-      .where('inv_versions.number = ?', params[:version])
-      .where('inv_files.pathname = ?', filename)
-      .first
-    raise ActiveRecord::RecordNotFound if @file.nil?
+    retries = 0
+    begin
+      @file = InvFile.joins(:inv_version, :inv_object)
+        .where('inv_objects.ark = ?', params_u(:object))
+        .where('inv_versions.number = ?', params[:version])
+        .where('inv_files.pathname = ?', filename)
+        .first
+      raise ActiveRecord::RecordNotFound if @file.nil?
+    rescue StandardError => e
+      # :nocov:
+      retries += 1
+      retries > RETRY_LIMIT ? raise(e) : retry
+      # :nocov:
+    end
   end
 
   # Call storage service to create a presigned URL for a file
