@@ -102,12 +102,12 @@ class ObjectController < ApplicationController
     retries = 0
     begin
       do_recent
+    # :nocov:
     rescue StandardError => e
-      # :nocov:
       retries += 1
       retries > RETRY_LIMIT ? raise(e) : retry
-      # :nocov:
     end
+    # :nocov:
   end
 
   def do_recent
