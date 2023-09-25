@@ -79,9 +79,21 @@ class FileController < ApplicationController
     }
   end
 
+  def storage_key_do
+    retries = 0
+    begin
+      do_storage_key_do
+    # :nocov:
+    rescue StandardError => e
+      retries += 1
+      retries > RETRY_LIMIT ? raise(e) : retry
+    end
+    # :nocov:
+  end
+
   # Perform database lookup for storge node and key
   # rubocop:disable all
-  def storage_key_do
+  def do_storage_key_do
     version = params_u(:version).to_i
     ark = params_u(:object)
     pathname = fix_filename
