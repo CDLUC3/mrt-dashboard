@@ -60,12 +60,10 @@ class InvObject < ApplicationRecord
     retries = 0
     begin
       !inv_duas.blank?
-    # :nocov:
     rescue StandardError => e
       retries += 1
       retries > RETRY_LIMIT ? raise(e) : retry
     end
-    # :nocov:
   end
   # :nocov:
 
