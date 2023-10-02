@@ -57,9 +57,16 @@ class InvObject < ApplicationRecord
 
   # :nocov:
   def dua_exists?
-    !inv_duas.blank?
+    retries = 0
+    begin
+      !inv_duas.blank?
+    # :nocov:
+    rescue StandardError => e
+      retries += 1
+      retries > RETRY_LIMIT ? raise(e) : retry
+    end
+    # :nocov:
   end
-
   # :nocov:
 
   # :nocov:
@@ -82,11 +89,27 @@ class InvObject < ApplicationRecord
   end
 
   def current_version
-    @current_version ||= inv_versions.order('number desc').first
+    retries = 0
+    begin
+      @current_version ||= inv_versions.order('number desc').first
+    # :nocov:
+    rescue StandardError => e
+      retries += 1
+      retries > RETRY_LIMIT ? raise(e) : retry
+    end
+    # :nocov:
   end
 
   def inv_collection
-    @inv_collection ||= inv_collections.first
+    retries = 0
+    begin
+      @inv_collection ||= inv_collections.first
+    # :nocov:
+    rescue StandardError => e
+      retries += 1
+      retries > RETRY_LIMIT ? raise(e) : retry
+    end
+    # :nocov:
   end
 
   def group
