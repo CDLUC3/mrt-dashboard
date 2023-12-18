@@ -28,7 +28,7 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Set up Ruby 3.0
-      uses: actions/setup-ruby@v1
+      uses: actions/setup-ruby@v2
       with:
         ruby-version: 3.0
 
@@ -40,7 +40,7 @@ jobs:
 
     # Try to retrieve the gems from the cache
     - name: 'Cache Gems'
-      uses: actions/cache@v1
+      uses: actions/cache@v2
       with:
         path: vendor/bundle
         key: ${{ runner.os }}-gem-${{ hashFiles('**/Gemfile.lock') }}
