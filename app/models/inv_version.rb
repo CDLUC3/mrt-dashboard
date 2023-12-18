@@ -32,7 +32,15 @@ class InvVersion < ApplicationRecord
   end
 
   def metadata(element)
-    inv_dublinkernels.select { |md| md.element == element && md.value != '(:unas)' }.map(&:value)
+    retries = 0
+    begin
+      inv_dublinkernels.select { |md| md.element == element && md.value != '(:unas)' }.map(&:value)
+    # :nocov:
+    rescue StandardError => e
+      retries += 1
+      retries > RETRY_LIMIT ? raise(e) : retry
+    end
+    # :nocov:
   end
 
   def dk_who
