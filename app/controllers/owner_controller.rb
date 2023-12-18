@@ -41,7 +41,7 @@ class OwnerController < ApplicationController
       @results = find_by_file_name(@request_owner, term) if @results.empty?
       @results = find_by_full_text(@request_owner, terms) if @results.empty?
     end
-    render status: @results.empty? ? 201 : 200
+    render status: @results.empty? ? 204 : 200
   end
 
   private

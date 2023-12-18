@@ -61,7 +61,7 @@ class CollectionController < ApplicationController
       @results = find_by_localid(collection_ark, params[:terms])
       return render_object_info(@results[0].ark) if @results.length == 1
     end
-    render status: 201, json: {}.to_json
+    render status: 204, json: {}.to_json
   end
 
   private
