@@ -4,3 +4,9 @@ Metrics/ClassLength:
   Exclude:
   - group.rb
   - inv_object.rb
+Metrics/AbcSize:
+  Exclude:
+  - inv_object.rb
+Metrics/MethodLength:
+  Exclude:
+  - inv_object.rb
