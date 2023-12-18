@@ -20,15 +20,39 @@ class InvVersion < ApplicationRecord
   end
 
   def total_size
-    inv_files.sum('full_size')
+    retries = 0
+    begin
+      inv_files.sum('full_size')
+    # :nocov:
+    rescue StandardError => e
+      retries += 1
+      retries > RETRY_LIMIT ? raise(e) : retry
+    end
+    # :nocov:
   end
 
   def system_files
-    inv_files.system_files.order(:pathname)
+    retries = 0
+    begin
+      inv_files.system_files.order(:pathname)
+    # :nocov:
+    rescue StandardError => e
+      retries += 1
+      retries > RETRY_LIMIT ? raise(e) : retry
+    end
+    # :nocov:
   end
 
   def producer_files
-    inv_files.producer_files.order(:pathname)
+    retries = 0
+    begin
+      inv_files.producer_files.order(:pathname)
+    # :nocov:
+    rescue StandardError => e
+      retries += 1
+      retries > RETRY_LIMIT ? raise(e) : retry
+    end
+    # :nocov:
   end
 
   def metadata(element)
@@ -64,7 +88,15 @@ class InvVersion < ApplicationRecord
   end
 
   def total_actual_size
-    inv_files.sum('full_size')
+    retries = 0
+    begin
+      inv_files.sum('full_size')
+    # :nocov:
+    rescue StandardError => e
+      retries += 1
+      retries > RETRY_LIMIT ? raise(e) : retry
+    end
+    # :nocov:
   end
 
   def exceeds_sync_size?

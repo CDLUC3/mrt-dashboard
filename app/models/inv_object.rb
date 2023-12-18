@@ -190,17 +190,25 @@ class InvObject < ApplicationRecord
   def object_info_add_versions(json, maxfile)
     filecount = 0
     inv_versions.each do |ver|
-      v = {
-        version_number: ver.number,
-        created: ver.created,
-        file_count: ver.inv_files.length,
-        files: []
-      }
-      ver.inv_files.each do |f|
-        filecount += 1
-        v[:files].push(object_info_files(f)) unless filecount > maxfile
+      retries = 0
+      begin
+        v = {
+          version_number: ver.number,
+          created: ver.created,
+          file_count: ver.inv_files.length,
+          files: []
+        }
+        ver.inv_files.each do |f|
+          filecount += 1
+          v[:files].push(object_info_files(f)) unless filecount > maxfile
+        end
+        json[:versions].prepend(v)
+      # :nocov:
+      rescue StandardError => e
+        retries += 1
+        retries > RETRY_LIMIT ? raise(e) : retry
       end
-      json[:versions].prepend(v)
+      # :nocov:
     end
     filecount
   end
