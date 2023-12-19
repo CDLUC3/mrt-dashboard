@@ -41,7 +41,9 @@ class OwnerController < ApplicationController
       @results = find_by_file_name(@request_owner, term) if @results.empty?
       @results = find_by_full_text(@request_owner, terms) if @results.empty?
     end
-    render status: @results.empty? ? 204 : 200
+    # The 201 (Accepted) being returned should have probably been a 204 (Empty Result).
+    # The collection search API has been returning 201 for some time, so this will be unchanged.
+    render status: @results.empty? ? 201 : 200
   end
 
   private

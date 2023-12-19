@@ -63,7 +63,7 @@ RSpec.describe OwnerController, type: :controller do
         mock_owner_name(@owner.name)
         request.session.merge!({ uid: user_id })
         get(:search_results, params: { terms: 'my-local-id-not-found', owner: @owner.name })
-        expect(response.status).to eq(204)
+        expect(response.status).to eq(201)
       end
 
       it 'empty terms search no results' do
@@ -71,7 +71,7 @@ RSpec.describe OwnerController, type: :controller do
         mock_owner_name(@owner.name)
         request.session.merge!({ uid: user_id })
         get(:search_results, params: { terms: '', owner: @owner.name })
-        expect(response.status).to eq(204)
+        expect(response.status).to eq(201)
       end
 
       it 'localid search - result found' do

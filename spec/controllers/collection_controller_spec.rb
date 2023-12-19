@@ -68,7 +68,7 @@ RSpec.describe CollectionController, type: :controller do
         mock_permissions_all(user_id, collection_id)
         request.session.merge!({ uid: user_id })
         get(:local_id_search, params: { group: @collection.group, terms: 'my-local-id-not-found' })
-        expect(response.status).to eq(204)
+        expect(response.status).to eq(201)
       end
 
       it 'localid search - result found' do
