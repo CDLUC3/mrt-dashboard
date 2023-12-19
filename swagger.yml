@@ -541,6 +541,8 @@ paths:
       responses:
         "200":
           $ref: '#/components/responses/object'
+        "201":
+          description: no results
         "401":
           description: access not authorized
   /version/index:
