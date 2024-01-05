@@ -1205,7 +1205,7 @@ table.properties td.files_mime, table.properties td.files_path {
   line-break: anywhere;
 }
 
-td.files.file_size {
+table.properties td.files_size {
   text-align: right;
 }
 
