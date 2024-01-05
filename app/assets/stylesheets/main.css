@@ -1189,7 +1189,24 @@ span.digest div {
 }
 
 table.properties td, table.properties th {
-    width: 20%;
+  width: 20%;
+}
+
+table.properties.object_properties th, table.properties.version_properties th {
+  width: 30%;
+}
+
+table.properties.object_properties td, table.properties.version_properties td {
+  line-break: anywhere;
+  width: 65%;
+}
+
+table.properties td.files_mime, table.properties td.files_path {
+  line-break: anywhere;
+}
+
+td.files.file_size {
+  text-align: right;
 }
 
 #skip a {

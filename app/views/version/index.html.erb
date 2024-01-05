@@ -34,13 +34,13 @@
     <%= render :partial => '/version/details_display', :object => @version %>
 
     <h3>User Files</h3>
-    <table class="properties">
+    <table class="properties files_properties producer_files_properties">
       <tbody>
       <%= render :partial => '/version/files', :locals => {:files => @version.producer_files.quickload_files} %>
       </tbody>
     </table>
     <h3>System Files</h3>
-    <table class="properties">
+    <table class="properties files_properties system_files_properties">
       <tbody>
       <%= render :partial => '/version/files', :locals => {:files => @version.system_files.quickload_files} %>
       </tbody>

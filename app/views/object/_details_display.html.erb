@@ -1,42 +1,42 @@
-<table class="properties">
+<table class="properties object_properties">
   <tbody>
-  <tr>
+  <tr class="object_permalink">
     <th>permanent link:</th>
     <td><%= link_to(details_display.permalink, details_display.permalink) %></td>
   </tr>
-  <tr>
+  <tr class="object_primary_id">
     <th>primary identifier:</th>
     <td><%= details_display.ark %></td>
   </tr>
-  <tr>
+  <tr class="object_title">
     <th>title:</th>
     <td><%= dc_nice(details_display.current_version.dk_what) %></td>
   </tr>
-  <tr>
+  <tr class="object_creator">
     <th>creator:</th>
     <td><%= dc_nice(details_display.current_version.dk_who) %></td>
   </tr>
-  <tr>
+  <tr class="object_date">
     <th>date:</th>
     <td><%= dc_nice(details_display.current_version.dk_when) %></td>
   </tr>
-  <tr>
+  <tr class="object_localid">
     <th>local id:</th>
     <td><%= dc_nice(details_display.all_local_ids) %></td>
   </tr>
-  <tr>
+  <tr class="object_modified">
     <th>last modified:</th>
     <td><%= merritt_time(details_display.modified) %></td>
   </tr>
-  <tr>
+  <tr class="object_created">
     <th>created:</th>
     <td><%= merritt_time(details_display.inv_versions[0].created) %></td>
   </tr>
-  <tr>
+  <tr class="object_size">
     <th>object size:</th>
     <td><%= number_to_storage_size(details_display.size) %></td>
   </tr>
-  <tr>
+  <tr class="object_versions">
     <th>total versions:</th>
     <td><%= details_display.inv_versions.size %></td>
   </tr>

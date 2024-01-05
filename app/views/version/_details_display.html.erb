@@ -1,51 +1,51 @@
-<table class="properties">
+<table class="properties version_properties">
   <tbody>
-  <tr>
+  <tr class="version_primary_id">
     <th>object primary identifier:</th>
     <td><%= details_display.inv_object.ark %></td>
   </tr>
 
-  <tr>
+  <tr class="version_permalink">
     <th>permanent link:</th>
     <td><%= link_to(details_display.permalink, details_display.permalink) %></td>
   </tr>
 
-  <tr>
+  <tr class="version_title">
     <th>title:</th>
     <td><%= dc_nice(details_display.dk_what) %></td>
   </tr>
 
-  <tr>
+  <tr class="version_creator">
     <th>creator:</th>
     <td><%= dc_nice(details_display.dk_who) %></td>
   </tr>
 
-  <tr>
+  <tr class="version_date">
     <th>date:</th>
     <td><%= dc_nice(details_display.dk_when) %></td>
   </tr>
 
-  <tr>
+  <tr class="version_local_id">
     <th>local id:</th>
     <td><%= dc_nice(details_display.local_id) %></td>
   </tr>
 
-  <tr>
+  <tr class="version_number">
     <th>version number:</th>
     <td class='version-label'><%= details_display.number %></td>
   </tr>
 
-  <tr>
+  <tr class="version_date">
     <th>version date:</th>
     <td><%= merritt_time(details_display.created) %></td>
   </tr>
 
-  <tr>
+  <tr class="version_size">
     <th>version size:</th>
     <td><%= number_to_storage_size(details_display.total_size) %></td>
   </tr>
 
-  <tr>
+  <tr class="version_files">
     <th>version files:</th>
     <td><%= details_display.inv_files.count %></td>
   </tr>
