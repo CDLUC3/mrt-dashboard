@@ -2,7 +2,7 @@ module IngestMixin
   include HttpMixin
 
   def ingest_filename
-    filename = (params[:filename] || params[:file].original_filename)
+    filename = params[:filename] || params[:file].original_filename
     # We found a case in which % in the original filename triggers an encoding error
     # Pull the filename from the POST header using a pattern match
     unless filename.valid_encoding?
@@ -50,7 +50,7 @@ module IngestMixin
       'DC.subject' => params['DC.subject'],
       'DC.title' => params['DC.title'],
       'DC.type' => params['DC.type'],
-      'submitter' => (params['submitter'] || "#{current_user.login}/#{current_user.displayname}"),
+      'submitter' => params['submitter'] || "#{current_user.login}/#{current_user.displayname}",
       'title' => params[:title],
       'synchronousMode' => params[:synchronousMode],
       'retainTargetURL' => params[:retainTargetURL],
