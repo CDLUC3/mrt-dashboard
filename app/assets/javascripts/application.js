@@ -2,7 +2,6 @@
 // This file is automatically included by javascript_include_tag :defaults
 
 //= require jquery.min
-//= require jquery-ui.min
 //= require jquery_ujs
 
 //= require prototype
