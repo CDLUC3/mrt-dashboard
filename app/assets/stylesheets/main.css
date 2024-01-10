@@ -448,9 +448,6 @@
   footer nav ul li:not(:last-of-type) {
     border-right: 1px solid #7c7e7f;
   }
-  table.properties th {
-    white-space: nowrap;
-  }
   span.timestamp {
     display: inline-block;
   }
@@ -1201,7 +1198,7 @@ table.properties.object_properties td, table.properties.version_properties td {
   width: 65%;
 }
 
-table.properties td.files_mime, table.properties td.files_path {
+table.properties td.files_mime, table.properties th.files_path {
   line-break: anywhere;
 }
 
@@ -1250,8 +1247,6 @@ div.pagination {
 table.properties tr th.files {
   width: 200px;
   max-width: 200px;
-  overflow-x: hidden;
-  text-overflow: ellipsis;
 }
 
 table.properties tr td.files {
