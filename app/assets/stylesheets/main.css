@@ -1170,13 +1170,17 @@ div.form-submit {
   padding-top: 12px;
 }
 
-span.digest {
+span.digest, span.files_mime {
   width: 100px;
-  font-style: italic;
   display: inline-flex;
+  white-space: nowrap;
 }
 
-span.digest div {
+span.digest {
+  font-style: italic;
+}
+
+span.digest div, span.files_mime div, span.files_path div {
   text-overflow: ellipsis;
   overflow-x: hidden;
 }
@@ -1196,10 +1200,6 @@ table.properties.object_properties th, table.properties.version_properties th {
 table.properties.object_properties td, table.properties.version_properties td {
   line-break: anywhere;
   width: 65%;
-}
-
-table.properties td.files_mime, table.properties th.files_path {
-  line-break: anywhere;
 }
 
 table.properties td.files_size {
@@ -1247,11 +1247,21 @@ div.pagination {
 table.properties tr th.files {
   width: 200px;
   max-width: 200px;
+  text-align: left;
+}
+
+table.properties tr th.files div {
+  text-indent: -10px;
+  padding-left: 10px;
 }
 
 table.properties tr td.files {
   width: 100px;
   max-width: 100px;
+}
+
+table.files_properties tr:hover td, table.files_properties tr:hover th {
+  background-color: #E0E0E0;
 }
 
 th.ark-header {

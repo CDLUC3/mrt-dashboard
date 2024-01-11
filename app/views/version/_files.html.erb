@@ -15,15 +15,23 @@
         file_basename = File.basename(file.pathname)
     %>
       <tr>
-        <th class="files files_path" title='<%= file.pathname %>'>
-          <% if can_download_object %>
-            <%= link_to file_basename, presigned_link_uri(object, version, file) %>
-          <% else %>
-            <%= file_basename %>
-          <% end %>
+        <th class="files files_path">
+          <span class="files_path" title='<%= file.pathname %>'>
+            <div >
+            <% if can_download_object %>
+              <%= link_to file_basename, presigned_link_uri(object, version, file) %>
+            <% else %>
+              <%= file_basename %>
+            <% end %>
+            </div>
+          </span>
         </th>
         <td class="files files_mime">
-          <%= clean_mime_type(file.mime_type) %>
+          <span class="files_mime" title="<%= clean_mime_type(file.mime_type) %>">
+            <div>
+              <%= clean_mime_type(file.mime_type) %>
+            </div>
+          </span>
         </td>
         <td class="files files_size">
           <span><%= number_to_storage_size(file.full_size) %></span>
