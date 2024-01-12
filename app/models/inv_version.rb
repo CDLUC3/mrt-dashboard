@@ -28,7 +28,7 @@ class InvVersion < ApplicationRecord
     # :nocov:
     rescue StandardError => e
       retries += 1
-      raise(RetryException.new(e)) if retries > RETRY_LIMIT
+      raise RetryException, e if retries > RETRY_LIMIT
 
       sleep 1
       retry
@@ -43,7 +43,7 @@ class InvVersion < ApplicationRecord
     # :nocov:
     rescue StandardError => e
       retries += 1
-      raise(RetryException.new(e)) if retries > RETRY_LIMIT
+      raise RetryException, e if retries > RETRY_LIMIT
 
       sleep 1
       retry
@@ -58,7 +58,7 @@ class InvVersion < ApplicationRecord
     # :nocov:
     rescue StandardError => e
       retries += 1
-      raise(RetryException.new(e)) if retries > RETRY_LIMIT
+      raise RetryException, e if retries > RETRY_LIMIT
 
       sleep 1
       retry
@@ -73,7 +73,7 @@ class InvVersion < ApplicationRecord
     # :nocov:
     rescue StandardError => e
       retries += 1
-      raise(RetryException.new(e)) if retries > RETRY_LIMIT
+      raise RetryException, e if retries > RETRY_LIMIT
 
       sleep 1
       retry
@@ -107,7 +107,7 @@ class InvVersion < ApplicationRecord
       inv_files.sum('full_size')
     rescue StandardError => e
       retries += 1
-      raise(RetryException.new(e)) if retries > RETRY_LIMIT
+      raise RetryException, e if retries > RETRY_LIMIT
 
       sleep 1
       retry

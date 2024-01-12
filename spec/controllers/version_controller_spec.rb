@@ -59,9 +59,9 @@ RSpec.describe VersionController, type: :controller do
         .with(any_args)
         .and_raise(Mysql2::Error::ConnectionError.new('Simulate Failure'))
 
-      expect{
+      expect do
         get(:download, params: params)
-      }.to raise_error(RetryException)
+      end.to raise_error(RetryException)
     end
 
     it 'prevents download when download size exceeded' do

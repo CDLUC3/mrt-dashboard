@@ -237,9 +237,9 @@ RSpec.describe ObjectController, type: :controller do
           .with(any_args)
           .and_raise(Mysql2::Error::ConnectionError.new('Simulate Failure'))
 
-        expect{
+        expect do
           get(:index, params: { object: object_ark })
-        }.to raise_error(RetryException)
+        end.to raise_error(RetryException)
       end
 
     end
@@ -772,9 +772,9 @@ RSpec.describe ObjectController, type: :controller do
           .with(any_args)
           .and_raise(Mysql2::Error::ConnectionError.new('Simulate Failure'))
 
-        expect{
+        expect do
           get(:recent, params: { collection: collection.ark })
-        }.to raise_error(RetryException)
+        end.to raise_error(RetryException)
       end
 
       it 'gets the list of objects - no collection permissions' do

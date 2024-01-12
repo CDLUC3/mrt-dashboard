@@ -37,7 +37,7 @@ class ObjectController < ApplicationController
       @object = InvObject.where('ark = ?', params_u(:object)).includes(:inv_collections, inv_versions: [:inv_files]).first
     rescue StandardError => e
       retries += 1
-      raise(RetryException.new(e)) if retries > RETRY_LIMIT
+      raise RetryException, e if retries > RETRY_LIMIT
 
       sleep 1
       retry
@@ -105,7 +105,7 @@ class ObjectController < ApplicationController
       do_recent
     rescue StandardError => e
       retries += 1
-      raise(RetryException.new(e)) if retries > RETRY_LIMIT
+      raise RetryException, e if retries > RETRY_LIMIT
 
       sleep 1
       retry

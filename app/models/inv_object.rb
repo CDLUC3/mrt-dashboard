@@ -63,7 +63,7 @@ class InvObject < ApplicationRecord
       !inv_duas.blank?
     rescue StandardError => e
       retries += 1
-      raise(RetryException.new(e)) if retries > RETRY_LIMIT
+      raise RetryException, e if retries > RETRY_LIMIT
 
       sleep 1
       retry
@@ -96,7 +96,7 @@ class InvObject < ApplicationRecord
     # :nocov:
     rescue StandardError => e
       retries += 1
-      raise(RetryException.new(e)) if retries > RETRY_LIMIT
+      raise RetryException, e if retries > RETRY_LIMIT
 
       sleep 1
       retry
@@ -111,7 +111,7 @@ class InvObject < ApplicationRecord
     # :nocov:
     rescue StandardError => e
       retries += 1
-      raise(RetryException.new(e)) if retries > RETRY_LIMIT
+      raise RetryException, e if retries > RETRY_LIMIT
 
       sleep 1
       retry
@@ -134,7 +134,7 @@ class InvObject < ApplicationRecord
     # :nocov:
     rescue StandardError => e
       retries += 1
-      raise(RetryException.new(e)) if retries > RETRY_LIMIT
+      raise RetryException, e if retries > RETRY_LIMIT
 
       sleep 1
       retry
@@ -226,7 +226,7 @@ class InvObject < ApplicationRecord
       # :nocov:
       rescue StandardError => e
         retries += 1
-        raise(RetryException.new(e)) if retries > RETRY_LIMIT
+        raise RetryException, e if retries > RETRY_LIMIT
 
         sleep 1
         retry

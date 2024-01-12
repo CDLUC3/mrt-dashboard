@@ -57,7 +57,7 @@ class FileController < ApplicationController
       return if current_user_can_download?(obj)
     rescue StandardError => e
       retries += 1
-      raise(RetryException.new(e)) if retries > RETRY_LIMIT
+      raise RetryException, e if retries > RETRY_LIMIT
 
       sleep 1
       retry
@@ -86,7 +86,7 @@ class FileController < ApplicationController
       do_storage_key_do
     rescue StandardError => e
       retries += 1
-      raise(RetryException.new(e)) if retries > RETRY_LIMIT
+      raise RetryException, e if retries > RETRY_LIMIT
 
       sleep 1
       retry
@@ -222,7 +222,7 @@ class FileController < ApplicationController
       raise ActiveRecord::RecordNotFound if @file.nil?
     rescue StandardError => e
       retries += 1
-      raise(RetryException.new(e)) if retries > RETRY_LIMIT
+      raise RetryException, e if retries > RETRY_LIMIT
 
       sleep 1
       retry

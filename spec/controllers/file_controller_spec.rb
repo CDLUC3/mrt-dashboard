@@ -164,9 +164,9 @@ RSpec.describe FileController, type: :controller do
         .with(any_args)
         .and_raise(Mysql2::Error::ConnectionError.new('Simulate Failure'))
 
-      expect{
+      expect do
         get(:presign, params: params)
-      }.to raise_error(RetryException)
+      end.to raise_error(RetryException)
     end
 
     it 'redirects to presign url for the file - retry failure on object retreival' do
@@ -178,9 +178,9 @@ RSpec.describe FileController, type: :controller do
         .with(any_args)
         .and_raise(Mysql2::Error::ConnectionError.new('Simulate Failure'))
 
-      expect{
+      expect do
         get(:presign, params: params)
-      }.to raise_error(RetryException)
+      end.to raise_error(RetryException)
     end
 
     it 'redirects to presign url for the file - retry version check' do
@@ -192,9 +192,9 @@ RSpec.describe FileController, type: :controller do
         .with(any_args)
         .and_raise(Mysql2::Error::ConnectionError.new('Simulate Failure'))
 
-      expect{
+      expect do
         get(:presign, params: params)
-      }.to raise_error(RetryException)
+      end.to raise_error(RetryException)
     end
 
     it 'redirects to presign url for the file - retry dua check' do
@@ -206,9 +206,9 @@ RSpec.describe FileController, type: :controller do
         .with(any_args)
         .and_raise(Mysql2::Error::ConnectionError.new('Simulate Failure'))
 
-      expect{
+      expect do
         get(:presign, params: params)
-      }.to raise_error(RetryException)
+      end.to raise_error(RetryException)
     end
 
     it 'test ark encoding recovery' do
