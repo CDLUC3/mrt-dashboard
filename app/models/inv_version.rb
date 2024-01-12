@@ -1,4 +1,6 @@
 class InvVersion < ApplicationRecord
+  RETRY_LIMIT = 3
+
   belongs_to :inv_object, inverse_of: :inv_versions
   has_many :inv_files, inverse_of: :inv_version
   has_many :inv_dublinkernels
@@ -26,7 +28,10 @@ class InvVersion < ApplicationRecord
     # :nocov:
     rescue StandardError => e
       retries += 1
-      retries > RETRY_LIMIT ? raise(e) : retry
+      raise(e) if retries > RETRY_LIMIT
+
+      sleep 1
+      retry
     end
     # :nocov:
   end
@@ -38,7 +43,10 @@ class InvVersion < ApplicationRecord
     # :nocov:
     rescue StandardError => e
       retries += 1
-      retries > RETRY_LIMIT ? raise(e) : retry
+      raise(e) if retries > RETRY_LIMIT
+
+      sleep 1
+      retry
     end
     # :nocov:
   end
@@ -50,7 +58,10 @@ class InvVersion < ApplicationRecord
     # :nocov:
     rescue StandardError => e
       retries += 1
-      retries > RETRY_LIMIT ? raise(e) : retry
+      raise(e) if retries > RETRY_LIMIT
+
+      sleep 1
+      retry
     end
     # :nocov:
   end
@@ -62,7 +73,10 @@ class InvVersion < ApplicationRecord
     # :nocov:
     rescue StandardError => e
       retries += 1
-      retries > RETRY_LIMIT ? raise(e) : retry
+      raise(e) if retries > RETRY_LIMIT
+
+      sleep 1
+      retry
     end
     # :nocov:
   end
@@ -94,7 +108,10 @@ class InvVersion < ApplicationRecord
     # :nocov:
     rescue StandardError => e
       retries += 1
-      retries > RETRY_LIMIT ? raise(e) : retry
+      raise(e) if retries > RETRY_LIMIT
+
+      sleep 1
+      retry
     end
     # :nocov:
   end

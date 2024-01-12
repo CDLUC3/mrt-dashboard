@@ -1,4 +1,6 @@
 class InvObject < ApplicationRecord
+  RETRY_LIMIT = 3
+
   belongs_to :inv_owner, inverse_of: :inv_objects
 
   has_many :inv_versions, inverse_of: :inv_object
@@ -62,7 +64,10 @@ class InvObject < ApplicationRecord
       !inv_duas.blank?
     rescue StandardError => e
       retries += 1
-      retries > RETRY_LIMIT ? raise(e) : retry
+      raise(e) if retries > RETRY_LIMIT
+
+      sleep 1
+      retry
     end
   end
   # :nocov:
@@ -93,7 +98,10 @@ class InvObject < ApplicationRecord
     # :nocov:
     rescue StandardError => e
       retries += 1
-      retries > RETRY_LIMIT ? raise(e) : retry
+      raise(e) if retries > RETRY_LIMIT
+
+      sleep 1
+      retry
     end
     # :nocov:
   end
@@ -105,7 +113,10 @@ class InvObject < ApplicationRecord
     # :nocov:
     rescue StandardError => e
       retries += 1
-      retries > RETRY_LIMIT ? raise(e) : retry
+      raise(e) if retries > RETRY_LIMIT
+
+      sleep 1
+      retry
     end
     # :nocov:
   end
@@ -119,7 +130,18 @@ class InvObject < ApplicationRecord
   end
 
   def all_local_ids
-    inv_localids.map(&:local_id)
+    retries = 0
+    begin
+      inv_localids.map(&:local_id)
+    # :nocov:
+    rescue StandardError => e
+      retries += 1
+      raise(e) if retries > RETRY_LIMIT
+
+      sleep 1
+      retry
+    end
+    # :nocov:
   end
 
   def exceeds_download_size?
@@ -206,7 +228,10 @@ class InvObject < ApplicationRecord
       # :nocov:
       rescue StandardError => e
         retries += 1
-        retries > RETRY_LIMIT ? raise(e) : retry
+        raise(e) if retries > RETRY_LIMIT
+
+        sleep 1
+        retry
       end
       # :nocov:
     end

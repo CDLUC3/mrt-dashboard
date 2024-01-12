@@ -7,7 +7,7 @@ class ObjectController < ApplicationController
   RETRY_LIMIT = 3
 
   before_action :require_user, except: %i[jupload_add recent ingest mint update]
-  before_action :require_named_user_or_401, only: %i[recent]
+  before_action :require_named_user_or_401, only: %i[recent add]
   before_action :load_object, only: %i[index download download_user download_manifest presign object_info audit_replic]
 
   before_action(only: %i[download download_user download_manifest presign]) do
@@ -38,7 +38,10 @@ class ObjectController < ApplicationController
     rescue StandardError => e
       # :nocov:
       retries += 1
-      retries > RETRY_LIMIT ? raise(e) : retry
+      raise(e) if retries > RETRY_LIMIT
+
+      sleep 1
+      retry
       # :nocov:
     end
 
@@ -105,7 +108,10 @@ class ObjectController < ApplicationController
     # :nocov:
     rescue StandardError => e
       retries += 1
-      retries > RETRY_LIMIT ? raise(e) : retry
+      raise(e) if retries > RETRY_LIMIT
+
+      sleep 1
+      retry
     end
     # :nocov:
   end

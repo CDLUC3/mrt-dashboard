@@ -58,7 +58,10 @@ class FileController < ApplicationController
     rescue StandardError => e
       # :nocov:
       retries += 1
-      retries > RETRY_LIMIT ? raise(e) : retry
+      raise(e) if retries > RETRY_LIMIT
+
+      sleep 1
+      retry
       # :nocov:
     end
 
@@ -86,7 +89,10 @@ class FileController < ApplicationController
     # :nocov:
     rescue StandardError => e
       retries += 1
-      retries > RETRY_LIMIT ? raise(e) : retry
+      raise(e) if retries > RETRY_LIMIT
+
+      sleep 1
+      retry
     end
     # :nocov:
   end
@@ -201,6 +207,7 @@ class FileController < ApplicationController
     params[:file] = match[3]
   end
 
+  # rubocop:disable Metrics/AbcSize
   def load_file
     filename = fix_filename
 
@@ -220,10 +227,14 @@ class FileController < ApplicationController
     rescue StandardError => e
       # :nocov:
       retries += 1
-      retries > RETRY_LIMIT ? raise(e) : retry
+      raise(e) if retries > RETRY_LIMIT
+
+      sleep 1
+      retry
       # :nocov:
     end
   end
+  # rubocop:enable Metrics/AbcSize
 
   # Call storage service to create a presigned URL for a file
   # https://github.com/CDLUC3/mrt-doc/blob/master/endopoints/storage/presign-file.md
