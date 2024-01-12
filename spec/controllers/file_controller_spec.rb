@@ -155,6 +155,62 @@ RSpec.describe FileController, type: :controller do
       end
     end
 
+    it 'redirects to presign url for the file - retry failure on pathname match' do
+      mock_permissions_all(user_id, collection_id)
+
+      request.session.merge!({ uid: user_id })
+      allow(InvFile)
+        .to receive(:joins)
+        .with(any_args)
+        .and_raise(Mysql2::Error::ConnectionError.new('Simulate Failure'))
+
+      expect{
+        get(:presign, params: params)
+      }.to raise_error(RetryException)
+    end
+
+    it 'redirects to presign url for the file - retry failure on object retreival' do
+      mock_permissions_all(user_id, collection_id)
+
+      request.session.merge!({ uid: user_id })
+      allow_any_instance_of(InvFile)
+        .to receive(:inv_version)
+        .with(any_args)
+        .and_raise(Mysql2::Error::ConnectionError.new('Simulate Failure'))
+
+      expect{
+        get(:presign, params: params)
+      }.to raise_error(RetryException)
+    end
+
+    it 'redirects to presign url for the file - retry version check' do
+      mock_permissions_all(user_id, collection_id)
+
+      request.session.merge!({ uid: user_id })
+      allow_any_instance_of(Mysql2::Client)
+        .to receive(:prepare)
+        .with(any_args)
+        .and_raise(Mysql2::Error::ConnectionError.new('Simulate Failure'))
+
+      expect{
+        get(:presign, params: params)
+      }.to raise_error(RetryException)
+    end
+
+    it 'redirects to presign url for the file - retry dua check' do
+      mock_permissions_all(user_id, collection_id)
+
+      request.session.merge!({ uid: user_id })
+      allow_any_instance_of(InvObject)
+        .to receive(:inv_duas)
+        .with(any_args)
+        .and_raise(Mysql2::Error::ConnectionError.new('Simulate Failure'))
+
+      expect{
+        get(:presign, params: params)
+      }.to raise_error(RetryException)
+    end
+
     it 'test ark encoding recovery' do
       mock_permissions_all(user_id, collection_id)
 

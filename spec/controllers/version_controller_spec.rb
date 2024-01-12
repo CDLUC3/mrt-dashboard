@@ -50,6 +50,20 @@ RSpec.describe VersionController, type: :controller do
       expect(response.status).to eq(401)
     end
 
+    it 'total actual size - retry error' do
+      mock_permissions_all(user_id, collection_id)
+
+      request.session.merge!({ uid: user_id })
+      allow_any_instance_of(ActiveRecord::Associations::CollectionProxy)
+        .to receive(:sum)
+        .with(any_args)
+        .and_raise(Mysql2::Error::ConnectionError.new('Simulate Failure'))
+
+      expect{
+        get(:download, params: params)
+      }.to raise_error(RetryException)
+    end
+
     it 'prevents download when download size exceeded' do
       mock_permissions_all(user_id, collection_id)
 

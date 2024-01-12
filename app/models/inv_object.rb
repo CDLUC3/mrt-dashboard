@@ -57,20 +57,18 @@ class InvObject < ApplicationRecord
     URI.parse("#{APP_CONFIG['uri_3']}#{node_number}/#{to_param}")
   end
 
-  # :nocov:
   def dua_exists?
     retries = 0
     begin
       !inv_duas.blank?
     rescue StandardError => e
       retries += 1
-      raise(e) if retries > RETRY_LIMIT
+      raise(RetryException.new(e)) if retries > RETRY_LIMIT
 
       sleep 1
       retry
     end
   end
-  # :nocov:
 
   # :nocov:
   def dua_uri
@@ -98,7 +96,7 @@ class InvObject < ApplicationRecord
     # :nocov:
     rescue StandardError => e
       retries += 1
-      raise(e) if retries > RETRY_LIMIT
+      raise(RetryException.new(e)) if retries > RETRY_LIMIT
 
       sleep 1
       retry
@@ -113,7 +111,7 @@ class InvObject < ApplicationRecord
     # :nocov:
     rescue StandardError => e
       retries += 1
-      raise(e) if retries > RETRY_LIMIT
+      raise(RetryException.new(e)) if retries > RETRY_LIMIT
 
       sleep 1
       retry
@@ -136,7 +134,7 @@ class InvObject < ApplicationRecord
     # :nocov:
     rescue StandardError => e
       retries += 1
-      raise(e) if retries > RETRY_LIMIT
+      raise(RetryException.new(e)) if retries > RETRY_LIMIT
 
       sleep 1
       retry
@@ -228,7 +226,7 @@ class InvObject < ApplicationRecord
       # :nocov:
       rescue StandardError => e
         retries += 1
-        raise(e) if retries > RETRY_LIMIT
+        raise(RetryException.new(e)) if retries > RETRY_LIMIT
 
         sleep 1
         retry

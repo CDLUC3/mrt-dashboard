@@ -56,13 +56,11 @@ class FileController < ApplicationController
       obj = @file.inv_version.inv_object
       return if current_user_can_download?(obj)
     rescue StandardError => e
-      # :nocov:
       retries += 1
-      raise(e) if retries > RETRY_LIMIT
+      raise(RetryException.new(e)) if retries > RETRY_LIMIT
 
       sleep 1
       retry
-      # :nocov:
     end
 
     flash[:error] = 'You do not have download permissions.'
@@ -86,15 +84,13 @@ class FileController < ApplicationController
     retries = 0
     begin
       do_storage_key_do
-    # :nocov:
     rescue StandardError => e
       retries += 1
-      raise(e) if retries > RETRY_LIMIT
+      raise(RetryException.new(e)) if retries > RETRY_LIMIT
 
       sleep 1
       retry
     end
-    # :nocov:
   end
 
   # Perform database lookup for storge node and key
@@ -225,13 +221,11 @@ class FileController < ApplicationController
         .first
       raise ActiveRecord::RecordNotFound if @file.nil?
     rescue StandardError => e
-      # :nocov:
       retries += 1
-      raise(e) if retries > RETRY_LIMIT
+      raise(RetryException.new(e)) if retries > RETRY_LIMIT
 
       sleep 1
       retry
-      # :nocov:
     end
   end
   # rubocop:enable Metrics/AbcSize

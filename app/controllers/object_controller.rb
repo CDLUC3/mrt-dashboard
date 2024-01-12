@@ -36,13 +36,11 @@ class ObjectController < ApplicationController
     begin
       @object = InvObject.where('ark = ?', params_u(:object)).includes(:inv_collections, inv_versions: [:inv_files]).first
     rescue StandardError => e
-      # :nocov:
       retries += 1
-      raise(e) if retries > RETRY_LIMIT
+      raise(RetryException.new(e)) if retries > RETRY_LIMIT
 
       sleep 1
       retry
-      # :nocov:
     end
 
     raise ActiveRecord::RecordNotFound if @object.nil?
@@ -105,15 +103,13 @@ class ObjectController < ApplicationController
     retries = 0
     begin
       do_recent
-    # :nocov:
     rescue StandardError => e
       retries += 1
-      raise(e) if retries > RETRY_LIMIT
+      raise(RetryException.new(e)) if retries > RETRY_LIMIT
 
       sleep 1
       retry
     end
-    # :nocov:
   end
 
   def do_recent

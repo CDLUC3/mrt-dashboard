@@ -221,6 +221,27 @@ RSpec.describe ObjectController, type: :controller do
         get(:index, params: { object: object_ark })
         expect(response.status).to eq(401)
       end
+
+      it 'successful object load' do
+        mock_permissions_all(user_id, collection_id)
+        request.session.merge!({ uid: user_id })
+        get(:index, params: { object: object_ark })
+        expect(response.status).to eq(200)
+      end
+
+      it 'successful object load - retry failure on load_object' do
+        mock_permissions_all(user_id, collection_id)
+        request.session.merge!({ uid: user_id })
+        allow(InvObject)
+          .to receive(:where)
+          .with(any_args)
+          .and_raise(Mysql2::Error::ConnectionError.new('Simulate Failure'))
+
+        expect{
+          get(:index, params: { object: object_ark })
+        }.to raise_error(RetryException)
+      end
+
     end
 
     describe ':object_info' do
@@ -742,6 +763,18 @@ RSpec.describe ObjectController, type: :controller do
         objects.each do |obj|
           expect(body).to include(obj.ark)
         end
+      end
+
+      it 'gets the list of objects - retry failure on query' do
+        mock_permissions_all(user_id, collection_id)
+        allow(InvCollection)
+          .to receive(:where)
+          .with(any_args)
+          .and_raise(Mysql2::Error::ConnectionError.new('Simulate Failure'))
+
+        expect{
+          get(:recent, params: { collection: collection.ark })
+        }.to raise_error(RetryException)
       end
 
       it 'gets the list of objects - no collection permissions' do

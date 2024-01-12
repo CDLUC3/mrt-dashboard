@@ -7,6 +7,8 @@ module Rack
   end
 end
 
+class RetryException < RuntimeError; end
+
 class ApplicationController < ActionController::Base
   include DuaMixin
   include Encoder
