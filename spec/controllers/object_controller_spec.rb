@@ -332,6 +332,30 @@ RSpec.describe ObjectController, type: :controller do
         json = JSON.parse(response.body)
         expect(json['versions'][0]['files'][0]['pathname']).to eq('producer/foo.bin')
       end
+
+      it 'returns object_info with files as json - retry failure' do
+        inv_file = create(
+          :inv_file,
+          inv_object: @objects[0],
+          inv_version: @objects[0].current_version,
+          pathname: 'producer/foo.bin',
+          mime_type: 'application/octet-stream',
+          billable_size: 1000
+        )
+        inv_file.save!
+
+        mock_permissions_all(user_id, collection_id)
+        request.session.merge!({ uid: user_id })
+
+        allow_any_instance_of(InvVersion)
+          .to receive(:inv_files)
+          .with(any_args)
+          .and_raise(Mysql2::Error::ConnectionError.new('Simulate Failure'))
+
+        expect do
+          get(:object_info, params: { object: object_ark })
+        end.to raise_error(RetryException)
+      end
     end
 
     describe ':download' do

@@ -93,7 +93,6 @@ class InvObject < ApplicationRecord
     retries = 0
     begin
       @current_version ||= inv_versions.order('number desc').first
-    # :nocov:
     rescue StandardError => e
       retries += 1
       raise RetryException, e if retries > RETRY_LIMIT
@@ -101,14 +100,12 @@ class InvObject < ApplicationRecord
       sleep 1
       retry
     end
-    # :nocov:
   end
 
   def inv_collection
     retries = 0
     begin
       @inv_collection ||= inv_collections.first
-    # :nocov:
     rescue StandardError => e
       retries += 1
       raise RetryException, e if retries > RETRY_LIMIT
@@ -116,7 +113,6 @@ class InvObject < ApplicationRecord
       sleep 1
       retry
     end
-    # :nocov:
   end
 
   def group
@@ -131,7 +127,6 @@ class InvObject < ApplicationRecord
     retries = 0
     begin
       inv_localids.map(&:local_id)
-    # :nocov:
     rescue StandardError => e
       retries += 1
       raise RetryException, e if retries > RETRY_LIMIT
@@ -139,7 +134,6 @@ class InvObject < ApplicationRecord
       sleep 1
       retry
     end
-    # :nocov:
   end
 
   def exceeds_download_size?
@@ -223,7 +217,6 @@ class InvObject < ApplicationRecord
           v[:files].push(object_info_files(f)) unless filecount > maxfile
         end
         json[:versions].prepend(v)
-      # :nocov:
       rescue StandardError => e
         retries += 1
         raise RetryException, e if retries > RETRY_LIMIT
@@ -231,7 +224,6 @@ class InvObject < ApplicationRecord
         sleep 1
         retry
       end
-      # :nocov:
     end
     filecount
   end

@@ -25,7 +25,6 @@ class InvVersion < ApplicationRecord
     retries = 0
     begin
       inv_files.sum('full_size')
-    # :nocov:
     rescue StandardError => e
       retries += 1
       raise RetryException, e if retries > RETRY_LIMIT
@@ -33,14 +32,12 @@ class InvVersion < ApplicationRecord
       sleep 1
       retry
     end
-    # :nocov:
   end
 
   def system_files
     retries = 0
     begin
       inv_files.system_files.order(:pathname)
-    # :nocov:
     rescue StandardError => e
       retries += 1
       raise RetryException, e if retries > RETRY_LIMIT
@@ -48,14 +45,12 @@ class InvVersion < ApplicationRecord
       sleep 1
       retry
     end
-    # :nocov:
   end
 
   def producer_files
     retries = 0
     begin
       inv_files.producer_files.order(:pathname)
-    # :nocov:
     rescue StandardError => e
       retries += 1
       raise RetryException, e if retries > RETRY_LIMIT
@@ -63,14 +58,12 @@ class InvVersion < ApplicationRecord
       sleep 1
       retry
     end
-    # :nocov:
   end
 
   def metadata(element)
     retries = 0
     begin
       inv_dublinkernels.select { |md| md.element == element && md.value != '(:unas)' }.map(&:value)
-    # :nocov:
     rescue StandardError => e
       retries += 1
       raise RetryException, e if retries > RETRY_LIMIT
@@ -78,7 +71,6 @@ class InvVersion < ApplicationRecord
       sleep 1
       retry
     end
-    # :nocov:
   end
 
   def dk_who

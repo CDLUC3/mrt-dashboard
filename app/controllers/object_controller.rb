@@ -17,7 +17,7 @@ class ObjectController < ApplicationController
     end
   end
 
-  before_action(only: %i[download download_user]) do
+  before_action(only: %i[download download_user presign]) do
     check_dua(@object, { object: @object })
   end
 

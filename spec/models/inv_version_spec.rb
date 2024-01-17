@@ -26,4 +26,50 @@ describe InvVersion do
       expect(version.bytestream_uri2).to eq(URI.parse(expected_uri))
     end
   end
+
+  describe 'retry logic' do
+    it 'total_size retry' do
+      allow_any_instance_of(ActiveRecord::Associations::CollectionProxy)
+        .to receive(:sum)
+        .with(any_args)
+        .and_raise(Mysql2::Error::ConnectionError.new('Simulate Failure'))
+
+      expect do
+        @version.total_size
+      end.to raise_error(RetryException)
+    end
+
+    it 'system_files retry' do
+      allow_any_instance_of(InvVersion)
+        .to receive(:inv_files)
+        .with(any_args)
+        .and_raise(Mysql2::Error::ConnectionError.new('Simulate Failure'))
+
+      expect do
+        @version.system_files
+      end.to raise_error(RetryException)
+    end
+
+    it 'producer_files retry' do
+      allow_any_instance_of(InvVersion)
+        .to receive(:inv_files)
+        .with(any_args)
+        .and_raise(Mysql2::Error::ConnectionError.new('Simulate Failure'))
+
+      expect do
+        @version.producer_files
+      end.to raise_error(RetryException)
+    end
+
+    it 'metadata retry' do
+      allow_any_instance_of(ActiveRecord::Associations::CollectionProxy)
+        .to receive(:select)
+        .with(any_args)
+        .and_raise(Mysql2::Error::ConnectionError.new('Simulate Failure'))
+
+      expect do
+        @version.metadata('who')
+      end.to raise_error(RetryException)
+    end
+  end
 end

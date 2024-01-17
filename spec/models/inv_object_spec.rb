@@ -21,6 +21,39 @@ describe InvObject do
     end
   end
 
+  describe 'retry logic' do
+    it 'object current_version - hit retry limit' do
+      allow_any_instance_of(ActiveRecord::Associations::CollectionProxy)
+        .to receive(:order)
+        .with(any_args)
+        .and_raise(Mysql2::Error::ConnectionError.new('Simulate Failure'))
+      expect do
+        @obj.current_version
+      end.to raise_error(RetryException)
+    end
+
+    it 'object inv_collection - hit retry limit' do
+      allow_any_instance_of(ActiveRecord::Associations::CollectionProxy)
+        .to receive(:order)
+        .with(any_args)
+        .and_raise(Mysql2::Error::ConnectionError.new('Simulate Failure'))
+      expect do
+        @obj.inv_collection
+      end.to raise_error(RetryException)
+    end
+
+    it 'gets the list of local ids - retry failure on query' do
+      allow_any_instance_of(ActiveRecord::Associations::CollectionProxy)
+        .to receive(:map)
+        .with(any_args)
+        .and_raise(Mysql2::Error::ConnectionError.new('Simulate Failure'))
+
+      expect do
+        @obj.all_local_ids
+      end.to raise_error(RetryException)
+    end
+  end
+
   describe :bytestream_uri do
     it 'generates the "uri_1" (content) URI' do
       # TODO: figure out why this produces double //s and stop doing it
