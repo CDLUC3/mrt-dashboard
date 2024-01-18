@@ -3,8 +3,7 @@ require 'tempfile'
 class ObjectController < ApplicationController
   include MintMixin
   include IngestMixin
-
-  RETRY_LIMIT = 3
+  include MerrittRetryMixin
 
   before_action :require_user, except: %i[jupload_add recent ingest mint update]
   before_action :require_named_user_or_401, only: %i[recent add]
@@ -32,15 +31,8 @@ class ObjectController < ApplicationController
   protect_from_forgery except: %i[ingest mint update]
 
   def load_object
-    retries = 0
-    begin
+    merritt_retry_block do
       @object = InvObject.where('ark = ?', params_u(:object)).includes(:inv_collections, inv_versions: [:inv_files]).first
-    rescue StandardError => e
-      retries += 1
-      raise RetryException, e if retries > RETRY_LIMIT
-
-      sleep 1
-      retry
     end
 
     raise ActiveRecord::RecordNotFound if @object.nil?
@@ -100,15 +92,8 @@ class ObjectController < ApplicationController
   # rubocop:enable Lint/RescueException
 
   def recent
-    retries = 0
-    begin
+    merritt_retry_block do
       do_recent
-    rescue StandardError => e
-      retries += 1
-      raise RetryException, e if retries > RETRY_LIMIT
-
-      sleep 1
-      retry
     end
   end
 

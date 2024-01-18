@@ -61,7 +61,7 @@ RSpec.describe VersionController, type: :controller do
 
       expect do
         get(:download, params: params)
-      end.to raise_error(RetryException)
+      end.to raise_error(MerrittRetryMixin::RetryException)
     end
 
     it 'prevents download when download size exceeded' do

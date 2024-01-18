@@ -14,6 +14,7 @@ class ApplicationController < ActionController::Base
   include NumberMixin
   include PaginationMixin
   include HttpMixin
+  include MerrittRetryMixin
   require 'streamer'
 
   helper_method(

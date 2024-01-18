@@ -1,5 +1,5 @@
 class InvObject < ApplicationRecord
-  RETRY_LIMIT = 3
+  include MerrittRetryMixin
 
   belongs_to :inv_owner, inverse_of: :inv_objects
 
@@ -58,15 +58,8 @@ class InvObject < ApplicationRecord
   end
 
   def dua_exists?
-    retries = 0
-    begin
+    merritt_retry_block do
       !inv_duas.blank?
-    rescue StandardError => e
-      retries += 1
-      raise RetryException, e if retries > RETRY_LIMIT
-
-      sleep 1
-      retry
     end
   end
 
@@ -90,28 +83,14 @@ class InvObject < ApplicationRecord
   end
 
   def current_version
-    retries = 0
-    begin
+    merritt_retry_block do
       @current_version ||= inv_versions.order('number desc').first
-    rescue StandardError => e
-      retries += 1
-      raise RetryException, e if retries > RETRY_LIMIT
-
-      sleep 1
-      retry
     end
   end
 
   def inv_collection
-    retries = 0
-    begin
+    merritt_retry_block do
       @inv_collection ||= inv_collections.first
-    rescue StandardError => e
-      retries += 1
-      raise RetryException, e if retries > RETRY_LIMIT
-
-      sleep 1
-      retry
     end
   end
 
@@ -124,15 +103,8 @@ class InvObject < ApplicationRecord
   end
 
   def all_local_ids
-    retries = 0
-    begin
+    merritt_retry_block do
       inv_localids.map(&:local_id)
-    rescue StandardError => e
-      retries += 1
-      raise RetryException, e if retries > RETRY_LIMIT
-
-      sleep 1
-      retry
     end
   end
 
@@ -204,8 +176,7 @@ class InvObject < ApplicationRecord
   def object_info_add_versions(json, maxfile)
     filecount = 0
     inv_versions.each do |ver|
-      retries = 0
-      begin
+      merritt_retry_block do
         v = {
           version_number: ver.number,
           created: ver.created,
@@ -217,12 +188,6 @@ class InvObject < ApplicationRecord
           v[:files].push(object_info_files(f)) unless filecount > maxfile
         end
         json[:versions].prepend(v)
-      rescue StandardError => e
-        retries += 1
-        raise RetryException, e if retries > RETRY_LIMIT
-
-        sleep 1
-        retry
       end
     end
     filecount

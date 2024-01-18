@@ -16,6 +16,13 @@ module DuaMixin
     # bypass DUA processing for python scripts - indicated by special param
     return if params[:blue]
 
+    puts 333
+    puts session
+    puts 444
+    puts session.keys
+    puts 555
+    puts redirect_args
+
     session[:collection_acceptance] ||= Hash.new(false)
     # check if user already saw DUA and accepted: if so, return
     if session[:collection_acceptance][object.group.id]
@@ -24,6 +31,7 @@ module DuaMixin
       nil
     elsif object.dua_exists? && process_dua_request(object.dua_uri)
       # if the DUA for this collection exists, display DUA to user for acceptance before displaying file
+      puts 666
       redirect_to({ controller: 'dua', action: 'index' }.merge(redirect_args)) && return
     end
   end

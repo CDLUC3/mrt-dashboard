@@ -2,6 +2,7 @@ require 'rails_helper'
 require 'support/presigned'
 
 RSpec.describe ObjectController, type: :controller do
+  include MerrittRetryMixin
 
   attr_reader :user_id
 
@@ -239,7 +240,7 @@ RSpec.describe ObjectController, type: :controller do
 
         expect do
           get(:index, params: { object: object_ark })
-        end.to raise_error(RetryException)
+        end.to raise_error(MerrittRetryMixin::RetryException)
       end
 
     end
@@ -354,7 +355,7 @@ RSpec.describe ObjectController, type: :controller do
 
         expect do
           get(:object_info, params: { object: object_ark })
-        end.to raise_error(RetryException)
+        end.to raise_error(MerrittRetryMixin::RetryException)
       end
     end
 
@@ -798,7 +799,7 @@ RSpec.describe ObjectController, type: :controller do
 
         expect do
           get(:recent, params: { collection: collection.ark })
-        end.to raise_error(RetryException)
+        end.to raise_error(MerrittRetryMixin::RetryException)
       end
 
       it 'gets the list of objects - no collection permissions' do

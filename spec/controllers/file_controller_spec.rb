@@ -2,6 +2,7 @@ require 'rails_helper'
 require 'support/presigned'
 
 RSpec.describe FileController, type: :controller do
+  include MerrittRetryMixin
 
   attr_reader :user_id
   attr_reader :collection
@@ -166,7 +167,7 @@ RSpec.describe FileController, type: :controller do
 
       expect do
         get(:presign, params: params)
-      end.to raise_error(RetryException)
+      end.to raise_error(MerrittRetryMixin::RetryException)
     end
 
     it 'redirects to presign url for the file - retry failure on object retreival' do
@@ -180,7 +181,7 @@ RSpec.describe FileController, type: :controller do
 
       expect do
         get(:presign, params: params)
-      end.to raise_error(RetryException)
+      end.to raise_error(MerrittRetryMixin::RetryException)
     end
 
     it 'redirects to presign url for the file - retry version check' do
@@ -194,7 +195,7 @@ RSpec.describe FileController, type: :controller do
 
       expect do
         get(:presign, params: params)
-      end.to raise_error(RetryException)
+      end.to raise_error(MerrittRetryMixin::RetryException)
     end
 
     it 'redirects to presign url for the file - retry dua check' do
@@ -208,7 +209,7 @@ RSpec.describe FileController, type: :controller do
 
       expect do
         get(:presign, params: params)
-      end.to raise_error(RetryException)
+      end.to raise_error(MerrittRetryMixin::RetryException)
     end
 
     it 'test ark encoding recovery' do

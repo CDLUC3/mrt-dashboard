@@ -1,6 +1,7 @@
 require 'rails_helper'
 
 describe InvVersion do
+  include MerrittRetryMixin
 
   attr_reader :obj, :version
 
@@ -36,7 +37,7 @@ describe InvVersion do
 
       expect do
         @version.total_size
-      end.to raise_error(RetryException)
+      end.to raise_error(MerrittRetryMixin::RetryException)
     end
 
     it 'system_files retry' do
@@ -47,7 +48,7 @@ describe InvVersion do
 
       expect do
         @version.system_files
-      end.to raise_error(RetryException)
+      end.to raise_error(MerrittRetryMixin::RetryException)
     end
 
     it 'producer_files retry' do
@@ -58,7 +59,7 @@ describe InvVersion do
 
       expect do
         @version.producer_files
-      end.to raise_error(RetryException)
+      end.to raise_error(MerrittRetryMixin::RetryException)
     end
 
     it 'metadata retry' do
@@ -69,7 +70,7 @@ describe InvVersion do
 
       expect do
         @version.metadata('who')
-      end.to raise_error(RetryException)
+      end.to raise_error(MerrittRetryMixin::RetryException)
     end
   end
 end

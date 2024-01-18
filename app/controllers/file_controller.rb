@@ -2,8 +2,7 @@ require 'httpclient'
 require 'json'
 
 class FileController < ApplicationController
-
-  RETRY_LIMIT = 3
+  include MerrittRetryMixin
 
   before_action :require_user
 
@@ -51,16 +50,9 @@ class FileController < ApplicationController
   private
 
   def check_download
-    retries = 0
-    begin
+    merritt_retry_block do
       obj = @file.inv_version.inv_object
       return if current_user_can_download?(obj)
-    rescue StandardError => e
-      retries += 1
-      raise RetryException, e if retries > RETRY_LIMIT
-
-      sleep 1
-      retry
     end
 
     flash[:error] = 'You do not have download permissions.'
@@ -81,15 +73,8 @@ class FileController < ApplicationController
   end
 
   def storage_key_do
-    retries = 0
-    begin
+    merritt_retry_block do
       do_storage_key_do
-    rescue StandardError => e
-      retries += 1
-      raise RetryException, e if retries > RETRY_LIMIT
-
-      sleep 1
-      retry
     end
   end
 
@@ -212,20 +197,13 @@ class FileController < ApplicationController
     # the filename
     filename = "producer/#{filename}" if filename.valid_encoding? && filename !~ /^(producer|system)/
 
-    retries = 0
-    begin
+    merritt_retry_block do
       @file = InvFile.joins(:inv_version, :inv_object)
         .where('inv_objects.ark = ?', params_u(:object))
         .where('inv_versions.number = ?', params[:version])
         .where('inv_files.pathname = ?', filename)
         .first
       raise ActiveRecord::RecordNotFound if @file.nil?
-    rescue StandardError => e
-      retries += 1
-      raise RetryException, e if retries > RETRY_LIMIT
-
-      sleep 1
-      retry
     end
   end
   # rubocop:enable Metrics/AbcSize

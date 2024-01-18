@@ -1,5 +1,5 @@
 class InvVersion < ApplicationRecord
-  RETRY_LIMIT = 3
+  include MerrittRetryMixin
 
   belongs_to :inv_object, inverse_of: :inv_versions
   has_many :inv_files, inverse_of: :inv_version
@@ -22,54 +22,26 @@ class InvVersion < ApplicationRecord
   end
 
   def total_size
-    retries = 0
-    begin
+    merritt_retry_block do
       inv_files.sum('full_size')
-    rescue StandardError => e
-      retries += 1
-      raise RetryException, e if retries > RETRY_LIMIT
-
-      sleep 1
-      retry
     end
   end
 
   def system_files
-    retries = 0
-    begin
+    merritt_retry_block do
       inv_files.system_files.order(:pathname)
-    rescue StandardError => e
-      retries += 1
-      raise RetryException, e if retries > RETRY_LIMIT
-
-      sleep 1
-      retry
     end
   end
 
   def producer_files
-    retries = 0
-    begin
+    merritt_retry_block do
       inv_files.producer_files.order(:pathname)
-    rescue StandardError => e
-      retries += 1
-      raise RetryException, e if retries > RETRY_LIMIT
-
-      sleep 1
-      retry
     end
   end
 
   def metadata(element)
-    retries = 0
-    begin
+    merritt_retry_block do
       inv_dublinkernels.select { |md| md.element == element && md.value != '(:unas)' }.map(&:value)
-    rescue StandardError => e
-      retries += 1
-      raise RetryException, e if retries > RETRY_LIMIT
-
-      sleep 1
-      retry
     end
   end
 
@@ -94,15 +66,8 @@ class InvVersion < ApplicationRecord
   end
 
   def total_actual_size
-    retries = 0
-    begin
+    merritt_retry_block do
       inv_files.sum('full_size')
-    rescue StandardError => e
-      retries += 1
-      raise RetryException, e if retries > RETRY_LIMIT
-
-      sleep 1
-      retry
     end
   end
 

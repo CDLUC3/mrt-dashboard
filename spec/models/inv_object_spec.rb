@@ -1,6 +1,8 @@
 require 'rails_helper'
 
 describe InvObject do
+  include MerrittRetryMixin
+
   attr_reader :obj
   attr_reader :collection
 
@@ -29,7 +31,7 @@ describe InvObject do
         .and_raise(Mysql2::Error::ConnectionError.new('Simulate Failure'))
       expect do
         @obj.current_version
-      end.to raise_error(RetryException)
+      end.to raise_error(MerrittRetryMixin::RetryException)
     end
 
     it 'object inv_collection - hit retry limit' do
@@ -39,7 +41,7 @@ describe InvObject do
         .and_raise(Mysql2::Error::ConnectionError.new('Simulate Failure'))
       expect do
         @obj.inv_collection
-      end.to raise_error(RetryException)
+      end.to raise_error(MerrittRetryMixin::RetryException)
     end
 
     it 'gets the list of local ids - retry failure on query' do
@@ -50,7 +52,7 @@ describe InvObject do
 
       expect do
         @obj.all_local_ids
-      end.to raise_error(RetryException)
+      end.to raise_error(MerrittRetryMixin::RetryException)
     end
   end
 
