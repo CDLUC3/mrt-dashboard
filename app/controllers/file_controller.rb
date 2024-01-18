@@ -188,7 +188,6 @@ class FileController < ApplicationController
     params[:file] = match[3]
   end
 
-  # rubocop:disable Metrics/AbcSize
   def load_file
     filename = fix_filename
 
@@ -206,7 +205,6 @@ class FileController < ApplicationController
       raise ActiveRecord::RecordNotFound if @file.nil?
     end
   end
-  # rubocop:enable Metrics/AbcSize
 
   # Call storage service to create a presigned URL for a file
   # https://github.com/CDLUC3/mrt-doc/blob/master/endopoints/storage/presign-file.md

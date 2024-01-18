@@ -10,7 +10,7 @@ module MerrittRetryMixin
       yield
     rescue StandardError => e
       retries += 1
-    raise RetryException, e if retries > RETRY_LIMIT
+      raise RetryException, e if retries > RETRY_LIMIT
 
       sleep 1
       retry
