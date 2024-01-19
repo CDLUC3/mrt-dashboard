@@ -444,6 +444,7 @@ DEPENDENCIES
   pry
   pry-rails
   pry-remote
+  psych (= 5.1.2)
   puma
   rack-cache
   rails (~> 6.0)

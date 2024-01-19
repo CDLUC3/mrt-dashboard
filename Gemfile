@@ -34,6 +34,7 @@ gem 'uglifier'
 gem 'unicode'
 gem 'uuidtools'
 gem 'will_paginate'
+gem 'psych', '5.1.2'
 
 group :development do
   gem 'web-console'
