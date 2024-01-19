@@ -10,11 +10,6 @@ class VersionController < ApplicationController
     end
   end
 
-  before_action(only: %i[download download_user presign]) do
-    obj = @version.inv_object
-    check_dua(obj, { object: obj, version: @version })
-  end
-
   before_action(only: %i[download download_user]) do
     if @version.exceeds_download_size?
       render file: "#{Rails.root}/public/403.html", status: 403, layout: false

@@ -7,7 +7,6 @@ class InvObject < ApplicationRecord
   has_many :inv_files, through: :inv_versions
 
   has_many :inv_dublinkernels
-  has_one :inv_duas
   has_one :inv_embargo
 
   has_many :inv_collections_inv_objects
@@ -56,19 +55,6 @@ class InvObject < ApplicationRecord
   def bytestream_uri3
     URI.parse("#{APP_CONFIG['uri_3']}#{node_number}/#{to_param}")
   end
-
-  def dua_exists?
-    merritt_retry_block do
-      !inv_duas.blank?
-    end
-  end
-
-  # :nocov:
-  def dua_uri
-    URI.parse("#{APP_CONFIG['uri_1']}#{node_number}/#{inv_collection.to_param}/0/#{urlencode(APP_CONFIG['mrt_dua_file'])}")
-  end
-
-  # :nocov:
 
   def node_number
     inv_nodes.where('inv_nodes_inv_objects.role' => 'primary').select('inv_nodes.number').map(&:number).first
