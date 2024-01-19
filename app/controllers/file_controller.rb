@@ -16,8 +16,6 @@ class FileController < ApplicationController
 
   before_action :check_download, except: %i[storage_key]
 
-  before_action :check_version, only: %i[download presign]
-
   def download
     # deprecate file download in favor of presigned retrieval
     url = request.url.gsub(%r{/d/}, '/api/presign-file/')
@@ -57,11 +55,6 @@ class FileController < ApplicationController
 
     flash[:error] = 'You do not have download permissions.'
     render file: "#{Rails.root}/public/401.html", status: 401, layout: false
-  end
-
-  def check_version
-    version = @file.inv_version
-    version.inv_object
   end
 
   def not_found_obj
