@@ -12,28 +12,6 @@
 
 ActiveRecord::Schema.define(version: 0) do
 
-  create_table "annita", id: false, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
-    t.integer "xnum"
-  end
-
-  create_table "annita_tbl", id: false, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
-    t.integer "id", limit: 2, default: 0, null: false
-    t.integer "number", null: false
-    t.string "media_type", limit: 13, null: false
-    t.string "media_connectivity", limit: 7, null: false
-    t.string "access_mode", limit: 9, null: false
-    t.string "access_protocol", limit: 10, null: false
-    t.string "node_form", limit: 8, default: "physical", null: false
-    t.string "logical_volume"
-    t.string "external_provider"
-    t.boolean "verify_on_read", null: false
-    t.boolean "verify_on_write", null: false
-    t.string "base_url", limit: 2045, null: false
-    t.datetime "created", null: false
-    t.integer "source_node", limit: 2
-    t.integer "target_node", limit: 2
-  end
-
   create_table "inv_audits", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.integer "inv_node_id", limit: 2, null: false
     t.integer "inv_object_id", null: false
@@ -83,25 +61,6 @@ ActiveRecord::Schema.define(version: 0) do
   create_table "inv_collections_inv_objects", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.integer "inv_collection_id", limit: 2, null: false
     t.integer "inv_object_id", null: false
-    t.index ["inv_collection_id"], name: "id_idx"
-    t.index ["inv_object_id"], name: "id_idx1"
-  end
-
-  create_table "inv_duas", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
-    t.integer "inv_collection_id", limit: 2
-    t.integer "inv_object_id", null: false
-    t.string "identifier"
-    t.string "title", null: false
-    t.string "terms", limit: 16383, null: false
-    t.text "template"
-    t.string "accept_obligation", limit: 8, null: false
-    t.string "name_obligation", limit: 8, null: false
-    t.string "affiliation_obligation", limit: 8, null: false
-    t.string "email_obligation", limit: 8, null: false
-    t.string "applicability", limit: 10, null: false
-    t.string "persistence", limit: 9, null: false
-    t.string "notification", null: false
-    t.index ["identifier"], name: "identifier"
     t.index ["inv_collection_id"], name: "id_idx"
     t.index ["inv_object_id"], name: "id_idx1"
   end
