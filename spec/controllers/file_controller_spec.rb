@@ -198,20 +198,6 @@ RSpec.describe FileController, type: :controller do
       end.to raise_error(MerrittRetryMixin::RetryException)
     end
 
-    it 'redirects to presign url for the file - retry dua check' do
-      mock_permissions_all(user_id, collection_id)
-
-      request.session.merge!({ uid: user_id })
-      allow_any_instance_of(InvObject)
-        .to receive(:inv_duas)
-        .with(any_args)
-        .and_raise(Mysql2::Error::ConnectionError.new('Simulate Failure'))
-
-      expect do
-        get(:presign, params: params)
-      end.to raise_error(MerrittRetryMixin::RetryException)
-    end
-
     it 'test ark encoding recovery' do
       mock_permissions_all(user_id, collection_id)
 

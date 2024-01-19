@@ -13,7 +13,8 @@ default: &default
   encoding: utf8mb4
   host: "{!SSM: inv/db-host}"
   database: "{!SSM: inv/db-name}"
-  pool: 20
+  pool: 25
+  idle_timeout: 0
   port: 3306
   username: "{!SSM: inv/readwrite/db-user}"
   password: "{!SSM: inv/readwrite/db-password}"
@@ -34,4 +35,4 @@ docker: &docker
   username: user
   password: password
   encoding: utf8mb4   
-  
+  idle_timeout: 0

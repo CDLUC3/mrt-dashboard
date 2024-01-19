@@ -8,7 +8,6 @@ module Rack
 end
 
 class ApplicationController < ActionController::Base
-  include DuaMixin
   include Encoder
   include ErrorMixin
   include NumberMixin

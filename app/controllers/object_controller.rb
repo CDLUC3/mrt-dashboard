@@ -16,10 +16,6 @@ class ObjectController < ApplicationController
     end
   end
 
-  before_action(only: %i[download download_user presign]) do
-    check_dua(@object, { object: @object })
-  end
-
   before_action(only: %i[ingest mint update]) do
     if current_user
       render(status: 404, plain: '') unless current_user.groups('write').any? { |g| g.submission_profile == params[:profile] }

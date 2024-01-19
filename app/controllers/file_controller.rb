@@ -62,7 +62,6 @@ class FileController < ApplicationController
   def check_version
     version = @file.inv_version
     obj = version.inv_object
-    check_dua(obj, { object: obj, version: version, file: @file })
   end
 
   def not_found_obj
