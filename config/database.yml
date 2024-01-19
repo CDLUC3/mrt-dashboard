@@ -14,6 +14,9 @@ default: &default
   host: "{!SSM: inv/db-host}"
   database: "{!SSM: inv/db-name}"
   pool: 25
+  # Merritt UI encountered 500 errors when mysql connections were no longer active.
+  # Jan 2024 - adding this setting to see if it prevents inactive connections.
+  # See https://api.rubyonrails.org/classes/ActiveRecord/ConnectionAdapters/ConnectionPool.html
   idle_timeout: 0
   port: 3306
   username: "{!SSM: inv/readwrite/db-user}"

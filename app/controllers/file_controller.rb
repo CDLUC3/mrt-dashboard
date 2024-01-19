@@ -61,7 +61,7 @@ class FileController < ApplicationController
 
   def check_version
     version = @file.inv_version
-    obj = version.inv_object
+    version.inv_object
   end
 
   def not_found_obj
