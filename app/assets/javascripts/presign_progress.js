@@ -91,6 +91,14 @@ var AssemblyProgress = function(assembler, pDialogs) {
 
     // If the percent is already at 100%, no action is needed
     if (val >= 100) {
+      //if the user takes no action for an hour, refresh the presigned url
+      setTimeout( 
+        function(){
+          self.setProgressVal(90);
+          self.progress()
+        },
+        60000
+      );
       return;
     }
 
