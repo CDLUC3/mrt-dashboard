@@ -97,7 +97,7 @@ var AssemblyProgress = function(assembler, pDialogs) {
           self.setProgressVal(90);
           self.progress()
         },
-        60000
+        60 * 60 * 1000
       );
       return;
     }
