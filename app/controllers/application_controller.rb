@@ -188,7 +188,7 @@ class ApplicationController < ActionController::Base
     r = create_http_cli(connect: 5, receive: 5, send: 5).get(
       File.join(APP_CONFIG['storage_presign_token'], token),
       {
-        timeout: 24 * 60,
+        timeout: 12 * 60,
         contentDisposition: "attachment; filename=#{filename}"
       },
       follow_redirect: true
