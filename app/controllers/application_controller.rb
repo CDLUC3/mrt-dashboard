@@ -185,10 +185,12 @@ class ApplicationController < ActionController::Base
   end
 
   def do_presign_obj_by_token(token, filename = 'object.zip', no_redirect = nil)
+    # Do not set timer to more than 6 * 60 since AWS host credentials for presigned expire at 6 hours
+    # see https://docs.aws.amazon.com/AmazonS3/latest/userguide/using-presigned-url.html#who-presigned-url
     r = create_http_cli(connect: 5, receive: 5, send: 5).get(
       File.join(APP_CONFIG['storage_presign_token'], token),
       {
-        timeout: 12 * 60,
+        timeout: 6 * 60,
         contentDisposition: "attachment; filename=#{filename}"
       },
       follow_redirect: true

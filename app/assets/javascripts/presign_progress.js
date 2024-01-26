@@ -86,6 +86,11 @@ var AssemblyProgress = function(assembler, pDialogs) {
     // If the val is not numeric, the process is being initialized
     if (!jQuery.isNumeric(val)) {
       val = self.assembler.getPercent();
+      // if the assembly dialog is not visible, force the regeneration of a presigned URL 
+      // by setting the progress value to 90%
+      if (val == 100 && !jQuery( ".progress-label:visible" ).is()){
+        val = 90;
+      }
       self.setProgressVal(val);
     }
 
