@@ -155,7 +155,7 @@ describe 'presigned objects and versions', js: true do
   end
 
   it 'test close/reopen dialog from upper downloads button' do
-    mock_assembly(
+    mock_assembly_with_download(
       @obj.node_number,
       ApplicationController.encode_storage_key(@obj.ark, @version.number),
       response_assembly_200(@token, 10)
@@ -172,16 +172,23 @@ describe 'presigned objects and versions', js: true do
 
     sleep 2
 
-    within('div.ui-dialog div.ui-dialog-titlebar') do
+    within('div.ui-dialog div.ui-dialog-buttonset') do
       click_button('Close')
     end
+
     within('#downloads') do
       expect(page.text).to eq('Downloads: Available')
     end
 
     click_button('Downloads: Available')
 
-    within('div.ui-dialog .ui-dialog-title') do
+    sleep 2
+
+    page.execute_script("presignDialogs.simulateCompletion('#{@token}', '#pretend-link')")
+
+    sleep 2
+
+    within('div.ui-dialog:has(div.ui-dialog-buttonset) .ui-dialog-title') do
       expect(page.text).to eq('Object is ready for Download')
     end
 
@@ -190,6 +197,7 @@ describe 'presigned objects and versions', js: true do
     within('#downloads') do
       expect(page.text).to eq('Downloads: None')
     end
+
   end
 
   it 'test no downloads' do

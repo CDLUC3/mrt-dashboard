@@ -306,7 +306,7 @@ describe ApplicationController do
       expect(@client).to receive(:get).with(
         File.join(APP_CONFIG['storage_presign_token'], token),
         {
-          timeout: 12 * 60,
+          timeout: 6 * 60,
           contentDisposition: "attachment; filename=#{filename}"
         },
         follow_redirect: true
@@ -333,7 +333,7 @@ describe ApplicationController do
       expect(@client).to receive(:get).with(
         File.join(APP_CONFIG['storage_presign_token'], token),
         {
-          timeout: 12 * 60,
+          timeout: 6 * 60,
           contentDisposition: "attachment; filename=#{filename}"
         },
         follow_redirect: true
@@ -361,7 +361,7 @@ describe ApplicationController do
       expect(@client).to receive(:get).with(
         File.join(APP_CONFIG['storage_presign_token'], token),
         {
-          timeout: 12 * 60,
+          timeout: 6 * 60,
           contentDisposition: "attachment; filename=#{filename}"
         },
         follow_redirect: true
@@ -387,7 +387,7 @@ describe ApplicationController do
       expect(@client).to receive(:get).with(
         File.join(APP_CONFIG['storage_presign_token'], token),
         {
-          timeout: 12 * 60,
+          timeout: 6 * 60,
           contentDisposition: "attachment; filename=#{filename}"
         },
         follow_redirect: true
@@ -408,7 +408,7 @@ describe ApplicationController do
       expect(@client).to receive(:get).with(
         File.join(APP_CONFIG['storage_presign_token'], token),
         {
-          timeout: 12 * 60,
+          timeout: 6 * 60,
           contentDisposition: "attachment; filename=#{filename}"
         },
         follow_redirect: true
@@ -428,7 +428,7 @@ describe ApplicationController do
       expect(@client).to receive(:get).with(
         File.join(APP_CONFIG['storage_presign_token'], token),
         {
-          timeout: 12 * 60,
+          timeout: 6 * 60,
           contentDisposition: "attachment; filename=#{filename}"
         },
         follow_redirect: true

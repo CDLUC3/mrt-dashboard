@@ -98,4 +98,11 @@ def mock_assembly(node_id, key, json, params = {})
       json[:status], json[:message], json
     )
   )
+  client
+end
+
+def mock_assembly_with_download(node_id, key, json, params = {})
+  client = mock_assembly(node_id, key, json, params)
+  allow(client).to receive(:get).with(any_args).and_return(mock_response(200, '', {}))
+  client
 end
