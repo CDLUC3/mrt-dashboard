@@ -12,7 +12,7 @@ describe Streamer do
         connect_timeout: 7200,
         keep_alive_timeout: 3600
       }.each do |param, value|
-        writer = "#{param}=".to_sym
+        writer = :"#{param}="
         allow(client).to receive(writer).with(value)
       end
       allow(HTTPClient).to receive(:new).and_return(client)

@@ -61,6 +61,8 @@ class CollectionController < ApplicationController
       @results = find_by_localid(collection_ark, params[:terms])
       return render_object_info(@results[0].ark) if @results.length == 1
     end
+    # Not sure why 201, this probably should have returned a 204 (Empty Result).
+    # The Api has been returning the 201 (Accepted) for some time, so this will remain unchanged.
     render status: 201, json: {}.to_json
   end
 
@@ -84,7 +86,7 @@ class CollectionController < ApplicationController
     terms = Unicode.downcase(terms_param)
       .split(/\s+/)
       .map { |t| is_ark?(t) ? t[11..] : t } # special ark handling
-      .delete_if { |t| (t.blank? || t.size < 4) }
+      .delete_if { |t| t.blank? || t.size < 4 }
     terms[0..50] # we can't have more than 60 terms, so just drop > 50
   end
 

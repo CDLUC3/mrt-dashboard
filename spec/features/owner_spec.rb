@@ -78,7 +78,7 @@ describe 'owners' do
         it 'finds by substring, no objects found' do
           fill_in('terms', with: 'Jan')
           click_button 'Go'
-          expect(page).to have_content('here were no items that had the text matching')
+          expect(page).to have_content('There were no items that had the text matching')
         end
 
         it 'finds by ark' do

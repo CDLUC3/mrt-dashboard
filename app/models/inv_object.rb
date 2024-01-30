@@ -1,11 +1,12 @@
 class InvObject < ApplicationRecord
+  include MerrittRetryMixin
+
   belongs_to :inv_owner, inverse_of: :inv_objects
 
   has_many :inv_versions, inverse_of: :inv_object
   has_many :inv_files, through: :inv_versions
 
   has_many :inv_dublinkernels
-  has_one :inv_duas
   has_one :inv_embargo
 
   has_many :inv_collections_inv_objects
@@ -55,25 +56,6 @@ class InvObject < ApplicationRecord
     URI.parse("#{APP_CONFIG['uri_3']}#{node_number}/#{to_param}")
   end
 
-  # :nocov:
-  def dua_exists?
-    retries = 0
-    begin
-      !inv_duas.blank?
-    rescue StandardError => e
-      retries += 1
-      retries > RETRY_LIMIT ? raise(e) : retry
-    end
-  end
-  # :nocov:
-
-  # :nocov:
-  def dua_uri
-    URI.parse("#{APP_CONFIG['uri_1']}#{node_number}/#{inv_collection.to_param}/0/#{urlencode(APP_CONFIG['mrt_dua_file'])}")
-  end
-
-  # :nocov:
-
   def node_number
     inv_nodes.where('inv_nodes_inv_objects.role' => 'primary').select('inv_nodes.number').map(&:number).first
   end
@@ -87,27 +69,15 @@ class InvObject < ApplicationRecord
   end
 
   def current_version
-    retries = 0
-    begin
+    merritt_retry_block do
       @current_version ||= inv_versions.order('number desc').first
-    # :nocov:
-    rescue StandardError => e
-      retries += 1
-      retries > RETRY_LIMIT ? raise(e) : retry
     end
-    # :nocov:
   end
 
   def inv_collection
-    retries = 0
-    begin
+    merritt_retry_block do
       @inv_collection ||= inv_collections.first
-    # :nocov:
-    rescue StandardError => e
-      retries += 1
-      retries > RETRY_LIMIT ? raise(e) : retry
     end
-    # :nocov:
   end
 
   def group
@@ -119,7 +89,9 @@ class InvObject < ApplicationRecord
   end
 
   def all_local_ids
-    inv_localids.map(&:local_id)
+    merritt_retry_block do
+      inv_localids.map(&:local_id)
+    end
   end
 
   def exceeds_download_size?
@@ -190,17 +162,19 @@ class InvObject < ApplicationRecord
   def object_info_add_versions(json, maxfile)
     filecount = 0
     inv_versions.each do |ver|
-      v = {
-        version_number: ver.number,
-        created: ver.created,
-        file_count: ver.inv_files.length,
-        files: []
-      }
-      ver.inv_files.each do |f|
-        filecount += 1
-        v[:files].push(object_info_files(f)) unless filecount > maxfile
+      merritt_retry_block do
+        v = {
+          version_number: ver.number,
+          created: ver.created,
+          file_count: ver.inv_files.length,
+          files: []
+        }
+        ver.inv_files.each do |f|
+          filecount += 1
+          v[:files].push(object_info_files(f)) unless filecount > maxfile
+        end
+        json[:versions].prepend(v)
       end
-      json[:versions].prepend(v)
     end
     filecount
   end

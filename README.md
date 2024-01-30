@@ -1,6 +1,6 @@
 # Merritt Dashboard (Merritt UI)
 
-This microservice is part of the [Merritt Preservation System](https://github.com/CDLUC3/mrt-doc).
+This microservice is part of the [Merritt Preservation System](https://github.com/CDLUC3/mrt-doc). 
 
 ## Purpose
 

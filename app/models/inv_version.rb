@@ -1,4 +1,6 @@
 class InvVersion < ApplicationRecord
+  include MerrittRetryMixin
+
   belongs_to :inv_object, inverse_of: :inv_versions
   has_many :inv_files, inverse_of: :inv_version
   has_many :inv_dublinkernels
@@ -20,19 +22,27 @@ class InvVersion < ApplicationRecord
   end
 
   def total_size
-    inv_files.sum('full_size')
+    merritt_retry_block do
+      inv_files.sum('full_size')
+    end
   end
 
   def system_files
-    inv_files.system_files.order(:pathname)
+    merritt_retry_block do
+      inv_files.system_files.order(:pathname)
+    end
   end
 
   def producer_files
-    inv_files.producer_files.order(:pathname)
+    merritt_retry_block do
+      inv_files.producer_files.order(:pathname)
+    end
   end
 
   def metadata(element)
-    inv_dublinkernels.select { |md| md.element == element && md.value != '(:unas)' }.map(&:value)
+    merritt_retry_block do
+      inv_dublinkernels.select { |md| md.element == element && md.value != '(:unas)' }.map(&:value)
+    end
   end
 
   def dk_who
@@ -56,7 +66,9 @@ class InvVersion < ApplicationRecord
   end
 
   def total_actual_size
-    inv_files.sum('full_size')
+    merritt_retry_block do
+      inv_files.sum('full_size')
+    end
   end
 
   def exceeds_sync_size?

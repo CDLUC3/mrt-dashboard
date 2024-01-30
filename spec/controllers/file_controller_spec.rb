@@ -2,6 +2,7 @@ require 'rails_helper'
 require 'support/presigned'
 
 RSpec.describe FileController, type: :controller do
+  include MerrittRetryMixin
 
   attr_reader :user_id
   attr_reader :collection
@@ -153,6 +154,48 @@ RSpec.describe FileController, type: :controller do
       expected_headers.each do |header, value|
         expect(response_headers[header]).to eq(value)
       end
+    end
+
+    it 'redirects to presign url for the file - retry failure on pathname match' do
+      mock_permissions_all(user_id, collection_id)
+
+      request.session.merge!({ uid: user_id })
+      allow(InvFile)
+        .to receive(:joins)
+        .with(any_args)
+        .and_raise(Mysql2::Error::ConnectionError.new('Simulate Failure'))
+
+      expect do
+        get(:presign, params: params)
+      end.to raise_error(MerrittRetryMixin::RetryException)
+    end
+
+    it 'redirects to presign url for the file - retry failure on object retreival' do
+      mock_permissions_all(user_id, collection_id)
+
+      request.session.merge!({ uid: user_id })
+      allow_any_instance_of(InvFile)
+        .to receive(:inv_version)
+        .with(any_args)
+        .and_raise(Mysql2::Error::ConnectionError.new('Simulate Failure'))
+
+      expect do
+        get(:presign, params: params)
+      end.to raise_error(MerrittRetryMixin::RetryException)
+    end
+
+    it 'redirects to presign url for the file - retry version check' do
+      mock_permissions_all(user_id, collection_id)
+
+      request.session.merge!({ uid: user_id })
+      allow_any_instance_of(Mysql2::Client)
+        .to receive(:prepare)
+        .with(any_args)
+        .and_raise(Mysql2::Error::ConnectionError.new('Simulate Failure'))
+
+      expect do
+        get(:presign, params: params)
+      end.to raise_error(MerrittRetryMixin::RetryException)
     end
 
     it 'test ark encoding recovery' do

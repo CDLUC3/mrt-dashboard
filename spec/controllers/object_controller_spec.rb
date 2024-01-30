@@ -2,6 +2,7 @@ require 'rails_helper'
 require 'support/presigned'
 
 RSpec.describe ObjectController, type: :controller do
+  include MerrittRetryMixin
 
   attr_reader :user_id
 
@@ -221,6 +222,27 @@ RSpec.describe ObjectController, type: :controller do
         get(:index, params: { object: object_ark })
         expect(response.status).to eq(401)
       end
+
+      it 'successful object load' do
+        mock_permissions_all(user_id, collection_id)
+        request.session.merge!({ uid: user_id })
+        get(:index, params: { object: object_ark })
+        expect(response.status).to eq(200)
+      end
+
+      it 'successful object load - retry failure on load_object' do
+        mock_permissions_all(user_id, collection_id)
+        request.session.merge!({ uid: user_id })
+        allow(InvObject)
+          .to receive(:where)
+          .with(any_args)
+          .and_raise(Mysql2::Error::ConnectionError.new('Simulate Failure'))
+
+        expect do
+          get(:index, params: { object: object_ark })
+        end.to raise_error(MerrittRetryMixin::RetryException)
+      end
+
     end
 
     describe ':object_info' do
@@ -310,6 +332,30 @@ RSpec.describe ObjectController, type: :controller do
         expect(response.status).to eq(200)
         json = JSON.parse(response.body)
         expect(json['versions'][0]['files'][0]['pathname']).to eq('producer/foo.bin')
+      end
+
+      it 'returns object_info with files as json - retry failure' do
+        inv_file = create(
+          :inv_file,
+          inv_object: @objects[0],
+          inv_version: @objects[0].current_version,
+          pathname: 'producer/foo.bin',
+          mime_type: 'application/octet-stream',
+          billable_size: 1000
+        )
+        inv_file.save!
+
+        mock_permissions_all(user_id, collection_id)
+        request.session.merge!({ uid: user_id })
+
+        allow_any_instance_of(InvVersion)
+          .to receive(:inv_files)
+          .with(any_args)
+          .and_raise(Mysql2::Error::ConnectionError.new('Simulate Failure'))
+
+        expect do
+          get(:object_info, params: { object: object_ark })
+        end.to raise_error(MerrittRetryMixin::RetryException)
       end
     end
 
@@ -742,6 +788,18 @@ RSpec.describe ObjectController, type: :controller do
         objects.each do |obj|
           expect(body).to include(obj.ark)
         end
+      end
+
+      it 'gets the list of objects - retry failure on query' do
+        mock_permissions_all(user_id, collection_id)
+        allow(InvCollection)
+          .to receive(:where)
+          .with(any_args)
+          .and_raise(Mysql2::Error::ConnectionError.new('Simulate Failure'))
+
+        expect do
+          get(:recent, params: { collection: collection.ark })
+        end.to raise_error(MerrittRetryMixin::RetryException)
       end
 
       it 'gets the list of objects - no collection permissions' do

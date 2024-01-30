@@ -41,6 +41,8 @@ class OwnerController < ApplicationController
       @results = find_by_file_name(@request_owner, term) if @results.empty?
       @results = find_by_full_text(@request_owner, terms) if @results.empty?
     end
+    # The 201 (Accepted) being returned should have probably been a 204 (Empty Result).
+    # The collection search API has been returning 201 for some time, so this will be unchanged.
     render status: @results.empty? ? 201 : 200
   end
 
@@ -50,7 +52,7 @@ class OwnerController < ApplicationController
     terms = Unicode.downcase(terms_param)
       .split(/\s+/)
       .map { |t| is_ark?(t) ? t[11..] : t } # special ark handling
-      .delete_if { |t| (t.blank? || t.size < 4) }
+      .delete_if { |t| t.blank? || t.size < 4 }
     terms[0..50] # we can't have more than 60 terms, so just drop > 50
   end
 

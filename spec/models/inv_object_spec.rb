@@ -1,6 +1,8 @@
 require 'rails_helper'
 
 describe InvObject do
+  include MerrittRetryMixin
+
   attr_reader :obj
   attr_reader :collection
 
@@ -18,6 +20,39 @@ describe InvObject do
       end
       obj.reload
       expect(obj.all_local_ids).to eq(expected_lids)
+    end
+  end
+
+  describe 'retry logic' do
+    it 'object current_version - hit retry limit' do
+      allow_any_instance_of(ActiveRecord::Associations::CollectionProxy)
+        .to receive(:order)
+        .with(any_args)
+        .and_raise(Mysql2::Error::ConnectionError.new('Simulate Failure'))
+      expect do
+        @obj.current_version
+      end.to raise_error(MerrittRetryMixin::RetryException)
+    end
+
+    it 'object inv_collection - hit retry limit' do
+      allow_any_instance_of(ActiveRecord::Associations::CollectionProxy)
+        .to receive(:order)
+        .with(any_args)
+        .and_raise(Mysql2::Error::ConnectionError.new('Simulate Failure'))
+      expect do
+        @obj.inv_collection
+      end.to raise_error(MerrittRetryMixin::RetryException)
+    end
+
+    it 'gets the list of local ids - retry failure on query' do
+      allow_any_instance_of(ActiveRecord::Associations::CollectionProxy)
+        .to receive(:map)
+        .with(any_args)
+        .and_raise(Mysql2::Error::ConnectionError.new('Simulate Failure'))
+
+      expect do
+        @obj.all_local_ids
+      end.to raise_error(MerrittRetryMixin::RetryException)
     end
   end
 

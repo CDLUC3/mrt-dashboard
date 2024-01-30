@@ -2,8 +2,7 @@ require 'httpclient'
 require 'json'
 
 class FileController < ApplicationController
-
-  RETRY_LIMIT = 3
+  include MerrittRetryMixin
 
   before_action :require_user
 
@@ -16,8 +15,6 @@ class FileController < ApplicationController
   before_action :load_file, except: %i[storage_key]
 
   before_action :check_download, except: %i[storage_key]
-
-  before_action :check_version, only: %i[download presign]
 
   def download
     # deprecate file download in favor of presigned retrieval
@@ -51,25 +48,13 @@ class FileController < ApplicationController
   private
 
   def check_download
-    retries = 0
-    begin
+    merritt_retry_block do
       obj = @file.inv_version.inv_object
       return if current_user_can_download?(obj)
-    rescue StandardError => e
-      # :nocov:
-      retries += 1
-      retries > RETRY_LIMIT ? raise(e) : retry
-      # :nocov:
     end
 
     flash[:error] = 'You do not have download permissions.'
     render file: "#{Rails.root}/public/401.html", status: 401, layout: false
-  end
-
-  def check_version
-    version = @file.inv_version
-    obj = version.inv_object
-    check_dua(obj, { object: obj, version: version, file: @file })
   end
 
   def not_found_obj
@@ -80,15 +65,9 @@ class FileController < ApplicationController
   end
 
   def storage_key_do
-    retries = 0
-    begin
+    merritt_retry_block do
       do_storage_key_do
-    # :nocov:
-    rescue StandardError => e
-      retries += 1
-      retries > RETRY_LIMIT ? raise(e) : retry
     end
-    # :nocov:
   end
 
   # Perform database lookup for storge node and key
@@ -209,19 +188,13 @@ class FileController < ApplicationController
     # the filename
     filename = "producer/#{filename}" if filename.valid_encoding? && filename !~ /^(producer|system)/
 
-    retries = 0
-    begin
+    merritt_retry_block do
       @file = InvFile.joins(:inv_version, :inv_object)
         .where('inv_objects.ark = ?', params_u(:object))
         .where('inv_versions.number = ?', params[:version])
         .where('inv_files.pathname = ?', filename)
         .first
       raise ActiveRecord::RecordNotFound if @file.nil?
-    rescue StandardError => e
-      # :nocov:
-      retries += 1
-      retries > RETRY_LIMIT ? raise(e) : retry
-      # :nocov:
     end
   end
 

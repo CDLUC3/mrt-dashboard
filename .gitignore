@@ -23,7 +23,6 @@ mrt-dashboard_production
 console
 help/*
 sqlite/*
-db/schema.rb
 .DS_Store
 .project
 .rvmrc

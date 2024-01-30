@@ -3,11 +3,10 @@ require 'tempfile'
 class ObjectController < ApplicationController
   include MintMixin
   include IngestMixin
-
-  RETRY_LIMIT = 3
+  include MerrittRetryMixin
 
   before_action :require_user, except: %i[jupload_add recent ingest mint update]
-  before_action :require_named_user_or_401, only: %i[recent]
+  before_action :require_named_user_or_401, only: %i[recent add]
   before_action :load_object, only: %i[index download download_user download_manifest presign object_info audit_replic]
 
   before_action(only: %i[download download_user download_manifest presign]) do
@@ -15,10 +14,6 @@ class ObjectController < ApplicationController
       flash[:error] = 'You do not have download permissions.'
       render file: "#{Rails.root}/public/401.html", status: 401, layout: false
     end
-  end
-
-  before_action(only: %i[download download_user]) do
-    check_dua(@object, { object: @object })
   end
 
   before_action(only: %i[ingest mint update]) do
@@ -32,14 +27,8 @@ class ObjectController < ApplicationController
   protect_from_forgery except: %i[ingest mint update]
 
   def load_object
-    retries = 0
-    begin
+    merritt_retry_block do
       @object = InvObject.where('ark = ?', params_u(:object)).includes(:inv_collections, inv_versions: [:inv_files]).first
-    rescue StandardError => e
-      # :nocov:
-      retries += 1
-      retries > RETRY_LIMIT ? raise(e) : retry
-      # :nocov:
     end
 
     raise ActiveRecord::RecordNotFound if @object.nil?
@@ -99,15 +88,9 @@ class ObjectController < ApplicationController
   # rubocop:enable Lint/RescueException
 
   def recent
-    retries = 0
-    begin
+    merritt_retry_block do
       do_recent
-    # :nocov:
-    rescue StandardError => e
-      retries += 1
-      retries > RETRY_LIMIT ? raise(e) : retry
     end
-    # :nocov:
   end
 
   def do_recent

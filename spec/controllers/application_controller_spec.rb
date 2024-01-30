@@ -305,8 +305,10 @@ describe ApplicationController do
       filename = 'object.zip'
       expect(@client).to receive(:get).with(
         File.join(APP_CONFIG['storage_presign_token'], token),
-        { contentDisposition: "attachment; filename=#{filename}" },
-        {},
+        {
+          timeout: 6 * 60,
+          contentDisposition: "attachment; filename=#{filename}"
+        },
         follow_redirect: true
       ).and_return(
         mock_response(
@@ -330,8 +332,10 @@ describe ApplicationController do
       filename = 'object.zip'
       expect(@client).to receive(:get).with(
         File.join(APP_CONFIG['storage_presign_token'], token),
-        { contentDisposition: "attachment; filename=#{filename}" },
-        {},
+        {
+          timeout: 6 * 60,
+          contentDisposition: "attachment; filename=#{filename}"
+        },
         follow_redirect: true
       ).and_return(
         mock_response(
@@ -356,8 +360,10 @@ describe ApplicationController do
       filename = 'object.zip'
       expect(@client).to receive(:get).with(
         File.join(APP_CONFIG['storage_presign_token'], token),
-        { contentDisposition: "attachment; filename=#{filename}" },
-        {},
+        {
+          timeout: 6 * 60,
+          contentDisposition: "attachment; filename=#{filename}"
+        },
         follow_redirect: true
       ).and_return(
         mock_response(
@@ -380,8 +386,10 @@ describe ApplicationController do
       filename = 'object.zip'
       expect(@client).to receive(:get).with(
         File.join(APP_CONFIG['storage_presign_token'], token),
-        { contentDisposition: "attachment; filename=#{filename}" },
-        {},
+        {
+          timeout: 6 * 60,
+          contentDisposition: "attachment; filename=#{filename}"
+        },
         follow_redirect: true
       ).and_return(
         mock_response(
@@ -399,8 +407,10 @@ describe ApplicationController do
       filename = 'object.zip'
       expect(@client).to receive(:get).with(
         File.join(APP_CONFIG['storage_presign_token'], token),
-        { contentDisposition: "attachment; filename=#{filename}" },
-        {},
+        {
+          timeout: 6 * 60,
+          contentDisposition: "attachment; filename=#{filename}"
+        },
         follow_redirect: true
       ).and_return(
         mock_response(
@@ -417,8 +427,10 @@ describe ApplicationController do
       filename = 'object.zip'
       expect(@client).to receive(:get).with(
         File.join(APP_CONFIG['storage_presign_token'], token),
-        { contentDisposition: "attachment; filename=#{filename}" },
-        {},
+        {
+          timeout: 6 * 60,
+          contentDisposition: "attachment; filename=#{filename}"
+        },
         follow_redirect: true
       ).and_raise(
         HTTPClient::ReceiveTimeoutError

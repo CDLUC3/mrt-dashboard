@@ -448,9 +448,6 @@
   footer nav ul li:not(:last-of-type) {
     border-right: 1px solid #7c7e7f;
   }
-  table.properties th {
-    white-space: nowrap;
-  }
   span.timestamp {
     display: inline-block;
   }
@@ -1173,13 +1170,17 @@ div.form-submit {
   padding-top: 12px;
 }
 
-span.digest {
+span.digest, span.files_mime {
   width: 100px;
-  font-style: italic;
   display: inline-flex;
+  white-space: nowrap;
 }
 
-span.digest div {
+span.digest {
+  font-style: italic;
+}
+
+span.digest div, span.files_mime div, span.files_path div {
   text-overflow: ellipsis;
   overflow-x: hidden;
 }
@@ -1189,7 +1190,20 @@ span.digest div {
 }
 
 table.properties td, table.properties th {
-    width: 20%;
+  width: 20%;
+}
+
+table.properties.object_properties th, table.properties.version_properties th {
+  width: 30%;
+}
+
+table.properties.object_properties td, table.properties.version_properties td {
+  line-break: anywhere;
+  width: 65%;
+}
+
+table.properties td.files_size {
+  text-align: right;
 }
 
 #skip a {
@@ -1233,13 +1247,21 @@ div.pagination {
 table.properties tr th.files {
   width: 200px;
   max-width: 200px;
-  overflow-x: hidden;
-  text-overflow: ellipsis;
+  text-align: left;
+}
+
+table.properties tr th.files div {
+  text-indent: -10px;
+  padding-left: 10px;
 }
 
 table.properties tr td.files {
   width: 100px;
   max-width: 100px;
+}
+
+table.files_properties tr:hover td, table.files_properties tr:hover th {
+  background-color: #E0E0E0;
 }
 
 th.ark-header {

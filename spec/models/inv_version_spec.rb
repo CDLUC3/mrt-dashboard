@@ -1,6 +1,7 @@
 require 'rails_helper'
 
 describe InvVersion do
+  include MerrittRetryMixin
 
   attr_reader :obj, :version
 
@@ -24,6 +25,52 @@ describe InvVersion do
       # TODO: figure out why this produces double //s and stop doing it
       expected_uri = "#{APP_CONFIG['uri_2']}#{obj.node_number}/#{obj.to_param}/#{version.to_param}"
       expect(version.bytestream_uri2).to eq(URI.parse(expected_uri))
+    end
+  end
+
+  describe 'retry logic' do
+    it 'total_size retry' do
+      allow_any_instance_of(ActiveRecord::Associations::CollectionProxy)
+        .to receive(:sum)
+        .with(any_args)
+        .and_raise(Mysql2::Error::ConnectionError.new('Simulate Failure'))
+
+      expect do
+        @version.total_size
+      end.to raise_error(MerrittRetryMixin::RetryException)
+    end
+
+    it 'system_files retry' do
+      allow_any_instance_of(InvVersion)
+        .to receive(:inv_files)
+        .with(any_args)
+        .and_raise(Mysql2::Error::ConnectionError.new('Simulate Failure'))
+
+      expect do
+        @version.system_files
+      end.to raise_error(MerrittRetryMixin::RetryException)
+    end
+
+    it 'producer_files retry' do
+      allow_any_instance_of(InvVersion)
+        .to receive(:inv_files)
+        .with(any_args)
+        .and_raise(Mysql2::Error::ConnectionError.new('Simulate Failure'))
+
+      expect do
+        @version.producer_files
+      end.to raise_error(MerrittRetryMixin::RetryException)
+    end
+
+    it 'metadata retry' do
+      allow_any_instance_of(ActiveRecord::Associations::CollectionProxy)
+        .to receive(:select)
+        .with(any_args)
+        .and_raise(Mysql2::Error::ConnectionError.new('Simulate Failure'))
+
+      expect do
+        @version.metadata('who')
+      end.to raise_error(MerrittRetryMixin::RetryException)
     end
   end
 end

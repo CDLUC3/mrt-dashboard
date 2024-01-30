@@ -25,7 +25,7 @@ describe HttpMixin do
         keep_alive_timeout: 3600
       }
       config.each do |param, value|
-        writer = "#{param}=".to_sym
+        writer = :"#{param}="
         expect(client).to receive(writer).with(value)
       end
       expect(HTTPClient).to receive(:new).and_return(client)
