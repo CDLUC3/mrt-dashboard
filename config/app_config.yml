@@ -29,7 +29,7 @@ stage: &stage
   <<: *ssmdef
   dua_email_to:         [marisa.strong@ucop.edu, eric.lopatin@ucop.edu]
   merritt_server:       "http://merritt-stage.cdlib.org"
-  n2t_uri:              "http://n2t-stg.n2t.net/"
+  n2t_uri:              "http://n2t.net/"
   proto_force:          "https"
   global_search_owners:
     'UCB Library': "{!SSM: ui/global-search/ucb}"
