@@ -6,9 +6,6 @@ This microservice is part of the [Merritt Preservation System](https://github.co
 
 This microservice provides the User Interface for the Merritt Perservation System.
 
-This microservice provides API functionality for the [Dryad](https://datadryad.org/)
-and for the harvesting of Nuxeo content feeds for ingest into Merrit. 
-
 ## Component Diagram
 
 ```mermaid
@@ -22,10 +19,6 @@ graph TD
   ST(Storage)
   click ST href "https://github.com/CDLUC3/mrt-store" "source code"
   LDAP[/LDAP\]
-  NUXEO((Nuxeo DAMS))
-  DRYAD(Dryad UI)
-  click DRYAD href "https://datadryad.org/" "service link"
-  NFEED[[Cron: Nuxeo Harvest]]
   BROWSER[[Browser]]
 
   subgraph Merritt
@@ -34,21 +27,11 @@ graph TD
     UI --> |"file or manifest"| ING
     UI --> |authorization| LDAP
     UI ---> |retrieval req| ST
-    NFEED --> ING
-  end
-  subgraph dryad_browse
-    DRYAD --> |download req| UI
-  end
-  subgraph dams_ingest
-    NUXEO --> NFEED
   end
 
   style RDS fill:#F68D2F
   style LDAP fill:cyan
-  style NUXEO fill:cyan
-  style DRYAD fill:cyan
   style UI stroke:red,stroke-width:4px
-  style NFEED stroke:red,stroke-width:4px
 ```
 
 ## API Summary
