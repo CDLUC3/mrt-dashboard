@@ -742,14 +742,6 @@ div.home {
     height: 31px;
     width: 204px;
   }
-  main.home section.related-services ul li#ie-dryad-logo {
-    -ms-grid-column: 3;
-    -ms-grid-row: 3;
-  }
-  main.home section.related-services ul li#ie-dryad-logo img {
-    height: 40px;
-    width: 140px;
-  }
   main.home section.related-services ul li#ie-escholarship-logo {
     -ms-grid-column: 5;
     -ms-grid-row: 3;
