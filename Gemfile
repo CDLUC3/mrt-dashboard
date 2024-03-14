@@ -12,6 +12,8 @@ gem 'bootsnap'
 gem 'builder'
 gem 'capistrano', '3.14.1'
 gem 'capistrano-rails'
+gem 'ed25519'
+gem 'bcrypt_pbkdf'
 
 gem 'exception_notification'
 gem 'httpclient'
