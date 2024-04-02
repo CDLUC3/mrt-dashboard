@@ -97,5 +97,8 @@ Rails.application.routes.draw do
 
   # obsolete?
   get('feeds/recent' => 'feeds#recent')
+  get('/docs', to: redirect('https://github.com/CDLUC3/mrt-doc/blob/main/README.md'))
+  get('/presentations', to: redirect('https://github.com/CDLUC3/mrt-doc/blob/main/presentations/README.md'))
+  get('/wiki', to: redirect('https://github.com/CDLUC3/mrt-doc/wiki'))
 
 end
