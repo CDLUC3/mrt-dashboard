@@ -8,11 +8,12 @@ gem 'rails', '~> 6.0'
 
 gem 'aws-sdk-ec2'
 gem 'aws-sdk-ssm'
+gem 'bcrypt_pbkdf'
 gem 'bootsnap'
 gem 'builder'
 gem 'capistrano', '3.14.1'
 gem 'capistrano-rails'
-
+gem 'ed25519'
 gem 'exception_notification'
 gem 'httpclient'
 gem 'irb'
