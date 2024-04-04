@@ -10,3 +10,9 @@ Metrics/AbcSize:
 Metrics/MethodLength:
   Exclude:
   - inv_object.rb
+Metrics/PerceivedComplexity:
+  Exclude:
+  - inv_object.rb
+Metrics/CyclomaticComplexity:
+  Exclude:
+  - inv_object.rb
