@@ -182,8 +182,8 @@ class InvObject < ApplicationRecord
     begin
       add_prune(json) if filecount < maxfile
       json[:prune_evaluated] = (filecount < maxfile)
-    rescue
-      #suppress any errors from the pruning algorithm
+    rescue StandardError
+      # suppress any errors from the pruning algorithm
     end
     filecount
   end
