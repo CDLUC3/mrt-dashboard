@@ -10,7 +10,8 @@
       <%= link_to("Collection: #{@object.group.description}", :controller => 'collection', :action => 'index', :group => @object.group) %> &gt;
       Object: <%= @object.ark %>
       <% unless guest_logged_in? %>
-      <%= link_to('JSON version', "/api/object_info/#{Encoder.urlencode(@object.ark)}", title: 'JSON representation of this object') %>
+        <span> - </span>
+        <%= link_to('JSON version', "/api/object_info/#{Encoder.urlencode(@object.ark)}", title: 'JSON representation of this object') %>
       <% end %>
     </div>
 

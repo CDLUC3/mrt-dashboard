@@ -128,7 +128,7 @@ class InvObject < ApplicationRecord
   end
 
   def object_info
-    maxfile = 1000
+    maxfile = 2500
     json = object_info_json
     object_info_add_localids(json)
     filecount = object_info_add_versions(json, maxfile)
@@ -179,8 +179,12 @@ class InvObject < ApplicationRecord
         json[:versions].prepend(v)
       end
     end
-    json[:prune_evaluated] = (filecount < maxfile)
-    add_prune(json) if filecount < maxfile
+    begin
+      add_prune(json) if filecount < maxfile
+      json[:prune_evaluated] = (filecount < maxfile)
+    rescue
+      #suppress any errors from the pruning algorithm
+    end
     filecount
   end
 
