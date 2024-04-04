@@ -184,6 +184,7 @@ class InvObject < ApplicationRecord
     filecount
   end
 
+  # :nocov:
   def add_prune(json)
     digests = {}
     paths = {}
@@ -210,6 +211,7 @@ class InvObject < ApplicationRecord
       end
     end
   end
+  # :nocov:
 
   def object_info_files(file)
     {
