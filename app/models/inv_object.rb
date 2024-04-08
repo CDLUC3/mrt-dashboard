@@ -128,7 +128,7 @@ class InvObject < ApplicationRecord
   end
 
   def object_info
-    maxfile = 1000
+    maxfile = 2500
     json = object_info_json
     object_info_add_localids(json)
     filecount = object_info_add_versions(json, maxfile)
@@ -149,7 +149,10 @@ class InvObject < ApplicationRecord
       erc_what: erc_what,
       erc_when: erc_when,
       versions: [],
-      localids: []
+      localids: [],
+      prune_v1: [],
+      prune_v2: [],
+      prune_evaluated: false
     }
   end
 
@@ -176,8 +179,43 @@ class InvObject < ApplicationRecord
         json[:versions].prepend(v)
       end
     end
+    begin
+      add_prune(json) if filecount < maxfile
+      json[:prune_evaluated] = (filecount < maxfile)
+    rescue StandardError
+      # suppress any errors from the pruning algorithm
+    end
     filecount
   end
+
+  # :nocov:
+  def add_prune(json)
+    digests = {}
+    paths = {}
+    curv = json[:versions][0]
+    vn = curv[:version_number]
+    curv[:files].each do |f|
+      paths[f[:pathname]] = vn
+      digests[f[:digest_value]] = vn
+    end
+    json[:versions].each do |v|
+      next if v[:version_number] == vn
+
+      v[:files].each do |f|
+        next unless f[:full_size] == f[:billable_size]
+
+        p = f[:pathname]
+        rec = { pathname: p, billable_size: f[:billable_size], version: v[:version_number] }
+        next if paths.key?(p)
+
+        json[:prune_v1].append(rec) unless json[:prune_v1].include?(p)
+        next unless digests.key?(f[:digest_value])
+
+        json[:prune_v2].append(rec) unless json[:prune_v2].include?(p)
+      end
+    end
+  end
+  # :nocov:
 
   def object_info_files(file)
     {
