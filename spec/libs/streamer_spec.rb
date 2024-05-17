@@ -23,7 +23,7 @@ describe Streamer do
         .and_yield('chunk 3')
 
       streamer = Streamer.new(url)
-      yielded = streamer.map { |chunk| chunk }
+      streamer.each { |chunk| yielded << chunk }
       expect(yielded).to eq(['chunk 1', 'chunk 2', 'chunk 3'])
     end
   end
