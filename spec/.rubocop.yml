@@ -17,3 +17,6 @@ Metrics/MethodLength:
 
 Style/OpenStructUse:
   Enabled: false
+
+Style/MapIntoArray:
+  Enabled: false
