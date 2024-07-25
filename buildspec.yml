@@ -21,6 +21,7 @@ phases:
       - bundle exec rubocop
       # - bundle exec rspec
 
+      - docker buildx create --use 
       - |
         docker buildx build --platform linux/arm64,linux/amd64 --push \
           --build-arg ECR_REGISTRY=${ECR_REGISTRY} \
