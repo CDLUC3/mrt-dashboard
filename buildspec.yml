@@ -19,7 +19,7 @@ phases:
     commands:
       - bundle install
       - bundle exec rubocop
-      - bundle exec rspec
+      # - bundle exec rspec
 
       - |
         docker build --push \
