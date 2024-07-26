@@ -28,6 +28,6 @@ phases:
       - BUILDCMD="buildx build --platform linux/arm64,linux/amd64 --push"
       - BUILDCMD="build --push"
       - |
-        docker #{BUILDCMD} \
+        docker ${BUILDCMD} \
           --build-arg ECR_REGISTRY=${ECR_REGISTRY} \
           -t ${ECR_REGISTRY}/mrt-dashboard:dev .
