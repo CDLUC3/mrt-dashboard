@@ -348,8 +348,6 @@ GEM
       unicode-display_width (>= 2.4.0, < 3.0)
     rubocop-ast (1.31.3)
       parser (>= 3.3.1.0)
-    ruby-debug-ide (0.7.3)
-      rake (>= 0.8.1)
     ruby-prof (1.7.0)
     ruby-progressbar (1.13.0)
     rubyzip (2.3.2)
@@ -466,7 +464,6 @@ DEPENDENCIES
   rest-client
   rspec-rails
   rubocop
-  ruby-debug-ide
   ruby-prof
   selenium-webdriver (~> 4.11)
   simplecov
