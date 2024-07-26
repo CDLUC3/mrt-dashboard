@@ -17,12 +17,15 @@ phases:
   build:
     on-failure: ABORT
     commands:
-      - bundle install
-      - bundle exec rubocop
+      # disable the following to see if build speed improves
+      # - bundle install
+      # - bundle exec rubocop
+      
+      # rspec tests not yet working in codebuild
       # - bundle exec rspec
 
       - docker buildx create --use 
       - |
-        docker buildx build --platform linux/arm64,linux/amd64 --push \
+        docker buildx build --quiet --platform linux/arm64,linux/amd64 --push \
           --build-arg ECR_REGISTRY=${ECR_REGISTRY} \
           -t ${ECR_REGISTRY}/mrt-dashboard:dev .
