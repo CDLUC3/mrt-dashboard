@@ -25,8 +25,8 @@ phases:
       # - bundle exec rspec
 
       - docker buildx create --use 
-      - BUILDCMD="buildx build --platform linux/arm64,linux/amd64 --push"
-      - BUILDCMD="build --push"
+      - BUILDCMD="buildx build --platform linux/arm64,linux/amd64 --push --quiet"
+      - BUILDCMD="build --push --quiet"
       - |
         docker ${BUILDCMD} \
           --build-arg ECR_REGISTRY=${ECR_REGISTRY} \
