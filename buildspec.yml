@@ -14,19 +14,20 @@ phases:
       - BRANCHTAG=`git describe --tags --exact-match 2> /dev/null || git symbolic-ref -q --short HEAD || git name-rev $(git rev-parse --short HEAD) | cut -d' ' -f2 || git rev-parse --short HEAD`
       - echo "Branchtag ${BRANCHTAG}"
 
+      # - docker buildx create --use 
+      # - BUILDCMD="buildx build --platform linux/arm64,linux/amd64 --push --quiet"
+      - BUILDCMD="build --push --quiet"
+
   build:
     on-failure: ABORT
     commands:
       # disable the following to see if build speed improves
-      # - bundle install
-      # - bundle exec rubocop
+      - bundle install
+      - bundle exec rubocop
       
       # rspec tests not yet working in codebuild
       # - bundle exec rspec
 
-      - docker buildx create --use 
-      - BUILDCMD="buildx build --platform linux/arm64,linux/amd64 --push --quiet"
-      - BUILDCMD="build --push --quiet"
       - |
         docker ${BUILDCMD} \
           --build-arg ECR_REGISTRY=${ECR_REGISTRY} \
