@@ -1,0 +1,9 @@
+config/credentials.yml.enc
+Dockerfile
+vendor/
+.byebug_history
+tmp/
+log/
+coverage/
+.bundle/
+public/assets

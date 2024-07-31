@@ -51,7 +51,7 @@ group :development, :test, :docker do
   gem 'pry-remote', require: 'pry-remote'
   gem 'rspec-rails'
   gem 'rubocop'
-  gem 'ruby-debug-ide'
+  # gem 'ruby-debug-ide'
   gem 'ruby-prof'
 end
 

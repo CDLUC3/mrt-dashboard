@@ -1,0 +1,34 @@
+version: 0.2
+
+# Pre-requisites
+# - Create CodeBuild project
+#   - Provide minimal github credentials to access public repo
+# test
+
+phases:
+  pre_build:
+    on-failure: ABORT
+    commands:
+      - aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin ${ECR_REGISTRY}
+      - aws ecr create-repository --repository-name mrt-dashboard || echo 'ignore if exists...'
+      - BRANCHTAG=`git describe --tags --exact-match 2> /dev/null || git symbolic-ref -q --short HEAD || git name-rev $(git rev-parse --short HEAD) | cut -d' ' -f2 || git rev-parse --short HEAD`
+      - echo "Branchtag ${BRANCHTAG}"
+
+      # - docker buildx create --use 
+      # - BUILDCMD="buildx build --platform linux/arm64,linux/amd64 --push --quiet"
+      - BUILDCMD="build --push --quiet"
+
+  build:
+    on-failure: ABORT
+    commands:
+      # disable the following to see if build speed improves
+      - bundle install
+      - bundle exec rubocop
+      
+      # rspec tests not yet working in codebuild
+      # - bundle exec rspec
+
+      - |
+        docker ${BUILDCMD} \
+          --build-arg ECR_REGISTRY=${ECR_REGISTRY} \
+          -t ${ECR_REGISTRY}/mrt-dashboard:dev .
