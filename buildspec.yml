@@ -10,7 +10,6 @@ phases:
     on-failure: ABORT
     commands:
     - aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin ${ECR_REGISTRY}
-    - aws ecr create-repository --repository-name mrt-dashboard || echo 'ignore if exists...'
 
     - COMMIT=`git rev-parse --short HEAD`
     - BRANCH=`git symbolic-ref -q --short HEAD || git name-rev $(git rev-parse --short HEAD) | cut -d' ' -f2 || echo ''`
