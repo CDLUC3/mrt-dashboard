@@ -3,7 +3,6 @@
 #   All rights reserved
 #*********************************************************************
 # See https://itnext.io/docker-rails-puma-nginx-postgres-999cd8866b18
-#   docker build -t cdluc3/mrt-dashboard .
 
 FROM public.ecr.aws/docker/library/ruby:3
 RUN apt-get update -y -qq && apt-get install -y build-essential libpq-dev nodejs && apt-get -y upgrade
