@@ -15,6 +15,7 @@ phases:
     - BRANCH=`git symbolic-ref -q --short HEAD || git name-rev $(git rev-parse --short HEAD) | cut -d' ' -f2 || echo ''`
     - TAG=`git describe --tags --exact-match 2> /dev/null || echo ''`
     - BRANCHTAG=`git describe --tags --exact-match 2> /dev/null || git symbolic-ref -q --short HEAD || git name-rev $(git rev-parse --short HEAD) | cut -d' ' -f2 || git rev-parse --short HEAD`
+    - DOCKTAG=$BRANCHTAG
     - echo "Branchtag ${BRANCHTAG}"
 
   build:
@@ -24,13 +25,16 @@ phases:
     - bundle install
     - bundle exec rubocop
       
-    # rspec tests not yet working in codebuild
-    # - bundle exec rspec
+    - |
+      if [[ "${BRANCHTAG}" == "main" ]]
+      then
+        DOCKTAG='dev'
+      fi
 
     - |
       docker build --push --quiet \
         --build-arg ECR_REGISTRY=${ECR_REGISTRY} \
-        -t ${ECR_REGISTRY}/mrt-dashboard:dev .
+        -t ${ECR_REGISTRY}/mrt-dashboard:${DOCKTAG} .
     - aws s3 cp swagger.html s3://${S3CFBUCKET}/api/mrt-dashboard/index.html
     - aws s3 cp swagger.yml s3://${S3CFBUCKET}/api/mrt-dashboard/
     - aws cloudfront create-invalidation --distribution-id ${CFDISTRIBUTIONID} --paths /api/mrt-dashboard/ --region us-east-1
