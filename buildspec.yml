@@ -36,6 +36,32 @@ phases:
       docker build --push --quiet \
         --build-arg ECR_REGISTRY=${ECR_REGISTRY} \
         -t ${ECR_REGISTRY}/mrt-dashboard:${DOCKTAG} .
+
+    # report results
+    - mkdir -p reports
+    - RPT=reports/mrt-dashboard
+    - echo "## Semantic Tags" > $RPT
+    - |
+      git for-each-ref --sort=-creatordate --format '- %(refname) (%(creatordate:short))' refs/tags \
+        | egrep "tags/[0-9]+\.[0-9]+\.[0-9]+ " \
+        | sed -e "s/refs\/tags\///" | head -10 >> $RPT
+    - echo "## Feature Tags" >> $RPT
+    - |
+      git for-each-ref --sort=-creatordate --format '- %(refname) (%(creatordate:short))' refs/tags \
+        | egrep -v "tags/[0-9]+\.[0-9]+\.[0-9]+ " \
+        | egrep -v "sprint-" \
+        | sed -e "s/refs\/tags\///" | head -10 >> $RPT
+    - |
+      for img in mrt-dashboard
+      do
+        echo "## Docker Image Tags $img" >> $RPT
+        aws ecr list-images --repository-name $img --filter tagStatus=TAGGED --output=text \
+        | cut -f3 \
+        | sed -e "s/^/- /" >> $RPT
+      done
+
+    - aws s3 cp $RPT s3://${S3CFBUCKET}/$RPT
     - aws s3 cp swagger.html s3://${S3CFBUCKET}/api/mrt-dashboard/index.html
     - aws s3 cp swagger.yml s3://${S3CFBUCKET}/api/mrt-dashboard/
+    - aws cloudfront create-invalidation --distribution-id ${CFDISTRIBUTIONID} --paths /reports/* --region us-east-1
     - aws cloudfront create-invalidation --distribution-id ${CFDISTRIBUTIONID} --paths /api/mrt-dashboard/ --region us-east-1
