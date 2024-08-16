@@ -22,6 +22,7 @@ phases:
     on-failure: ABORT
     commands:
     # disable the following to see if build speed improves
+    - ruby -v
     - bundle install
     - bundle exec rubocop
       
