@@ -39,7 +39,7 @@ phases:
 
     # report results
     - mkdir -p reports
-    - RPT=reports/mrt-dashboard
+    - RPT=reports/mrt-dashboard.md
     - echo "## Semantic Tags" > $RPT
     - |
       git for-each-ref --sort=-creatordate --format '- %(refname) (%(creatordate:short))' refs/tags \
