@@ -21,8 +21,8 @@ phases:
   build:
     on-failure: ABORT
     commands:
-    # disable the following to see if build speed improves
-    - rbenv versions
+    # 3.2.4 is required
+    #- rbenv versions
     #- bundle install
     #- bundle exec rubocop
       
