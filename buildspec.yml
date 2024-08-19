@@ -16,7 +16,7 @@ phases:
     - TAG=`git describe --tags --exact-match 2> /dev/null || echo ''`
     - BRANCHTAG=`git describe --tags --exact-match 2> /dev/null || git symbolic-ref -q --short HEAD || git name-rev $(git rev-parse --short HEAD) | cut -d' ' -f2 || git rev-parse --short HEAD`
     - DOCKTAG=$BRANCHTAG
-    - echo "Branchtag ${BRANCHTAG}"
+    - echo "Branchtag ${BRANCHTAG}; COMMITDATE=${COMMITDATE}; REPONAME=${REPONAME}; BRANCHNAME=${BRANCHNAME}"
 
   build:
     on-failure: ABORT
@@ -35,11 +35,11 @@ phases:
     - |
       docker build --push --quiet \
         --build-arg ECR_REGISTRY=${ECR_REGISTRY} \
-        -t ${ECR_REGISTRY}/mrt-dashboard:${DOCKTAG} .
+        -t ${ECR_REGISTRY}/${REPONAME}:${DOCKTAG} .
 
     # report results
     - mkdir -p reports
-    - RPT=reports/mrt-dashboard.md
+    - RPT=reports/${REPONAME}.md
     - echo "## Semantic Tags" > $RPT
     - |
       git for-each-ref --sort=-creatordate --format '- %(refname) (%(creatordate:short))' refs/tags \
@@ -52,7 +52,7 @@ phases:
         | egrep -v "sprint-" \
         | sed -e "s/refs\/tags\///" | head -10 >> $RPT
     - |
-      for img in mrt-dashboard
+      for img in ${REPONAME}
       do
         echo "## Docker Image Tags $img" >> $RPT
         aws ecr list-images --repository-name $img --filter tagStatus=TAGGED --output=text \
@@ -61,7 +61,7 @@ phases:
       done
 
     - aws s3 cp $RPT s3://${S3CFBUCKET}/$RPT
-    - aws s3 cp swagger.html s3://${S3CFBUCKET}/api/mrt-dashboard/index.html
-    - aws s3 cp swagger.yml s3://${S3CFBUCKET}/api/mrt-dashboard/
+    - aws s3 cp swagger.html s3://${S3CFBUCKET}/api/${REPONAME}/index.html
+    - aws s3 cp swagger.yml s3://${S3CFBUCKET}/api/${REPONAME}/
     - aws cloudfront create-invalidation --distribution-id ${CFDISTRIBUTIONID} --paths /reports/* --region us-east-1
-    - aws cloudfront create-invalidation --distribution-id ${CFDISTRIBUTIONID} --paths /api/mrt-dashboard/ --region us-east-1
+    - aws cloudfront create-invalidation --distribution-id ${CFDISTRIBUTIONID} --paths /api/${REPONAME}/ --region us-east-1
