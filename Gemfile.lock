@@ -1,12 +1,9 @@
 GIT
-  remote: https://github.com/CDLUC3/uc3-ssm
-  revision: 6237b227875c314470ec352d0bdd1346a3a9fb70
-  branch: main
+  remote: https://github.com/CDLUC3/uc3-ssm.git
+  revision: fabe9675fd26d228100f9487a01e99f61d22bc60
+  tag: 1.0.3
   specs:
-    uc3-ssm (0.3.10)
-      aws-sdk-ssm (~> 1.84)
-      logger (~> 1.4)
-      yaml (~> 0.2.1)
+    uc3-ssm (1.0.3)
 
 GEM
   remote: http://rubygems.org/
@@ -415,7 +412,6 @@ GEM
     will_paginate (4.0.1)
     xpath (3.2.0)
       nokogiri (~> 1.8)
-    yaml (0.2.1)
     zeitwerk (2.6.17)
 
 PLATFORMS
@@ -471,7 +467,7 @@ DEPENDENCIES
   simplecov-console
   sprockets
   thin
-  uc3-ssm (= 0.3.10)!
+  uc3-ssm!
   uglifier
   unicode
   uuidtools
