@@ -57,7 +57,8 @@ phases:
         echo "## Docker Image Tags $img" >> $RPT
         aws ecr list-images --repository-name $img --filter tagStatus=TAGGED --output=text \
         | cut -f3 \
-        | sed -e "s/^/- /" >> $RPT
+        | sed -e "s/^/- /" \
+        | sort >> $RPT
       done
 
     - aws s3 cp $RPT s3://${S3CFBUCKET}/$RPT
