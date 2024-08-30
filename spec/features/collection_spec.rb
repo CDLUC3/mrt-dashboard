@@ -85,6 +85,7 @@ describe 'collections' do
           find('input#title').set('sample file')
           find('input#author').set('sample author')
           find_button('Submit').click
+          sleep 1
           expect(page.title).to include('Add Object')
           expect(find('p.error-message')).to have_content('You must choose a filename to submit.')
         end
