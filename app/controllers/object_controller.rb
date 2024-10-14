@@ -91,7 +91,6 @@ class ObjectController < ApplicationController
   def recent
     merritt_retry_block do
       do_recent
-      raise StandardError, 'force retry failure'
     end
   end
 
