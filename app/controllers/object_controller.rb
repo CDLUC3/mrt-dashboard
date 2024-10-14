@@ -28,7 +28,8 @@ class ObjectController < ApplicationController
 
   def load_object
     merritt_retry_block do
-      @object = InvObject.where('ark = ?', params_u(:object)).includes(:inv_collections, inv_versions: [:inv_files]).first
+      res = InvObject.where('ark = ?', params_u(:object)).includes(:inv_collections, inv_versions: [:inv_files])
+      @object = res.first unless res.empty?
     end
 
     raise ActiveRecord::RecordNotFound if @object.nil?
@@ -90,6 +91,7 @@ class ObjectController < ApplicationController
   def recent
     merritt_retry_block do
       do_recent
+      raise StandardError, 'force retry failure'
     end
   end
 

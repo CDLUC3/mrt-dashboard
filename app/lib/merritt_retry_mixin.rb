@@ -15,7 +15,11 @@ module MerrittRetryMixin
       yield
     rescue StandardError => e
       retries += 1
-      raise RetryException, e if retries > RETRY_LIMIT
+      if retries > RETRY_LIMIT
+        Rails.logger.error('Retries exhausted.  Clearing all active connections.')
+        ActiveRecord::Connection.clear_active_connections!
+        raise RetryException, e
+      end
 
       sleep 1
       retry
