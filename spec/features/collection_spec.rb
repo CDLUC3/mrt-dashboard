@@ -127,6 +127,22 @@ describe 'collections' do
           expect(page).to have_content(obj.erc_when)
         end
 
+        # TODO: improve this test by having an actual filename to search
+        it 'find - search without wildcard' do
+          fill_in('terms', with: 'foozzz')
+          click_button 'Go'
+
+          expect(page).to have_content('There were no items that had the text matching')
+        end
+
+        # TODO: improve this test by having an actual filename to search
+        it 'find - search with wildcard' do
+          fill_in('terms', with: 'f*ozzz')
+          click_button 'Go'
+
+          expect(page).to have_content('There were no items that had the text matching')
+        end
+
         it 'finds by arks' do
           expected_objects = [1, 3, 5].map { |i| inv_objects[i] }
           arks = expected_objects.map(&:ark)

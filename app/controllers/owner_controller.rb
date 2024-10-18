@@ -77,10 +77,17 @@ class OwnerController < ApplicationController
   end
 
   def find_by_file_name(owner, term)
+    if term =~ /\*/
+      where = 'inv_files.pathname like ?'
+      val = "producer/#{term.gsub('*', '%')}"
+    else
+      where = 'inv_files.pathname = ?'
+      val = "producer/#{term}"
+    end
     InvObject
       .joins(:inv_owner, :inv_files)
       .where('inv_owners.ark = ?', owner.ark)
-      .where('inv_files.pathname = ?', "producer/#{term}")
+      .where(where, val)
       .includes(:inv_versions)
       .quickloadhack
       .limit(10)
