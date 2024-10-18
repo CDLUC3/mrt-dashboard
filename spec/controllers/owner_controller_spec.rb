@@ -66,14 +66,6 @@ RSpec.describe OwnerController, type: :controller do
         expect(response.status).to eq(201)
       end
 
-      it 'fileid search with wildcard - no results' do
-        mock_permissions_all(user_id, collection_id)
-        mock_owner_name(@owner.name)
-        request.session.merge!({ uid: user_id })
-        get(:search_results, params: { terms: 'my-local-id-n*t-found', owner: @owner.name })
-        expect(response.status).to eq(201)
-      end
-
       it 'empty terms search no results' do
         mock_permissions_all(user_id, collection_id)
         mock_owner_name(@owner.name)

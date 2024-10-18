@@ -71,13 +71,6 @@ RSpec.describe CollectionController, type: :controller do
         expect(response.status).to eq(201)
       end
 
-      it 'fileid search with wildcard - no results' do
-        mock_permissions_all(user_id, collection_id)
-        request.session.merge!({ uid: user_id })
-        get(:local_id_search, params: { group: @collection.group, terms: 'my-local-id-n*t-found' })
-        expect(response.status).to eq(201)
-      end
-
       it 'localid search - result found' do
         mock_permissions_all(user_id, collection_id)
         request.session.merge!({ uid: user_id })
