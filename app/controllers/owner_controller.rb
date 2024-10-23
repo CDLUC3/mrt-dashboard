@@ -77,7 +77,7 @@ class OwnerController < ApplicationController
   end
 
   def find_by_file_name(owner, term)
-    if term =~ /\*/
+    if term =~ /\*/ && current_uid != LDAP_CONFIG['guest_user']
       where = 'inv_files.pathname like ?'
       val = "producer/#{term.gsub('*', '%')}"
     else
