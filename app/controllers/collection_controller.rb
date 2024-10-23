@@ -103,10 +103,17 @@ class CollectionController < ApplicationController
   end
 
   def find_by_file_name(collection_ark, term)
+    if term =~ /\*/ && current_uid != LDAP_CONFIG['guest_user']
+      where = 'inv_files.pathname like ?'
+      val = "producer/#{term.gsub('*', '%')}"
+    else
+      where = 'inv_files.pathname = ?'
+      val = "producer/#{term}"
+    end
     InvObject
       .joins(:inv_collections, :inv_files)
       .where('inv_collections.ark = ?', collection_ark)
-      .where('inv_files.pathname = ?', "producer/#{term}")
+      .where(where, val)
       .includes(:inv_versions)
       .quickloadhack
       .limit(10)
