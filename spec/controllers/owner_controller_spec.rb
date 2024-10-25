@@ -46,6 +46,14 @@ RSpec.describe OwnerController, type: :controller do
       @client = mock_httpclient
     end
 
+    after(:each) do
+      @objects.each do |obj|
+        obj.delete
+      end
+      @collection.delete
+      @owner.delete
+    end
+
     def mock_owner_name(name)
       allow_any_instance_of(ApplicationController).to receive(:current_owner_name).and_return(name)
     end
