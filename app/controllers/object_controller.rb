@@ -129,6 +129,12 @@ class ObjectController < ApplicationController
     @count_by_status = @object.audit_replic_stats(@datestr)
   end
 
+  def force_fail
+    merritt_retry_block do
+      raise StandardError, 'force fail'
+    end
+  end
+
   private
 
   def check_atom_group_permissions

@@ -81,6 +81,8 @@ class InvObject < ApplicationRecord
   end
 
   def group
+    return nil if inv_collection.nil?
+    
     inv_collection.group
   end
 

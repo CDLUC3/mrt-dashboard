@@ -101,4 +101,6 @@ Rails.application.routes.draw do
   get('/presentations', to: redirect('https://github.com/CDLUC3/mrt-doc/blob/main/presentations/README.md'))
   get('/wiki', to: redirect('https://github.com/CDLUC3/mrt-doc/wiki'))
 
+  # this method will be used to test retry failure handling
+  get('/force_fail' => 'object#force_fail')
 end
