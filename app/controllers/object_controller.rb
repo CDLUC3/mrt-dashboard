@@ -130,9 +130,11 @@ class ObjectController < ApplicationController
   end
 
   def force_fail
+    # :nocov:
     merritt_retry_block do
       raise StandardError, 'force fail'
     end
+    # :nocov:
   end
 
   private
