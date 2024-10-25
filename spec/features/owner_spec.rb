@@ -25,6 +25,7 @@ describe 'owners' do
   end
 
   after(:each) do
+    @owner.delete
     log_out!
   end
 

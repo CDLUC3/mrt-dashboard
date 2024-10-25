@@ -62,6 +62,7 @@ describe 'objects', js: true do
   end
 
   after(:each) do
+    @owner.delete
     log_out!
   end
 
