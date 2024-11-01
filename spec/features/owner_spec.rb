@@ -25,6 +25,7 @@ describe 'owners' do
   end
 
   after(:each) do
+    @owner.delete
     log_out!
   end
 
@@ -113,6 +114,23 @@ describe 'owners' do
             expect(page).not_to have_content(obj.erc_when)
           end
         end
+
+        # TODO: improve this test by having an actual filename to search
+        it 'find - search without wildcard' do
+          fill_in('terms', with: 'foozzz')
+          click_button 'Go'
+
+          expect(page).to have_content('There were no items that had the text matching')
+        end
+
+        # TODO: improve this test by having an actual filename to search
+        it 'find - search with wildcard' do
+          fill_in('terms', with: 'f*ozzz')
+          click_button 'Go'
+
+          expect(page).to have_content('There were no items that had the text matching')
+        end
+
       end
     end
 

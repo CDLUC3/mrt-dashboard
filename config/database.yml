@@ -17,7 +17,9 @@ default: &default
   # Merritt UI encountered 500 errors when mysql connections were no longer active.
   # Jan 2024 - adding this setting to see if it prevents inactive connections.
   # See https://api.rubyonrails.org/classes/ActiveRecord/ConnectionAdapters/ConnectionPool.html
-  idle_timeout: 0
+  #
+  # Oct 2024 - reverting this setting now that retry logic clears connections
+  # idle_timeout: 0
   port: 3306
   username: "{!SSM: inv/readwrite/db-user}"
   password: "{!SSM: inv/readwrite/db-password}"
@@ -38,4 +40,4 @@ docker: &docker
   username: user
   password: password
   encoding: utf8mb4   
-  idle_timeout: 0
+  # idle_timeout: 0

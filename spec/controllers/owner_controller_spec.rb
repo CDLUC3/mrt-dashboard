@@ -35,15 +35,22 @@ RSpec.describe OwnerController, type: :controller do
 
       @object_ark = objects[0].ark
       @object = objects[0]
-      lid = InvLocalid.new(
+      @lid = InvLocalid.new(
         local_id: @testlocalid,
         inv_object: @object,
         inv_owner: @object.inv_owner,
         created: Time.now
       )
-      lid.save!
+      @lid.save!
 
       @client = mock_httpclient
+    end
+
+    after(:each) do
+      @lid.delete
+      @objects.each(&:delete)
+      @collection.delete
+      @owner.delete
     end
 
     def mock_owner_name(name)
