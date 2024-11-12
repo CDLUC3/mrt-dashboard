@@ -4,7 +4,7 @@ gem 'activeresource'
 gem 'json'
 gem 'multi_json'
 gem 'mysql2'
-gem 'rails', '~> 6.0'
+gem 'rails', '7.0'
 
 gem 'aws-sdk-ec2'
 gem 'aws-sdk-ssm'
