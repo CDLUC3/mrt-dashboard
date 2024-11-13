@@ -1,25 +1,10 @@
-require 'active_record/errors'
-MrtDashboard::Application.configure do
-  config.action_controller.perform_caching = true
-  config.autoload_paths                   += %W[#{config.root}/lib]
-  config.cache_classes                     = true
-  config.consider_all_requests_local       = false
-  config.i18n.fallbacks                    = true
-  config.serve_static_files = true
+require 'active_support/core_ext/integer/time'
 
-  # To turn off pipeline, set to false
-  config.assets.enabled = true
+Rails.application.configure do
+  # Settings specified here will take precedence over those in config/application.rb.
 
-  # Compress JavaScripts and CSS.
-  config.assets.js_compressor = :uglifier
-  # config.assets.css_compressor = :sass
-
-  # Do not fallback to assets pipeline if a precompiled asset is missed.
-  config.assets.compile = false
-
-  # Asset digests allow you to set far-future HTTP expiration dates on all assets,
-  # yet still be able to expire them through the digest params.
-  config.assets.digest = true
+  # Code is not reloaded between requests.
+  config.cache_classes = true
 
   # Eager load code on boot. This eager loads most of Rails and
   # your application in memory, allowing both threaded web servers
@@ -38,6 +23,12 @@ MrtDashboard::Application.configure do
   # Disable serving static files from the `/public` folder by default since
   # Apache or NGINX already handles this.
   config.public_file_server.enabled = ENV['RAILS_SERVE_STATIC_FILES'].present?
+
+  # Compress CSS using a preprocessor.
+  # config.assets.css_compressor = :sass
+
+  # Do not fallback to assets pipeline if a precompiled asset is missed.
+  config.assets.compile = false
 
   # Enable serving of images, stylesheets, and JavaScripts from an asset server.
   # config.asset_host = "http://assets.example.com"
