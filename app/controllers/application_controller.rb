@@ -14,7 +14,7 @@ class ApplicationController < ActionController::Base
   include PaginationMixin
   include HttpMixin
   include MerrittRetryMixin
-  require 'streamer'
+  require_relative '../lib/streamer'
 
   helper_method(
     :available_groups,

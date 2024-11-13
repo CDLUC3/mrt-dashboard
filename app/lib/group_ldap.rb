@@ -1,7 +1,6 @@
 require 'rubygems'
 require 'net/ldap'
-require 'noid'
-require 'ldap_mixin'
+# require 'ldap_mixin'
 
 module GroupLdap
 
@@ -34,7 +33,7 @@ module GroupLdap
       group_attributes = {
         objectclass: ['organizationalUnit'] + extra_classes,
         description: description,
-        arkId: "ark:/13030/#{@minter.mint}"
+        arkId: 'ark:/13030/12345'
       }
       true_or_exception(admin_ldap.add(dn: ns_dn(groupid), attributes: group_attributes))
 
