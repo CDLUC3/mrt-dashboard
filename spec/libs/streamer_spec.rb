@@ -1,4 +1,5 @@
 require 'rails_helper'
+require_relative '../../app/lib/streamer'
 require 'webmock/rspec'
 
 describe Streamer do

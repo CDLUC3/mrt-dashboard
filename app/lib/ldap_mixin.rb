@@ -2,8 +2,6 @@
 # mixed in modules must define ns_dn(id) and obj_filter(id) methods which differ
 # for each (like a Java abstract class) as well as any specific methods for each
 
-# require 'lib/noid'
-
 module LdapMixin
 
   class LdapException < RuntimeError; end
@@ -22,7 +20,7 @@ module LdapMixin
     # minter: 'http://noid.cdlib.org/nd/noidu_g9'
     # connect_timeout: 60
 
-    @minter = Noid::Minter.new(minter)
+    puts "minter #{minter} ignored"
     @base = base
     @ldap_connect = {
       host: host,

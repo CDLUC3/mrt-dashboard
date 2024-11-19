@@ -18,7 +18,7 @@ module MerrittRetryMixin
       if retries > RETRY_LIMIT
         Rails.logger.error('Retries exhausted.  Clearing all active connections.')
         # ActiveRecord::Base.clear_active_connections!
-        ActiveRecord::Base.clear_all_connections!
+        ActiveRecord::Base.connection_handler.clear_all_connections!
         # yet to try: flush_idle_connections
         raise RetryException, e
       end

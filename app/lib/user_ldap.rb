@@ -1,6 +1,6 @@
 require 'rubygems'
 require 'net/ldap'
-# require 'lib/ldap_mixin'
+# require 'ldap_mixin'
 
 module UserLdap
   class Server
@@ -29,7 +29,7 @@ module UserLdap
         cn: "#{firstname} #{lastname}",
         displayName: "#{firstname} #{lastname}",
         userPassword: password,
-        arkId: "ark:/13030/#{@minter.mint}",
+        arkId: 'ark:/13030/12345',
         mail: email
       }
       true_or_exception(admin_ldap.add(dn: ns_dn(userid), attributes: attr))

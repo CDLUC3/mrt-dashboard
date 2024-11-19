@@ -14,7 +14,7 @@ class ApplicationController < ActionController::Base
   include PaginationMixin
   include HttpMixin
   include MerrittRetryMixin
-  require 'streamer'
+  require_relative '../lib/streamer'
 
   helper_method(
     :available_groups,
@@ -38,7 +38,7 @@ class ApplicationController < ActionController::Base
     url = APP_CONFIG.fetch('redirects', {}).fetch(group.submission_profile, '')
     return if url.empty?
 
-    redirect_to url and return true
+    redirect_to(url, allow_other_host: true) and return true
   end
 
   def render_unavailable
@@ -251,7 +251,7 @@ class ApplicationController < ActionController::Base
     store_location
     flash[:notice] = 'You must be logged in to access the page you requested'
     ret = url_for_with_proto({ controller: 'user_sessions', action: 'guest_login' })
-    redirect_to(ret) && return
+    redirect_to(ret, allow_other_host: true) && return
   end
 
   def require_named_user_or_401
@@ -277,7 +277,7 @@ class ApplicationController < ActionController::Base
 
   def redirect_back_or_default(default)
     if session
-      redirect_to(session[:return_to] || default)
+      redirect_to(session[:return_to] || default, allow_other_host: true)
     else
       # :nocov:
       redirect_to(default)

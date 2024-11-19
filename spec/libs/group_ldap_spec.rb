@@ -1,5 +1,5 @@
 require 'rails_helper'
-require 'group_ldap'
+require_relative '../../app/lib/group_ldap'
 
 module GroupLdap
   describe Server do
