@@ -29,7 +29,7 @@ module HttpMixin
   end
 
   def post_redirect?(resp)
-    resp.status == TEMPORARY_REDIRECT || resp.status == PERMANENT_REDIRECT
+    [TEMPORARY_REDIRECT, PERMANENT_REDIRECT].include?(resp.status)
   end
 
   def redirect_url_from(resp)
