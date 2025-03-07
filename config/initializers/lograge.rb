@@ -1,4 +1,5 @@
 Rails.application.configure do
+  next if Rails.env.docker?
   config.lograge.enabled = true
   config.lograge.custom_options = ->(event) do
     { time: event.time }
