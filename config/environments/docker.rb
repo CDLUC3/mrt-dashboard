@@ -1,5 +1,5 @@
 require 'active_record/errors'
-MrtDashboard::Application.configure do
+Rails.application.configure do
   config.action_controller.perform_caching = true
   config.autoload_paths                   += %W[#{config.root}/lib]
   config.cache_classes                     = true
@@ -18,5 +18,7 @@ MrtDashboard::Application.configure do
   # Prepend all log lines with the following tags.
   config.log_tags = [:request_id]
 
-  config.logger = ActiveSupport::Logger.new(STDOUT)
+  logger = ActiveSupport::Logger.new($stdout)
+  logger.formatter = config.log_formatter
+  config.logger = ActiveSupport::TaggedLogging.new(logger)
 end
