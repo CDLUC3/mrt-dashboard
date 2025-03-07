@@ -18,4 +18,5 @@ MrtDashboard::Application.configure do
   # Prepend all log lines with the following tags.
   config.log_tags = [:request_id]
 
+  config.logger = ActiveSupport::Logger.new($stdout)
 end
