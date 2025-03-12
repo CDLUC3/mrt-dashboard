@@ -41,3 +41,11 @@ docker: &docker
   password: password
   encoding: utf8mb4   
   # idle_timeout: 0
+
+ecs: &docker
+  adapter: mysql2
+  host: db-container
+  database: inv
+  username: user
+  password: password
+  encoding: utf8mb4   
