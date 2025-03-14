@@ -1,4 +1,4 @@
-MrtDashboard::Application.configure do
+Rails.application.configure do
 
   config.action_controller.perform_caching   = true
   config.cache_classes                       = false

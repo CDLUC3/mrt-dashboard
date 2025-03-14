@@ -1,5 +1,5 @@
 require 'active_record/errors'
-MrtDashboard::Application.configure do
+Rails.application.configure do
   config.action_controller.perform_caching = true
   config.autoload_paths                   += %W[#{config.root}/lib]
   config.cache_classes                     = true
