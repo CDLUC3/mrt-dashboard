@@ -67,6 +67,10 @@ phases:
         | sed -e "s/^/- /" \
         | sort >> $RPT
       done
+    - |
+      aws ecs update-service --cluster mrt-ecs-stack --service ui \
+       --desired-count 2 --output yaml --no-cli-pager \
+       --force-new-deployment || echo "Skip ECS Deployment"
 
     - aws s3 cp $RPT s3://${S3CFBUCKET}/$RPT
     - aws s3 cp swagger.html s3://${S3CFBUCKET}/api/${REPONAME}/index.html
