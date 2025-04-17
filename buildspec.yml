@@ -3,7 +3,7 @@ version: 0.2
 # Pre-requisites
 # - Create CodeBuild project
 #   - Provide minimal github credentials to access public repo
-# test
+# test 
 
 phases:
   pre_build:
