@@ -3,6 +3,7 @@
 
 //= require jquery.min
 //= require jquery_ujs
+//= require jquery-ui.min
 
 //= require prototype
 //= require effects
