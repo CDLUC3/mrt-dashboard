@@ -43,7 +43,13 @@ phases:
       docker build --push --quiet \
         --build-arg ECR_REGISTRY=${ECR_REGISTRY} \
         -t ${ECR_REGISTRY}/${REPONAME}:${DOCKTAG} .
-
+    
+      if [[ "${DOCKTAG}" == "dev" ]]
+      then
+        docker build --push --quiet \
+          --build-arg ECR_REGISTRY=${ECR_REGISTRY} \
+          -t ${ECR_REGISTRY}/${REPONAME}:ecs-dev .
+      fi
     # report results
     - mkdir -p reports
     - RPT=reports/${REPONAME}.md
