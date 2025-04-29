@@ -18,7 +18,7 @@ end
 
 # app_config.yml does not have any SSM values
 unless self.class.const_defined?(:APP_CONFIG)
-  APP_CONFIG = Uc3Ssm::ConfigResolver.new
+  APP_CONFIG = Uc3Ssm::ConfigResolver.new(def_value: 'NOT_APPLICABLE')
     .resolve_file_values(file: 'config/app_config.yml', return_key: Rails.env)
 
   # invert key/values from global_search_owners to global_search, this makes it easier to store user names in SSM
