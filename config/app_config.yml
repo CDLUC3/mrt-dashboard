@@ -112,4 +112,9 @@ development:
   global_search_owners: 
     'UCB Library': "{!SSM: ui/global-search/ucb}"
 
+ecs:
+  <<: *dockerdef
+  global_search_owners:
+    "UC3 Merritt administrator": merritt-test
+
 # TODO: rename uri_[1-3] to [content, producer, manifest]_uri or similar

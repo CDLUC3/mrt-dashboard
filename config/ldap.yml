@@ -47,3 +47,6 @@ docker: &docker
 
 development:
   <<: *docker
+
+ecs:
+  <<: *docker
