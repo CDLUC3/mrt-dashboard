@@ -33,7 +33,6 @@ RUN bundle install
 # Build a discardable master.key and credentials.yml.enc file for docker deployment
 RUN EDITOR=nano bundle exec rails credentials:edit
 
-ENV SSM_SKIP_RESOLUTION=Y
 RUN bundle exec rails assets:precompile && \
     bundle exec rails dev:cache
     
