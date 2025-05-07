@@ -20,11 +20,11 @@ module NumberMixin
     size = Kernel.Float(size)
     if size == 1 then '1 Byte'
     elsif size < 10**3 then format('%d B', size)
-    elsif size < 10**6 then format("%.#{precision}f KB", (size / (10.0**3)))
-    elsif size < 10**9 then format("%.#{precision}f MB", (size / (10.0**6)))
-    elsif size < 10**12 then format("%.#{precision}f GB", (size / (10.0**9)))
+    elsif size < 10**6 then format("%.#{precision}f KB", size / (10.0**3))
+    elsif size < 10**9 then format("%.#{precision}f MB", size / (10.0**6))
+    elsif size < 10**12 then format("%.#{precision}f GB", size / (10.0**9))
     else
-      format("%.#{precision}f TB", (size / (10.0**12)))
+      format("%.#{precision}f TB", size / (10.0**12))
     end.sub('.0', '')
   rescue StandardError
     nil
