@@ -45,7 +45,7 @@ docker: &docker
 ecs:
   adapter: mysql2
   encoding: utf8mb4
-  host: "{!SSM: /uc3/mrt/ecs/billing/db-host}"
+  host: "{!SSM: /uc3/mrt/ecs/billing/db-host !DEFAULT: NA}"
   database: "inv"
   pool: 25
   # Merritt UI encountered 500 errors when mysql connections were no longer active.
@@ -55,5 +55,5 @@ ecs:
   # Oct 2024 - reverting this setting now that retry logic clears connections
   # idle_timeout: 0
   port: 3306
-  username: "{!SSM: /uc3/mrt/ecs/billing/readwrite/db-user}"
-  password: "{!SSM: /uc3/mrt/ecs/billing/readwrite/db-password}"
+  username: "{!SSM: /uc3/mrt/ecs/billing/readwrite/db-user !DEFAULT: NA}"
+  password: "{!SSM: /uc3/mrt/ecs/billing/readwrite/db-password !DEFAULT: NA}"
