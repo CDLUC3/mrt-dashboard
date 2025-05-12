@@ -13,7 +13,6 @@ mrt-dashboard.iml
 
 /profile/
 
-.bundle
 db/*.sqlite3
 log/
 tmp/
@@ -75,7 +74,6 @@ build-iPhoneSimulator/
 /rdoc/
 
 ## Environment normalization:
-/.bundle/
 /vendor/bundle
 /lib/bundler/man/
 
