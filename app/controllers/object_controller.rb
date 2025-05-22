@@ -27,7 +27,7 @@ class ObjectController < ApplicationController
   protect_from_forgery except: %i[ingest mint update]
 
   def load_object
-    merritt_retry_block do
+    merritt_retry_block('load_object') do
       res = InvObject.where('ark = ?', params_u(:object)).includes(:inv_collections, inv_versions: [:inv_files])
       @object = res.first unless res.empty?
     end
@@ -82,14 +82,24 @@ class ObjectController < ApplicationController
 
     begin
       post_upload
+      redirect_to(controller: 'object', action: 'submitted', batch_id: @batch_id, obj_count: @obj_count)
     rescue Exception => e # TODO: should this be StandardError?
       render_upload_error(e)
     end
   end
   # rubocop:enable Lint/RescueException
 
+  def submitted
+    unless params[:batch_id] && params[:obj_count]
+      render 404, plain: '404 Not Found'
+      return
+    end
+    @batch_id = params[:batch_id]
+    @obj_count = params[:obj_count]
+  end
+
   def recent
-    merritt_retry_block do
+    merritt_retry_block('recent (objcts)') do
       do_recent
     end
   end
@@ -131,7 +141,7 @@ class ObjectController < ApplicationController
 
   def force_fail
     # :nocov:
-    merritt_retry_block do
+    merritt_retry_block('force_fail') do
       raise StandardError, 'force fail'
     end
     # :nocov:

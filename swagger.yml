@@ -258,12 +258,6 @@ components:
       schema: 
         type: string
       required: false
-    in_synchronousMode:
-      in: query
-      name: synchronousMode
-      schema: 
-        type: string
-      required: false
     in_retainTargetURL:
       in: query
       name: retainTargetURL
@@ -989,7 +983,6 @@ paths:
       - $ref: '#/components/parameters/in_dc_title'
       - $ref: '#/components/parameters/in_submitter'
       - $ref: '#/components/parameters/in_title'
-      - $ref: '#/components/parameters/in_synchronousMode'
       - $ref: '#/components/parameters/in_retainTargetURL'
       - $ref: '#/components/parameters/in_type'
       responses:
@@ -1031,7 +1024,6 @@ paths:
       - $ref: '#/components/parameters/in_dc_title'
       - $ref: '#/components/parameters/in_submitter'
       - $ref: '#/components/parameters/in_title'
-      - $ref: '#/components/parameters/in_synchronousMode'
       - $ref: '#/components/parameters/in_retainTargetURL'
       - $ref: '#/components/parameters/in_type'
       responses:

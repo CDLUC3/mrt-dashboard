@@ -22,25 +22,25 @@ class InvVersion < ApplicationRecord
   end
 
   def total_size
-    merritt_retry_block do
+    merritt_retry_block('total_size') do
       inv_files.sum('full_size')
     end
   end
 
   def system_files
-    merritt_retry_block do
+    merritt_retry_block('system_files') do
       inv_files.system_files.order(:pathname)
     end
   end
 
   def producer_files
-    merritt_retry_block do
+    merritt_retry_block('producer_files') do
       inv_files.producer_files.order(:pathname)
     end
   end
 
   def metadata(element)
-    merritt_retry_block do
+    merritt_retry_block('metadata') do
       inv_dublinkernels.select { |md| md.element == element && md.value != '(:unas)' }.map(&:value)
     end
   end
@@ -66,7 +66,7 @@ class InvVersion < ApplicationRecord
   end
 
   def total_actual_size
-    merritt_retry_block do
+    merritt_retry_block('total_actual_size') do
       inv_files.sum('full_size')
     end
   end

@@ -69,13 +69,13 @@ class InvObject < ApplicationRecord
   end
 
   def current_version
-    merritt_retry_block do
+    merritt_retry_block('current_version') do
       @current_version ||= inv_versions.order('number desc').first
     end
   end
 
   def inv_collection
-    merritt_retry_block do
+    merritt_retry_block('inv_collection') do
       @inv_collection ||= inv_collections.first
     end
   end
@@ -91,7 +91,7 @@ class InvObject < ApplicationRecord
   end
 
   def all_local_ids
-    merritt_retry_block do
+    merritt_retry_block('all_local_ids') do
       inv_localids.map(&:local_id)
     end
   end
@@ -167,7 +167,7 @@ class InvObject < ApplicationRecord
   def object_info_add_versions(json, maxfile)
     filecount = 0
     inv_versions.each do |ver|
-      merritt_retry_block do
+      merritt_retry_block('object_info_add_versions') do
         v = {
           version_number: ver.number,
           created: ver.created,
