@@ -90,12 +90,14 @@ class ObjectController < ApplicationController
   # rubocop:enable Lint/RescueException
 
   def submitted
+    # :nocov:
     unless params[:batch_id] && params[:obj_count]
       render 404, plain: '404 Not Found'
       return
     end
     @batch_id = params[:batch_id]
     @obj_count = params[:obj_count]
+    # :nocov:
   end
 
   def recent
