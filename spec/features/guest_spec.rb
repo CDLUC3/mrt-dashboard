@@ -35,6 +35,7 @@ describe 'guest' do
     collection = collections[0]
     collection_link = find_link(collection.name)
     collection_link.click
+    collection_link.click if current_url =~ /choose_collection$/
     expect(page.title).to include(collection.name)
   end
 
