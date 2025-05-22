@@ -720,7 +720,7 @@ RSpec.describe ObjectController, type: :controller do
         request.session.merge!(session)
         post(:upload, params: params)
 
-        expect(response.status).to eq(200)
+        expect(response.status).to eq(302)
         expect(controller.instance_variable_get('@batch_id')).to eq(batch_id)
         expect(controller.instance_variable_get('@obj_count')).to eq(3)
       end

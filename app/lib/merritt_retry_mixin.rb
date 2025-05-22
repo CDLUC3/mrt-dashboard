@@ -1,6 +1,12 @@
 # Exception for mysql retries
 module MerrittRetryMixin
-  class RetryException < RuntimeError; end
+  class RetryException < RuntimeError
+    def initialize(status: 500)
+      @status = status
+    end
+
+    attr_reader :status
+  end
 
   RETRY_LIMIT = 5
 
@@ -20,7 +26,8 @@ module MerrittRetryMixin
         # ActiveRecord::Base.clear_active_connections!
         ActiveRecord::Base.connection_handler.clear_all_connections!
         # yet to try: flush_idle_connections
-        raise RetryException, e
+        status = e.instance_of?(HTTPClient::ReceiveTimeoutError) ? 408 : 500
+        raise RetryException.new(status: status), e
       end
 
       Rails.logger.error("Retrying Action [#{action}]: #{retries} of #{RETRY_LIMIT} due to: #{e.message}")

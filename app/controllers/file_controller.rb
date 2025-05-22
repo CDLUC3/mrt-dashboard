@@ -210,6 +210,8 @@ class FileController < ApplicationController
       )
       eval_presign_get_by_node_key(r)
     end
+  rescue RetryException => e
+    render status: e.status, plain: 'Failure in spite of retry'
   end
 
   # Evaluate response from the storage service presign request
