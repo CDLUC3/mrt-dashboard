@@ -1,7 +1,8 @@
 # Exception for mysql retries
 module MerrittRetryMixin
   class RetryException < RuntimeError
-    def initialize(status: 500)
+    def initialize(message: 'RetryException', status: 500)
+      super(message)
       @status = status
     end
 
