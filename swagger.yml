@@ -459,6 +459,22 @@ paths:
       - experimental
       parameters: 
       - $ref: '#/components/parameters/arkParam'
+      - maxfileParam:
+        in: query
+        name: maxfile
+        schema: 
+          type: number
+        required: false
+        description: maximum number of files to return in the json object
+        defaults: 2500
+      - indexParam:
+        in: query
+        name: index
+        schema: 
+          type: number
+        required: false
+        description: index offset for file to display
+        defaults: 0
       responses:
         "200":
           $ref: '#/components/responses/object'

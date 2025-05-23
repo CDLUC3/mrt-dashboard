@@ -124,9 +124,56 @@ class ObjectController < ApplicationController
   end
 
   def object_info
+    maxfile = params.fetch(:maxfile, '2500').to_i.clamp(0, 2500)
+    index = params.fetch(:index, '0').to_i
+
     return render status: 401, plain: '' unless @object.user_has_read_permission?(current_uid)
 
-    render status: 200, json: @object.object_info.to_json
+    info = @object.object_info(index: index, maxfile: maxfile)
+    render status: 200, json: add_fixity_to_info(info).to_json
+  end
+
+  def fixity_sql
+    %{
+      select
+        ifnull(concat(n.number, ' ', n.description), concat('node_id ', a.inv_node_id)) as node,
+        a.status,
+        count(a.id) as audit_count,
+        min(a.verified) as earliest_verified,
+        max(a.verified) as latest_verified
+      from
+        inv.inv_objects o
+      inner join
+        inv.inv_files f
+        on f.inv_object_id = o.id and f.billable_size = f.full_size
+      left join
+        inv.inv_audits a
+        on o.id = a.inv_object_id
+        and f.id = a.inv_file_id
+      inner join
+        inv.inv_nodes n
+        on n.id = a.inv_node_id
+      where
+        o.id = #{@object.id}
+      group by
+        node,
+        a.status
+    }
+  end
+
+  def add_fixity_to_info(info)
+    info[:fixity] = []
+    ActiveRecord::Base.connection.execute(fixity_sql).each do |row|
+      data = {
+        node: row[0],
+        status: row[1],
+        audit_count: row[2],
+        earliest_verified: row[3],
+        latest_verified: row[4]
+      }
+      info[:fixity].push(data)
+    end
+    info
   end
 
   def audit_replic

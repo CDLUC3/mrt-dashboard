@@ -43,6 +43,8 @@ Metrics/BlockLength:
 
 Metrics/MethodLength:
   Max: 20
+  Exclude:
+    - 'app/controllers/object_controller.rb'
 
 Metrics/AbcSize:
   Exclude:
