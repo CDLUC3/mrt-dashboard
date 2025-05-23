@@ -394,8 +394,8 @@ components:
                         Other values indicate that prcoessing is in progress.  If the values persist for more than a couple hours, consult the Merritt team for interpretation.
                         Note: Each object's fixity is re-verified every 45-60 days.  It is appropriate for the status to change from VERIFIED to one of the processing states.
                         Note: Files residing in nearline storage are only fixity checked on the initaiial write.
-                      audit_count:
-                        type: integer
+                    audit_count:
+                      type: integer
                       description: The number of files within the object on a storage node with a specific status.
                     earliest_verified: 
                       type: string
