@@ -142,16 +142,16 @@ class ObjectController < ApplicationController
         min(a.verified) as earliest_verified,
         max(a.verified) as latest_verified
       from
-        inv.inv_objects o
+        inv_objects o
       inner join
-        inv.inv_files f
+        inv_files f
         on f.inv_object_id = o.id and f.billable_size = f.full_size
       left join
-        inv.inv_audits a
+        inv_audits a
         on o.id = a.inv_object_id
         and f.id = a.inv_file_id
       inner join
-        inv.inv_nodes n
+        inv_nodes n
         on n.id = a.inv_node_id
       where
         o.id = #{@object.id}
