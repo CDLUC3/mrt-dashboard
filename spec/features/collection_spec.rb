@@ -147,7 +147,10 @@ describe 'collections' do
           expected_objects = [1, 3, 5].map { |i| inv_objects[i] }
           arks = expected_objects.map(&:ark)
           fill_in('terms', with: arks.join(' '))
+          sleep 1
+
           click_button 'Go'
+          sleep 1
 
           expected_objects.each do |obj|
             expect(page).to have_content(obj.ark)

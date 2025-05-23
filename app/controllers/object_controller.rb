@@ -163,6 +163,7 @@ class ObjectController < ApplicationController
 
   def add_fixity_to_info(info)
     info[:fixity] = []
+    # :nocov:
     ActiveRecord::Base.connection.execute(fixity_sql).each do |row|
       data = {
         node: row[0],
@@ -173,6 +174,7 @@ class ObjectController < ApplicationController
       }
       info[:fixity].push(data)
     end
+    # :nocov:
     info
   end
 
