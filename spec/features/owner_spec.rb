@@ -142,6 +142,7 @@ describe 'owners' do
     it 'requires read permissions', js: true do
       log_in_with(user_id, password)
       visit(index_path)
+      visit(index_path) if current_url =~ /choose_collection$/
       expect(page).to have_content('Not authorized')
     end
 

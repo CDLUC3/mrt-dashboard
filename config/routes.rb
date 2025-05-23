@@ -80,6 +80,7 @@ Rails.application.routes.draw do
   post('object/mint' => 'object#mint')
   post('object/upload' => 'object#upload')
   post('user/update' => 'user#update')
+  get('object/submitted' => 'object#submitted')
 
   # Deprecate the following actions
   get('d/:object' => 'object#download')

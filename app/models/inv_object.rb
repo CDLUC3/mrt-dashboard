@@ -69,13 +69,13 @@ class InvObject < ApplicationRecord
   end
 
   def current_version
-    merritt_retry_block do
+    merritt_retry_block('current_version') do
       @current_version ||= inv_versions.order('number desc').first
     end
   end
 
   def inv_collection
-    merritt_retry_block do
+    merritt_retry_block('inv_collection') do
       @inv_collection ||= inv_collections.first
     end
   end
@@ -91,7 +91,7 @@ class InvObject < ApplicationRecord
   end
 
   def all_local_ids
-    merritt_retry_block do
+    merritt_retry_block('all_local_ids') do
       inv_localids.map(&:local_id)
     end
   end
@@ -129,11 +129,10 @@ class InvObject < ApplicationRecord
     end
   end
 
-  def object_info
-    maxfile = 2500
+  def object_info(index: 0, maxfile: 2500)
     json = object_info_json
     object_info_add_localids(json)
-    filecount = object_info_add_versions(json, maxfile)
+    filecount = object_info_add_versions(json, maxfile, index)
 
     json['total_files'] = filecount
     json['included_files'] = [filecount, maxfile].min
@@ -151,10 +150,7 @@ class InvObject < ApplicationRecord
       erc_what: erc_what,
       erc_when: erc_when,
       versions: [],
-      localids: [],
-      prune_v1: [],
-      prune_v2: [],
-      prune_evaluated: false
+      localids: []
     }
   end
 
@@ -164,10 +160,11 @@ class InvObject < ApplicationRecord
     end
   end
 
-  def object_info_add_versions(json, maxfile)
+  def object_info_add_versions(json, maxfile, index)
     filecount = 0
+    fileindex = 0
     inv_versions.each do |ver|
-      merritt_retry_block do
+      merritt_retry_block('object_info_add_versions') do
         v = {
           version_number: ver.number,
           created: ver.created,
@@ -175,49 +172,18 @@ class InvObject < ApplicationRecord
           files: []
         }
         ver.inv_files.each do |f|
-          filecount += 1
-          v[:files].push(object_info_files(f)) unless filecount > maxfile
+          if fileindex < index
+            fileindex += 1
+          else
+            filecount += 1
+            v[:files].push(object_info_files(f)) unless filecount > maxfile
+          end
         end
         json[:versions].prepend(v)
       end
     end
-    begin
-      add_prune(json) if filecount < maxfile
-      json[:prune_evaluated] = (filecount < maxfile)
-    rescue StandardError
-      # suppress any errors from the pruning algorithm
-    end
     filecount
   end
-
-  # :nocov:
-  def add_prune(json)
-    digests = {}
-    paths = {}
-    curv = json[:versions][0]
-    vn = curv[:version_number]
-    curv[:files].each do |f|
-      paths[f[:pathname]] = vn
-      digests[f[:digest_value]] = vn
-    end
-    json[:versions].each do |v|
-      next if v[:version_number] == vn
-
-      v[:files].each do |f|
-        next unless f[:full_size] == f[:billable_size]
-
-        p = f[:pathname]
-        rec = { pathname: p, billable_size: f[:billable_size], version: v[:version_number] }
-        next if paths.key?(p)
-
-        json[:prune_v1].append(rec) unless json[:prune_v1].include?(p)
-        next unless digests.key?(f[:digest_value])
-
-        json[:prune_v2].append(rec) unless json[:prune_v2].include?(p)
-      end
-    end
-  end
-  # :nocov:
 
   def object_info_files(file)
     {

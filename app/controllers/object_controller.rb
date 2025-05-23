@@ -1,7 +1,6 @@
 require 'tempfile'
 
 class ObjectController < ApplicationController
-  include MintMixin
   include IngestMixin
   include MerrittRetryMixin
 
@@ -16,7 +15,7 @@ class ObjectController < ApplicationController
     end
   end
 
-  before_action(only: %i[ingest mint update]) do
+  before_action(only: %i[ingest update]) do
     if current_user
       render(status: 404, plain: '') unless current_user.groups('write').any? { |g| g.submission_profile == params[:profile] }
     else
@@ -24,10 +23,10 @@ class ObjectController < ApplicationController
     end
   end
 
-  protect_from_forgery except: %i[ingest mint update]
+  protect_from_forgery except: %i[ingest update]
 
   def load_object
-    merritt_retry_block do
+    merritt_retry_block('load_object') do
       res = InvObject.where('ark = ?', params_u(:object)).includes(:inv_collections, inv_versions: [:inv_files])
       @object = res.first unless res.empty?
     end
@@ -45,10 +44,6 @@ class ObjectController < ApplicationController
     render(status: 400, plain: "Bad file parameter.\n") && return unless params[:file].respond_to?(:tempfile)
 
     do_post(APP_CONFIG['ingest_service_update'], update_params_from(params, current_user))
-  end
-
-  def mint
-    do_post(APP_CONFIG['mint_service'], mint_params_from(params))
   end
 
   def index
@@ -82,14 +77,26 @@ class ObjectController < ApplicationController
 
     begin
       post_upload
+      redirect_to(controller: 'object', action: 'submitted', batch_id: @batch_id, obj_count: @obj_count)
     rescue Exception => e # TODO: should this be StandardError?
       render_upload_error(e)
     end
   end
   # rubocop:enable Lint/RescueException
 
+  def submitted
+    # :nocov:
+    unless params[:batch_id] && params[:obj_count]
+      render 404, plain: '404 Not Found'
+      return
+    end
+    @batch_id = params[:batch_id]
+    @obj_count = params[:obj_count]
+    # :nocov:
+  end
+
   def recent
-    merritt_retry_block do
+    merritt_retry_block('recent (objcts)') do
       do_recent
     end
   end
@@ -117,9 +124,58 @@ class ObjectController < ApplicationController
   end
 
   def object_info
+    maxfile = params.fetch(:maxfile, '2500').to_i.clamp(0, 2500)
+    index = params.fetch(:index, '0').to_i
+
     return render status: 401, plain: '' unless @object.user_has_read_permission?(current_uid)
 
-    render status: 200, json: @object.object_info.to_json
+    info = @object.object_info(index: index, maxfile: maxfile)
+    render status: 200, json: add_fixity_to_info(info).to_json
+  end
+
+  def fixity_sql
+    %{
+      select
+        ifnull(concat(n.number, ' ', n.description), concat('node_id ', a.inv_node_id)) as node,
+        a.status,
+        count(a.id) as audit_count,
+        min(a.verified) as earliest_verified,
+        max(a.verified) as latest_verified
+      from
+        inv_objects o
+      inner join
+        inv_files f
+        on f.inv_object_id = o.id and f.billable_size = f.full_size
+      left join
+        inv_audits a
+        on o.id = a.inv_object_id
+        and f.id = a.inv_file_id
+      inner join
+        inv_nodes n
+        on n.id = a.inv_node_id
+      where
+        o.id = #{@object.id}
+      group by
+        node,
+        a.status
+    }
+  end
+
+  def add_fixity_to_info(info)
+    info[:fixity] = []
+    # :nocov:
+    ActiveRecord::Base.connection.execute(fixity_sql).each do |row|
+      data = {
+        node: row[0],
+        status: row[1],
+        audit_count: row[2],
+        earliest_verified: row[3],
+        latest_verified: row[4]
+      }
+      info[:fixity].push(data)
+    end
+    # :nocov:
+    info
   end
 
   def audit_replic
@@ -131,7 +187,7 @@ class ObjectController < ApplicationController
 
   def force_fail
     # :nocov:
-    merritt_retry_block do
+    merritt_retry_block('force_fail') do
       raise StandardError, 'force fail'
     end
     # :nocov:

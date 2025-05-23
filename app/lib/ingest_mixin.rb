@@ -52,7 +52,6 @@ module IngestMixin
       'DC.type' => params['DC.type'],
       'submitter' => params['submitter'] || "#{current_user.login}/#{current_user.displayname}",
       'title' => params[:title],
-      'synchronousMode' => params[:synchronousMode],
       'retainTargetURL' => params[:retainTargetURL],
       'type' => params[:type]
     }.reject { |_k, v| v.blank? }
@@ -92,7 +91,6 @@ module IngestMixin
       'DC.type' => params['DC.type'],
       'submitter' => "#{current_user.login}/#{current_user.displayname}",
       'title' => params[:title],
-      'synchronousMode' => params[:synchronousMode],
       'retainTargetURL' => params[:retainTargetURL],
       'type' => params[:type]
     }.reject { |_k, v| v.blank? }

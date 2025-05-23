@@ -29,10 +29,10 @@ xml.tag!('feed', :xmlns => 'http://www.w3.org/2005/Atom',
   end
   xml.tag!('id', 'urn:uuid:8dd71209-616a-4723-bfc1-b46572499932')
   xml.tag!('title', 'Recent objects')
-  if @objects[0]
-    xml.tag!('updated', @objects[0].modified.to_formatted_s(:w3cdtf))
-  else
+  if @objects.empty?
     xml.tag!('updated', Time.now.to_formatted_s(:w3cdtf))
+  else
+    xml.tag!('updated', @objects[0].modified.to_formatted_s(:w3cdtf))
   end
   xml.tag!('author') do
     xml.tag!('name', 'California Digital Library')

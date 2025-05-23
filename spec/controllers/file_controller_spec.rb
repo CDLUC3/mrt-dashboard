@@ -365,7 +365,7 @@ RSpec.describe FileController, type: :controller do
         { contentType: inv_file.mime_type },
         {},
         follow_redirect: true
-      ).and_raise(
+      ).exactly(6).times.and_raise(
         HTTPClient::ReceiveTimeoutError
       )
 

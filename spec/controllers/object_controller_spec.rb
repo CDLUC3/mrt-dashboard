@@ -158,64 +158,6 @@ RSpec.describe ObjectController, type: :controller do
       end
     end
 
-    describe ':mint' do
-      attr_reader :params
-
-      before(:each) do
-        @params = {
-          profile: "#{collection_id}_profile",
-          erc: 'who: Herschlag, Natalie%0Awhat: An Account of a Very Odd Monstrous Calf',
-          responseForm: 'xml'
-        }
-      end
-
-      it 'requires a user' do
-        @request.headers['HTTP_AUTHORIZATION'] = nil
-        request.headers.merge!({ 'Content-Type' => 'multipart/form-data' })
-        request.session.merge!({ uid: nil })
-        post(:mint, params: params)
-        expect(response.status).to eq(401)
-      end
-
-      it 'requires the user to have write permissions on the current submission profile' do
-        mock_permissions_read_only(user_id, collection_id)
-        request.headers.merge!({ 'Content-Type' => 'multipart/form-data' })
-        request.session.merge!({ uid: user_id })
-        post(:mint, params: params)
-        expect(response.status).to eq(404)
-      end
-
-      it 'posts a mint request' do
-        mock_permissions_all(user_id, collection_id)
-
-        mint_status = 200
-        mint_headers = { content_type: 'text/xml; charset=utf-8' }
-        mint_body = '<xml>12345</xml>'
-        mint_response = instance_double(HTTP::Message)
-        allow(mint_response).to receive(:status).and_return(mint_status)
-        allow(mint_response).to receive(:headers).and_return(mint_headers)
-        allow(mint_response).to receive(:body).and_return(mint_body)
-
-        expected_params = {
-          'profile' => params[:profile],
-          'erc' => params[:erc],
-          'responseForm' => params[:responseForm]
-        }
-        expect(client).to receive(:post).with(
-          APP_CONFIG['mint_service'],
-          hash_including(expected_params)
-        ).and_return(mint_response)
-
-        request.headers.merge!({ 'Content-Type' => 'multipart/form-data' })
-        request.session.merge!({ uid: user_id })
-        post(:mint, params: params)
-
-        expect(response.status).to eq(mint_response.status)
-        expect(response.content_type).to eq(mint_response.headers[:content_type])
-        expect(response.body).to eq(mint_response.body)
-      end
-    end
-
     describe ':index' do
       it 'prevents index view without read permission' do
         request.session.merge!({ uid: user_id })
@@ -332,6 +274,24 @@ RSpec.describe ObjectController, type: :controller do
         expect(response.status).to eq(200)
         json = JSON.parse(response.body)
         expect(json['versions'][0]['files'][0]['pathname']).to eq('producer/foo.bin')
+      end
+
+      it 'returns object_info with files starting at index 1 as json' do
+        inv_file = create(
+          :inv_file,
+          inv_object: @objects[0],
+          inv_version: @objects[0].current_version,
+          pathname: 'producer/foo.bin',
+          mime_type: 'application/octet-stream',
+          billable_size: 1000
+        )
+        inv_file.save!
+
+        mock_permissions_all(user_id, collection_id)
+        request.session.merge!({ uid: user_id })
+
+        get(:object_info, params: { object: object_ark, index: 1 })
+        expect(response.status).to eq(200)
       end
 
       it 'returns object_info with files as json - retry failure' do
@@ -667,12 +627,6 @@ RSpec.describe ObjectController, type: :controller do
         expect(response.headers['Location']).to include('guest_login')
       end
 
-      # TODO: why not?
-      # it 'requires write permission' do
-      #   post(:upload, params, session)
-      #   expect(response.status).to eq(403)
-      # end
-
       it 'redirects and displays an error when no file provided' do
         params.delete(:file)
         request.headers.merge!({ 'Content-Type' => 'multipart/form-data' })
@@ -720,7 +674,7 @@ RSpec.describe ObjectController, type: :controller do
         request.session.merge!(session)
         post(:upload, params: params)
 
-        expect(response.status).to eq(200)
+        expect(response.status).to eq(302)
         expect(controller.instance_variable_get('@batch_id')).to eq(batch_id)
         expect(controller.instance_variable_get('@obj_count')).to eq(3)
       end
