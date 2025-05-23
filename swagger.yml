@@ -377,6 +377,31 @@ components:
                 type: integer
                 description: A maximum of 1000 files will be included in the json object.
                 example: 17
+              fixity:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    node: 
+                      type: string
+                      decription: "Merritt description of the cloud provider node"
+                    status: 
+                      type: string
+                      decription: |
+                        Fixity status result.  
+                        VERIFIED indicates successful fixity check. 
+                        SIZE-MISMATCH and DIGEST-MISMATCH indicate a fixity issue. 
+                        Other values indicate that prcoessing is in progress.  If the values persist for more than a couple hours, consult the Merritt team for interpretation.
+                        Note: Each object's fixity is re-verified every 45-60 days.  It is appropriate for the status to change from VERIFIED to one of the processing states.
+                        Note: Files residing in nearline storage are only fixity checked on the initaiial write.
+                      audit_count:
+                        type: integer
+                      description: The number of files within the object on a storage node with a specific status.
+                    earliest_verified: 
+                      type: string
+                      description: Indicates the time range when the files for the object were most recently fixity checked.
+                    latest_verified: 
+                      description: Indicates the time range when the files for the object were most recently fixity checked.
 paths:
   /login:
     get:
