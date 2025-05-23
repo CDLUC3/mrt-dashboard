@@ -385,6 +385,7 @@ components:
                     node: 
                       type: string
                       decription: "Merritt description of the cloud provider node"
+                      example: "S3 or Glacier"
                     status: 
                       type: string
                       decription: |
@@ -394,14 +395,18 @@ components:
                         Other values indicate that prcoessing is in progress.  If the values persist for more than a couple hours, consult the Merritt team for interpretation.
                         Note: Each object's fixity is re-verified every 45-60 days.  It is appropriate for the status to change from VERIFIED to one of the processing states.
                         Note: Files residing in nearline storage are only fixity checked on the initaiial write.
+                      example: "verified"
                     audit_count:
                       type: integer
                       description: The number of files within the object on a storage node with a specific status.
+                      example: 17
                     earliest_verified: 
                       type: string
                       description: Indicates the time range when the files for the object were most recently fixity checked.
+                      example: "2025-05-23T10:59:21.000Z"
                     latest_verified: 
                       description: Indicates the time range when the files for the object were most recently fixity checked.
+                      example: "2025-05-23T10:59:21.000Z"
 paths:
   /login:
     get:
