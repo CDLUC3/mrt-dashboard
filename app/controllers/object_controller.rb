@@ -1,7 +1,6 @@
 require 'tempfile'
 
 class ObjectController < ApplicationController
-  include MintMixin
   include IngestMixin
   include MerrittRetryMixin
 
@@ -16,7 +15,7 @@ class ObjectController < ApplicationController
     end
   end
 
-  before_action(only: %i[ingest mint update]) do
+  before_action(only: %i[ingest update]) do
     if current_user
       render(status: 404, plain: '') unless current_user.groups('write').any? { |g| g.submission_profile == params[:profile] }
     else
@@ -24,7 +23,7 @@ class ObjectController < ApplicationController
     end
   end
 
-  protect_from_forgery except: %i[ingest mint update]
+  protect_from_forgery except: %i[ingest update]
 
   def load_object
     merritt_retry_block('load_object') do
@@ -45,10 +44,6 @@ class ObjectController < ApplicationController
     render(status: 400, plain: "Bad file parameter.\n") && return unless params[:file].respond_to?(:tempfile)
 
     do_post(APP_CONFIG['ingest_service_update'], update_params_from(params, current_user))
-  end
-
-  def mint
-    do_post(APP_CONFIG['mint_service'], mint_params_from(params))
   end
 
   def index

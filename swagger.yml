@@ -930,7 +930,7 @@ paths:
           description: processing error
   /object/upload:
     post:
-      summary: Start object ingest (tbd differentiate ingest vs upload)
+      summary: Start object ingest from the UI (calls ingest update)
       tags:
       - ui
       - api
@@ -949,7 +949,7 @@ paths:
           description: TBD
   /object/ingest:
     post:
-      summary: Start object ingest (tbd differentiate ingest vs upload)
+      summary: Start object ingest add (api endpoint for depositors)
       tags:
       - ui
       - api
@@ -990,7 +990,7 @@ paths:
           description: TBD
   /object/update:
     post:
-      summary: Start new version ingest for an object
+      summary: Start object update (api endpoint for depositors)
       tags:
       - ui
       - api
@@ -1029,28 +1029,3 @@ paths:
       responses:
         "200":
           description: TBD
-  /object/mint:
-    post:
-      summary: Mint an id for a new object
-      tags:
-      - internal-use
-      parameters:
-      - in: query
-        name: profile
-        schema: 
-          type: string
-        required: true
-      - in: query
-        name: responseForm
-        schema: 
-          type: string
-        required: true
-      - in: query
-        name: erc
-        schema: 
-          type: string
-        required: true
-      responses:
-        "200":
-          description: TBD
-
