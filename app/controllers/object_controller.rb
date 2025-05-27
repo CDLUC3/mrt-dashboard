@@ -143,13 +143,9 @@ class ObjectController < ApplicationController
         max(a.verified) as latest_verified
       from
         inv_objects o
-      inner join
-        inv_files f
-        on f.inv_object_id = o.id and f.billable_size = f.full_size
       left join
         inv_audits a
         on o.id = a.inv_object_id
-        and f.id = a.inv_file_id
       inner join
         inv_nodes n
         on n.id = a.inv_node_id
@@ -164,6 +160,10 @@ class ObjectController < ApplicationController
   def add_fixity_to_info(info)
     info[:fixity] = []
     # :nocov:
+    if info['total_files'] > 40_000
+      info[:fixity] << { message: 'This object has too many files to display fixity state.' }
+      return info
+    end
     ActiveRecord::Base.connection.execute(fixity_sql).each do |row|
       data = {
         node: row[0],
