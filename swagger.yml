@@ -371,11 +371,21 @@ components:
                   example: "my-localid"
               total_files: 
                 type: integer
-                description: A maximum of 1000 files will be included in the json object.  The complete number (across all versions) will be computed here.
+                description: |
+                  The complete number of Merritt files (across all versions) will be computed here.  
+                  Note that some files may not be modified from version to version.
+                  Files that are unmodified between versions are not duplicated in cloud stoage.
+                example: 17
+              unique_file_count: 
+                type: integer
+                description: |
+                  The number of unique Merritt files (across all versions) will be computed here. 
+                  A unique file is stored in cloud storage.
+                  When reviewing fixity counts, this is the number that should be matched against the fixity audit counts.
                 example: 17
               included_files: 
                 type: integer
-                description: A maximum of 1000 files will be included in the json object.
+                description: A maximum of 2500 files will be included in the json object.
                 example: 17
               fixity:
                 type: array
