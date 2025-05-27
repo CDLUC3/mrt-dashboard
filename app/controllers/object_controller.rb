@@ -143,9 +143,13 @@ class ObjectController < ApplicationController
         max(a.verified) as latest_verified
       from
         inv_objects o
+      inner join
+        inv_files f
+        on f.inv_object_id = o.id and f.billable_size = f.full_size
       left join
         inv_audits a
         on o.id = a.inv_object_id
+        and f.id = a.inv_file_id
       inner join
         inv_nodes n
         on n.id = a.inv_node_id
