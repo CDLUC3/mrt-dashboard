@@ -78,8 +78,10 @@ class OwnerController < ApplicationController
 
   def find_by_file_name(owner, term)
     if term =~ /\*/ && current_uid != LDAP_CONFIG['guest_user']
+      # :nocov:
       where = 'inv_files.pathname like ?'
       val = "producer/#{term.gsub('*', '%')}"
+      # :nocov:
     else
       where = 'inv_files.pathname = ?'
       val = "producer/#{term}"

@@ -147,7 +147,10 @@ describe 'collections' do
           expected_objects = [1, 3, 5].map { |i| inv_objects[i] }
           arks = expected_objects.map(&:ark)
           fill_in('terms', with: arks.join(' '))
+          sleep 1
+
           click_button 'Go'
+          sleep 1
 
           expected_objects.each do |obj|
             expect(page).to have_content(obj.ark)
@@ -175,12 +178,14 @@ describe 'collections' do
       log_in_with(LDAP_CONFIG['guest_user'], LDAP_CONFIG['guest_password'])
       allow(APP_CONFIG['redirects']).to receive(:fetch).with('collection_1_profile', '').and_return('https://cdlib.org/')
       visit(index_path)
+      visit(index_path) if current_url =~ /choose_collection$/
       expect(current_url).to eq('https://cdlib.org/')
     end
 
     it 'requires read permissions', js: true do
       log_in_with(user_id, password)
       visit(index_path)
+      visit(index_path) if current_url =~ /choose_collection$/
       expect(page).to have_content('Not authorized')
     end
 

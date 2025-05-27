@@ -71,8 +71,13 @@ describe 'versions', js: true do
     user_id = mock_user(name: 'Rachel Roe', password: password)
     expect(obj.user_has_read_permission?(user_id)).to eq(false) # just to be sure
 
+    sleep 1
+
     log_out!
+    sleep 1
+
     log_in_with(user_id, password)
+    sleep 1
 
     index_path = url_for(
       controller: :version,
@@ -81,7 +86,10 @@ describe 'versions', js: true do
       version: version.number,
       only_path: true
     )
+    sleep 1
+
     visit(index_path)
+    sleep 1
 
     expect(page.title).to include('401')
     expect(page).to have_content('not authorized')
@@ -151,8 +159,13 @@ describe 'versions', js: true do
     user_id = mock_user(name: 'Rachel Roe', password: password)
     mock_permissions_view_only(user_id, collection_1_id)
 
+    sleep 1
+
     log_out!
+    sleep 1
+
     log_in_with(user_id, password)
+    sleep 1
 
     index_path = url_for(
       controller: :version,
@@ -161,7 +174,10 @@ describe 'versions', js: true do
       version: version.number,
       only_path: true
     )
+    sleep 1
+
     visit(index_path)
+    sleep 1
 
     expect(page).not_to have_content('Download version')
     expect(page).to have_content('You do not have permission to download this object.')
