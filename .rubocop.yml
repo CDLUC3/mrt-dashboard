@@ -49,6 +49,7 @@ Metrics/MethodLength:
 Metrics/AbcSize:
   Exclude:
     - 'app/controllers/application_controller.rb'
+    - 'app/controllers/object_controller.rb'
 
 Naming/FileName:
   Exclude:

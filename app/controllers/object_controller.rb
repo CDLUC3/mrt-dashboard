@@ -138,6 +138,7 @@ class ObjectController < ApplicationController
       select
         ifnull(concat(n.number, ' ', n.description), concat('node_id ', a.inv_node_id)) as node,
         a.status,
+        count(distinct a.inv_file_id) as unique_file_count,
         count(a.id) as audit_count,
         min(a.verified) as earliest_verified,
         max(a.verified) as latest_verified
@@ -169,12 +170,13 @@ class ObjectController < ApplicationController
       return info
     end
     ActiveRecord::Base.connection.execute(fixity_sql).each do |row|
+      info['unique_file_count'] = row[2]
       data = {
         node: row[0],
         status: row[1],
-        audit_count: row[2],
-        earliest_verified: row[3],
-        latest_verified: row[4]
+        audit_count: row[3],
+        earliest_verified: row[4],
+        latest_verified: row[5]
       }
       info[:fixity].push(data)
     end
