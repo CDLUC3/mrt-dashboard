@@ -20,6 +20,8 @@ module MerrittRetryMixin
     retries = 0
     begin
       yield
+    rescue ActiveRecord::RecordNotFound => e
+      raise e
     rescue StandardError => e
       retries += 1
       if retries > RETRY_LIMIT
