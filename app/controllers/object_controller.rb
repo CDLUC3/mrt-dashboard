@@ -130,7 +130,7 @@ class ObjectController < ApplicationController
     return render status: 401, plain: '' unless @object.user_has_read_permission?(current_uid)
 
     info = @object.object_info(index: index, maxfile: maxfile)
-    render status: 200, json: ObjectController.add_fixity_to_info(object, info).to_json
+    render status: 200, json: ObjectController.add_fixity_to_info(@object, info).to_json
   end
 
   def self.fixity_sql(object)
