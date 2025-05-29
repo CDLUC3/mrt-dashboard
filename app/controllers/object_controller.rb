@@ -130,10 +130,10 @@ class ObjectController < ApplicationController
     return render status: 401, plain: '' unless @object.user_has_read_permission?(current_uid)
 
     info = @object.object_info(index: index, maxfile: maxfile)
-    render status: 200, json: add_fixity_to_info(info).to_json
+    render status: 200, json: ObjectController.add_fixity_to_info(object, info).to_json
   end
 
-  def fixity_sql
+  def self.fixity_sql(object)
     %{
       select
         ifnull(concat(n.number, ' ', n.description), concat('node_id ', a.inv_node_id)) as node,
@@ -155,21 +155,21 @@ class ObjectController < ApplicationController
         inv_nodes n
         on n.id = a.inv_node_id
       where
-        o.id = #{@object.id}
+        o.id = #{object.id}
       group by
         node,
         a.status
     }
   end
 
-  def add_fixity_to_info(info)
+  def self.add_fixity_to_info(object, info)
     info[:fixity] = []
     # :nocov:
     if info['total_files'] > 40_000
       info[:fixity] << { message: 'This object has too many files to display fixity state.' }
       return info
     end
-    ActiveRecord::Base.connection.execute(fixity_sql).each do |row|
+    ActiveRecord::Base.connection.execute(ObjectController.fixity_sql(object)).each do |row|
       info['unique_file_count'] = row[2]
       data = {
         node: row[0],

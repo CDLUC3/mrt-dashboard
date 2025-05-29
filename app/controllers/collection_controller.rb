@@ -70,7 +70,9 @@ class CollectionController < ApplicationController
 
   def render_object_info(ark)
     object = InvObject.where('ark = ?', ark).includes(:inv_collections, inv_versions: [:inv_files]).first
-    render json: object.object_info.to_json, status: 200
+    info = object.object_info
+    info = ObjectController.add_fixity_to_info(object, info)
+    render json: info.to_json, status: 200
   end
 
   def find_all(collection_ark)
