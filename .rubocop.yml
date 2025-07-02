@@ -56,9 +56,11 @@ Naming/FileName:
     - 'config/deploy/*'
 
 # Just because something looks like an accessor doesn't mean it is one
-Naming/PredicateName:
+Naming/PredicatePrefix:
   Exclude:
     - 'app/controllers/application_controller.rb'
+Naming/PredicateMethod:
+  Enabled: false
 
 # Confusing and weird
 Naming/VariableNumber:
