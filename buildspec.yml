@@ -74,7 +74,7 @@ phases:
         | sort >> $RPT
       done
     - |
-      aws ecs update-service --cluster mrt-ecs-stack --service ui \
+      aws ecs update-service --cluster mrt-ecs-dev-stack --service ui \
        --desired-count 2 --output yaml --no-cli-pager \
        --force-new-deployment || echo "Skip ECS Deployment"
 
