@@ -110,3 +110,9 @@ Style/Lambda:
 Style/SingleLineBlockParams:
   Enabled: false
 
+Layout/IndentationWidth:
+  Enabled: false
+Layout/ElseAlignment:
+  Enabled: false
+Style/ConditionalAssignment:
+  Enabled: false
