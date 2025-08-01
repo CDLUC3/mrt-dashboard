@@ -8,6 +8,6 @@ Rails.application.configure do
   if Rails.env in %w[production stage]
     config.lograge.logger = ActiveSupport::Logger.new "#{Rails.root}/log/lograge_#{Rails.env}.log"
   else
-    config.lograge.logger = ActiveSupport::Logger.new(STDOUT)
+    config.lograge.logger = ActiveSupport::Logger.new($stdout)
   end
 end
