@@ -5,7 +5,7 @@ Rails.application.configure do
   end
   config.lograge.formatter = Lograge::Formatters::Logstash.new
   config.lograge.keep_original_rails_log = true
-  if Rails.env in %w[production stage]
+  if %w[production stage].include?(Rails.env)
     config.lograge.logger = ActiveSupport::Logger.new "#{Rails.root}/log/lograge_#{Rails.env}.log"
   else
     config.lograge.logger = ActiveSupport::Logger.new($stdout)
