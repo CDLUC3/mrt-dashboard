@@ -473,6 +473,7 @@ DEPENDENCIES
   aws-sdk-ec2
   aws-sdk-ssm
   bcrypt_pbkdf
+  bigdecimal
   bootsnap
   builder
   byebug

@@ -8,6 +8,7 @@ gem 'rails', '~> 7.2'
 
 gem 'aws-sdk-ec2'
 gem 'aws-sdk-ssm'
+gem 'bigdecimal'
 gem 'bcrypt_pbkdf'
 gem 'bootsnap'
 gem 'builder'
