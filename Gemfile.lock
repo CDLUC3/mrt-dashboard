@@ -120,7 +120,7 @@ GEM
       msgpack (~> 1.2)
     builder (3.3.0)
     byebug (12.0.0)
-    capistrano (3.19.2)
+    capistrano (3.14.1)
       airbrussh (>= 1.0.0)
       i18n
       rake (>= 10.0.0)
@@ -475,11 +475,10 @@ DEPENDENCIES
   aws-sdk-ec2
   aws-sdk-ssm
   bcrypt_pbkdf
-  bigdecimal
   bootsnap
   builder
   byebug
-  capistrano
+  capistrano (= 3.14.1)
   capistrano-rails
   capybara
   capybara-webmock
