@@ -60,6 +60,7 @@ phases:
         -t ${ECR_REGISTRY}/${REPONAME}:${DOCKTAG} .
     
     - |
+      SERVICENAME=ui
       if [[ "$DOCKTAG" == "$TAG_ECS_DEV" ]]
       then
         docker build --quiet --push \
@@ -68,15 +69,15 @@ phases:
 
         RUNNING_COUNT=$(aws ecs list-tasks \
           --cluster mrt-ecs-dev-stack \
-          --service-name admintool \
+          --service-name $SERVICENAME \
           --desired-status RUNNING \
           --query 'length(taskArns)' \
           --output text)
 
         if [ $RUNNING_COUNT -gt 0 ]
         then
-          aws ecs update-service --cluster mrt-ecs-dev-stack --service admintool \
-            --desired-count 2 --output text --no-cli-pager \
+          aws ecs update-service --cluster mrt-ecs-dev-stack --service $SERVICENAME \
+            --desired-count $RUNNING_COUNT --output text --no-cli-pager \
            --query "service.deployments[0].[id,taskDefinition,status,desiredCount,createdAt]" \
             --force-new-deployment || echo "Skip ecs-dev Deployment"
         fi  
@@ -90,15 +91,15 @@ phases:
 
         RUNNING_COUNT=$(aws ecs list-tasks \
           --cluster mrt-ecs-ephemeral-stack \
-          --service-name admintool \
+          --service-name $SERVICENAME \
           --desired-status RUNNING \
           --query 'length(taskArns)' \
           --output text)
 
         if [ $RUNNING_COUNT -gt 0 ]
         then
-          aws ecs update-service --cluster mrt-ecs-ephemeral-stack --service admintool \
-            --desired-count 2 --output text --no-cli-pager \
+          aws ecs update-service --cluster mrt-ecs-ephemeral-stack --service $SERVICENAME \
+            --desired-count $RUNNING_COUNT --output text --no-cli-pager \
             --query "service.deployments[0].[id,taskDefinition,status,desiredCount,createdAt]" \
             --force-new-deployment || echo "Skip ecs-ephemeral Deployment"
         fi  
@@ -112,15 +113,15 @@ phases:
 
         RUNNING_COUNT=$(aws ecs list-tasks \
           --cluster mrt-ecs-dbsnapshot-stack \
-          --service-name admintool \
+          --service-name $SERVICENAME \
           --desired-status RUNNING \
           --query 'length(taskArns)' \
           --output text)
 
         if [ $RUNNING_COUNT -gt 0 ]
         then
-          aws ecs update-service --cluster mrt-ecs-dbsnapshot-stack --service admintool \
-            --desired-count 2 --output text --no-cli-pager \
+          aws ecs update-service --cluster mrt-ecs-dbsnapshot-stack --service $SERVICENAME \
+            --desired-count $RUNNING_COUNT --output text --no-cli-pager \
             --query "service.deployments[0].[id,taskDefinition,status,desiredCount,createdAt]" \
             --force-new-deployment || echo "Skip ecs-dbsnapshot Deployment"
         fi  
