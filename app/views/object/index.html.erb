@@ -27,8 +27,8 @@
       <% if current_user_can_download?(@object) %>
         <% if @object.exceeds_download_size? %>
           <p>
-            Objects larger than <%= max_download_size_pretty %> cannot be downloaded as a .zip file.
-            Versions and individual files below that size can still be downloaded.
+            Objects larger than <%= max_download_size_pretty %> cannot be downloaded as a .zip file. 
+            However, individual files larger than that size can still be downloaded.
           </p>
         <% else %>
           <%= form_tag({action: :presign, object: @object}, remote: true, method: 'GET', id: 'button_presign_obj', dataType: 'json') do %>
