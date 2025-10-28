@@ -173,10 +173,10 @@ phases:
 
             case "$stack" in
               ecs-stg|ecs-prd)
-                pushed=$(gdate -d $(aws ecr describe-images --repository-name ${REPONAME} \
+                pushed=$(date -d $(aws ecr describe-images --repository-name ${REPONAME} \
                   --image-ids imageTag=$stack 
                   --query "imageDetails[0].imagePushedAt" --output text) +%s || echo 0)
-                current=$(gdate +%s)
+                current=$(date +%s)
 
                 # do not archive more than once per hour
                 if [[ $current -gt $(($pushed + 3600)) ]]
