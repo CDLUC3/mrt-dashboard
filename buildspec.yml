@@ -28,7 +28,7 @@ phases:
         BRANCHTAG=$BRANCHNAME
       fi
     - echo "Branchtag ${BRANCHTAG}; COMMITDATE=${COMMITDATE}; REPONAME=${REPONAME}; BRANCHNAME=${BRANCHNAME}"
-    - BUILDDATE=$(date -z America/Los_Angeles +"%Y%m%d-%H%M%S")
+    - BUILDDATE=$(TZ='America/Los_Angeles' date +"%Y%m%d-%H%M%S")
     - echo "BUILDDATE=$BUILDDATE"
 
     - |
