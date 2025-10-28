@@ -28,7 +28,8 @@ phases:
         BRANCHTAG=$BRANCHNAME
       fi
     - echo "Branchtag ${BRANCHTAG}; COMMITDATE=${COMMITDATE}; REPONAME=${REPONAME}; BRANCHNAME=${BRANCHNAME}"
-    - BUILDDATE=$(date +"%Y%m%d-%H%M%S")
+    - BUILDDATE=$(date -z America/Los_Angeles +"%Y%m%d-%H%M%S")
+    - echo "BUILDDATE=$BUILDDATE"
 
     - |
       DEVBUCK=$(aws ssm get-parameter --name /uc3/mrt/config-bucket-dev --query Parameter.Value --output text)
