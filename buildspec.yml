@@ -183,7 +183,7 @@ phases:
                 then
                   docker build --quiet --push \
                     --build-arg ECR_REGISTRY=${ECR_REGISTRY} \
-                    -t ${ECR_REGISTRY}/${REPONAME}:archive-${stack}-${BRANCHTAG}-${BUILDDATE} .
+                    -t ${ECR_REGISTRY}/${REPONAME}:archive-${stack}-${TAG_ECS}-${BUILDDATE} .
                 fi
             esac
           fi
