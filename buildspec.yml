@@ -179,7 +179,7 @@ phases:
                 current=$(gdate +%s)
 
                 # do not archive more than once per hour
-                if [[ $current -gt $pushed + 3600 ]]
+                if [[ $current -gt $(($pushed + 3600)) ]]
                 then
                   docker build --quiet --push \
                     --build-arg ECR_REGISTRY=${ECR_REGISTRY} \
