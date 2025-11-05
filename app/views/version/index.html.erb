@@ -50,8 +50,8 @@
       <% if current_user_can_download?(@version.inv_object) %>
         <% if @version.exceeds_download_size? %>
           <p>
-            Versions larger than <%= max_download_size_pretty %> cannot be downloaded as a .zip file.
-            Versions and individual files below that size can still be downloaded.
+            Versions larger than <%= max_download_size_pretty %> cannot be downloaded as a .zip file. 
+            However, individual files larger than that size can still be downloaded.
           </p>
         <% else %>
           <%= form_tag({action: :presign, :object => @version.inv_object, :version => @version}, remote: true, method: 'GET', id: 'button_presign_obj', dataType: 'json') do %>

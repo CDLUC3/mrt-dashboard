@@ -6,6 +6,11 @@ version: 0.2
 # test 
 
 phases:
+  install:
+    commands:
+    - python3 -m pip install --upgrade pip
+    - pip install yq
+
   pre_build:
     on-failure: ABORT
     commands:
@@ -22,8 +27,23 @@ phases:
       else
         BRANCHTAG=$BRANCHNAME
       fi
-    - DOCKTAG=$BRANCHTAG
     - echo "Branchtag ${BRANCHTAG}; COMMITDATE=${COMMITDATE}; REPONAME=${REPONAME}; BRANCHNAME=${BRANCHNAME}"
+    - BUILDDATE=$(TZ='America/Los_Angeles' date +"%Y%m%d-%H%M%S")
+    - echo "BUILDDATE=$BUILDDATE"
+
+    - |
+      DEVBUCK=$(aws ssm get-parameter --name /uc3/mrt/config-bucket-dev --query Parameter.Value --output text)
+      aws s3 cp s3://${DEVBUCK}/uc3/mrt/mrt-ecs-manifest/ecs-release-manifest.yaml /tmp/ecs-release-manifest.yaml
+      TAG_ECS_DEV=$(yq -r ".\"ecs-tagmap\".\"${REPONAME}\".\"ecs-dev\"" /tmp/ecs-release-manifest.yaml)
+      echo TAG_ECS_DEV=$TAG_ECS_DEV
+      TAG_ECS_EPHEMERAL=$(yq -r ".\"ecs-tagmap\".\"${REPONAME}\".\"ecs-ephemeral\"" /tmp/ecs-release-manifest.yaml)
+      echo TAG_ECS_EPHEMERAL=$TAG_ECS_EPHEMERAL
+      TAG_ECS_DBSNAPSHOT=$(yq -r ".\"ecs-tagmap\".\"${REPONAME}\".\"ecs-dbsnapshot\"" /tmp/ecs-release-manifest.yaml)
+      echo TAG_ECS_DBSNAPSHOT=$TAG_ECS_DBSNAPSHOT
+      TAG_ECS_STG=$(yq -r ".\"ecs-tagmap\".\"${REPONAME}\".\"ecs-stg\"" /tmp/ecs-release-manifest.yaml)
+      echo TAG_ECS_STG=$TAG_ECS_STG
+      TAG_ECS_PRD=$(yq -r ".\"ecs-tagmap\".\"${REPONAME}\".\"ecs-prd\"" /tmp/ecs-release-manifest.yaml)
+      echo TAG_ECS_PRD=$TAG_ECS_PRD
 
   build:
     on-failure: ABORT
@@ -32,50 +52,140 @@ phases:
     - |
       if [[ "${BRANCHTAG}" == "main" ]]
       then
-        DOCKTAG='dev'
+        BRANCHTAG='dev'
       fi
 
     - |
       docker build --push --quiet \
         --build-arg ECR_REGISTRY=${ECR_REGISTRY} \
-        -t ${ECR_REGISTRY}/${REPONAME}:${DOCKTAG} .
+        -t ${ECR_REGISTRY}/${REPONAME}:${BRANCHTAG} .
     
-      if [[ "${DOCKTAG}" == "dev" ]]
+    - |
+      SERVICENAME=ui
+      if [[ "$BRANCHTAG" == "$TAG_ECS_DEV" ]]
       then
-        docker build --push --quiet \
+        docker build --quiet --push \
           --build-arg ECR_REGISTRY=${ECR_REGISTRY} \
           -t ${ECR_REGISTRY}/${REPONAME}:ecs-dev .
-      fi
-    # report results
-    - mkdir -p reports
-    - RPT=reports/${REPONAME}.md
-    - echo "## Semantic Tags" > $RPT
-    - |
-      git for-each-ref --sort=-creatordate --format '- %(refname) (%(creatordate:short))' refs/tags \
-        | egrep "tags/[0-9]+\.[0-9]+\.[0-9]+ " \
-        | sed -e "s/refs\/tags\///" | head -10 >> $RPT
-    - echo "## Feature Tags" >> $RPT
-    - |
-      git for-each-ref --sort=-creatordate --format '- %(refname) (%(creatordate:short))' refs/tags \
-        | egrep -v "tags/[0-9]+\.[0-9]+\.[0-9]+ " \
-        | egrep -v "sprint-" \
-        | sed -e "s/refs\/tags\///" | head -10 >> $RPT
-    - |
-      for img in ${REPONAME}
-      do
-        echo "## Docker Image Tags $img" >> $RPT
-        aws ecr list-images --repository-name $img --filter tagStatus=TAGGED --output=text \
-        | cut -f3 \
-        | sed -e "s/^/- /" \
-        | sort >> $RPT
-      done
-    - |
-      aws ecs update-service --cluster mrt-ecs-dev-stack --service ui \
-       --desired-count 2 --output yaml --no-cli-pager \
-       --force-new-deployment || echo "Skip ECS Deployment"
 
-    - aws s3 cp $RPT s3://${S3CFBUCKET}/$RPT
+        RUNNING_COUNT=$(aws ecs list-tasks \
+          --cluster mrt-ecs-dev-stack \
+          --service-name $SERVICENAME \
+          --desired-status RUNNING \
+          --query 'length(taskArns)' \
+          --output text)
+
+        if [ $RUNNING_COUNT -gt 0 ]
+        then
+          aws ecs update-service --cluster mrt-ecs-dev-stack --service $SERVICENAME \
+            --desired-count $RUNNING_COUNT --output text --no-cli-pager \
+           --query "service.deployments[0].[id,taskDefinition,status,desiredCount,createdAt]" \
+            --force-new-deployment || echo "Skip ecs-dev Deployment"
+        fi  
+      fi
+
+      if [[ "$BRANCHTAG" == "$TAG_ECS_EPHEMERAL" ]]
+      then
+        docker build --quiet --push \
+          --build-arg ECR_REGISTRY=${ECR_REGISTRY} \
+          -t ${ECR_REGISTRY}/${REPONAME}:ecs-ephemeral .
+
+        RUNNING_COUNT=$(aws ecs list-tasks \
+          --cluster mrt-ecs-ephemeral-stack \
+          --service-name $SERVICENAME \
+          --desired-status RUNNING \
+          --query 'length(taskArns)' \
+          --output text)
+
+        if [ $RUNNING_COUNT -gt 0 ]
+        then
+          aws ecs update-service --cluster mrt-ecs-ephemeral-stack --service $SERVICENAME \
+            --desired-count $RUNNING_COUNT --output text --no-cli-pager \
+            --query "service.deployments[0].[id,taskDefinition,status,desiredCount,createdAt]" \
+            --force-new-deployment || echo "Skip ecs-ephemeral Deployment"
+        fi  
+      fi
+
+      if [[ "$BRANCHTAG" == "$TAG_ECS_DBSNAPSHOT" ]]
+      then
+        docker build --quiet --push \
+          --build-arg ECR_REGISTRY=${ECR_REGISTRY} \
+          -t ${ECR_REGISTRY}/${REPONAME}:ecs-dbsnapshot .
+
+        RUNNING_COUNT=$(aws ecs list-tasks \
+          --cluster mrt-ecs-dbsnapshot-stack \
+          --service-name $SERVICENAME \
+          --desired-status RUNNING \
+          --query 'length(taskArns)' \
+          --output text)
+
+        if [ $RUNNING_COUNT -gt 0 ]
+        then
+          aws ecs update-service --cluster mrt-ecs-dbsnapshot-stack --service $SERVICENAME \
+            --desired-count $RUNNING_COUNT --output text --no-cli-pager \
+            --query "service.deployments[0].[id,taskDefinition,status,desiredCount,createdAt]" \
+            --force-new-deployment || echo "Skip ecs-dbsnapshot Deployment"
+        fi  
+      fi
+
+      if [[ "$BRANCHTAG" == "$TAG_ECS_STG" ]]
+      then
+        docker build --quiet --push \
+          --build-arg ECR_REGISTRY=${ECR_REGISTRY} \
+          -t ${ECR_REGISTRY}/${REPONAME}:ecs-stg .
+
+        docker build --quiet --push \
+          --build-arg ECR_REGISTRY=${ECR_REGISTRY} \
+          -t ${ECR_REGISTRY}/${REPONAME}:archive-ecs-stg-${BRANCHTAG}-${BUILDDATE} .
+      fi
+
+      if [[ "$BRANCHTAG" == "$TAG_ECS_PRD" ]]
+      then
+        docker build --quiet --push \
+          --build-arg ECR_REGISTRY=${ECR_REGISTRY} \
+          -t ${ECR_REGISTRY}/${REPONAME}:ecs-prd .
+
+        docker build --quiet --push \
+          --build-arg ECR_REGISTRY=${ECR_REGISTRY} \
+          -t ${ECR_REGISTRY}/${REPONAME}:archive-ecs-prd-${BRANCHTAG}-${BUILDDATE} .
+      fi
+
     - aws s3 cp swagger.html s3://${S3CFBUCKET}/api/${REPONAME}/index.html
     - aws s3 cp swagger.yml s3://${S3CFBUCKET}/api/${REPONAME}/
-    - aws cloudfront create-invalidation --distribution-id ${CFDISTRIBUTIONID} --paths /reports/* --region us-east-1
     - aws cloudfront create-invalidation --distribution-id ${CFDISTRIBUTIONID} --paths /api/${REPONAME}/ --region us-east-1
+
+    - |
+      # daily / on-demand rebuild of deployed images
+      # note that this also applied to a main branch build
+      if [[ "$MODE" == "OnDemand" ]]
+      then
+        for stack in ecs-dev ecs-ephemeral ecs-dbsnapshot ecs-stg ecs-prd
+        do
+          TAG_ECS=$(yq -r ".\"ecs-tagmap\".\"${REPONAME}\".\"$stack\"" /tmp/ecs-release-manifest.yaml)
+
+          if [[ "$BRANCHTAG" != "$TAG_ECS" ]]
+          then
+            git checkout $TAG_ECS
+
+            docker build --quiet --push \
+              --build-arg ECR_REGISTRY=${ECR_REGISTRY} \
+              -t ${ECR_REGISTRY}/${REPONAME}:$stack .
+
+            case "$stack" in
+              ecs-stg|ecs-prd)
+                pushed=$(date -d $(aws ecr describe-images --repository-name ${REPONAME} \
+                  --image-ids imageTag=$stack 
+                  --query "imageDetails[0].imagePushedAt" --output text) +%s || echo 0)
+                current=$(date +%s)
+
+                # do not archive more than once per hour
+                if [[ $current -gt $(($pushed + 3600)) ]]
+                then
+                  docker build --quiet --push \
+                    --build-arg ECR_REGISTRY=${ECR_REGISTRY} \
+                    -t ${ECR_REGISTRY}/${REPONAME}:archive-${stack}-${TAG_ECS}-${BUILDDATE} .
+                fi
+            esac
+          fi
+        done
+      fi
