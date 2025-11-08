@@ -4,7 +4,7 @@
 #*********************************************************************
 # See https://itnext.io/docker-rails-puma-nginx-postgres-999cd8866b18
 
-FROM public.ecr.aws/docker/library/ruby:3.2
+FROM public.ecr.aws/docker/library/ruby:3.4
 RUN apt-get update -y -qq && apt-get install -y build-essential libpq-dev nodejs && apt-get -y upgrade
 
 # Set an environment variable where the Rails app is installed to inside of Docker image
