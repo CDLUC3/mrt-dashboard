@@ -30,12 +30,12 @@ jobs:
     - name: Set up Ruby 3.0
       uses: ruby/setup-ruby@v1
       with:
-        ruby-version: 3.2
+        ruby-version: 3.4
 
-    - name: Setup Bundler 2.1.4
+    - name: Setup Bundler 2.7.2
       run: |
         gem uninstall bundler
-        gem install bundler:2.1.4
+        gem install bundler:2.7.2
 
     - name: Ensure sqlite3 installation
       run: |
