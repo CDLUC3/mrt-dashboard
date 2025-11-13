@@ -25,7 +25,9 @@ module MrtDashboard
     #
     # config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")
-
+    
+    config.global_id.app = 'mrt-dashboard'
+    
     def config.database_configuration
       # The entire config must be returned, but only the Rails.env will be processed
       Uc3Ssm::ConfigResolver.new(def_value: 'NOT_APPLICABLE').resolve_file_values(file: 'config/database.yml')
