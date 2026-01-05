@@ -2,7 +2,7 @@ require_relative 'boot'
 
 require 'rails/all'
 require 'uc3-ssm'
-require 'sprockets/railtie'
+# require 'sprockets/railtie'
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
@@ -11,13 +11,12 @@ Bundler.require(*Rails.groups)
 module MrtDashboard
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
-    config.load_defaults 7.2
+    config.load_defaults 8.1
 
     # Please, add to the `ignore` list any other `lib` subdirectories that do
     # not contain `.rb` files, or that should not be reloaded or eager loaded.
     # Common ones are `templates`, `generators`, or `middleware`, for example.
     config.autoload_lib(ignore: %w[assets tasks])
-    config.global_id.app = 'mrt-dashboard'
 
     # Configuration for the application, engines, and railties goes here.
     #
@@ -26,6 +25,8 @@ module MrtDashboard
     #
     # config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")
+
+    config.global_id.app = 'mrt-dashboard'
 
     def config.database_configuration
       # The entire config must be returned, but only the Rails.env will be processed
