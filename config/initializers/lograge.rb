@@ -1,7 +1,7 @@
 Rails.application.configure do
   config.lograge.enabled = true
   config.lograge.custom_options = ->(event) do
-    { time: event.time, note: event.inspect }
+    { time: event.time }
   end
   config.lograge.formatter = Lograge::Formatters::Logstash.new
   config.lograge.keep_original_rails_log = true
