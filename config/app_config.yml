@@ -89,8 +89,8 @@ dockerdef: &dockerdef
   storage_presign_token: "http://store:8080/store/presign-obj-by-token/"
   redirects:
     escholarship_content: "http://cdlib.org"
-  upload-limit:          "1000000"
-  upload-limit-message:  "1 MB"
+  upload-limit:          "1000000000"
+  upload-limit-message:  "1 GB"
 
 docker:
   <<: *dockerdef
