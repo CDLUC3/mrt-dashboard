@@ -16,7 +16,7 @@ Rails.application.configure do
   config.active_support.deprecation = :log
 
   # Store uploaded files on the local file system (see config/storage.yml for options). 
-  config.active_storage.service = :ecs
+  config.active_storage.service = :rptbucket
 
   # Prepend all log lines with the following tags.
   config.log_tags = [:request_id]
