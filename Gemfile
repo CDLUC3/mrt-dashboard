@@ -7,6 +7,7 @@ gem 'mysql2'
 gem 'rails', '~> 8.1'
 
 gem 'aws-sdk-ec2'
+gem 'aws-sdk-s3'
 gem 'aws-sdk-ssm'
 gem 'bcrypt_pbkdf'
 gem 'bootsnap'
