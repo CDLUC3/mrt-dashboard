@@ -2,6 +2,7 @@ require_relative 'boot'
 
 require 'rails/all'
 require 'uc3-ssm'
+require 'tempfile'
 # require 'sprockets/railtie'
 
 # Require the gems listed in Gemfile, including any gems
@@ -32,5 +33,9 @@ module MrtDashboard
       # The entire config must be returned, but only the Rails.env will be processed
       Uc3Ssm::ConfigResolver.new(def_value: 'NOT_APPLICABLE').resolve_file_values(file: 'config/database.yml')
     end
+
+    tmp_dir = ENV.fetch('TMPDIR', '/tmp')
+    FileUtils.mkdir_p(tmp_dir) unless File.exist?(tmp_dir)
+    Tempfile::Dir = tmp_dir
   end
 end
