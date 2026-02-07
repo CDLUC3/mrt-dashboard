@@ -21,4 +21,8 @@ Rails.application.configure do
   logger = ActiveSupport::Logger.new($stdout)
   logger.formatter = config.log_formatter
   config.logger = ActiveSupport::TaggedLogging.new(logger)
+
+  tmp_dir = ENV.fetch('TMPDIR', '/tmp')
+  FileUtils.mkdir_p(tmp_dir) unless File.exist?(tmp_dir)
+  puts "tmp_dir init: #{tmp_dir}"
 end
