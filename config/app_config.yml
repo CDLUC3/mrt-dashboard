@@ -79,14 +79,14 @@ dockerdef: &dockerdef
   # cloudcontainer is obsolete functionality to support large object (email) downloads
   n2t_uri:              "http://n2t-wf.cdlib.org/"
   # Note that the following service is no longer available
-  ingest_service:       "http://{!ENV: INGEST_SERVICE !DEFAULT: ingest:8080/ingest}/poster/submit/"
-  ingest_service_update: "http://{!ENV: INGEST_SERVICE !DEFAULT: ingest:8080/ingest}/poster/update/"
-  uri_1:                "http://{!ENV: ACCESS_SERVICE !DEFAULT: store:8080/store}/content/"
-  uri_2:                "http://{!ENV: ACCESS_SERVICE !DEFAULT: store:8080/store}/producer/"
-  uri_3:                "http://{!ENV: ACCESS_SERVICE !DEFAULT: store:8080/store}/manifest/"
-  storage_presign_file: "http://{!ENV: ACCESS_SERVICE !DEFAULT: store:8080/store}/presign-file/"
-  storage_presign_obj:  "http://{!ENV: ACCESS_SERVICE !DEFAULT: store:8080/store}/assemble-obj/"
-  storage_presign_token: "http://{!ENV: ACCESS_SERVICE !DEFAULT: store:8080/store}/presign-obj-by-token/"
+  ingest_service:       "http://{!ENV: SVC_INGEST !DEFAULT: ingest:8080/ingest}/poster/submit/"
+  ingest_service_update: "http://{!ENV: SVC_INGEST !DEFAULT: ingest:8080/ingest}/poster/update/"
+  uri_1:                "http://{!ENV: SVC_ACCESS !DEFAULT: store:8080/store}/content/"
+  uri_2:                "http://{!ENV: SVC_ACCESS !DEFAULT: store:8080/store}/producer/"
+  uri_3:                "http://{!ENV: SVC_ACCESS !DEFAULT: store:8080/store}/manifest/"
+  storage_presign_file: "http://{!ENV: SVC_ACCESS !DEFAULT: store:8080/store}/presign-file/"
+  storage_presign_obj:  "http://{!ENV: SVC_ACCESS !DEFAULT: store:8080/store}/assemble-obj/"
+  storage_presign_token: "http://{!ENV: SVC_ACCESS !DEFAULT: store:8080/store}/presign-obj-by-token/"
   redirects:
     escholarship_content: "http://cdlib.org"
   upload-limit:          "{!ENV: MRT_UPLOAD_LIMIT !DEFAULT: 1000000}"
