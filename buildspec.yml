@@ -58,6 +58,7 @@ phases:
         --build-arg ECR_REGISTRY=${ECR_REGISTRY} \
         -t ${ECR_REGISTRY}/${REPONAME}:${BRANCHTAG} .
 
+    - |
       if [[ "$BRANCHTAG" == "main" ]]
       then
         docker build --quiet --push \
