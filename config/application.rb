@@ -35,7 +35,7 @@ module MrtDashboard
     end
 
     tmp_dir = ENV.fetch('TMPDIR', '/tmp')
-    FileUtils.mkdir_p(tmp_dir) unless File.exist?(tmp_dir)
+    FileUtils.mkdir_p(tmp_dir)
     Tempfile::Dir = tmp_dir
   end
 end
