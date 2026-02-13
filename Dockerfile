@@ -5,7 +5,7 @@
 # See https://itnext.io/docker-rails-puma-nginx-postgres-999cd8866b18
 
 FROM public.ecr.aws/docker/library/ruby:3.4
-RUN apt-get update -y -qq &&\
+RUN apt-get update -y -qq && \
   apt-get install -y build-essential libpq-dev nodejs ca-certificates && \
   apt-get -y upgrade
 
@@ -15,7 +15,8 @@ RUN mkdir -p $RAILS_ROOT $RAILS_ROOT/log
 
 RUN mkdir -p /etc/pki/ca-trust/source/anchors
 COPY UC3-Self-Signed-CA.crt /etc/pki/ca-trust/source/anchors/UC3-Self-Signed-CA.crt
-RUN /bin/update-ca-trust extract
+# do not expect a cert to be available for docker compose
+RUN /usr/sbin/update-ca-certificates extract || true
 
 # Set working directory
 WORKDIR $RAILS_ROOT
