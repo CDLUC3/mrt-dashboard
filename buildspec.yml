@@ -14,6 +14,10 @@ phases:
   pre_build:
     on-failure: ABORT
     commands:
+    - |
+      CA_CERT_NAME=UC3-Self-Signed-CA.crt
+      aws ssm get-parameter --name /uc3/default/uc3_ca/$CA_CERT_NAME --output text --query 'Parameter.Value' > $CA_CERT_NAME
+
     - aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin ${ECR_REGISTRY}
 
     - COMMIT=`git rev-parse --short HEAD`

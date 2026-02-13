@@ -11,6 +11,9 @@ RUN apt-get update -y -qq && apt-get install -y build-essential libpq-dev nodejs
 ENV RAILS_ROOT /var/www/app_name
 RUN mkdir -p $RAILS_ROOT $RAILS_ROOT/log
 
+COPY UC3-Self-Signed-CA.crt /etc/pki/ca-trust/source/anchors/UC3-Self-Signed-CA.crt
+RUN /usr/bin/update-ca-trust extract
+
 # Set working directory
 WORKDIR $RAILS_ROOT
 
