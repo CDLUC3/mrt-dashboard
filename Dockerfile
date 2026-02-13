@@ -13,7 +13,6 @@ RUN apt-get update -y -qq && \
 ENV RAILS_ROOT /var/www/app_name
 RUN mkdir -p $RAILS_ROOT $RAILS_ROOT/log
 
-RUN mkdir -p /etc/pki/ca-trust/source/anchors
 COPY UC3-Self-Signed-CA.crt /usr/local/share/ca-certificates/
 
 # do not expect a cert to be available for docker compose
