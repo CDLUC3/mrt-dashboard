@@ -161,6 +161,7 @@ phases:
     - aws cloudfront create-invalidation --distribution-id ${CFDISTRIBUTIONID} --paths /api/${REPONAME}/ --region us-east-1
 
     - |
+      git fetch --all
       # daily / on-demand rebuild of deployed images
       # note that this also applied to a main branch build
       if [[ "$MODE" == "OnDemand" ]]
@@ -172,6 +173,7 @@ phases:
           if [[ "$BRANCHTAG" != "$TAG_ECS" ]]
           then
             git checkout $TAG_ECS
+            git pull
 
             docker build --quiet --push \
               --build-arg ECR_REGISTRY=${ECR_REGISTRY} \
