@@ -170,8 +170,10 @@ phases:
 
           if [[ "$BRANCHTAG" != "$TAG_ECS" ]]
           then
+            git stash
             git checkout $TAG_ECS
-            git pull
+            aws ssm get-parameter --name /uc3/default/uc3_ca/$CA_CERT_NAME --output text --query 'Parameter.Value' > $CA_CERT_NAME
+
 
             docker build --quiet --push \
               --build-arg ECR_REGISTRY=${ECR_REGISTRY} \
