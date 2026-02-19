@@ -1,6 +1,7 @@
 ##################################################
 # Custom ignores
 
+UC3-Self-Signed-CA.crt
 public/assets/**
 
 .config-secret
