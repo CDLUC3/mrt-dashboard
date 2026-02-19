@@ -170,7 +170,6 @@ phases:
 
           if [[ "$BRANCHTAG" != "$TAG_ECS" ]]
           then
-            git stash
             git checkout $TAG_ECS
             CA_CERT_NAME=UC3-Self-Signed-CA.crt
             aws ssm get-parameter --name /uc3/default/uc3_ca/$CA_CERT_NAME --output text --query 'Parameter.Value' > $CA_CERT_NAME
