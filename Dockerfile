@@ -57,4 +57,4 @@ RUN /usr/sbin/update-ca-certificates
 
 RUN echo Docker Build `date` > .version
 
-CMD ["bundle", "exec", "puma", "-C", "config/application.rb", "-p", "8086", "-t", "0:${RAILS_MAX_THREADS}"]
+CMD ["sh", "-c", "bundle exec puma -C config/application.rb -p 8086 -t 0:$RAILS_MAX_THREADS"]
