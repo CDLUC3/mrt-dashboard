@@ -24,6 +24,7 @@ WORKDIR $RAILS_ROOT
 # Setting env up
 ENV RAILS_ENV='docker'
 ENV RACK_ENV='docker'
+ENV RAILS_MAX_THREADS=5
 
 # Adding gems
 COPY Gemfile Gemfile
@@ -56,4 +57,4 @@ RUN /usr/sbin/update-ca-certificates
 
 RUN echo Docker Build `date` > .version
 
-CMD ["bundle", "exec", "puma", "-C", "config/application.rb", "-p", "8086"]
+CMD ["bundle", "exec", "puma", "-C", "config/application.rb", "-p", "8086", "-t", "0:${RAILS_MAX_THREADS}"]
