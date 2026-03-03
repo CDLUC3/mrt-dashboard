@@ -134,28 +134,6 @@ phases:
         fi  
       fi
 
-      if [[ "$BRANCHTAG" == "$TAG_ECS_STG" ]]
-      then
-        docker build --quiet --push \
-          --build-arg ECR_REGISTRY=${ECR_REGISTRY} \
-          -t ${ECR_REGISTRY}/${REPONAME}:ecs-stg .
-
-        docker build --quiet --push \
-          --build-arg ECR_REGISTRY=${ECR_REGISTRY} \
-          -t ${ECR_REGISTRY}/${REPONAME}:archive-ecs-stg-${BRANCHTAG}-${BUILDDATE} .
-      fi
-
-      if [[ "$BRANCHTAG" == "$TAG_ECS_PRD" ]]
-      then
-        docker build --quiet --push \
-          --build-arg ECR_REGISTRY=${ECR_REGISTRY} \
-          -t ${ECR_REGISTRY}/${REPONAME}:ecs-prd .
-
-        docker build --quiet --push \
-          --build-arg ECR_REGISTRY=${ECR_REGISTRY} \
-          -t ${ECR_REGISTRY}/${REPONAME}:archive-ecs-prd-${BRANCHTAG}-${BUILDDATE} .
-      fi
-
     - aws s3 cp swagger.html s3://${S3CFBUCKET}/api/${REPONAME}/index.html
     - aws s3 cp swagger.yml s3://${S3CFBUCKET}/api/${REPONAME}/
     - aws cloudfront create-invalidation --distribution-id ${CFDISTRIBUTIONID} --paths /api/${REPONAME}/ --region us-east-1
@@ -178,21 +156,6 @@ phases:
               --build-arg ECR_REGISTRY=${ECR_REGISTRY} \
               -t ${ECR_REGISTRY}/${REPONAME}:$stack .
 
-            case "$stack" in
-              ecs-stg|ecs-prd)
-                pushed=$(date -d $(aws ecr describe-images --repository-name ${REPONAME} \
-                  --image-ids imageTag=$stack 
-                  --query "imageDetails[0].imagePushedAt" --output text) +%s || echo 0)
-                current=$(date +%s)
-
-                # do not archive more than once per hour
-                if [[ $current -gt $(($pushed + 3600)) ]]
-                then
-                  docker build --quiet --push \
-                    --build-arg ECR_REGISTRY=${ECR_REGISTRY} \
-                    -t ${ECR_REGISTRY}/${REPONAME}:archive-${stack}-${TAG_ECS}-${BUILDDATE} .
-                fi
-            esac
           fi
         done
       fi
