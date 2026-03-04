@@ -56,6 +56,7 @@ phases:
     - |
       docker build --push --quiet \
         --build-arg ECR_REGISTRY=${ECR_REGISTRY} \
+        --build-arg BUILD_TAG=${BRANCHTAG} \
         -t ${ECR_REGISTRY}/${REPONAME}:${BRANCHTAG} .
 
     - |
@@ -63,6 +64,7 @@ phases:
       then
         docker build --quiet --push \
           --build-arg ECR_REGISTRY=${ECR_REGISTRY} \
+          --build-arg BUILD_TAG=${BRANCHTAG} \
           -t ${ECR_REGISTRY}/${REPONAME}:dev .
       fi
 
@@ -72,6 +74,7 @@ phases:
       then
         docker build --quiet --push \
           --build-arg ECR_REGISTRY=${ECR_REGISTRY} \
+          --build-arg BUILD_TAG=${BRANCHTAG} \
           -t ${ECR_REGISTRY}/${REPONAME}:ecs-dev .
 
         RUNNING_COUNT=$(aws ecs list-tasks \
@@ -94,6 +97,7 @@ phases:
       then
         docker build --quiet --push \
           --build-arg ECR_REGISTRY=${ECR_REGISTRY} \
+          --build-arg BUILD_TAG=${BRANCHTAG} \
           -t ${ECR_REGISTRY}/${REPONAME}:ecs-ephemeral .
 
         RUNNING_COUNT=$(aws ecs list-tasks \
@@ -116,6 +120,7 @@ phases:
       then
         docker build --quiet --push \
           --build-arg ECR_REGISTRY=${ECR_REGISTRY} \
+          --build-arg BUILD_TAG=${BRANCHTAG} \
           -t ${ECR_REGISTRY}/${REPONAME}:ecs-dbsnapshot .
 
         RUNNING_COUNT=$(aws ecs list-tasks \
@@ -154,6 +159,7 @@ phases:
 
             docker build --quiet --push \
               --build-arg ECR_REGISTRY=${ECR_REGISTRY} \
+              --build-arg BUILD_TAG=${TAG_ECS} \
               -t ${ECR_REGISTRY}/${REPONAME}:$stack .
 
           fi

@@ -5,6 +5,7 @@
 # See https://itnext.io/docker-rails-puma-nginx-postgres-999cd8866b18
 
 FROM public.ecr.aws/docker/library/ruby:3.4
+ARG BUILD_TAG
 RUN apt-get update -y -qq && \
   apt-get install -y build-essential libpq-dev nodejs ca-certificates && \
   apt-get -y upgrade
@@ -55,6 +56,10 @@ RUN mkdir /usr/local/share/ca-certificates/extra
 COPY docker/ldap-ca.crt /usr/local/share/ca-certificates/extra/ldap-ca.crt
 RUN /usr/sbin/update-ca-certificates
 
-RUN echo Docker Build `date` > .version
+RUN if [ -n "$BUILD_TAG" ]; then \
+      echo "$BUILD_TAG" > .version; \
+    else \
+      echo "Docker Build $(date)" > .version; \
+    fi
 
 CMD ["sh", "-c", "bundle exec puma -C config/application.rb -p 8086 -t 0:$RAILS_MAX_THREADS"]
