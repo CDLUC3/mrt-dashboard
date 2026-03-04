@@ -57,9 +57,9 @@ namespace :deploy do
     on roles(:app), wait: 1 do
       ssm = Uc3Ssm::ConfigResolver.new
       master_key = ssm.parameter_for_key('ui/master_key')
-      f = File.open("#{release_path}/config/master.key", 'w')
-      f.puts master_key
-      f.close
+      File.open("#{release_path}/config/master.key", 'w') do |f|
+        f.puts master_key
+      end
     end
   end
 

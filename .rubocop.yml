@@ -119,3 +119,5 @@ Layout/ElseAlignment:
   Enabled: false
 Style/ConditionalAssignment:
   Enabled: false
+Style/OneClassPerFile:
+  Enabled: false
