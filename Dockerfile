@@ -59,7 +59,7 @@ RUN /usr/sbin/update-ca-certificates
 RUN if [ -n "$BUILD_TAG" ]; then \
       echo "${BUILD_TAG}." > .version; \
     else \
-      echo "Docker Build $(date)." > .version; \
+      echo "Docker Build $(date)" > .version; \
     fi
 
 CMD ["sh", "-c", "bundle exec puma -C config/application.rb -p 8086 -t 0:$RAILS_MAX_THREADS"]
