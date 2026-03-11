@@ -174,3 +174,7 @@ Temporary Items
 node_modules/
 vendor/
 .vscode/
+
+# Ignore key files for decrypting credentials and more.
+/config/master.key
+
