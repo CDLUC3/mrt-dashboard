@@ -17,6 +17,7 @@ phases:
     - |
       CA_CERT_NAME=UC3-Self-Signed-CA.crt
       aws ssm get-parameter --name /uc3/default/uc3_ca/$CA_CERT_NAME --output text --query 'Parameter.Value' > $CA_CERT_NAME
+      aws ssm get-parameter --name /uc3/mrt/ui/master_key --output text --query 'Parameter.Value' --with-decryption > config/master.key
 
     - aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin ${ECR_REGISTRY}
 
@@ -54,22 +55,27 @@ phases:
     commands:
       
     - |
-      if [[ "${BRANCHTAG}" == "main" ]]
-      then
-        BRANCHTAG='dev'
-      fi
-
-    - |
       docker build --push --quiet \
         --build-arg ECR_REGISTRY=${ECR_REGISTRY} \
+        --build-arg BUILD_TAG=${BRANCHTAG} \
         -t ${ECR_REGISTRY}/${REPONAME}:${BRANCHTAG} .
-    
+
+    - |
+      if [[ "$BRANCHTAG" == "main" ]]
+      then
+        docker build --quiet --push \
+          --build-arg ECR_REGISTRY=${ECR_REGISTRY} \
+          --build-arg BUILD_TAG=${BRANCHTAG} \
+          -t ${ECR_REGISTRY}/${REPONAME}:dev .
+      fi
+
     - |
       SERVICENAME=ui
       if [[ "$BRANCHTAG" == "$TAG_ECS_DEV" ]]
       then
         docker build --quiet --push \
           --build-arg ECR_REGISTRY=${ECR_REGISTRY} \
+          --build-arg BUILD_TAG=${BRANCHTAG} \
           -t ${ECR_REGISTRY}/${REPONAME}:ecs-dev .
 
         RUNNING_COUNT=$(aws ecs list-tasks \
@@ -92,6 +98,7 @@ phases:
       then
         docker build --quiet --push \
           --build-arg ECR_REGISTRY=${ECR_REGISTRY} \
+          --build-arg BUILD_TAG=${BRANCHTAG} \
           -t ${ECR_REGISTRY}/${REPONAME}:ecs-ephemeral .
 
         RUNNING_COUNT=$(aws ecs list-tasks \
@@ -114,6 +121,7 @@ phases:
       then
         docker build --quiet --push \
           --build-arg ECR_REGISTRY=${ECR_REGISTRY} \
+          --build-arg BUILD_TAG=${BRANCHTAG} \
           -t ${ECR_REGISTRY}/${REPONAME}:ecs-dbsnapshot .
 
         RUNNING_COUNT=$(aws ecs list-tasks \
@@ -130,28 +138,6 @@ phases:
             --query "service.deployments[0].[id,taskDefinition,status,desiredCount,createdAt]" \
             --force-new-deployment || echo "Skip ecs-dbsnapshot Deployment"
         fi  
-      fi
-
-      if [[ "$BRANCHTAG" == "$TAG_ECS_STG" ]]
-      then
-        docker build --quiet --push \
-          --build-arg ECR_REGISTRY=${ECR_REGISTRY} \
-          -t ${ECR_REGISTRY}/${REPONAME}:ecs-stg .
-
-        docker build --quiet --push \
-          --build-arg ECR_REGISTRY=${ECR_REGISTRY} \
-          -t ${ECR_REGISTRY}/${REPONAME}:archive-ecs-stg-${BRANCHTAG}-${BUILDDATE} .
-      fi
-
-      if [[ "$BRANCHTAG" == "$TAG_ECS_PRD" ]]
-      then
-        docker build --quiet --push \
-          --build-arg ECR_REGISTRY=${ECR_REGISTRY} \
-          -t ${ECR_REGISTRY}/${REPONAME}:ecs-prd .
-
-        docker build --quiet --push \
-          --build-arg ECR_REGISTRY=${ECR_REGISTRY} \
-          -t ${ECR_REGISTRY}/${REPONAME}:archive-ecs-prd-${BRANCHTAG}-${BUILDDATE} .
       fi
 
     - aws s3 cp swagger.html s3://${S3CFBUCKET}/api/${REPONAME}/index.html
@@ -177,23 +163,9 @@ phases:
 
             docker build --quiet --push \
               --build-arg ECR_REGISTRY=${ECR_REGISTRY} \
-              -t ${ECR_REGISTRY}/${REPONAME}:$stack .
+              --build-arg BUILD_TAG=${TAG_ECS} \
+              -t ${ECR_REGISTRY}/${REPONAME}:$TAG_ECS .
 
-            case "$stack" in
-              ecs-stg|ecs-prd)
-                pushed=$(date -d $(aws ecr describe-images --repository-name ${REPONAME} \
-                  --image-ids imageTag=$stack 
-                  --query "imageDetails[0].imagePushedAt" --output text) +%s || echo 0)
-                current=$(date +%s)
-
-                # do not archive more than once per hour
-                if [[ $current -gt $(($pushed + 3600)) ]]
-                then
-                  docker build --quiet --push \
-                    --build-arg ECR_REGISTRY=${ECR_REGISTRY} \
-                    -t ${ECR_REGISTRY}/${REPONAME}:archive-${stack}-${TAG_ECS}-${BUILDDATE} .
-                fi
-            esac
           fi
         done
       fi

@@ -5,11 +5,19 @@
 # See https://itnext.io/docker-rails-puma-nginx-postgres-999cd8866b18
 
 FROM public.ecr.aws/docker/library/ruby:3.4
-RUN apt-get update -y -qq && apt-get install -y build-essential libpq-dev nodejs && apt-get -y upgrade
+ARG BUILD_TAG
+RUN apt-get update -y -qq && \
+  apt-get install -y build-essential libpq-dev nodejs ca-certificates && \
+  apt-get -y upgrade
 
 # Set an environment variable where the Rails app is installed to inside of Docker image
 ENV RAILS_ROOT /var/www/app_name
 RUN mkdir -p $RAILS_ROOT $RAILS_ROOT/log
+
+COPY UC3-Self-Signed-CA.crt* /usr/local/share/ca-certificates/
+
+# do not expect a cert to be available for docker compose
+RUN /usr/sbin/update-ca-certificates extract || true
 
 # Set working directory
 WORKDIR $RAILS_ROOT
@@ -17,6 +25,7 @@ WORKDIR $RAILS_ROOT
 # Setting env up
 ENV RAILS_ENV='docker'
 ENV RACK_ENV='docker'
+ENV RAILS_MAX_THREADS=5
 
 # Adding gems
 COPY Gemfile Gemfile
@@ -47,6 +56,10 @@ RUN mkdir /usr/local/share/ca-certificates/extra
 COPY docker/ldap-ca.crt /usr/local/share/ca-certificates/extra/ldap-ca.crt
 RUN /usr/sbin/update-ca-certificates
 
-RUN echo Docker Build `date` > .version
+RUN if [ -n "$BUILD_TAG" ]; then \
+      echo "${BUILD_TAG}." > .version; \
+    else \
+      echo "Docker Build $(date)" > .version; \
+    fi
 
-CMD ["bundle", "exec", "puma", "-C", "config/application.rb", "-p", "8086"]
+CMD ["sh", "-c", "bundle exec puma -C config/application.rb -p 8086 -t 0:$RAILS_MAX_THREADS"]

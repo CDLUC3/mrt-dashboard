@@ -1,5 +1,5 @@
 unless self.class.const_defined?(:APP_VERSION)
-  APP_VERSION = File.exist?('.version') ? File.read('.version').chop.chop.chomp(';') : 'no-deploy-tag'
+  APP_VERSION = File.exist?('.version') ? File.read('.version').chop : 'no-deploy-tag'
 end
 
 # When running outside of a local/docker environment, the SSM_ROOT_PATH must be set
