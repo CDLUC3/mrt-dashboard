@@ -33,7 +33,7 @@ phases:
         BRANCHTAG=$BRANCHNAME
       fi
     - echo "Branchtag ${BRANCHTAG}; COMMITDATE=${COMMITDATE}; REPONAME=${REPONAME}; BRANCHNAME=${BRANCHNAME}"
-    - BUILDDATE=$(TZ='America/Los_Angeles' date +"%Y%m%d-%H%M%S")
+    - BUILDDATE=$(TZ='America/Los_Angeles' date +"%Y%m%d")
     - echo "BUILDDATE=$BUILDDATE"
 
     - |
@@ -59,6 +59,11 @@ phases:
         --build-arg ECR_REGISTRY=${ECR_REGISTRY} \
         --build-arg BUILD_TAG=${BRANCHTAG} \
         -t ${ECR_REGISTRY}/${REPONAME}:${BRANCHTAG} .
+
+      docker build --push --quiet \
+        --build-arg ECR_REGISTRY=${ECR_REGISTRY} \
+        --build-arg BUILD_TAG=${BRANCHTAG} \
+        -t ${ECR_REGISTRY}/${REPONAME}:archive-${BRANCHTAG}-${BUILDDATE} .
 
     - |
       if [[ "$BRANCHTAG" == "main" ]]
@@ -160,12 +165,15 @@ phases:
             CA_CERT_NAME=UC3-Self-Signed-CA.crt
             aws ssm get-parameter --name /uc3/default/uc3_ca/$CA_CERT_NAME --output text --query 'Parameter.Value' > $CA_CERT_NAME
 
-
             docker build --quiet --push \
               --build-arg ECR_REGISTRY=${ECR_REGISTRY} \
               --build-arg BUILD_TAG=${TAG_ECS} \
               -t ${ECR_REGISTRY}/${REPONAME}:$TAG_ECS .
 
+            docker build --quiet --push \
+              --build-arg ECR_REGISTRY=${ECR_REGISTRY} \
+              --build-arg BUILD_TAG=${TAG_ECS} \
+              -t ${ECR_REGISTRY}/${REPONAME}:archive-${TAG_ECS}-${BUILDDATE} .
           fi
         done
       fi
