@@ -161,7 +161,7 @@ phases:
             docker build --quiet --push \
               --build-arg ECR_REGISTRY=${ECR_REGISTRY} \
               --build-arg BUILD_TAG=${TAG_ECS} \
-              -t ${ECR_REGISTRY}/${REPONAME}:$stack .
+              -t ${ECR_REGISTRY}/${REPONAME}:$TAG_ECS .
 
           fi
         done
