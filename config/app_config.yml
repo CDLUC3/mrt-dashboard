@@ -1,7 +1,8 @@
 # Application defaults
 def: &def
-  # maximum byte size threshold for download of object/versions without compression
-  max_archive_size: 1073741824  # maximum byte size threshold for any download whatsoever
+  # this value is read in code but does not seem to be used any longer
+  max_archive_size: 1073741824  
+  # cutoff size that limits object assembly
   max_download_size: 214748364800  # 200 GiB
   dua_email_from: no-reply-merritt@ucop.edu
   mrt_dua_file: producer/mrt-dua.txt
@@ -74,7 +75,7 @@ dockerdef: &dockerdef
   # Marisa is coded into rspec tests
   dua_email_to:         [uc3@ucop.edu]
   n2t_uri:              "http://n2t.net/"
-  merritt_server:       "http://{!ENV: MRT_DOCKER_HOST !DEFAULT: localhost}:8086"
+  merritt_server:       "{!ENV: MRT_UI_HOME !DEFAULT: http://localhost:8086}"
   ingest_service:       "http://{!ENV: SVC_INGEST !DEFAULT: ingest:8080/ingest}/poster/submit/"
   ingest_service_update: "http://{!ENV: SVC_INGEST !DEFAULT: ingest:8080/ingest}/poster/update/"
   uri_1:                "http://{!ENV: SVC_ACCESS !DEFAULT: store:8080/store}/content/"
