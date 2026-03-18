@@ -5,10 +5,10 @@ def: &def
   max_download_size: 214748364800  # 200 GiB
   dua_email_from: no-reply-merritt@ucop.edu
   mrt_dua_file: producer/mrt-dua.txt
-  get_storage_key_file: "/api/get-storage-key-file"
   proto_force: ""
   redirects:
     ucsc_lib_hollzahawi_content: "http://www.holl-lab.com/islas-project.html"
+    escholarship_content: "http://cdlib.org"
 
 ssm: &ssmdef
   ingest_service:        "{!SSM: colladmin/ingest-service}poster/submit/"
@@ -71,14 +71,10 @@ test:
 # Docker configuration defaults
 dockerdef: &dockerdef
   <<: *def
-  max_archive_size:  10000000  # 9999 bytes ~= 99 KiB
-  max_download_size: 20000000  # 1048576 bytes = 1 MiB
   # Marisa is coded into rspec tests
-  dua_email_to:         [marisa.strong@ucop.edu]
+  dua_email_to:         [uc3@ucop.edu]
+  n2t_uri:              "http://n2t.net/"
   merritt_server:       "http://{!ENV: MRT_DOCKER_HOST !DEFAULT: localhost}:8086"
-  # cloudcontainer is obsolete functionality to support large object (email) downloads
-  n2t_uri:              "http://n2t-wf.cdlib.org/"
-  # Note that the following service is no longer available
   ingest_service:       "http://{!ENV: SVC_INGEST !DEFAULT: ingest:8080/ingest}/poster/submit/"
   ingest_service_update: "http://{!ENV: SVC_INGEST !DEFAULT: ingest:8080/ingest}/poster/update/"
   uri_1:                "http://{!ENV: SVC_ACCESS !DEFAULT: store:8080/store}/content/"
@@ -87,8 +83,6 @@ dockerdef: &dockerdef
   storage_presign_file: "http://{!ENV: SVC_ACCESS !DEFAULT: store:8080/store}/presign-file/"
   storage_presign_obj:  "http://{!ENV: SVC_ACCESS !DEFAULT: store:8080/store}/assemble-obj/"
   storage_presign_token: "http://{!ENV: SVC_ACCESS !DEFAULT: store:8080/store}/presign-obj-by-token/"
-  redirects:
-    escholarship_content: "http://cdlib.org"
   upload-limit:          "{!ENV: MRT_UPLOAD_LIMIT !DEFAULT: 1000000}"
   upload-limit-message:  "{!ENV: MRT_UPLOAD_LIMIT_MSG !DEFAULT: 1 MB}"
 
@@ -113,5 +107,6 @@ ecs:
   <<: *dockerdef
   global_search_owners:
     "UC3 Merritt administrator": merritt-test
+    'UCB Library': "{!ENV: UCB_GLOBAL_SEARCH !DEFAULT: ''}"
 
 # TODO: rename uri_[1-3] to [content, producer, manifest]_uri or similar
