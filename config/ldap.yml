@@ -49,7 +49,8 @@ development:
   <<: *docker
 
 ecs:
-  admin_password: "{!SSM: ldap/ecs-admin-password !DEFAULT: password}"
+  # admin_password: "{!SSM: ldap/ecs-admin-password !DEFAULT: password}"
+  admin_password: "{!SSM: ldap/admin-password !DEFAULT: password}"
   admin_user:     cn=Directory Manager
   group_base:     ou=mrt-classes,ou=uc3,dc=cdlib,dc=org
   host:           "{!ENV: HOST_LDAP !DEFAULT: ldap}"
