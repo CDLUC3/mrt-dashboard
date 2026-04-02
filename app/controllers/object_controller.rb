@@ -54,6 +54,7 @@ class ObjectController < ApplicationController
 
   def download
     render(file: "#{Rails.root}/public/403.html", status: 403, layout: false) && return if @object.exceeds_download_size?
+
     # this process used to trigger the large object email which has become obsolete with presigned urls
     render(file: "#{Rails.root}/public/413.html", status: 413, layout: false) && return if @object.exceeds_sync_size?
 
@@ -204,6 +205,7 @@ class ObjectController < ApplicationController
   def check_atom_group_permissions
     group = Group.find(params[:collection])
     render(status: 404, plain: '404 Not Found') && return unless group
+
     render(status: 401, plain: '401 Not Authorized') && return unless group.user_has_read_permission?(current_uid)
 
     true
