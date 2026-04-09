@@ -8,31 +8,6 @@ test:
   password: password
   encoding: utf8mb4   
 
-default: &default
-  adapter: mysql2
-  encoding: utf8mb4
-  host: "{!SSM: inv/db-host}"
-  database: "{!SSM: inv/db-name}"
-  pool: 25
-  # Merritt UI encountered 500 errors when mysql connections were no longer active.
-  # Jan 2024 - adding this setting to see if it prevents inactive connections.
-  # See https://api.rubyonrails.org/classes/ActiveRecord/ConnectionAdapters/ConnectionPool.html
-  #
-  # Oct 2024 - reverting this setting now that retry logic clears connections
-  # idle_timeout: 0
-  port: 3306
-  username: "{!SSM: inv/readwrite/db-user}"
-  password: "{!SSM: inv/readwrite/db-password}"
-
-stage:
-  <<: *default
-
-production:
-  <<: *default
-
-development:
-  <<: *default
-
 docker: &docker
   adapter: mysql2
   host: db-container
