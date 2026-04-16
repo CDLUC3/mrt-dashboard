@@ -155,12 +155,14 @@ phases:
       # note that this also applied to a main branch build
       if [[ "$MODE" == "OnDemand" ]]
       then
+        BUILT="$BRANCHTAG;"
         for stack in ecs-dev ecs-ephemeral ecs-dbsnapshot ecs-stg ecs-prd
         do
           TAG_ECS=$(yq -r ".\"ecs-tagmap\".\"${REPONAME}\".\"$stack\"" /tmp/ecs-release-manifest.yaml)
 
-          if [[ "$BRANCHTAG" != "$TAG_ECS" ]]
+          if [[ "$BUILT" != *"$TAG_ECS;"* ]]
           then
+            BUILT="$BUILT$TAG_ECS;"
             git checkout $TAG_ECS
             CA_CERT_NAME=UC3-Self-Signed-CA.crt
             aws ssm get-parameter --name /uc3/default/uc3_ca/$CA_CERT_NAME --output text --query 'Parameter.Value' > $CA_CERT_NAME
