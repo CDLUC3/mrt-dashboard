@@ -115,6 +115,7 @@ module IngestMixin
 
   def post_upload
     render status: 500, plain: 'current user not set' unless current_user && current_group
+    puts "current_group: #{current_group.inspect}"
     ingest_params = upload_params_from(params, current_user, current_group)
     resp          = http_post(APP_CONFIG['ingest_service_update'], ingest_params)
     @doc          = Nokogiri::XML(resp.content) { |config| config.strict.noent.noblanks }
