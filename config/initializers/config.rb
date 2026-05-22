@@ -14,8 +14,6 @@ raise ' *** SSM_ROOT_PATH is empty' if ENV.fetch('SSM_ROOT_PATH', '').empty? && 
 unless self.class.const_defined?(:LDAP_CONFIG)
   LDAP_CONFIG = Uc3Ssm::ConfigResolver.new(def_value: 'NOT_APPLICABLE')
     .resolve_file_values(file: 'config/ldap.yml', return_key: Rails.env)
-  puts "LDAP_CONFIG: #{LDAP_CONFIG.inspect}"
-  LDAP_CONFIG
 end
 
 # app_config.yml does not have any SSM values
