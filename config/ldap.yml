@@ -41,5 +41,5 @@ ecs:
   guest_password: guest
   guest_user:     anonymous
   connect_timeout: 60
-  tls:            'TLSv1_2'
+  # tls:            'TLSv1_2'
 
