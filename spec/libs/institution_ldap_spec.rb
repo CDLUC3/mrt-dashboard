@@ -20,7 +20,8 @@ module InstitutionLdap
         encryption: {
           method: :simple_tls,
           tls_options: {
-            ssl_version: LDAP_CONFIG['tls']
+            ssl_version: LDAP_CONFIG['tls'],
+            verify_mode: OpenSSL::SSL::VERIFY_NONE
           }
         },
         connect_timeout: LDAP_CONFIG['connect_timeout']
