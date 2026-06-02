@@ -15,8 +15,6 @@ phases:
     on-failure: ABORT
     commands:
     - |
-      CA_CERT_NAME=UC3-Self-Signed-CA.crt
-      aws ssm get-parameter --name /uc3/default/uc3_ca/$CA_CERT_NAME --output text --query 'Parameter.Value' > $CA_CERT_NAME
       aws ssm get-parameter --name /uc3/mrt/ui/master_key --output text --query 'Parameter.Value' --with-decryption > config/master.key
 
     - aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin ${ECR_REGISTRY}
@@ -164,8 +162,6 @@ phases:
           then
             BUILT="$BUILT$TAG_ECS;"
             git checkout $TAG_ECS
-            CA_CERT_NAME=UC3-Self-Signed-CA.crt
-            aws ssm get-parameter --name /uc3/default/uc3_ca/$CA_CERT_NAME --output text --query 'Parameter.Value' > $CA_CERT_NAME
 
             docker build --quiet --push \
               --build-arg ECR_REGISTRY=${ECR_REGISTRY} \

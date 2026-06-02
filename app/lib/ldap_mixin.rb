@@ -26,7 +26,12 @@ module LdapMixin
       host: host,
       port: port,
       auth: { method: :simple, username: admin_user, password: admin_password },
-      encryption: { method: :simple_tls, tls_options: { ssl_version: LDAP_CONFIG['tls'] } },
+      encryption: {
+        method: :simple_tls, tls_options: {
+          ssl_version: LDAP_CONFIG['tls'],
+          verify_mode: OpenSSL::SSL::VERIFY_NONE
+        }
+      },
       connect_timeout: connect_timeout
     }
 
