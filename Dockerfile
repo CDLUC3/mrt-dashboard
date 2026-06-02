@@ -7,17 +7,12 @@
 FROM public.ecr.aws/docker/library/ruby:3.4
 ARG BUILD_TAG
 RUN apt-get update -y -qq && \
-  apt-get install -y build-essential libpq-dev nodejs ca-certificates && \
+  apt-get install -y build-essential libpq-dev nodejs \
   apt-get -y upgrade
 
 # Set an environment variable where the Rails app is installed to inside of Docker image
 ENV RAILS_ROOT /var/www/app_name
 RUN mkdir -p $RAILS_ROOT $RAILS_ROOT/log
-
-COPY UC3-Self-Signed-CA.crt* /usr/local/share/ca-certificates/
-
-# do not expect a cert to be available for docker compose
-RUN /usr/sbin/update-ca-certificates extract || true
 
 # Set working directory
 WORKDIR $RAILS_ROOT
@@ -50,11 +45,6 @@ EXPOSE 3000 8086 1234
 # https://serverfault.com/questions/683605/docker-container-time-timezone-will-not-reflect-changes
 ENV TZ=America/Los_Angeles
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
-
-# CA cert for LDAP SSL access
-RUN mkdir /usr/local/share/ca-certificates/extra
-COPY docker/ldap-ca.crt /usr/local/share/ca-certificates/extra/ldap-ca.crt
-RUN /usr/sbin/update-ca-certificates
 
 RUN if [ -n "$BUILD_TAG" ]; then \
       echo "${BUILD_TAG}." > .version; \
