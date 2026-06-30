@@ -32,12 +32,9 @@ module ApplicationHelper
 
   # makes a tip over a question mark item, just pass in the text
   # requires javascript_include_tag 'wztip/wz_tooltip.js' on the page
-  def help_tip(the_text)
-    escaped_tooltip = html_escape(the_text).gsub("'", "\\'")
+  def help_tip(name, the_text)
     tooltip_tag = <<~HTML
-      <a href="#" onmouseover="Tip('#{escaped_tooltip}')">
-        <img class="tip-icon" src="#{image_path('tip_icon.svg')}" alt="(?)"/>
-      </a>
+      <span class="tooltip" role="tooltip" id="#{name}-tooltip"><em>#{the_text}</em></span><br/>
     HTML
     tooltip_tag.html_safe
   end
