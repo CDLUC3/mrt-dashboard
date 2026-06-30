@@ -51,40 +51,35 @@
         <tr>
           <th><label for="title">Title:</label></th>
           <td>
-            <%= text_field_tag('title', nil, :size => 30) %>
-            <%= help_tip('We strongly recommend that you provide at least a title.') %>
+            <%= text_field_tag('title', nil, :size => 30, :title => 'We strongly recommend that you provide at least a title.') %>
           </td>
         </tr>
 
         <tr>
           <th><label for="author">Creator:</label></th>
           <td>
-            <%= text_field_tag('author', nil, :size => 30) %>
-            <%= help_tip('Author or creator of the object.') %>
+            <%= text_field_tag('author', nil, :size => 30, :title => 'Author or creator of the object.') %>
           </td>
         </tr>
 
         <tr>
           <th><label for="date">Date:</label></th>
           <td>
-            <%= text_field_tag('date', nil, :size => 30) %>
-            <%= help_tip('Publication date of object') %>
+            <%= text_field_tag('date', nil, :size => 30, :title => 'Publication date of object') %>
           </td>
         </tr>
 
         <tr>
           <th><label for="local_id">Local ID:</label></th>
           <td>
-            <%= text_field_tag('local_id', nil, :size => 30) %>
-            <%= help_tip('An existing identifier you use to track the object.') %>
+            <%= text_field_tag('local_id', nil, :size => 30, :title => 'An existing identifier you use to track the object.') %>
           </td>
         </tr>
 
         <tr>
           <th><label for="primary_id">Primary ID:</label></th>
           <td>
-            <%= text_field_tag('primary_id', nil, :size => 30) %>
-            <%= help_tip('Most commonly used for updates, this is the previously assigned primary identifier.') %>
+            <%= text_field_tag('primary_id', nil, :size => 30, :title => 'Most commonly used for updates, this is the previously assigned primary identifier.') %>
           </td>
         </tr>
         </tbody>
@@ -101,7 +96,6 @@
 
   <aside>
     <%= render(partial: '/shared/side_lookup') %>
-    <%= render(partial: 'help_add') %>
     <%= render(partial: '/shared/help_sidebar') %>
   </aside>
 </main>
