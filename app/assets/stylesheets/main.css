@@ -1271,3 +1271,19 @@ table.state td, table.state th {
   border: thin solid darkgray !important;
   padding: 4px;
 }
+
+.tooltip {
+  display: none;
+  position: absolute;
+  background: #333;
+  color: #fff;
+  padding: 8px;
+  border-radius: 4px;
+  font-size: 0.85rem;
+}
+
+/* Show tooltip when input is hovered OR focused */
+input:hover + .tooltip,
+input:focus + .tooltip {
+  display: block;
+}
