@@ -34,7 +34,7 @@ module ApplicationHelper
   # requires javascript_include_tag 'wztip/wz_tooltip.js' on the page
   def help_tip(name, the_text)
     tooltip_tag = <<~HTML
-      <span class="tooltip" role="tooltip" id="#{name}-tooltip"><em>#{the_text}</em></span><br/>
+      <span class="tooltip" role="tooltip" id="#{name}-tooltip" aria-hidden="true"><em>#{the_text}</em></span><br/>
     HTML
     tooltip_tag.html_safe
   end
