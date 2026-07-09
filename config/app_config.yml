@@ -75,5 +75,6 @@ ecs:
   global_search_owners:
     "UC3 Merritt administrator": merritt-test
     'UCB Library': "{!ENV: UCB_GLOBAL_SEARCH !DEFAULT: ''}"
+    'UCR Library': "{!ENV: UCR_GLOBAL_SEARCH !DEFAULT: ''}"
 
 # TODO: rename uri_[1-3] to [content, producer, manifest]_uri or similar
