@@ -167,9 +167,6 @@ GEM
       database_cleaner-core (~> 2.0)
     database_cleaner-core (2.1.0)
     date (3.5.1)
-    debase (0.2.9)
-      debase-ruby_core_source (>= 3.4.1)
-    debase-ruby_core_source (4.0.1)
     diff-lcs (1.6.2)
     diffy (3.4.4)
     docile (1.4.1)
@@ -494,7 +491,6 @@ DEPENDENCIES
   capybara-webmock
   colorize
   database_cleaner
-  debase
   diffy
   ed25519
   equivalent-xml

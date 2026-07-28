@@ -65,6 +65,11 @@ local:
   global_search_owners:
     "UC3 Merritt administrator": merritt-test
 
+localhost:
+  <<: *dockerdef
+  global_search_owners:
+    "UC3 Merritt administrator": merritt-test
+
 development:
   <<: *dockerdef
   global_search_owners: 

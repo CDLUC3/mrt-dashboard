@@ -17,6 +17,9 @@ docker: &docker
   encoding: utf8mb4   
   # idle_timeout: 0
 
+localhost:
+  <<: *docker
+
 ecs:
   adapter: mysql2
   encoding: utf8mb4

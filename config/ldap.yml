@@ -28,6 +28,10 @@ docker: &docker
 development:
   <<: *docker
 
+localhost:
+  <<: *docker
+  host: localhost
+
 ecs:
   # admin_password: "{!SSM: ldap/ecs-admin-password !DEFAULT: password}"
   admin_password: "{!SSM: ldap/admin-password !DEFAULT: password}"
