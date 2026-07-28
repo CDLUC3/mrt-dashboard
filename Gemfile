@@ -44,7 +44,7 @@ end
 group :development, :test, :docker do
   gem 'byebug'
   gem 'colorize'
-  gem 'debase'
+  # gem 'debase'
   gem 'launchy'
   gem 'listen'
   gem 'pry'
