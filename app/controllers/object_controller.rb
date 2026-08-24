@@ -69,7 +69,7 @@ class ObjectController < ApplicationController
     stream_response(@object.bytestream_uri3.to_s, 'attachment', pairtree_encode(@object.ark), 'text/xml')
   end
 
-  # rubocop:disable Lint/RescueException
+  # rubocop:disable-next Lint/RescueException
   def upload
     if params[:file].nil?
       flash[:error] = 'You must choose a filename to submit.'
@@ -83,7 +83,6 @@ class ObjectController < ApplicationController
       render_upload_error(e)
     end
   end
-  # rubocop:enable Lint/RescueException
 
   def submitted
     # :nocov:

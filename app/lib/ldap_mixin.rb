@@ -9,7 +9,7 @@ module LdapMixin
   attr_reader :ldap_connect, :minter
   attr_accessor :base
 
-  # rubocop:disable Metrics/ParameterLists
+  # rubocop:disable-next Metrics/ParameterLists
   def initialize(host:, port:, base:, admin_user:, admin_password:, minter:, connect_timeout:)
     # sample arguments
     # host: "badger.cdlib.org",
@@ -37,7 +37,6 @@ module LdapMixin
 
     raise LdapException, 'Unable to bind to LDAP server.' unless ENV.fetch('RAILS_ENV', nil) == 'test' || admin_ldap.bind
   end
-  # rubocop:enable Metrics/ParameterLists
 
   def admin_ldap
     @admin_ldap ||= Net::LDAP.new(@ldap_connect)

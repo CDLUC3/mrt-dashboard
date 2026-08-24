@@ -12,7 +12,7 @@ module Noid
       @cache         = []
     end
 
-    # rubocop:disable Lint/RescueException
+    # rubocop:disable-next Lint/RescueException
     def mint
       (@cache = request_more_ids) if @cache.empty?
       @cache.shift
@@ -23,7 +23,6 @@ module Noid
     rescue Exception # TODO: should this be StandardError (or just 'rescue')?
       raise MintException, "Can't get ID; not a NOID server?"
     end
-    # rubocop:enable Lint/RescueException
 
     private
 

@@ -13,9 +13,9 @@ set :branch,           ENV.fetch('BRANCH', nil)          || 'master'
 
 set :default_env,      { path: '$PATH' }
 set :stages,           %w[local mrt-ui-dev stage production]
-set :puma_pid,         "#{fetch(:deploy_to)}/shared/pid/puma.pid"
-set :puma_log,         "#{fetch(:deploy_to)}/shared/log/puma.log"
-set :puma_port,        '26181'
+set :puma_pid, "#{fetch(:deploy_to)}/shared/pid/puma.pid"
+set :puma_log, "#{fetch(:deploy_to)}/shared/log/puma.log"
+set :puma_port, '26181'
 
 # persistent dirs
 set :linked_files, %w[]

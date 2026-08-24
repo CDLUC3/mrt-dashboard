@@ -137,11 +137,10 @@ class CollectionController < ApplicationController
       .paginate(paginate_args)
   end
 
-  # rubocop:disable Naming/AccessorMethodName
+  # rubocop:disable-next Naming/AccessorMethodName
   def set_session_group(group)
     session[:group_id]          = group.id
     session[:group_ark]         = group.ark_id
     session[:group_description] = group.description
   end
-  # rubocop:enable Naming/AccessorMethodName
 end

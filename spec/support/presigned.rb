@@ -21,7 +21,7 @@ end
 
 def response_assembly_200(token = SecureRandom.uuid, ready = 20)
   # set expiration a few seconds in the future
-  time = Time.new.gmtime + ready
+  time = Time.now.gmtime + ready
   {
     status: 200,
     token: token,
