@@ -8,8 +8,10 @@
       Owner: <%= @request_owner.name %>
     </h1>
     <div class="breadcrumbs">
-      <%= link_to('Merritt', :controller => 'home', :action => 'index') %> &gt;
-      Owner: <%= @request_owner.name %>
+      <ol>
+      <li><%= link_to('Merritt', :controller => 'home', :action => 'index') %></li>
+      <li>Owner: <%= @request_owner.name %></li>
+      </ol>
     </div>
 
     <nav>

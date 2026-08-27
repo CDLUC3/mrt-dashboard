@@ -7,9 +7,11 @@
     <h1>Search Results</h1>
 
     <div class="breadcrumbs">
-      <%= link_to('Merritt', :controller => 'home', :action => 'index') %> &gt;
-      Search <%= current_owner_name %>
-      &gt; Search Results
+      <ol>
+      <li><%= link_to('Merritt', :controller => 'home', :action => 'index') %></li>
+      <li>Search <%= current_owner_name %></li>
+      <li>Search Results</li>
+      </ol>
     </div>
 
     <% if @results && !@results.empty? %>

@@ -1,15 +1,12 @@
-<% unless env_str.blank? %>
-  <p class="environment"><%= env_str %></p>
-<% end %>
 <div id="skip">
   <a class="skipnav" href="#maincontent">Skip to main content</a>
 </div>
 <header>
   <div class="masthead">
     <%= image_tag 'logos/ucop-logo.svg', class: 'ucop-logo', alt: 'University of California' %>
-    <%= image_tag 'logos/ucop-logo-divider.svg', class: 'ucop-logo-divider', alt: '|' %>
+    <%= image_tag 'logos/ucop-logo-divider.svg', class: 'ucop-logo-divider', alt: '|', "aria-hidden": "true" %>
     <a href="/">
-      <%= image_tag 'logos/merritt-logo.svg', class: 'merritt-logo', alt: 'Merritt Logo' %>
+      <%= image_tag 'logos/merritt-logo.svg', class: 'merritt-logo', alt: 'Merritt' %>
     </a>
   </div>
   <% if user_logged_in? %> 

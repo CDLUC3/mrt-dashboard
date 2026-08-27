@@ -850,10 +850,6 @@ header nav ul li {
   font-weight: bold;
 }
 
-header nav ul li a:hover {
-  text-decoration: none;
-}
-
 header nav ul li.dropdown ul li {
   font-weight: normal;
 }
@@ -861,7 +857,6 @@ header nav ul li.dropdown ul li {
 header nav a {
   color: inherit;
   display: inline-block;
-  text-decoration: none;
   width: 100%;
 }
 
@@ -1126,10 +1121,6 @@ form table.properties td {
   width: 75%;
 }
 
-a {
-  text-decoration: none;
-}
-
 img.merritt-logo {
   height: 30px;
   vertical-align: bottom;
@@ -1286,4 +1277,23 @@ table.state td, table.state th {
 input:hover + .tooltip,
 input:focus + .tooltip {
   display: block;
+}
+
+section.help ul li {
+  margin-bottom: 6px;
+}
+
+div.breadcrumbs ol {
+  display: inline;
+  margin-block: 0;
+  list-style-type: none;
+  padding-inline-start: 0;
+}
+
+div.breadcrumbs ol li {
+  display: inline;
+}
+
+div.breadcrumbs ol li:not(:last-child)::after {
+  content: " > ";
 }
