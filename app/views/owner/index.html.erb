@@ -2,7 +2,7 @@
   UC3 Merritt: Owner — <%= @request_owner.name %>
 <% end %>
 
-<main id="maincontent">
+<main>
   <section>
     <h1>
       Owner: <%= @request_owner.name %>
@@ -17,7 +17,7 @@
     <nav>
       <%= will_paginate(@recent_objects) %>
     </nav>
-    <table class="main">
+    <table class="main" id="maincontent">
       <thead>
       <tr>
         <th style="width: 30%;">Primary Id</th>

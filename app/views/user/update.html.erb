@@ -2,7 +2,7 @@
   UC3 Merritt: Update Profile for <%= current_user.displayname %>
 <% end %>
 
-<main id="maincontent">
+<main>
   <section>
     <h1>Update profile for <%= current_user.displayname %></h1>
 
@@ -13,6 +13,7 @@
       </ol>
     </div>
 
+    <div id="maincontent"></div>
     <% unless @display_text.blank? %>
       <p class="error-message"><%= @display_text %></p>
     <% end %>

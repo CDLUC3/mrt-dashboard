@@ -2,7 +2,7 @@
   UC3 Merritt: Owner — <%= current_owner_name %> — Search Results
 <% end %>
 
-<main id="maincontent">
+<main>
   <section>
     <h1>Search Results</h1>
 
@@ -18,7 +18,7 @@
     <nav>
       <%= will_paginate(@results) %>
     </nav>
-    <table class="main">
+    <table class="main" id="maincontent">
       <thead>
       <tr>
         <th style="width: 30%;">Primary Id</th>
@@ -30,7 +30,7 @@
       </tbody>
     </table>
     <% else %>
-    <p>
+    <p id="maincontent">
       There were no items that had the text matching <strong><%=params[:terms]%></strong>.
     </p>
     <% end %>

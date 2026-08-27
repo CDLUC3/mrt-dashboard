@@ -4,7 +4,7 @@
 <%= javascript_include_tag 'wztip/wz_tooltip.js' %>
 <%= javascript_include_tag 'upload.js' %>
 
-<main id="maincontent">
+<main>
   <section>
     <h1>Add Object</h1>
 
@@ -21,6 +21,7 @@
       </ol>
     </div>
 
+    <div id="maincontent"></div>
     <% if flash[:error] %>
       <p class="error-message"><%= flash[:error] %></p>
     <% end %>
