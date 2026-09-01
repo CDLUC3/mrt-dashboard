@@ -9,7 +9,7 @@ UC3 Merritt Login
     <%= render :partial => '/shared/flash_show' %>
 
       <%= form_tag({action: 'guest_login'}) do %>
-      <div>
+      <div clss="guestlogin">
         <h2>Guest login</h2>
         <p>Login as guest for read-only access</p>
         <div><%= submit_tag('Guest') %></div>
@@ -17,9 +17,9 @@ UC3 Merritt Login
       <% end %>
 
       <%= form_tag({action: 'login_post'}) do %>
-      <div>
+      <div class="pwlogin">
         <h2>User login</h2>
-        <div class="pwlogin">
+        <div>
           <label for="login">Username</label>
           <%= text_field_tag('login', params[:login]) %>
           <br/>

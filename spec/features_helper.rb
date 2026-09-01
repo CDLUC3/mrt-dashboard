@@ -64,9 +64,12 @@ end
 
 def log_in_with(user_id, password)
   visit login_path
-  fill_in 'login', with: user_id
-  fill_in 'password', with: password
-  click_button 'Login'
+
+  within 'div.pwlogin' do
+    fill_in 'login', with: user_id
+    fill_in 'password', with: password
+    click_button 'Login'
+  end
   wait_for_ajax!
 end
 
@@ -75,5 +78,8 @@ def log_out!
   # return if page.has_no_content?('Logout')
   return unless page.text.include?('Logout')
 
-  click_link('Logout', match: :first)
+  within 'nav.menu' do
+    find('span.login-message').click
+    click_link('Logout', match: :first)
+  end
 end
