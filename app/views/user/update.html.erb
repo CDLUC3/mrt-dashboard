@@ -14,11 +14,8 @@
     </div>
 
     <div id="maincontent">
-    <div class="skip">
-      <a class="skipnav" href="#lookup">Skip to search</a>
-    </div>
+    <div class="skip"><a class="skipnav" href="#lookup">Skip to search</a></div>
 
-    </div>
     <% unless @display_text.blank? %>
       <p class="error-message"><%= @display_text %></p>
     <% end %>
@@ -72,6 +69,7 @@
         <%= submit_tag %>
       </div>
     <% end # form_tag %>
+    </div>
 
   </section>
   <aside>
