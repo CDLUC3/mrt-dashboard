@@ -86,6 +86,7 @@ describe 'objects', js: true do
       only_path: true
     )
     visit(index_path)
+    sleep 1
 
     expect(page.title).to include('401')
     expect(page).to have_content('not authorized')
