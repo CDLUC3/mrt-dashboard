@@ -1,4 +1,9 @@
-<section class="lookup">
+<section class="lookup" id="lookup">
+  <h2>Global Lookup</h2>
+  <p>
+    Use the global lookup to search for objects across all collections in
+    Merritt. You can search by identifier, file name, title, author or date.
+  </p>
 <% if group_choosen? %>
   <h2>Object Lookup</h2>
   <%= form_tag({:controller => 'collection', :action => 'search_results'}, :method => :get) do %>
