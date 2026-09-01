@@ -1189,7 +1189,7 @@ table.properties td.files_size {
   text-align: right;
 }
 
-#skip a {
+#skip a, .skip a {
   position:absolute;
   left:-10000px;
   top:auto;
@@ -1198,7 +1198,7 @@ table.properties td.files_size {
   overflow:hidden;
 }
 
-#skip a:focus {
+#skip a:focus, .skip a:focus {
   position:static;
   width:auto;
   height:auto;
