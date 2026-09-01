@@ -15,7 +15,7 @@
     </div>
 
     <% if @results && !@results.empty? %>
-    <nav>
+    <nav aria-label="Pagination">
       <%= will_paginate(@results) %>
     </nav>
     <table class="main" id="maincontent">

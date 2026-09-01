@@ -10,7 +10,7 @@
     </a>
   </div>
   <% if user_logged_in? %> 
-    <nav class="menu">
+    <nav class="menu" aria-label="Main navigation">
       <input type="checkbox" id="nav-menu" />
       <label class="nav-menu-label" for="nav-menu">
         <%= image_tag 'nav-menu.svg', class: 'expandable', alt: 'Menu', tabindex: '0' %>
@@ -49,7 +49,7 @@
     </nav>
   <% else %>
     <% unless action_name == 'login' %>
-    <nav class="login">
+    <nav class="login" aria-label="Login">
       <ul>
         <li><%= link_to('Login', controller: 'user_sessions', action: 'login') %></li>
       </ul>
