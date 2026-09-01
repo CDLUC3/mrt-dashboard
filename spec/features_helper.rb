@@ -43,6 +43,7 @@ RSpec.configure do |config|
     Capybara.current_driver = :selenium_chrome_headless
     # Toggle the following when needed during testing
     # Capybara.current_driver = :selenium_chrome
+    Capybara.default_max_wait_time = 5
   end
 
 end
