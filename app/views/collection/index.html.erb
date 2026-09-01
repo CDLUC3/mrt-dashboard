@@ -26,7 +26,11 @@
     <nav aria-label="Pagination">
       <%= will_paginate(@recent_objects) %>
     </nav>
-    <table class="main" id="maincontent">
+    <div id=maincontent>
+    <div class="skip">
+      <a class="skipnav" href="#lookup">Skip to search</a>
+    </div>
+    <table class="main">
       <thead>
       <tr>
         <th style="width: 30%;">Primary Id</th>
@@ -37,6 +41,7 @@
       <%= render :partial => "/object/table_row", :collection => @recent_objects %>
       </tbody>
     </table>
+    </div>
   </section>
 
   <aside>

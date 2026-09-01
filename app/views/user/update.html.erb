@@ -13,7 +13,12 @@
       </ol>
     </div>
 
-    <div id="maincontent"></div>
+    <div id="maincontent">
+    <div class="skip">
+      <a class="skipnav" href="#lookup">Skip to search</a>
+    </div>
+
+    </div>
     <% unless @display_text.blank? %>
       <p class="error-message"><%= @display_text %></p>
     <% end %>

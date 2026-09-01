@@ -18,7 +18,11 @@
     <nav aria-label="Pagination">
       <%= will_paginate(@results) %>
     </nav>
-    <table class="main" id="maincontent">
+    <div id=maincontent>
+    <div class="skip">
+      <a class="skipnav" href="#lookup">Skip to search</a>
+    </div>
+    <table class="main">
       <thead>
       <tr>
         <th style="width: 30%;">Primary Id</th>
@@ -29,10 +33,14 @@
       <%= render :partial => "/object/table_row", :collection => @results %>
       </tbody>
     </table>
+    </div>
     <% else %>
-    <p id="maincontent">
+    <div id="maincontent">
+    <div class="skip">
+      <a class="skipnav" href="#lookup">Skip to search</a>
+    </div>
       There were no items that had the text matching <strong><%=params[:terms]%></strong>.
-    </p>
+    </div>
     <% end %>
   </section>
 
