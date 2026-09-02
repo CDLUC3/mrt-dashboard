@@ -36,6 +36,7 @@ RSpec.configure do |config|
 
   config.before(:each, type: :feature, js: false) do
     Capybara.use_default_driver
+    Capybara.default_max_wait_time = 5
   end
 
   config.before(:each, type: :feature, js: true) do

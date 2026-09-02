@@ -60,13 +60,13 @@ class User
   end
 
   # TODO: figure out whether we still need this & get rid of it if not
-  # :nocov:
+  # simplecov:disable
   # these would be LDAP attributes, not database ones.  maybe they should sync up more to
   # be more active-record-like, but it seems a lot of work to make it completely match AR
   def set_attrib(attribute, value)
     LDAP_USER.replace_attribute(login, attribute, value)
   end
-  # :nocov:
+  # simplecov:enable
 
   def self.valid_ldap_credentials?(uid, password)
     begin
@@ -92,7 +92,7 @@ class User
   private
 
   # TODO: figure out whether we still need this & get rid of it if not
-  # :nocov:
+  # simplecov:disable
   def single_value(record, field)
     if record[field].nil? || record[field][0].nil? || record[field][0].empty?
       nil
@@ -100,7 +100,7 @@ class User
       record[field][0]
     end
   end
-  # :nocov:
+  # simplecov:enable
 
   def array_to_value(arr)
     return arr unless arr.is_a?(Array)

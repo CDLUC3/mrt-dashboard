@@ -85,14 +85,14 @@ class ObjectController < ApplicationController
   end
 
   def submitted
-    # :nocov:
+    # simplecov:disable
     unless params[:batch_id] && params[:obj_count]
       render 404, plain: '404 Not Found'
       return
     end
     @batch_id = params[:batch_id]
     @obj_count = params[:obj_count]
-    # :nocov:
+    # simplecov:enable
   end
 
   def recent
@@ -164,7 +164,7 @@ class ObjectController < ApplicationController
 
   def self.add_fixity_to_info(object, info)
     info[:fixity] = []
-    # :nocov:
+    # simplecov:disable
     if info['total_files'] > 40_000
       info[:fixity] << { message: 'This object has too many files to display fixity state.' }
       return info
@@ -180,7 +180,7 @@ class ObjectController < ApplicationController
       }
       info[:fixity].push(data)
     end
-    # :nocov:
+    # simplecov:enable
     info
   end
 
@@ -192,11 +192,11 @@ class ObjectController < ApplicationController
   end
 
   def force_fail
-    # :nocov:
+    # simplecov:disable
     merritt_retry_block('force_fail') do
       raise StandardError, 'force fail'
     end
-    # :nocov:
+    # simplecov:enable
   end
 
   private

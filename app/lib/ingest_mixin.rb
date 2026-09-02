@@ -10,9 +10,9 @@ module IngestMixin
         m = /filename="([^"]+)"/.match(params[:file].headers)
         filename = m[1] if m
       rescue StandardError
-        # :nocov:
+        # simplecov:disable
         filename = filename.encode('UTF-8', invalid: :replace, undef: :replace)
-        # :nocov:
+        # simplecov:enable
       end
     end
     filename
