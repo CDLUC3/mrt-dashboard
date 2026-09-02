@@ -150,6 +150,7 @@ describe 'owners' do
       mock_permissions_all(user_id, collection_id)
       log_in_with(user_id, password)
       visit(index_path)
+      sleep 1
       expect(page).to have_content('Not authorized')
     end
 

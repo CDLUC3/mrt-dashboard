@@ -36,6 +36,7 @@ RSpec.configure do |config|
 
   config.before(:each, type: :feature, js: false) do
     Capybara.use_default_driver
+    Capybara.default_max_wait_time = 5
   end
 
   config.before(:each, type: :feature, js: true) do
@@ -43,6 +44,7 @@ RSpec.configure do |config|
     Capybara.current_driver = :selenium_chrome_headless
     # Toggle the following when needed during testing
     # Capybara.current_driver = :selenium_chrome
+    Capybara.default_max_wait_time = 5
   end
 
 end
@@ -64,9 +66,12 @@ end
 
 def log_in_with(user_id, password)
   visit login_path
-  fill_in 'login', with: user_id
-  fill_in 'password', with: password
-  click_button 'Login'
+
+  within 'div.pwlogin' do
+    fill_in 'login', with: user_id
+    fill_in 'password', with: password
+    click_button 'Login'
+  end
   wait_for_ajax!
 end
 
@@ -75,5 +80,8 @@ def log_out!
   # return if page.has_no_content?('Logout')
   return unless page.text.include?('Logout')
 
-  click_link('Logout', match: :first)
+  within 'nav.menu' do
+    find('span.login-message').click
+    click_link('Logout', match: :first)
+  end
 end

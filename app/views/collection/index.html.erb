@@ -6,7 +6,7 @@
   <link rel="alternate" type="application/atom+xml" href="/object/recent.atom?collection=<%= @request_group.ark_id %>"/>
 <% end %>
 
-<main id="maincontent">
+<main>
   <section>
     <h1>
       Collection: <%= @request_group.description %>
@@ -17,13 +17,17 @@
       <% end %>
     </h1>
     <div class="breadcrumbs">
-      <%= link_to('Merritt', :controller => 'home', :action => 'index') %> &gt;
-      Collection: <%= @request_group.description %>
+      <ol>
+      <li><%= link_to('Merritt', :controller => 'home', :action => 'index') %></li>
+      <li>Collection: <%= @request_group.description %></li>
+      </ol>
     </div>
 
-    <nav>
+    <nav aria-label="Pagination">
       <%= will_paginate(@recent_objects) %>
     </nav>
+    <div id=maincontent>
+    <div class="skip"><a class="skipnav" href="#lookup">Skip to search</a></div>
     <table class="main">
       <thead>
       <tr>
@@ -35,6 +39,7 @@
       <%= render :partial => "/object/table_row", :collection => @recent_objects %>
       </tbody>
     </table>
+    </div>
   </section>
 
   <aside>

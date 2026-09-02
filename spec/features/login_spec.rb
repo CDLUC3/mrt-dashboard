@@ -27,8 +27,7 @@ describe 'login', js: true do
 
   it 'supports logout' do
     log_in_with(user_id, password)
-    logout_link = find_link('Logout')
-    logout_link.click
+    log_out!
     expect(page).not_to have_content('Logged in')
     expect(page).to have_content('Login')
   end

@@ -2,24 +2,28 @@
   UC3 Merritt: Submission Error
 <% end %>
 
-<main id="maincontent">
+<main>
   <section>
     <h1>Submission Error</h1>
 
     <div class="breadcrumbs">
-      <%= link_to('Merritt', :controller => 'home', :action => 'index') %> &gt;
-      <%= link_to(
+      <ol>
+      <li><%= link_to('Merritt', :controller => 'home', :action => 'index') %></li>
+      <li><%= link_to(
               "Collection: #{current_group.description}",
               controller: 'collection',
               action: 'index',
               group: current_group.id
-          ) %> &gt;
-      Submission Error
+          ) %></li>
+      <li>Submission Error</li>
+      </ol>
     </div>
 
+    <div id="maincontent">
+    <div class="skip"><a class="skipnav" href="#lookup">Skip to search</a></div>
     <p>
-      Your request to add data to the Merritt repository ran into a problem. It
-      returned the following error:
+        Your request to add data to the Merritt repository ran into a problem. It
+        returned the following error:
     </p>
 
     <p><strong><%= @description %></strong></p>
@@ -33,6 +37,7 @@
       Please include the error message shown
       above which will help us in troubleshooting the issue.
     </p>
+    </div>
   </section>
 
   <aside>

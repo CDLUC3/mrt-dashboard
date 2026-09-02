@@ -4,21 +4,25 @@
 <%= javascript_include_tag 'wztip/wz_tooltip.js' %>
 <%= javascript_include_tag 'upload.js' %>
 
-<main id="maincontent">
+<main>
   <section>
     <h1>Add Object</h1>
 
     <div class="breadcrumbs">
-      <%= link_to('Merritt', controller: 'home', action: 'index') %> &gt;
-      <%= link_to(
+      <ol>
+      <li><%= link_to('Merritt', controller: 'home', action: 'index') %></li>
+      <li><%= link_to(
               "Collection: #{current_group.description}",
               controller: 'collection',
               action: 'index',
               group: current_group.id)
-      %> &gt;
-      Add Object
+      %></li>
+      <li>Add Object</li>
+      </ol>
     </div>
 
+    <div id="maincontent">
+    <div class="skip"><a class="skipnav" href="#lookup">Skip to search</a></div>
     <% if flash[:error] %>
       <p class="error-message"><%= flash[:error] %></p>
     <% end %>
@@ -96,7 +100,7 @@
         <%= submit_tag("Submit") %>
       </div>
     <% end %>
-
+    </div>
   </section>
 
   <aside>
