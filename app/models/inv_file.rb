@@ -35,8 +35,8 @@ class InvFile < ApplicationRecord
   end
 
   def exceeds_download_size?
-    # :nocov:
+    # simplecov:disable
     full_size > APP_CONFIG['max_download_size']
-    # :nocov:
+    # simplecov:enable
   end
 end

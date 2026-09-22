@@ -2,20 +2,24 @@
   UC3 Merritt: Collection — <%= current_group.description %> — Search Results
 <% end %>
 
-<main id="maincontent">
+<main>
   <section>
     <h1>Search Results</h1>
 
     <div class="breadcrumbs">
-      <%= link_to('Merritt', :controller => 'home', :action => 'index') %> &gt;
-      <%= link_to("Collection: #{@request_group.description}", :controller => 'collection', :action => 'index', :group => @request_group.id) %> &gt;
-      Search Results
+      <ol>
+      <li><%= link_to('Merritt', :controller => 'home', :action => 'index') %></li>
+      <li><%= link_to("Collection: #{@request_group.description}", :controller => 'collection', :action => 'index', :group => @request_group.id) %></li>
+      <li>Search Results</li>
+      </ol>
     </div>
 
     <% if @results && !@results.empty? %>
-    <nav>
+    <nav aria-label="Pagination">
       <%= will_paginate(@results) %>
     </nav>
+    <div id=maincontent>
+    <div class="skip"><a class="skipnav" href="#lookup">Skip to search</a></div>
     <table class="main">
       <thead>
       <tr>
@@ -27,10 +31,14 @@
       <%= render :partial => "/object/table_row", :collection => @results %>
       </tbody>
     </table>
+    </div>
     <% else %>
-    <p>
+    <div id="maincontent">
+    <div class="skip">
+      <a class="skipnav" href="#lookup">Skip to search</a>
+    </div>
       There were no items that had the text matching <strong><%=params[:terms]%></strong>.
-    </p>
+    </div>
     <% end %>
   </section>
 

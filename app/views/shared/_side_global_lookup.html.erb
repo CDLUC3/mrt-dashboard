@@ -1,11 +1,12 @@
-<section class="lookup">
+<section class="lookup" id="lookup">
+  <h2>Global Lookup</h2>
+  <p>
+    Use the global lookup to search for objects across all collections in
+    Merritt. You can search by identifier, file name, title, author or date.
+  </p>
 <% if owner_set? %>
   <h3><%= current_owner_name %> Lookup</h3>
   <%= form_tag({:controller => 'owner', :action => 'search_results'}, :method => :get) do %>
-    <%= text_field_tag 'terms', params[:terms] %>
-    <%= hidden_field_tag 'owner', current_owner_name %>
-    <%= submit_tag('Go') %>
-
     <p>
       <label for="terms">Search by</label>
     </p>
@@ -14,6 +15,9 @@
       <li>File name (exact match)</li>
       <li>Title, author or date</li>
     </ul>
+    <%= text_field_tag 'terms', params[:terms] %>
+    <%= hidden_field_tag 'owner', current_owner_name %>
+    <%= submit_tag('Go') %>
   <% end %>
 <% end %>
 </section>

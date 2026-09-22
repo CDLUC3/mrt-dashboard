@@ -45,7 +45,7 @@
   section {
     background: none;
   }
-  section.lookup {
+  #lookup {
     display: none;
   }
   nav {

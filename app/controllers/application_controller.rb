@@ -91,11 +91,11 @@ class ApplicationController < ActionController::Base
       current_user.groups
         .sort_by { |g| g.description.downcase }
         .map { |g| { id: g.id, description: g.description, user_permissions: g.user_permissions(current_user.login) } }
-    # :nocov:
+    # simplecov:disable
     rescue StandardError
       []
     end
-    # :nocov:
+    # simplecov:enable
   end
 
   # Construct a storage key from component parts
@@ -281,9 +281,9 @@ class ApplicationController < ActionController::Base
     if session
       redirect_to(session[:return_to] || default, allow_other_host: true)
     else
-      # :nocov:
+      # simplecov:disable
       redirect_to(default)
-      # :nocov:
+      # simplecov:enable
     end
     session[:return_to] = nil
   end

@@ -30,9 +30,9 @@ module PaginationMixin
 
       logger.warn("Can't show #{per_page} per_page; showing #{max_per_page}")
     rescue StandardError => e
-      # :nocov:
+      # simplecov:disable
       logger.error(to_msg(e))
-      # :nocov:
+      # simplecov:enable
     end
     max_per_page
   end

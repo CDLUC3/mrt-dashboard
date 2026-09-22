@@ -1,5 +1,5 @@
 <footer>
-  <nav>
+  <nav aria-label="Footer login and help">
     <ul>
       <% if user_logged_in? %>
         <li class='logout'><%= link_to('Logout', :controller => 'user_sessions', :action => 'logout') %></li>
@@ -25,7 +25,7 @@
     </p>
   </div>
 
-  <nav>
+  <nav aria-label="Legal">
     <ul>
       <li><a href="https://www.cdlib.org/about/terms.html">Terms of Use</a></li>
       <li><a href="https://cdlib.org/about/policies-and-guidelines/privacy-statement/">Privacy Statement</a></li>

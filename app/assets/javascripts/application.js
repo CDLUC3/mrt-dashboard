@@ -14,3 +14,4 @@
 //= require presign_progress
 //= require presign_assembly
 //= require presign_download_page
+//= require klaroconfig

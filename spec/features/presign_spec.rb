@@ -245,7 +245,9 @@ describe 'presigned objects and versions', js: true do
       click_button('Close')
     end
 
-    click_link(obj.ark)
+    within('.breadcrumbs') do
+      click_link("Object: #{obj.ark}")
+    end
 
     mock_assembly(
       obj.node_number,

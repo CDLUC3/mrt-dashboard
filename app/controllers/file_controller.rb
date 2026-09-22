@@ -154,10 +154,10 @@ class FileController < ApplicationController
     fname = params_u(:file)
     return fname if fname.valid_encoding?
 
-    # :nocov:
+    # simplecov:disable
     log.warn("invalid encoding for filname #{fname}")
     fname
-    # :nocov:
+    # simplecov:enable
   end
 
   def fix_params
