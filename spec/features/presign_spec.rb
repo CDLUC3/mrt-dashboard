@@ -65,7 +65,7 @@ describe 'presigned objects and versions', js: true do
 
   after(:each) do
     if has_css?('div.ui-dialog')
-      within('div.ui-dialog div.ui-dialog-titlebar') do
+      within('div.ui-dialog div.ui-dialog-titlebar', match: :first) do
         click_button('Close')
       end
     end
